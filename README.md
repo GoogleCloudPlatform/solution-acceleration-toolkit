@@ -13,7 +13,7 @@ of your GCP organization.
   compliance and best practices built in.
 
 - Policy Generator: Generate best practices policies for Forseti and other
-  monitoring solutions, customizable for your infra.
+  monitoring solutions, customized for your infra.
 
 - Terraform Importer: Automatically detect and import existing resources defined
   by your Terraform configs.
