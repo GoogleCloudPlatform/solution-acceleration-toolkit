@@ -91,15 +91,15 @@ $ git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-su
 $ cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
-$ CONFIG_PATH=examples/engine/simple.yaml
+$ CONFIG_PATH=examples/tfengine/simple.yaml
 $ OUTPUT_PATH=/tmp/engine
 
 # Step 3: Install the engine
-$ go install ./cmd/terraform_engine
+$ go install ./cmd/tfengine
 
 # Step 4: Generate Terraform configs. Edit config with values of your infra.
 $ nano $CONFIG_PATH
-$ terraform_engine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
+$ tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
 
 # Step 5: Run one time bootstrap to setup devops project to host Terraform state.
 $ cd $OUTPUT_PATH/bootstrap

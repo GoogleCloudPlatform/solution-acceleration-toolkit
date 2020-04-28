@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-// terraform_engine provides an engine to power your Terraform environment.
+// tfengine provides an engine to power your Terraform environment.
 //
 // Usage:
-// $ terraform_engine --config_path=/absolute/path/to/config --output_dir=/tmp/engine
+// $ tfengine --config_path=path/to/config --output_dir=/tmp/engine
 package main
 
 import (
