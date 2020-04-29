@@ -12,8 +12,8 @@ of your GCP organization.
 -   [Terraform Engine](./cmd/tfengine): Generate end to end infra-as-code for
     GCP with security, compliance and best practices built in.
 
--   Policy Generator: Generate best practices policies for Forseti and other
-    monitoring solutions, customized for your infra.
+-   [Policy Generator](./cmd/policygen): Generate best practices policies for
+    Forseti and other monitoring solutions, customized for your infra.
 
 -   [Terraform Importer](./cmd/tfimporter): Automatically detect and import
     existing resources defined by your Terraform configs.
