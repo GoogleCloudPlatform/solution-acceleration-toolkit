@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$BASE := "../../configs/tfengine/recipes"}}
+{{$BASE := "../../templates/tfengine/recipes"}}
 
 data:
   ORG_ID: "123"
