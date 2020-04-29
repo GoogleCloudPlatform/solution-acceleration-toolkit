@@ -19,7 +19,6 @@ package pathutil
 
 import (
 	"os"
-	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
 )
@@ -30,5 +29,5 @@ func Expand(path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Abs(os.ExpandEnv(path))
+	return os.ExpandEnv(path), nil
 }

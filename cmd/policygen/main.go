@@ -21,14 +21,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	"flag"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -52,7 +51,7 @@ type Config struct {
 	GCPOrgPolicies  map[string]interface{} `json:"gcp_organization_policies"`
 }
 
-// TODO: Move this to input config.
+// TODO(xingao): Move this to input config.
 const templateDir = "../../templates/policygen"
 
 func main() {
