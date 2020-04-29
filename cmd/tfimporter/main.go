@@ -30,7 +30,7 @@ import (
 
 	"flag"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/config"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
@@ -53,11 +53,11 @@ func main() {
 }
 
 func run() error {
-	// Normalize the config path.
+	// Expand the config path (ex. expand ~).
 	var err error
-	*inputDir, err = config.NormalizePath(*inputDir)
+	*inputDir, err = pathutil.Expand(*inputDir)
 	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", *inputDir, err)
+		return fmt.Errorf("expand path %q: %v", *inputDir, err)
 	}
 
 	// Create Terraform command runners.
