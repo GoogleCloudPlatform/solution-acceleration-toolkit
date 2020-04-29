@@ -34,3 +34,6 @@ build_viewers = [
   {{- end}}
 ]
 {{- end}}
+{{- if index . "FAIL_ON_DELETES"}}
+fail_on_deletes               = {{.FAIL_ON_DELETES}}
+{{- end}}
