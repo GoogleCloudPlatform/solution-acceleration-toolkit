@@ -9,7 +9,7 @@ of your GCP organization.
 
 ## Tools
 
-- Terraform Engine: Generate end to end infra-as-code for GCP with security,
+- [Terraform Engine](./cmd/tfengine): Generate end to end infra-as-code for GCP with security,
   compliance and best practices built in.
 
 - Policy Generator: Generate best practices policies for Forseti and other
