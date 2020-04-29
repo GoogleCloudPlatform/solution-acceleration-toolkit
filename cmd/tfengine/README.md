@@ -6,7 +6,7 @@ Terraform Engine is a framework to jump start your organization onto GCP. It is
 a Terraform module generator that puts together Terraform resources and modules
 into deployments complete with values for your infrastructure.
 
-## Why?
+## Why
 
 Users hosting any type of sensitive data on GCP typically need to go through a
 few common and repetitive processes such as setting up devops, auditing and
@@ -28,14 +28,14 @@ Use our [sample](./samples) configs to quickly get started.
 
 ## Prerequisites
 
-1.  Install the following dependencies and add them to your PATH:
+1. Install the following dependencies and add them to your PATH:
 
-    -   [gcloud](https://cloud.google.com/sdk/gcloud)
-    -   [Terraform 0.12](https://www.terraform.io/)
-    -   [Terragrunt](https://terragrunt.gruntwork.io/)
-    -   [Go 1.14+](https://golang.org/dl/)
+    - [gcloud](https://cloud.google.com/sdk/gcloud)
+    - [Terraform 0.12](https://www.terraform.io/)
+    - [Terragrunt](https://terragrunt.gruntwork.io/)
+    - [Go 1.14+](https://golang.org/dl/)
 
-1.  Get familiar with [GCP](https://cloud.google.com/docs/overview),
+1. Get familiar with [GCP](https://cloud.google.com/docs/overview),
     [Terraform](https://www.terraform.io/intro/index.html) and
     [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8).
 
@@ -44,27 +44,27 @@ Use our [sample](./samples) configs to quickly get started.
     wrapper around Terraform to manage multiple Terraform deployments and reduce
     duplication.
 
-1.  Setup your
+1. Setup your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
     for GCP resources and [G Suite Domain](https://gsuite.google.com/) for
     groups.
 
-1.  [Create administrative groups](https://support.google.com/a/answer/33343?hl=en)
+1. [Create administrative groups](https://support.google.com/a/answer/33343?hl=en)
     in the G Suite Domain:
 
-    -   {PREFIX}-org-admins@{DOMAIN}: This group will get administrative access
+    - {PREFIX}-org-admins@{DOMAIN}: This group will get administrative access
         to the entire org. This group can be used in break-glass situations to
         give humans access to the org to make changes.
 
-    -   {PREFIX}-devops-owners@{DOMAIN}: This group will get owners access to
+    - {PREFIX}-devops-owners@{DOMAIN}: This group will get owners access to
         the devops project to make changes to the CICD project or make changes
         to the Terraform state.
 
-    -   {PREFIX}-auditors@{DOMAIN}: This group will get security reviewer
+    - {PREFIX}-auditors@{DOMAIN}: This group will get security reviewer
         (metadata viewer) access to the entire org, as well as viewer access to
         the audit logs BigQuery and Cloud Storage resources.
 
-    -   {PREFIX}-approvers@{DOMAIN}: This group will get access to view
+    - {PREFIX}-approvers@{DOMAIN}: This group will get access to view
         Terraform plans and should approve PRs in the GitHub repo.
 
     For example, with sample prefix "gcp" and domain "example.com" the group
@@ -74,6 +74,14 @@ Use our [sample](./samples) configs to quickly get started.
     The privileged groups should remain empty and only have humans added for
     emergency situations or when investigation is required. This does not apply
     to view only groups such as approvers.
+
+1. The running user will need to be a super admin or have the following roles:
+
+   - `roles/resourcemanager.organizationAdmin` on the org
+
+   - `roles/resourcemanager.projectCreator` on the org
+
+   - `roles/billing.user` on the billing account
 
 ## Usage
 
@@ -85,7 +93,7 @@ on the engine any longer, and the user can directly use the `terraform` and
 Replace the values in [samples/simple.yaml](./samples/simple.yaml) with values
 for your infrastructure, then run the following commands:
 
-```
+```shell
 # Step 1: Clone repo
 $ git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
 $ cd healthcare-data-protection-suite
@@ -107,10 +115,10 @@ $ terraform init
 $ terraform plan
 $ terraform apply
 
-# Step 6: Deploy Continuous Integration (CI) and Continuous Deployment (CD)
-# resources by following the instructions in components/cicd/README.md in this
-# directory or $OUTPUT_PATH/cicd/README.md in the generated Terraform configs
-# directory.
+# Step 6 (Optional): Deploy Continuous Integration (CI) and Continuous
+# Deployment (CD) resources by following the instructions in
+# components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in
+# the generated Terraform configs directory.
 
 # After the above is done. Your devops project and CICD pipelines are ready, and
 # following changes should be made as Pull Requests (PRs) and go though code
@@ -131,18 +139,18 @@ $ cd $OUTPUT_PATH/org/.../example-deployment
 
 ## Tips
 
--   Before running `terragrunt apply-all` always run `terragrunt plan-all` and
-    carefully review the output. The CICD will create a trigger to generate the
-    plan. Look for the values of the known fields to ensure they are what you
-    expect. You may see some values with the word "mock" in them. These values
-    are coming from other deployments and will be filled with the real value
-    once Terragrunt runs the dependent deployment.
+- Before running `terragrunt apply-all` always run `terragrunt plan-all` and
+  carefully review the output. The CICD will create a trigger to generate the
+  plan. Look for the values of the known fields to ensure they are what you
+  expect. You may see some values with the word "mock" in them. These values
+  are coming from other deployments and will be filled with the real value
+  once Terragrunt runs the dependent deployment.
 
--   If you plan on using the engine again, do not manually modify any generated
-    file as it will be overwritten the next time the engine runs. Instead,
-    prefer to change the input config, recipe or component for the generated
-    files and add new resources under new deployments that are not generated by
-    the engine.
+- If you plan on using the engine again, do not manually modify any generated
+  file as it will be overwritten the next time the engine runs. Instead,
+  prefer to change the input config, recipe or component for the generated
+  files and add new resources under new deployments that are not generated by
+  the engine.
 
--   Always backup any engine configs as well as the generated Terraform configs
-    and any modifications to the Terraform configs to version control.
+- Always backup any engine configs as well as the generated Terraform configs
+  and any modifications to the Terraform configs to version control.
