@@ -15,5 +15,5 @@ of your GCP organization.
 -   [Policy Generator](./cmd/policygen): Generate best practices policies for
     Forseti and other monitoring solutions, customized for your infra.
 
--   [Terraform Importer](./cmd/tfimporter): Automatically detect and import
+-   [Terraform Importer](./cmd/tfimport): Automatically detect and import
     existing resources defined by your Terraform configs.
