@@ -78,9 +78,7 @@ Use our [sample](./samples) configs to quickly get started.
 1. The running user will need to be a super admin or have the following roles:
 
    - `roles/resourcemanager.organizationAdmin` on the org
-
    - `roles/resourcemanager.projectCreator` on the org
-
    - `roles/billing.user` on the billing account
 
 ## Usage
