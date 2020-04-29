@@ -20,7 +20,7 @@ find "$(pwd)" -name 'plan.tfplan' | while read planfile; do
   pushd "${plandir}"
 
   delchanges="$(terraform show -json $(basename ${planfile}) | jq '.resource_changes[].change | select(.actions | index("delete"))')"
-  if [[ ! "${delchanges}" = "" ]]; then
+  if ! [[ -z "${delchanges}" ]]; then
     echo >&2 "Error: Found changes intending to delete resources in module ${plandir}:"
     echo >&2 "${delchanges}"
     found_deletes="true"
