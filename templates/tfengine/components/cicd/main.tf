@@ -174,16 +174,16 @@ resource "google_cloudbuild_trigger" "plan" {
   ]
 }
 
-resource "google_cloudbuild_trigger" "delete_check" {
+resource "google_cloudbuild_trigger" "deletion_check" {
   disabled = ! var.trigger_enabled
   provider = google-beta
   project  = var.devops_project_id
-  name     = "tf-delete-check"
+  name     = "tf-deletion-check"
 
   included_files = [
     "${local.terraform_root_prefix}org/**",
-    "${local.terraform_root_prefix}cicd/configs/tf-delete-check.yaml",
-    "${local.terraform_root_prefix}cicd/configs/tf-delete-check.sh",
+    "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.yaml",
+    "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.sh",
   ]
 
   github {
@@ -194,7 +194,7 @@ resource "google_cloudbuild_trigger" "delete_check" {
     }
   }
 
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-delete-check.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = local.terraform_root
