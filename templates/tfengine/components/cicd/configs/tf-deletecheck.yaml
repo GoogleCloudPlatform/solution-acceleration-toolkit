@@ -36,8 +36,8 @@ steps:
 - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
   entrypoint: '${_TERRAFORM_ROOT}/cicd/configs/tf-deletecheck.sh'
   dir: "${_TERRAFORM_ROOT}/org"
-  args: ['${_FAIL_ON_DELETES}']
+  args: ['${_REJECT_PLAN_DELETIONS}']
 
 substitutions:
   _TERRAFORM_ROOT: "."
-  _FAIL_ON_DELETES: "false"
+  _REJECT_PLAN_DELETIONS: "false"

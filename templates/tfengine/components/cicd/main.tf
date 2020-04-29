@@ -199,7 +199,7 @@ resource "google_cloudbuild_trigger" "deletecheck" {
   substitutions = {
     _TERRAFORM_ROOT = local.terraform_root
     # Pass as string so it can be used as a GCB substitution.
-    _FAIL_ON_DELETES = "${var.fail_on_deletes}"
+    _REJECT_PLAN_DELETIONS = "${var.reject_plan_deletions}"
   }
 
   depends_on = [

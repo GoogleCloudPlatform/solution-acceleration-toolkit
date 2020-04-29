@@ -11,7 +11,7 @@
 
 set -e
 
-fail_on_deletes="${1}"
+reject_plan_deletions="${1}"
 
 # Parse every plan
 found_deletes="false"
@@ -36,8 +36,8 @@ if [[ "${found_deletes}" == 'true' ]]; then
   echo >&2 'Destructive changes are dangerous and should be manually applied by a human operator, not by automation.'
 
   # Don't fail is this check is disabled.
-  if [[ '${fail_on_deletes}' == 'false' ]]; then
-    echo >&2 'Flag fail_on_deletes is set to false, not failing.'
+  if [[ '${reject_plan_deletions}' == 'false' ]]; then
+    echo >&2 'Flag reject_plan_deletions is set to false, not failing.'
     exit 0
   fi
 

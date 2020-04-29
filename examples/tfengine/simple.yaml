@@ -68,6 +68,6 @@ templates:
       BRANCH_REGEX: "master"
       CONTINUOUS_DEPLOYMENT_ENABLED: true
       TRIGGER_ENABLED: true
-      FAIL_ON_DELETES: false
+      REJECT_PLAN_DELETIONS: false
       BUILD_VIEWERS:
       - "group:example-cicd-viewers@example.com"
