@@ -20,6 +20,8 @@ to detect changes in the repo, trigger builds and run the workloads.
     *   `CONTINUOUS_DEPLOYMENT_ENABLED`: Whether or not to enable continuous
         deployment of Terraform configs
     *   `TRIGGER_ENABLED`: Whether or not to enable all Cloud Build Triggers
+    *   `REJECT_PLAN_DELETIONS`: Whether to show a failed check when delete operations
+        are found in the plan.
     *   `TERRAFORM_ROOT`: Path of the directory relative to the repo root
         containing the Terraform configs
 
