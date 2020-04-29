@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/GoogleCloudPlatform/healthcare/deploy/importer/resources"
-	"github.com/GoogleCloudPlatform/healthcare/deploy/policygen/terraform"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/resources"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/google/go-cmp/cmp"
 )
 

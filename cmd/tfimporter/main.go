@@ -18,7 +18,7 @@
 // Requires Terraform to be installed and for authentication to be configured for each provider in the Terraform configs provider blocks.
 //
 // Usage:
-// $ bazel run :importer -- --input_dir=/path/to/config
+// $ go run . --input_dir=/path/to/config
 package main
 
 import (
