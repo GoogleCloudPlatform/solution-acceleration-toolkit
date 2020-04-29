@@ -1,6 +1,6 @@
 # Terraform Engine
 
-Status: Early Access Preview
+Status: Early Access Program
 
 Terraform Engine is a framework to jump start your organization onto GCP. It is
 a Terraform module generator that puts together Terraform resources and modules
