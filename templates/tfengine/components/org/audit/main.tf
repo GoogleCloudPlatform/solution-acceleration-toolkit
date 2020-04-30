@@ -41,7 +41,7 @@ resource "google_organization_iam_audit_config" "config" {
 # BigQuery log sink.
 module "bigquery_log_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 4.0"
+  version = "~> 4.0.0"
 
   log_sink_name        = "bigquery-org-sink"
   parent_resource_type = "organization"
@@ -55,7 +55,7 @@ module "bigquery_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52 is merged.
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.0"
+  version = "~> 4.1.0"
 
   dataset_id                  = var.dataset_name
   project_id                  = var.project_id
@@ -82,7 +82,7 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 # Cloud Storage log sink.
 module "storage_log_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 4.0"
+  version = "~> 4.0.0"
 
   log_sink_name        = "storage-org-sink"
   parent_resource_type = "organization"
@@ -96,7 +96,7 @@ module "storage_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52  is fixed.
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 1.5.0"
 
   name          = var.bucket_name
   project_id    = var.project_id
