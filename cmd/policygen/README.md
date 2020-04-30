@@ -25,7 +25,7 @@ Currently supported Policy Libraries:
 1. Get familiar with
     [GCP Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
     and
-    [Policy library Constraints](https://github.com/forseti-security/policy-library).
+    [Policy Library Constraints](https://github.com/forseti-security/policy-library).
 
 ## Usage
 
@@ -61,10 +61,10 @@ terraform plan
 terraform apply
 ```
 
-#### Policy library Constraints
+#### Policy Library Constraints
 
-To use Policy library Constraints with **Forseti**, follow
+To use Policy Library Constraints with **Forseti**, follow
 [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
 
-To use Policy library Constraints with **Terraform Validator**, follow
+To use Policy Library Constraints with **Terraform Validator**, follow
 [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
