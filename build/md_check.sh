@@ -12,14 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-steps:
-- name: "gcr.io/cloud-builders/npm"
-  entrypoint: "sh"
-  args: ["build/md_check.sh"]
+#!/bin/bash
+set -e
 
-- name: "gcr.io/cloud-builders/go"
-  entrypoint: "sh"
-  args: ["build/go_check.sh"]
-
-options:
-  env: ["GOPATH=/go"]
+# Check format
+npm install -g markdownlint-cli
+markdownlint **/*.md
