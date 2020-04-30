@@ -12,21 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-steps:
-- name: "gcr.io/cloud-builders/npm"
-  entrypoint: "sh"
-  args: ["build/md_check.sh"]
-  waitFor: ["-"] # wait for nothing
+#!/bin/bash
+set -e
 
-- name: "gcr.io/cloud-builders/go"
-  entrypoint: "sh"
-  args: ["build/go_check.sh"]
-  waitFor: ["-"] # wait for nothing
+go install ./cmd/tfengine
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools:0.9.5"
-  entrypoint: "sh"
-  args: ["build/tf_check.sh"]
-  waitFor: ["-"] # wait for nothing
-
-options:
-  env: ["GOPATH=/go"]
+d=${PWD}/examples/tfengine
+for c in simple.yaml full.yaml
+do
+  ${GOPATH}/bin/tfengine --config_path=${d}/${c} --output_path=/tmp/engine
+  cd /tmp/engine
+  terraform fmt -recursive -check
+  rm -r /tmp/engine/*
+done
