@@ -23,15 +23,6 @@ if [[ "${f}" ]]; then
   exit 1
 fi
 
-# Check dependencies up-to-date
-go mod download
-d=$(go get -u all 2>&1)
-if [[ "${d}" ]]; then
-  echo "The following dependencies are updated, please run 'go get -u all' locally and commit the change."
-  echo "${d}"
-  exit 1
-fi
-
 go vet ./...
 go build ./...
 go test ./...

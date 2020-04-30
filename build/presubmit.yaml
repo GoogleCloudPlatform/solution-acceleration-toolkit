@@ -18,4 +18,4 @@ steps:
   args: ["build/go_check.sh"]
 
 options:
- env: ["GOPATH=/go"]
+  env: ["GOPATH=/go"]
