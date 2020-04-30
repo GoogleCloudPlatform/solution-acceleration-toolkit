@@ -47,12 +47,10 @@ var (
 // Config is the struct representing the Policy Generator configuration.
 type Config struct {
 	OrgID           string                 `json:"org_id"`
+	TemplateDir     string                 `json:"template_dir"`
 	ForsetiPolicies map[string]interface{} `json:"forseti_policies"`
 	GCPOrgPolicies  map[string]interface{} `json:"gcp_organization_policies"`
 }
-
-// TODO(xingao): Move this to input config.
-const templateDir = "../../templates/policygen"
 
 func main() {
 	flag.Parse()
@@ -160,8 +158,14 @@ func loadConfig(path string) (*Config, error) {
 	if err := yaml.Unmarshal(b, c); err != nil {
 		return nil, fmt.Errorf("unmarshal config %q: %v", path, err)
 	}
+	if c.TemplateDir == "" {
+		return nil, fmt.Errorf("`template_dir` is required")
+	}
 	if c.OrgID == "" {
 		return nil, fmt.Errorf("`org_id` is required")
+	}
+	if !filepath.IsAbs(c.TemplateDir) {
+		c.TemplateDir = filepath.Join(filepath.Dir(path), c.TemplateDir)
 	}
 	return c, nil
 }
@@ -174,7 +178,7 @@ func generateForsetiPolicies(outputDir string, c *Config) error {
 	data := map[string]interface{}{
 		"ORG_ID": c.OrgID,
 	}
-	in := filepath.Join(templateDir, "forseti", "org")
+	in := filepath.Join(c.TemplateDir, "forseti", "org")
 	out := filepath.Join(outputDir, "forseti_policies", fmt.Sprintf("org.%s", c.OrgID))
 	return template.WriteDir(in, out, data)
 }
@@ -191,7 +195,7 @@ func generateGCPOrgPolicies(outputDir string, c *Config) error {
 		return err
 	}
 
-	in := filepath.Join(templateDir, "org_policies")
+	in := filepath.Join(c.TemplateDir, "org_policies")
 	out := filepath.Join(outputDir, "gcp_organization_policies")
 	if err := template.WriteDir(in, out, data); err != nil {
 		return err

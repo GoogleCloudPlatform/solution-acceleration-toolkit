@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template_dir: ../../templates/policygen
 org_id: 123
 forseti_policies: {}
 gcp_organization_policies:
