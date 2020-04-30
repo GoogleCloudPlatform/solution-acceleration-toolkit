@@ -4,25 +4,25 @@ Status: Early Access Program
 
 A security policy generator which generates policies for two purposes:
 
-1.  Typical policies enforced in a HIPAA aligned GCP environment.
-1.  (coming soon) Policies based on Terraform configs to monitor GCP changes
+1. Typical policies enforced in a HIPAA aligned GCP environment.
+1. (coming soon) Policies based on Terraform configs to monitor GCP changes
     that are not deployed by Terraform.
 
 Currently supported Policy Libraries:
 
-*   [Policy Library](https://github.com/forseti-security/policy-library) as YAML
+* [Policy Library](https://github.com/forseti-security/policy-library) as YAML
     files.
-*   [Google Cloud Platform Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
+* [Google Cloud Platform Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
     as Terraform configs.
 
 ## Prerequisites
 
-1.  Install the following dependencies and add them to your PATH:
+1. Install the following dependencies and add them to your PATH:
 
-    -   [Terraform 0.12](https://www.terraform.io/)
-    -   [Go 1.14+](https://golang.org/dl/)
+    * [Terraform 0.12](https://www.terraform.io/)
+    * [Go 1.14+](https://golang.org/dl/)
 
-1.  Get familiar with
+1. Get familiar with
     [GCP Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
     and
     [Policy library Constraints](https://github.com/forseti-security/policy-library).
