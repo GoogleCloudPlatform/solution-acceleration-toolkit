@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Required fields
+template_dir: ../../templates/policygen
 org_id: 123
+
+# Optional fields
 forseti_policies: {}
 gcp_organization_policies:
   ALLOWED_POLICY_MEMBER_DOMAINS:

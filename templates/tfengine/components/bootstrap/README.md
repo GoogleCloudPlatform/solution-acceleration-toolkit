@@ -1,3 +1,5 @@
+# Bootstrap
+
 This directory defines resources that must be deployed first in order for the
 rest of the Terraform configs to function.
 
