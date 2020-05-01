@@ -172,39 +172,6 @@ resource "google_cloudbuild_trigger" "plan" {
   ]
 }
 
-resource "google_cloudbuild_trigger" "deletion_check" {
-  disabled = ! var.trigger_enabled
-  provider = google-beta
-  project  = var.devops_project_id
-  name     = "tf-deletion-check"
-
-  included_files = [
-    "${local.terraform_root_prefix}org/**",
-    "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.yaml",
-    "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.sh",
-  ]
-
-  github {
-    owner = var.repo_owner
-    name  = var.repo_name
-    pull_request {
-      branch = var.branch_regex
-    }
-  }
-
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = local.terraform_root
-    # Pass as string so it can be used as a GCB substitution.
-    _REJECT_PLAN_DELETIONS = "${var.reject_plan_deletions}"
-  }
-
-  depends_on = [
-    google_project_service.devops_apis,
-  ]
-}
-
 # Cloud Build Triggers for CD.
 resource "google_cloudbuild_trigger" "apply" {
   count    = var.continuous_deployment_enabled ? 1 : 0
