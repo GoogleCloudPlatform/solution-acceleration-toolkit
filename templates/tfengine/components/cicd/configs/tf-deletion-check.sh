@@ -11,8 +11,6 @@
 
 set -e
 
-reject_plan_deletions="${1}"
-
 echo 'Checking for Terraform deletions'
 
 # Parse every plan
@@ -24,7 +22,7 @@ for planfile in $(find "$(pwd)" -name 'plan.tfplan'); do
   delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[] | select(.change.actions | index("delete")) | "\t" + .address')"
   if ! [[ -z "${delchanges}" ]]; then
     cat >&2 <<EOF
-Error: Found changes intending to delete the following resources in module ${plandir}:
+Warning: Found changes intending to delete the following resources in module ${plandir}:
 ${delchanges}
 
 EOF
@@ -38,18 +36,7 @@ done
 
 if [[ "${found_deletes}" == 'true' ]]; then
   cat >&2 <<EOF
-Error: Found changes intending to delete resources. See above for details.
-Destructive changes are dangerous and should be reviewed carefully by a human operator before being applied by automation.
-
+Warning: Found changes intending to delete resources. See above for details.
+Destructive changes should be reviewed carefully by a human operator before being applied by automation.
 EOF
-
-  # Don't fail is this check is disabled.
-  if [[ "${reject_plan_deletions}" == 'false' ]]; then
-    echo >&2 "Flag reject_plan_deletions is set to ${reject_plan_deletions}, not failing."
-    exit 0
-  fi
-
-  # Otherwise fail.
-  exit 1
 fi
-echo "No planned deletions found!"
