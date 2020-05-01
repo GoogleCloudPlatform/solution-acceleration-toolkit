@@ -23,6 +23,11 @@
 // TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
 {{- if enabled . "BOOTSTRAP_GCS_BACKEND"}}
 terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
   backend "gcs" {
     bucket = "{{.STATE_BUCKET}}"
     prefix = "bootstrap"

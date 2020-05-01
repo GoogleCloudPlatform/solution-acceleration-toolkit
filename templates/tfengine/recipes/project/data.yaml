@@ -16,7 +16,7 @@ templates:
     {{if get . "STORAGE_BUCKETS"}}
     - NAME: "storage_location"
       TYPE: "string"
-      VALUE: "{{.STORAGE_LOCATION}}"
+      VALUE: '"{{.STORAGE_LOCATION}}"'
     {{end}}
     DEPS:
     - NAME: "project"

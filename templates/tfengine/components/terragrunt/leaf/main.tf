@@ -12,32 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include {
-  path = find_in_parent_folders()
-}
+{{- if get . "DESC"}}
+# {{.}}
+{{- end}}
 
-{{range get . "DEPS" -}}
-dependency "{{.NAME}}" {
-  config_path = "{{.PATH}}"
-
-  {{- if not (get . "MOCK_OUTPUTS")}}
-  skip_outputs = true
-  {{- end}}
-
-  {{- if index . "MOCK_OUTPUTS"}}
-  mock_outputs = {
-    {{- range $k, $v := .MOCK_OUTPUTS}}
-    {{$k}} = {{$v}}
-    {{- end}}
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
   }
-  {{- end}}
+  backend "gcs" {}
 }
-{{- end}}
-
-{{if index . "INPUTS" -}}
-inputs = {
-  {{- range $k, $v := .INPUTS}}
-  {{$k}} = {{$v}}
-  {{- end}}
-}
-{{- end}}
