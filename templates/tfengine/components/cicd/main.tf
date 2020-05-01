@@ -151,7 +151,6 @@ resource "google_cloudbuild_trigger" "plan" {
 
   included_files = [
     "${local.terraform_root_prefix}**",
-    "${local.terraform_root_prefix}cicd/configs/tf-deletion-check.sh",
   ]
 
   github {
