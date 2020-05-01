@@ -88,7 +88,7 @@ Terraform configs. After the output has been generated, there is no dependency
 on the engine any longer, and the user can directly use the `terraform` and
 `terragrunt` binaries to deploy the infrastructure.
 
-Replace the values in [samples/simple.yaml](./samples/simple.yaml) with values
+Replace the values in the [example](../../examples/tfengine/simple.yaml) with values
 for your infrastructure, then run the following commands:
 
 ```shell
