@@ -61,7 +61,7 @@ locals {
     "roles/resourcemanager.organizationAdmin",
     "roles/resourcemanager.folderCreator",
     "roles/resourcemanager.projectCreator",
-  ])
+  ]
 }
 
 locals {
