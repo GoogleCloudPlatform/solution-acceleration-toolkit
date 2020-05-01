@@ -61,6 +61,18 @@ templates:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
     ORG_POLICIES: {} # Use default org policies.
+    CICD:
+      PROJECT_ID: "example-devops"
+      STATE_BUCKET: "example-state-bucket"
+      REPO_OWNER: "GoogleCloudPlatform"
+      REPO_NAME: "example"
+      BRANCH_REGEX: "master"
+      CONTINUOUS_DEPLOYMENT_ENABLED: true
+      TRIGGER_ENABLED: true
+      REJECT_PLAN_DELETIONS: false
+      BUILD_VIEWERS:
+      - "group:example-cicd-viewers@example.com"
+
 
 # Prod
 - name: "folder-prod"
