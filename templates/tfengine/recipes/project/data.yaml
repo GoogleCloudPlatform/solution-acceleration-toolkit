@@ -3,7 +3,8 @@ templates:
   recipe_path: "../folder/project.yaml"
 
 - name: "data_dir"
-  output_path: "./project.{{.PROJECT_ID}}/data"
+  output_ref: "project.dir"
+  output_path: "./data"
 
 - name: "terraform"
   recipe_path: "../terraform/terraform.yaml"

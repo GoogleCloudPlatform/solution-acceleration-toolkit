@@ -2,7 +2,7 @@ include {
   path = find_in_parent_folders()
 }
 
-{{range .DEPS -}}
+{{range get . "DEPS" -}}
 dependency "{{.NAME}}" {
   config_path = "{{.PATH}}"
 

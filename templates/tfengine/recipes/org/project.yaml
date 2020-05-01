@@ -5,9 +5,11 @@ templates:
   component_path: "../../components/project/project"
   output_ref: "dir"
   output_path: "./project"
+- name: "terragrunt"
+  component_path: "../../components/terragrunt/leaf"
+  output_ref: "project"
 {{if index . "PROJECT_OWNERS"}}
 - name: "owners"
   component_path: "../../components/project/owners"
-  output_ref: "dir"
-  output_path: "./project"
+  output_ref: "project"
 {{end}}

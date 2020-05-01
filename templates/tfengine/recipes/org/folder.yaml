@@ -8,3 +8,6 @@ templates:
   data:
     DISPLAY_NAME: "{{.DISPLAY_NAME}}"
     PARENT: "organizations/{{.ORG_ID}}"
+- name: "terragrunt"
+  component_path: "../../components/terragrunt/leaf"
+  output_ref: "folder"

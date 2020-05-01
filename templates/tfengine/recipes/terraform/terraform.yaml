@@ -1,4 +1,6 @@
 templates:
+- name: "terragrunt"
+  component_path: "../../components/terragrunt/leaf"
 {{if get . "VARS"}}
 - name: "vars"
   component_path: "../../components/terraform/variables"
@@ -6,8 +8,4 @@ templates:
 {{if get . "OUTPUTS"}}
 - name: "outputs"
   component_path: "../../components/terraform/outputs"
-{{end}}
-{{if get . "DEPS"}}
-- name: "deps"
-  component_path: "../../components/terragrunt/dependencies"
 {{end}}

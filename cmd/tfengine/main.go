@@ -29,6 +29,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/ghodss/yaml"
 )
@@ -64,13 +65,23 @@ func main() {
 		log.Fatal("--output_path must be set")
 	}
 
-	if err := run(); err != nil {
+	if err := run(*configPath, *outputPath); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run() error {
-	c, err := loadConfig(*configPath, nil)
+func run(confPath, outPath string) error {
+	var err error
+	confPath, err = pathutil.Expand(confPath)
+	if err != nil {
+		return err
+	}
+	outPath, err = pathutil.Expand(outPath)
+	if err != nil {
+		return err
+	}
+
+	c, err := loadConfig(confPath, nil)
 	if err != nil {
 		return err
 	}
@@ -95,7 +106,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	cp := exec.Command("cp", append([]string{"-a", "-t", *outputPath}, fs...)...)
+	cp := exec.Command("cp", append([]string{"-a", "-t", outPath}, fs...)...)
 	cp.Stderr = os.Stderr
 	return cp.Run()
 }
@@ -143,7 +154,10 @@ func dump(conf *Config, root string, outputRefs map[string]string, parentKey str
 
 		switch {
 		case ti.RecipePath != "":
-			rp := ti.RecipePath
+			rp, err := pathutil.Expand(ti.RecipePath)
+			if err != nil {
+				return err
+			}
 			if !filepath.IsAbs(rp) {
 				rp = filepath.Join(root, rp)
 			}
@@ -156,7 +170,10 @@ func dump(conf *Config, root string, outputRefs map[string]string, parentKey str
 				return fmt.Errorf("recipe %q: %v", ti.Name, err)
 			}
 		case ti.ComponentPath != "":
-			cp := ti.ComponentPath
+			cp, err := pathutil.Expand(ti.ComponentPath)
+			if err != nil {
+				return err
+			}
 			if !filepath.IsAbs(cp) {
 				cp = filepath.Join(root, cp)
 			}
