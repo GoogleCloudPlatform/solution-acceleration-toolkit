@@ -61,6 +61,17 @@ templates:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
     ORG_POLICIES: {} # Use default org policies.
+    CICD:
+      PROJECT_ID: "example-devops"
+      STATE_BUCKET: "example-state-bucket"
+      REPO_OWNER: "GoogleCloudPlatform"
+      REPO_NAME: "example"
+      BRANCH_REGEX: "master"
+      CONTINUOUS_DEPLOYMENT_ENABLED: true
+      TRIGGER_ENABLED: true
+      BUILD_VIEWERS:
+      - "group:example-cicd-viewers@example.com"
+
 
 # Prod
 - name: "folder-prod"
@@ -74,19 +85,12 @@ templates:
   data:
     DISPLAY_NAME: "team1"
 - name: "project-example-prod-data"
-  recipe_path: "{{$BASE}}/folder/project.yaml"
+  recipe_path: "{{$BASE}}/project/data.yaml"
   output_ref: "folder-prod-team1.dir"
   data:
     PROJECT_ID: "example-prod-data"
-    PROJECT_OWNERS:
-    - "group:example-prod-data-owners@example.com"
-- name: "project-example-prod-data-resources"
-  recipe_path: "{{$BASE}}/project/data.yaml"
-  output_ref: "project-example-prod-data.dir"
-  data:
-    PROJECT_ID: "example-prod-data"
     STORAGE_BUCKETS:
-    - NAME: "example-bucket"
+    - NAME: "example-prod-bucket"
       IAM_MEMBERS:
       - ROLE: "roles/storage.objectViewer"
         MEMBER: "group:example-readers@example.com"
@@ -103,7 +107,12 @@ templates:
   data:
     DISPLAY_NAME: "team1"
 - name: "project-example-dev-data"
-  recipe_path: "{{$BASE}}/folder/project.yaml"
+  recipe_path: "{{$BASE}}/project/data.yaml"
   output_ref: "folder-dev-team1.dir"
   data:
     PROJECT_ID: "example-dev-data"
+    STORAGE_BUCKETS:
+    - NAME: "example-dev-bucket"
+      IAM_MEMBERS:
+      - ROLE: "roles/storage.objectViewer"
+        MEMBER: "group:example-readers@example.com"
