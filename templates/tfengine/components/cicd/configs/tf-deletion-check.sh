@@ -11,7 +11,7 @@
 
 set -e
 
-echo 'Checking for Terraform deletions'
+echo -e 'Checking for Terraform deletions\n'
 
 # Parse every plan
 found_deletes="false"
@@ -35,8 +35,5 @@ EOF
 done
 
 if [[ "${found_deletes}" == 'true' ]]; then
-  cat >&2 <<EOF
-Warning: Found changes intending to delete resources. See above for details.
-Destructive changes should be reviewed carefully by a human operator before being applied by automation.
-EOF
+  echo >&2 'Destructive changes should be reviewed carefully by a human operator before being applied by automation.'
 fi
