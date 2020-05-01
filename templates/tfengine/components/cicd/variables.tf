@@ -65,8 +65,3 @@ variable "build_viewers" {
   default     = []
 }
 
-variable "reject_plan_deletions" {
-  description = "Whether to fail when delete operations are found in the plan"
-  type        = bool
-  default     = false
-}

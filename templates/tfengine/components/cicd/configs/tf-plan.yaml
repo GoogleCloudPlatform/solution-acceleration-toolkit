@@ -28,7 +28,12 @@ steps:
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terragrunt
-    args: ["plan-all", "--lock=false"]
+    args: ["plan-all", "--lock=false", "--terragrunt-non-interactive", "-out=plan.tfplan"]
+    dir: "${_TERRAFORM_ROOT}/org"
+
+  # Check for delete operations as an FYI, it won't fail the build.
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+    entrypoint: '/workspace/${_TERRAFORM_ROOT}/cicd/configs/tf-deletion-check.sh'
     dir: "${_TERRAFORM_ROOT}/org"
 
 substitutions:
