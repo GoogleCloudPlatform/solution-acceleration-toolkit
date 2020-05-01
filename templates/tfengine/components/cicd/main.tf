@@ -51,20 +51,17 @@ locals {
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
-    # Consider using viewer roles for individual services. But it is hard to know beforehand what
-    # services are used in each project.
-    "roles/viewer",
     "roles/iam.securityReviewer",
   ]
-  cloudbuild_sa_editor_roles = concat(local.cloudbuild_sa_viewer_roles, [
+  cloudbuild_sa_editor_roles = [
     "roles/billing.user",
     "roles/compute.xpnAdmin",
+    "roles/logging.configWriter",
     "roles/orgpolicy.policyAdmin",
-    "roles/owner",
     "roles/resourcemanager.organizationAdmin",
     "roles/resourcemanager.folderCreator",
     "roles/resourcemanager.projectCreator",
-  ])
+  ]
 }
 
 locals {
@@ -72,6 +69,7 @@ locals {
   terraform_root = trim((var.terraform_root == "" || var.terraform_root == "/") ? "." : var.terraform_root, "/")
   # ./ to indicate root is not recognized by Cloud Build Trigger.
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+  cloud_build_sa        = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Cloud Build - API
@@ -97,8 +95,8 @@ resource "google_project_iam_member" "cloudbuild_viewers" {
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  role   = var.continuous_deployment_enabled ? "roles/storage.admin" : "roles/storage.objectViewer"
+  member = local.cloud_build_sa
   depends_on = [
     google_project_service.devops_apis,
   ]
@@ -109,7 +107,7 @@ resource "google_organization_iam_member" "cloudbuild_sa_iam" {
   for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
   org_id   = var.org_id
   role     = each.value
-  member   = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  member   = local.cloud_build_sa
   depends_on = [
     google_project_service.devops_apis,
   ]
