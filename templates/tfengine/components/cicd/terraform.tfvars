@@ -34,3 +34,6 @@ build_viewers = [
   {{- end}}
 ]
 {{- end}}
+{{- if index . "REJECT_PLAN_DELETIONS"}}
+reject_plan_deletions         = {{.REJECT_PLAN_DELETIONS}}
+{{- end}}

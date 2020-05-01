@@ -11,8 +11,8 @@ into deployments complete with values for your infrastructure.
 Users hosting any type of sensitive data on GCP typically need to go through a
 few common and repetitive processes such as setting up devops, auditing and
 monitoring. By using our out of the box end-to-end configs that implement these
-steps for you, you can quickly setup a secure and compliant environment and focus
-on the parts of the infrastructure that drive your business.
+steps for you, you can quickly setup a secure and compliant environment and
+focus on the parts of the infrastructure that drive your business.
 
 This tool will help you follow Terraform
 [best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo),
@@ -77,11 +77,9 @@ Use our [sample](./samples) configs to quickly get started.
 
 1. The running user will need to be a super admin or have the following roles:
 
-   - `roles/resourcemanager.organizationAdmin` on the org
-
-   - `roles/resourcemanager.projectCreator` on the org
-
-   - `roles/billing.user` on the billing account
+    - `roles/resourcemanager.organizationAdmin` on the org
+    - `roles/resourcemanager.projectCreator` on the org
+    - `roles/billing.user` on the billing account
 
 ## Usage
 
@@ -95,25 +93,25 @@ for your infrastructure, then run the following commands:
 
 ```shell
 # Step 1: Clone repo
-$ git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
-$ cd healthcare-data-protection-suite
+git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
+cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
-$ CONFIG_PATH=examples/tfengine/simple.yaml
-$ OUTPUT_PATH=/tmp/engine
+CONFIG_PATH=examples/tfengine/simple.yaml
+OUTPUT_PATH=/tmp/engine
 
 # Step 3: Install the engine
-$ go install ./cmd/tfengine
+go install ./cmd/tfengine
 
 # Step 4: Generate Terraform configs. Edit config with values of your infra.
-$ nano $CONFIG_PATH
-$ tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
+nano $CONFIG_PATH
+tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
 
 # Step 5: Run one time bootstrap to setup devops project to host Terraform state.
-$ cd $OUTPUT_PATH/bootstrap
-$ terraform init
-$ terraform plan
-$ terraform apply
+cd $OUTPUT_PATH/bootstrap
+terraform init
+terraform plan
+terraform apply
 
 # Step 6 (Optional): Deploy Continuous Integration (CI) and Continuous
 # Deployment (CD) resources by following the instructions in
@@ -133,7 +131,7 @@ $ terraform apply
 # block from the config once done.
 
 # Step 9 (Optional): Modify and/or add deployments as needed...
-$ cd $OUTPUT_PATH/org/.../example-deployment
+cd $OUTPUT_PATH/org/.../example-deployment
 # And then send the change as a PR.
 ```
 

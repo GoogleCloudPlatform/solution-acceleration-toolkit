@@ -1,3 +1,5 @@
+# Root
+
 This directory defines the entire architecture in Terraform.
 
 It should initially be deployed by running `terragrunt apply-all` after
