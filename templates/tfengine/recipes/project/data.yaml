@@ -1,35 +1,35 @@
 templates:
-- name: "dir"
-  output_path: "./data"
-- name: "parent_dep"
-  component_path: "../../components/terragrunt/dependency"
-  output_ref: "dir"
+- name: "project"
+  recipe_path: "../folder/project.yaml"
+
+- name: "data_dir"
+  output_path: "./project.{{.PROJECT_ID}}/data"
+
+- name: "terraform"
+  recipe_path: "../terraform/terraform.yaml"
+  output_ref: "data_dir"
   data:
-    DEPENDENCIES:
+    VARS:
+    - NAME: "project_id"
+      TYPE: "string"
+    {{if get . "STORAGE_BUCKETS"}}
+    - NAME: "storage_location"
+      TYPE: "string"
+      VALUE: "{{.STORAGE_LOCATION}}"
+    {{end}}
+    DEPS:
     - NAME: "project"
       PATH: "../project"
-- name: "var_project_id"
-  component_path: "../../components/terraform/variable"
-  output_ref: "dir"
-  data:
-    NAME: "project_id"
-    TYPE: "string"
-    VALUE: '"{{.PROJECT_ID}}"'
+      MOCK_OUTPUTS:
+        project_id: '"mock-project"'
+    INPUTS:
+      project_id: "dependency.project.outputs.project_id"
 
-{{if index . "STORAGE_BUCKETS"}}
-- name: "var_storage_location"
-  component_path: "../../components/terraform/variable"
-  output_ref: "dir"
-  data:
-    NAME: "storage_location"
-    TYPE: "string"
-    VALUE: '"{{.STORAGE_LOCATION}}"'
-{{range $i, $_ := .STORAGE_BUCKETS}}
+{{range $i, $_ := get . "STORAGE_BUCKETS"}}
 - name: "bucket-{{.NAME}}"
   component_path: "../../components/project/storage"
-  output_ref: "dir"
+  output_ref: "data_dir"
   flatten:
   - key: "STORAGE_BUCKETS"
     index: {{$i}}
-{{end}}
 {{end}}

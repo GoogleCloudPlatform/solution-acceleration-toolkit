@@ -8,11 +8,11 @@ templates:
   data:
     DISPLAY_NAME: {{.DISPLAY_NAME}}
 - name: "parent_dep"
-  component_path: "../../components/terragrunt/dependency"
+  component_path: "../../components/terragrunt/dependencies"
   output_ref: "dir"
   output_path: "./folder"
   data:
-    DEPENDENCIES:
+    DEPS:
     - NAME: "parent_folder"
       PATH: "../../folder"
       MOCK_OUTPUTS:

@@ -1,4 +1,8 @@
-{{- range .DEPENDENCIES}}
+include {
+  path = find_in_parent_folders()
+}
+
+{{range .DEPS -}}
 dependency "{{.NAME}}" {
   config_path = "{{.PATH}}"
 
@@ -14,9 +18,9 @@ dependency "{{.NAME}}" {
   }
   {{- end}}
 }
-{{end}}
+{{- end}}
 
-{{- if index . "INPUTS"}}
+{{if index . "INPUTS" -}}
 inputs = {
   {{- range $k, $v := .INPUTS}}
   {{$k}} = {{$v}}
