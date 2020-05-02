@@ -11,7 +11,7 @@
 
 set -e
 
-echo -e 'Checking for Terraform deletions\n'
+echo -e 'Checking for resource deletions...\n'
 
 # Parse every plan
 found_deletes="false"
@@ -36,4 +36,6 @@ done
 
 if [[ "${found_deletes}" == 'true' ]]; then
   echo >&2 'Destructive changes should be reviewed carefully by a human operator before being applied by automation.'
+else
+  echo >&2 'No resource deletion found.'
 fi
