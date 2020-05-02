@@ -43,6 +43,7 @@ locals {
   devops_apis = [
     # TODO: Figure out how to use user_project_override and disable APIs in devops project
     # that are needed to obtain resource information in other projects.
+    "admin.googleapis.com",
     "bigquery.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudbuild.googleapis.com",
@@ -66,6 +67,9 @@ locals {
     "roles/resourcemanager.organizationAdmin",
     "roles/resourcemanager.folderCreator",
     "roles/resourcemanager.projectCreator",
+  ]
+  cloudbuild_devops_roles = [
+    "roles/serviceusage.serviceUsageViewer",
   ]
 }
 
@@ -108,10 +112,21 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 }
 
 # Grant Cloud Build Service Account access to the organization.
-resource "google_organization_iam_member" "cloudbuild_sa_iam" {
+resource "google_organization_iam_member" "cloudbuild_sa_org_iam" {
   for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
   org_id   = var.org_id
   role     = each.value
+  member   = local.cloud_build_sa
+  depends_on = [
+    google_project_service.devops_apis,
+  ]
+}
+
+# Grant Cloud Build Service Account access to the devops project.
+resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
+  for_each = toset(local.cloudbuild_devops_roles)
+  project  = var.devops_project_id
+  role     = each.key
   member   = local.cloud_build_sa
   depends_on = [
     google_project_service.devops_apis,
