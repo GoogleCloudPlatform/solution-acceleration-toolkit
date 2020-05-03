@@ -23,3 +23,8 @@ variable "project_id" {
 variable "domain" {
   type = string
 }
+
+variable "region" {
+  type    = string
+  default = "us-central1"
+}

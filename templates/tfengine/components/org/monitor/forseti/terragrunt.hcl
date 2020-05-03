@@ -19,6 +19,5 @@ include {
 dependencies {
   paths = [
     "../../project.{{.PROJECT_ID}}/project",
-    "../../project.{{.PROJECT_ID}}/network",
   ]
 }
