@@ -76,12 +76,13 @@ func TestImportable(t *testing.T) {
 }
 
 const (
-	testAddress  = "test-address"
-	testImportID = "test-import-id"
-	testInputDir = "test-input-dir"
+	testAddress       = "test-address"
+	testImportID      = "test-import-id"
+	testInputDir      = "test-input-dir"
+	testTerraformPath = "terraform"
 )
 
-var argsWant = []string{"terraform", "import", testAddress, testImportID}
+var argsWant = []string{testTerraformPath, "import", testAddress, testImportID}
 
 type testImporter struct{}
 
@@ -115,7 +116,7 @@ func TestImportArgs(t *testing.T) {
 		output: wantOutput,
 	}
 
-	gotOutput, err := Import(trn, testResource, testInputDir)
+	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath)
 
 	if err != nil {
 		t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)
