@@ -21,6 +21,9 @@ locals {
   forseti_subnet_name = "forseti-subnet"
 }
 
+# TODO(xingao): fix the data dependency in Forseti CloudSQL sub module
+# https://github.com/forseti-security/terraform-google-forseti/blob/master/modules/cloudsql/main.tf
+# and reuse the network component instead of putting putting the network here.
 module "network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.1"
