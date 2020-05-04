@@ -35,7 +35,8 @@ var (
 // Defines all supported resource importers
 // TODO: Add more resources
 var importers = map[string]importer{
-	"google_storage_bucket": &resources.StorageBucketImporter{},
+	"google_storage_bucket":    &resources.StorageBucketImporter{},
+	"google_container_cluster": &resources.GkeClusterImporter{},
 }
 
 // Resource represents a resource and an importer that can import it.

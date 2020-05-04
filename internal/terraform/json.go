@@ -21,7 +21,6 @@ package terraform
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strings"
 )
@@ -76,7 +75,6 @@ type ResourceChange struct {
 	Mode          string `json:"mode"` // "managed" for resources, or "data" for data resources
 	Kind          string `json:"type"`
 	Name          string `json:"name"`
-	Index         string `json:"index,omitempty"`
 	Change        Change `json:"change"`
 }
 
@@ -201,14 +199,10 @@ func ReadProviderConfigValues(data []byte, kind, name string) (map[string]interf
 		return nil, err
 	}
 
-	config, err := resourceProviderConfig(kind, name, p)
-	if err != nil {
-		return nil, err
-	}
-
 	result := make(map[string]interface{})
 
-	// Resolve expressions.
+	// Resolve expressions in the provider config.
+	config := resourceProviderConfig(kind, name, p)
 	for k, v := range config.Expressions {
 		// Within a provider config, we expect expressions to be maps, but that's not guaranteed, so don't type assert.
 		switch mv := v.(type) {
@@ -220,20 +214,20 @@ func ReadProviderConfigValues(data []byte, kind, name string) (map[string]interf
 	return result, nil
 }
 
-func resourceProviderConfig(kind string, name string, plan *plan) (ProviderConfig, error) {
-	// Find the provider_config_key for this resource.
+func resourceProviderConfig(kind string, name string, plan *plan) ProviderConfig {
+	// Find the provider_config_key for this resource, if it exists.
 	for _, r := range plan.Configuration.RootModule.Resources {
 		if r.Kind == kind && r.Name == name {
 			// Find the right provider config based on the provider_config_key
-			pc, ok := plan.Configuration.ProviderConfig[r.ProviderConfigKey]
-			if !ok {
-				return ProviderConfig{}, fmt.Errorf("Could not provider config for key %q", r.ProviderConfigKey)
+			if pc, ok := plan.Configuration.ProviderConfig[r.ProviderConfigKey]; ok {
+				return pc
 			}
-			return pc, nil
 		}
 	}
 
-	return ProviderConfig{}, fmt.Errorf("Could not find provider config key for resource %v.%v", kind, name)
+	log.Printf("Could not find provider config key for resource %v.%v", kind, name)
+
+	return ProviderConfig{}
 }
 
 func resolveExpression(expr map[string]interface{}, plan *plan) interface{} {
