@@ -135,30 +135,24 @@ func TestResourceProviderConfig(t *testing.T) {
 	p := unmarshalTestPlan(t)
 
 	tests := []struct {
-		kind      string
-		name      string
-		wantEmpty bool
+		kind string
+		name string
 	}{
 		// Empty address - should return empty.
-		{"", "", true},
+		{"", ""},
 
 		// No provider for this resource - should return empty.
-		{"google_storage_bucket", "some_other_bucket", true},
+		{"google_storage_bucket", "some_other_bucket"},
 
 		// Provider config exists - should not return empty.
-		{"google_storage_bucket", "gcs_tf_bucket", false},
+		{"google_storage_bucket", "gcs_tf_bucket"},
 	}
 	for _, testcase := range tests {
 		config, ok := resourceProviderConfig(testcase.kind, testcase.name, p)
-		isEmpty := cmp.Equal(config, ProviderConfig{}, cmpopts.EquateEmpty())
 
-		if testcase.wantEmpty {
-			if ok || !isEmpty {
-				t.Errorf("resourceProviderConfig(%q, %q, %v) returned non-empty config %v; wanted empty config", testcase.kind, testcase.name, testPlanPath, config)
-			}
-		} else {
-			if !ok || isEmpty {
-				t.Errorf("resourceProviderConfig(%q, %q, %v) returned empty provider config; want nonempty config", testcase.kind, testcase.name, testPlanPath)
+		if !ok {
+			if diff := cmp.Diff(config, ProviderConfig{}, cmpopts.EquateEmpty()); diff != "" {
+				t.Errorf("resourceProviderConfig(%q, %q, %v) returned not ok and a non-empty config (-got +want):\n%s", testcase.kind, testcase.name, testPlanPath, diff)
 			}
 		}
 	}
