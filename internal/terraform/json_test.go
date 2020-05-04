@@ -149,15 +149,15 @@ func TestResourceProviderConfig(t *testing.T) {
 		{"google_storage_bucket", "gcs_tf_bucket", false},
 	}
 	for _, testcase := range tests {
-		config := resourceProviderConfig(testcase.kind, testcase.name, p)
+		config, ok := resourceProviderConfig(testcase.kind, testcase.name, p)
 		isEmpty := cmp.Equal(config, ProviderConfig{}, cmpopts.EquateEmpty())
 
 		if testcase.wantEmpty {
-			if !isEmpty {
+			if ok || !isEmpty {
 				t.Errorf("resourceProviderConfig(%q, %q, %v) returned non-empty config %v; wanted empty config", testcase.kind, testcase.name, testPlanPath, config)
 			}
 		} else {
-			if isEmpty {
+			if !ok || isEmpty {
 				t.Errorf("resourceProviderConfig(%q, %q, %v) returned empty provider config; want nonempty config", testcase.kind, testcase.name, testPlanPath)
 			}
 		}

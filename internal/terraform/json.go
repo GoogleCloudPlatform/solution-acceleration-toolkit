@@ -202,7 +202,11 @@ func ReadProviderConfigValues(data []byte, kind, name string) (map[string]interf
 	result := make(map[string]interface{})
 
 	// Resolve expressions in the provider config.
-	config := resourceProviderConfig(kind, name, p)
+	config, ok := resourceProviderConfig(kind, name, p)
+	if !ok {
+		return result, nil
+	}
+
 	for k, v := range config.Expressions {
 		// Within a provider config, we expect expressions to be maps, but that's not guaranteed, so don't type assert.
 		switch mv := v.(type) {
@@ -214,20 +218,20 @@ func ReadProviderConfigValues(data []byte, kind, name string) (map[string]interf
 	return result, nil
 }
 
-func resourceProviderConfig(kind string, name string, plan *plan) ProviderConfig {
+func resourceProviderConfig(kind string, name string, plan *plan) (pc ProviderConfig, ok bool) {
 	// Find the provider_config_key for this resource, if it exists.
 	for _, r := range plan.Configuration.RootModule.Resources {
 		if r.Kind == kind && r.Name == name {
 			// Find the right provider config based on the provider_config_key
 			if pc, ok := plan.Configuration.ProviderConfig[r.ProviderConfigKey]; ok {
-				return pc
+				return pc, true
 			}
 		}
 	}
 
 	log.Printf("Could not find provider config key for resource %v.%v", kind, name)
 
-	return ProviderConfig{}
+	return ProviderConfig{}, false
 }
 
 func resolveExpression(expr map[string]interface{}, plan *plan) interface{} {
