@@ -23,7 +23,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/resources"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 )
 
 // Regexes used in parsing the output of the `terraform import` command.
@@ -34,22 +34,22 @@ var (
 
 // Defines all supported resource importers
 // TODO: Add more resources
-var importers = map[string]importer{
-	"google_storage_bucket":    &resources.StorageBucketImporter{},
-	"google_container_cluster": &resources.GkeClusterImporter{},
+var importers = map[string]resourceImporter{
+	"google_storage_bucket":    &importer.StorageBucket{},
+	"google_container_cluster": &importer.GKECluster{},
 }
 
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
-	ProviderConfig resources.ProviderConfigMap
-	Importer       importer
+	ProviderConfig importer.ProviderConfigMap
+	Importer       resourceImporter
 }
 
-// importer is an interface that must be implemented by all resources to allow them to be imported.
-type importer interface {
+// resourceImporter is an interface that must be implemented by all resources to allow them to be imported.
+type resourceImporter interface {
 	// ImportID returns an ID that Terraform can use to import this resource.
-	ImportID(rc terraform.ResourceChange, pcv resources.ProviderConfigMap) (string, error)
+	ImportID(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (string, error)
 }
 
 // ImportID is a convenience function for passing a resource's information to its importer.
@@ -59,8 +59,8 @@ func (ir Resource) ImportID() (string, error) {
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
-func Importable(rc terraform.ResourceChange, pcv resources.ProviderConfigMap) (*Resource, bool) {
-	importer, ok := importers[rc.Kind]
+func Importable(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (*Resource, bool) {
+	ri, ok := importers[rc.Kind]
 	if !ok {
 		return nil, false
 	}
@@ -68,7 +68,7 @@ func Importable(rc terraform.ResourceChange, pcv resources.ProviderConfigMap) (*
 	return &Resource{
 		Change:         rc,
 		ProviderConfig: pcv,
-		Importer:       importer,
+		Importer:       ri,
 	}, true
 }
 

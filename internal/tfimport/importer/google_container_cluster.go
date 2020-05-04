@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package resources
+package importer
 
 import (
 	"fmt"
@@ -22,11 +22,11 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// GkeClusterImporter defines a struct with the necessary information for a GKE cluster to be imported.
-type GkeClusterImporter struct{}
+// GKECluster defines a struct with the necessary information for a GKE cluster to be imported.
+type GKECluster struct{}
 
 // ImportID returns the GCP project and bucket name for use in importing.
-func (b *GkeClusterImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *GKECluster) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project := fromConfigValues("project", rc.Change.After, pcv)
 	if project == nil {
 		return "", fmt.Errorf("could not find project in resource change or provider config")

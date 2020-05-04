@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package resources defines resource-specific implementations for interface Importer.
-package resources
+// Package importer defines resource-specific implementations for interface Importer.
+package importer
 
 // ProviderConfigMap is a type alias to make variables more readable.
 type ProviderConfigMap map[string]interface{}

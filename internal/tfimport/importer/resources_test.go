@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package resources
+package importer
 
 import (
 	"testing"

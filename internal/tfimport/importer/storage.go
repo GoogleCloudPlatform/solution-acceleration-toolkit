@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package resources
+package importer
 
 import (
 	"fmt"
@@ -22,11 +22,11 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// StorageBucketImporter defines a struct with the necessary information for a GCS bucket to be imported.
-type StorageBucketImporter struct{}
+// StorageBucket defines a struct with the necessary information for a GCS bucket to be imported.
+type StorageBucket struct{}
 
 // ImportID returns the GCP project and bucket name for use in importing.
-func (b *StorageBucketImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *StorageBucket) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project := fromConfigValues("project", rc.Change.After, pcv)
 	name := fromConfigValues("name", rc.Change.After, nil)
 	if project == nil {
