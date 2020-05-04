@@ -147,13 +147,29 @@ func TestResourceProviderConfig(t *testing.T) {
 		// Provider config exists - should not return empty.
 		{"google_storage_bucket", "gcs_tf_bucket"},
 	}
+
+	expectedProviderConfig := ProviderConfig{
+		Name:              "google",
+		VersionConstraint: "3.5.0",
+		Alias:             "myprovider",
+		Expressions: expressions{
+			"credentials": map[string]interface{}{},
+			"location":    map[string]interface{}{"constant_value": string("US")},
+			"project":     map[string]interface{}{"references": []interface{}{string("var.project")}},
+			"region":      map[string]interface{}{"references": []interface{}{string("var.region")}},
+			"zone":        map[string]interface{}{"references": []interface{}{string("var.zone")}},
+		},
+	}
 	for _, testcase := range tests {
 		config, ok := resourceProviderConfig(testcase.kind, testcase.name, p)
 
-		if !ok {
-			if diff := cmp.Diff(config, ProviderConfig{}, cmpopts.EquateEmpty()); diff != "" {
-				t.Errorf("resourceProviderConfig(%q, %q, %v) returned not ok and a non-empty config (-got +want):\n%s", testcase.kind, testcase.name, testPlanPath, diff)
-			}
+		expected := ProviderConfig{}
+		if ok {
+			expected = expectedProviderConfig
+		}
+
+		if diff := cmp.Diff(config, expected, cmpopts.EquateEmpty()); diff != "" {
+			t.Errorf("resourceProviderConfig(%q, %q, %v) returned diff (-got +want):\n%s", testcase.kind, testcase.name, testPlanPath, diff)
 		}
 	}
 }
