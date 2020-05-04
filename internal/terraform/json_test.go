@@ -154,10 +154,10 @@ func TestResourceProviderConfig(t *testing.T) {
 		Alias:             "myprovider",
 		Expressions: expressions{
 			"credentials": map[string]interface{}{},
-			"location":    map[string]interface{}{"constant_value": string("US")},
-			"project":     map[string]interface{}{"references": []interface{}{string("var.project")}},
-			"region":      map[string]interface{}{"references": []interface{}{string("var.region")}},
-			"zone":        map[string]interface{}{"references": []interface{}{string("var.zone")}},
+			"location":    map[string]interface{}{"constant_value": "US"},
+			"project":     map[string]interface{}{"references": []interface{}{"var.project"}},
+			"region":      map[string]interface{}{"references": []interface{}{"var.region"}},
+			"zone":        map[string]interface{}{"references": []interface{}{"var.zone"}},
 		},
 	}
 	for _, testcase := range tests {
