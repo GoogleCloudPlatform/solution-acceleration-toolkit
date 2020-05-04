@@ -135,29 +135,41 @@ func TestResourceProviderConfig(t *testing.T) {
 	p := unmarshalTestPlan(t)
 
 	tests := []struct {
-		kind    string
-		name    string
-		wantErr bool
+		kind string
+		name string
 	}{
-		// Empty address - should return err.
-		{"", "", true},
+		// Empty address - should return empty.
+		{"", ""},
 
-		// No provider for this resource - should return err.
-		{"google_storage_bucket", "some_other_bucket", true},
+		// No provider for this resource - should return empty.
+		{"google_storage_bucket", "some_other_bucket"},
 
-		// Provider config exists - should not return err.
-		{"google_storage_bucket", "gcs_tf_bucket", false},
+		// Provider config exists - should not return empty.
+		{"google_storage_bucket", "gcs_tf_bucket"},
+	}
+
+	expectedProviderConfig := ProviderConfig{
+		Name:              "google",
+		VersionConstraint: "3.5.0",
+		Alias:             "myprovider",
+		Expressions: expressions{
+			"credentials": map[string]interface{}{},
+			"location":    map[string]interface{}{"constant_value": "US"},
+			"project":     map[string]interface{}{"references": []interface{}{"var.project"}},
+			"region":      map[string]interface{}{"references": []interface{}{"var.region"}},
+			"zone":        map[string]interface{}{"references": []interface{}{"var.zone"}},
+		},
 	}
 	for _, testcase := range tests {
-		config, err := resourceProviderConfig(testcase.kind, testcase.name, p)
-		if testcase.wantErr {
-			if err == nil {
-				t.Errorf("resourceProviderConfig(%q, %q, %v) returned nil err; wanted err != nil", testcase.kind, testcase.name, testPlanPath)
-			}
-		} else {
-			if cmp.Equal(config, ProviderConfig{}, cmpopts.EquateEmpty()) {
-				t.Errorf("resourceProviderConfig(%q, %q, %v) returned empty provider config; want nonempty config", testcase.kind, testcase.name, testPlanPath)
-			}
+		config, ok := resourceProviderConfig(testcase.kind, testcase.name, p)
+
+		expected := ProviderConfig{}
+		if ok {
+			expected = expectedProviderConfig
+		}
+
+		if diff := cmp.Diff(config, expected, cmpopts.EquateEmpty()); diff != "" {
+			t.Errorf("resourceProviderConfig(%q, %q, %v) returned diff (-got +want):\n%s", testcase.kind, testcase.name, testPlanPath, diff)
 		}
 	}
 }

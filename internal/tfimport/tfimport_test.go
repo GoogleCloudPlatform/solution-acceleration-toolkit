@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/resources"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -31,7 +31,7 @@ func TestImportable(t *testing.T) {
 	tests := []struct {
 		rc   terraform.ResourceChange
 		pcv  map[string]interface{}
-		want importer
+		want resourceImporter
 	}{
 		// Empty Kind - should return nil.
 		{terraform.ResourceChange{}, nil, nil},
@@ -55,7 +55,23 @@ func TestImportable(t *testing.T) {
 					},
 				},
 			}, nil,
-			&resources.StorageBucketImporter{},
+			&importer.StorageBucket{},
+		},
+
+		// GKE Cluster - should return resource with GKE clsuter importer
+		{
+			terraform.ResourceChange{
+				Kind:    "google_container_cluster",
+				Address: "google_container_cluster.my_cluster",
+				Change: terraform.Change{
+					After: map[string]interface{}{
+						"project":  "project-from-resource",
+						"location": "us-east1",
+						"name":     "mybucket",
+					},
+				},
+			}, nil,
+			&importer.GKECluster{},
 		},
 	}
 	for _, tc := range tests {
@@ -86,7 +102,7 @@ var argsWant = []string{testTerraformPath, "import", testAddress, testImportID}
 
 type testImporter struct{}
 
-func (r *testImporter) ImportID(terraform.ResourceChange, resources.ProviderConfigMap) (string, error) {
+func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfigMap) (string, error) {
 	return testImportID, nil
 }
 
@@ -107,7 +123,7 @@ func (tr *testRunner) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 func TestImportArgs(t *testing.T) {
 	testResource := &Resource{
 		Change:         terraform.ResourceChange{Address: testAddress},
-		ProviderConfig: resources.ProviderConfigMap{},
+		ProviderConfig: importer.ProviderConfigMap{},
 		Importer:       &testImporter{},
 	}
 
