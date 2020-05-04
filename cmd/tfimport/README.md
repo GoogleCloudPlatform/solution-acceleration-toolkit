@@ -32,6 +32,17 @@ supported resources will be in the state.
 If you now run `terraform plan`, you should only see planned changes for
 differences between the configs and the actual infrastructure.
 
+## Using a Different Terraform Binary
+
+By default, the importer will call simply `terraform` to do operations.
+
+If you want to use a specific terraform binary, or a wrapper like
+[Terragrunt](https://terragrunt.gruntwork.io/), supply the right flag:
+
+```shell
+go run ./cmd/tfimport --input_dir ~/path/to/terraform/configs/dir/ --terraform_path='terragrunt'
+```
+
 ## Supported Resources
 
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)

@@ -73,7 +73,7 @@ func Importable(rc terraform.ResourceChange, pcv resources.ProviderConfigMap) (*
 
 // Import runs `terraform import` for the given importable resource.
 // It parses the output string to determine to determine if the provider said the resource doesn't exist or isn't importable.
-func Import(rn runner.Runner, ir *Resource, inputDir string) (output []byte, err error) {
+func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string) (output []byte, err error) {
 	// Try to get the ImportID()
 	importID, err := ir.ImportID()
 	if err != nil {
@@ -81,7 +81,7 @@ func Import(rn runner.Runner, ir *Resource, inputDir string) (output []byte, err
 	}
 
 	// Run the import.
-	cmd := exec.Command("terraform", "import", ir.Change.Address, importID)
+	cmd := exec.Command(terraformPath, "import", ir.Change.Address, importID)
 	cmd.Dir = inputDir
 	return rn.CmdCombinedOutput(cmd)
 }

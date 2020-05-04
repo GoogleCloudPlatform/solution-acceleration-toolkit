@@ -36,7 +36,8 @@ import (
 )
 
 var (
-	inputDir = flag.String("input_dir", ".", "Required. Path to Terraform config.")
+	inputDir      = flag.String("input_dir", ".", "Required. Path to Terraform config.")
+	terraformPath = flag.String("terraform_path", "terraform", "Optional. Name or path to the terraform binary to use.")
 )
 
 func main() {
@@ -62,19 +63,19 @@ func run() error {
 	// Create Terraform command runners.
 	rn := &runner.Default{}
 	tfCmd := func(args ...string) error {
-		cmd := exec.Command("terraform", args...)
+		cmd := exec.Command(*terraformPath, args...)
 		cmd.Dir = *inputDir
 		return rn.CmdRun(cmd)
 	}
 	tfCmdOutput := func(args ...string) ([]byte, error) {
-		cmd := exec.Command("terraform", args...)
+		cmd := exec.Command(*terraformPath, args...)
 		cmd.Dir = *inputDir
 		return rn.CmdOutput(cmd)
 	}
 
 	// Init is safe to run on an already-initialized config dir.
 	if err := tfCmd("init"); err != nil {
-		return fmt.Errorf("terraform init: %v", err)
+		return fmt.Errorf("init: %v", err)
 	}
 
 	// Generate and load the plan using a temp var.
@@ -85,11 +86,11 @@ func run() error {
 	defer os.Remove(tmpfile.Name())
 	planPath := tmpfile.Name()
 	if err := tfCmd("plan", "-out", planPath); err != nil {
-		return fmt.Errorf("terraform plan: %v", err)
+		return fmt.Errorf("plan: %v", err)
 	}
 	b, err := tfCmdOutput("show", "-json", planPath)
 	if err != nil {
-		return fmt.Errorf("terraform show: %v", err)
+		return fmt.Errorf("show: %v", err)
 	}
 
 	// Load only "create" changes.
@@ -117,7 +118,7 @@ func run() error {
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(rn, ir, *inputDir)
+		output, err := tfimport.Import(rn, ir, *inputDir, *terraformPath)
 
 		// Handle the different outcomes of the import attempt.
 		switch {
