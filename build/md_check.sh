@@ -15,6 +15,10 @@
 #!/bin/bash
 set -e
 
+# Print versions
+npm version
+
 # Check format
-npm install -g markdownlint-cli@0.22.0
+# Note: Requires Node 10+ (see https://github.com/igorshubovych/markdownlint-cli/issues/90)
+npm install -g markdownlint-cli
 markdownlint **/*.md
