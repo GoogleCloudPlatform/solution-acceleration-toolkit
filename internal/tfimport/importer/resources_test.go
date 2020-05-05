@@ -22,43 +22,47 @@ import (
 
 func TestFromConfigValues(t *testing.T) {
 	configs := []ProviderConfigMap{
-		ProviderConfigMap{
+		{
 			"":       "emptyValFirst",
 			"mykey1": "key1First",
 			"mykey2": "key2First",
 		},
-		nil,                 // nil map to ensure it doesn't crash the check.
-		ProviderConfigMap{}, // Empty map just to make sure it gets skipped correctly.
-		ProviderConfigMap{
+		nil, // nil map to ensure it doesn't crash the check.
+		{},  // Empty map just to make sure it gets skipped correctly.
+		{
 			"mykey1": "key1Second",
 			"mykey3": "key3Second",
 		},
 	}
 
 	tests := []struct {
-		key  string
-		cvs  []ProviderConfigMap
-		want interface{}
+		key     string
+		cvs     []ProviderConfigMap
+		want    interface{}
+		wantErr bool
 	}{
 		// Empty configs - should return nil.
-		{"", nil, nil},
+		{"", nil, nil, false},
 
 		// Empty key - should still work.
-		{"", configs, "emptyValFirst"},
+		{"", configs, "emptyValFirst", false},
 
-		// Key not in any config - should return nil.
-		{"nonExistentKey", configs, nil},
+		// Key not in any config - should return nil and err.
+		{"nonExistentKey", configs, nil, true},
 
 		// Key in second config - should return second one, not nil.
-		{"mykey3", configs, "key3Second"},
+		{"mykey3", configs, "key3Second", false},
 
 		// Key in both configs - should return first one.
-		{"mykey1", configs, "key1First"},
+		{"mykey1", configs, "key1First", false},
 	}
 	for _, tc := range tests {
-		got := fromConfigValues(tc.key, tc.cvs...)
+		got, err := fromConfigValues(tc.key, tc.cvs...)
 		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
+		}
+		if tc.wantErr && err == nil {
+			t.Errorf("fromConfigValues(%v, %v) returned nil err on nil value, expected error message", tc.key, tc.cvs)
 		}
 	}
 }

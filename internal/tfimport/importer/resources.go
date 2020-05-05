@@ -17,15 +17,17 @@
 // Package importer defines resource-specific implementations for interface Importer.
 package importer
 
+import "fmt"
+
 // ProviderConfigMap is a type alias to make variables more readable.
 type ProviderConfigMap map[string]interface{}
 
 // fromConfigValues returns the first matching config value for key, from the given config value maps cvs.
-func fromConfigValues(key string, cvs ...ProviderConfigMap) interface{} {
+func fromConfigValues(key string, cvs ...ProviderConfigMap) (interface{}, error) {
 	for _, cv := range cvs {
 		if v, ok := cv[key]; ok {
-			return v
+			return v, nil
 		}
 	}
-	return nil
+	return nil, fmt.Errorf("could not find key %q in resource change or provider config", key)
 }
