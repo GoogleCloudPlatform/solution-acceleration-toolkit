@@ -41,8 +41,8 @@ func TestFromConfigValues(t *testing.T) {
 		want    interface{}
 		wantErr bool
 	}{
-		// Empty configs - should return nil.
-		{"", nil, nil, false},
+		// Empty configs - should return nil and err.
+		{"", nil, nil, true},
 
 		// Empty key - should still work.
 		{"", configs, "emptyValFirst", false},
@@ -59,8 +59,8 @@ func TestFromConfigValues(t *testing.T) {
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, tc.cvs...)
 
-		if tc.wantErr && err == nil {
-			t.Errorf("fromConfigValues(%v, %v) returned nil err on nil value, expected error message", tc.key, tc.cvs)
+		if (err != nil) != tc.wantErr {
+			t.Errorf("fromConfigValues(%v, %v) = error: %v; want error %t", tc.key, tc.cvs, err, tc.wantErr)
 		}
 
 		if got != tc.want {
