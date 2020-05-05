@@ -24,7 +24,7 @@ pipeline to manage.
 Our templates use Google's best practice modules from the
 [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
 
-Use our [sample](./samples) configs to quickly get started.
+Use our [example](../../examples/tfengine) configs to quickly get started.
 
 ## Prerequisites
 
