@@ -20,51 +20,60 @@ import (
 	"testing"
 )
 
-func TestFromConfigValues(t *testing.T) {
-	configs := []ProviderConfigMap{
-		{
-			"":       "emptyValFirst",
-			"mykey1": "key1First",
-			"mykey2": "key2First",
-		},
-		nil, // nil map to ensure it doesn't crash the check.
-		{},  // Empty map just to make sure it gets skipped correctly.
-		{
-			"mykey1": "key1Second",
-			"mykey3": "key3Second",
-		},
-	}
+var configs = []ProviderConfigMap{
+	{
+		"":       "emptyValFirst",
+		"mykey1": "key1First",
+		"mykey2": "key2First",
+	},
+	nil, // nil map to ensure it doesn't crash the check.
+	{},  // Empty map just to make sure it gets skipped correctly.
+	{
+		"mykey1": "key1Second",
+		"mykey3": "key3Second",
+	},
+}
 
+func TestFromConfigValuesGot(t *testing.T) {
 	tests := []struct {
-		key     string
-		cvs     []ProviderConfigMap
-		want    interface{}
-		wantErr bool
+		key  string
+		cvs  []ProviderConfigMap
+		want interface{}
 	}{
-		// Empty configs - should return nil.
-		{"", nil, nil, false},
-
 		// Empty key - should still work.
-		{"", configs, "emptyValFirst", false},
-
-		// Key not in any config - should return nil and err.
-		{"nonExistentKey", configs, nil, true},
+		{"", configs, "emptyValFirst"},
 
 		// Key in second config - should return second one, not nil.
-		{"mykey3", configs, "key3Second", false},
+		{"mykey3", configs, "key3Second"},
 
 		// Key in both configs - should return first one.
-		{"mykey1", configs, "key1First", false},
+		{"mykey1", configs, "key1First"},
 	}
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, tc.cvs...)
-
-		if tc.wantErr && err == nil {
-			t.Errorf("fromConfigValues(%v, %v) returned nil err on nil value, expected error message", tc.key, tc.cvs)
+		if err != nil {
+			t.Errorf("fromConfigValues(%v, %v) failed: %s", tc.key, tc.cvs, err)
 		}
-
 		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
+		}
+	}
+}
+
+func TestFromConfigValuesErr(t *testing.T) {
+	tests := []struct {
+		key string
+		cvs []ProviderConfigMap
+	}{
+		// Empty configs - should return err.
+		{"", nil},
+
+		// Key not in any config - should return err.
+		{"nonExistentKey", configs},
+	}
+	for _, tc := range tests {
+		if _, err := fromConfigValues(tc.key, tc.cvs...); err == nil {
+			t.Errorf("fromConfigValues(%v, %v) succeeded for malformed input, want error", tc.key, tc.cvs)
 		}
 	}
 }
