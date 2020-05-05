@@ -17,7 +17,6 @@
 package importer
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -73,15 +72,8 @@ func TestFromConfigValuesErr(t *testing.T) {
 		{"nonExistentKey", configs},
 	}
 	for _, tc := range tests {
-		_, err := fromConfigValues(tc.key, tc.cvs...)
-
-		if err == nil {
+		if _, err := fromConfigValues(tc.key, tc.cvs...); err == nil {
 			t.Errorf("fromConfigValues(%v, %v) succeeded for malformed input, want error", tc.key, tc.cvs)
-		}
-
-		wantErr := fmt.Errorf("could not find key %q in resource change or provider config", tc.key)
-		if err.Error() != wantErr.Error() {
-			t.Errorf("fromConfigValues(%v, %v) = error: %v; want error %v", tc.key, tc.cvs, err, wantErr)
 		}
 	}
 }
