@@ -27,19 +27,19 @@ type GKECluster struct{}
 
 // ImportID returns the GCP project and bucket name for use in importing.
 func (b *GKECluster) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
-	project := fromConfigValues("project", rc.Change.After, pcv)
-	if project == nil {
-		return "", fmt.Errorf("could not find project in resource change or provider config")
+	project, err := fromConfigValues("project", rc.Change.After, pcv)
+	if err != nil {
+		return "", err
 	}
 
-	location := fromConfigValues("location", rc.Change.After, pcv)
-	if project == nil {
-		return "", fmt.Errorf("could not find location in resource change or provider config")
+	location, err := fromConfigValues("location", rc.Change.After, pcv)
+	if err != nil {
+		return "", err
 	}
 
-	name := fromConfigValues("name", rc.Change.After, nil)
-	if name == nil {
-		return "", fmt.Errorf("could not find cluster name in resource change or provider config")
+	name, err := fromConfigValues("name", rc.Change.After, nil)
+	if err != nil {
+		return "", err
 	}
 
 	return fmt.Sprintf("projects/%v/locations/%v/clusters/%v", project, location, name), nil
