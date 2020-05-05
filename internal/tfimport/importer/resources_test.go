@@ -51,7 +51,11 @@ func TestFromConfigValuesGot(t *testing.T) {
 		{"mykey1", configs, "key1First"},
 	}
 	for _, tc := range tests {
-		if got, _ := fromConfigValues(tc.key, tc.cvs...); got != tc.want {
+		got, err := fromConfigValues(tc.key, tc.cvs...)
+		if err != nil {
+			t.Errorf("fromConfigValues(%v, %v) failed: %s", tc.key, tc.cvs, err)
+		}
+		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
 		}
 	}
@@ -71,8 +75,12 @@ func TestFromConfigValuesErr(t *testing.T) {
 	for _, tc := range tests {
 		_, err := fromConfigValues(tc.key, tc.cvs...)
 
+		if err == nil {
+			t.Errorf("fromConfigValues(%v, %v) succeeded for malformed input, want error", tc.key, tc.cvs)
+		}
+
 		wantErr := fmt.Errorf("could not find key %q in resource change or provider config", tc.key)
-		if err == nil || err.Error() != wantErr.Error() {
+		if err.Error() != wantErr.Error() {
 			t.Errorf("fromConfigValues(%v, %v) = error: %v; want error %v", tc.key, tc.cvs, err, wantErr)
 		}
 	}
