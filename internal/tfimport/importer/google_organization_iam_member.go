@@ -22,11 +22,11 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// OrgIamMember defines a struct with the necessary information for a GKE cluster to be imported.
-type OrgIamMember struct{}
+// OrgIAMMember defines a struct with the necessary information for a GKE cluster to be imported.
+type OrgIAMMember struct{}
 
 // ImportID returns the GCP project and bucket name for use in importing.
-func (b *OrgIamMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *OrgIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	orgID, err := fromConfigValues("org_id", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
