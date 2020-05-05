@@ -16,5 +16,5 @@
 set -e
 
 # Check format
-npm install -g markdownlint-cli
+npm install -g markdownlint-cli@0.22.0
 markdownlint **/*.md
