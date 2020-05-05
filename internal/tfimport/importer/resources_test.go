@@ -58,11 +58,13 @@ func TestFromConfigValues(t *testing.T) {
 	}
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, tc.cvs...)
-		if got != tc.want {
-			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
-		}
+
 		if tc.wantErr && err == nil {
 			t.Errorf("fromConfigValues(%v, %v) returned nil err on nil value, expected error message", tc.key, tc.cvs)
+		}
+
+		if got != tc.want {
+			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
 		}
 	}
 }
