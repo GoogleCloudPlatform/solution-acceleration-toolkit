@@ -41,14 +41,8 @@ func TestFromConfigValuesGot(t *testing.T) {
 		cvs  []ProviderConfigMap
 		want interface{}
 	}{
-		// Empty configs - should return nil and err.
-		{"", nil, nil},
-
 		// Empty key - should still work.
 		{"", configs, "emptyValFirst"},
-
-		// Key not in any config - should return nil and err.
-		{"nonExistentKey", configs, nil},
 
 		// Key in second config - should return second one, not nil.
 		{"mykey3", configs, "key3Second"},
@@ -57,9 +51,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 		{"mykey1", configs, "key1First"},
 	}
 	for _, tc := range tests {
-		got, _ := fromConfigValues(tc.key, tc.cvs...)
-
-		if got != tc.want {
+		if got, _ := fromConfigValues(tc.key, tc.cvs...); got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
 		}
 	}
@@ -67,33 +59,20 @@ func TestFromConfigValuesGot(t *testing.T) {
 
 func TestFromConfigValuesErr(t *testing.T) {
 	tests := []struct {
-		key     string
-		cvs     []ProviderConfigMap
-		wantErr bool
+		key string
+		cvs []ProviderConfigMap
 	}{
 		// Empty configs - should return err.
-		{"", nil, true},
-
-		// Empty key exists - should NOT return err.
-		{"", configs, false},
+		{"", nil},
 
 		// Key not in any config - should return err.
-		{"nonExistentKey", configs, true},
+		{"nonExistentKey", configs},
 	}
 	for _, tc := range tests {
 		_, err := fromConfigValues(tc.key, tc.cvs...)
 
-		errsEqual := true
-		var wantErr error = nil
-
-		if tc.wantErr {
-			wantErr = fmt.Errorf("could not find key %q in resource change or provider config", tc.key)
-			errsEqual = err.Error() == wantErr.Error()
-		} else {
-			errsEqual = err == nil
-		}
-
-		if !errsEqual {
+		wantErr := fmt.Errorf("could not find key %q in resource change or provider config", tc.key)
+		if err == nil || err.Error() != wantErr.Error() {
 			t.Errorf("fromConfigValues(%v, %v) = error: %v; want error %v", tc.key, tc.cvs, err, wantErr)
 		}
 	}
