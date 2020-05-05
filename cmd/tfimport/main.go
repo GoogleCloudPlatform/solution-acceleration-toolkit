@@ -135,8 +135,9 @@ func run() error {
 			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
 
 		// Important to handle this last.
+		// Don't fail right away, import as many resources as possible.
 		default:
-			return fmt.Errorf("import resource %q: %v", ir.Change.Address, err)
+			log.Printf("import resource %q: %v", ir.Change.Address, err)
 		}
 	}
 
