@@ -13,7 +13,7 @@
 # limitations under the License.
 
 steps:
-- name: "gcr.io/cloud-builders/npm"
+- name: "gcr.io/cloud-builders/npm:current"
   entrypoint: "sh"
   args: ["build/md_check.sh"]
 
