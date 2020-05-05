@@ -15,6 +15,9 @@
 #!/bin/bash
 set -e
 
+# Print versions
+go version
+
 # Check format
 f=$(gofmt -l .)
 if [[ "${f}" ]]; then
