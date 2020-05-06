@@ -32,7 +32,7 @@ supported resources will be in the state.
 If you now run `terraform plan`, you should only see planned changes for
 differences between the configs and the actual infrastructure.
 
-## Using a Different Terraform Binary
+### Using a Different Terraform Binary
 
 By default, the importer will call simply `terraform` to do operations.
 
@@ -43,10 +43,6 @@ If you want to use a specific terraform binary, or a wrapper like
 go run ./cmd/tfimport --input_dir ~/path/to/terraform/configs/dir/ --terraform_path='terragrunt'
 ```
 
-## Supported Resources
-
-- [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
-
 ## Terraformer
 
 This tool is complementary to
@@ -55,3 +51,11 @@ This tool is complementary to
 Terraformer focuses on generating new Terraform configs from existing
 infrastructure, while the Importer allows you to define and organize your own
 Terraform configs, including importing resources from within modules.
+
+## Supported Resources
+
+- [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
+- [google_container_cluster](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
+- [google_organization_policy](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)
+- [google_organization_iam_member](https://www.terraform.io/docs/providers/google/r/google_organization_iam_member.html)
+- [google_organization_iam_audit_config](https://www.terraform.io/docs/providers/google/r/google_organization_iam_audit_config.html)
