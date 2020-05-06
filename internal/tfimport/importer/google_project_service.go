@@ -22,20 +22,20 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// ProjectIAMBinding defines a struct with the necessary information for a google_project_iam_binding to be imported.
-type ProjectIAMBinding struct{}
+// ProjectService defines a struct with the necessary information for a google_project_service to be imported.
+type ProjectService struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *ProjectIAMBinding) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *ProjectService) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
 	}
 
-	role, err := fromConfigValues("role", rc.Change.After, pcv)
+	service, err := fromConfigValues("service", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
 	}
 
-	return fmt.Sprintf("%v %v", project, role), nil
+	return fmt.Sprintf("%v/%v", project, service), nil
 }

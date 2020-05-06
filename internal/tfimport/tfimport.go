@@ -43,6 +43,7 @@ var importers = map[string]resourceImporter{
 	"google_project":                       &importer.Project{},
 	"google_project_iam_binding":           &importer.ProjectIAMBinding{},
 	"google_project_iam_member":            &importer.ProjectIAMMember{},
+	"google_project_service":               &importer.ProjectService{},
 }
 
 // Resource represents a resource and an importer that can import it.
