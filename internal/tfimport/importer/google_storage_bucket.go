@@ -25,7 +25,7 @@ import (
 // StorageBucket defines a struct with the necessary information for a google_storage_bucket to be imported.
 type StorageBucket struct{}
 
-// ImportID returns the GCP project and bucket name for use in importing.
+// ImportID returns the ID of the resource to use in importing.
 func (b *StorageBucket) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {

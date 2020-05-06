@@ -25,7 +25,7 @@ import (
 // GKECluster defines a struct with the necessary information for a google_container_cluster to be imported.
 type GKECluster struct{}
 
-// ImportID returns the GCP project, location and name for use in importing.
+// ImportID returns the ID of the resource to use in importing.
 func (b *GKECluster) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
