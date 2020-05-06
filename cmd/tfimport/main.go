@@ -37,7 +37,7 @@ import (
 
 var (
 	inputDir      = flag.String("input_dir", ".", "Path to Terraform config.")
-	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.")
+	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
 )
 
 func main() {
