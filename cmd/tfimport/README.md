@@ -46,6 +46,7 @@ go run ./cmd/tfimport --input_dir ~/path/to/terraform/configs/dir/ --terraform_p
 ## Supported Resources
 
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
+- [google_project_iam_member](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_member-1)
 
 ## Terraformer
 
