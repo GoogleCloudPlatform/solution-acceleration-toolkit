@@ -48,7 +48,7 @@ differences between the configs and the actual infrastructure.
 $ tfimport -h
 Usage:
   -input_dir string
-     Path to directory containing Terraform config. (default ".")
+     Path to the directory containing Terraform config. (default ".")
   -terraform_path string
      Name or path to the terraform binary to use.
      This could be i.e. 'terragrunt' or a path to
