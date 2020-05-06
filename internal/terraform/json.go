@@ -229,8 +229,6 @@ func resourceProviderConfig(kind string, name string, plan *plan) (pc ProviderCo
 		}
 	}
 
-	log.Printf("Could not find provider config key for resource %v.%v", kind, name)
-
 	return ProviderConfig{}, false
 }
 
