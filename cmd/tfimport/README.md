@@ -60,3 +60,4 @@ Terraform configs, including importing resources from within modules.
 - [google_organization_iam_member](https://www.terraform.io/docs/providers/google/r/google_organization_iam_member.html)
 - [google_organization_iam_audit_config](https://www.terraform.io/docs/providers/google/r/google_organization_iam_audit_config.html)
 - [google_project](https://www.terraform.io/docs/providers/google/r/google_project.html)
+- [google_project_iam_binding](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_binding-1)
