@@ -22,10 +22,10 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// GKECluster defines a struct with the necessary information for a GKE cluster to be imported.
+// GKECluster defines a struct with the necessary information for a google_container_cluster to be imported.
 type GKECluster struct{}
 
-// ImportID returns the GCP project and bucket name for use in importing.
+// ImportID returns the GCP project, location and name for use in importing.
 func (b *GKECluster) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {

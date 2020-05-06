@@ -22,7 +22,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// StorageBucket defines a struct with the necessary information for a GCS bucket to be imported.
+// StorageBucket defines a struct with the necessary information for a google_storage_bucket to be imported.
 type StorageBucket struct{}
 
 // ImportID returns the GCP project and bucket name for use in importing.

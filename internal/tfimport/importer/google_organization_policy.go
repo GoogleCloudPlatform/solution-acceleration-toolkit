@@ -22,10 +22,10 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// OrgPolicy defines a struct with the necessary information for a GKE cluster to be imported.
+// OrgPolicy defines a struct with the necessary information for a google_organization_policy to be imported.
 type OrgPolicy struct{}
 
-// ImportID returns the GCP project and bucket name for use in importing.
+// ImportID returns the org_id and constraint for use in importing.
 func (b *OrgPolicy) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	orgID, err := fromConfigValues("org_id", rc.Change.After, pcv)
 	if err != nil {
