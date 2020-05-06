@@ -25,7 +25,7 @@ import (
 // ProjectIAMMember defines a struct with the necessary information for a google_project_iam_member to be imported.
 type ProjectIAMMember struct{}
 
-// ImportID returns the project, role and membe for use in importing.
+// ImportID returns the ID of the resource to use in importing.
 func (b *ProjectIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
