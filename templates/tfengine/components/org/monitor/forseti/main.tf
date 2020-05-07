@@ -59,7 +59,7 @@ module "router" {
 
 module "forseti" {
   source  = "terraform-google-modules/forseti/google"
-  version = "~> 5.2.0"
+  version = "~> 5.2.1"
 
   domain     = var.domain
   project_id = var.project_id
