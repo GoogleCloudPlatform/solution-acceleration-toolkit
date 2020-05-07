@@ -22,6 +22,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -33,6 +34,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 )
 
 var (
@@ -101,6 +103,7 @@ func run() error {
 
 	// Import all importable create changes.
 	importedSomething := false
+	var ie *importer.InsufficientInfoErr
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -123,11 +126,17 @@ func run() error {
 		// Handle the different outcomes of the import attempt.
 		switch {
 		// err will only be nil when the import succeed.
+		// Import succeeded, print the success output.
 		case err == nil:
-			// Import succeeded, print the success output.
 			fmt.Println(string(output))
 			importedSomething = true
 
+		// Check if the error indicates insufficient information.
+		case errors.As(err, &ie):
+			log.Println(err)
+			log.Printf("Skipping")
+
+		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case tfimport.NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
@@ -136,7 +145,7 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			return fmt.Errorf("import resource %q: %v", ir.Change.Address, err)
+			return fmt.Errorf("import resource %q: %v\n%v", ir.Change.Address, err, string(output))
 		}
 	}
 
