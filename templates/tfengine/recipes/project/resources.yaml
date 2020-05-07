@@ -1,14 +1,6 @@
 templates:
-- name: "project"
-  recipe_path: "../folder/project.yaml"
-
-- name: "data_dir"
-  output_ref: "project.dir"
-  output_path: "./data"
-
 - name: "terraform"
   recipe_path: "../terraform/terraform.yaml"
-  output_ref: "data_dir"
   data:
     VARS:
     - NAME: "project_id"
@@ -17,6 +9,11 @@ templates:
     - NAME: "storage_location"
       TYPE: "string"
       VALUE: '"{{.STORAGE_LOCATION}}"'
+    {{end}}
+    {{if get . "GKE_CLUSTERS"}}
+    - NAME: "cluster_region"
+      TYPE: "string"
+      VALUE: '"{{.CLUSTER_REGION}}"'
     {{end}}
     DEPS:
     - NAME: "project"
@@ -29,8 +26,15 @@ templates:
 {{range $i, $_ := get . "STORAGE_BUCKETS"}}
 - name: "bucket-{{.NAME}}"
   component_path: "../../components/project/storage"
-  output_ref: "data_dir"
   flatten:
   - key: "STORAGE_BUCKETS"
+    index: {{$i}}
+{{end}}
+
+{{range $i, $_ := get . "GKE_CLUSTERS"}}
+- name: "gke-{{.NAME}}"
+  component_path: "../../components/project/gke_cluster"
+  flatten:
+  - key: "GKE_CLUSTERS"
     index: {{$i}}
 {{end}}

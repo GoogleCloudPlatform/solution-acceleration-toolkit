@@ -8,6 +8,14 @@ templates:
 - name: "project"
   component_path: "../../components/project/project"
   output_ref: "terragrunt"
+{{if has . "RESOURCES"}}
+- name: "resources"
+  recipe_path: "../project/resources.yaml"
+  output_ref: "dir"
+  output_path: "./resources"
+  flatten:
+  - key: "RESOURCES"
+{{end}}
 
 {{if index . "PROJECT_OWNERS"}}
 - name: "owners"
