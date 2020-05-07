@@ -46,6 +46,7 @@ var importers = map[string]resourceImporter{
 	"google_project_service":               &importer.ProjectService{},
 	"google_service_account":               &importer.ServiceAccount{},
 	"google_bigquery_table":                &importer.BigQueryTable{},
+	"google_bigquery_dataset":              &importer.BigQueryDataset{},
 }
 
 // Resource represents a resource and an importer that can import it.
