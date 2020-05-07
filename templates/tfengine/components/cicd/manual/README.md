@@ -24,6 +24,10 @@ to detect changes in the repo, trigger builds and run the workloads.
     * `TRIGGER_ENABLED`: Whether or not to enable all Cloud Build Triggers
     * `TERRAFORM_ROOT`: Path of the directory relative to the repo root
         containing the Terraform configs
+    * `BUILD_VIEWERS`: IAM members to grant cloudbuild.builds.viewer role
+        in the devops project to see CICD results
+    * `MANAGED_SERVICES`: APIs to enable in the devops project so Cloud
+        Build Service Account can manage those services in other projects
 
 1. Generate the CICD Terraform configs and Cloud Build configs using the
     Terraform Engine.
@@ -31,7 +35,8 @@ to detect changes in the repo, trigger builds and run the workloads.
 1. Before deployment CICD Terraform resources, follow
     [installing_the_cloud_build_app](https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app)
     to install the Cloud Build app and connect your GitHub repository to your
-    Cloud project. This currently cannot be done through automation.
+    Cloud project. To perform this operation, you need Admin permission in that
+    GitHub repository. This currently cannot be done through automation.
 
 1. Once the GitHub repo is connected, run the following commands in this
     directory to enable necessary APIs, grant Cloud Build Service Account
