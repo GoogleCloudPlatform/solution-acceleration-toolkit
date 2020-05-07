@@ -1,0 +1,24 @@
+templates:
+- name: "terraform"
+  recipe_path: "../terraform/terraform.yaml"
+  data:
+    VARS:
+    - NAME: "project_id"
+      TYPE: "string"
+    DEPS:
+    - NAME: "project"
+      PATH: "../project"
+      MOCK_OUTPUTS:
+        project_id: '"mock-project"'
+    INPUTS:
+      project_id: "dependency.project.outputs.project_id"
+
+{{if has . "STORAGE_BUCKETS"}}
+- name: "storage_buckets"
+  component_path: "../../components/project/storage_buckets"
+{{end}}
+
+{{if has . "GKE_CLUSTERS"}}
+- name: "gke_clusters"
+  component_path: "../../components/project/gke_clusters"
+{{end}}
