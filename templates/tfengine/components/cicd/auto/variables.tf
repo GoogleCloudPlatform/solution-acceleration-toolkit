@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id       = "{{.PROJECT_ID}}"
-org_id           = "{{.ORG_ID}}"
-billing_account  = "{{.BILLING_ACCOUNT}}"
-state_bucket     = "{{.STATE_BUCKET}}"
-storage_location = "{{.STORAGE_LOCATION}}"
-org_admin        = "{{.ORG_ADMIN}}"
-devops_owners = [
-  {{- range .PROJECT_OWNERS}}
-  "{{.}}",
-  {{- end}}
-]
+variable "project_id" {
+  description = "Project ID of the devops project to host CI/CD resources"
+  type        = string
+}
+
+variable "managed_services" {
+  type        = list(string)
+  description = "List of APIs to enable in the devops project so CI/CD pipeline can manage those services in other projects"
+  default     = []
+}

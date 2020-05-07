@@ -67,6 +67,8 @@ templates:
       TRIGGER_ENABLED: true
       BUILD_VIEWERS:
       - "group:example-cicd-viewers@example.com"
+      MANAGED_SERVICES:
+      - "sqladmin.googleapis.com"
 
 - name: "folder-prod"
   recipe_path: "{{$BASE}}/org/folder.yaml"

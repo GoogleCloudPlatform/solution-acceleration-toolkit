@@ -17,8 +17,12 @@ variable "org_id" {
   type        = string
 }
 
-variable "devops_project_id" {
-  description = "Project ID of the devops project to create the Cloud Build Triggers"
+variable "billing_account" {
+  type = string
+}
+
+variable "project_id" {
+  description = "Project ID of the devops project to host CI/CD resources"
   type        = string
 }
 
