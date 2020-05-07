@@ -1,8 +1,10 @@
 templates:
 - name: "dir"
   output_path: "./project.{{.PROJECT_ID}}"
-- name: "project"
-  recipe_path: "../org/project.yaml"
+- name: "terragrunt"
+  component_path: "../../components/terragrunt/leaf"
+  output_ref: "dir"
+  output_path: "./project"
   data:
     DEPS:
     - NAME: "parent_folder"
@@ -11,3 +13,21 @@ templates:
         name: '"mock-folder"'
     INPUTS:
       folder_id: "dependency.parent_folder.outputs.name"
+- name: "project"
+  component_path: "../../components/project/project"
+  output_ref: "terragrunt"
+
+{{if has . "RESOURCES"}}
+- name: "resources"
+  recipe_path: "../project/resources.yaml"
+  output_ref: "dir"
+  output_path: "./resources"
+  flatten:
+  - key: "RESOURCES"
+{{end}}
+
+{{if index . "PROJECT_OWNERS"}}
+- name: "owners"
+  component_path: "../../components/project/owners"
+  output_ref: "dir"
+{{end}}

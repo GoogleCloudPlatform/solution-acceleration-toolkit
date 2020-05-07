@@ -18,6 +18,10 @@ data:
   ORG_ID: "123"
   BILLING_ACCOUNT: "000-000-000"
   STORAGE_LOCATION: "us-central1"
+  CLUSTER_REGION: "us-central1"
+  MASTER_AUTHORIZED_NETWORKS:
+  - DISPLAY_NAME: "Office"
+    CIDR_BLOCK: "192.0.2.0/24"
 
   # TODO: This block prevents certain parts of the configs from being generated
   # which require dependencies to be deployed first.
@@ -64,8 +68,6 @@ templates:
       BUILD_VIEWERS:
       - "group:example-cicd-viewers@example.com"
 
-
-# Prod
 - name: "folder-prod"
   recipe_path: "{{$BASE}}/org/folder.yaml"
   output_ref: "foundation.org_dir"
@@ -77,34 +79,26 @@ templates:
   data:
     DISPLAY_NAME: "team1"
 - name: "project-example-prod-data"
-  recipe_path: "{{$BASE}}/project/data.yaml"
+  recipe_path: "{{$BASE}}/folder/project.yaml"
   output_ref: "folder-prod-team1.dir"
   data:
     PROJECT_ID: "example-prod-data"
-    STORAGE_BUCKETS:
-    - NAME: "example-prod-bucket"
-      IAM_MEMBERS:
-      - ROLE: "roles/storage.objectViewer"
-        MEMBER: "group:example-readers@example.com"
-
-# Dev
-- name: "folder-dev"
-  recipe_path: "{{$BASE}}/org/folder.yaml"
-  output_ref: "foundation.org_dir"
+    RESOURCES:
+      STORAGE_BUCKETS:
+      - NAME: "example-prod-bucket"
+        IAM_MEMBERS:
+        - ROLE: "roles/storage.objectViewer"
+          MEMBER: "group:example-readers@example.com"
+- name: "project-example-apps"
+  recipe_path: "{{$BASE}}/folder/project.yaml"
+  output_ref: "folder-prod-team1.dir"
   data:
-    DISPLAY_NAME: "dev"
-- name: "folder-dev-team1"
-  recipe_path: "{{$BASE}}/folder/folder.yaml"
-  output_ref: "folder-dev.dir"
-  data:
-    DISPLAY_NAME: "team1"
-- name: "project-example-dev-data"
-  recipe_path: "{{$BASE}}/project/data.yaml"
-  output_ref: "folder-dev-team1.dir"
-  data:
-    PROJECT_ID: "example-dev-data"
-    STORAGE_BUCKETS:
-    - NAME: "example-dev-bucket"
-      IAM_MEMBERS:
-      - ROLE: "roles/storage.objectViewer"
-        MEMBER: "group:example-readers@example.com"
+    PROJECT_ID: "example-prod-apps"
+    RESOURCES:
+      GKE_CLUSTERS:
+      - NAME: "example-prod-gke-cluster"
+        NETWORK: "example-network"
+        SUBNET: "example-subnet"
+        IP_RANGE_PODS_NAME: "example-pods-range"
+        IP_RANGE_SERVICES_NAME: "example-services-range"
+        MASTER_IPV4_CIDR_BLOCK: "192.168.0.0/28"
