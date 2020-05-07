@@ -18,7 +18,7 @@
 // Requires Terraform to be installed and for authentication to be configured for each provider in the Terraform configs provider blocks.
 //
 // Usage:
-// $ go run . --input_dir=/path/to/config
+// $ go run . [--input_dir=/path/to/config] [--terraform_path=terragrunt]
 package main
 
 import (
@@ -36,8 +36,8 @@ import (
 )
 
 var (
-	inputDir      = flag.String("input_dir", ".", "Required. Path to Terraform config.")
-	terraformPath = flag.String("terraform_path", "terraform", "Optional. Name or path to the terraform binary to use.")
+	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
+	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
 )
 
 func main() {
