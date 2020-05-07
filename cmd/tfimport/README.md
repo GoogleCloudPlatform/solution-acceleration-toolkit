@@ -76,3 +76,6 @@ Terraform configs, including importing resources from within modules.
 - [google_project_iam_binding](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_binding-1)
 - [google_project_iam_member](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_member-1)
 - [google_project_service](https://www.terraform.io/docs/providers/google/r/google_project_service.html)
+- [google_service_account](https://www.terraform.io/docs/providers/google/r/google_service_account.html)
+- [google_bigquery_table](https://www.terraform.io/docs/providers/google/r/bigquery_table.html)
+- [google_bigquery_dataset](https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html)
