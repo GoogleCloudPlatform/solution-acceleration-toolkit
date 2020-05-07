@@ -8,6 +8,7 @@ templates:
 - name: "project"
   component_path: "../../components/project/project"
   output_ref: "terragrunt"
+
 {{if has . "RESOURCES"}}
 - name: "resources"
   recipe_path: "../project/resources.yaml"

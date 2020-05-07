@@ -1,6 +1,6 @@
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "8.2.0"
+  version = "9.0.0"
 
   # Required.
   name                   = "{{.NAME}}"
@@ -18,4 +18,5 @@ module "{{resourceName .NAME}}" {
   istio                      = true
   skip_provisioners          = true
   enable_private_endpoint    = false
+  release_channel            = "STABLE"
 }
