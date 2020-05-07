@@ -19,6 +19,9 @@ data:
   BILLING_ACCOUNT: "000-000-000"
   STORAGE_LOCATION: "us-central1"
   CLUSTER_REGION: "us-central1"
+  MASTER_AUTHORIZED_NETWORKS:
+  - DISPLAY_NAME: "Office"
+    CIDR_BLOCK: "192.0.2.0/24"
 
   # TODO: This block prevents certain parts of the configs from being generated
   # which require dependencies to be deployed first.

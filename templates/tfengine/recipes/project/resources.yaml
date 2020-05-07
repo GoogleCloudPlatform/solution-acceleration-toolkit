@@ -5,16 +5,6 @@ templates:
     VARS:
     - NAME: "project_id"
       TYPE: "string"
-    {{if get . "STORAGE_BUCKETS"}}
-    - NAME: "storage_location"
-      TYPE: "string"
-      VALUE: '"{{.STORAGE_LOCATION}}"'
-    {{end}}
-    {{if get . "GKE_CLUSTERS"}}
-    - NAME: "cluster_region"
-      TYPE: "string"
-      VALUE: '"{{.CLUSTER_REGION}}"'
-    {{end}}
     DEPS:
     - NAME: "project"
       PATH: "../project"
@@ -23,18 +13,12 @@ templates:
     INPUTS:
       project_id: "dependency.project.outputs.project_id"
 
-{{range $i, $_ := get . "STORAGE_BUCKETS"}}
-- name: "bucket-{{.NAME}}"
-  component_path: "../../components/project/storage"
-  flatten:
-  - key: "STORAGE_BUCKETS"
-    index: {{$i}}
+{{if has . "STORAGE_BUCKETS"}}
+- name: "storage_buckets"
+  component_path: "../../components/project/storage_buckets"
 {{end}}
 
-{{range $i, $_ := get . "GKE_CLUSTERS"}}
-- name: "gke-{{.NAME}}"
-  component_path: "../../components/project/gke_cluster"
-  flatten:
-  - key: "GKE_CLUSTERS"
-    index: {{$i}}
+{{if has . "GKE_CLUSTERS"}}
+- name: "gke_clusters"
+  component_path: "../../components/project/gke_clusters"
 {{end}}

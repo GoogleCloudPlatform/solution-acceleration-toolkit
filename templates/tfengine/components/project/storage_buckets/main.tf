@@ -1,3 +1,4 @@
+{{range get . "STORAGE_BUCKETS"}}
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
@@ -16,3 +17,4 @@ module "{{resourceName .NAME}}" {
   ]
   {{- end}}
 }
+{{end}}

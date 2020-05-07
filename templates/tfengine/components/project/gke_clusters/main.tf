@@ -1,3 +1,4 @@
+{{range get . "GKE_CLUSTERS"}}
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "9.0.0"
@@ -20,3 +21,4 @@ module "{{resourceName .NAME}}" {
   enable_private_endpoint    = false
   release_channel            = "STABLE"
 }
+{{end}}
