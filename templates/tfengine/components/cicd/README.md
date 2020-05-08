@@ -7,6 +7,15 @@ and Continuous Deployment (CD) component.
   deployed manually to provision the initial CI/CD resources.
 
 * The `auto/` directory contains the Terraform resouces for CI/CD purposes
-  that are also managed by CI/CD itself. Note that, the resources to put here
-  should be carefully reviewed as the devops project is sensitive and most
-  changes should done by a human operator to avoid CI/CD misconfigures itself.
+  that are also managed by CI/CD itself.
+
+  Sensitive resources in the devops project such as
+
+  * Terraform state bucket
+  * IAM bindings
+  * Cloud Build Triggers
+
+   should not be put here to let CI/CD manage them, which could lead to
+   potential misconfiguration of itself. Those resources should be included
+   in the `main.tf` in `cicd/` directory at root and deployed manually by
+   an human owner of the devops project.
