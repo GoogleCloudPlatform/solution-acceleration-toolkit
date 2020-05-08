@@ -1,7 +1,7 @@
 # Continuous Integration (CI) and Continuous Deployment (CD)
 
-This directory defines resources needed to setup CICD pipelines of Terraform
-configs.
+This directory defines the resources that need to be deployed manually
+to setup CICD pipelines of Terraform configs.
 
 The CI and CD pipelines use
 [Google Cloud Build](https://cloud.google.com/cloud-build) and
@@ -30,7 +30,8 @@ to detect changes in the repo, trigger builds and run the workloads.
         Build Service Account can manage those services in other projects
 
 1. Generate the CICD Terraform configs and Cloud Build configs using the
-    Terraform Engine.
+    Terraform Engine. Only the Terraform resources in the current directory,
+    i.e. the `cicd/` directory under root, need to be deplopyed manually.
 
 1. Before deployment CICD Terraform resources, follow
     [installing_the_cloud_build_app](https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app)
@@ -48,19 +49,20 @@ to detect changes in the repo, trigger builds and run the workloads.
     terraform apply
     ```
 
-    Two presubmit triggers are created by default and results are posted in the
-    Pull Request. Failing these presubmits will block Pull Request submission.
+    Two presubmit triggers are created by default. Build/test status and results
+    will be posted in the Pull Request. Failures of these presubmits should
+    be configured to block Pull Request submissions.
 
     1. `tf-validate`: Perform Terraform format and syntax check.
-    1. `tf-plan`: Generate speculative plans to show a set of possible changes
+    1. `tf-plan`: Generate speculative plans to show a set of potential changes
         if the pending config changes are deployed.
 
     If `CONTINUOUS_DEPLOYMENT_ENABLED` is set to `true` in your Terraform Engine
     config, `continuous_deployment_enabled` will be set to `true` in
     `terraform.tfvars` in this directory to create an additional Cloud Build
-    Trigger and grant the Cloud Build Service Account broder permissions to
-    automaticaly apply the config changes to GCP after the Pull Request is
-    approved and submitted.
+    Trigger and grant the Cloud Build Service Account broder permissions. So
+    after the Pull Request is approved and submitted, this postsubmit deployment
+    job can automatically apply the config changes to GCP.
 
     After the triggers are created, to temporarily disable or re-enable them,
     set the `trigger_enabled` in `terraform.tfvars` to `false` or `true` and
@@ -77,7 +79,7 @@ to detect changes in the repo, trigger builds and run the workloads.
 ### Continuous Integration (presubmit)
 
 Presubmit Cloud Build results will be posted as a Cloud Build job link in the
-Pull Request, and they will be configured to block Pull Request submission.
+Pull Request, and they should be configured to block Pull Request submissions.
 
 Every new push to the Pull Request at the configured branches will automatically
 trigger presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in the
@@ -91,5 +93,5 @@ to <https://console.cloud.google.com/cloud-build/builds> and look for your commi
 to view the Cloud Build job triggered by your merged commit.
 
 The Postsubmit Cloud Build Trigger monitors and deploys changes made to `org/`
-folder only. Other changes made to `bootstrap`, `cicd` and `secrets` folders
-should be deployed manually if needed.
+folder only. Other changes made to `bootstrap` and `cicd` folders at root should
+be deployed manually.

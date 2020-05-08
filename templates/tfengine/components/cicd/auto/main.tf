@@ -13,10 +13,10 @@
 # limitations under the License.
 
 # This folder contains additional Terraform resources in the devops project to configure CI/CD which
-# are also managed by CI/CD.
+# are also managed by CI/CD itself.
 #
-# Note that, the resources to put here should be carefully reviewed and picked as devops project
-# is sensitive and most changes should done by a human operator to avoid CI/CD misconfigures itself.
+# Note that, the resources to put here should be carefully reviewed as the devops project is
+# sensitive and most changes should done by a human operator to avoid CI/CD misconfigures itself.
 
 terraform {
   required_version = "~> 0.12.0"
