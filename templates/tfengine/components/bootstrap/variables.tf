@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "devops_project_id" {
+variable "project_id" {
   type = string
 }
 
@@ -29,10 +29,6 @@ variable "billing_account" {
 }
 
 variable "state_bucket" {
-  type = string
-}
-
-variable "storage_location" {
   type = string
 }
 

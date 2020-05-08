@@ -17,8 +17,15 @@
 data:
   ORG_ID: "123"
   BILLING_ACCOUNT: "000-000-000"
-  STORAGE_LOCATION: "us-central1"
-  CLUSTER_REGION: "us-central1"
+
+  # Default locations for resources. Can be overridden in individual templates.
+  BIGQUERY_DATASET_LOCATION: "us-east1"
+  CLOUD_SQL_INSTANCE_REGION: "us-central1"
+  COMPUTE_INSTANCE_REGION: "us-central1"
+  COMPUTE_NETWORK_REGION: "us-central1"
+  GKE_CLUSTER_REGION: "us-central1"
+  STORAGE_BUCKET_LOCATION: "us-central1"
+
   MASTER_AUTHORIZED_NETWORKS:
   - DISPLAY_NAME: "Office"
     CIDR_BLOCK: "192.0.2.0/24"
@@ -67,6 +74,8 @@ templates:
       TRIGGER_ENABLED: true
       BUILD_VIEWERS:
       - "group:example-cicd-viewers@example.com"
+      MANAGED_SERVICES:
+      - "sqladmin.googleapis.com"
 
 - name: "folder-prod"
   recipe_path: "{{$BASE}}/org/folder.yaml"

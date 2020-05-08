@@ -13,7 +13,8 @@
 # limitations under the License.
 
 org_id                        = "{{.ORG_ID}}"
-devops_project_id             = "{{.PROJECT_ID}}"
+billing_account               = "{{.BILLING_ACCOUNT}}"
+project_id                    = "{{.PROJECT_ID}}"
 state_bucket                  = "{{.STATE_BUCKET}}"
 repo_owner                    = "{{.REPO_OWNER}}"
 repo_name                     = "{{.REPO_NAME}}"

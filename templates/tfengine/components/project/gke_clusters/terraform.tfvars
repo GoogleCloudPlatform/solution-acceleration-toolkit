@@ -1,4 +1,3 @@
-cluster_region = "{{.CLUSTER_REGION}}"
 {{- if has . "MASTER_AUTHORIZED_NETWORKS"}}
 master_authorized_networks = [
   {{- range .MASTER_AUTHORIZED_NETWORKS}}

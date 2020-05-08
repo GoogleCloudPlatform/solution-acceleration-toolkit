@@ -40,7 +40,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 7.0"
 
-  name                    = var.devops_project_id
+  name                    = var.project_id
   org_id                  = var.org_id
   billing_account         = var.billing_account
   lien                    = true
@@ -48,7 +48,6 @@ module "project" {
   skip_gcloud_download    = true
   activate_apis = [
     "cloudbuild.googleapis.com",
-    "secretmanager.googleapis.com",
   ]
 }
 
@@ -59,7 +58,7 @@ module "state_bucket" {
 
   name       = var.state_bucket
   project_id = module.project.project_id
-  location   = var.storage_location
+  location   = "{{.STORAGE_BUCKET_LOCATION}}"
 }
 
 # Project level IAM permissions for devops project owners.
