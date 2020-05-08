@@ -52,6 +52,7 @@ var importers = map[string]resourceImporter{
 	"google_logging_organization_sink":     &importer.LoggingOrgSink{},
 	"google_compute_network":               &importer.ComputeNetwork{},
 	"google_compute_subnetwork":            &importer.ComputeSubnetwork{},
+	"google_compute_router":                &importer.ComputeRouter{},
 }
 
 // Resource represents a resource and an importer that can import it.

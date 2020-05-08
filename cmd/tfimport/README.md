@@ -83,3 +83,4 @@ Terraform configs, including importing resources from within modules.
 - [google_logging_organization_sink](https://www.terraform.io/docs/providers/google/r/logging_organization_sink.html)
 - [google_compute_network](https://www.terraform.io/docs/providers/google/r/compute_network.html)
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
+- [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
