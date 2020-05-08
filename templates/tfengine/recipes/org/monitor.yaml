@@ -1,6 +1,12 @@
 templates:
+- name: "dir"
+  output_path: "monitor"
 - name: "project"
   recipe_path: "./project.yaml"
+  output_ref: "dir"
+  data:
+    OUTPUT_PATH: ""
 - name: "forseti"
   component_path: "../../components/org/monitor/forseti"
-  output_path: "./monitor/forseti"
+  output_ref: "dir"
+  output_path: "./forseti"

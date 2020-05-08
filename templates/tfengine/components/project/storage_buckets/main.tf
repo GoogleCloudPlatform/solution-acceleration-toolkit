@@ -5,7 +5,12 @@ module "{{resourceName .NAME}}" {
 
   name       = "{{.NAME}}"
   project_id = var.project_id
-  location   = var.storage_location
+  {{- if has . "LOCATION"}}
+  location   = "{{.LOCATION}}"
+  {{- else}}
+  location   = "{{$.STORAGE_BUCKET_LOCATION}}"
+  {{- end}}
+
   {{- if index . "IAM_MEMBERS"}}
   iam_members = [
     {{- range .IAM_MEMBERS}}
