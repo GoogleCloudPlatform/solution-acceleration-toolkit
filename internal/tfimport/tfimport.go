@@ -48,6 +48,7 @@ var importers = map[string]resourceImporter{
 	"google_bigquery_table":                &importer.BigQueryTable{},
 	"google_bigquery_dataset":              &importer.BigQueryDataset{},
 	"google_storage_bucket_iam_member":     &importer.StorageBucketIAMMember{},
+	"google_cloudbuild_trigger":            &importer.CloudBuildTrigger{},
 }
 
 // Resource represents a resource and an importer that can import it.
