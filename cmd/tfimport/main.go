@@ -39,6 +39,7 @@ import (
 var (
 	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
+	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
 )
 
 func main() {
@@ -100,9 +101,14 @@ func run() error {
 		return fmt.Errorf("read Terraform plan changes: %q", err)
 	}
 
+	if *dryRun {
+		log.Printf("Dry run mode, logging commands but not executing any imports.")
+	}
+
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
+	var cmdsRan []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -120,15 +126,19 @@ func run() error {
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(rn, ir, *inputDir, *terraformPath)
+		output, err := tfimport.Import(rn, ir, *inputDir, *terraformPath, *dryRun)
 
 		// Handle the different outcomes of the import attempt.
 		switch {
 		// err will only be nil when the import succeed.
 		case err == nil:
-			// Import succeeded, print the success output.
-			fmt.Println(string(output))
-			importedSomething = true
+			// Import succeeded.
+			if *dryRun {
+				cmdsRan = append(cmdsRan, output)
+			} else {
+				fmt.Println(output)
+				importedSomething = true
+			}
 
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case tfimport.NotImportable(output):
@@ -138,7 +148,7 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, string(output)))
+			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output))
 		}
 	}
 
@@ -148,6 +158,10 @@ func run() error {
 
 	if len(errs) > 0 {
 		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if *dryRun && len(cmdsRan) > 0 {
+		fmt.Printf("Import commands:\ncd %v\n%v\n", *inputDir, strings.Join(cmdsRan, "\n"))
 	}
 
 	return nil

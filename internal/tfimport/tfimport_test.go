@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os/exec"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -108,7 +109,8 @@ func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfi
 
 type testRunner struct {
 	// This can be modified per test case to check different outcomes.
-	output []byte
+	output     []byte
+	wantCalled bool
 }
 
 func (*testRunner) CmdRun(cmd *exec.Cmd) error              { return nil }
@@ -116,6 +118,9 @@ func (*testRunner) CmdOutput(cmd *exec.Cmd) ([]byte, error) { return nil, nil }
 func (tr *testRunner) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 	if !cmp.Equal(cmd.Args, argsWant) {
 		return nil, fmt.Errorf("args = %v; want %v", cmd.Args, argsWant)
+	}
+	if !tr.wantCalled {
+		return nil, fmt.Errorf("runner called unexpectedly")
 	}
 	return tr.output, nil
 }
@@ -127,41 +132,62 @@ func TestImportArgs(t *testing.T) {
 		Importer:       &testImporter{},
 	}
 
-	wantOutput := []byte("")
-	trn := &testRunner{
-		output: wantOutput,
-	}
+	tests := []struct {
+		output     []byte
+		wantOutput string
+		dryRun     bool
+	}{
+		// No output, dry run off.
+		{
+			output:     []byte("Import successful!"),
+			wantOutput: "Import successful!",
+			dryRun:     false,
+		},
 
-	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath)
-
-	if err != nil {
-		t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)
+		// No output, dry run on.
+		{
+			output:     []byte("Import successful!"),
+			wantOutput: strings.Join(argsWant, " "),
+			dryRun:     true,
+		},
 	}
-	if !cmp.Equal(gotOutput, wantOutput) {
-		t.Errorf("TestImport(%v, %v, %v) output = %v; want %v", trn, testResource, testInputDir, gotOutput, wantOutput)
+	for _, tc := range tests {
+		trn := &testRunner{
+			output:     tc.output,
+			wantCalled: !tc.dryRun,
+		}
+
+		gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath, tc.dryRun)
+
+		if err != nil {
+			t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)
+		}
+		if !cmp.Equal(gotOutput, tc.wantOutput) {
+			t.Errorf("TestImport(%v, %v, %v) output = %v; want %v", trn, testResource, testInputDir, gotOutput, tc.wantOutput)
+		}
 	}
 }
 
 func TestNotImportable(t *testing.T) {
 	tests := []struct {
-		output []byte
+		output string
 		want   bool
 	}{
 		// No output.
 		{
-			output: []byte(""),
+			output: "",
 			want:   false,
 		},
 
 		// Not importable error.
 		{
-			output: []byte("Error: resource google_container_registry doesn't support import"),
+			output: "Error: resource google_container_registry doesn't support import",
 			want:   true,
 		},
 
 		// Importable and exists.
 		{
-			output: []byte("Import successful!"),
+			output: "Import successful!",
 			want:   false,
 		},
 	}
@@ -175,24 +201,24 @@ func TestNotImportable(t *testing.T) {
 
 func TestDoesNotExist(t *testing.T) {
 	tests := []struct {
-		output []byte
+		output string
 		want   bool
 	}{
 		// No output.
 		{
-			output: []byte(""),
+			output: "",
 			want:   false,
 		},
 
 		// Does not exist error.
 		{
-			output: []byte("Error: Cannot import non-existent remote object"),
+			output: "Error: Cannot import non-existent remote object",
 			want:   true,
 		},
 
 		// Importable and exists.
 		{
-			output: []byte("Import successful!"),
+			output: "Import successful!",
 			want:   false,
 		},
 	}
