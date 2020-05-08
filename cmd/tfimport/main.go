@@ -28,6 +28,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -101,6 +102,7 @@ func run() error {
 
 	// Import all importable create changes.
 	importedSomething := false
+	var errs []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -136,12 +138,16 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			return fmt.Errorf("import resource %q: %v\n%v", ir.Change.Address, err, string(output))
+			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, string(output)))
 		}
 	}
 
 	if !importedSomething {
 		log.Printf("No resources imported.")
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
 	}
 
 	return nil
