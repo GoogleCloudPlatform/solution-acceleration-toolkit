@@ -50,6 +50,7 @@ var importers = map[string]resourceImporter{
 	"google_storage_bucket_iam_member":     &importer.StorageBucketIAMMember{},
 	"google_cloudbuild_trigger":            &importer.CloudBuildTrigger{},
 	"google_logging_organization_sink":     &importer.LoggingOrgSink{},
+	"google_compute_network":               &importer.ComputeNetwork{},
 }
 
 // Resource represents a resource and an importer that can import it.

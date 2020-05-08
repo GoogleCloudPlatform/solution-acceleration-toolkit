@@ -81,3 +81,4 @@ Terraform configs, including importing resources from within modules.
 - [google_storage_bucket_iam_member](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html#google_storage_bucket_iam_member)
 - [google_cloudbuild_trigger](https://www.terraform.io/docs/providers/google/r/cloudbuild_trigger.html)
 - [google_logging_organization_sink](https://www.terraform.io/docs/providers/google/r/logging_organization_sink.html)
+- [google_compute_network](https://www.terraform.io/docs/providers/google/r/compute_network.html)
