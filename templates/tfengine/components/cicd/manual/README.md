@@ -92,6 +92,6 @@ submitted to a configured branch. To view the result of the Cloud Build run, go
 to <https://console.cloud.google.com/cloud-build/builds> and look for your commit
 to view the Cloud Build job triggered by your merged commit.
 
-The Postsubmit Cloud Build Trigger monitors and deploys changes made to `org/`
+The Postsubmit Cloud Build Trigger monitors and deploys changes made to `live/`
 folder only. Other changes made to `bootstrap` and `cicd` folders at root should
 be deployed manually.

@@ -79,7 +79,7 @@ templates:
 
 - name: "folder-prod"
   recipe_path: "{{$BASE}}/org/folder.yaml"
-  output_ref: "foundation.org_dir"
+  output_ref: "foundation.live_dir"
   data:
     DISPLAY_NAME: "prod"
 - name: "folder-prod-team1"

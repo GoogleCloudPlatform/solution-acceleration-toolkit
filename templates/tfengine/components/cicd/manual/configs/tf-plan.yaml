@@ -19,33 +19,33 @@ steps:
     entrypoint: terraform
     args: ["version"]
 
-  # org/cicd
+  # live/cicd
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["init"]
-    dir: "${_TERRAFORM_ROOT}/org/cicd"
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["plan", "--lock=false", "-out=plan.tfplan"]
-    dir: "${_TERRAFORM_ROOT}/org/cicd"
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
 
-  # org
+  # live
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terragrunt
     args: ["init"]
-    dir: "${_TERRAFORM_ROOT}/org"
+    dir: "${_TERRAFORM_ROOT}/live"
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terragrunt
     args: ["plan-all", "--lock=false", "--terragrunt-non-interactive", "-out=plan.tfplan"]
-    dir: "${_TERRAFORM_ROOT}/org"
+    dir: "${_TERRAFORM_ROOT}/live"
 
   # Check for delete operations as an FYI, it won't fail the build.
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: bash
     args: ["../cicd/configs/tf-deletion-check.sh"]
-    dir: "${_TERRAFORM_ROOT}/org"
+    dir: "${_TERRAFORM_ROOT}/live"
 
 substitutions:
     _TERRAFORM_ROOT: "."

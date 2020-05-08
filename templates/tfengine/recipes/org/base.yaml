@@ -4,4 +4,4 @@ templates:
   output_path: "./bootstrap"
 - name: "root"
   component_path: "../../components/terragrunt/root"
-  output_path: "./org"
+  output_path: "./live"
