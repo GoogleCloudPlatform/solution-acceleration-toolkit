@@ -147,7 +147,7 @@ func run() error {
 	}
 
 	if len(errs) > 0 {
-		return fmt.Errorf("Failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
 	}
 
 	return nil
