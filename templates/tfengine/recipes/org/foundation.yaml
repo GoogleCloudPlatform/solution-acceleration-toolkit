@@ -28,8 +28,13 @@ templates:
 {{end}}
 {{if has . "CICD"}}
 - name: "cicd"
-  component_path: "../../components/cicd"
+  component_path: "../../components/cicd/manual"
   output_path: "./cicd"
+  flatten:
+  - key: "CICD"
+- name: "cicd"
+  component_path: "../../components/cicd/auto"
+  output_path: "./org/cicd"
   flatten:
   - key: "CICD"
 {{end}}

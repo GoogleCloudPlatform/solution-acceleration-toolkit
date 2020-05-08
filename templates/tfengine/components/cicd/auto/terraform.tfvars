@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "org_id" {
-  type = string
-}
-
-variable "project_id" {
-  type = string
-}
+project_id = "{{.PROJECT_ID}}"
+{{- if index . "MANAGED_SERVICES"}}
+managed_services = [
+  {{- range .MANAGED_SERVICES}}
+  "{{.}}",
+  {{- end}}
+]
+{{- end}}

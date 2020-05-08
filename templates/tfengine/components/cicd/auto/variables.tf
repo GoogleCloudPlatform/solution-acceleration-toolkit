@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "org_id" {
-  type = string
+variable "project_id" {
+  description = "Project ID of the devops project to host CI/CD resources"
+  type        = string
 }
 
-variable "project_id" {
-  type = string
+variable "managed_services" {
+  type        = list(string)
+  description = "List of APIs to enable in the devops project so CI/CD pipeline can manage those services in other projects"
+  default     = []
 }
