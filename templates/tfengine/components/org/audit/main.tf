@@ -57,9 +57,9 @@ module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.1.0"
 
-  dataset_id                  = var.dataset_name
+  dataset_id                  = "{{.DATASET_NAME}}"
   project_id                  = var.project_id
-  location                    = "us-east1"
+  location                    = "{{.BIGQUERY_DATASET_LOCATION}}"
   default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
   access = [
     {
@@ -98,9 +98,9 @@ module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.5.0"
 
-  name          = var.bucket_name
+  name          = "{{.BUCKET_NAME}}"
   project_id    = var.project_id
-  location      = "us-central1"
+  location      = "{{.STORAGE_BUCKET_LOCATION}}"
   storage_class = "COLDLINE"
 
   lifecycle_rules = [{
