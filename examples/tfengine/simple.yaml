@@ -23,7 +23,6 @@ data:
   CLOUD_SQL_INSTANCE_REGION: "us-central1"
   COMPUTE_INSTANCE_REGION: "us-central1"
   COMPUTE_NETWORK_REGION: "us-central1"
-  GKE_CLUSTER_REGION: "us-central1"
   STORAGE_BUCKET_LOCATION: "us-central1"
 
   # TODO: This block prevents certain parts of the configs from being generated
