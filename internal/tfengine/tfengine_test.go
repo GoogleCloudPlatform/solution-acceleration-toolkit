@@ -7,28 +7,32 @@ import (
 	"testing"
 )
 
-const basePath = "../../examples/tfengine"
-
 // TestExamples is a basic test for the engine to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
-	exs := []string{"simple", "full"}
+	exs, err := filepath.Glob("../../examples/tfengine/*.yaml")
+	if err != nil {
+		t.Fatalf("filepath.Glob = %v", err)
+	}
+
+	if len(exs) == 0 {
+		t.Error("found no examples")
+	}
+
 	for _, ex := range exs {
-		t.Run(ex, func(t *testing.T) {
+		t.Run(filepath.Base(ex), func(t *testing.T) {
 			tmp, err := ioutil.TempDir("", "")
 			if err != nil {
-				t.Fatalf("ioutil.TempDir: %v", err)
+				t.Fatalf("ioutil.TempDir = %v", err)
 			}
 			defer os.RemoveAll(tmp)
 
-			p := filepath.Join(basePath, ex+".yaml")
-			if err := Run(p, tmp); err != nil {
-				t.Fatalf("tfengine.Run(%q, %q) = %v", p, tmp, err)
+			if err := Run(ex, tmp); err != nil {
+				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
 			// Check for the existence of the bootstrap folder.
-			p = filepath.Join(tmp, "bootstrap")
-			if _, err := os.Stat(p); err != nil {
-				t.Fatalf("os.Stat(%q) = %v", p, err)
+			if _, err := os.Stat(filepath.Join(tmp, "bootstrap")); err != nil {
+				t.Fatalf("os.Stat bootstrap dir = %v", err)
 			}
 		})
 	}
