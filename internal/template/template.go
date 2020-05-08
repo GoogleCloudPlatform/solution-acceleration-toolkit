@@ -101,7 +101,7 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}, flatten [
 	if dst == nil {
 		return errors.New("dst must not be nil")
 	}
-	if err := mergo.Merge(&dst, src, mergo.WithOverwriteWithEmptyValue); err != nil {
+	if err := mergo.Merge(&dst, src, mergo.WithOverride, mergo.WithOverwriteWithEmptyValue); err != nil {
 		return err
 	}
 	for _, fi := range flatten {
