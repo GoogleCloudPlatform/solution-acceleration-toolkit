@@ -6,7 +6,11 @@ module "{{resourceName .NAME}}" {
   # Required.
   name                   = "{{.NAME}}"
   project_id             = var.project_id
-  region                 = var.cluster_region
+  {{- if has . "REGION"}}
+  region                 = "{{.REGION}}"
+  {{- else}}
+  region                 = "{{$.GKE_CLUSTER_REGION}}"
+  {{- end}}
   regional               = true
   network                = "{{.NETWORK}}"
   subnetwork             = "{{.SUBNET}}"

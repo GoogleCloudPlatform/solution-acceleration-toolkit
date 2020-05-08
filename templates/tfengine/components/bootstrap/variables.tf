@@ -32,10 +32,6 @@ variable "state_bucket" {
   type = string
 }
 
-variable "storage_location" {
-  type = string
-}
-
 variable "org_admin" {
   type = string
 }

@@ -74,7 +74,7 @@ func TestMergeData(t *testing.T) {
 				"a": 2,
 			},
 			want: map[string]interface{}{
-				"a": 1,
+				"a": 2,
 			},
 		},
 		{
