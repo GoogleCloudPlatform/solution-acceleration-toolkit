@@ -136,7 +136,7 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			return fmt.Errorf("import resource %q: %v", ir.Change.Address, err)
+			return fmt.Errorf("import resource %q: %v\n%v", ir.Change.Address, err, string(output))
 		}
 	}
 
