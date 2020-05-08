@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/ghodss/yaml"
+	"github.com/otiai10/copy"
 )
 
 // Config is the user supplied config for the engine.
@@ -60,13 +60,7 @@ func Run(confPath, outPath string) error {
 		return fmt.Errorf("failed to mkdir %q: %v", outPath, err)
 	}
 
-	fs, err := filepath.Glob(filepath.Join(tmpDir, "/*"))
-	if err != nil {
-		return err
-	}
-	cp := exec.Command("cp", append([]string{"-a", "-t", outPath}, fs...)...)
-	cp.Stderr = os.Stderr
-	return cp.Run()
+	return copy.Copy(tmpDir, outPath)
 }
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
