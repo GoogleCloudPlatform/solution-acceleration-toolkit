@@ -42,5 +42,5 @@ func (b *StorageBucketIAMMember) ImportID(rc terraform.ResourceChange, pcv Provi
 		return "", err
 	}
 
-	return fmt.Sprintf("b/%v %v %v", bucket, role, member), nil
+	return fmt.Sprintf("%v %v %v", bucket, role, member), nil
 }
