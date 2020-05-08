@@ -28,6 +28,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -146,7 +147,7 @@ func run() error {
 	}
 
 	if len(errs) > 0 {
-		return fmt.Errorf("Failed to import %v resources:\n%v", len(errs), errs)
+		return fmt.Errorf("Failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
 	}
 
 	return nil
