@@ -1,6 +1,10 @@
 templates:
 - name: "dir"
+  {{if has . "OUTPUT_PATH"}}
+  output_path: "{{.OUTPUT_PATH}}"
+  {{else}}
   output_path: "./project.{{.PROJECT_ID}}"
+  {{end}}
 - name: "terragrunt"
   component_path: "../../components/terragrunt/leaf"
   output_ref: "dir"

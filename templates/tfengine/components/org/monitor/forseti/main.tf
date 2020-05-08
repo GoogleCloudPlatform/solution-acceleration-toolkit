@@ -19,6 +19,7 @@ terraform {
 locals {
   forseti_vpc_name    = "forseti-vpc"
   forseti_subnet_name = "forseti-subnet"
+  forseti_subnet_key  = "{{.COMPUTE_NETWORK_REGION}}/${local.forseti_subnet_name}"
 }
 
 # TODO(xingao): fix the data dependency in Forseti CloudSQL sub module
@@ -33,7 +34,7 @@ module "network" {
   subnets = [{
     subnet_name   = local.forseti_subnet_name
     subnet_ip     = "10.10.10.0/24"
-    subnet_region = var.region
+    subnet_region = "{{.COMPUTE_NETWORK_REGION}}"
   }]
 }
 
@@ -43,14 +44,14 @@ module "router" {
 
   name    = "forseti-router"
   project = var.project_id
-  region  = var.region
+  region  = "{{.COMPUTE_NETWORK_REGION}}"
   network = module.network.network_name
 
   nats = [{
     name                               = "forseti-nat"
     source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
     subnetworks = [{
-      name                     = module.network.subnets["${var.region}/${local.forseti_subnet_name}"].self_link
+      name                     = module.network.subnets[local.forseti_subnet_key].self_link
       source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
       secondary_ip_range_names = []
     }]
@@ -61,19 +62,19 @@ module "forseti" {
   source  = "terraform-google-modules/forseti/google"
   version = "~> 5.2.1"
 
-  domain     = var.domain
+  domain     = "{{.DOMAIN}}"
   project_id = var.project_id
   org_id     = var.org_id
   network    = module.network.network_name
-  subnetwork = module.network.subnets["${var.region}/${local.forseti_subnet_name}"].name
+  subnetwork = module.network.subnets[local.forseti_subnet_key].name
   composite_root_resources = [
     "organizations/${var.org_id}",
   ]
 
-  server_region           = var.region
-  cloudsql_region         = var.region
-  storage_bucket_location = var.region
-  bucket_cai_location     = var.region
+  server_region           = "{{.COMPUTE_INSTANCE_REGION}}"
+  cloudsql_region         = "{{.CLOUD_SQL_INSTANCE_REGION}}"
+  storage_bucket_location = "{{.STORAGE_BUCKET_LOCATION}}"
+  bucket_cai_location     = "{{.STORAGE_BUCKET_LOCATION}}"
 
   cloudsql_private  = true
   client_enabled    = false
