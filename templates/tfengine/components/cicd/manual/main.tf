@@ -206,7 +206,7 @@ resource "google_cloudbuild_trigger" "apply" {
   name     = "tf-apply"
 
   included_files = [
-    "${local.terraform_root_prefix}org/**",
+    "${local.terraform_root_prefix}live/**",
     "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
   ]
 

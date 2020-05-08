@@ -131,7 +131,7 @@ terraform apply
 # block from the config once done.
 
 # Step 9 (Optional): Modify and/or add deployments as needed...
-cd $OUTPUT_PATH/org/.../example-deployment
+cd $OUTPUT_PATH/live/.../example-deployment
 # And then send the change as a PR.
 ```
 
