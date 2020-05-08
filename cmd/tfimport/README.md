@@ -78,3 +78,4 @@ Terraform configs, including importing resources from within modules.
 - [google_service_account](https://www.terraform.io/docs/providers/google/r/google_service_account.html)
 - [google_bigquery_table](https://www.terraform.io/docs/providers/google/r/bigquery_table.html)
 - [google_bigquery_dataset](https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html)
+- [google_cloudbuild_trigger](https://www.terraform.io/docs/providers/google/r/cloudbuild_trigger.html)
