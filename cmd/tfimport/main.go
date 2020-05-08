@@ -101,6 +101,7 @@ func run() error {
 
 	// Import all importable create changes.
 	importedSomething := false
+	errors := ""
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -136,12 +137,18 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			return fmt.Errorf("import resource %q: %v", ir.Change.Address, err)
+			errMsg := fmt.Sprintf("failed to import resource %q: %v\n%v", ir.Change.Address, err, string(output))
+			errors += fmt.Sprintf("%v\n", errMsg)
+			log.Printf(errMsg)
 		}
 	}
 
 	if !importedSomething {
 		log.Printf("No resources imported.")
+	}
+
+	if errors != "" {
+		return fmt.Errorf("Found errors during import:\n%v", errors)
 	}
 
 	return nil
