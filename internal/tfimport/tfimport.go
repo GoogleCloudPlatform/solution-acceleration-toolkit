@@ -91,7 +91,7 @@ func Importable(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (*R
 
 // Import runs `terraform import` for the given importable resource.
 // It parses the output string to determine to determine if the provider said the resource doesn't exist or isn't importable.
-func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string) (output []byte, err error) {
+func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string) (output string, err error) {
 	// Try to get the ImportID()
 	importID, err := ir.ImportID()
 	if err != nil {
@@ -101,15 +101,17 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	// Run the import.
 	cmd := exec.Command(terraformPath, "import", ir.Change.Address, importID)
 	cmd.Dir = inputDir
-	return rn.CmdCombinedOutput(cmd)
+
+	outputBytes, err := rn.CmdCombinedOutput(cmd)
+	return string(outputBytes), err
 }
 
 // NotImportable parses the output of a `terraform import` command to determine if it indicated that a resource is not importable.
-func NotImportable(output []byte) bool {
-	return reNotImportable.FindStringIndex(string(output)) != nil
+func NotImportable(output string) bool {
+	return reNotImportable.FindStringIndex(output) != nil
 }
 
 // DoesNotExist parses the output of a `terraform import` command to determine if it indicated that a resource does not exist.
-func DoesNotExist(output []byte) bool {
-	return reDoesNotExist.FindStringIndex(string(output)) != nil
+func DoesNotExist(output string) bool {
+	return reDoesNotExist.FindStringIndex(output) != nil
 }

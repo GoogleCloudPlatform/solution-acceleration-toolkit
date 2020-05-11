@@ -65,6 +65,23 @@ func (*Default) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 	return cmd.CombinedOutput()
 }
 
+// Dry is the Runner that only prints commands and does not execute them.
+type Dry struct{}
+
+func (*Dry) CmdRun(cmd *exec.Cmd) error {
+	log.Printf("%v", cmd.String())
+	return nil
+}
+
+func (d *Dry) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
+	return []byte(cmd.String()), d.CmdRun(cmd)
+}
+
+func (d *Dry) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
+	return []byte(cmd.String()), d.CmdRun(cmd)
+}
+
+// Private helper functions.
 func contains(s string, subs ...string) bool {
 	for _, sub := range subs {
 		if !strings.Contains(s, sub) {
