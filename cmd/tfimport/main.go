@@ -73,11 +73,6 @@ func run() error {
 	}
 
 	// Create Terraform command runners.
-	tfCmd := func(args ...string) error {
-		cmd := exec.Command(*terraformPath, args...)
-		cmd.Dir = *inputDir
-		return rn.CmdRun(cmd)
-	}
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(*terraformPath, args...)
 		cmd.Dir = *inputDir
@@ -85,8 +80,8 @@ func run() error {
 	}
 
 	// Init is safe to run on an already-initialized config dir.
-	if err := tfCmd("init"); err != nil {
-		return fmt.Errorf("init: %v", err)
+	if out, err := tfCmdOutput("init"); err != nil {
+		return fmt.Errorf("init: %v\v%v", err, string(out))
 	}
 
 	// Generate and load the plan using a temp var.
@@ -96,12 +91,12 @@ func run() error {
 	}
 	defer os.Remove(tmpfile.Name())
 	planPath := tmpfile.Name()
-	if err := tfCmd("plan", "-out", planPath); err != nil {
-		return fmt.Errorf("plan: %v", err)
+	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
+		return fmt.Errorf("plan: %v\n%v", err, string(out))
 	}
 	b, err := tfCmdOutput("show", "-json", planPath)
 	if err != nil {
-		return fmt.Errorf("show: %v", err)
+		return fmt.Errorf("show: %v\n%v", err, string(b))
 	}
 
 	// Load only "create" changes.
@@ -113,6 +108,7 @@ func run() error {
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
+	var importCmds []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -127,13 +123,15 @@ func run() error {
 			log.Printf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			continue
 		}
+
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
 		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath)
 
-		// In dry-run mode, ignore the output, since nothing happened.
+		// In dry-run mode, the output is the command to run.
 		if *dryRun {
+			importCmds = append(importCmds, output)
 			continue
 		}
 
@@ -163,6 +161,16 @@ func run() error {
 
 	if len(errs) > 0 {
 		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if *dryRun && len(importCmds) > 0 {
+		log.Printf("Import commands:")
+		fmt.Printf("cd %v\n", *inputDir)
+		// The last arg in import could be several space-separated strings. These need to be quoted together.
+		for _, c := range importCmds {
+			args := strings.Split(c, " ")
+			fmt.Printf("%v %v %v %q\n", args[0], args[1], args[2], strings.Join(args[3:], " "))
+		}
 	}
 
 	return nil

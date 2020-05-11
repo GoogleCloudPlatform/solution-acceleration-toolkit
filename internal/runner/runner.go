@@ -74,11 +74,11 @@ func (*Dry) CmdRun(cmd *exec.Cmd) error {
 }
 
 func (d *Dry) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
-	return []byte(""), d.CmdRun(cmd)
+	return []byte(cmd.String()), d.CmdRun(cmd)
 }
 
 func (d *Dry) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
-	return []byte(""), d.CmdRun(cmd)
+	return []byte(cmd.String()), d.CmdRun(cmd)
 }
 
 // Private helper functions.
