@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os/exec"
 	"reflect"
-	"strings"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -109,8 +108,7 @@ func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfi
 
 type testRunner struct {
 	// This can be modified per test case to check different outcomes.
-	output     []byte
-	wantCalled bool
+	output []byte
 }
 
 func (*testRunner) CmdRun(cmd *exec.Cmd) error              { return nil }
@@ -118,9 +116,6 @@ func (*testRunner) CmdOutput(cmd *exec.Cmd) ([]byte, error) { return nil, nil }
 func (tr *testRunner) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 	if !cmp.Equal(cmd.Args, argsWant) {
 		return nil, fmt.Errorf("args = %v; want %v", cmd.Args, argsWant)
-	}
-	if !tr.wantCalled {
-		return nil, fmt.Errorf("runner called unexpectedly")
 	}
 	return tr.output, nil
 }
@@ -132,39 +127,18 @@ func TestImportArgs(t *testing.T) {
 		Importer:       &testImporter{},
 	}
 
-	tests := []struct {
-		output     []byte
-		wantOutput string
-		dryRun     bool
-	}{
-		// No output, dry run off.
-		{
-			output:     []byte("Import successful!"),
-			wantOutput: "Import successful!",
-			dryRun:     false,
-		},
-
-		// No output, dry run on.
-		{
-			output:     []byte("Import successful!"),
-			wantOutput: strings.Join(argsWant, " "),
-			dryRun:     true,
-		},
+	wantOutput := ""
+	trn := &testRunner{
+		output: []byte(wantOutput),
 	}
-	for _, tc := range tests {
-		trn := &testRunner{
-			output:     tc.output,
-			wantCalled: !tc.dryRun,
-		}
 
-		gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath, tc.dryRun)
+	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath)
 
-		if err != nil {
-			t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)
-		}
-		if !cmp.Equal(gotOutput, tc.wantOutput) {
-			t.Errorf("TestImport(%v, %v, %v) output = %v; want %v", trn, testResource, testInputDir, gotOutput, tc.wantOutput)
-		}
+	if err != nil {
+		t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)
+	}
+	if !cmp.Equal(gotOutput, wantOutput) {
+		t.Errorf("TestImport(%v, %v, %v) output = %v; want %v", trn, testResource, testInputDir, gotOutput, wantOutput)
 	}
 }
 

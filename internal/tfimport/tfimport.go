@@ -20,7 +20,6 @@ package tfimport
 import (
 	"os/exec"
 	"regexp"
-	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -92,7 +91,7 @@ func Importable(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (*R
 
 // Import runs `terraform import` for the given importable resource.
 // It parses the output string to determine to determine if the provider said the resource doesn't exist or isn't importable.
-func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string, dryRun bool) (output string, err error) {
+func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string) (output string, err error) {
 	// Try to get the ImportID()
 	importID, err := ir.ImportID()
 	if err != nil {
@@ -102,11 +101,6 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	// Run the import.
 	cmd := exec.Command(terraformPath, "import", ir.Change.Address, importID)
 	cmd.Dir = inputDir
-
-	// Don't run the commands in dry-run mode.
-	if dryRun {
-		return strings.Join(cmd.Args, " "), nil
-	}
 
 	outputBytes, err := rn.CmdCombinedOutput(cmd)
 	return string(outputBytes), err

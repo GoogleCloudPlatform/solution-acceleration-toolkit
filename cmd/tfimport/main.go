@@ -62,8 +62,17 @@ func run() error {
 		return fmt.Errorf("expand path %q: %v", *inputDir, err)
 	}
 
-	// Create Terraform command runners.
+	// Determine the runners to use.
 	rn := &runner.Default{}
+	var importRn runner.Runner
+	if *dryRun {
+		importRn = &runner.Dry{}
+		log.Printf("Dry run mode, logging commands but not executing any imports.")
+	} else {
+		importRn = &runner.Default{}
+	}
+
+	// Create Terraform command runners.
 	tfCmd := func(args ...string) error {
 		cmd := exec.Command(*terraformPath, args...)
 		cmd.Dir = *inputDir
@@ -101,14 +110,9 @@ func run() error {
 		return fmt.Errorf("read Terraform plan changes: %q", err)
 	}
 
-	if *dryRun {
-		log.Printf("Dry run mode, logging commands but not executing any imports.")
-	}
-
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
-	var cmdsRan []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -126,19 +130,20 @@ func run() error {
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(rn, ir, *inputDir, *terraformPath, *dryRun)
+		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath)
+
+		// In dry-run mode, ignore the output, since nothing happened.
+		if *dryRun {
+			continue
+		}
 
 		// Handle the different outcomes of the import attempt.
 		switch {
 		// err will only be nil when the import succeed.
 		case err == nil:
 			// Import succeeded.
-			if *dryRun {
-				cmdsRan = append(cmdsRan, output)
-			} else {
-				fmt.Println(output)
-				importedSomething = true
-			}
+			fmt.Println(output)
+			importedSomething = true
 
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case tfimport.NotImportable(output):
@@ -158,10 +163,6 @@ func run() error {
 
 	if len(errs) > 0 {
 		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
-	}
-
-	if *dryRun && len(cmdsRan) > 0 {
-		fmt.Printf("Import commands:\ncd %v\n%v\n", *inputDir, strings.Join(cmdsRan, "\n"))
 	}
 
 	return nil
