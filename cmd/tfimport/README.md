@@ -47,8 +47,13 @@ differences between the configs and the actual infrastructure.
 ```shell
 $ tfimport -h
 Usage:
+  -dry_run
+     Run in dry-run mode, which only prints the import commands without running them.
   -input_dir string
-     Path to the directory containing Terraform config. (default ".")
+     Path to the directory containing Terraform configs. (default ".")
+  -interactive
+     Interactively ask for user input when import information cannot be
+     automatically determined. (default true)
   -terraform_path string
      Name or path to the terraform binary to use.
      This could be i.e. 'terragrunt' or a path to
