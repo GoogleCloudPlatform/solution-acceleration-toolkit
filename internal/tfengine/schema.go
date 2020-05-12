@@ -52,7 +52,7 @@ properties:
           type: string
 
         data:
-          descripton: Key value pairs passed to this templates.
+          descripton: Key value pairs passed to this template.
 
         # ----------------------------------------------------------------------
         # NOTE: The fields below should typically be set by recipe maintainers and not end users.
