@@ -39,10 +39,6 @@ properties:
           description: Name of the template. Can be referred to by 'output_ref'.
           type: string
 
-        component_path:
-          description: Path to a component directory. Mutually exclusive with 'recipe_path'.
-          type: string
-
         recipe_path:
           description: Path to a recipe YAML config. Mutually exclusive with 'component_path'.
           type: string
@@ -58,8 +54,13 @@ properties:
         data:
           descripton: Key value pairs passed to this templates.
 
-        # NOTE:
-        #   The fields below should typically be set by recipe maintainers and not end users.
+        # ----------------------------------------------------------------------
+        # NOTE: The fields below should typically be set by recipe maintainers and not end users.
+        # ----------------------------------------------------------------------
+
+        component_path:
+          description: Path to a component directory. Mutually exclusive with 'recipe_path'.
+          type: string
 
         output_path:
           description: |
