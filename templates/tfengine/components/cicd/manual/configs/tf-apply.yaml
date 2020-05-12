@@ -18,45 +18,45 @@ steps:
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["version"]
-    id: Display Terraform version
+    id: Terraform version
 
   # live/cicd
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
-    id: Initialize Terraform for CICD component changes
+    id: Terraform initialization (CICD)
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["plan"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
-    id: Display speculative plan for CICD component changes
+    id: Speculative plan (CICD)
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["apply", "-auto-approve"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
-    id: Deploy CICD component changes
+    id: Deployment (CICD)
 
   # live/
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terragrunt
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live"
-    id: Initialize Terraform for live component changes
+    id: Terraform initialization (live)
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: bash
     args: ["../cicd/configs/terragrunt.sh", "plan-all"]
     dir: "${_TERRAFORM_ROOT}/live"
-    id: Display speculative plan for live component changes
+    id: Speculative plan (live)
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: bash
     args: ["../cicd/configs/terragrunt.sh", "apply-all"]
     dir: "${_TERRAFORM_ROOT}/live"
-    id: Deploy live component changes
+    id: Deployment (live)
 
 substitutions:
     _TERRAFORM_ROOT: "."
