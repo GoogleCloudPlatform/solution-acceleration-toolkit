@@ -20,7 +20,7 @@ This tool will help you follow:
 [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
 
 - [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
-by using the popular open source tool
+through use of the popular open source tool
 [Terragrunt](https://terragrunt.gruntwork.io/) to define smaller and more
 modular configs.
 
