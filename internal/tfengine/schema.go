@@ -46,7 +46,7 @@ properties:
         output_ref:
           description: |
             Every template outputs to a specific directory. This field allows
-            a template write its contents to the same output dir as another
+            a template to write its contents to the same output dir as another
             template without having to manually specify the same path.
 
             Example:
