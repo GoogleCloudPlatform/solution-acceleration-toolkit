@@ -31,25 +31,21 @@ terraform {
   }
   backend "gcs" {
     bucket = "{{.STATE_BUCKET}}"
-    prefix = "cicd"
+    prefix = "cicd/manual"
   }
 }
 
 data "google_project" "devops" {
-  project_id = var.devops_project_id
+  project_id = var.project_id
 }
 
 locals {
-  devops_apis = [
-    # TODO: Figure out how to use user_project_override and disable APIs in devops project
-    # that are needed to obtain resource information in other projects.
+  services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
     "cloudbilling.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "container.googleapis.com",
-    "firebase.googleapis.com",
     "iam.googleapis.com",
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
@@ -60,7 +56,6 @@ locals {
     "roles/iam.securityReviewer",
   ]
   cloudbuild_sa_editor_roles = [
-    "roles/billing.user",
     "roles/compute.xpnAdmin",
     "roles/logging.configWriter",
     "roles/orgpolicy.policyAdmin",
@@ -69,7 +64,8 @@ locals {
     "roles/resourcemanager.projectCreator",
   ]
   cloudbuild_devops_roles = [
-    "roles/serviceusage.serviceUsageViewer",
+    # Enable Cloud Build SA to list and enable APIs in the devops project.
+    "roles/serviceusage.serviceUsageAdmin",
   ]
 }
 
@@ -82,21 +78,31 @@ locals {
 }
 
 # Cloud Build - API
-resource "google_project_service" "devops_apis" {
-  for_each           = toset(local.devops_apis)
-  project            = var.devops_project_id
+resource "google_project_service" "services" {
+  for_each           = toset(local.services)
+  project            = var.project_id
   service            = each.value
   disable_on_destroy = false
+}
+
+# IAM permissions to allow Cloud Build Service Account use the billing account.
+resource "google_billing_account_iam_member" "binding" {
+  billing_account_id = var.billing_account
+  role               = "roles/billing.user"
+  member             = local.cloud_build_sa
+  depends_on = [
+    google_project_service.services,
+  ]
 }
 
 # IAM permissions to allow approvers and contributors to view the build results.
 resource "google_project_iam_member" "cloudbuild_viewers" {
   for_each = toset(var.build_viewers)
-  project  = var.devops_project_id
+  project  = var.project_id
   role     = "roles/cloudbuild.builds.viewer"
   member   = each.value
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
@@ -107,7 +113,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   role   = var.continuous_deployment_enabled ? "roles/storage.admin" : "roles/storage.objectViewer"
   member = local.cloud_build_sa
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
@@ -118,18 +124,18 @@ resource "google_organization_iam_member" "cloudbuild_sa_org_iam" {
   role     = each.value
   member   = local.cloud_build_sa
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
 # Grant Cloud Build Service Account access to the devops project.
 resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
-  project  = var.devops_project_id
+  project  = var.project_id
   role     = each.key
   member   = local.cloud_build_sa
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
@@ -137,7 +143,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 resource "google_cloudbuild_trigger" "validate" {
   disabled = ! var.trigger_enabled
   provider = google-beta
-  project  = var.devops_project_id
+  project  = var.project_id
   name     = "tf-validate"
 
   included_files = [
@@ -159,14 +165,14 @@ resource "google_cloudbuild_trigger" "validate" {
   }
 
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
 resource "google_cloudbuild_trigger" "plan" {
   disabled = ! var.trigger_enabled
   provider = google-beta
-  project  = var.devops_project_id
+  project  = var.project_id
   name     = "tf-plan"
 
   included_files = [
@@ -188,7 +194,7 @@ resource "google_cloudbuild_trigger" "plan" {
   }
 
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }
 
@@ -197,11 +203,11 @@ resource "google_cloudbuild_trigger" "apply" {
   count    = var.continuous_deployment_enabled ? 1 : 0
   disabled = ! var.trigger_enabled
   provider = google-beta
-  project  = var.devops_project_id
+  project  = var.project_id
   name     = "tf-apply"
 
   included_files = [
-    "${local.terraform_root_prefix}org/**",
+    "${local.terraform_root_prefix}live/**",
     "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
   ]
 
@@ -220,6 +226,6 @@ resource "google_cloudbuild_trigger" "apply" {
   }
 
   depends_on = [
-    google_project_service.devops_apis,
+    google_project_service.services,
   ]
 }

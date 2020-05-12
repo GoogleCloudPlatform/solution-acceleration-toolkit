@@ -127,9 +127,9 @@ func TestImportArgs(t *testing.T) {
 		Importer:       &testImporter{},
 	}
 
-	wantOutput := []byte("")
+	wantOutput := ""
 	trn := &testRunner{
-		output: wantOutput,
+		output: []byte(wantOutput),
 	}
 
 	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath)
@@ -144,24 +144,24 @@ func TestImportArgs(t *testing.T) {
 
 func TestNotImportable(t *testing.T) {
 	tests := []struct {
-		output []byte
+		output string
 		want   bool
 	}{
 		// No output.
 		{
-			output: []byte(""),
+			output: "",
 			want:   false,
 		},
 
 		// Not importable error.
 		{
-			output: []byte("Error: resource google_container_registry doesn't support import"),
+			output: "Error: resource google_container_registry doesn't support import",
 			want:   true,
 		},
 
 		// Importable and exists.
 		{
-			output: []byte("Import successful!"),
+			output: "Import successful!",
 			want:   false,
 		},
 	}
@@ -175,24 +175,24 @@ func TestNotImportable(t *testing.T) {
 
 func TestDoesNotExist(t *testing.T) {
 	tests := []struct {
-		output []byte
+		output string
 		want   bool
 	}{
 		// No output.
 		{
-			output: []byte(""),
+			output: "",
 			want:   false,
 		},
 
 		// Does not exist error.
 		{
-			output: []byte("Error: Cannot import non-existent remote object"),
+			output: "Error: Cannot import non-existent remote object",
 			want:   true,
 		},
 
 		// Importable and exists.
 		{
-			output: []byte("Import successful!"),
+			output: "Import successful!",
 			want:   false,
 		},
 	}

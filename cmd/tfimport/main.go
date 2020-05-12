@@ -29,6 +29,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -40,6 +41,7 @@ import (
 var (
 	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
+	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
 )
 
 func main() {
@@ -62,13 +64,17 @@ func run() error {
 		return fmt.Errorf("expand path %q: %v", *inputDir, err)
 	}
 
-	// Create Terraform command runners.
+	// Determine the runners to use.
 	rn := &runner.Default{}
-	tfCmd := func(args ...string) error {
-		cmd := exec.Command(*terraformPath, args...)
-		cmd.Dir = *inputDir
-		return rn.CmdRun(cmd)
+	var importRn runner.Runner
+	if *dryRun {
+		importRn = &runner.Dry{}
+		log.Printf("Dry run mode, logging commands but not executing any imports.")
+	} else {
+		importRn = &runner.Default{}
 	}
+
+	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(*terraformPath, args...)
 		cmd.Dir = *inputDir
@@ -76,8 +82,8 @@ func run() error {
 	}
 
 	// Init is safe to run on an already-initialized config dir.
-	if err := tfCmd("init"); err != nil {
-		return fmt.Errorf("init: %v", err)
+	if out, err := tfCmdOutput("init"); err != nil {
+		return fmt.Errorf("init: %v\v%v", err, string(out))
 	}
 
 	// Generate and load the plan using a temp var.
@@ -87,12 +93,12 @@ func run() error {
 	}
 	defer os.Remove(tmpfile.Name())
 	planPath := tmpfile.Name()
-	if err := tfCmd("plan", "-out", planPath); err != nil {
-		return fmt.Errorf("plan: %v", err)
+	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
+		return fmt.Errorf("plan: %v\n%v", err, string(out))
 	}
 	b, err := tfCmdOutput("show", "-json", planPath)
 	if err != nil {
-		return fmt.Errorf("show: %v", err)
+		return fmt.Errorf("show: %v\n%v", err, string(b))
 	}
 
 	// Load only "create" changes.
@@ -104,6 +110,8 @@ func run() error {
 	// Import all importable create changes.
 	importedSomething := false
 	var ie *importer.InsufficientInfoErr
+	var errs []string
+	var importCmds []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -118,17 +126,25 @@ func run() error {
 			log.Printf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			continue
 		}
+
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(rn, ir, *inputDir, *terraformPath)
+		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath)
+
+		// In dry-run mode, the output is the command to run.
+		if *dryRun {
+			importCmds = append(importCmds, output)
+			continue
+		}
 
 		// Handle the different outcomes of the import attempt.
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
 		case err == nil:
-			fmt.Println(string(output))
+			// Import succeeded.
+			fmt.Println(output)
 			importedSomething = true
 
 		// Check if the error indicates insufficient information.
@@ -145,12 +161,26 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			return fmt.Errorf("import resource %q: %v\n%v", ir.Change.Address, err, string(output))
+			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output))
 		}
 	}
 
 	if !importedSomething {
 		log.Printf("No resources imported.")
+	}
+
+	if len(errs) > 0 {
+		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if *dryRun && len(importCmds) > 0 {
+		log.Printf("Import commands:")
+		fmt.Printf("cd %v\n", *inputDir)
+		// The last arg in import could be several space-separated strings. These need to be quoted together.
+		for _, c := range importCmds {
+			args := strings.Split(c, " ")
+			fmt.Printf("%v %v %v %q\n", args[0], args[1], args[2], strings.Join(args[3:], " "))
+		}
 	}
 
 	return nil
