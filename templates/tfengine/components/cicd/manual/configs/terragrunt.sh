@@ -18,7 +18,7 @@
 
 set -e
 
-filter_regex="[terragrunt].*\(Setting\|Module\|Running command\|Reading\|Initializing\|Are you sure\|The non-interactive\)"
+filter_regex="[terragrunt].*\(Setting\|Module.*dep\|Module.*skip\|Running command\|Reading\|Initializing\|Are you sure\|The non-interactive\)"
 
 function plan_all() {
   terragrunt plan-all --terragrunt-non-interactive -lock=false -compact-warnings -out=plan.tfplan 2> >(grep -v "${filter_regex}" >&2)
