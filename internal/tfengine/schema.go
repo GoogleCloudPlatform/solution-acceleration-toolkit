@@ -50,10 +50,10 @@ properties:
             template without having to manually specify the same path.
 
             Example:
-            If output_ref is set to 'foo.bar' then this will look for sibling
-            template named 'foo' (defined in this list) and a child template
-            inside 'foo' named 'bar'. It will then write its contents to the
-            same path as this dir.
+              If output_ref is set to 'foo.bar' then this will look for sibling
+              template named 'foo' (defined in this list) and a child template
+              inside 'foo' named 'bar'. It will then write its contents to the
+              same path as 'bar'.
           type: string
 
         output_path:
