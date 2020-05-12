@@ -24,7 +24,7 @@ steps:
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Terraform initialization
+    id: Init
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform

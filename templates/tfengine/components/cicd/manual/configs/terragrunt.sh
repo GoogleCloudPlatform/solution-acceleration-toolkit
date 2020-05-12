@@ -18,12 +18,14 @@
 
 set -e
 
+filter_regex="[terragrunt].*\(Setting\|Module\|Running command\|Reading\|Initializing\|Are you sure\|The non-interactive\)"
+
 function plan_all() {
-  terragrunt plan-all --terragrunt-non-interactive -lock=false -compact-warnings -out=plan.tfplan 2> >(grep -v "[terragrunt].*\(Setting\|Module\|Running command\|Reading\|Initializing\)" >&2)
+  terragrunt plan-all --terragrunt-non-interactive -lock=false -compact-warnings -out=plan.tfplan 2> >(grep -v "${filter_regex}" >&2)
 }
 
 function apply_all() {
-  terragrunt apply-all --terragrunt-non-interactive -compact-warnings 2> >(grep -v "[terragrunt].*\(Setting\|Module\|Running command\|Reading\|Initializing\)" >&2)
+  terragrunt apply-all --terragrunt-non-interactive -compact-warnings 2> >(grep -v ""${filter_regex}"" >&2)
 }
 
 case "$1" in
