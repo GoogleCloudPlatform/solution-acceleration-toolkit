@@ -16,14 +16,12 @@ package tfengine
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
-	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/ghodss/yaml"
-	"github.com/xeipuuv/gojsonschema"
 )
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
@@ -38,10 +36,15 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 
 	cj, err := yaml.YAMLToJSON(buf.Bytes())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("convert config to JSON: %v", err)
 	}
 
-	if err := validate(cj); err != nil {
+	sj, err := yaml.YAMLToJSON([]byte(schema))
+	if err != nil {
+		return nil, fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	if err := jsonschema.Validate(sj, cj); err != nil {
 		return nil, err
 	}
 
@@ -50,28 +53,4 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 	return c, nil
-}
-
-func validate(confJSON []byte) error {
-	schemaJSON, err := yaml.YAMLToJSON([]byte(schema))
-	if err != nil {
-		return fmt.Errorf("failed to load schema: %v", err)
-	}
-
-	result, err := gojsonschema.Validate(gojsonschema.NewBytesLoader(schemaJSON), gojsonschema.NewBytesLoader(confJSON))
-	if err != nil {
-		return fmt.Errorf("failed to validate config: %v", err)
-	}
-
-	if len(result.Errors()) == 0 {
-		return nil
-	}
-
-	var sb strings.Builder
-	sb.WriteString("config has validation errors:")
-	for _, err := range result.Errors() {
-		sb.WriteString(fmt.Sprintf("\n- %s: %s", err.Context().String(), err.Description()))
-	}
-	return errors.New(sb.String())
-
 }
