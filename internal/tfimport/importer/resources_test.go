@@ -17,6 +17,8 @@
 package importer
 
 import (
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -74,6 +76,76 @@ func TestFromConfigValuesErr(t *testing.T) {
 	for _, tc := range tests {
 		if _, err := fromConfigValues(tc.key, tc.cvs...); err == nil {
 			t.Errorf("fromConfigValues(%v, %v) succeeded for malformed input, want error", tc.key, tc.cvs)
+		}
+	}
+}
+
+func TestUserValue(t *testing.T) {
+	tests := []struct {
+		input string
+		want  string
+	}{
+		// Empty.
+		{"\n", ""},
+
+		// Normal input.
+		{"myinput\n", "myinput"},
+
+		// Stripping spaces, but not in the middle.
+		{"  my space   separated  input   \n", "my space   separated  input"},
+	}
+
+	for _, tc := range tests {
+		// Temporarily redirect standard out to null while running
+		stdout := os.Stdout
+		os.Stdout = os.NewFile(0, os.DevNull)
+		out, err := userValue(strings.NewReader(tc.input))
+		os.Stdout = stdout
+
+		if err != nil {
+			t.Errorf("userValue(%q) failed: %s", tc.input, err)
+		} else if out != tc.want {
+			t.Errorf("userValue(%q) = %v; want %v", tc.input, out, tc.want)
+		}
+	}
+}
+
+func TestUserChoice(t *testing.T) {
+	choices := []string{"ch1", "ch2", "ch3", "ch4"}
+	tests := []struct {
+		input string
+		want  string
+	}{
+		// Invalid inputs.
+		{"\na\n1\n", "ch2"},
+
+		// Invalid choices.
+		{"15\n-1\n1\n", "ch2"},
+
+		// Boundary - first choice.
+		{"0\n", "ch1"},
+
+		// Boundary - last choice.
+		{"3\n", "ch4"},
+
+		// Stripping spaces.
+		{"  0 \n", "ch1"},
+
+		// Only select the first choice, ignore further input.
+		{"0\n1\n2\n", "ch1"},
+	}
+
+	for _, tc := range tests {
+		// Temporarily redirect standard out to null while running
+		stdout := os.Stdout
+		os.Stdout = os.NewFile(0, os.DevNull)
+		out, err := userChoice(strings.NewReader(tc.input), choices)
+		os.Stdout = stdout
+
+		if err != nil {
+			t.Errorf("userChoice(%q) failed: %s", tc.input, err)
+		} else if out != tc.want {
+			t.Errorf("userChoice(%q) = %v; want %v", tc.input, out, tc.want)
 		}
 	}
 }

@@ -20,6 +20,7 @@ package importer
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strconv"
@@ -60,15 +61,15 @@ func fromUser(fieldName string, prompt string, choices []string) (val string, er
 	log.Println(prompt)
 
 	if len(choices) > 0 {
-		return userChoice(choices)
+		return userChoice(os.Stdin, choices)
 	} else {
-		return userValue()
+		return userValue(os.Stdin)
 	}
 }
 
-func userValue() (string, error) {
+func userValue(in io.Reader) (string, error) {
 	fmt.Println("Enter a value manually (blank to skip):")
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(in)
 	val, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err
@@ -79,11 +80,11 @@ func userValue() (string, error) {
 
 // userChoice asks the user to select one of the possible choices by index.
 // Returns skip==true if the user decided not to make a choice.
-func userChoice(choices []string) (string, error) {
+func userChoice(in io.Reader, choices []string) (string, error) {
 	fmt.Println("Choose a number from below (blank to skip):")
 
 	// Show the choices.
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(in)
 	for i, c := range choices {
 		fmt.Printf("%v. %v\n", i, c)
 	}
@@ -99,14 +100,10 @@ func userChoice(choices []string) (string, error) {
 		}
 		val = strings.TrimSpace(val)
 
-		if val == "" {
-			return val, nil
-		}
-
 		// Choice must be a valid number.
 		choice, err = strconv.Atoi(val)
 		if err != nil {
-			fmt.Printf("Invalid choice: %v\n", err)
+			fmt.Printf("Invalid input %q: %v\n", val, err)
 			continue
 		}
 
