@@ -93,5 +93,5 @@ to <https://console.cloud.google.com/cloud-build/builds> and look for your commi
 to view the Cloud Build job triggered by your merged commit.
 
 The Postsubmit Cloud Build Trigger monitors and deploys changes made to `live/`
-folder only. Other changes made to `bootstrap` and `cicd` folders at root should
-be deployed manually.
+folder only. Other changes made to `bootstrap/`, `cicd/` and other folders at
+root should be deployed manually.
