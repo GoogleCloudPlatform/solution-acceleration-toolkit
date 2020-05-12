@@ -98,7 +98,7 @@ func fetchNodePoolName(b *GKENodePool, project string, location string, cluster 
 }
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *GKENodePool) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *GKENodePool) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
@@ -116,9 +116,14 @@ func (b *GKENodePool) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMa
 
 	name, err := fromConfigValues("name", rc.Change.After, pcv)
 	if err != nil {
-		name, err = fetchNodePoolName(b, project.(string), location.(string), cluster.(string))
-		if err != nil {
-			return "", &InsufficientInfoErr{rc.Address, []string{"name"}, err.Error()}
+		name = ""
+
+		// Could not find the name in the config. If interactive, ask the user for it.
+		if interactive {
+			name, err = fetchNodePoolName(b, project.(string), location.(string), cluster.(string))
+			if err != nil {
+				return "", &InsufficientInfoErr{rc.Address, []string{"name"}, err.Error()}
+			}
 		}
 		if name == "" {
 			return "", &InsufficientInfoErr{rc.Address, []string{"name"}, ""}

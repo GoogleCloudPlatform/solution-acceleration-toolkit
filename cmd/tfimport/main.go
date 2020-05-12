@@ -42,6 +42,7 @@ var (
 	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
 	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
+	interactive   = flag.Bool("interactive", true, "Interactively ask for user input when import information cannot be automatically determined.")
 )
 
 func main() {
@@ -130,7 +131,7 @@ func run() error {
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath)
+		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath, *interactive)
 
 		// In dry-run mode, the output is the command to run.
 		if *dryRun {
@@ -150,7 +151,7 @@ func run() error {
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
 			log.Println(err)
-			log.Printf("Skipping")
+			log.Println("Skipping")
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
@@ -161,6 +162,7 @@ func run() error {
 
 		// Important to handle this last.
 		default:
+			log.Println(err)
 			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output))
 		}
 	}

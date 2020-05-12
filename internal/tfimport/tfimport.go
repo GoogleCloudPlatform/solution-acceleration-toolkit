@@ -67,12 +67,12 @@ type Resource struct {
 // resourceImporter is an interface that must be implemented by all resources to allow them to be imported.
 type resourceImporter interface {
 	// ImportID returns an ID that Terraform can use to import this resource.
-	ImportID(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (string, error)
+	ImportID(rc terraform.ResourceChange, pcv importer.ProviderConfigMap, interactive bool) (string, error)
 }
 
 // ImportID is a convenience function for passing a resource's information to its importer.
-func (ir Resource) ImportID() (string, error) {
-	return ir.Importer.ImportID(ir.Change, ir.ProviderConfig)
+func (ir Resource) ImportID(interactive bool) (string, error) {
+	return ir.Importer.ImportID(ir.Change, ir.ProviderConfig, interactive)
 }
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
@@ -92,9 +92,9 @@ func Importable(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (*R
 
 // Import runs `terraform import` for the given importable resource.
 // It parses the output string to determine to determine if the provider said the resource doesn't exist or isn't importable.
-func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string) (output string, err error) {
+func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath string, interactive bool) (output string, err error) {
 	// Try to get the ImportID()
-	importID, err := ir.ImportID()
+	importID, err := ir.ImportID(interactive)
 	if err != nil {
 		return output, err
 	}
