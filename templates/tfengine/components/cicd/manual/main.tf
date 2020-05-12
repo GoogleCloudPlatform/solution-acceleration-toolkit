@@ -49,6 +49,7 @@ locals {
     "iam.googleapis.com",
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
+    "sqladmin.googleapis.com",
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
