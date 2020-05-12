@@ -25,7 +25,7 @@ function plan_all() {
 }
 
 function apply_all() {
-  terragrunt apply-all --terragrunt-non-interactive -compact-warnings 2> >(grep -v ""${filter_regex}"" >&2)
+  terragrunt apply-all --terragrunt-non-interactive -compact-warnings 2> >(grep -v "${filter_regex}" >&2)
 }
 
 case "$1" in
