@@ -85,7 +85,7 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 
 The engine takes a path to an input config and a path to output the generated
 Terraform configs. For details on fields for the input schema, see the
-[schema](../../internal/tfengine/schema.go).After the output has been generated,
+[schema](../../internal/tfengine/schema.go). After the output has been generated,
 there is no dependency on the engine any longer, and the user can directly use
 the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
