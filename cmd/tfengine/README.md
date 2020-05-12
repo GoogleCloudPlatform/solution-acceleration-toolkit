@@ -14,15 +14,15 @@ monitoring. By using our out of the box end-to-end configs that implement these
 steps for you, you can quickly setup a secure and compliant environment and
 focus on the parts of the infrastructure that drive your business.
 
-This tool will help you follow Terraform
-[best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo),
-by using the popular open source tool
-[Terragrunt](https://terragrunt.gruntwork.io/) to define smaller modular configs
-rather than monolithic modules that quickly get out of hand or need a custom
-pipeline to manage.
+This tool will help you follow:
 
-Our templates use Google's best practice modules from the
+- GCP best practices through use of modules from the
 [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+
+- [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
+by using the popular open source tool
+[Terragrunt](https://terragrunt.gruntwork.io/) to define smaller and more
+modular configs.
 
 Use our [example](../../examples/tfengine) configs to quickly get started.
 
@@ -84,12 +84,13 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 ## Usage
 
 The engine takes a path to an input config and a path to output the generated
-Terraform configs. After the output has been generated, there is no dependency
-on the engine any longer, and the user can directly use the `terraform` and
-`terragrunt` binaries to deploy the infrastructure.
+Terraform configs. For details on fields for the input schema, see the
+[schema](../../internal/tfengine/schema.go). After the output has been generated,
+there is no dependency on the engine any longer, and the user can directly use
+the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
-Replace the values in the [example](../../examples/tfengine/simple.yaml) with values
-for your infrastructure, then run the following commands:
+Replace the values in the [example](../../examples/tfengine/simple.yaml) with
+values for your infrastructure, then run the following commands:
 
 ```shell
 # Step 1: Clone repo
