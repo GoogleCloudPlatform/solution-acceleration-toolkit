@@ -18,31 +18,31 @@ steps:
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["version"]
-    id: Display Terraform version
+    id: Terraform version
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Initialize Terraform
+    id: Init
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["fmt", "-recursive", "-check"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Check Terraform configs format
+    id: Terraform configs format check
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terragrunt
     args: ["hclfmt", "--terragrunt-check"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Check Terragrunt configs format
+    id: Terragrunt configs format check
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
     entrypoint: terraform
     args: ["validate"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Validate Terraform configs
+    id: Terraform configs validation
 
 substitutions:
     _TERRAFORM_ROOT: "."

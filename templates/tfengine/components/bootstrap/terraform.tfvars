@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id       = "{{.PROJECT_ID}}"
-org_id           = "{{.ORG_ID}}"
-billing_account  = "{{.BILLING_ACCOUNT}}"
-state_bucket     = "{{.STATE_BUCKET}}"
-org_admin        = "{{.ORG_ADMIN}}"
+project_id      = "{{.PROJECT_ID}}"
+org_id          = "{{.ORG_ID}}"
+billing_account = "{{.BILLING_ACCOUNT}}"
+state_bucket    = "{{.STATE_BUCKET}}"
+org_admin       = "{{.ORG_ADMIN}}"
 devops_owners = [
   {{- range .PROJECT_OWNERS}}
   "{{.}}",
