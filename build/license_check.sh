@@ -24,7 +24,7 @@ go version
 (cd / && go get -u github.com/google/addlicense)
 
 # Check for missing license headers
-missing="$(find -name "*.go" | xargs addlicense -check)"
+missing="$(addlicense -check .)"
 if [ -n "${missing}" ]; then
   cat <<EOF
 
