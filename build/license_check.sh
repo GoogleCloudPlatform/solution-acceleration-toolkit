@@ -12,21 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-steps:
-- name: "gcr.io/cloud-builders/go"
-  entrypoint: "sh"
-  args: ["build/license_check.sh"]
-  id: License headers check
+#!/bin/bash
 
-- name: "gcr.io/cloud-builders/npm:current"
-  entrypoint: "sh"
-  args: ["build/md_check.sh"]
-  id: Markdownlint check
+# Don't set -e, want to capture the output of missing files.
 
-- name: "gcr.io/cloud-builders/go"
-  entrypoint: "sh"
-  args: ["build/go_check.sh"]
-  id: Go code check
+# Print versions
+go version
 
-options:
-  env: ["GOPATH=/go"]
+# Install license headers checker.
+# Switch directories to avoid changing go.mod and go.sum files (see https://stackoverflow.com/a/57313319).
+(cd / && go get -u github.com/google/addlicense)
+
+# Check for missing license headers
+missing="$(addlicense -check .)"
+if [ -n "${missing}" ]; then
+  cat <<EOF
+
+Files missing license headers:
+${missing}
+
+To fix, run the following:
+go get -u github.com/google/addlicense
+addlicense -c "Google LLC" -l "apache" .
+EOF
+
+  exit 1
+fi
