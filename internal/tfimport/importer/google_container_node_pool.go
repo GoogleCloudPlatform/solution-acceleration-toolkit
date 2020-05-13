@@ -22,13 +22,19 @@ import (
 
 	container "cloud.google.com/go/container/apiv1"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
+	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	containerpb "google.golang.org/genproto/googleapis/container/v1"
 )
 
+// Define the client as an interface to allow overriding it in tests.
+type GKENodePoolClient interface {
+	ListNodePools(ctx context.Context, req *containerpb.ListNodePoolsRequest, opts ...gax.CallOption) (*containerpb.ListNodePoolsResponse, error)
+}
+
 // GKENodePool defines a struct with the necessary information for a google_container_node_pool to be imported.
 type GKENodePool struct {
-	client *container.ClusterManagerClient
+	client GKENodePoolClient
 }
 
 func (b *GKENodePool) initClient(ctx context.Context) error {
