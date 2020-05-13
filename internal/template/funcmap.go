@@ -39,15 +39,15 @@ func get(m map[string]interface{}, key string, def ...interface{}) interface{} {
 		v, ok := m[k]
 		switch {
 		case !ok:
+			if len(def) == 1 {
+				return def[0]
+			}
 			return nil
 		case i == len(split)-1:
 			return v
 		default:
 			m = v.(map[string]interface{})
 		}
-	}
-	if len(def) == 1 {
-		return def[0]
 	}
 	return nil
 }
