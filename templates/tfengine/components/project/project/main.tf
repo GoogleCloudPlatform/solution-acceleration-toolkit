@@ -14,10 +14,10 @@
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 7.0"
+  source  = "terraform-google-modules/project-factory/google//modules/core_project_factory"
+  version = "~> 8.0.0"
 
-  name                    = var.name
+  name                    = "{{.PROJECT_ID}}"
   org_id                  = var.org_id
   folder_id               = var.folder_id
   billing_account         = var.billing_account

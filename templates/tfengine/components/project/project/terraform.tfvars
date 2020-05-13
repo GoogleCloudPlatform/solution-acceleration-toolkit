@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name            = "{{.PROJECT_ID}}"
 org_id          = "{{.ORG_ID}}"
 billing_account = "{{.BILLING_ACCOUNT}}"
 {{- if has . "ENABLE_LIEN"}}
