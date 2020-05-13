@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -53,14 +52,14 @@ func fromConfigValues(key string, cvs ...ProviderConfigMap) (interface{}, error)
 }
 
 // userValue asks the user to fill in a value that the importer can't figure out.
-func fromUser(fieldName string, prompt string, choices []string) (val string, err error) {
+func fromUser(in io.Reader, fieldName string, prompt string, choices []string) (val string, err error) {
 	log.Printf("Could not determine %q automatically\n", fieldName)
 	log.Println(prompt)
 
 	if len(choices) > 0 {
-		return userChoice(os.Stdin, choices)
+		return userChoice(in, choices)
 	} else {
-		return userValue(os.Stdin)
+		return userValue(in)
 	}
 }
 

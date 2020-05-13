@@ -19,6 +19,8 @@ package importer
 import (
 	"context"
 	"fmt"
+	"io"
+	"os"
 
 	container "cloud.google.com/go/container/apiv1"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -72,7 +74,7 @@ func (b *GKENodePool) fetchNodePools(ctx context.Context, project string, locati
 	return resp.NodePools, nil
 }
 
-func fetchNodePoolName(b *GKENodePool, project string, location string, cluster string) (string, error) {
+func (b *GKENodePool) fetchNodePoolName(in io.Reader, project string, location string, cluster string) (string, error) {
 	clusterName := fmt.Sprintf("%v/%v/%v", project, location, cluster)
 
 	// Fetch the node pools for this cluster and ask the user.
@@ -95,7 +97,7 @@ func fetchNodePoolName(b *GKENodePool, project string, location string, cluster 
 
 	// Ask the user to choose.
 	prompt := "Please identify the node pool"
-	choice, err := fromUser("name", prompt, nodePoolNames)
+	choice, err := fromUser(in, "name", prompt, nodePoolNames)
 	if err != nil {
 		return "", err
 	}
@@ -126,7 +128,7 @@ func (b *GKENodePool) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMa
 
 		// Could not find the name in the config. If interactive, ask the user for it.
 		if interactive {
-			name, err = fetchNodePoolName(b, project.(string), location.(string), cluster.(string))
+			name, err = b.fetchNodePoolName(os.Stdin, project.(string), location.(string), cluster.(string))
 			if err != nil {
 				return "", &InsufficientInfoErr{rc.Address, []string{"name"}, err.Error()}
 			}

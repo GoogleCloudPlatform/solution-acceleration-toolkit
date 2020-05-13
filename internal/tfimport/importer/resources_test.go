@@ -94,10 +94,13 @@ func TestUserValue(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		// Temporarily redirect standard out to null while running
+		// Temporarily redirect output to null while running
 		stdout := os.Stdout
 		os.Stdout = os.NewFile(0, os.DevNull)
+
 		out, err := userValue(strings.NewReader(tc.input))
+
+		// Restore.
 		os.Stdout = stdout
 
 		if err != nil {
@@ -134,10 +137,13 @@ func TestUserChoice(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		// Temporarily redirect standard out to null while running
+		// Temporarily redirect output to null while running
 		stdout := os.Stdout
 		os.Stdout = os.NewFile(0, os.DevNull)
+
 		out, err := userChoice(strings.NewReader(tc.input), choices)
+
+		// Restore.
 		os.Stdout = stdout
 
 		if err != nil {
