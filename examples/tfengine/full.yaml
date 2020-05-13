@@ -87,6 +87,20 @@ templates:
   output_ref: "folder-prod.dir"
   data:
     DISPLAY_NAME: "team1"
+- name: "project-example-prod-networks"
+  recipe_path: "{{$BASE}}/folder/project.yaml"
+    output_ref: "folder-prod-team1.dir"
+  data:
+    PROJECT_ID: "example-prod-networks"
+    RESOURCES:
+      COMPUTE_NETWORKS:
+      - NAME: "example-network"
+        SUBNETS:
+        - NAME: "example-subnet"
+          IP_RANGE: "10.2.0.0/16"
+          SECONDARY_RANGES:
+          - NAME: "example-range"
+            IP_RANGE: "192.168.10.0/24"
 - name: "project-example-prod-data"
   recipe_path: "{{$BASE}}/folder/project.yaml"
   output_ref: "folder-prod-team1.dir"
