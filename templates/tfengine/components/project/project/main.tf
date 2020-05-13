@@ -21,8 +21,8 @@ module "project" {
   org_id                  = var.org_id
   folder_id               = var.folder_id
   billing_account         = var.billing_account
-  lien                    = var.enable_lien
   activate_apis           = var.apis
+  enable_lien             = {{get . "ENABLE_LIEN" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
 }
