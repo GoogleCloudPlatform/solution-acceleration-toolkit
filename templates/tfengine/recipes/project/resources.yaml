@@ -27,6 +27,11 @@ templates:
     INPUTS:
       project_id: "dependency.project.outputs.project_id"
 
+{{if has . "COMPUTE_NETWORKS"}}
+- name: "compute_networks"
+  component_path: "../../components/project/compute_networks"
+{{end}}
+
 {{if has . "STORAGE_BUCKETS"}}
 - name: "storage_buckets"
   component_path: "../../components/project/storage_buckets"
