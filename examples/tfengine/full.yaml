@@ -89,7 +89,7 @@ templates:
     DISPLAY_NAME: "team1"
 - name: "project-example-prod-networks"
   recipe_path: "{{$BASE}}/folder/project.yaml"
-    output_ref: "folder-prod-team1.dir"
+  output_ref: "folder-prod-team1.dir"
   data:
     PROJECT_ID: "example-prod-networks"
     RESOURCES:

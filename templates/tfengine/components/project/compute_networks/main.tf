@@ -16,7 +16,7 @@ limitations under the License. */ -}}
 {{- $has_secondary_ranges := false}}
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 2.0"
+  version = "~> 2.3.0"
 
   network_name = "{{.NAME}}"
   project_id   = var.project_id
@@ -34,7 +34,6 @@ module "{{resourceName .NAME}}" {
       {{- end}}
       subnet_flow_logs       = true
       subnets_private_access = true
-
     },
 
     {{- if has . "SECONDARY_RANGES"}}
