@@ -26,7 +26,7 @@ module "project" {
   skip_gcloud_download    = true
 
   {{- if has . "SHARED_VPC"}}
-  {{- $host := .SHARED_VPC.HOST_PROJECT}}
+  {{- $host := .SHARED_VPC.HOST_PROJECT_ID}}
   shared_vpc              = "{{$host}}"
 
   {{- if has .SHARED_VPC "SUBNETS"}}

@@ -120,7 +120,7 @@ templates:
     APIS:
     - "container.googleapis.com"
     SHARED_VPC:
-      HOST_PROJECT: "example-prod-networks"
+      HOST_PROJECT_ID: "example-prod-networks"
       SUBNETS:
       - NAME: example-subnet
     RESOURCES:
