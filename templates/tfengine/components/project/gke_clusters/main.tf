@@ -12,13 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{- range get . "GKE_CLUSTERS"}}
-
-{{- $region := get . "REGION"}}
-{{- if not $region}}
-{{- $region = $.GKE_CLUSTER_REGION}}
-{{- end}}
-
+{{range get . "GKE_CLUSTERS" -}}
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "9.0.0"
@@ -26,7 +20,7 @@ module "{{resourceName .NAME}}" {
   # Required.
   name                   = "{{.NAME}}"
   project_id             = var.project_id
-  region                 = "{{$region}}"
+  region                 = "{{get . "REGION" $.GKE_CLUSTER_REGION }}"
   regional               = true
   network                = "{{.NETWORK}}"
   subnetwork             = "{{.SUBNET}}"

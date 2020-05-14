@@ -120,9 +120,10 @@ templates:
     APIS:
     - "container.googleapis.com"
     SHARED_VPC:
-      HOST: "example-prod-networks"
+      HOST_PROJECT: "example-prod-networks"
       SUBNETS:
-      - "projects/example-prod-networks/regions/us-central1/subnetworks/example-subnet"
+      - NAME: example-subnet
+      # - "projects/example-prod-networks/regions/us-central1/subnetworks/example-subnet"
     RESOURCES:
       GKE_CLUSTERS:
       - NAME: "example-prod-gke-cluster"
