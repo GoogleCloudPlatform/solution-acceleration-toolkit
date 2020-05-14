@@ -123,7 +123,6 @@ templates:
       HOST_PROJECT: "example-prod-networks"
       SUBNETS:
       - NAME: example-subnet
-      # - "projects/example-prod-networks/regions/us-central1/subnetworks/example-subnet"
     RESOURCES:
       GKE_CLUSTERS:
       - NAME: "example-prod-gke-cluster"
