@@ -117,8 +117,11 @@ func TestUserChoice(t *testing.T) {
 		input string
 		want  string
 	}{
+		// Empty imput is skip.
+		{"\n", ""},
+
 		// Invalid inputs.
-		{"\na\n1\n", "ch2"},
+		{"a\n1\n", "ch2"},
 
 		// Invalid choices.
 		{"15\n-1\n1\n", "ch2"},

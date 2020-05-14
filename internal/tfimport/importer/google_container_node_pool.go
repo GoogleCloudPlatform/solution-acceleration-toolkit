@@ -130,11 +130,11 @@ func (b *GKENodePool) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMa
 		if interactive {
 			name, err = b.fetchNodePoolName(os.Stdin, project.(string), location.(string), cluster.(string))
 			if err != nil {
-				return "", &InsufficientInfoErr{rc.Address, []string{"name"}, err.Error()}
+				return "", err
 			}
 		}
 		if name == "" {
-			return "", &InsufficientInfoErr{rc.Address, []string{"name"}, ""}
+			return "", &InsufficientInfoErr{[]string{"name"}, ""}
 		}
 	}
 

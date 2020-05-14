@@ -28,15 +28,14 @@ type ProviderConfigMap map[string]interface{}
 
 // InsufficientInfoErr indicates that we do not have enough information to
 type InsufficientInfoErr struct {
-	address       string
 	missingFields []string
 	msg           string
 }
 
 func (e *InsufficientInfoErr) Error() string {
-	err := fmt.Sprintf("Insufficient information to import %v - missing fields %v.", e.address, e.missingFields)
+	err := fmt.Sprintf("missing fields: %v", strings.Join(e.missingFields, ", "))
 	if e.msg != "" {
-		err = fmt.Sprintf("%v Additional info: %v", err, e.msg)
+		err = fmt.Sprintf("%v; additional info: %v", err, e.msg)
 	}
 	return err
 }
@@ -57,10 +56,19 @@ func fromUser(in io.Reader, fieldName string, prompt string, choices []string) (
 	log.Println(prompt)
 
 	if len(choices) > 0 {
-		return userChoice(in, choices)
+		val, err = userChoice(in, choices)
 	} else {
-		return userValue(in)
+		val, err = userValue(in)
 	}
+
+	if val == "" {
+		ie := &InsufficientInfoErr{missingFields: []string{fieldName}}
+		if err != nil {
+			ie.msg = err.Error()
+		}
+		return "", ie
+	}
+	return val, err
 }
 
 func userValue(in io.Reader) (string, error) {
@@ -95,6 +103,10 @@ func userChoice(in io.Reader, choices []string) (string, error) {
 			return "", err
 		}
 		val = strings.TrimSpace(val)
+
+		if val == "" {
+			return "", nil
+		}
 
 		// Choice must be a valid number.
 		choice, err = strconv.Atoi(val)

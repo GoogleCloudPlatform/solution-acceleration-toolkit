@@ -108,7 +108,6 @@ func run() error {
 
 	// Import all importable create changes.
 	importedSomething := false
-	var ie *importer.InsufficientInfoErr
 	var errs []string
 	var importCmds []string
 	for _, cc := range createChanges {
@@ -138,6 +137,7 @@ func run() error {
 		}
 
 		// Handle the different outcomes of the import attempt.
+		var ie *importer.InsufficientInfoErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
@@ -148,7 +148,7 @@ func run() error {
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
-			log.Println(err)
+			log.Printf("Insufficient information to import %q: %v\n", cc.Address, err)
 			log.Println("Skipping")
 
 		// Check if error indicates resource is not importable or does not exist.
