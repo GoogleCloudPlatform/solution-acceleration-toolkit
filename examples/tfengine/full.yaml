@@ -56,7 +56,6 @@ templates:
       - "group:example-devops-owners@example.com"
     AUDIT:
       PROJECT_ID: "example-audit"
-      ENABLE_LIEN: true
       DATASET_NAME: "1yr_org_audit_logs"
       BUCKET_NAME: "7yr-org-audit-logs"
       AUDITORS: "group:example-dev-auditors@example.com"
