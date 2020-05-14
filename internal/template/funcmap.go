@@ -28,8 +28,7 @@ var funcMap = map[string]interface{}{
 // get allows a template to optionally lookup a value from a dict.
 // If a value is not found, it will check for a single default.
 // If there is no default, it will return nil.
-//   {{if get . "OPTIONAL_KEY"}} {{.}} {{end}}  // GOOD
-//   {{.OPTIONAL_KEY}}  // BAD, will fail if the key is not set
+// There should be at most one default value set.
 //
 // Keys can reference multiple levels of maps by using "." to indicate a new level
 // (e.g. L1.L2 will lookup key L1 in the top level map then L2 within the value.)
