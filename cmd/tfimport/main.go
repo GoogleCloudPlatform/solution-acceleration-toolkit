@@ -88,7 +88,7 @@ func run() error {
 	return nil
 }
 
-// This function does the full pland and import cycle.
+// This function does the full plan and import cycle.
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
 func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
