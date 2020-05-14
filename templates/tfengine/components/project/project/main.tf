@@ -36,8 +36,8 @@ module "project" {
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.NAME}}",
     {{- end}}
   ]
-  {{- end}}
-  {{- end}}
+  {{- end /* shared VPC subnets */}}
+  {{- end /* shared VPC */}}
 
   {{- if has . "APIS"}}
   activate_apis = [
