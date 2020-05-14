@@ -20,11 +20,7 @@ module "{{resourceName .NAME}}" {
   # Required.
   name                   = "{{.NAME}}"
   project_id             = var.project_id
-  {{- if has . "REGION"}}
-  region                 = "{{.REGION}}"
-  {{- else}}
-  region                 = "{{$.GKE_CLUSTER_REGION}}"
-  {{- end}}
+  region                 = "{{get . "REGION" $.GKE_CLUSTER_REGION}}"
   regional               = true
   network                = "{{.NETWORK}}"
   subnetwork             = "{{.SUBNET}}"
@@ -39,4 +35,4 @@ module "{{resourceName .NAME}}" {
   enable_private_endpoint    = false
   release_channel            = "STABLE"
 }
-{{end}}
+{{- end}}

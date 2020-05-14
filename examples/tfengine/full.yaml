@@ -112,11 +112,17 @@ templates:
         IAM_MEMBERS:
         - ROLE: "roles/storage.objectViewer"
           MEMBER: "group:example-readers@example.com"
-- name: "project-example-apps"
+- name: "project-example-prod-apps"
   recipe_path: "{{$BASE}}/folder/project.yaml"
   output_ref: "folder-prod-team1.dir"
   data:
     PROJECT_ID: "example-prod-apps"
+    APIS:
+    - "container.googleapis.com"
+    SHARED_VPC:
+      HOST_PROJECT_ID: "example-prod-networks"
+      SUBNETS:
+      - NAME: example-subnet
     RESOURCES:
       GKE_CLUSTERS:
       - NAME: "example-prod-gke-cluster"
