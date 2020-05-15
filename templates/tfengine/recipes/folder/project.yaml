@@ -27,6 +27,11 @@ templates:
         name: '"mock-folder"'
     INPUTS:
       folder_id: "dependency.parent_folder.outputs.name"
+  flatten: [
+  {{if has . "PROJECT_TERRAFORM"}}
+  { key: "PROJECT_TERRAFORM" }
+  {{end}}
+  ]
 - name: "project"
   component_path: "../../components/project/project"
   output_ref: "terragrunt"

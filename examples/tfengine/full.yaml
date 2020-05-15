@@ -130,3 +130,8 @@ templates:
         IP_RANGE_PODS_NAME: "example-pods-range"
         IP_RANGE_SERVICES_NAME: "example-services-range"
         MASTER_IPV4_CIDR_BLOCK: "192.168.0.0/28"
+    # Add dependency on network.
+    PROJECT_TERRAFORM:
+      DEPS:
+      - NAME: "networks"
+        PATH: "../project.example-prod-networks/networks"
