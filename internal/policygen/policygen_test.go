@@ -40,7 +40,15 @@ func TestExamples(t *testing.T) {
 			}
 			defer os.RemoveAll(tmp)
 
-			if err := Run(ex, "", "", "", tmp); err != nil {
+			args := &RunArgs{
+				InputConfig: ex,
+				InputDir:    "",
+				InputPlan:   "",
+				InputState:  "",
+				OutputDir:   tmp,
+			}
+
+			if err := Run(args); err != nil {
 				t.Fatalf("policygen.Run(%q, %q, %q, %q, %q) = %v", ex, "", "", "", tmp, err)
 			}
 

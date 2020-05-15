@@ -28,16 +28,25 @@ import (
 	"github.com/otiai10/copy"
 )
 
-func Run(inputConfig, inputDir, inputPlan, inputState, outputDir string) error {
+// RunArgs is the struct representing the arguments passed to Run().
+type RunArgs struct {
+	InputConfig string
+	InputDir    string
+	InputPlan   string
+	InputState  string
+	OutputDir   string
+}
+
+func Run(args *RunArgs) error {
 	var err error
-	inputConfig, err = pathutil.Expand(inputConfig)
+	inputConfig, err := pathutil.Expand(args.InputConfig)
 	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", inputConfig, err)
+		return fmt.Errorf("normalize path %q: %v", args.InputConfig, err)
 	}
 
-	outputDir, err = pathutil.Expand(outputDir)
+	outputDir, err := pathutil.Expand(args.OutputDir)
 	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", outputDir, err)
+		return fmt.Errorf("normalize path %q: %v", args.OutputDir, err)
 	}
 
 	tmpDir, err := ioutil.TempDir("", "")
@@ -60,7 +69,7 @@ func Run(inputConfig, inputDir, inputPlan, inputState, outputDir string) error {
 	}
 
 	rn := &runner.Default{Quiet: true}
-	resources, err := loadResources(rn, inputDir, inputPlan, inputState)
+	resources, err := loadResources(rn, args.InputDir, args.InputPlan, args.InputState)
 	if err != nil {
 		return err
 	}

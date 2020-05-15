@@ -58,7 +58,15 @@ func main() {
 		log.Fatal("--output_dir must be set")
 	}
 
-	if err := policygen.Run(*inputConfig, *inputDir, *inputPlan, *inputState, *outputDir); err != nil {
+	args := &policygen.RunArgs{
+		InputConfig: *inputConfig,
+		InputDir:    *inputDir,
+		InputPlan:   *inputPlan,
+		InputState:  *inputState,
+		OutputDir:   *outputDir,
+	}
+
+	if err := policygen.Run(args); err != nil {
 		log.Fatalf("Failed to generate policies: %v", err)
 	}
 }
