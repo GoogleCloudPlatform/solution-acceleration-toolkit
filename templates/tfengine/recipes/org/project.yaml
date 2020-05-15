@@ -19,8 +19,8 @@ templates:
   {{else}}
   output_path: "./project.{{.PROJECT_ID}}"
   {{end}}
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
+- name: "terraform"
+  recipe_path: "../terraform/terraform.yaml"
   output_ref: "dir"
   output_path: "./project"
   flatten: [
@@ -30,7 +30,7 @@ templates:
   ]
 - name: "project"
   component_path: "../../components/project/project"
-  output_ref: "terragrunt"
+  output_ref: "terraform"
 
 {{if has . "RESOURCES"}}
 - name: "resources"
