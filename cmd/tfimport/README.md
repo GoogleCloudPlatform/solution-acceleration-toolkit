@@ -85,3 +85,6 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
+- [google_compute_subnetwork_iam_policy](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
+- [google_compute_subnetwork_iam_binding](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
+- [google_compute_subnetwork_iam_member](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
