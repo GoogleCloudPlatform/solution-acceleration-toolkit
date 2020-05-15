@@ -20,12 +20,12 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/otiai10/copy"
 )
 
 func Run(inputConfig, inputDir, inputPlan, inputState, outputDir string) error {
@@ -72,12 +72,7 @@ func Run(inputConfig, inputDir, inputPlan, inputState, outputDir string) error {
 		return fmt.Errorf("mkdir %q: %v", outputDir, err)
 	}
 
-	fs, err := filepath.Glob(filepath.Join(tmpDir, "*"))
-	if err != nil {
-		return err
-	}
-	cp := exec.Command("cp", append([]string{"-a", "-t", outputDir}, fs...)...)
-	return rn.CmdRun(cp)
+	return copy.Copy(tmpDir, outputDir)
 }
 
 func generateForsetiPolicies(outputDir string, c *config) error {
