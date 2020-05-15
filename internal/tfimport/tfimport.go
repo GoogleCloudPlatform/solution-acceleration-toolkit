@@ -51,6 +51,7 @@ var importers = map[string]resourceImporter{
 	"google_compute_subnetwork":            &importer.ComputeSubnetwork{},
 	"google_compute_router":                &importer.ComputeRouter{},
 	"google_compute_router_nat":            &importer.ComputeRouterNat{},
+	"google_sql_database":                  &importer.SQLDatabase{},
 	"google_sql_database_instance":         &importer.SQLDatabaseInstance{},
 	"google_sql_user":                      &importer.SQLUser{},
 }
