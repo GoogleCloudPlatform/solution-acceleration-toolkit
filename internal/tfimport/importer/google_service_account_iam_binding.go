@@ -32,5 +32,5 @@ func (b *ServiceAccountIAMBinding) ImportID(rc terraform.ResourceChange, pcv Pro
 		return "", err
 	}
 
-	return fmt.Sprintf("%v iam.serviceAccountUser", serviceAccountID), nil
+	return fmt.Sprintf("%v roles/iam.serviceAccountUser", serviceAccountID), nil
 }
