@@ -86,3 +86,4 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
 - [google_sql_database_instance](https://www.terraform.io/docs/providers/google/r/sql_database_instance.html)
+- [google_sql_user](https://www.terraform.io/docs/providers/google/r/sql_user.html)
