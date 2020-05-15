@@ -42,14 +42,11 @@ func TestExamples(t *testing.T) {
 
 			args := &RunArgs{
 				InputConfig: ex,
-				InputDir:    "",
-				InputPlan:   "",
-				InputState:  "",
 				OutputDir:   tmp,
 			}
 
 			if err := Run(args); err != nil {
-				t.Fatalf("policygen.Run(%q, %q, %q, %q, %q) = %v", ex, "", "", "", tmp, err)
+				t.Fatalf("policygen.Run(%+v) = %v", args, err)
 			}
 
 			// Check for the existence of policy folders.
