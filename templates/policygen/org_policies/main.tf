@@ -17,142 +17,207 @@
 # See the following resources for the details of policies enforced.
 
 terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
   backend "gcs" {}
 }
 
 # App Engine
-resource "google_organization_policy" "appengine_disable_code_download" {
-  org_id     = var.org_id
-  constraint = "appengine.disableCodeDownload"
+module "orgpolicy_appengine_disable_code_download" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/appengine.disableCodeDownload"
+  policy_type = "boolean"
+  enforce     = true
 }
 
 # Cloud SQL
-resource "google_organization_policy" "sql_restrict_authorized_networks" {
-  org_id     = var.org_id
-  constraint = "sql.restrictAuthorizedNetworks"
+module "orgpolicy_sql_restrict_authorized_networks" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/sql.restrictAuthorizedNetworks"
+  policy_type = "boolean"
+  enforce     = true
 }
 
-resource "google_organization_policy" "sql_restrict_public_ip" {
-  org_id     = var.org_id
-  constraint = "sql.restrictPublicIp"
+module "orgpolicy_sql_restrict_public_ip" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/sql.restrictPublicIp"
+  policy_type = "boolean"
+  enforce     = true
 }
 
 # Compute Engine
-resource "google_organization_policy" "compute_disable_nested_virtualization" {
-  org_id     = var.org_id
-  constraint = "compute.disableNestedVirtualization"
+module "orgpolicy_compute_disable_nested_virtualization" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/compute.disableNestedVirtualization"
+  policy_type = "boolean"
+  enforce     = true
 }
 
-resource "google_organization_policy" "compute_disable_serial_port_access" {
-  org_id     = var.org_id
-  constraint = "compute.disableSerialPortAccess"
+module "orgpolicy_compute_disable_serial_port_access" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/compute.disableSerialPortAccess"
+  policy_type = "boolean"
+  enforce     = true
 }
 
-resource "google_organization_policy" "compute_restrict_shared_vpc_host_projects" {
-  count      = length(var.allowed_shared_vpc_host_projects) != 0 ? 1 : 0
-  org_id     = var.org_id
-  constraint = "compute.restrictSharedVpcHostProjects"
+module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  list_policy {
-    allow {
-      values = var.allowed_shared_vpc_host_projects
-    }
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint        = "constraints/compute.restrictSharedVpcHostProjects"
+  policy_type       = "list"
+  allow             = var.allowed_shared_vpc_host_projects
+  allow_list_length = length(var.allowed_shared_vpc_host_projects)
 }
 
-resource "google_organization_policy" "compute_skip_default_network_creation" {
-  org_id     = var.org_id
-  constraint = "compute.skipDefaultNetworkCreation"
+module "orgpolicy_compute_skip_default_network_creation" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/compute.skipDefaultNetworkCreation"
+  policy_type = "boolean"
+  enforce     = true
 }
 
-resource "google_organization_policy" "compute_trusted_image_projects" {
-  count      = length(var.allowed_trusted_image_projects) != 0 ? 1 : 0
-  org_id     = var.org_id
-  constraint = "compute.trustedImageProjects"
+module "orgpolicy_compute_trusted_image_projects" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  list_policy {
-    allow {
-      values = var.allowed_trusted_image_projects
-    }
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint        = "constraints/compute.trustedImageProjects"
+  policy_type       = "list"
+  allow             = var.allowed_trusted_image_projects
+  allow_list_length = length(var.allowed_trusted_image_projects)
 }
 
-resource "google_organization_policy" "compute_vm_can_ip_forward" {
-  org_id     = var.org_id
-  constraint = "compute.vmCanIpForward"
+module "orgpolicy_compute_vm_can_ip_forward" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  list_policy {
-    deny {
-      all = true
-    }
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/compute.vmCanIpForward"
+  policy_type = "list"
+  enforce     = true # deny all
+}
+
+module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
+  policy_type = "boolean"
+  enforce     = true
 }
 
 # Cloud Identity and Access Management
-resource "google_organization_policy" "iam_allowed_policy_member_domains" {
-  count      = length(var.allowed_policy_member_domains) != 0 ? 1 : 0
-  org_id     = var.org_id
-  constraint = "iam.allowedPolicyMemberDomains"
-
-  list_policy {
-    allow {
-      values = var.allowed_policy_member_domains
-    }
-  }
+data "google_organization" "orgs" {
+  for_each = toset(var.allowed_policy_member_domains)
+  domain   = each.value
 }
 
-# Resource Manager
-resource "google_organization_policy" "compute_restrict_xpn_project_lien_removal" {
-  org_id     = var.org_id
-  constraint = "compute.restrictXpnProjectLienRemoval"
+module "orgpolicy_iam_allowed_policy_member_domains" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint        = "constraints/iam.allowedPolicyMemberDomains"
+  policy_type       = "list"
+  allow             = [for org in data.google_organization.orgs : org["directory_customer_id"]]
+  allow_list_length = length(var.allowed_policy_member_domains)
 }
 
 # Google Cloud Platform - Resource Locations
-resource "google_organization_policy" "gcp_resource_locations" {
-  org_id     = var.org_id
-  constraint = "gcp.resourceLocations"
+module "orgpolicy_gcp_resource_locations" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  list_policy {
-    allow {
-      values = ["in:us-locations"]
-    }
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint        = "constraints/gcp.resourceLocations"
+  policy_type       = "list"
+  allow             = ["in:us-locations"]
+  allow_list_length = 1
 }
 
 # Cloud Storage
-resource "google_organization_policy" "storage_uniform_bucket_level_access" {
-  org_id     = var.org_id
-  constraint = "storage.uniformBucketLevelAccess"
+module "orgpolicy_storage_uniform_bucket_level_access" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
 
-  boolean_policy {
-    enforced = true
-  }
+  policy_for      = var.policy_for
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+
+  constraint  = "storage.uniformBucketLevelAccess"
+  policy_type = "boolean"
+  enforce     = true
 }
