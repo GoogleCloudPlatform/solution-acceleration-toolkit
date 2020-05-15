@@ -88,3 +88,7 @@ Terraform configs, including importing resources from within modules.
 - [google_service_account_iam_policy](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
 - [google_service_account_iam_binding](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
 - [google_service_account_iam_member](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
+- [google_service_networking_connection](https://www.terraform.io/docs/providers/google/r/service_networking_connection.html)
+- [google_sql_database](https://www.terraform.io/docs/providers/google/r/sql_database.html)
+- [google_sql_database_instance](https://www.terraform.io/docs/providers/google/r/sql_database_instance.html)
+- [google_sql_user](https://www.terraform.io/docs/providers/google/r/sql_user.html)
