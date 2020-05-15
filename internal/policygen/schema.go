@@ -32,7 +32,8 @@ properties:
   org_id:
     description: |
       ID of the organization where the policies will be applied to.
-    type: integer
+    type: string
+    pattern: ^[0-9]{8,25}$
 
   forseti_policies:
     description: |

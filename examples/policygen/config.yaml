@@ -14,7 +14,7 @@
 
 # Required fields
 template_dir: ../../templates/policygen
-org_id: 123
+org_id: "12345678"
 
 # Optional fields
 forseti_policies: {}
