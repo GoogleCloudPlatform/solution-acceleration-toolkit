@@ -134,4 +134,4 @@ templates:
     PROJECT_TERRAFORM:
       DEPS:
       - NAME: "networks"
-        PATH: "../project.example-prod-networks/networks"
+        PATH: "../../project.example-prod-networks/resources"
