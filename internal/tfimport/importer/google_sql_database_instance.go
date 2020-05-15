@@ -20,11 +20,11 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// SQLInstance defines a struct with the necessary information for a google_sql_database_instance to be imported.
-type SQLInstance struct{}
+// SQLDatabaseInstance defines a struct with the necessary information for a google_sql_database_instance to be imported.
+type SQLDatabaseInstance struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *SQLInstance) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *SQLDatabaseInstance) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
