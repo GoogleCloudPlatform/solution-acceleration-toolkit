@@ -32,11 +32,15 @@ type Runner interface {
 }
 
 // Default is the Runner that executes the command by default.
-type Default struct{}
+type Default struct {
+	Quiet bool
+}
 
 // CmdRun executes the command.
-func (*Default) CmdRun(cmd *exec.Cmd) error {
-	log.Printf("Running: %v", cmd.Args)
+func (d *Default) CmdRun(cmd *exec.Cmd) error {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	var stderr bytes.Buffer
@@ -48,8 +52,10 @@ func (*Default) CmdRun(cmd *exec.Cmd) error {
 }
 
 // CmdOutput executes the command and returns the command stdout.
-func (*Default) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
-	log.Printf("Running: %v", cmd.Args)
+func (d *Default) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	b, err := cmd.Output()
@@ -60,8 +66,10 @@ func (*Default) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 }
 
 // CmdCombinedOutput executes the command and returns the command stdout and stderr.
-func (*Default) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
-	log.Printf("Running: %v", cmd.Args)
+func (d *Default) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
 	return cmd.CombinedOutput()
 }
 
