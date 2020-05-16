@@ -37,13 +37,16 @@ properties:
 
   forseti_policies:
     description: |
-      Key value pairs passed to Forseti Policy Library constraint templates.
+      Key value pairs passed to Forseti Policy Library constraint templates. If an optional
+      property is not specified, then the corresponding default setting will be applied.
     type: object
     additionalProperties: false
 
   gcp_organization_policies:
     description: |
-      Key value pairs passed to GCP Organization Policy constraint templates.
+      Key value pairs passed to GCP Organization Policy constraint templates. If an optional
+      property is not specified, then the corresponding default setting will be applied.
+      For example, if ALLOWED_* is not specified, then the corresponding policy will allow all.
     type: object
     additionalProperties: false
     properties:
