@@ -12,16 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "policy_for" {
-  description = "Resource hierarchy node to apply the policy to: one of `organization`, `folder`, or `project`."
-  type        = string
-}
-
-variable "node_id" {
-  description = "Resource hierarchy node ID: one of organization ID, folder ID or project ID"
-  type        = string
-}
-
 variable "allowed_policy_member_domains" {
   description = "The list of domains to allow users from, e.g. google.com. If not specified, iam.allowedPolicyMemberDomains constraint will deny all"
   default     = []

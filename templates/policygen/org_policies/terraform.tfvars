@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-policy_for = "{{.POLICY_FOR}}"
-node_id    = "{{.NODE_ID}}"
 {{- if index . "ALLOWED_POLICY_MEMBER_DOMAINS"}}
 allowed_policy_member_domains = [
   {{- range .ALLOWED_POLICY_MEMBER_DOMAINS}}
