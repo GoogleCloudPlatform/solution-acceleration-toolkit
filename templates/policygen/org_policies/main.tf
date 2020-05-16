@@ -18,6 +18,10 @@
 
 {{- $type_field := printf "%s_id" .ROOT_TYPE}}
 
+terraform {
+  backend "gcs" {}
+}
+
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
