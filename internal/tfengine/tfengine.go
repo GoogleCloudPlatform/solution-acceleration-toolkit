@@ -33,10 +33,8 @@ type Config struct {
 }
 
 type templateInfo struct {
-	Name          string                  `json:"name"`
 	ComponentPath string                  `json:"component_path"`
 	RecipePath    string                  `json:"recipe_path"`
-	OutputRef     string                  `json:"output_ref"`
 	OutputPath    string                  `json:"output_path"`
 	Flatten       []*template.FlattenInfo `json:"flatten"`
 	Data          map[string]interface{}  `json:"data"`
@@ -63,10 +61,7 @@ func Run(confPath, outPath string) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	outputRefs := map[string]string{
-		"": tmpDir,
-	}
-	if err := dump(c, filepath.Dir(confPath), outputRefs, ""); err != nil {
+	if err := dump(c, filepath.Dir(confPath), tmpDir); err != nil {
 		return err
 	}
 
@@ -77,30 +72,16 @@ func Run(confPath, outPath string) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
-func dump(conf *Config, root string, outputRefs map[string]string, parentKey string) error {
+func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
-		if ti.Name == "" {
-			return fmt.Errorf("template name cannot be empty: %+v", ti)
-		}
+		outputPath := filepath.Join(outputPath, ti.OutputPath)
+
 		if ti.Data == nil {
 			ti.Data = make(map[string]interface{})
 		}
 		if err := template.MergeData(ti.Data, conf.Data, ti.Flatten); err != nil {
 			return err
 		}
-
-		tp := parentKey
-		if ti.OutputRef != "" {
-			tp = buildOutputKey(parentKey, ti.OutputRef)
-		}
-		parentPath, ok := outputRefs[tp]
-		if !ok {
-			return fmt.Errorf("output reference for %q not found: %v", tp, outputRefs)
-		}
-
-		outputPath := filepath.Join(parentPath, ti.OutputPath)
-		outputKey := buildOutputKey(parentKey, ti.Name)
-		outputRefs[outputKey] = outputPath
 
 		switch {
 		case ti.RecipePath != "":
@@ -113,11 +94,11 @@ func dump(conf *Config, root string, outputRefs map[string]string, parentKey str
 			}
 			rc, err := loadConfig(rp, ti.Data)
 			if err != nil {
-				return fmt.Errorf("load recipe %q: %v", ti.Name, err)
+				return fmt.Errorf("load recipe %q: %v", rp, err)
 			}
 			rc.Data = ti.Data
-			if err := dump(rc, filepath.Dir(rp), outputRefs, outputKey); err != nil {
-				return fmt.Errorf("recipe %q: %v", ti.Name, err)
+			if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
+				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
 		case ti.ComponentPath != "":
 			cp, err := pathutil.Expand(ti.ComponentPath)
@@ -128,16 +109,9 @@ func dump(conf *Config, root string, outputRefs map[string]string, parentKey str
 				cp = filepath.Join(root, cp)
 			}
 			if err := template.WriteDir(cp, outputPath, ti.Data); err != nil {
-				return fmt.Errorf("component %q: %v", ti.Name, err)
+				return fmt.Errorf("component %q: %v", cp, err)
 			}
 		}
 	}
 	return nil
-}
-
-func buildOutputKey(parent, child string) string {
-	if parent == "" {
-		return child
-	}
-	return parent + "." + child
 }
