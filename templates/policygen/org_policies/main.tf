@@ -25,15 +25,21 @@ terraform {
   backend "gcs" {}
 }
 
+locals {
+  organization_id = var.policy_for == "organization" ? var.node_id : null
+  folder_id       = var.policy_for == "folder" ? var.node_id : null
+  project_id      = var.policy_for == "project" ? var.node_id : null
+}
+
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/appengine.disableCodeDownload"
   policy_type = "boolean"
@@ -46,9 +52,9 @@ module "orgpolicy_sql_restrict_authorized_networks" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/sql.restrictAuthorizedNetworks"
   policy_type = "boolean"
@@ -60,9 +66,9 @@ module "orgpolicy_sql_restrict_public_ip" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/sql.restrictPublicIp"
   policy_type = "boolean"
@@ -75,9 +81,9 @@ module "orgpolicy_compute_disable_nested_virtualization" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/compute.disableNestedVirtualization"
   policy_type = "boolean"
@@ -89,9 +95,9 @@ module "orgpolicy_compute_disable_serial_port_access" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/compute.disableSerialPortAccess"
   policy_type = "boolean"
@@ -103,9 +109,9 @@ module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint        = "constraints/compute.restrictSharedVpcHostProjects"
   policy_type       = "list"
@@ -118,9 +124,9 @@ module "orgpolicy_compute_skip_default_network_creation" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/compute.skipDefaultNetworkCreation"
   policy_type = "boolean"
@@ -132,9 +138,9 @@ module "orgpolicy_compute_trusted_image_projects" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint        = "constraints/compute.trustedImageProjects"
   policy_type       = "list"
@@ -147,9 +153,9 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/compute.vmCanIpForward"
   policy_type = "list"
@@ -161,9 +167,9 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
   policy_type = "boolean"
@@ -181,9 +187,9 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
   policy_type       = "list"
@@ -197,9 +203,9 @@ module "orgpolicy_gcp_resource_locations" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint        = "constraints/gcp.resourceLocations"
   policy_type       = "list"
@@ -213,9 +219,9 @@ module "orgpolicy_storage_uniform_bucket_level_access" {
   version = "~> 3.0.2"
 
   policy_for      = var.policy_for
-  organization_id = var.policy_for == "organization" ? var.node_id : null
-  folder_id       = var.policy_for == "folder" ? var.node_id : null
-  project_id      = var.policy_for == "project" ? var.node_id : null
+  organization_id = local.organization_id
+  folder_id       = local.folder_id
+  project_id      = local.project_id
 
   constraint  = "storage.uniformBucketLevelAccess"
   policy_type = "boolean"
