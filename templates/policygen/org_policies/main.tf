@@ -16,23 +16,15 @@
 # (https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
 # See the following resources for the details of policies enforced.
 
-{{- $res_field := ""}}
-
-{{- if eq .POLICY_FOR "project"}}
-  {{- $res_field = "project_id"}}
-{{- else if eq .POLICY_FOR "folder"}}
-  {{- $res_field = "folder_id"}}
-{{- else}}
-  {{- $res_field = "organization_id"}}
-{{- end}}
+{{- $type_field := printf "%s_id" .ROOT_TYPE}}
 
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/appengine.disableCodeDownload"
   policy_type = "boolean"
@@ -44,8 +36,8 @@ module "orgpolicy_sql_restrict_authorized_networks" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/sql.restrictAuthorizedNetworks"
   policy_type = "boolean"
@@ -56,8 +48,8 @@ module "orgpolicy_sql_restrict_public_ip" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/sql.restrictPublicIp"
   policy_type = "boolean"
@@ -69,8 +61,8 @@ module "orgpolicy_compute_disable_nested_virtualization" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/compute.disableNestedVirtualization"
   policy_type = "boolean"
@@ -81,8 +73,8 @@ module "orgpolicy_compute_disable_serial_port_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/compute.disableSerialPortAccess"
   policy_type = "boolean"
@@ -93,8 +85,8 @@ module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint        = "constraints/compute.restrictSharedVpcHostProjects"
   policy_type       = "list"
@@ -106,8 +98,8 @@ module "orgpolicy_compute_skip_default_network_creation" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/compute.skipDefaultNetworkCreation"
   policy_type = "boolean"
@@ -118,8 +110,8 @@ module "orgpolicy_compute_trusted_image_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint        = "constraints/compute.trustedImageProjects"
   policy_type       = "list"
@@ -131,8 +123,8 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/compute.vmCanIpForward"
   policy_type = "list"
@@ -143,8 +135,8 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
   policy_type = "boolean"
@@ -161,8 +153,8 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
   policy_type       = "list"
@@ -175,8 +167,8 @@ module "orgpolicy_gcp_resource_locations" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint        = "constraints/gcp.resourceLocations"
   policy_type       = "list"
@@ -189,8 +181,8 @@ module "orgpolicy_storage_uniform_bucket_level_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.POLICY_FOR}}"
-  {{$res_field}} = "{{.NODE_ID}}"
+  policy_for = "{{.ROOT_TYPE}}"
+  {{$type_field}} = "{{.ROOT_ID}}"
 
   constraint  = "storage.uniformBucketLevelAccess"
   policy_type = "boolean"
