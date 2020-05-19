@@ -40,4 +40,4 @@ templates:
 
 {{if has . "SERVICE_ACCOUNTS"}}
 - component_path: "../../components/project/service_accounts"
-{{}}
+{{end}}
