@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$output_path := get . "OUTPUT_PATH"}}
-{{if not $output_path}}
-  {{$output_path = printf "./project.%s" .PROJECT_ID}}
-{{end}}
+{{$output_path := get . "OUTPUT_PATH" (printf "./project.%s" .PROJECT_ID)}}
 
 templates:
 - component_path: "../../components/terragrunt/leaf"
