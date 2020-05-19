@@ -57,7 +57,9 @@ templates:
     MONITOR:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
-    ORG_POLICIES: {} # Use default org policies.
+    ORG_POLICIES:
+      PARENT_TYPE: organization
+      PARENT_ID: "12345678"
     CICD:
       PROJECT_ID: "example-devops"
       STATE_BUCKET: "example-state-bucket"

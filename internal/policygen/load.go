@@ -22,6 +22,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -33,16 +34,26 @@ func loadConfig(path string) (*config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("read config %q: %v", path, err)
 	}
+
+	cj, err := yaml.YAMLToJSON(b)
+	if err != nil {
+		return nil, fmt.Errorf("convert config to JSON: %v", err)
+	}
+
+	sj, err := yaml.YAMLToJSON([]byte(schema))
+	if err != nil {
+		return nil, fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	if err := jsonschema.Validate(sj, cj); err != nil {
+		return nil, err
+	}
+
 	c := new(config)
-	if err := yaml.Unmarshal(b, c); err != nil {
+	if err := yaml.Unmarshal(cj, c); err != nil {
 		return nil, fmt.Errorf("unmarshal config %q: %v", path, err)
 	}
-	if c.TemplateDir == "" {
-		return nil, fmt.Errorf("`template_dir` is required")
-	}
-	if c.OrgID == "" {
-		return nil, fmt.Errorf("`org_id` is required")
-	}
+
 	if !filepath.IsAbs(c.TemplateDir) {
 		c.TemplateDir = filepath.Join(filepath.Dir(path), c.TemplateDir)
 	}

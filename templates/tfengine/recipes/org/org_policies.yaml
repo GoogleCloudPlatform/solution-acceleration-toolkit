@@ -13,5 +13,7 @@
 # limitations under the License.
 
 templates:
+- component_path: "../../components/terragrunt/leaf"
+  output_path: "./org_policies"
 - component_path: "../../../policygen/org_policies"
   output_path: "./org_policies"
