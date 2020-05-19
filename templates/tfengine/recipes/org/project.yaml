@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$output_path := get . "OUTPUT_PATH" (printf "./project.%s" .PROJECT_ID)}}
+{{$output_path := get . "OUTPUT_PATH" .PROJECT.PROJECT_ID}}
 
 templates:
 - component_path: "../../components/terragrunt/leaf"
@@ -20,6 +20,8 @@ templates:
 - name: "project"
   component_path: "../../components/project/project"
   output_path: "{{$output_path}}/project"
+  flatten:
+  - key: "PROJECT"
 
 {{if has . "RESOURCES"}}
 - name: "resources"

@@ -86,15 +86,16 @@ templates:
 
 # Prod folder for team 1.
 - recipe_path: "{{$BASE}}/folder/folder.yaml"
-  output_path: "./live/folder.prod"
+  output_path: "./live/prod"
   data:
     DISPLAY_NAME: "team1"
 
 # Prod central networks project for team 1.
 - recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_path: "./live/folder.prod/folder.team1"
+  output_path: "./live/prod/team1"
   data:
-    PROJECT_ID: "example-prod-networks"
+    PROJECT:
+      PROJECT_ID: "example-prod-networks"
     RESOURCES:
       COMPUTE_NETWORKS:
       - NAME: "example-network"
@@ -107,9 +108,10 @@ templates:
 
 # Prod central data project for team 1.
 - recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_path: "./live/folder.prod/folder.team1"
+  output_path: "./live/prod/team1"
   data:
-    PROJECT_ID: "example-prod-data"
+    PROJECT:
+      PROJECT_ID: "example-prod-data"
     RESOURCES:
       STORAGE_BUCKETS:
       - NAME: "example-prod-bucket"
@@ -119,15 +121,16 @@ templates:
 
 # Prod central apps project for team 1.
 - recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_path: "./live/folder.prod/folder.team1"
+  output_path: "./live/prod/team1"
   data:
-    PROJECT_ID: "example-prod-apps"
-    APIS:
-    - "container.googleapis.com"
-    SHARED_VPC:
-      HOST_PROJECT_ID: "example-prod-networks"
-      SUBNETS:
-      - NAME: example-subnet
+    PROJECT:
+      PROJECT_ID: "example-prod-apps"
+      APIS:
+      - "container.googleapis.com"
+      SHARED_VPC:
+        HOST_PROJECT_ID: "example-prod-networks"
+        SUBNETS:
+        - NAME: example-subnet
     RESOURCES:
       GKE_CLUSTERS:
       - NAME: "example-prod-gke-cluster"

@@ -36,7 +36,7 @@ properties:
       additionalProperties: false
       properties:
         name:
-          description: Name of the template. Can be referred to by 'output_ref'.
+          description: Name of the template.
           type: string
 
         recipe_path:
