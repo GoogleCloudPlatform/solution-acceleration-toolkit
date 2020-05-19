@@ -51,6 +51,7 @@ var importers = map[string]resourceImporter{
 	"google_compute_subnetwork":                 &importer.ComputeSubnetwork{},
 	"google_compute_router":                     &importer.ComputeRouter{},
 	"google_compute_router_nat":                 &importer.ComputeRouterNat{},
+	"google_compute_global_address":             &importer.ComputeGlobalAddress{},
 	"google_compute_image":                      &importer.ComputeImage{},
 	"google_compute_instance":                   &importer.ComputeInstance{},
 	"google_compute_shared_vpc_host_project":    &importer.ComputeSharedVPCHostProject{},

@@ -85,6 +85,7 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
+- [google_compute_global_address](https://www.terraform.io/docs/providers/google/r/compute_global_address.html)
 - [google_compute_image](https://www.terraform.io/docs/providers/google/r/compute_image.html)
 - [google_compute_instance](https://www.terraform.io/docs/providers/google/r/compute_instance.html)
 - [google_compute_shared_vpc_host_project](https://www.terraform.io/docs/providers/google/r/compute_shared_vpc_host_project.html)
