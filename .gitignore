@@ -1,3 +1,6 @@
 **/policygen
 **/tfengine
 **/tfimport
+!**/policygen/
+!**/tfengine/
+!**/tfimport/
