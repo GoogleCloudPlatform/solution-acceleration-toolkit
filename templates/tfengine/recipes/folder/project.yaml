@@ -13,12 +13,8 @@
 # limitations under the License.
 
 templates:
-- name: "dir"
-  output_path: "./project.{{.PROJECT_ID}}"
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
-  output_ref: "dir"
-  output_path: "./project"
+- component_path: "../../components/terragrunt/leaf"
+  output_path: "./project.{{.PROJECT_ID}}/project"
   data:
     DEPS:
     - NAME: "parent_folder"
@@ -29,19 +25,16 @@ templates:
       folder_id: "dependency.parent_folder.outputs.name"
 - name: "project"
   component_path: "../../components/project/project"
-  output_ref: "terragrunt"
+  output_path: "./project.{{.PROJECT_ID}}/project"
 
 {{if has . "RESOURCES"}}
-- name: "resources"
-  recipe_path: "../project/resources.yaml"
-  output_ref: "dir"
-  output_path: "./resources"
+- recipe_path: "../project/resources.yaml"
+  output_path: "./project.{{.PROJECT_ID}}/resources"
   flatten:
   - key: "RESOURCES"
 {{end}}
 
 {{if index . "PROJECT_OWNERS"}}
-- name: "owners"
-  component_path: "../../components/project/owners"
-  output_ref: "dir"
+- component_path: "../../components/project/owners"
+  output_path: "./project.{{.PROJECT_ID}}/project"
 {{end}}

@@ -40,8 +40,8 @@ data:
     BOOTSTRAP_GCS_BACKEND: true
 
 templates:
-- name: "foundation"
-  recipe_path: "{{$BASE}}/org/foundation.yaml"
+# Foundation for the org.
+- recipe_path: "{{$BASE}}/org/foundation.yaml"
   data:
     DEVOPS:
       PROJECT_ID: "example-devops"
