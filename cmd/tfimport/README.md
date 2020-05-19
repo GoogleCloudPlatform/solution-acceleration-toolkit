@@ -85,6 +85,7 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
+- [google_dns_managed_zone](https://www.terraform.io/docs/providers/google/r/dns_managed_zone.html)
 - [google_dns_record_set](https://www.terraform.io/docs/providers/google/r/dns_record_set.html)
 - [google_firebase_project](https://www.terraform.io/docs/providers/google/r/firebase_project.html)
 - [google_project_iam_custom_role](https://www.terraform.io/docs/providers/google/r/google_project_iam_custom_role.html)
