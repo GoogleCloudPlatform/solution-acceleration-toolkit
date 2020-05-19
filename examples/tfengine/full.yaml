@@ -45,8 +45,8 @@ data:
     BOOTSTRAP_GCS_BACKEND: true
 
 templates:
-- name: "foundation"
-  recipe_path: "{{$BASE}}/org/foundation.yaml"
+# Foundation for the org.
+- recipe_path: "{{$BASE}}/org/foundation.yaml"
   data:
     DEVOPS:
       PROJECT_ID: "example-devops"
@@ -62,7 +62,9 @@ templates:
     MONITOR:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
-    ORG_POLICIES: {} # Use default org policies.
+    ORG_POLICIES:
+      PARENT_TYPE: folder
+      PARENT_ID: "12345678"
     CICD:
       PROJECT_ID: "example-devops"
       STATE_BUCKET: "example-state-bucket"
@@ -76,19 +78,21 @@ templates:
       MANAGED_SERVICES:
       - "sqladmin.googleapis.com"
 
-- name: "folder-prod"
-  recipe_path: "{{$BASE}}/org/folder.yaml"
-  output_ref: "foundation.live_dir"
+# Top level prod folder.
+- recipe_path: "{{$BASE}}/org/folder.yaml"
+  output_path: "./live"
   data:
     DISPLAY_NAME: "prod"
-- name: "folder-prod-team1"
-  recipe_path: "{{$BASE}}/folder/folder.yaml"
-  output_ref: "folder-prod.dir"
+
+# Prod folder for team 1.
+- recipe_path: "{{$BASE}}/folder/folder.yaml"
+  output_path: "./live/folder.prod"
   data:
     DISPLAY_NAME: "team1"
-- name: "project-example-prod-networks"
-  recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_ref: "folder-prod-team1.dir"
+
+# Prod central networks project for team 1.
+- recipe_path: "{{$BASE}}/folder/project.yaml"
+  output_path: "./live/folder.prod/folder.team1"
   data:
     PROJECT_ID: "example-prod-networks"
     RESOURCES:
@@ -100,9 +104,10 @@ templates:
           SECONDARY_RANGES:
           - NAME: "example-range"
             IP_RANGE: "192.168.10.0/24"
-- name: "project-example-prod-data"
-  recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_ref: "folder-prod-team1.dir"
+
+# Prod central data project for team 1.
+- recipe_path: "{{$BASE}}/folder/project.yaml"
+  output_path: "./live/folder.prod/folder.team1"
   data:
     PROJECT_ID: "example-prod-data"
     RESOURCES:
@@ -111,9 +116,10 @@ templates:
         IAM_MEMBERS:
         - ROLE: "roles/storage.objectViewer"
           MEMBER: "group:example-readers@example.com"
-- name: "project-example-prod-apps"
-  recipe_path: "{{$BASE}}/folder/project.yaml"
-  output_ref: "folder-prod-team1.dir"
+
+# Prod central apps project for team 1.
+- recipe_path: "{{$BASE}}/folder/project.yaml"
+  output_path: "./live/folder.prod/folder.team1"
   data:
     PROJECT_ID: "example-prod-apps"
     APIS:
