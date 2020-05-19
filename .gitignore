@@ -1,3 +1,4 @@
+# Ignore built binaries for the DPT tools, but not similarly-named directories.
 **/policygen
 **/tfengine
 **/tfimport
