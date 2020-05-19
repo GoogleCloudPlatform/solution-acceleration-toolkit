@@ -46,27 +46,41 @@ properties:
     description: |
       Key value pairs passed to GCP Organization Policy constraint templates. If an optional
       property is not specified, then the corresponding default setting will be applied.
-      For example, if ALLOWED_* is not specified, then the corresponding policy will allow all.
+      For example, if ALLOWED_* is not specified, then the corresponding policy will deny all.
     type: object
     additionalProperties: false
     properties:
+      PARENT_TYPE:
+        description: |
+          Type of parent GCP resource to apply the policy: can be one of "organization",
+          "folder", or "project".
+        type: string
+        pattern: ^organization|folder|project$
+
+      PARENT_ID:
+        description: |
+          ID of parent GCP resource to apply the policy: can be one of the organization ID,
+          folder ID, or project ID according to PARENT_TYPE.
+        type: string
+        pattern: ^[0-9]{8,25}$
+
       ALLOWED_POLICY_MEMBER_DOMAINS:
         description: |
-          see templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
       ALLOWED_SHARED_VPC_HOST_PROJECTS:
         description: |
-          see templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
       ALLOWED_TRUSTED_IMAGE_PROJECTS:
         description: |
-          see templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
