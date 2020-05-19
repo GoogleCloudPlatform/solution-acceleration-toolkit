@@ -51,6 +51,7 @@ var importers = map[string]resourceImporter{
 	"google_compute_subnetwork":              &importer.ComputeSubnetwork{},
 	"google_compute_router":                  &importer.ComputeRouter{},
 	"google_compute_router_nat":              &importer.ComputeRouterNat{},
+	"google_project_iam_custom_role":         &importer.ProjectIAMCustomRole{},
 	"google_pubsub_topic":                    &importer.PubSubTopic{},
 	"google_pubsub_subscription":             &importer.PubSubSubscription{},
 	"google_secret_manager_secret":           &importer.SecretManagerSecret{},
