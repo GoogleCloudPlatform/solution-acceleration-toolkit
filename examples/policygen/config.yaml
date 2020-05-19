@@ -14,14 +14,14 @@
 
 # Required fields
 template_dir: ../../templates/policygen
-org_id: 123
+org_id: "12345678"
 
 # Optional fields
 forseti_policies: {}
 gcp_organization_policies:
+  PARENT_TYPE: organization # one of `organization`, `folder` or `project`
+  PARENT_ID: "12345678"
   ALLOWED_POLICY_MEMBER_DOMAINS:
-  - foo
-  - bar
+  - google.com
   ALLOWED_SHARED_VPC_HOST_PROJECTS:
-  - vpc-project-1
-  - vpc-project-2
+  - under:organizations/12345678
