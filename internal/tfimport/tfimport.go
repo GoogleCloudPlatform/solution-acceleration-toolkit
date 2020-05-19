@@ -51,9 +51,8 @@ var importers = map[string]resourceImporter{
 	"google_compute_subnetwork":              &importer.ComputeSubnetwork{},
 	"google_compute_router":                  &importer.ComputeRouter{},
 	"google_compute_router_nat":              &importer.ComputeRouterNat{},
-	"google_iap_tunnel_instance_iam_policy":  &importer.IAPTunnerInstanceIAMPolicy{},
-	"google_iap_tunnel_instance_iam_binding": &importer.IAPTunnerInstanceIAMBinding{},
-	"google_iap_tunnel_instance_iam_member":  &importer.IAPTunnerInstanceIAMMember{},
+	"google_secret_manager_secret":           &importer.SecretManagerSecret{},
+	"google_secret_manager_secret_version":   &importer.SecretManagerSecretVersion{},
 	"google_service_account_iam_policy":      &importer.ServiceAccountIAMPolicy{},
 	"google_service_account_iam_binding":     &importer.ServiceAccountIAMBinding{},
 	"google_service_account_iam_member":      &importer.ServiceAccountIAMMember{},
@@ -61,6 +60,9 @@ var importers = map[string]resourceImporter{
 	"google_sql_database":                    &importer.SQLDatabase{},
 	"google_sql_database_instance":           &importer.SQLDatabaseInstance{},
 	"google_sql_user":                        &importer.SQLUser{},
+	"google_iap_tunnel_instance_iam_policy":  &importer.IAPTunnerInstanceIAMPolicy{},
+	"google_iap_tunnel_instance_iam_binding": &importer.IAPTunnerInstanceIAMBinding{},
+	"google_iap_tunnel_instance_iam_member":  &importer.IAPTunnerInstanceIAMMember{},
 }
 
 // Resource represents a resource and an importer that can import it.
