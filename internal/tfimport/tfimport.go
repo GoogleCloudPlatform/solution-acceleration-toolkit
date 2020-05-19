@@ -51,6 +51,7 @@ var importers = map[string]resourceImporter{
 	"google_compute_subnetwork":                 &importer.ComputeSubnetwork{},
 	"google_compute_router":                     &importer.ComputeRouter{},
 	"google_compute_router_nat":                 &importer.ComputeRouterNat{},
+	"google_compute_shared_vpc_host_project":    &importer.ComputeSharedVPCHostProject{},
 	"google_compute_shared_vpc_service_project": &importer.ComputeSharedVPCServiceProject{},
 	"google_dns_managed_zone":                   &importer.DNSManagedZone{},
 	"google_dns_record_set":                     &importer.DNSRecordSet{},
