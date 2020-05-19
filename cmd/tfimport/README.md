@@ -85,6 +85,8 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
+- [google_pubsub_topic](https://www.terraform.io/docs/providers/google/r/pubsub_topic.html)
+- [google_pubsub_subscription](https://www.terraform.io/docs/providers/google/r/pubsub_subscription.html)
 - [google_secret_manager_secret](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html)
 - [google_secret_manager_secret_version](https://www.terraform.io/docs/providers/google/r/secret_manager_secret_version.html)
 - [google_iap_tunnel_instance_iam_policy](https://www.terraform.io/docs/providers/google/r/iap_tunnel_instance_iam.html)
