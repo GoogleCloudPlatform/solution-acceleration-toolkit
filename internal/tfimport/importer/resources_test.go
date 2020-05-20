@@ -52,7 +52,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, tc.cvs...)
 		if err != nil {
-			t.Errorf("fromConfigValues(%v, %v) failed: %s", tc.key, tc.cvs, err)
+			t.Errorf("fromConfigValues(%v, %v) failed: %v", tc.key, tc.cvs, err)
 		}
 		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
@@ -104,8 +104,9 @@ func TestUserValue(t *testing.T) {
 		os.Stdout = stdout
 
 		if err != nil {
-			t.Errorf("userValue(%q) failed: %s", tc.input, err)
-		} else if out != tc.want {
+			t.Fatalf("userValue(%q) failed: %v", tc.input, err)
+		}
+		if out != tc.want {
 			t.Errorf("userValue(%q) = %v; want %v", tc.input, out, tc.want)
 		}
 	}
@@ -150,8 +151,9 @@ func TestUserChoice(t *testing.T) {
 		os.Stdout = stdout
 
 		if err != nil {
-			t.Errorf("userChoice(%q) failed: %s", tc.input, err)
-		} else if out != tc.want {
+			t.Fatalf("userChoice(%q) failed: %v", tc.input, err)
+		}
+		if out != tc.want {
 			t.Errorf("userChoice(%q) = %v; want %v", tc.input, out, tc.want)
 		}
 	}

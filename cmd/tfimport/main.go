@@ -179,8 +179,9 @@ func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 
 		// Important to handle this last.
 		default:
-			log.Println(err)
-			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output))
+			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
+			log.Println(errMsg)
+			errs = append(errs, errMsg)
 		}
 	}
 

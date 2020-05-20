@@ -71,6 +71,7 @@ Terraform configs, including importing resources from within modules.
 
 ## Supported Resources
 
+- [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
 - [google_container_cluster](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
 - [google_organization_policy](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)
@@ -90,7 +91,6 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
 - [google_compute_router](https://www.terraform.io/docs/providers/google/r/compute_router.html)
 - [google_compute_router_nat](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
-- [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
 - [google_binary_authorization_policy](https://www.terraform.io/docs/providers/google/r/binary_authorization_policy.html)
 - [google_compute_firewall](https://www.terraform.io/docs/providers/google/r/compute_firewall.html)
 - [google_compute_global_address](https://www.terraform.io/docs/providers/google/r/compute_global_address.html)

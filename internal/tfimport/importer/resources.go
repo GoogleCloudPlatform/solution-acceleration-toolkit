@@ -26,7 +26,7 @@ import (
 // ProviderConfigMap is a type alias to make variables more readable.
 type ProviderConfigMap map[string]interface{}
 
-// InsufficientInfoErr indicates that we do not have enough information to
+// InsufficientInfoErr indicates that we do not have enough information to import a resource.
 type InsufficientInfoErr struct {
 	missingFields []string
 	msg           string
