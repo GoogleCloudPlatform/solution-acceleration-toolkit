@@ -26,3 +26,13 @@ variable "allowed_trusted_image_projects" {
   description = "The list of projects that can be used for image storage and disk instantiation for Compute Engine. Each entry must be specified in the form: projects/PROJECT_ID. If not specified, compute.trustedImageProjects constraint will deny all"
   default     = []
 }
+
+variable "allowed_ip_forwarding_vms" {
+  description = "The list of Compute Engine instances that are allowed IP forwarding. Each entry must be specified in the form: projects/PROJECT_ID/zones/ZONE/instances/INSTANCE. If not specified, compute.vmCanIpForward constraint will deny all"
+  default     = []
+}
+
+variable "allowed_public_vms" {
+  description = "The list of Compute Engine instances that are allowed direct external access (i.e. with an external IP). Each entry must be specified in the form: projects/PROJECT_ID/zones/ZONE/instances/INSTANCE. If not specified, compute.vmExternalIpAccess constraint will deny all"
+  default     = []
+}

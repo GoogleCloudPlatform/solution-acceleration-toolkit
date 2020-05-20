@@ -32,3 +32,17 @@ allowed_trusted_image_projects = [
   {{- end}}
 ]
 {{- end}}
+{{- if index . "ALLOWED_PUBLIC_VMS"}}
+allowed_public_vms = [
+  {{- range .ALLOWED_PUBLIC_VMS}}
+  "{{.}}",
+  {{- end}}
+]
+{{- end}}
+{{- if index . "ALLOWED_IP_FORWARDING_VMS"}}
+allowed_ip_forwarding_vms = [
+  {{- range .ALLOWED_IP_FORWARDING_VMS}}
+  "{{.}}",
+  {{- end}}
+]
+{{- end}}
