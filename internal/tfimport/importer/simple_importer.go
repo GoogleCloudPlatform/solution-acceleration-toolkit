@@ -54,7 +54,13 @@ func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfi
 
 	// Build the template.
 	buf := &bytes.Buffer{}
-	err = template.Must(template.New("").Option("missingkey=error").Parse(i.Tmpl)).Execute(buf, fieldsMap)
+	tmpl, err := template.New("").Option("missingkey=error").Parse(i.Tmpl)
+	if err != nil {
+		return "", err
+	}
+
+	// Execute the template.
+	err = tmpl.Execute(buf, fieldsMap)
 	if err != nil {
 		return "", err
 	}
