@@ -30,7 +30,7 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    bucket = "{{.STATE_BUCKET}}"
+    bucket = "{{.state_bucket}}"
     prefix = "cicd/manual"
   }
 }

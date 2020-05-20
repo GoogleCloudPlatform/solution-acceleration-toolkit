@@ -12,9 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "SERVICE_ACCOUNTS"}}
-resource "google_service_account" "{{resourceName .ACCOUNT_ID}}" {
-  account_id = "{{.ACCOUNT_ID}}"
+{{range get . "service_accounts"}}
+resource "google_service_account" "{{resourceName .account_id}}" {
+  account_id = "{{.account_id}}"
   project_id = var.project_id
 }
 {{end}}
