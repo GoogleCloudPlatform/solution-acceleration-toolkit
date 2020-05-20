@@ -20,13 +20,13 @@ org_id: "12345678"
 forseti_policies:
   # TODO(xingao): consider merging with same attributes in org policies
   allowed_policy_member_domains:
-  - google.com
+  - example.com
 
 gcp_organization_policies:
   parent_type: organization # one of `organization`, `folder` or `project`
   parent_id: "12345678"
   allowed_policy_member_domains:
-  - google.com
+  - example.com
   allowed_shared_vpc_host_projects:
   - under:folders/12345678
   allowed_trusted_image_projects:

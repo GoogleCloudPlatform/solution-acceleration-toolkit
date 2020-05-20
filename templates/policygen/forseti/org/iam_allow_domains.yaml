@@ -23,7 +23,7 @@ spec:
   parameters:
     domains:
     - gserviceaccount.com # always allow GCP service accounts
-{{- range get . "allowed_policy_member_domains"}}
+    {{- range get . "allowed_policy_member_domains"}}
     - {{.}}
-{{- end}}
+    {{- end}}
     allow_sub_domains: true
