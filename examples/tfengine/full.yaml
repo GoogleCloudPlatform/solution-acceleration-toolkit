@@ -111,6 +111,11 @@ templates:
   data:
     PROJECT_ID: "example-prod-data"
     RESOURCES:
+      BIGQUERY_DATASETS:
+      - DATASET_ID: "example_dataset"
+        ACCESS:
+        - role: "roles/bigquery.dataOwner"
+          special_group: "projectOwners"
       STORAGE_BUCKETS:
       - NAME: "example-prod-bucket"
         IAM_MEMBERS:

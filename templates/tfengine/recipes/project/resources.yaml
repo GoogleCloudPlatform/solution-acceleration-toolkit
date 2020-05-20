@@ -26,6 +26,10 @@ templates:
     INPUTS:
       project_id: "dependency.project.outputs.project_id"
 
+{{if has . "BIGQUERY_DATASETS"}}
+- component_path: "../../components/project/bigquery_datasets"
+{{end}}
+
 {{if has . "COMPUTE_NETWORKS"}}
 - component_path: "../../components/project/compute_networks"
 {{end}}
