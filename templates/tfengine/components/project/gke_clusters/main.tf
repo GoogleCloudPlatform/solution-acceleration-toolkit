@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "gke_clusters"}}
-module "{{resourceName .NAME}}" {
+module "{{resourceName .name}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "9.0.0"
 

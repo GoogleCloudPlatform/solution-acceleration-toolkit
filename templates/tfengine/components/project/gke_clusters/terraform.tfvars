@@ -12,12 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{- if has . "MASTER_AUTHORIZED_NETWORKS"}}
+{{- if has . "master_authorized_networks"}}
 master_authorized_networks = [
-  {{- range .MASTER_AUTHORIZED_NETWORKS}}
+  {{- range .master_authorized_networks}}
   {
-    cidr_block   = "{{.CIDR_BLOCK}}"
-    display_name = "{{.DISPLAY_NAME}}"
+    cidr_block   = "{{.cidr_block}}"
+    display_name = "{{.display_name}}"
   },
   {{- end}}
 ]

@@ -14,7 +14,7 @@ limitations under the License. */ -}}
 
 {{range get . "compute_networks"}}
 {{- $has_secondary_ranges := false}}
-module "{{resourceName .NAME}}" {
+module "{{resourceName .name}}" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.3.0"
 
