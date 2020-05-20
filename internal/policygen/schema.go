@@ -41,6 +41,14 @@ properties:
       property is not specified, then the corresponding default setting will be applied.
     type: object
     additionalProperties: false
+    properties:
+      allowed_policy_member_domains:
+        description: |
+          List of domains to allow their members to be granted IAM roles.
+          gserviceaccount.com is always allowed to make sure GCP internal services work properly.
+        type: array
+        items:
+          type: string
 
   gcp_organization_policies:
     description: |
