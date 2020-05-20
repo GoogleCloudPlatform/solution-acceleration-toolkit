@@ -24,7 +24,7 @@ import (
 type StorageBucketIAMMember struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *StorageBucketIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *StorageBucketIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	bucket, err := fromConfigValues("bucket", rc.Change.After, pcv)
 	if err != nil {
 		return "", err

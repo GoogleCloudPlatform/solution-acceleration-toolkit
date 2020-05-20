@@ -24,7 +24,7 @@ import (
 type SecretManagerSecretVersion struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *SecretManagerSecretVersion) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *SecretManagerSecretVersion) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	secret, err := fromConfigValues("secret", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
