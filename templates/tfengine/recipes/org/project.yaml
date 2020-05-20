@@ -17,12 +17,11 @@
 templates:
 - recipe_path: "../terraform/terraform.yaml"
   output_path: "{{$output_path}}/project"
-  flatten: [
-    {{if has . "PROJECT.TERRAFORM_ADDONS"}}
-    { key: "PROJECT" },
-    { key: "TERRAFORM_ADDONS" },
-    {{end}}
-  ]
+  {{if has . "PROJECT.TERRAFORM_ADDONS"}}
+  flatten:
+  - key: "PROJECT"
+  - key: "TERRAFORM_ADDONS"
+  {{end}}
 - component_path: "../../components/project/project"
   output_path: "{{$output_path}}/project"
   flatten:

@@ -23,12 +23,11 @@ templates:
         name: '"mock-folder"'
     INPUTS:
       folder_id: "dependency.parent_folder.outputs.name"
-  flatten: [
-    {{if has . "PROJECT.TERRAFORM_ADDONS"}}
-    { key: "PROJECT" },
-    { key: "TERRAFORM_ADDONS" },
-    {{end}}
-  ]
+  {{if has . "PROJECT.TERRAFORM_ADDONS"}}
+  flatten:
+  - key: "PROJECT"
+  - key: "TERRAFORM_ADDONS"
+  {{end}}
 - component_path: "../../components/project/project"
   output_path: "{{.PROJECT.PROJECT_ID}}/project"
   flatten:
