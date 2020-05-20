@@ -140,3 +140,5 @@ templates:
         IP_RANGE_PODS_NAME: "example-pods-range"
         IP_RANGE_SERVICES_NAME: "example-services-range"
         MASTER_IPV4_CIDR_BLOCK: "192.168.0.0/28"
+      SERVICE_ACCOUNTS:
+      - ACCOUNT_ID: "example-sa"
