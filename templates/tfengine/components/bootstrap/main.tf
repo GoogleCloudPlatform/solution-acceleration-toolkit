@@ -35,7 +35,7 @@ terraform {
 {{- end}}
 }
 
-# create the project, enable apis, and create the deletion lien, if specified.
+# Create the project, enable apis, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 7.0"
@@ -51,7 +51,7 @@ module "project" {
   ]
 }
 
-# terraform state bucket, hosted in the devops project.
+# Terraform state bucket, hosted in the devops project.
 module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
