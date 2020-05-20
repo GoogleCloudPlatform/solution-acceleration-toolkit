@@ -18,6 +18,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
 var configs = []ProviderConfigMap{
@@ -34,28 +36,36 @@ var configs = []ProviderConfigMap{
 	},
 }
 
+var resourceChange = terraform.ResourceChange{
+	Change: terraform.Change{
+		After: map[string]interface{}{
+			"project": "myproject",
+			"name":    "myresourcename",
+		},
+	},
+}
+
 func TestFromConfigValuesGot(t *testing.T) {
 	tests := []struct {
 		key  string
-		cvs  []ProviderConfigMap
 		want interface{}
 	}{
 		// Empty key - should still work.
-		{"", configs, "emptyValFirst"},
+		{"", "emptyValFirst"},
 
 		// Key in second config - should return second one, not nil.
-		{"mykey3", configs, "key3Second"},
+		{"mykey3", "key3Second"},
 
 		// Key in both configs - should return first one.
-		{"mykey1", configs, "key1First"},
+		{"mykey1", "key1First"},
 	}
 	for _, tc := range tests {
-		got, err := fromConfigValues(tc.key, tc.cvs...)
+		got, err := fromConfigValues(tc.key, configs...)
 		if err != nil {
-			t.Errorf("fromConfigValues(%v, %v) failed: %v", tc.key, tc.cvs, err)
+			t.Fatalf("fromConfigValues(%v, %v) failed: %v", tc.key, configs, err)
 		}
 		if got != tc.want {
-			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, tc.cvs, got, tc.want)
+			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, configs, got, tc.want)
 		}
 	}
 }
@@ -155,6 +165,49 @@ func TestUserChoice(t *testing.T) {
 		}
 		if out != tc.want {
 			t.Errorf("userChoice(%q) = %v; want %v", tc.input, out, tc.want)
+		}
+	}
+}
+
+func TestSimpleImporter(t *testing.T) {
+	tests := []struct {
+		reqFields []string
+		tmpl      string
+		want      string
+	}{
+		// Empty.
+		{[]string{}, "", ""},
+
+		// Simple case, insert some template fields.
+		{[]string{"project", "name"}, "projects/{{.project}}/resources/{{.name}}", "projects/myproject/resources/myresourcename"},
+	}
+	for _, tc := range tests {
+		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
+		got, err := imp.ImportID(resourceChange, configs[0])
+		if err != nil {
+			t.Fatalf("%v ImportID(%v, %v) failed: %v", imp, resourceChange, configs, err)
+		}
+		if got != tc.want {
+			t.Errorf("%v ImportID(%v, %v) = %v; want %v", imp, resourceChange, configs, got, tc.want)
+		}
+	}
+}
+
+func TestSimpleImporterErr(t *testing.T) {
+	tests := []struct {
+		reqFields []string
+		tmpl      string
+	}{
+		// Field does not exist in configs.
+		{[]string{"project", "name", "version"}, "projects/{{.project}}/secrets/{{.name}}/versions/{{.version}}"},
+
+		// Template is using unknown field
+		{[]string{"project", "name"}, "projects/{{.project}}/secrets/{{.name}}/versions/{{.version}}"},
+	}
+	for _, tc := range tests {
+		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
+		if got, err := imp.ImportID(resourceChange, configs[0]); err == nil {
+			t.Errorf("%v ImportID(%v, %v) succeeded for malformed input, want error; got = %v", imp, resourceChange, configs, got)
 		}
 	}
 }
