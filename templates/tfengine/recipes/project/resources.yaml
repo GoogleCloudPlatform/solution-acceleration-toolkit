@@ -13,8 +13,7 @@
 # limitations under the License.
 
 templates:
-- name: "terraform"
-  recipe_path: "../terraform/terraform.yaml"
+- recipe_path: "../terraform/terraform.yaml"
   data:
     VARS:
     - NAME: "project_id"
@@ -28,16 +27,13 @@ templates:
       project_id: "dependency.project.outputs.project_id"
 
 {{if has . "COMPUTE_NETWORKS"}}
-- name: "compute_networks"
-  component_path: "../../components/project/compute_networks"
+- component_path: "../../components/project/compute_networks"
 {{end}}
 
 {{if has . "STORAGE_BUCKETS"}}
-- name: "storage_buckets"
-  component_path: "../../components/project/storage_buckets"
+- component_path: "../../components/project/storage_buckets"
 {{end}}
 
 {{if has . "GKE_CLUSTERS"}}
-- name: "gke_clusters"
-  component_path: "../../components/project/gke_clusters"
+- component_path: "../../components/project/gke_clusters"
 {{end}}

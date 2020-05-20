@@ -13,9 +13,7 @@
 # limitations under the License.
 
 templates:
-- name: "bootstrap"
-  component_path: "../../components/bootstrap"
+- component_path: "../../components/bootstrap"
   output_path: "./bootstrap"
-- name: "root"
-  component_path: "../../components/terragrunt/root"
+- component_path: "../../components/terragrunt/root"
   output_path: "./live"

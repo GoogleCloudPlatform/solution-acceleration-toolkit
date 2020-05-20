@@ -12,26 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{$output_path := get . "OUTPUT_PATH" (printf "./project.%s" .PROJECT_ID)}}
+
 templates:
-- name: "dir"
-  {{if has . "OUTPUT_PATH"}}
-  output_path: "{{.OUTPUT_PATH}}"
-  {{else}}
-  output_path: "./project.{{.PROJECT_ID}}"
-  {{end}}
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
-  output_ref: "dir"
-  output_path: "./project"
+- component_path: "../../components/terragrunt/leaf"
+  output_path: "{{$output_path}}/project"
 - name: "project"
   component_path: "../../components/project/project"
-  output_ref: "terragrunt"
+  output_path: "{{$output_path}}/project"
 
 {{if has . "RESOURCES"}}
 - name: "resources"
   recipe_path: "../project/resources.yaml"
-  output_ref: "dir"
-  output_path: "./resources"
+  output_path: "{{$output_path}}/resources"
   flatten:
   - key: "RESOURCES"
 {{end}}
@@ -39,5 +32,5 @@ templates:
 {{if index . "PROJECT_OWNERS"}}
 - name: "owners"
   component_path: "../../components/project/owners"
-  output_ref: "dir"
+  output_path: "{{$output_path}}/project"
 {{end}}

@@ -1,4 +1,4 @@
-# Copyright 2020 Google Inc.
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,9 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-org_id = "{{.ORG_ID}}"
-{{- if index . "ALLOWED_POLICY_MEMBER_DOMAINS"}}
+{{if index . "ALLOWED_POLICY_MEMBER_DOMAINS"}}
 allowed_policy_member_domains = [
   {{- range .ALLOWED_POLICY_MEMBER_DOMAINS}}
   "{{.}}",

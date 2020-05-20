@@ -1,4 +1,4 @@
-# Copyright 2020 Google Inc.
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,8 +40,8 @@ data:
     BOOTSTRAP_GCS_BACKEND: true
 
 templates:
-- name: "foundation"
-  recipe_path: "{{$BASE}}/org/foundation.yaml"
+# Foundation for the org.
+- recipe_path: "{{$BASE}}/org/foundation.yaml"
   data:
     DEVOPS:
       PROJECT_ID: "example-devops"
@@ -57,7 +57,9 @@ templates:
     MONITOR:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
-    ORG_POLICIES: {} # Use default org policies.
+    ORG_POLICIES:
+      PARENT_TYPE: organization
+      PARENT_ID: "12345678"
     CICD:
       PROJECT_ID: "example-devops"
       STATE_BUCKET: "example-state-bucket"
