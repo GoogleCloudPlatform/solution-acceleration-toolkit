@@ -17,7 +17,11 @@ template_dir: ../../templates/policygen
 org_id: "12345678"
 
 # Optional fields
-forseti_policies: {}
+forseti_policies:
+  # TODO(xingao): consider merging with same attributes in org policies
+  allowed_policy_member_domains:
+  - google.com
+
 gcp_organization_policies:
   parent_type: organization # one of `organization`, `folder` or `project`
   parent_id: "12345678"
