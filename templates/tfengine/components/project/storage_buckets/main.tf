@@ -12,25 +12,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "STORAGE_BUCKETS"}}
-module "{{resourceName .NAME}}" {
+{{range get . "storage_buckets"}}
+module "{{resourceName .name}}" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "{{.NAME}}"
+  name       = "{{.name}}"
   project_id = var.project_id
-  {{- if has . "LOCATION"}}
-  location   = "{{.LOCATION}}"
+  {{- if has . "location"}}
+  location   = "{{.location}}"
   {{- else}}
-  location   = "{{$.STORAGE_BUCKET_LOCATION}}"
+  location   = "{{$.storage_bucket_location}}"
   {{- end}}
 
-  {{- if index . "IAM_MEMBERS"}}
+  {{- if index . "iam_members"}}
   iam_members = [
-    {{- range .IAM_MEMBERS}}
+    {{- range .iam_members}}
     {
-      role   = "{{.ROLE}}"
-      member = "{{.MEMBER}}"
+      role   = "{{.role}}"
+      member = "{{.member}}"
     },
     {{- end}}
   ]

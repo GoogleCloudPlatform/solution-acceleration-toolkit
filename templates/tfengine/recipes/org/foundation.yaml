@@ -15,32 +15,32 @@
 templates:
 - recipe_path: "./base.yaml"
   flatten:
-  - key: "DEVOPS"
-{{if has . "AUDIT"}}
+  - key: "devops"
+{{if has . "audit"}}
 - recipe_path: "./audit.yaml"
   output_path: "./live"
   flatten:
-  - key: "AUDIT"
+  - key: "audit"
 {{end}}
-{{if has . "MONITOR"}}
+{{if has . "monitor"}}
 - recipe_path: "./monitor.yaml"
   output_path: "./live"
   flatten:
-  - key: "MONITOR"
+  - key: "monitor"
 {{end}}
-{{if has . "ORG_POLICIES"}}
+{{if has . "org_policies"}}
 - recipe_path: "./org_policies.yaml"
   output_path: "./live"
   flatten:
-  - key: "ORG_POLICIES"
+  - key: "org_policies"
 {{end}}
-{{if has . "CICD"}}
+{{if has . "cicd"}}
 - component_path: "../../components/cicd/manual"
   output_path: "./cicd"
   flatten:
-  - key: "CICD"
+  - key: "cicd"
 - component_path: "../../components/cicd/auto"
   output_path: "./live/cicd"
   flatten:
-  - key: "CICD"
+  - key: "cicd"
 {{end}}
