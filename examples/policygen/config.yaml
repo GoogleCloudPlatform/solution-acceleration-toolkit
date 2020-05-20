@@ -24,4 +24,10 @@ gcp_organization_policies:
   ALLOWED_POLICY_MEMBER_DOMAINS:
   - google.com
   ALLOWED_SHARED_VPC_HOST_PROJECTS:
-  - under:organizations/12345678
+  - under:folders/12345678
+  ALLOWED_TRUSTED_IMAGE_PROJECTS:
+  - projects/example-image-project
+  ALLOWED_PUBLIC_VMS:
+  - projects/example-project/zones/us-central1-a/instances/example-public-instance
+  ALLOWED_IP_FORWARDING_VMS:
+  - projects/example-project/zones/us-central1-a/instances/example-routing-instance

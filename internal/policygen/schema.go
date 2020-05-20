@@ -84,4 +84,18 @@ properties:
         type: array
         items:
           type: string
+
+      ALLOWED_PUBLIC_VMS:
+        description: |
+          See templates/policygen/org_policies/variables.tf.
+        type: array
+        items:
+          type: string
+
+      ALLOWED_IP_FORWARDING_VMS:
+        description: |
+          See templates/policygen/org_policies/variables.tf.
+        type: array
+        items:
+          type: string
 `
