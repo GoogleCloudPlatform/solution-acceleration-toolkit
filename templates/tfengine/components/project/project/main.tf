@@ -25,19 +25,17 @@ module "project" {
   default_service_account = "keep"
   skip_gcloud_download    = true
 
-  {{- if has . "SHARED_VPC"}}
-  {{- $host := .SHARED_VPC.HOST_PROJECT_ID}}
+  {{- if has . "SHARED_VPC_ATTACHMENT"}}
+  {{- $host := .SHARED_VPC_ATTACHMENT.HOST_PROJECT_ID}}
   shared_vpc              = "{{$host}}"
 
-  {{- if has .SHARED_VPC "SUBNETS"}}
   shared_vpc_subnets = [
-    {{- range get . "SHARED_VPC.SUBNETS"}}
+    {{- range get . "SHARED_VPC_ATTACHMENT.SUBNETS"}}
     {{- $region := get . "REGION" $.COMPUTE_NETWORK_REGION}}
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.NAME}}",
     {{- end}}
   ]
-  {{- end}} {{/* shared VPC subnets */}}
-  {{- end}} {{/* shared VPC */}}
+  {{- end}}
 
   {{- if has . "APIS"}}
   activate_apis = [
@@ -47,3 +45,9 @@ module "project" {
   ]
   {{- end}}
 }
+
+{{if get . "IS_SHARED_VPC_HOST" -}}
+resource "google_compute_shared_vpc_host_project" "host" {
+  project = module.project.project_id
+}
+{{- end}}
