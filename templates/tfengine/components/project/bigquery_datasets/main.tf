@@ -12,21 +12,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "BIGQUERY_DATASETS"}}
-module "{{resourceName .DATASET_ID}}" {
+{{range get . "bigquery_datasets"}}
+module "{{resourceName .dataset_id}}" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
 
-  dataset_id = "{{.DATASET_ID}}"
+  dataset_id = "{{.dataset_id}}"
   project_id = var.project_id
-  location   = "{{get . "LOCATION" $.BIGQUERY_DATASET_LOCATION}}"
+  location   = "{{get . "location" $.bigquery_dataset_location}}"
+  {{hclField . "default_table_expiration_ms" false}}
 
-  {{- if has . "DEFAULT_TABLE_EXPIRATION_MS"}}
-  default_table_expiration_ms = {{.DEFAULT_TABLE_EXPIRATION_MS}}
-  {{- end}}
-
-  {{if has . "ACCESS"}}
-  access = {{hcl .ACCESS}}
-  {{end}}
+  {{hclField . "access" false}}
 }
 {{- end}}

@@ -114,11 +114,13 @@ templates:
     project:
       project_id: "example-prod-data"
     resources:
-      bigguery_datasets:
+      bigquery_datasets:
       - dataset_id: "example_dataset"
         access:
         - role: "roles/bigquery.dataOwner"
           special_group: "projectOwners"
+        - role: "roles/bigquery.dataViewer"
+          group_by_email: "example-readers@example.com"
       storage_buckets:
       - name: "example-prod-bucket"
         iam_members:
