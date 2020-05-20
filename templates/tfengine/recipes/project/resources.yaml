@@ -41,3 +41,7 @@ templates:
 {{if has . "GKE_CLUSTERS"}}
 - component_path: "../../components/project/gke_clusters"
 {{end}}
+
+{{if has . "SERVICE_ACCOUNTS"}}
+- component_path: "../../components/project/service_accounts"
+{{end}}

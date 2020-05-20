@@ -17,5 +17,7 @@ templates:
   output_path: "./monitor"
   data:
     OUTPUT_PATH: "."
+    PROJECT:
+      PROJECT_ID: "{{.PROJECT_ID}}"
 - component_path: "../../components/org/monitor/forseti"
   output_path: "./monitor/forseti"

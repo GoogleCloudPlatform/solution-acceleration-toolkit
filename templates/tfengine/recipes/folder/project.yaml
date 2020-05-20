@@ -14,7 +14,7 @@
 
 templates:
 - component_path: "../../components/terragrunt/leaf"
-  output_path: "./project.{{.PROJECT_ID}}/project"
+  output_path: "{{.PROJECT.PROJECT_ID}}/project"
   data:
     DEPS:
     - NAME: "parent_folder"
@@ -25,16 +25,18 @@ templates:
       folder_id: "dependency.parent_folder.outputs.name"
 - name: "project"
   component_path: "../../components/project/project"
-  output_path: "./project.{{.PROJECT_ID}}/project"
+  output_path: "{{.PROJECT.PROJECT_ID}}/project"
+  flatten:
+  - key: "PROJECT"
 
 {{if has . "RESOURCES"}}
 - recipe_path: "../project/resources.yaml"
-  output_path: "./project.{{.PROJECT_ID}}/resources"
+  output_path: "./{{.PROJECT.PROJECT_ID}}/resources"
   flatten:
   - key: "RESOURCES"
 {{end}}
 
 {{if index . "PROJECT_OWNERS"}}
 - component_path: "../../components/project/owners"
-  output_path: "./project.{{.PROJECT_ID}}/project"
+  output_path: "{{.PROJECT.PROJECT_ID}}/project"
 {{end}}
