@@ -12,31 +12,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "COMPUTE_NETWORKS"}}
+{{range get . "compute_networks"}}
 {{- $has_secondary_ranges := false}}
 module "{{resourceName .NAME}}" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.3.0"
 
-  network_name = "{{.NAME}}"
+  network_name = "{{.name}}"
   project_id   = var.project_id
 
-  {{- if has . "SUBNETS"}}
+  {{- if has . "subnets"}}
   subnets = [
-    {{- range .SUBNETS}}
+    {{- range .subnets}}
     {
-      subnet_name            = "{{.NAME}}"
-      subnet_ip              = "{{.IP_RANGE}}"
-      {{- if has . "REGION"}}
-      subnet_region          = "{{.REGION}}"
+      subnet_name            = "{{.name}}"
+      subnet_ip              = "{{.ip_range}}"
+      {{- if has . "region"}}
+      subnet_region          = "{{.region}}"
       {{- else}}
-      subnet_region          = "{{$.COMPUTE_NETWORK_REGION}}"
+      subnet_region          = "{{$.compute_network_region}}"
       {{- end}}
       subnet_flow_logs       = true
       subnets_private_access = true
     },
 
-    {{- if has . "SECONDARY_RANGES"}}
+    {{- if has . "secondary_ranges"}}
     {{$has_secondary_ranges = true}}
     {{- end}}
     {{- end}}
@@ -45,13 +45,13 @@ module "{{resourceName .NAME}}" {
 
   {{- if $has_secondary_ranges}}
   secondary_ranges = {
-    {{- range .SUBNETS}}
-    {{- if has . "SECONDARY_RANGES"}}
-    "{{.NAME}}" = [
-      {{- range .SECONDARY_RANGES}}
+    {{- range .subnets}}
+    {{- if has . "secondary_ranges"}}
+    "{{.name}}" = [
+      {{- range .secondary_ranges}}
       {
-        range_name    = "{{.NAME}}"
-        ip_cidr_range = "{{.IP_RANGE}}"
+        range_name    = "{{.name}}"
+        ip_cidr_range = "{{.ip_range}}"
       },
       {{- end}}
     ],

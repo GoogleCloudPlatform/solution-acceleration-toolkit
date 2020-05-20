@@ -16,18 +16,18 @@ include {
   path = find_in_parent_folders()
 }
 
-{{- range get . "DEPS"}}
+{{- range get . "deps"}}
 
-dependency "{{.NAME}}" {
-  config_path = "{{.PATH}}"
+dependency "{{.name}}" {
+  config_path = "{{.path}}"
 
-  {{- if not (get . "MOCK_OUTPUTS")}}
+  {{- if not (get . "mock_outputs")}}
   skip_outputs = true
   {{- end}}
 
-  {{- if index . "MOCK_OUTPUTS"}}
+  {{- if index . "mock_outputs"}}
   mock_outputs = {
-    {{- range $k, $v := .MOCK_OUTPUTS}}
+    {{- range $k, $v := .mock_outputs}}
     {{$k}} = {{$v}}
     {{- end}}
   }
@@ -35,9 +35,9 @@ dependency "{{.NAME}}" {
 }
 {{- end}}
 
-{{if index . "INPUTS" -}}
+{{if index . "inputs" -}}
 inputs = {
-  {{- range $k, $v := .INPUTS}}
+  {{- range $k, $v := .inputs}}
   {{$k}} = {{$v}}
   {{- end}}
 }

@@ -27,15 +27,15 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-{{- if enabled . "BOOTSTRAP_GCS_BACKEND"}}
+{{- if enabled . "bootstrap_gcs_backend"}}
   backend "gcs" {
-    bucket = "{{.STATE_BUCKET}}"
+    bucket = "{{.state_bucket}}"
     prefix = "bootstrap"
   }
 {{- end}}
 }
 
-# Create the project, enable APIs, and create the deletion lien, if specified.
+# create the project, enable apis, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 7.0"
@@ -51,14 +51,14 @@ module "project" {
   ]
 }
 
-# Terraform state bucket, hosted in the devops project.
+# terraform state bucket, hosted in the devops project.
 module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
   name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "{{.STORAGE_BUCKET_LOCATION}}"
+  location   = "{{.storage_bucket_location}}"
 }
 
 # Project level IAM permissions for devops project owners.

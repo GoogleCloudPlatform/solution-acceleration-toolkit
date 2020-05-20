@@ -16,10 +16,10 @@ templates:
 - recipe_path: "./project.yaml"
   output_path: "./audit"
   data:
-    OUTPUT_PATH: "."
-    PROJECT:
-      PROJECT_ID: "{{.PROJECT_ID}}"
-      APIS:
+    output_path: "."
+    project:
+      project_id: "{{.project_id}}"
+      apis:
       - "bigquery.googleapis.com"
       - "logging.googleapis.com"
 - component_path: "../../components/org/audit"

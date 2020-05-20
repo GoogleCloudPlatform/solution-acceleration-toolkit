@@ -14,9 +14,9 @@
 
 templates:
 - component_path: "../../components/folder/folder"
-  output_path: "{{.DISPLAY_NAME}}/folder"
+  output_path: "{{.display_name}}/folder"
   data:
-    DISPLAY_NAME: "{{.DISPLAY_NAME}}"
-    PARENT: "organizations/{{.ORG_ID}}"
+    display_name: "{{.display_name}}"
+    parent: "organizations/{{.org_id}}"
 - component_path: "../../components/terragrunt/leaf"
-  output_path: "{{.DISPLAY_NAME}}/folder"
+  output_path: "{{.display_name}}/folder"

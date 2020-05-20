@@ -12,138 +12,138 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$BASE := "../../templates/tfengine/recipes"}}
+{{$base := "../../templates/tfengine/recipes"}}
 
 data:
-  ORG_ID: "123"
-  BILLING_ACCOUNT: "000-000-000"
+  org_id: "123"
+  billing_account: "000-000-000"
 
-  # Default locations for resources. Can be overridden in individual templates.
-  BIGQUERY_DATASET_LOCATION: "us-east1"
-  CLOUD_SQL_INSTANCE_REGION: "us-central1"
-  COMPUTE_INSTANCE_REGION: "us-central1"
-  COMPUTE_NETWORK_REGION: "us-central1"
-  GKE_CLUSTER_REGION: "us-central1"
-  STORAGE_BUCKET_LOCATION: "us-central1"
+  # default locations for resources. can be overridden in individual templates.
+  bigquery_dataset_location: "us-east1"
+  cloud_sql_instance_region: "us-central1"
+  compute_instance_region: "us-central1"
+  compute_network_region: "us-central1"
+  gke_cluster_region: "us-central1"
+  storage_bucket_location: "us-central1"
 
-  MASTER_AUTHORIZED_NETWORKS:
-  - DISPLAY_NAME: "Office"
-    CIDR_BLOCK: "192.0.2.0/24"
+  master_authorized_networks:
+  - display_name: "office"
+    cidr_block: "192.0.2.0/24"
 
-  # TODO: This block prevents certain parts of the configs from being generated
+  # todo: this block prevents certain parts of the configs from being generated
   # which require dependencies to be deployed first.
   #
-  # 1. Follow the steps for each field in the block.
-  # 2. Remove this block once nothing needs to be disabled.
-  DISABLED:
-    # The bootstrap module creates the Terraform state bucket and thus
+  # 1. follow the steps for each field in the block.
+  # 2. remove this block once nothing needs to be disabled.
+  disabled:
+    # the bootstrap module creates the terraform state bucket and thus
     # its own state cannot be backed up until the state bucket has been created.
     #
-    # 1. Deploy the bootstrap module. The state will be created locally in the same directory.
-    # 2. Remove this field and run the engine.
-    # 3. In the bootstrap module run `terraform init` to backup the bootstrap state to GCS.
-    BOOTSTRAP_GCS_BACKEND: true
+    # 1. deploy the bootstrap module. the state will be created locally in the same directory.
+    # 2. remove this field and run the engine.
+    # 3. in the bootstrap module run `terraform init` to backup the bootstrap state to gcs.
+    bootstrap_gcs_backend: true
 
 templates:
-# Foundation for the org.
-- recipe_path: "{{$BASE}}/org/foundation.yaml"
+# foundation for the org.
+- recipe_path: "{{$base}}/org/foundation.yaml"
   data:
-    DEVOPS:
-      PROJECT_ID: "example-devops"
-      STATE_BUCKET: "example-state-bucket"
-      ORG_ADMIN: "group:example-org-admin@example.com"
-      PROJECT_OWNERS:
+    devops:
+      project_id: "example-devops"
+      state_bucket: "example-state-bucket"
+      org_admin: "group:example-org-admin@example.com"
+      project_owners:
       - "group:example-devops-owners@example.com"
-    AUDIT:
-      PROJECT_ID: "example-audit"
-      DATASET_NAME: "1yr_org_audit_logs"
-      BUCKET_NAME: "7yr-org-audit-logs"
-      AUDITORS: "group:example-dev-auditors@example.com"
-    MONITOR:
-      PROJECT_ID: "example-monitor"
-      DOMAIN: "example.com"
-    ORG_POLICIES:
-      PARENT_TYPE: folder
-      PARENT_ID: "12345678"
-    CICD:
-      PROJECT_ID: "example-devops"
-      STATE_BUCKET: "example-state-bucket"
-      REPO_OWNER: "GoogleCloudPlatform"
-      REPO_NAME: "example"
-      BRANCH_REGEX: "master"
-      CONTINUOUS_DEPLOYMENT_ENABLED: true
-      TRIGGER_ENABLED: true
-      BUILD_VIEWERS:
+    audit:
+      project_id: "example-audit"
+      dataset_name: "1yr_org_audit_logs"
+      bucket_name: "7yr-org-audit-logs"
+      auditors: "group:example-dev-auditors@example.com"
+    monitor:
+      project_id: "example-monitor"
+      domain: "example.com"
+    org_policies:
+      parent_type: folder
+      parent_id: "12345678"
+    cicd:
+      project_id: "example-devops"
+      state_bucket: "example-state-bucket"
+      repo_owner: "GoogleCloudPlatform"
+      repo_name: "example"
+      branch_regex: "master"
+      continuous_deployment_enabled: true
+      trigger_enabled: true
+      build_viewers:
       - "group:example-cicd-viewers@example.com"
-      MANAGED_SERVICES:
+      managed_services:
       - "sqladmin.googleapis.com"
 
-# Top level prod folder.
-- recipe_path: "{{$BASE}}/org/folder.yaml"
+# top level prod folder.
+- recipe_path: "{{$base}}/org/folder.yaml"
   output_path: "./live"
   data:
-    DISPLAY_NAME: "prod"
+    display_name: "prod"
 
-# Prod folder for team 1.
-- recipe_path: "{{$BASE}}/folder/folder.yaml"
+# prod folder for team 1.
+- recipe_path: "{{$base}}/folder/folder.yaml"
   output_path: "./live/prod"
   data:
-    DISPLAY_NAME: "team1"
+    display_name: "team1"
 
-# Prod central networks project for team 1.
-- recipe_path: "{{$BASE}}/folder/project.yaml"
+# prod central networks project for team 1.
+- recipe_path: "{{$base}}/folder/project.yaml"
   output_path: "./live/prod/team1"
   data:
-    PROJECT:
-      PROJECT_ID: "example-prod-networks"
-      IS_SHARED_VPC_HOST: true
-    RESOURCES:
-      COMPUTE_NETWORKS:
-      - NAME: "example-network"
-        SUBNETS:
-        - NAME: "example-subnet"
-          IP_RANGE: "10.2.0.0/16"
-          SECONDARY_RANGES:
-          - NAME: "example-range"
-            IP_RANGE: "192.168.10.0/24"
+    project:
+      project_id: "example-prod-networks"
+      is_shared_vpc_host: true
+    resources:
+      compute_networks:
+      - name: "example-network"
+        subnets:
+        - name: "example-subnet"
+          ip_range: "10.2.0.0/16"
+          secondary_ranges:
+          - name: "example-range"
+            ip_range: "192.168.10.0/24"
 
-# Prod central data project for team 1.
-- recipe_path: "{{$BASE}}/folder/project.yaml"
+# prod central data project for team 1.
+- recipe_path: "{{$base}}/folder/project.yaml"
   output_path: "./live/prod/team1"
   data:
-    PROJECT:
-      PROJECT_ID: "example-prod-data"
-    RESOURCES:
-      STORAGE_BUCKETS:
-      - NAME: "example-prod-bucket"
-        IAM_MEMBERS:
-        - ROLE: "roles/storage.objectViewer"
-          MEMBER: "group:example-readers@example.com"
+    project:
+      project_id: "example-prod-data"
+    resources:
+      storage_buckets:
+      - name: "example-prod-bucket"
+        iam_members:
+        - role: "roles/storage.objectviewer"
+          member: "group:example-readers@example.com"
 
-# Prod central apps project for team 1.
-- recipe_path: "{{$BASE}}/folder/project.yaml"
+# prod central apps project for team 1.
+- recipe_path: "{{$base}}/folder/project.yaml"
   output_path: "./live/prod/team1"
   data:
-    PROJECT:
-      PROJECT_ID: "example-prod-apps"
-      APIS:
+    project:
+      project_id: "example-prod-apps"
+      apis:
       - "container.googleapis.com"
-      SHARED_VPC_ATTACHMENT:
-        HOST_PROJECT_ID: "example-prod-networks"
-        SUBNETS:
-        - NAME: example-subnet
-      # Add dependency on network deployment.
-      TERRAFORM_ADDONS:
-        DEPS:
-        - NAME: "networks"
-          PATH: "../../example-prod-networks/resources"
-    RESOURCES:
-      GKE_CLUSTERS:
-      - NAME: "example-prod-gke-cluster"
-        NETWORK: "example-network"
-        SUBNET: "example-subnet"
-        IP_RANGE_PODS_NAME: "example-pods-range"
-        IP_RANGE_SERVICES_NAME: "example-services-range"
-        MASTER_IPV4_CIDR_BLOCK: "192.168.0.0/28"
-      SERVICE_ACCOUNTS:
-      - ACCOUNT_ID: "example-sa"
+      shared_vpc_attachment:
+        host_project_id: "example-prod-networks"
+        subnets:
+        - name: example-subnet
+      # add dependency on network deployment.
+      terraform_addons:
+        deps:
+        - name: "networks"
+          path: "../../example-prod-networks/resources"
+    resources:
+      gke_clusters:
+      - name: "example-prod-gke-cluster"
+        network: "example-network"
+        subnet: "example-subnet"
+        ip_range_pods_name: "example-pods-range"
+        ip_range_services_name: "example-services-range"
+        master_ipv4_cidr_block: "192.168.0.0/28"
+      service_accounts:
+      - account_id: "example-sa"

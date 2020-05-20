@@ -12,11 +12,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .VARS}}
-variable "{{.NAME}}" {
-  type = {{.TYPE}}
-  {{- if index . "DEFAULT"}}
-  default = {{.DEFAULT}}
+{{range .vars}}
+variable "{{.name}}" {
+  type = {{.type}}
+  {{- if index . "default"}}
+  default = {{.default}}
   {{- end}}
 }
 {{end}}

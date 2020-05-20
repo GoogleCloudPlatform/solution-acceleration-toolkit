@@ -14,9 +14,9 @@
 
 templates:
 - component_path: "../../components/terragrunt/leaf"
-{{if get . "VARS"}}
+{{if get . "vars"}}
 - component_path: "../../components/terraform/variables"
 {{end}}
-{{if get . "OUTPUTS"}}
+{{if get . "outputs"}}
 - component_path: "../../components/terraform/outputs"
 {{end}}
