@@ -35,7 +35,7 @@ terraform {
 {{- end}}
 }
 
-# Create the project, enable apis, and create the deletion lien, if specified.
+# Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 7.0"

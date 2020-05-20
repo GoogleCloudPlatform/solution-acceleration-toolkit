@@ -31,7 +31,7 @@ data:
   # 1. Follow the steps for each field in the block.
   # 2. Remove this block once nothing needs to be disabled.
   disabled:
-    # The bootstrap module creates the terraform state bucket and thus
+    # The bootstrap module creates the Terraform state bucket and thus
     # its own state cannot be backed up until the state bucket has been created.
     #
     # 1. Deploy the bootstrap module. The state will be created locally in the same directory.
