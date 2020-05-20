@@ -19,15 +19,15 @@ org_id: "12345678"
 # Optional fields
 forseti_policies: {}
 gcp_organization_policies:
-  PARENT_TYPE: organization # one of `organization`, `folder` or `project`
-  PARENT_ID: "12345678"
-  ALLOWED_POLICY_MEMBER_DOMAINS:
+  parent_type: organization # one of `organization`, `folder` or `project`
+  parent_id: "12345678"
+  allowed_policy_member_domains:
   - google.com
-  ALLOWED_SHARED_VPC_HOST_PROJECTS:
+  allowed_shared_vpc_host_projects:
   - under:folders/12345678
-  ALLOWED_TRUSTED_IMAGE_PROJECTS:
+  allowed_trusted_image_projects:
   - projects/example-image-project
-  ALLOWED_PUBLIC_VMS:
+  allowed_public_vms:
   - projects/example-project/zones/us-central1-a/instances/example-public-instance
-  ALLOWED_IP_FORWARDING_VMS:
+  allowed_ip_forwarding_vms:
   - projects/example-project/zones/us-central1-a/instances/example-routing-instance
