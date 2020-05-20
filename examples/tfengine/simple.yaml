@@ -58,8 +58,8 @@ templates:
       PROJECT_ID: "example-monitor"
       DOMAIN: "example.com"
     ORG_POLICIES:
-      PARENT_TYPE: organization
-      PARENT_ID: "12345678"
+      parent_type: organization
+      parent_id: "12345678"
     CICD:
       PROJECT_ID: "example-devops"
       STATE_BUCKET: "example-state-bucket"
