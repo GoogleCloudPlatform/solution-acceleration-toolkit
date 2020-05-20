@@ -17,7 +17,7 @@ module "{{resourceName .name}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "9.0.0"
 
-  # required.
+  # Required.
   name                   = "{{.name}}"
   project_id             = var.project_id
   region                 = "{{get . "region" $.gke_cluster_region}}"
