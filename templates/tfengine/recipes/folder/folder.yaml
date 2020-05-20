@@ -14,16 +14,16 @@
 
 templates:
 - component_path: "../../components/terragrunt/leaf"
-  output_path: "{{.DISPLAY_NAME}}/folder"
+  output_path: "{{.display_name}}/folder"
   data:
-    DEPS:
-    - NAME: "parent_folder"
-      PATH: "../../folder"
-      MOCK_OUTPUTS:
+    deps:
+    - name: "parent_folder"
+      path: "../../folder"
+      mock_outputs:
         name: '"mock-folder"'
-    INPUTS:
+    inputs:
       parent: "dependency.parent_folder.outputs.name"
 - component_path: "../../components/folder/folder"
-  output_path: "{{.DISPLAY_NAME}}/folder"
+  output_path: "{{.display_name}}/folder"
   data:
-    DISPLAY_NAME: {{.DISPLAY_NAME}}
+    display_name: {{.display_name}}

@@ -12,25 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id                        = "{{.ORG_ID}}"
-billing_account               = "{{.BILLING_ACCOUNT}}"
-project_id                    = "{{.PROJECT_ID}}"
-state_bucket                  = "{{.STATE_BUCKET}}"
-repo_owner                    = "{{.REPO_OWNER}}"
-repo_name                     = "{{.REPO_NAME}}"
-branch_regex                  = "{{.BRANCH_REGEX}}"
-{{- if index . "CONTINUOUS_DEPLOYMENT_ENABLED"}}
-continuous_deployment_enabled = {{.CONTINUOUS_DEPLOYMENT_ENABLED}}
+org_id                        = "{{.org_id}}"
+billing_account               = "{{.billing_account}}"
+project_id                    = "{{.project_id}}"
+state_bucket                  = "{{.state_bucket}}"
+repo_owner                    = "{{.repo_owner}}"
+repo_name                     = "{{.repo_name}}"
+branch_regex                  = "{{.branch_regex}}"
+{{- if index . "continuous_deployment_enabled"}}
+continuous_deployment_enabled = {{.continuous_deployment_enabled}}
 {{- end}}
-{{- if index . "TRIGGER_ENABLED"}}
-trigger_enabled               = {{.TRIGGER_ENABLED}}
+{{- if index . "trigger_enabled"}}
+trigger_enabled               = {{.trigger_enabled}}
 {{- end}}
-{{- if index . "TERRAFORM_ROOT"}}
-terraform_root                = "{{.TERRAFORM_ROOT}}"
+{{- if index . "terraform_root"}}
+terraform_root                = "{{.terraform_root}}"
 {{- end}}
-{{- if index . "BUILD_VIEWERS"}}
+{{- if index . "build_viewers"}}
 build_viewers = [
-  {{- range .BUILD_VIEWERS}}
+  {{- range .build_viewers}}
   "{{.}}",
   {{- end}}
 ]

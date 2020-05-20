@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "{{.PROJECT_ID}}"
-{{- if index . "MANAGED_SERVICES"}}
+project_id = "{{.project_id}}"
+{{- if index . "managed_services"}}
 managed_services = [
-  {{- range .MANAGED_SERVICES}}
+  {{- range .managed_services}}
   "{{.}}",
   {{- end}}
 ]

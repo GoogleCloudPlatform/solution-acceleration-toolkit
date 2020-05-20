@@ -27,9 +27,9 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-{{- if enabled . "BOOTSTRAP_GCS_BACKEND"}}
+{{- if enabled . "bootstrap_gcs_backend"}}
   backend "gcs" {
-    bucket = "{{.STATE_BUCKET}}"
+    bucket = "{{.state_bucket}}"
     prefix = "bootstrap"
   }
 {{- end}}
@@ -58,7 +58,7 @@ module "state_bucket" {
 
   name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "{{.STORAGE_BUCKET_LOCATION}}"
+  location   = "{{.storage_bucket_location}}"
 }
 
 # Project level IAM permissions for devops project owners.

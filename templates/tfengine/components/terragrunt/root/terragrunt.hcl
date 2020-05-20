@@ -15,7 +15,7 @@
 remote_state {
   backend = "gcs"
   config = {
-    bucket = "{{.STATE_BUCKET}}"
+    bucket = "{{.state_bucket}}"
     prefix = "${path_relative_to_include()}"
   }
 }

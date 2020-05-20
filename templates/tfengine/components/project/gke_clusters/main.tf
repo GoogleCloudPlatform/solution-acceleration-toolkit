@@ -12,21 +12,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "GKE_CLUSTERS"}}
-module "{{resourceName .NAME}}" {
+{{range get . "gke_clusters"}}
+module "{{resourceName .name}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "9.0.0"
 
   # Required.
-  name                   = "{{.NAME}}"
+  name                   = "{{.name}}"
   project_id             = var.project_id
-  region                 = "{{get . "REGION" $.GKE_CLUSTER_REGION}}"
+  region                 = "{{get . "region" $.gke_cluster_region}}"
   regional               = true
-  network                = "{{.NETWORK}}"
-  subnetwork             = "{{.SUBNET}}"
-  ip_range_pods          = "{{.IP_RANGE_PODS_NAME}}"
-  ip_range_services      = "{{.IP_RANGE_SERVICES_NAME}}"
-  master_ipv4_cidr_block = "{{.MASTER_IPV4_CIDR_BLOCK}}"
+  network                = "{{.network}}"
+  subnetwork             = "{{.subnet}}"
+  ip_range_pods          = "{{.ip_range_pods_name}}"
+  ip_range_services      = "{{.ip_range_services_name}}"
+  master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
 
   # Optional.
   master_authorized_networks = var.master_authorized_networks
