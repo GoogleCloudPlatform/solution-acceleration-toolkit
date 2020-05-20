@@ -11,23 +11,37 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-{{if index . "ALLOWED_POLICY_MEMBER_DOMAINS"}}
+{{if index . "allowed_policy_member_domains"}}
 allowed_policy_member_domains = [
-  {{- range .ALLOWED_POLICY_MEMBER_DOMAINS}}
+  {{- range .allowed_policy_member_domains}}
   "{{.}}",
   {{- end}}
 ]
 {{- end}}
-{{- if index . "ALLOWED_SHARED_VPC_HOST_PROJECTS"}}
+{{- if index . "allowed_shared_vpc_host_projects"}}
 allowed_shared_vpc_host_projects = [
-  {{- range .ALLOWED_SHARED_VPC_HOST_PROJECTS}}
+  {{- range .allowed_shared_vpc_host_projects}}
   "{{.}}",
   {{- end}}
 ]
 {{- end}}
-{{- if index . "ALLOWED_TRUSTED_IMAGE_PROJECTS"}}
+{{- if index . "allowed_trusted_image_projects"}}
 allowed_trusted_image_projects = [
-  {{- range .ALLOWED_TRUSTED_IMAGE_PROJECTS}}
+  {{- range .allowed_trusted_image_projects}}
+  "{{.}}",
+  {{- end}}
+]
+{{- end}}
+{{- if index . "allowed_public_vms"}}
+allowed_public_vms = [
+  {{- range .allowed_public_vms}}
+  "{{.}}",
+  {{- end}}
+]
+{{- end}}
+{{- if index . "allowed_ip_forwarding_vms"}}
+allowed_ip_forwarding_vms = [
+  {{- range .allowed_ip_forwarding_vms}}
   "{{.}}",
   {{- end}}
 ]

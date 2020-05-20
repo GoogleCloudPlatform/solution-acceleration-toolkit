@@ -15,33 +15,33 @@
 templates:
 - recipe_path: "../terraform/terraform.yaml"
   data:
-    VARS:
-    - NAME: "project_id"
-      TYPE: "string"
-    DEPS:
-    - NAME: "project"
-      PATH: "../project"
-      MOCK_OUTPUTS:
+    vars:
+    - name: "project_id"
+      type: "string"
+    deps:
+    - name: "project"
+      path: "../project"
+      mock_outputs:
         project_id: '"mock-project"'
-    INPUTS:
+    inputs:
       project_id: "dependency.project.outputs.project_id"
 
-{{if has . "BIGQUERY_DATASETS"}}
+{{if has . "bigquery_datasets"}}
 - component_path: "../../components/project/bigquery_datasets"
 {{end}}
 
-{{if has . "COMPUTE_NETWORKS"}}
+{{if has . "compute_networks"}}
 - component_path: "../../components/project/compute_networks"
 {{end}}
 
-{{if has . "STORAGE_BUCKETS"}}
+{{if has . "storage_buckets"}}
 - component_path: "../../components/project/storage_buckets"
 {{end}}
 
-{{if has . "GKE_CLUSTERS"}}
+{{if has . "gke_clusters"}}
 - component_path: "../../components/project/gke_clusters"
 {{end}}
 
-{{if has . "SERVICE_ACCOUNTS"}}
+{{if has . "service_accounts"}}
 - component_path: "../../components/project/service_accounts"
 {{end}}

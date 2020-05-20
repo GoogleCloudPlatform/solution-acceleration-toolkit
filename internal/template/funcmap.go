@@ -72,7 +72,7 @@ func hcl(v interface{}) string {
 // enabled is a helper to cleanly check if a key is set and its value is set to false.
 // This is useful for checks for DISABLED keys.
 func enabled(m map[string]interface{}, key string) bool {
-	v := get(m, "DISABLED."+key)
+	v := get(m, "disabled."+key)
 	return v == nil || !v.(bool)
 }
 

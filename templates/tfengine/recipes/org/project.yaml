@@ -12,27 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$output_path := get . "OUTPUT_PATH" .PROJECT.PROJECT_ID}}
+{{$output_path := get . "output_path" .project.project_id}}
 
 templates:
-- component_path: "../../components/terragrunt/leaf"
+- recipe_path: "../terraform/terraform.yaml"
   output_path: "{{$output_path}}/project"
-- name: "project"
-  component_path: "../../components/project/project"
+  {{if has . "project.terraform_addons"}}
+  flatten:
+  - key: "project"
+  - key: "terraform_addons"
+  {{end}}
+- component_path: "../../components/project/project"
   output_path: "{{$output_path}}/project"
   flatten:
-  - key: "PROJECT"
+  - key: "project"
 
-{{if has . "RESOURCES"}}
-- name: "resources"
-  recipe_path: "../project/resources.yaml"
+{{if has . "resources"}}
+- recipe_path: "../project/resources.yaml"
   output_path: "{{$output_path}}/resources"
   flatten:
-  - key: "RESOURCES"
+  - key: "resources"
 {{end}}
 
-{{if index . "PROJECT_OWNERS"}}
-- name: "owners"
-  component_path: "../../components/project/owners"
+{{if index . "project_owners"}}
+- component_path: "../../components/project/owners"
   output_path: "{{$output_path}}/project"
 {{end}}

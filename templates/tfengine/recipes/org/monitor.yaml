@@ -16,8 +16,8 @@ templates:
 - recipe_path: "./project.yaml"
   output_path: "./monitor"
   data:
-    OUTPUT_PATH: "."
-    PROJECT:
-      PROJECT_ID: "{{.PROJECT_ID}}"
+    output_path: "."
+    project:
+      project_id: "{{.project_id}}"
 - component_path: "../../components/org/monitor/forseti"
   output_path: "./monitor/forseti"
