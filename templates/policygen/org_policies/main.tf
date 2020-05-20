@@ -126,9 +126,23 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   policy_for = "{{.PARENT_TYPE}}"
   {{$type_field}} = "{{.PARENT_ID}}"
 
-  constraint  = "constraints/compute.vmCanIpForward"
-  policy_type = "list"
-  enforce     = true # deny all
+  constraint        = "constraints/compute.vmCanIpForward"
+  policy_type       = "list"
+  allow             = var.allowed_ip_forwarding_vms
+  allow_list_length = length(var.allowed_ip_forwarding_vms)
+}
+
+module "orgpolicy_compute_vm_external_ip_access" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for = "{{.PARENT_TYPE}}"
+  {{$type_field}} = "{{.PARENT_ID}}"
+
+  constraint        = "constraints/compute.vmExternalIpAccess"
+  policy_type       = "list"
+  allow             = var.allowed_public_vms
+  allow_list_length = length(var.allowed_public_vms)
 }
 
 module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
