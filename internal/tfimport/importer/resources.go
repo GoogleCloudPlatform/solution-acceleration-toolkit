@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"strconv"
 	"strings"
 )
 
@@ -66,17 +65,10 @@ func parseUserVal(fieldName, val string, err error) (string, error) {
 	return val, err
 }
 
-// fromUser asks the user for the value, without providing choices.
+// fromUser asks the user for the value.
 func fromUser(in io.Reader, fieldName string, prompt string) (val string, err error) {
 	showPrompt(fieldName, prompt)
 	val, err = userValue(in)
-	return parseUserVal(fieldName, val, err)
-}
-
-// fromUser asks the user to choose a value from the available choices.
-func fromUserChoices(in io.Reader, fieldName string, prompt string, choices []string) (val string, err error) {
-	showPrompt(fieldName, prompt)
-	val, err = userChoice(in, choices)
 	return parseUserVal(fieldName, val, err)
 }
 
@@ -90,50 +82,4 @@ func userValue(in io.Reader) (string, error) {
 	}
 	val = strings.TrimSpace(val)
 	return val, nil
-}
-
-// userChoice asks the user to select one of the possible choices by index.
-// Returns skip==true if the user decided not to make a choice.
-func userChoice(in io.Reader, choices []string) (string, error) {
-	fmt.Println("Choose a number from below (blank to skip):")
-
-	// Show the choices.
-	reader := bufio.NewReader(in)
-	for i, c := range choices {
-		fmt.Printf("%v. %v\n", i, c)
-	}
-
-	// Ask until a valid choice is made.
-	lowest := 0
-	highest := len(choices) - 1
-	choice := 0
-	for {
-		val, err := reader.ReadString('\n')
-		if err != nil {
-			return "", err
-		}
-		val = strings.TrimSpace(val)
-
-		if val == "" {
-			return "", nil
-		}
-
-		// Choice must be a valid number.
-		choice, err = strconv.Atoi(val)
-		if err != nil {
-			fmt.Printf("Invalid input %q: %v\n", val, err)
-			continue
-		}
-
-		// Choice must be between the first and final choice.
-		if !(choice >= lowest && choice <= highest) {
-			fmt.Printf("Invalid choice: must be between %v and %v\n", lowest, highest)
-			continue
-		}
-
-		// Valid choice, exit the loop.
-		break
-	}
-
-	return choices[choice], nil
 }

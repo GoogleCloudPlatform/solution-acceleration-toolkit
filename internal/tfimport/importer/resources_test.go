@@ -122,53 +122,6 @@ func TestUserValue(t *testing.T) {
 	}
 }
 
-func TestUserChoice(t *testing.T) {
-	choices := []string{"ch1", "ch2", "ch3", "ch4"}
-	tests := []struct {
-		input string
-		want  string
-	}{
-		// Empty imput is skip.
-		{"\n", ""},
-
-		// Invalid inputs.
-		{"a\n1\n", "ch2"},
-
-		// Invalid choices.
-		{"15\n-1\n1\n", "ch2"},
-
-		// Boundary - first choice.
-		{"0\n", "ch1"},
-
-		// Boundary - last choice.
-		{"3\n", "ch4"},
-
-		// Stripping spaces.
-		{"  0 \n", "ch1"},
-
-		// Only select the first choice, ignore further input.
-		{"0\n1\n2\n", "ch1"},
-	}
-
-	for _, tc := range tests {
-		// Temporarily redirect output to null while running
-		stdout := os.Stdout
-		os.Stdout = os.NewFile(0, os.DevNull)
-
-		out, err := userChoice(strings.NewReader(tc.input), choices)
-
-		// Restore.
-		os.Stdout = stdout
-
-		if err != nil {
-			t.Fatalf("userChoice(%q) failed: %v", tc.input, err)
-		}
-		if out != tc.want {
-			t.Errorf("userChoice(%q) = %v; want %v", tc.input, out, tc.want)
-		}
-	}
-}
-
 func TestSimpleImporter(t *testing.T) {
 	tests := []struct {
 		reqFields []string
