@@ -17,8 +17,10 @@ templates:
   output_path: "./audit"
   data:
     OUTPUT_PATH: "."
-    APIS:
-    - "bigquery.googleapis.com"
-    - "logging.googleapis.com"
+    PROJECT:
+      PROJECT_ID: "{{.PROJECT_ID}}"
+      APIS:
+      - "bigquery.googleapis.com"
+      - "logging.googleapis.com"
 - component_path: "../../components/org/audit"
   output_path: "./audit/resources"
