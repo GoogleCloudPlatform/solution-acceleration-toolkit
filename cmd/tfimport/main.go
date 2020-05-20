@@ -20,6 +20,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -32,12 +33,14 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 )
 
 var (
 	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.\nThis could be i.e. 'terragrunt' or a path to\na different version of terraform.")
 	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
+	interactive   = flag.Bool("interactive", true, "Interactively ask for user input when import information cannot be\nautomatically determined.")
 )
 
 func main() {
@@ -70,6 +73,25 @@ func run() error {
 		importRn = &runner.Default{}
 	}
 
+	retry := true
+	for retry {
+		retry, err = planAndImport(rn, importRn)
+		if err != nil {
+			return err
+		}
+
+		if retry {
+			log.Println("Succeeded in importing some resources, but others failed. Retrying the import, in case dependent values have now been populated.")
+		}
+	}
+
+	return nil
+}
+
+// This function does the full plan and import cycle.
+// If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
+// A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
+func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(*terraformPath, args...)
@@ -79,28 +101,28 @@ func run() error {
 
 	// Init is safe to run on an already-initialized config dir.
 	if out, err := tfCmdOutput("init"); err != nil {
-		return fmt.Errorf("init: %v\v%v", err, string(out))
+		return false, fmt.Errorf("init: %v\v%v", err, string(out))
 	}
 
 	// Generate and load the plan using a temp var.
 	tmpfile, err := ioutil.TempFile("", "")
 	if err != nil {
-		return fmt.Errorf("create temp file: %v", err)
+		return false, fmt.Errorf("create temp file: %v", err)
 	}
 	defer os.Remove(tmpfile.Name())
 	planPath := tmpfile.Name()
 	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
-		return fmt.Errorf("plan: %v\n%v", err, string(out))
+		return false, fmt.Errorf("plan: %v\n%v", err, string(out))
 	}
 	b, err := tfCmdOutput("show", "-json", planPath)
 	if err != nil {
-		return fmt.Errorf("show: %v\n%v", err, string(b))
+		return false, fmt.Errorf("show: %v\n%v", err, string(b))
 	}
 
 	// Load only "create" changes.
 	createChanges, err := terraform.ReadPlanChanges(b, []string{"create"})
 	if err != nil {
-		return fmt.Errorf("read Terraform plan changes: %q", err)
+		return false, fmt.Errorf("read Terraform plan changes: %q", err)
 	}
 
 	// Import all importable create changes.
@@ -112,7 +134,7 @@ func run() error {
 		// This is needed to determine if it's possible to import the resource.
 		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
 		if err != nil {
-			return fmt.Errorf("read provider config values from the Terraform plan: %q", err)
+			return false, fmt.Errorf("read provider config values from the Terraform plan: %q", err)
 		}
 
 		// Try to convert to an importable resource.
@@ -125,7 +147,7 @@ func run() error {
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Attempt the import.
-		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath)
+		output, err := tfimport.Import(importRn, ir, *inputDir, *terraformPath, *interactive)
 
 		// In dry-run mode, the output is the command to run.
 		if *dryRun {
@@ -134,13 +156,22 @@ func run() error {
 		}
 
 		// Handle the different outcomes of the import attempt.
+		var ie *importer.InsufficientInfoErr
 		switch {
 		// err will only be nil when the import succeed.
+		// Import succeeded, print the success output.
 		case err == nil:
 			// Import succeeded.
+			// Use fmt over log for the TF output because it prints colors and looks better when using it.
 			fmt.Println(output)
 			importedSomething = true
 
+		// Check if the error indicates insufficient information.
+		case errors.As(err, &ie):
+			log.Printf("Insufficient information to import %q: %v\n", cc.Address, err)
+			log.Println("Skipping")
+
+		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case tfimport.NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
@@ -149,16 +180,10 @@ func run() error {
 
 		// Important to handle this last.
 		default:
-			errs = append(errs, fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output))
+			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
+			log.Println(errMsg)
+			errs = append(errs, errMsg)
 		}
-	}
-
-	if !importedSomething {
-		log.Printf("No resources imported.")
-	}
-
-	if len(errs) > 0 {
-		return fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
 	}
 
 	if *dryRun && len(importCmds) > 0 {
@@ -169,7 +194,21 @@ func run() error {
 			args := strings.Split(c, " ")
 			fmt.Printf("%v %v %v %q\n", args[0], args[1], args[2], strings.Join(args[3:], " "))
 		}
+
+		return false, nil
 	}
 
-	return nil
+	if len(errs) > 0 {
+		if importedSomething {
+			// Time to retry. Some resources imported successfully, but others didn't.
+			return true, nil
+		}
+		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if !importedSomething {
+		log.Printf("No resources imported.")
+	}
+
+	return false, nil
 }

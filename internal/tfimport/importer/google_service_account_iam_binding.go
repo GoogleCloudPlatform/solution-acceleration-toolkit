@@ -24,7 +24,7 @@ import (
 type ServiceAccountIAMBinding struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *ServiceAccountIAMBinding) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *ServiceAccountIAMBinding) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	// This already includes the project. It looks like this:
 	// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
 	serviceAccountID, err := fromConfigValues("service_account_id", rc.Change.After, nil)

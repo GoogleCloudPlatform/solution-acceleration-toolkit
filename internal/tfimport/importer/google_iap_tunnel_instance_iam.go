@@ -30,7 +30,7 @@ type IAPTunnerInstanceIAMBinding struct{}
 type IAPTunnerInstanceIAMMember struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *IAPTunnerInstanceIAMPolicy) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *IAPTunnerInstanceIAMPolicy) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
@@ -49,7 +49,7 @@ func (b *IAPTunnerInstanceIAMPolicy) ImportID(rc terraform.ResourceChange, pcv P
 	return fmt.Sprintf("projects/%v/iap_tunnel/zones/%v/instances/%v", project, zone, instance), nil
 }
 
-func (b *IAPTunnerInstanceIAMBinding) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *IAPTunnerInstanceIAMBinding) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
@@ -73,7 +73,7 @@ func (b *IAPTunnerInstanceIAMBinding) ImportID(rc terraform.ResourceChange, pcv 
 	return fmt.Sprintf("projects/%v/iap_tunnel/zones/%v/instances/%v %v", project, zone, instance, role), nil
 }
 
-func (b *IAPTunnerInstanceIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *IAPTunnerInstanceIAMMember) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err

@@ -47,8 +47,13 @@ differences between the configs and the actual infrastructure.
 ```shell
 $ tfimport -h
 Usage:
+  -dry_run
+     Run in dry-run mode, which only prints the import commands without running them.
   -input_dir string
-     Path to the directory containing Terraform config. (default ".")
+     Path to the directory containing Terraform configs. (default ".")
+  -interactive
+     Interactively ask for user input when import information cannot be
+     automatically determined. (default true)
   -terraform_path string
      Name or path to the terraform binary to use.
      This could be i.e. 'terragrunt' or a path to
@@ -66,6 +71,7 @@ Terraform configs, including importing resources from within modules.
 
 ## Supported Resources
 
+- [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
 - [google_container_cluster](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
 - [google_organization_policy](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)

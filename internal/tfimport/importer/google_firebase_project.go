@@ -24,7 +24,7 @@ import (
 type FirebaseProject struct{}
 
 // ImportID returns the project ID for use in importing.
-func (b *FirebaseProject) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *FirebaseProject) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
