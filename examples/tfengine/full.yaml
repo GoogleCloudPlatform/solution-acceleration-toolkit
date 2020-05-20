@@ -132,6 +132,11 @@ templates:
         HOST_PROJECT_ID: "example-prod-networks"
         SUBNETS:
         - NAME: example-subnet
+      # Add dependency on network deployment.
+      TERRAFORM_ADDONS:
+        DEPS:
+        - NAME: "networks"
+          PATH: "../../example-prod-networks/resources"
     RESOURCES:
       GKE_CLUSTERS:
       - NAME: "example-prod-gke-cluster"

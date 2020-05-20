@@ -13,7 +13,7 @@
 # limitations under the License.
 
 templates:
-- component_path: "../../components/terragrunt/leaf"
+- recipe_path: "../terraform/terraform.yaml"
   output_path: "{{.PROJECT.PROJECT_ID}}/project"
   data:
     DEPS:
@@ -23,8 +23,12 @@ templates:
         name: '"mock-folder"'
     INPUTS:
       folder_id: "dependency.parent_folder.outputs.name"
-- name: "project"
-  component_path: "../../components/project/project"
+  {{if has . "PROJECT.TERRAFORM_ADDONS"}}
+  flatten:
+  - key: "PROJECT"
+  - key: "TERRAFORM_ADDONS"
+  {{end}}
+- component_path: "../../components/project/project"
   output_path: "{{.PROJECT.PROJECT_ID}}/project"
   flatten:
   - key: "PROJECT"
