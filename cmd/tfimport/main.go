@@ -162,6 +162,7 @@ func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 		// Import succeeded, print the success output.
 		case err == nil:
 			// Import succeeded.
+			// Use fmt over log for the TF output because it prints colors and looks better when using it.
 			fmt.Println(output)
 			importedSomething = true
 
