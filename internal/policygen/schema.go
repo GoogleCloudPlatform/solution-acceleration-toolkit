@@ -50,49 +50,49 @@ properties:
     type: object
     additionalProperties: false
     properties:
-      PARENT_TYPE:
+      parent_type:
         description: |
           Type of parent GCP resource to apply the policy: can be one of "organization",
           "folder", or "project".
         type: string
         pattern: ^organization|folder|project$
 
-      PARENT_ID:
+      parent_id:
         description: |
           ID of parent GCP resource to apply the policy: can be one of the organization ID,
-          folder ID, or project ID according to PARENT_TYPE.
+          folder ID, or project ID according to parent_type.
         type: string
         pattern: ^[0-9]{8,25}$
 
-      ALLOWED_POLICY_MEMBER_DOMAINS:
+      allowed_policy_member_domains:
         description: |
           See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
-      ALLOWED_SHARED_VPC_HOST_PROJECTS:
+      allowed_shared_vpc_host_projects:
         description: |
           See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
-      ALLOWED_TRUSTED_IMAGE_PROJECTS:
+      allowed_trusted_image_projects:
         description: |
           See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
-      ALLOWED_PUBLIC_VMS:
+      allowed_public_vms:
         description: |
           See templates/policygen/org_policies/variables.tf.
         type: array
         items:
           type: string
 
-      ALLOWED_IP_FORWARDING_VMS:
+      allowed_ip_forwarding_vms:
         description: |
           See templates/policygen/org_policies/variables.tf.
         type: array
