@@ -96,6 +96,7 @@ templates:
   data:
     PROJECT:
       PROJECT_ID: "example-prod-networks"
+      IS_SHARED_VPC_HOST: true
     RESOURCES:
       COMPUTE_NETWORKS:
       - NAME: "example-network"
@@ -127,7 +128,7 @@ templates:
       PROJECT_ID: "example-prod-apps"
       APIS:
       - "container.googleapis.com"
-      SHARED_VPC:
+      SHARED_VPC_ATTACHMENT:
         HOST_PROJECT_ID: "example-prod-networks"
         SUBNETS:
         - NAME: example-subnet
