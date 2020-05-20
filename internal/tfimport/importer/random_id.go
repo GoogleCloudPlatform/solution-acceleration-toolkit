@@ -33,7 +33,7 @@ func (c *RandomID) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, 
 
 	// Ask the user for the random_id.
 	prompt := "Please enter the previously-generated random_id, in *hex* form. See https://www.terraform.io/docs/providers/random/r/id.html#attributes-reference."
-	idHex, err := fromUser(os.Stdin, "b64_url", prompt, []string{})
+	idHex, err := fromUser(os.Stdin, "b64_url", prompt)
 	if err != nil {
 		return "", err
 	}

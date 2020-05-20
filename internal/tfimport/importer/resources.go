@@ -50,17 +50,12 @@ func fromConfigValues(key string, cvs ...ProviderConfigMap) (interface{}, error)
 	return nil, fmt.Errorf("could not find key %q in resource change or provider config", key)
 }
 
-// userValue asks the user to fill in a value that the importer can't figure out.
-func fromUser(in io.Reader, fieldName string, prompt string, choices []string) (val string, err error) {
+// Small helper functions to DRY the fromUser* functions.
+func showPrompt(fieldName, prompt string) {
 	log.Printf("Could not determine %q automatically\n", fieldName)
 	log.Println(prompt)
-
-	if len(choices) > 0 {
-		val, err = userChoice(in, choices)
-	} else {
-		val, err = userValue(in)
-	}
-
+}
+func parseUserVal(fieldName, val string, err error) (string, error) {
 	if val == "" {
 		ie := &InsufficientInfoErr{missingFields: []string{fieldName}}
 		if err != nil {
@@ -71,6 +66,21 @@ func fromUser(in io.Reader, fieldName string, prompt string, choices []string) (
 	return val, err
 }
 
+// fromUser asks the user for the value, without providing choices.
+func fromUser(in io.Reader, fieldName string, prompt string) (val string, err error) {
+	showPrompt(fieldName, prompt)
+	val, err = userValue(in)
+	return parseUserVal(fieldName, val, err)
+}
+
+// fromUser asks the user to choose a value from the available choices.
+func fromUserChoices(in io.Reader, fieldName string, prompt string, choices []string) (val string, err error) {
+	showPrompt(fieldName, prompt)
+	val, err = userChoice(in, choices)
+	return parseUserVal(fieldName, val, err)
+}
+
+// userValue asks the user to fill in a value that the importer can't figure out.
 func userValue(in io.Reader) (string, error) {
 	fmt.Println("Enter a value manually (blank to skip):")
 	reader := bufio.NewReader(in)
