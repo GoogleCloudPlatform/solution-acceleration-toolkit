@@ -60,7 +60,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, configs...)
 		if err != nil {
-			t.Errorf("fromConfigValues(%v, %v) failed: %s", tc.key, configs, err)
+			t.Fatalf("fromConfigValues(%v, %v) failed: %s", tc.key, configs, err)
 		}
 		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, configs, got, tc.want)
@@ -100,7 +100,10 @@ func TestSimpleImporter(t *testing.T) {
 	}
 	for _, tc := range tests {
 		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
-		got, _ := imp.ImportID(resourceChange, configs[0])
+		got, err := imp.ImportID(resourceChange, configs[0])
+		if err != nil {
+			t.Fatalf("%v ImportID(%v, %v) failed: %v", imp, resourceChange, configs, err)
+		}
 		if got != tc.want {
 			t.Errorf("%v ImportID(%v, %v) = %v; want %v", imp, resourceChange, configs, got, tc.want)
 		}
