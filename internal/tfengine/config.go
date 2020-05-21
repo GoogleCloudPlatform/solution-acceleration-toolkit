@@ -31,6 +31,8 @@ import (
 // Config is the user supplied config for the engine.
 // HCL struct tags are documented at https://pkg.go.dev/github.com/hashicorp/hcl2/gohcl.
 type Config struct {
+	// HCL decoder can't unmarshal into map[string]interface{},
+	// so make it unmarshal to a cty.Value and manually convert to map.
 	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for DataCty.
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
 	Data    map[string]interface{} `json:"data,omitempty"`
@@ -117,6 +119,9 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		if err != nil {
 			return nil, err
 		}
+		// hclsimple.Decode doesn't actually use the path for anything other
+		// than its extension, so just pass in any file name ending with json so
+		// the library knows to treat these bytes as json and not yaml.
 		path = "file.json"
 	}
 
