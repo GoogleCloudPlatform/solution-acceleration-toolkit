@@ -3,8 +3,8 @@
 This directory contains the Terraform configs for the Continuous Integration (CI)
 and Continuous Deployment (CD) component.
 
-* The [manual/](./manual) directory contains the Terraform resources that need to be
-  deployed manually to provision the initial CI/CD resources.
+* The [manual/](./manual) directory contains the Terraform resources that need to
+  be deployed manually to provision the initial CI/CD resources.
 
 * The [auto/](./auto) directory contains the Terraform resouces for CI/CD purposes
   that are also managed by CI/CD itself.
