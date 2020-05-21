@@ -30,7 +30,7 @@ fi
 cp go.mod go.mod.prev
 go mod download
 outdated=$(go get -u ./... 2>&1)
-go_mod_diff=$(diff -u go.mod go.mod.prev)
+go_mod_diff=$(diff -u go.mod go.mod.prev) || true
 if [[ "${go_mod_diff}" ]]; then
   cat <<EOF
 The following dependencies are out of date:
