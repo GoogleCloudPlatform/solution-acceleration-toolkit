@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "org_id" {
-  description = "GCP Organization ID that Cloud Build Service Account will have purview over"
-  type        = string
-}
-
 variable "billing_account" {
   type = string
 }

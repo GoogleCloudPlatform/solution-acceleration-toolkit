@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id                        = "{{.org_id}}"
 billing_account               = "{{.billing_account}}"
 project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"

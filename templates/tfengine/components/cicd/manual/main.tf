@@ -58,10 +58,12 @@ locals {
   cloudbuild_sa_editor_roles = [
     "roles/compute.xpnAdmin",
     "roles/logging.configWriter",
-    "roles/orgpolicy.policyAdmin",
-    "roles/resourcemanager.organizationAdmin",
-    "roles/resourcemanager.folderCreator",
     "roles/resourcemanager.projectCreator",
+    "roles/resourcemanager.{{.parent_type}}Admin",
+    {{- if eq (get . "parent_type") "organization"}}
+    "roles/orgpolicy.policyAdmin",
+    "roles/resourcemanager.folderCreator",
+    {{- end}}
   ]
   cloudbuild_devops_roles = [
     # Enable Cloud Build SA to list and enable APIs in the devops project.
@@ -117,10 +119,14 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   ]
 }
 
-# Grant Cloud Build Service Account access to the organization.
-resource "google_organization_iam_member" "cloudbuild_sa_org_iam" {
+# Grant Cloud Build Service Account access to the {{.parent_type}}.
+resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_iam" {
   for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
-  org_id   = var.org_id
+  {{- if eq (get . "parent_type") "organization"}}
+  org_id   = {{.parent_id}}
+  {{- else}}
+  folder   = {{.parent_id}}
+  {{- end}}
   role     = each.value
   member   = local.cloud_build_sa
   depends_on = [

@@ -58,9 +58,11 @@ templates:
       project_id: "example-monitor"
       domain: "example.com"
     org_policies:
-      parent_type: organization
+      parent_type: "folder" # one of `organization`, `folder` or `project`
       parent_id: "12345678"
     cicd:
+      parent_type: "folder" # one of `organization` or `folder`
+      parent_id: "12345678"
       project_id: "example-devops"
       state_bucket: "example-state-bucket"
       repo_owner: "GoogleCloudPlatform"
