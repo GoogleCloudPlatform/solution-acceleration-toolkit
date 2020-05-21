@@ -67,20 +67,6 @@ func (c *Config) Init() error {
 	return c.validate()
 }
 
-func (c *Config) validate() error {
-	sj, err := yaml.YAMLToJSON([]byte(schema))
-	if err != nil {
-		return fmt.Errorf("convert schema to JSON: %v", err)
-	}
-
-	cj, err := json.Marshal(c)
-	if err != nil {
-		return err
-	}
-
-	return jsonschema.Validate(sj, cj)
-}
-
 func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
 	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
 	if err != nil {
@@ -97,6 +83,20 @@ func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
 	}
 
 	return jr.Value, nil
+}
+
+func (c *Config) validate() error {
+	sj, err := yaml.YAMLToJSON([]byte(schema))
+	if err != nil {
+		return fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	cj, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	return jsonschema.Validate(sj, cj)
 }
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
