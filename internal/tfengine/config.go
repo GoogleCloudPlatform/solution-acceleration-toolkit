@@ -29,6 +29,7 @@ import (
 )
 
 // Config is the user supplied config for the engine.
+// HCL struct tags are documented at https://godoc.org/github.com/hashicorp/hcl2/gohcl.
 type Config struct {
 	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for DataCty.
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
