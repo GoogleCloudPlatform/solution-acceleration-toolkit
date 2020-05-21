@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id = "{{.ORG_ID}}"
+org_id = "{{.org_id}}"

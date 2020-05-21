@@ -88,10 +88,14 @@ func generateForsetiPolicies(outputDir string, c *config) error {
 	if c.ForsetiPolicies == nil {
 		return nil
 	}
-
 	data := map[string]interface{}{
-		"ORG_ID": c.OrgID,
+		"org_id": c.OrgID,
 	}
+
+	if err := template.MergeData(data, c.ForsetiPolicies, nil); err != nil {
+		return err
+	}
+
 	in := filepath.Join(c.TemplateDir, "forseti", "org")
 	out := filepath.Join(outputDir, "forseti_policies", fmt.Sprintf("org.%s", c.OrgID))
 	return template.WriteDir(in, out, data)
@@ -102,7 +106,7 @@ func generateGCPOrgPolicies(outputDir string, c *config) error {
 		return nil
 	}
 	data := map[string]interface{}{
-		"ORG_ID": c.OrgID,
+		"org_id": c.OrgID,
 	}
 
 	if err := template.MergeData(data, c.GCPOrgPolicies, nil); err != nil {
@@ -111,8 +115,5 @@ func generateGCPOrgPolicies(outputDir string, c *config) error {
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
 	out := filepath.Join(outputDir, "gcp_organization_policies")
-	if err := template.WriteDir(in, out, data); err != nil {
-		return err
-	}
-	return nil
+	return template.WriteDir(in, out, data)
 }

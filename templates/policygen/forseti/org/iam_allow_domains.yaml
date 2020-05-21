@@ -13,16 +13,17 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedBindingsConstraintV1
+kind: GCPIAMAllowedPolicyMemberDomainsConstraintV1
 metadata:
-  name: iam_deny_public_access
+  name: iam_allow_domains
 spec:
   severity: high
   match:
     target: ["organization/{{.org_id}}"]
   parameters:
-    mode: blacklist
-    role: "roles/*"
-    members:
-    - allUsers
-    - allAuthenticatedUsers
+    domains:
+    - gserviceaccount.com # always allow GCP service accounts
+    {{- range get . "allowed_policy_member_domains"}}
+    - {{.}}
+    {{- end}}
+    allow_sub_domains: true

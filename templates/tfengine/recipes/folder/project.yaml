@@ -14,33 +14,33 @@
 
 templates:
 - recipe_path: "../terraform/terraform.yaml"
-  output_path: "{{.PROJECT.PROJECT_ID}}/project"
+  output_path: "{{.project.project_id}}/project"
   data:
-    DEPS:
-    - NAME: "parent_folder"
-      PATH: "../../folder"
-      MOCK_OUTPUTS:
+    deps:
+    - name: "parent_folder"
+      path: "../../folder"
+      mock_outputs:
         name: '"mock-folder"'
-    INPUTS:
+    inputs:
       folder_id: "dependency.parent_folder.outputs.name"
-  {{if has . "PROJECT.TERRAFORM_ADDONS"}}
+  {{if has . "project.terraform_addons"}}
   flatten:
-  - key: "PROJECT"
-  - key: "TERRAFORM_ADDONS"
+  - key: "project"
+  - key: "terraform_addons"
   {{end}}
 - component_path: "../../components/project/project"
-  output_path: "{{.PROJECT.PROJECT_ID}}/project"
+  output_path: "{{.project.project_id}}/project"
   flatten:
-  - key: "PROJECT"
+  - key: "project"
 
-{{if has . "RESOURCES"}}
+{{if has . "resources"}}
 - recipe_path: "../project/resources.yaml"
-  output_path: "./{{.PROJECT.PROJECT_ID}}/resources"
+  output_path: "./{{.project.project_id}}/resources"
   flatten:
-  - key: "RESOURCES"
+  - key: "resources"
 {{end}}
 
-{{if index . "PROJECT_OWNERS"}}
+{{if index . "project_owners"}}
 - component_path: "../../components/project/owners"
-  output_path: "{{.PROJECT.PROJECT_ID}}/project"
+  output_path: "{{.project.project_id}}/project"
 {{end}}

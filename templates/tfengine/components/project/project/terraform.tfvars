@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id          = "{{.ORG_ID}}"
-billing_account = "{{.BILLING_ACCOUNT}}"
+org_id          = "{{.org_id}}"
+billing_account = "{{.billing_account}}"
