@@ -24,7 +24,7 @@ import (
 type ProjectService struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *ProjectService) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *ProjectService) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	project, err := fromConfigValues("project", rc.Change.After, pcv)
 	if err != nil {
 		return "", err

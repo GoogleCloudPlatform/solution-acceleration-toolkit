@@ -24,7 +24,7 @@ import (
 type OrgPolicy struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *OrgPolicy) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *OrgPolicy) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	orgID, err := fromConfigValues("org_id", rc.Change.After, pcv)
 	if err != nil {
 		return "", err

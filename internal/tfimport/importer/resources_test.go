@@ -15,6 +15,8 @@
 package importer
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -60,7 +62,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 	for _, tc := range tests {
 		got, err := fromConfigValues(tc.key, configs...)
 		if err != nil {
-			t.Fatalf("fromConfigValues(%v, %v) failed: %s", tc.key, configs, err)
+			t.Fatalf("fromConfigValues(%v, %v) failed: %v", tc.key, configs, err)
 		}
 		if got != tc.want {
 			t.Errorf("fromConfigValues(%v, %v) = %v; want %v", tc.key, configs, got, tc.want)
@@ -82,6 +84,40 @@ func TestFromConfigValuesErr(t *testing.T) {
 	for _, tc := range tests {
 		if _, err := fromConfigValues(tc.key, tc.cvs...); err == nil {
 			t.Errorf("fromConfigValues(%v, %v) succeeded for malformed input, want error", tc.key, tc.cvs)
+		}
+	}
+}
+
+func TestUserValue(t *testing.T) {
+	tests := []struct {
+		input string
+		want  string
+	}{
+		// Empty.
+		{"\n", ""},
+
+		// Normal input.
+		{"myinput\n", "myinput"},
+
+		// Stripping spaces, but not in the middle.
+		{"  my space   separated  input   \n", "my space   separated  input"},
+	}
+
+	for _, tc := range tests {
+		// Temporarily redirect output to null while running
+		stdout := os.Stdout
+		os.Stdout = os.NewFile(0, os.DevNull)
+
+		out, err := userValue(strings.NewReader(tc.input))
+
+		// Restore.
+		os.Stdout = stdout
+
+		if err != nil {
+			t.Fatalf("userValue(%q) failed: %v", tc.input, err)
+		}
+		if out != tc.want {
+			t.Errorf("userValue(%q) = %v; want %v", tc.input, out, tc.want)
 		}
 	}
 }
