@@ -23,10 +23,6 @@ steps:
   args: ["build/md_check.sh"]
   id: Markdownlint check
 
-- name: gcr.io/cloud-builders/git
-  args: ["fetch", "--unshallow", "--tags"]
-  id: Fetch .git directory
-
 - name: "gcr.io/cloud-builders/go"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
