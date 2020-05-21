@@ -17,8 +17,13 @@ package tfengine
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/ghodss/yaml"
+	"github.com/hashicorp/hcl/v2/hclsimple"
 	"github.com/zclconf/go-cty/cty"
 	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
@@ -59,7 +64,21 @@ func (c *Config) Init() error {
 			}
 		}
 	}
-	return nil
+	return c.validate()
+}
+
+func (c *Config) validate() error {
+	sj, err := yaml.YAMLToJSON([]byte(schema))
+	if err != nil {
+		return fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	cj, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	return jsonschema.Validate(sj, cj)
 }
 
 func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
@@ -78,4 +97,34 @@ func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
 	}
 
 	return jr.Value, nil
+}
+
+func loadConfig(path string, data map[string]interface{}) (*Config, error) {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	buf, err := template.WriteBuffer(string(b), data)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/86): deprecate yaml.
+	cj := buf.Bytes()
+	if filepath.Ext(path) == ".yaml" {
+		cj, err = yaml.YAMLToJSON(cj)
+		if err != nil {
+			return nil, err
+		}
+		path = "file.json"
+	}
+
+	c := new(Config)
+	if err := hclsimple.Decode(path, cj, nil, c); err != nil {
+		return nil, err
+	}
+	if err := c.Init(); err != nil {
+		return nil, err
+	}
+	return c, nil
 }
