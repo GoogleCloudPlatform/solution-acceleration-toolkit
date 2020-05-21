@@ -34,6 +34,9 @@ if ! git diff-index --quiet HEAD; then
 The following dependencies are out of date:
 ${outdated}
 
+There are also git changes:
+$(git diff)
+
 Please run 'go get -u ./...' locally and commit the changes.
 EOF
   exit 1
