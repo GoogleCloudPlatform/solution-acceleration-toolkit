@@ -30,20 +30,23 @@ if [[ "${f}" ]]; then
 fi
 
 # Check dependencies up-to-date
+cp go.mod go.mod.prev
 go mod download
 outdated=$(go get -u ./... 2>&1)
-if ! git diff-index --quiet HEAD; then
+go_mod_diff=$(diff -u go.mod go.mod.prev)
+if [[ "${go_mod_diff}" ]]; then
   cat <<EOF
 The following dependencies are out of date:
 ${outdated}
 
-There are also git changes:
-$(git diff)
+There are the following changes:
+${go_mod_diff}
 
 Please run 'go get -u ./...' locally and commit the changes.
 EOF
   exit 1
 fi
+rm go.mod.prev
 
 go mod tidy
 go vet ./...

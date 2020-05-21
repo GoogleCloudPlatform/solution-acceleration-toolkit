@@ -13,17 +13,6 @@
 # limitations under the License.
 
 steps:
-# Fetch the .git directory, since GCB doesn't do that by default.
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    git init
-    git remote add origin git@github.com:/GoogleCloudPlatform/$REPO_NAME.git
-    git fetch --tags origin $COMMIT_SHA
-    git reset --hard FETCH_HEAD
-
 - name: "gcr.io/cloud-builders/go"
   entrypoint: "sh"
   args: ["build/license_check.sh"]
