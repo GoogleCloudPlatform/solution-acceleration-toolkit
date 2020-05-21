@@ -30,7 +30,7 @@ fi
 go mod download
 d=$(go get -u ./... 2>&1)
 if [[ "${d}" ]]; then
-  echo "The following dependencies are out of date, please run 'go get -u all' locally and commit the change."
+  echo "The following dependencies are out of date, please run 'go get -u ./...' locally and commit the change."
   echo "${d}"
   exit 1
 fi
