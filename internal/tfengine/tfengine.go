@@ -26,20 +26,6 @@ import (
 	"github.com/otiai10/copy"
 )
 
-// Config is the user supplied config for the engine.
-type Config struct {
-	Data      map[string]interface{} `json:"data"`
-	Templates []*templateInfo        `json:"templates"`
-}
-
-type templateInfo struct {
-	ComponentPath string                  `json:"component_path"`
-	RecipePath    string                  `json:"recipe_path"`
-	OutputPath    string                  `json:"output_path"`
-	Flatten       []*template.FlattenInfo `json:"flatten"`
-	Data          map[string]interface{}  `json:"data"`
-}
-
 func Run(confPath, outPath string) error {
 	var err error
 	confPath, err = pathutil.Expand(confPath)
