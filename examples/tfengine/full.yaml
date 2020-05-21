@@ -116,6 +116,7 @@ templates:
     resources:
       bigquery_datasets:
       - dataset_id: "example_dataset"
+        default_table_expiration_ms: 10000000000
         access:
         - role: "roles/bigquery.dataOwner"
           special_group: "projectOwners"
