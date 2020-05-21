@@ -15,13 +15,10 @@
 package tfengine
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
-	"github.com/ghodss/yaml"
+	"github.com/hashicorp/hcl/v2/hclsimple"
 )
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
@@ -34,22 +31,33 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 
-	cj, err := yaml.YAMLToJSON(buf.Bytes())
-	if err != nil {
-		return nil, fmt.Errorf("convert config to JSON: %v", err)
-	}
+	// tmp, err := ioutil.TempFile("", fmt.Sprintf("*.%s", filepath.Ext(path)))
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	sj, err := yaml.YAMLToJSON([]byte(schema))
-	if err != nil {
-		return nil, fmt.Errorf("convert schema to JSON: %v", err)
-	}
+	// cj, err := yaml.YAMLToJSON(buf.Bytes())
+	// if err != nil {
+	// 	return nil, fmt.Errorf("convert config to JSON: %v", err)
+	// }
 
-	if err := jsonschema.Validate(sj, cj); err != nil {
-		return nil, err
-	}
+	// sj, err := yaml.YAMLToJSON([]byte(schema))
+	// if err != nil {
+	// 	return nil, fmt.Errorf("convert schema to JSON: %v", err)
+	// }
+
+	// if err := jsonschema.Validate(sj, cj); err != nil {
+	// 	return nil, err
+	// }
 
 	c := new(Config)
-	if err := json.Unmarshal(cj, c); err != nil {
+	if err := hclsimple.Decode(path, buf.Bytes(), nil, c); err != nil {
+		return nil, err
+	}
+	// if err := json.Unmarshal(cj, c); err != nil {
+	// 	return nil, err
+	// }
+	if err := c.Init(); err != nil {
 		return nil, err
 	}
 	return c, nil

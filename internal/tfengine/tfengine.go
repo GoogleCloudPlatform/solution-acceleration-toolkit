@@ -16,28 +16,74 @@
 package tfengine
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
+	"github.com/zclconf/go-cty/cty"
+	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
 // Config is the user supplied config for the engine.
 type Config struct {
-	Data      map[string]interface{} `json:"data"`
-	Templates []*templateInfo        `json:"templates"`
+	DataCty   *cty.Value `hcl:"data,optional"`
+	Data      map[string]interface{}
+	Templates []*templateInfo `hcl:"templates,block"`
 }
 
 type templateInfo struct {
-	ComponentPath string                  `json:"component_path"`
-	RecipePath    string                  `json:"recipe_path"`
-	OutputPath    string                  `json:"output_path"`
-	Flatten       []*template.FlattenInfo `json:"flatten"`
-	Data          map[string]interface{}  `json:"data"`
+	ComponentPath string                  `hcl:"component_path,optional"`
+	RecipePath    string                  `hcl:"recipe_path,optional"`
+	OutputPath    string                  `hcl:"output_path,optional"`
+	Flatten       []*template.FlattenInfo `hcl:"flatten,block"`
+	DataCty       *cty.Value              `hcl:"data,optional"`
+	Data          map[string]interface{}
+}
+
+func (c *Config) Init() error {
+	var err error
+	if c.DataCty != nil {
+		c.Data, err = parseCtyValueToMap(c.DataCty)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, t := range c.Templates {
+		if t.DataCty == nil {
+			continue
+		}
+		t.Data, err = ctyValueToMap(t.DataCty)
+		if err != nil {
+			return err
+		}
+		log.Println(t.Data)
+	}
+	return nil
+}
+
+func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
+	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
+	if err != nil {
+		return nil, err
+	}
+
+	type jsonRepr struct {
+		Value map[string]interface{}
+	}
+
+	var jr jsonRepr
+	if err := json.Unmarshal(b, &jr); err != nil {
+		return nil, err
+	}
+
+	return jr.Value, nil
 }
 
 func Run(confPath, outPath string) error {
