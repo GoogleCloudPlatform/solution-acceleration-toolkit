@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
-	github.com/google/go-cmp v0.4.1
+	github.com/google/go-cmp v0.4.1 // indirect
 	github.com/hashicorp/hcl/v2 v2.5.1
 	github.com/imdario/mergo v0.3.9
 	github.com/mitchellh/go-homedir v1.1.0
