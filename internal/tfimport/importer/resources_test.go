@@ -136,7 +136,7 @@ func TestSimpleImporter(t *testing.T) {
 	}
 	for _, tc := range tests {
 		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
-		got, err := imp.ImportID(resourceChange, configs[0])
+		got, err := imp.ImportID(resourceChange, configs[0], false)
 		if err != nil {
 			t.Fatalf("%v ImportID(%v, %v) failed: %v", imp, resourceChange, configs, err)
 		}
@@ -159,7 +159,7 @@ func TestSimpleImporterErr(t *testing.T) {
 	}
 	for _, tc := range tests {
 		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
-		if got, err := imp.ImportID(resourceChange, configs[0]); err == nil {
+		if got, err := imp.ImportID(resourceChange, configs[0], false); err == nil {
 			t.Errorf("%v ImportID(%v, %v) succeeded for malformed input, want error; got = %v", imp, resourceChange, configs, got)
 		}
 	}
