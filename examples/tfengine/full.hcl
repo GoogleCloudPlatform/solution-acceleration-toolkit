@@ -107,7 +107,7 @@ templates {
 
 # Prod central networks project for team 1.
 templates {
-- recipe_path = "{{$base}}/folder/project.yaml"
+  recipe_path = "{{$base}}/folder/project.yaml"
   output_path = "./live/prod/team1"
   data = {
     project = {
