@@ -3,10 +3,10 @@
 This directory contains the Terraform configs for the Continuous Integration (CI)
 and Continuous Deployment (CD) component.
 
-* The `manual/` directory contains the Terraform resources that need to be
-  deployed manually to provision the initial CI/CD resources.
+* The [manual/](./manual) directory contains the Terraform resources that need to
+  be deployed manually to provision the initial CI/CD resources.
 
-* The `auto/` directory contains the Terraform resouces for CI/CD purposes
+* The [auto/](./auto) directory contains the Terraform resouces for CI/CD purposes
   that are also managed by CI/CD itself.
 
   Sensitive resources in the devops project such as
@@ -16,6 +16,6 @@ and Continuous Deployment (CD) component.
   * Cloud Build Triggers
 
    should not be put here to let CI/CD manage them, which could lead to
-   potential misconfiguration of itself. Those resources should be included
-   in the `main.tf` in `cicd/` directory at root and deployed manually by
-   an human owner of the devops project.
+   potential misconfiguration of CI/CD itself. Those resources should be
+   included in [manual/main.tf](./manual/main.tf) directory and deployed
+   manually by a human owner of the devops project.

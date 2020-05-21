@@ -13,20 +13,20 @@ to detect changes in the repo, trigger builds and run the workloads.
 1. In the Terraform Engine config, add a `CICD` block under the `foundation`
     recipe and specify the following attributes:
 
-    * `PROJECT_ID`: Project ID of the `devops` project
-    * `STATE_BUCKET`: Name of the state bucket
-    * `REPO_OWNER`: GitHub repo owner
-    * `REPO_NAME`: GitHub repo name
-    * `BRANCH_REGEX`: Regex of the branches to set the Cloud Build Triggers to
+    * `project_id`: Project ID of the `devops` project
+    * `state_bucket`: Name of the state bucket
+    * `repo_owner`: GitHub repo owner
+    * `repo_name`: GitHub repo name
+    * `branch_regex`: Regex of the branches to set the Cloud Build Triggers to
         monitor
-    * `CONTINUOUS_DEPLOYMENT_ENABLED`: Whether or not to enable continuous
+    * `continuous_deployment_enabled`: Whether or not to enable continuous
         deployment of Terraform configs
-    * `TRIGGER_ENABLED`: Whether or not to enable all Cloud Build Triggers
-    * `TERRAFORM_ROOT`: Path of the directory relative to the repo root
+    * `trigger_enabled`: Whether or not to enable all Cloud Build Triggers
+    * `terraform_root`: Path of the directory relative to the repo root
         containing the Terraform configs
-    * `BUILD_VIEWERS`: IAM members to grant cloudbuild.builds.viewer role
+    * `build_viewers`: IAM members to grant cloudbuild.builds.viewer role
         in the devops project to see CICD results
-    * `MANAGED_SERVICES`: APIs to enable in the devops project so Cloud
+    * `managed_services`: APIs to enable in the devops project so Cloud
         Build Service Account can manage those services in other projects
 
 1. Generate the CICD Terraform configs and Cloud Build configs using the
@@ -57,16 +57,16 @@ to detect changes in the repo, trigger builds and run the workloads.
     1. `tf-plan`: Generate speculative plans to show a set of potential changes
         if the pending config changes are deployed.
 
-    If `CONTINUOUS_DEPLOYMENT_ENABLED` is set to `true` in your Terraform Engine
+    If `continuous_deployment_enabled` is set to `true` in your Terraform Engine
     config, `continuous_deployment_enabled` will be set to `true` in
-    `terraform.tfvars` in this directory to create an additional Cloud Build
+    [terraform.tfvars](./terraform.tfvars) to create an additional Cloud Build
     Trigger and grant the Cloud Build Service Account broder permissions. So
     after the Pull Request is approved and submitted, this postsubmit deployment
     job can automatically apply the config changes to GCP.
 
     After the triggers are created, to temporarily disable or re-enable them,
-    set the `trigger_enabled` in `terraform.tfvars` to `false` or `true` and
-    apply the changes by running:
+    set the `trigger_enabled` in [terraform.tfvars](./terraform.tfvars) to
+    `false` or `true` and apply the changes by running:
 
     ```shell
     terraform init
