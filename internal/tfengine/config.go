@@ -73,11 +73,10 @@ func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	type jsonRepr struct {
+	var jr struct {
 		Value map[string]interface{}
 	}
 
-	var jr jsonRepr
 	if err := json.Unmarshal(b, &jr); err != nil {
 		return nil, err
 	}
