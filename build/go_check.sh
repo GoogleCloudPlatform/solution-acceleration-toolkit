@@ -26,6 +26,19 @@ if [[ "${f}" ]]; then
   exit 1
 fi
 
+# Check dependencies up-to-date
+go mod download
+outdated=$(go get -u ./... 2>&1)
+if ! git diff-index --quiet HEAD; then
+  cat <<EOF
+The following dependencies are out of date:
+${outdated}
+
+Please run 'go get -u ./...' locally and commit the changes.
+EOF
+  exit 1
+fi
+
 go mod tidy
 go vet ./...
 go build ./...
