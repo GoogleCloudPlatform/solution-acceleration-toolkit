@@ -15,12 +15,16 @@
 package template
 
 import (
+	"fmt"
 	"strings"
+
+	"github.com/rodaine/hclencoder"
 )
 
 var funcMap = map[string]interface{}{
 	"get":          get,
 	"has":          has,
+	"hclField":     hclField,
 	"enabled":      enabled,
 	"resourceName": resourceName,
 }
@@ -56,6 +60,23 @@ func get(m map[string]interface{}, key string, def ...interface{}) interface{} {
 // (e.g. L1.L2 will lookup key L1 in the top level map then L2 within the value.)
 func has(m map[string]interface{}, key string) bool {
 	return get(m, key) != nil
+}
+
+// hclField returns a hcl marshaled field e.g. `name = "foo"`
+func hclField(m map[string]interface{}, key string, req bool) (string, error) {
+	v, ok := m[key]
+	switch {
+	case ok:
+		b, err := hclencoder.Encode(v)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("%s = %s", key, string(b)), nil
+	case req:
+		return "", fmt.Errorf("required field missing: %v", key)
+	default:
+		return "", nil
+	}
 }
 
 // enabled is a helper to cleanly check if a key is set and its value is set to false.
