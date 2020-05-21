@@ -32,9 +32,13 @@ var (
 // Defines all supported resource importers
 // TODO: Add more resources
 var importers = map[string]resourceImporter{
-	"random_id":                              &importer.RandomID{},
-	"google_storage_bucket":                  &importer.StorageBucket{},
-	"google_container_cluster":               &importer.GKECluster{},
+	"random_id":                &importer.RandomID{},
+	"google_storage_bucket":    &importer.StorageBucket{},
+	"google_container_cluster": &importer.GKECluster{},
+	"google_container_node_pool": &importer.SimpleImporter{
+		Fields: []string{"project", "location", "cluster", "name"},
+		Tmpl:   "{{.project}}/{{.location}}/{{.cluster}}/{{.name}}",
+	},
 	"google_organization_policy":             &importer.OrgPolicy{},
 	"google_organization_iam_member":         &importer.OrgIAMMember{},
 	"google_organization_iam_audit_config":   &importer.OrgIAMAuditConfig{},
