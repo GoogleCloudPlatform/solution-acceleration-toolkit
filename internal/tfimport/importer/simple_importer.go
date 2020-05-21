@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"os"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
@@ -30,38 +29,25 @@ type SimpleImporter struct {
 	Tmpl   string
 }
 
-func loadFields(fields []string, fieldsMap map[string]string, interactive bool, configValues ...ProviderConfigMap) error {
-	var missingFields []string
+func loadFields(fields []string, fieldsMap map[string]string, maps ...ProviderConfigMap) error {
 	for _, field := range fields {
-		val, err := fromConfigValues(field, configValues...)
-		// If interactive is set, try to get the field interactively.
-		if err != nil && interactive {
-			prompt := fmt.Sprintf("Please enter the exact value for %v", field)
-			val, err = fromUser(os.Stdin, field, prompt)
-		}
-
-		// If err is still not nil, then user didn't provide value, treat this as a missing field.
+		val, err := fromConfigValues(field, maps...)
 		if err != nil {
-			missingFields = append(missingFields, field)
+			return err
 		}
 
 		// A bit safer to use the printf string conversion than the type assertion (i.e. val.(string)).
 		fieldsMap[field] = fmt.Sprintf("%s", val)
 	}
-
-	if len(missingFields) > 0 {
-		return &InsufficientInfoErr{missingFields, ""}
-	}
-
 	return nil
 }
 
 // ImportID returns the ID of the resource to use in importing.
-func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
+func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
 	fieldsMap := make(map[string]string)
 
 	// Get required fields.
-	err := loadFields(i.Fields, fieldsMap, interactive, rc.Change.After, pcv)
+	err := loadFields(i.Fields, fieldsMap, rc.Change.After, pcv)
 	if err != nil {
 		return "", err
 	}
