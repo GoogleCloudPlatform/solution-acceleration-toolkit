@@ -48,6 +48,7 @@ type templateInfo struct {
 	Data    map[string]interface{} `json:"data,omitempty"`
 }
 
+// Init initializes and validates the config.
 func (c *Config) Init() error {
 	var err error
 	if c.DataCty != nil {
