@@ -13,22 +13,17 @@
 # limitations under the License.
 
 templates:
-- name: "dir"
-  output_path: "./folder.{{.DISPLAY_NAME}}"
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
-  output_ref: "dir"
-  output_path: "./folder"
+- component_path: "../../components/terragrunt/leaf"
+  output_path: "{{.display_name}}/folder"
   data:
-    DEPS:
-    - NAME: "parent_folder"
-      PATH: "../../folder"
-      MOCK_OUTPUTS:
+    deps:
+    - name: "parent_folder"
+      path: "../../folder"
+      mock_outputs:
         name: '"mock-folder"'
-    INPUTS:
+    inputs:
       parent: "dependency.parent_folder.outputs.name"
-- name: "folder"
-  component_path: "../../components/folder/folder"
-  output_ref: "terragrunt"
+- component_path: "../../components/folder/folder"
+  output_path: "{{.display_name}}/folder"
   data:
-    DISPLAY_NAME: {{.DISPLAY_NAME}}
+    display_name: {{.display_name}}

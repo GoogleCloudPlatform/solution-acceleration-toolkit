@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-display_name = "{{.DISPLAY_NAME}}"
-{{- if index . "PARENT"}}
-parent       = "{{.PARENT}}"
+display_name = "{{.display_name}}"
+{{- if index . "parent"}}
+parent       = "{{.parent}}"
 {{- end}}

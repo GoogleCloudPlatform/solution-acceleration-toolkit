@@ -100,7 +100,7 @@ var argsWant = []string{testTerraformPath, "import", testAddress, testImportID}
 
 type testImporter struct{}
 
-func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfigMap) (string, error) {
+func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfigMap, bool) (string, error) {
 	return testImportID, nil
 }
 
@@ -130,7 +130,7 @@ func TestImportArgs(t *testing.T) {
 		output: []byte(wantOutput),
 	}
 
-	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath)
+	gotOutput, err := Import(trn, testResource, testInputDir, testTerraformPath, true)
 
 	if err != nil {
 		t.Errorf("TestImport(%v, %v, %v) %v", trn, testResource, testInputDir, err)

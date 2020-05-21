@@ -17,33 +17,37 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 8.0.0"
 
-  name                    = "{{.PROJECT_ID}}"
+  name                    = "{{.project_id}}"
   org_id                  = var.org_id
   folder_id               = var.folder_id
   billing_account         = var.billing_account
-  lien                    = {{get . "ENABLE_LIEN" true}}
+  lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
 
-  {{- if has . "SHARED_VPC"}}
-  {{- $host := .SHARED_VPC.HOST_PROJECT_ID}}
+  {{- if has . "shared_vpc_attachment"}}
+  {{- $host := .shared_vpc_attachment.host_project_id}}
   shared_vpc              = "{{$host}}"
 
-  {{- if has .SHARED_VPC "SUBNETS"}}
   shared_vpc_subnets = [
-    {{- range get . "SHARED_VPC.SUBNETS"}}
-    {{- $region := get . "REGION" $.COMPUTE_NETWORK_REGION}}
-    "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.NAME}}",
+    {{- range get . "shared_vpc_attachment.subnets"}}
+    {{- $region := get . "region" $.compute_network_region}}
+    "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
   ]
-  {{- end}} {{/* shared VPC subnets */}}
-  {{- end}} {{/* shared VPC */}}
+  {{- end}}
 
-  {{- if has . "APIS"}}
+  {{- if has . "apis"}}
   activate_apis = [
-    {{- range .APIS}}
+    {{- range .apis}}
     "{{.}}",
     {{- end}}
   ]
   {{- end}}
 }
+
+{{if get . "is_shared_vpc_host" -}}
+resource "google_compute_shared_vpc_host_project" "host" {
+  project = module.project.project_id
+}
+{{- end}}

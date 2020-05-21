@@ -13,42 +13,34 @@
 # limitations under the License.
 
 templates:
-- name: "base"
-  recipe_path: "./base.yaml"
+- recipe_path: "./base.yaml"
   flatten:
-  - key: "DEVOPS"
-- name: "live_dir"
-  output_path: "./live"
-{{if has . "AUDIT"}}
-- name: "audit"
-  recipe_path: "./audit.yaml"
-  output_ref: "live_dir"
-  flatten:
-  - key: "AUDIT"
-{{end}}
-{{if has . "MONITOR"}}
-- name: "monitor"
-  recipe_path: "./monitor.yaml"
-  output_ref: "live_dir"
-  flatten:
-  - key: "MONITOR"
-{{end}}
-{{if has . "ORG_POLICIES"}}
-- name: "org_policies"
-  recipe_path: "./org_policies.yaml"
+  - key: "devops"
+{{if has . "audit"}}
+- recipe_path: "./audit.yaml"
   output_path: "./live"
   flatten:
-  - key: "ORG_POLICIES"
+  - key: "audit"
 {{end}}
-{{if has . "CICD"}}
-- name: "cicd"
-  component_path: "../../components/cicd/manual"
+{{if has . "monitor"}}
+- recipe_path: "./monitor.yaml"
+  output_path: "./live"
+  flatten:
+  - key: "monitor"
+{{end}}
+{{if has . "org_policies"}}
+- recipe_path: "./org_policies.yaml"
+  output_path: "./live"
+  flatten:
+  - key: "org_policies"
+{{end}}
+{{if has . "cicd"}}
+- component_path: "../../components/cicd/manual"
   output_path: "./cicd"
   flatten:
-  - key: "CICD"
-- name: "cicd"
-  component_path: "../../components/cicd/auto"
+  - key: "cicd"
+- component_path: "../../components/cicd/auto"
   output_path: "./live/cicd"
   flatten:
-  - key: "CICD"
+  - key: "cicd"
 {{end}}

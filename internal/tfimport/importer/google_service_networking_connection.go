@@ -25,7 +25,7 @@ import (
 type ServiceNetworkingConnection struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (b *ServiceNetworkingConnection) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap) (string, error) {
+func (b *ServiceNetworkingConnection) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	vnetwork, err := fromConfigValues("network", rc.Change.After, pcv)
 	if err != nil {
 		return "", err

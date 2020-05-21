@@ -19,7 +19,7 @@ metadata:
 spec:
   severity: high
   match:
-    target: ["organization/{{.ORG_ID}}"]
+    target: ["organization/{{.org_id}}"]
   parameters:
     mode: allowlist
     # https://cloud.google.com/storage/docs/locations

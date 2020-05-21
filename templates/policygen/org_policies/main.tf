@@ -16,15 +16,15 @@ limitations under the License. */ -}}
 # (https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
 # See the following resources for the details of policies enforced.
 
-{{- $type_field := printf "%s_id" .PARENT_TYPE}}
+{{- $type_field := printf "%s_id" .parent_type}}
 
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/appengine.disableCodeDownload"
   policy_type = "boolean"
@@ -36,8 +36,8 @@ module "orgpolicy_sql_restrict_authorized_networks" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/sql.restrictAuthorizedNetworks"
   policy_type = "boolean"
@@ -48,8 +48,8 @@ module "orgpolicy_sql_restrict_public_ip" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/sql.restrictPublicIp"
   policy_type = "boolean"
@@ -61,8 +61,8 @@ module "orgpolicy_compute_disable_nested_virtualization" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/compute.disableNestedVirtualization"
   policy_type = "boolean"
@@ -73,8 +73,8 @@ module "orgpolicy_compute_disable_serial_port_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/compute.disableSerialPortAccess"
   policy_type = "boolean"
@@ -85,8 +85,8 @@ module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint        = "constraints/compute.restrictSharedVpcHostProjects"
   policy_type       = "list"
@@ -98,8 +98,8 @@ module "orgpolicy_compute_skip_default_network_creation" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/compute.skipDefaultNetworkCreation"
   policy_type = "boolean"
@@ -110,8 +110,8 @@ module "orgpolicy_compute_trusted_image_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint        = "constraints/compute.trustedImageProjects"
   policy_type       = "list"
@@ -123,20 +123,34 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
-  constraint  = "constraints/compute.vmCanIpForward"
-  policy_type = "list"
-  enforce     = true # deny all
+  constraint        = "constraints/compute.vmCanIpForward"
+  policy_type       = "list"
+  allow             = var.allowed_ip_forwarding_vms
+  allow_list_length = length(var.allowed_ip_forwarding_vms)
+}
+
+module "orgpolicy_compute_vm_external_ip_access" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
+
+  constraint        = "constraints/compute.vmExternalIpAccess"
+  policy_type       = "list"
+  allow             = var.allowed_public_vms
+  allow_list_length = length(var.allowed_public_vms)
 }
 
 module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
   policy_type = "boolean"
@@ -153,8 +167,8 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
   policy_type       = "list"
@@ -167,8 +181,8 @@ module "orgpolicy_gcp_resource_locations" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
   constraint        = "constraints/gcp.resourceLocations"
   policy_type       = "list"
@@ -181,10 +195,10 @@ module "orgpolicy_storage_uniform_bucket_level_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "{{.PARENT_TYPE}}"
-  {{$type_field}} = "{{.PARENT_ID}}"
+  policy_for = "{{.parent_type}}"
+  {{$type_field}} = "{{.parent_id}}"
 
-  constraint  = "storage.uniformBucketLevelAccess"
+  constraint  = "constraints/storage.uniformBucketLevelAccess"
   policy_type = "boolean"
   enforce     = true
 }

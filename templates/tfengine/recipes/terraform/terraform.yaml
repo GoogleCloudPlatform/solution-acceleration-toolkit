@@ -13,13 +13,10 @@
 # limitations under the License.
 
 templates:
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
-{{if get . "VARS"}}
-- name: "vars"
-  component_path: "../../components/terraform/variables"
+- component_path: "../../components/terragrunt/leaf"
+{{if get . "vars"}}
+- component_path: "../../components/terraform/variables"
 {{end}}
-{{if get . "OUTPUTS"}}
-- name: "outputs"
-  component_path: "../../components/terraform/outputs"
+{{if get . "outputs"}}
+- component_path: "../../components/terraform/outputs"
 {{end}}

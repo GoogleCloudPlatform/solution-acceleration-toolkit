@@ -13,17 +13,14 @@
 # limitations under the License.
 
 templates:
-- name: "dir"
-  output_path: "audit"
-- name: "project"
-  recipe_path: "./project.yaml"
-  output_ref: "dir"
+- recipe_path: "./project.yaml"
+  output_path: "./audit"
   data:
-    OUTPUT_PATH: ""
-    APIS:
-    - "bigquery.googleapis.com"
-    - "logging.googleapis.com"
-- name: "audit"
-  component_path: "../../components/org/audit"
-  output_ref: "dir"
-  output_path: "./resources"
+    output_path: "."
+    project:
+      project_id: "{{.project_id}}"
+      apis:
+      - "bigquery.googleapis.com"
+      - "logging.googleapis.com"
+- component_path: "../../components/org/audit"
+  output_path: "./audit/resources"

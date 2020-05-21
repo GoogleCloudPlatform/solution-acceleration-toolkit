@@ -47,8 +47,13 @@ differences between the configs and the actual infrastructure.
 ```shell
 $ tfimport -h
 Usage:
+  -dry_run
+     Run in dry-run mode, which only prints the import commands without running them.
   -input_dir string
-     Path to the directory containing Terraform config. (default ".")
+     Path to the directory containing Terraform configs. (default ".")
+  -interactive
+     Interactively ask for user input when import information cannot be
+     automatically determined. (default true)
   -terraform_path string
      Name or path to the terraform binary to use.
      This could be i.e. 'terragrunt' or a path to
@@ -66,6 +71,7 @@ Terraform configs, including importing resources from within modules.
 
 ## Supported Resources
 
+- [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
 - [google_container_cluster](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
 - [google_organization_policy](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)
@@ -88,6 +94,13 @@ Terraform configs, including importing resources from within modules.
 - [google_compute_subnetwork_iam_policy](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
 - [google_compute_subnetwork_iam_binding](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
 - [google_compute_subnetwork_iam_member](https://www.terraform.io/docs/providers/google/r/compute_subnetwork_iam.html)
+- [google_binary_authorization_policy](https://www.terraform.io/docs/providers/google/r/binary_authorization_policy.html)
+- [google_compute_firewall](https://www.terraform.io/docs/providers/google/r/compute_firewall.html)
+- [google_compute_global_address](https://www.terraform.io/docs/providers/google/r/compute_global_address.html)
+- [google_compute_image](https://www.terraform.io/docs/providers/google/r/compute_image.html)
+- [google_compute_instance](https://www.terraform.io/docs/providers/google/r/compute_instance.html)
+- [google_compute_shared_vpc_host_project](https://www.terraform.io/docs/providers/google/r/compute_shared_vpc_host_project.html)
+- [google_compute_shared_vpc_service_project](https://www.terraform.io/docs/providers/google/r/compute_shared_vpc_service_project.html)
 - [google_dns_managed_zone](https://www.terraform.io/docs/providers/google/r/dns_managed_zone.html)
 - [google_dns_record_set](https://www.terraform.io/docs/providers/google/r/dns_record_set.html)
 - [google_firebase_project](https://www.terraform.io/docs/providers/google/r/firebase_project.html)

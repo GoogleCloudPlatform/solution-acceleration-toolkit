@@ -36,40 +36,18 @@ properties:
       additionalProperties: false
       properties:
         name:
-          description: Name of the template. Can be referred to by 'output_ref'.
+          description: Name of the template.
           type: string
 
         recipe_path:
           description: Path to a recipe YAML config. Mutually exclusive with 'component_path'.
           type: string
 
-        output_ref:
-          description: |
-            Every template outputs to a specific directory. This field allows
-            a template to write its contents to the same output dir as another
-            template without having to manually specify the same path.
-
-            Example:
-              If output_ref is set to 'foo.bar' then this will look for sibling
-              template named 'foo' (defined previously in this list) and a child
-              template inside 'foo' named 'bar'. It will then write its contents
-              to the same path as 'bar'.
-          type: string
-
         output_path:
           description: |
             Relative path for this template to write its contents.
-            Most users should prefer to use 'output_ref' if possible.
-            The final output path of this template is a join of the following:
-              - The base output path defined by the --output_path flag.
-              - The output ref to another template, if set.
-              - The output path defined by this field.
-
-            Example:
-              - Flag --output_path = /tmp/engine
-              - Field 'output_ref' evaluates to './foo'
-              - This field is set to './bar'
-              - The final output path for this template is: '/tmp/engine/foo/bar'.
+            This value will be joined with the value passed in by the flag at
+            --output_path.
           type: string
 
         data:

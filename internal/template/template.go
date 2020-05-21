@@ -27,6 +27,12 @@ import (
 	"github.com/imdario/mergo"
 )
 
+var mergoOpts = []func(*mergo.Config){
+	mergo.WithOverride,
+	mergo.WithOverwriteWithEmptyValue,
+	mergo.WithAppendSlice,
+}
+
 // FlattenInfo describes keys to flatten. If index is not a nil pointer then it is assumed the
 // value is a list that must be flattened at the specific index.
 type FlattenInfo struct {
@@ -101,7 +107,7 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}, flatten [
 	if dst == nil {
 		return errors.New("dst must not be nil")
 	}
-	if err := mergo.Merge(&dst, src, mergo.WithOverride, mergo.WithOverwriteWithEmptyValue); err != nil {
+	if err := mergo.Merge(&dst, src, mergoOpts...); err != nil {
 		return err
 	}
 	for _, fi := range flatten {
@@ -124,7 +130,7 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}, flatten [
 		if !ok {
 			return fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
 		}
-		if err := mergo.Merge(&dst, m); err != nil {
+		if err := mergo.Merge(&dst, m, mergoOpts...); err != nil {
 			return err
 		}
 	}

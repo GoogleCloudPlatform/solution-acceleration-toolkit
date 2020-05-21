@@ -12,32 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- name: "dir"
-  {{if has . "OUTPUT_PATH"}}
-  output_path: "{{.OUTPUT_PATH}}"
-  {{else}}
-  output_path: "./project.{{.PROJECT_ID}}"
-  {{end}}
-- name: "terragrunt"
-  component_path: "../../components/terragrunt/leaf"
-  output_ref: "dir"
-  output_path: "./project"
-- name: "project"
-  component_path: "../../components/project/project"
-  output_ref: "terragrunt"
+{{$output_path := get . "output_path" .project.project_id}}
 
-{{if has . "RESOURCES"}}
-- name: "resources"
-  recipe_path: "../project/resources.yaml"
-  output_ref: "dir"
-  output_path: "./resources"
+templates:
+- recipe_path: "../terraform/terraform.yaml"
+  output_path: "{{$output_path}}/project"
+  {{if has . "project.terraform_addons"}}
   flatten:
-  - key: "RESOURCES"
+  - key: "project"
+  - key: "terraform_addons"
+  {{end}}
+- component_path: "../../components/project/project"
+  output_path: "{{$output_path}}/project"
+  flatten:
+  - key: "project"
+
+{{if has . "resources"}}
+- recipe_path: "../project/resources.yaml"
+  output_path: "{{$output_path}}/resources"
+  flatten:
+  - key: "resources"
 {{end}}
 
-{{if index . "PROJECT_OWNERS"}}
-- name: "owners"
-  component_path: "../../components/project/owners"
-  output_ref: "dir"
+{{if index . "project_owners"}}
+- component_path: "../../components/project/owners"
+  output_path: "{{$output_path}}/project"
 {{end}}

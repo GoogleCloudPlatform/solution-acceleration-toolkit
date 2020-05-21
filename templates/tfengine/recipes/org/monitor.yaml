@@ -13,14 +13,11 @@
 # limitations under the License.
 
 templates:
-- name: "dir"
-  output_path: "monitor"
-- name: "project"
-  recipe_path: "./project.yaml"
-  output_ref: "dir"
+- recipe_path: "./project.yaml"
+  output_path: "./monitor"
   data:
-    OUTPUT_PATH: ""
-- name: "forseti"
-  component_path: "../../components/org/monitor/forseti"
-  output_ref: "dir"
-  output_path: "./forseti"
+    output_path: "."
+    project:
+      project_id: "{{.project_id}}"
+- component_path: "../../components/org/monitor/forseti"
+  output_path: "./monitor/forseti"
