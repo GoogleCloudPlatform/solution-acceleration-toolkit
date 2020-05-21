@@ -15,10 +15,17 @@
 package tfengine
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/ghodss/yaml"
 	"github.com/hashicorp/hcl/v2/hclsimple"
+	"github.com/zclconf/go-cty/cty"
+	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
@@ -31,34 +38,57 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 
-	// tmp, err := ioutil.TempFile("", fmt.Sprintf("*.%s", filepath.Ext(path)))
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// cj, err := yaml.YAMLToJSON(buf.Bytes())
-	// if err != nil {
-	// 	return nil, fmt.Errorf("convert config to JSON: %v", err)
-	// }
-
-	// sj, err := yaml.YAMLToJSON([]byte(schema))
-	// if err != nil {
-	// 	return nil, fmt.Errorf("convert schema to JSON: %v", err)
-	// }
-
-	// if err := jsonschema.Validate(sj, cj); err != nil {
-	// 	return nil, err
-	// }
+	// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/86): remove this.
+	cj := buf.Bytes()
+	if filepath.Ext(path) == ".yaml" {
+		cj, err = yaml.YAMLToJSON(cj)
+		if err != nil {
+			return nil, err
+		}
+		path = "file.json"
+	}
 
 	c := new(Config)
-	if err := hclsimple.Decode(path, buf.Bytes(), nil, c); err != nil {
+	if err := hclsimple.Decode(path, cj, nil, c); err != nil {
 		return nil, err
 	}
-	// if err := json.Unmarshal(cj, c); err != nil {
-	// 	return nil, err
-	// }
 	if err := c.Init(); err != nil {
 		return nil, err
 	}
+	if err := validate(c); err != nil {
+		return nil, err
+	}
 	return c, nil
+}
+
+func validate(c *Config) error {
+	sj, err := yaml.YAMLToJSON([]byte(schema))
+	if err != nil {
+		return fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	cj, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+
+	return jsonschema.Validate(sj, cj)
+}
+
+func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
+	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
+	if err != nil {
+		return nil, err
+	}
+
+	type jsonRepr struct {
+		Value map[string]interface{}
+	}
+
+	var jr jsonRepr
+	if err := json.Unmarshal(b, &jr); err != nil {
+		return nil, err
+	}
+
+	return jr.Value, nil
 }
