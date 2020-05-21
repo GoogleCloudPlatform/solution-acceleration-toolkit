@@ -24,45 +24,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
-	"github.com/zclconf/go-cty/cty"
 )
-
-// Config is the user supplied config for the engine.
-type Config struct {
-	DataCty   *cty.Value             `hcl:"data,optional" json:"-"`
-	Data      map[string]interface{} `json:"data,omitempty"`
-	Templates []*templateInfo        `hcl:"templates,block" json:"templates,omitempty"`
-}
-
-type templateInfo struct {
-	ComponentPath string                  `hcl:"component_path,optional" json:"component_path,omitempty"`
-	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
-	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`
-	Flatten       []*template.FlattenInfo `hcl:"flatten,block" json:"flatten,omitempty"`
-	DataCty       *cty.Value              `hcl:"data,optional" json:"-"`
-	Data          map[string]interface{}  `json:"data,omitempty"`
-}
-
-func (c *Config) Init() error {
-	var err error
-	if c.DataCty != nil {
-		c.Data, err = ctyValueToMap(c.DataCty)
-		if err != nil {
-			return err
-		}
-	}
-
-	for _, t := range c.Templates {
-		if t.DataCty == nil {
-			continue
-		}
-		t.Data, err = ctyValueToMap(t.DataCty)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
 
 func Run(confPath, outPath string) error {
 	var err error

@@ -3,7 +3,6 @@ module github.com/GoogleCloudPlatform/healthcare-data-protection-suite
 go 1.14
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.4.1
 	github.com/hashicorp/hcl/v2 v2.5.1

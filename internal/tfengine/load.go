@@ -24,8 +24,6 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/ghodss/yaml"
 	"github.com/hashicorp/hcl/v2/hclsimple"
-	"github.com/zclconf/go-cty/cty"
-	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
@@ -73,22 +71,4 @@ func validate(c *Config) error {
 	}
 
 	return jsonschema.Validate(sj, cj)
-}
-
-func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
-	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
-	if err != nil {
-		return nil, err
-	}
-
-	type jsonRepr struct {
-		Value map[string]interface{}
-	}
-
-	var jr jsonRepr
-	if err := json.Unmarshal(b, &jr); err != nil {
-		return nil, err
-	}
-
-	return jr.Value, nil
 }
