@@ -18,9 +18,6 @@ set -e
 # Print versions
 go version
 
-pwd
-ls -lah .
-
 # Check format
 f=$(gofmt -l .)
 if [[ "${f}" ]]; then
