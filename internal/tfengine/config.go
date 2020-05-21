@@ -112,7 +112,7 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 
-	// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/86): deprecate yaml.
+	// Convert yaml to json so hcl decoder can parse it.
 	cj := buf.Bytes()
 	if filepath.Ext(path) == ".yaml" {
 		cj, err = yaml.YAMLToJSON(cj)
