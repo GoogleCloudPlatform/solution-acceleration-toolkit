@@ -74,6 +74,7 @@ Terraform configs, including importing resources from within modules.
 - [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
 - [google_storage_bucket](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
 - [google_container_cluster](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
+- [google_container_node_pool](https://www.terraform.io/docs/providers/google/r/container_node_pool.html)
 - [google_organization_policy](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)
 - [google_organization_iam_member](https://www.terraform.io/docs/providers/google/r/google_organization_iam_member.html)
 - [google_organization_iam_audit_config](https://www.terraform.io/docs/providers/google/r/google_organization_iam_audit_config.html)
