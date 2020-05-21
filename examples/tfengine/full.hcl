@@ -98,7 +98,7 @@ templates {
 
 # Prod folder for team 1.
 templates {
-- recipe_path = "{{$base}}/folder/folder.yaml"
+  recipe_path = "{{$base}}/folder/folder.yaml"
   output_path = "./live/prod"
   data = {
     display_name: "team1"
