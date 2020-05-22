@@ -12,29 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$output_path := get . "output_path" .project.project_id}}
-
-templates:
-- recipe_path: "../terraform/terraform.yaml"
-  output_path: "{{$output_path}}/project"
+templates {
+  recipe_path = "../terraform/terraform.hcl"
+  output_path = "{{.project.project_id}}/project"
   {{if has . "project.terraform_addons"}}
-  flatten:
-  - key: "project"
-  - key: "terraform_addons"
+  flatten {
+    key = "project"
+  }
+  flatten {
+    key = "terraform_addons"
+  }
   {{end}}
-- component_path: "../../components/project/project"
-  output_path: "{{$output_path}}/project"
-  flatten:
-  - key: "project"
+}
+
+templates {
+  component_path = "../../components/project/project"
+  output_path    = "{{.project.project_id}}/project"
+  flatten = {
+    key = "project"
+  }
+}
 
 {{if has . "resources"}}
-- recipe_path: "../project/resources.yaml"
-  output_path: "{{$output_path}}/resources"
-  flatten:
-  - key: "resources"
+templates {
+  recipe_path = "../project/resources.hcl"
+  output_path = "./{{.project.project_id}}/resources"
+  flatten {
+    key = "resources"
+  }
+}
 {{end}}
 
 {{if index . "project_owners"}}
-- component_path: "../../components/project/owners"
-  output_path: "{{$output_path}}/project"
+templates {
+  component_path = "../../components/project/owners"
+  output_path    = "{{.project.project_id}}/project"
+}
 {{end}}

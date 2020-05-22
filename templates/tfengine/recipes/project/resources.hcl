@@ -12,32 +12,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- recipe_path: "../terraform/terraform.yaml"
-  data:
-    vars:
-    - name: "project_id"
-      type: "string"
-    deps:
-    - name: "project"
-      path: "../project"
-      mock_outputs:
-        project_id: '"mock-project"'
-    inputs:
-      project_id: "dependency.project.outputs.project_id"
+templates {
+  recipe_path= "../terraform/terraform.hcl"
+  data = {
+    vars = [{
+      name =  "project_id"
+      type = "string"
+    }]
+    deps = [{
+      name = "project"
+      path = "../project"
+      mock_outputs = {
+        project_id = "\"mock-project\""
+      }
+    }]
+    inputs = {
+      project_id = "dependency.project.outputs.project_id"
+    }
+  }
+}
 
 {{if has . "compute_networks"}}
-- component_path: "../../components/project/compute_networks"
+templates {
+  component_path = "../../components/project/compute_networks"
+}
 {{end}}
 
 {{if has . "storage_buckets"}}
-- component_path: "../../components/project/storage_buckets"
+templates {
+  component_path = "../../components/project/storage_buckets"
+}
 {{end}}
 
 {{if has . "gke_clusters"}}
-- component_path: "../../components/project/gke_clusters"
+templates {
+  component_path = "../../components/project/gke_clusters"
+}
 {{end}}
 
 {{if has . "service_accounts"}}
-- component_path: "../../components/project/service_accounts"
+templates {
+  component_path = "../../components/project/service_accounts"
+}
 {{end}}

@@ -12,11 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- component_path: "../../components/folder/folder"
-  output_path: "{{.display_name}}/folder"
-  data:
-    display_name: "{{.display_name}}"
-    parent: "organizations/{{.org_id}}"
-- component_path: "../../components/terragrunt/leaf"
-  output_path: "{{.display_name}}/folder"
+templates {
+  component_path = "../../components/terragrunt/leaf"
+  output_path    = "{{.display_name}}/folder"
+  data = {
+    deps = [{
+      name = "parent_folder"
+      path = "../../folder"
+      mock_outputs = {
+        name = "\"mock-folder\""
+      }
+    }]
+    inputs = {
+      parent = "dependency.parent_folder.outputs.name"
+    }
+  }
+}
+
+templates {
+  component_path = "../../components/folder/folder"
+  output_path    = "{{.display_name}}/folder"
+  data = {
+    display_name = {{.display_name}}
+  }
+}

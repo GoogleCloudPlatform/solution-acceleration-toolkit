@@ -46,7 +46,7 @@ data:
 
 templates:
 # Foundation for the org.
-- recipe_path: "{{$base}}/org/foundation.yaml"
+- recipe_path: "{{$base}}/org/foundation.hcl"
   data:
     devops:
       project_id: "example-devops"
@@ -79,19 +79,19 @@ templates:
       - "sqladmin.googleapis.com"
 
 # Top level prod folder.
-- recipe_path: "{{$base}}/org/folder.yaml"
+- recipe_path: "{{$base}}/org/folder.hcl"
   output_path: "./live"
   data:
     display_name: "prod"
 
 # Prod folder for team 1.
-- recipe_path: "{{$base}}/folder/folder.yaml"
+- recipe_path: "{{$base}}/folder/folder.hcl"
   output_path: "./live/prod"
   data:
     display_name: "team1"
 
 # Prod central networks project for team 1.
-- recipe_path: "{{$base}}/folder/project.yaml"
+- recipe_path: "{{$base}}/folder/project.hcl"
   output_path: "./live/prod/team1"
   data:
     project:
@@ -108,7 +108,7 @@ templates:
             ip_range: "192.168.10.0/24"
 
 # Prod central data project for team 1.
-- recipe_path: "{{$base}}/folder/project.yaml"
+- recipe_path: "{{$base}}/folder/project.hcl"
   output_path: "./live/prod/team1"
   data:
     project:
@@ -121,7 +121,7 @@ templates:
           member: "group:example-readers@example.com"
 
 # Prod central apps project for team 1.
-- recipe_path: "{{$base}}/folder/project.yaml"
+- recipe_path: "{{$base}}/folder/project.hcl"
   output_path: "./live/prod/team1"
   data:
     project:

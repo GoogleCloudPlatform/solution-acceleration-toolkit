@@ -41,7 +41,7 @@ data:
 
 templates:
 # Foundation for the org.
-- recipe_path: "{{$base}}/org/foundation.yaml"
+- recipe_path: "{{$base}}/org/foundation.hcl"
   data:
     devops:
       project_id: "example-devops"
