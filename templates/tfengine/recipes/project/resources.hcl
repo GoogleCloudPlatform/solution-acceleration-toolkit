@@ -13,7 +13,7 @@
 # limitations under the License.
 
 templates {
-  recipe_path= "../terraform/terraform.hcl"
+  recipe_path = "../terraform/terraform.hcl"
   data = {
     vars = [{
       name =  "project_id"
