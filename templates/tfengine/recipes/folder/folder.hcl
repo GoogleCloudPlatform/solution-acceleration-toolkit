@@ -33,6 +33,6 @@ templates {
   component_path = "../../components/folder/folder"
   output_path    = "{{.display_name}}/folder"
   data = {
-    display_name = {{.display_name}}
+    display_name = "{{.display_name}}"
   }
 }

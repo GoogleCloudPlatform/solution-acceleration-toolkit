@@ -40,7 +40,7 @@ templates {
 templates {
   component_path = "../../components/project/project"
   output_path    = "{{.project.project_id}}/project"
-  flatten = {
+  flatten {
     key = "project"
   }
 }
