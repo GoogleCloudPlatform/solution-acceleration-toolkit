@@ -32,6 +32,10 @@ templates {
   }
 }
 
+{{if has . "bigquery_datasets"}}
+- component_path: "../../components/project/bigquery_datasets"
+{{end}}
+
 {{if has . "compute_networks"}}
 templates {
   component_path = "../../components/project/compute_networks"

@@ -53,23 +53,23 @@ func TestImportable(t *testing.T) {
 					},
 				},
 			}, nil,
-			&importer.StorageBucket{},
+			&importer.SimpleImporter{},
 		},
 
-		// GKE Cluster - should return resource with GKE clsuter importer
+		// GKE Cluster - should return resource with GKE cluster importer
 		{
 			terraform.ResourceChange{
-				Kind:    "google_container_cluster",
-				Address: "google_container_cluster.my_cluster",
+				Kind:    "google_sql_user",
+				Address: "google_sql_user.my_user",
 				Change: terraform.Change{
 					After: map[string]interface{}{
 						"project":  "project-from-resource",
-						"location": "us-east1",
-						"name":     "mybucket",
+						"instance": "instance-from-resource",
+						"name":     "name-from-instance",
 					},
 				},
 			}, nil,
-			&importer.GKECluster{},
+			&importer.SQLUser{},
 		},
 	}
 	for _, tc := range tests {

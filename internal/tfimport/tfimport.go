@@ -32,40 +32,200 @@ var (
 // Defines all supported resource importers
 // TODO: Add more resources
 var importers = map[string]resourceImporter{
-	"random_id":                              &importer.RandomID{},
-	"google_storage_bucket":                  &importer.StorageBucket{},
-	"google_container_cluster":               &importer.GKECluster{},
-	"google_organization_policy":             &importer.OrgPolicy{},
-	"google_organization_iam_member":         &importer.OrgIAMMember{},
-	"google_organization_iam_audit_config":   &importer.OrgIAMAuditConfig{},
-	"google_project":                         &importer.Project{},
-	"google_project_iam_binding":             &importer.ProjectIAMBinding{},
-	"google_project_iam_member":              &importer.ProjectIAMMember{},
-	"google_project_service":                 &importer.ProjectService{},
-	"google_service_account":                 &importer.ServiceAccount{},
-	"google_bigquery_table":                  &importer.BigQueryTable{},
-	"google_bigquery_dataset":                &importer.BigQueryDataset{},
-	"google_storage_bucket_iam_member":       &importer.StorageBucketIAMMember{},
-	"google_cloudbuild_trigger":              &importer.CloudBuildTrigger{},
-	"google_logging_organization_sink":       &importer.LoggingOrgSink{},
-	"google_compute_network":                 &importer.ComputeNetwork{},
-	"google_compute_subnetwork":              &importer.ComputeSubnetwork{},
-	"google_compute_router":                  &importer.ComputeRouter{},
-	"google_compute_router_nat":              &importer.ComputeRouterNat{},
-	"google_pubsub_topic":                    &importer.PubSubTopic{},
-	"google_pubsub_subscription":             &importer.PubSubSubscription{},
-	"google_secret_manager_secret":           &importer.SecretManagerSecret{},
-	"google_secret_manager_secret_version":   &importer.SecretManagerSecretVersion{},
-	"google_service_account_iam_policy":      &importer.ServiceAccountIAMPolicy{},
-	"google_service_account_iam_binding":     &importer.ServiceAccountIAMBinding{},
-	"google_service_account_iam_member":      &importer.ServiceAccountIAMMember{},
-	"google_service_networking_connection":   &importer.ServiceNetworkingConnection{},
-	"google_sql_database":                    &importer.SQLDatabase{},
-	"google_sql_database_instance":           &importer.SQLDatabaseInstance{},
-	"google_sql_user":                        &importer.SQLUser{},
-	"google_iap_tunnel_instance_iam_policy":  &importer.IAPTunnerInstanceIAMPolicy{},
-	"google_iap_tunnel_instance_iam_binding": &importer.IAPTunnerInstanceIAMBinding{},
-	"google_iap_tunnel_instance_iam_member":  &importer.IAPTunnerInstanceIAMMember{},
+	"random_id": &importer.RandomID{},
+	"google_storage_bucket": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "{{.project}}/{{.name}}",
+	},
+	"google_container_cluster": &importer.SimpleImporter{
+		Fields: []string{"project", "location", "name"},
+		Tmpl:   "projects/{{.project}}/locations/{{.location}}/clusters/{{.name}}",
+	},
+	"google_organization_policy": &importer.SimpleImporter{
+		Fields: []string{"org_id", "constraint"},
+		Tmpl:   "{{.org_id}}/{{.constraint}}",
+	},
+	"google_organization_iam_member": &importer.SimpleImporter{
+		Fields: []string{"org_id", "role", "member"},
+		Tmpl:   "{{.org_id}} {{.role}} {{.member}}",
+	},
+	"google_organization_iam_audit_config": &importer.SimpleImporter{
+		Fields: []string{"org_id", "service"},
+		Tmpl:   "{{.org_id}} {{.service}}",
+	},
+	"google_project": &importer.SimpleImporter{
+		Fields: []string{"project_id"},
+		Tmpl:   "{{.project_id}}",
+	},
+	"google_project_iam_binding": &importer.SimpleImporter{
+		Fields: []string{"project", "role"},
+		Tmpl:   "{{.project}} {{.role}}",
+	},
+	"google_project_iam_member": &importer.SimpleImporter{
+		Fields: []string{"project", "role", "member"},
+		Tmpl:   "{{.project}} {{.role}} {{.member}}",
+	},
+	"google_project_service": &importer.SimpleImporter{
+		Fields: []string{"project", "service"},
+		Tmpl:   "{{.project}}/{{.service}}",
+	},
+	"google_service_account": &importer.SimpleImporter{
+		Fields: []string{"project", "account_id"},
+		Tmpl:   "projects/{{.project}}/serviceAccounts/{{.account_id}}@{{.project}}.iam.gserviceaccount.com",
+	},
+	"google_bigquery_table": &importer.SimpleImporter{
+		Fields: []string{"project", "dataset_id", "table_id"},
+		Tmpl:   "{{.project}}/{{.dataset_id}}/{{.table_id}}",
+	},
+	"google_bigquery_dataset": &importer.SimpleImporter{
+		Fields: []string{"project", "dataset_id"},
+		Tmpl:   "projects/{{.project}}/datasets/{{.dataset_id}}",
+	},
+	"google_storage_bucket_iam_member": &importer.SimpleImporter{
+		Fields: []string{"bucket", "role", "member"},
+		Tmpl:   "{{.bucket}} {{.role}} {{.member}}",
+	},
+	"google_cloudbuild_trigger": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/triggers/{{.name}}",
+	},
+	"google_logging_organization_sink": &importer.SimpleImporter{
+		Fields: []string{"org_id", "name"},
+		Tmpl:   "organizations/{{.org_id}}/sinks/{{.name}}",
+	},
+	"google_compute_network": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/networks/{{.name}}",
+	},
+	"google_compute_subnetwork": &importer.SimpleImporter{
+		Fields: []string{"project", "region", "name"},
+		Tmpl:   "projects/{{.project}}/regions/{{.region}}/subnetworks/{{.name}}",
+	},
+	"google_compute_router": &importer.SimpleImporter{
+		Fields: []string{"project", "region", "name"},
+		Tmpl:   "projects/{{.project}}/regions/{{.region}}/routers/{{.name}}",
+	},
+	"google_compute_router_nat": &importer.SimpleImporter{
+		Fields: []string{"project", "region", "router", "name"},
+		Tmpl:   "projects/{{.project}}/regions/{{.region}}/routers/{{.router}}/{{.name}}",
+	},
+	"google_compute_subnetwork_iam_policy": &importer.SimpleImporter{
+		Fields: []string{"subnetwork"},
+		Tmpl:   "{{.subnetwork}}",
+	},
+	"google_compute_subnetwork_iam_binding": &importer.SimpleImporter{
+		Fields: []string{"subnetwork", "role"},
+		Tmpl:   "{{.subnetwork}} {{.role}}",
+	},
+	"google_compute_subnetwork_iam_member": &importer.SimpleImporter{
+		Fields: []string{"subnetwork", "role", "member"},
+		Tmpl:   "{{.subnetwork}} {{.role}} {{.member}}",
+	},
+	"google_dns_managed_zone": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/managedZones/{{.name}}",
+	},
+	"google_dns_record_set": &importer.SimpleImporter{
+		Fields: []string{"project", "managed_zone", "name", "type"},
+		Tmpl:   "{{.project}}/{{.managed_zone}}/{{.name}}/{{.type}}",
+	},
+	"google_firebase_project": &importer.SimpleImporter{
+		Fields: []string{"project"},
+		Tmpl:   "projects/{{.project}}",
+	},
+	"google_project_iam_custom_role": &importer.SimpleImporter{
+		Fields: []string{"project", "role_id"},
+		Tmpl:   "projects/{{.project}}/roles/{{.role_id}}",
+	},
+	"google_container_node_pool": &importer.SimpleImporter{
+		Fields: []string{"project", "location", "cluster", "name"},
+		Tmpl:   "{{.project}}/{{.location}}/{{.cluster}}/{{.name}}",
+	},
+	"google_pubsub_topic": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/topics/{{.name}}",
+	},
+	"google_pubsub_subscription": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/subscriptions/{{.name}}",
+	},
+	"google_secret_manager_secret": &importer.SimpleImporter{
+		Fields: []string{"project", "secret_id"},
+		Tmpl:   "projects/{{.project}}/secrets/{{.secret_id}}",
+	},
+	"google_secret_manager_secret_version": &importer.SimpleImporter{
+		// This field is the full path of the secret, including the project name.
+		Fields: []string{"secret"},
+		Tmpl:   "{{.secret}}/versions/latest",
+	},
+	"google_service_account_iam_policy": &importer.SimpleImporter{
+		// This already includes the project. It looks like this:
+		// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
+		Fields: []string{"service_account_id"},
+		Tmpl:   "{{.service_account_id}}",
+	},
+	"google_service_account_iam_binding": &importer.SimpleImporter{
+		// This already includes the project. It looks like this:
+		// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
+		Fields: []string{"service_account_id"},
+		Tmpl:   "{{.service_account_id}} roles/iam.serviceAccountUser",
+	},
+	"google_service_account_iam_member": &importer.SimpleImporter{
+		// The service_account_id already includes the project. It looks like this:
+		// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
+		Fields: []string{"service_account_id", "role", "member"},
+		Tmpl:   "{{.service_account_id}} {{.role}} {{.member}}",
+	},
+	"google_service_networking_connection": &importer.ServiceNetworkingConnection{},
+	"google_sql_database": &importer.SimpleImporter{
+		Fields: []string{"project", "instance", "name"},
+		Tmpl:   "projects/{{.project}}/instances/{{.instance}}/databases/{{.name}}",
+	},
+	"google_sql_database_instance": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/instances/{{.name}}",
+	},
+	"google_sql_user": &importer.SQLUser{},
+	"google_iap_tunnel_instance_iam_policy": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "instance"},
+		Tmpl:   "projects/{{.project}}/iap_tunnel/zones/{{.zone}}/instances/{{.instance}}",
+	},
+	"google_iap_tunnel_instance_iam_binding": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "instance", "role"},
+		Tmpl:   "projects/{{.project}}/iap_tunnel/zones/{{.zone}}/instances/{{.instance}} {{.role}}",
+	},
+	"google_iap_tunnel_instance_iam_member": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "instance", "role", "member"},
+		Tmpl:   "projects/{{.project}}/iap_tunnel/zones/{{.zone}}/instances/{{.instance}} {{.role}} {{.member}}",
+	},
+	"google_binary_authorization_policy": &importer.SimpleImporter{
+		Fields: []string{"project"},
+		Tmpl:   "projects/{{.project}}",
+	},
+	"google_compute_firewall": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/firewalls/{{.name}}",
+	},
+	"google_compute_global_address": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/addresses/{{.name}}",
+	},
+	"google_compute_image": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/images/{{.name}}",
+	},
+	"google_compute_instance_from_template": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "name"},
+		Tmpl:   "projects/{{.project}}/zones/{{.zone}}/instances/{{.name}}",
+	},
+	"google_compute_shared_vpc_host_project": &importer.SimpleImporter{
+		Fields: []string{"project"},
+		Tmpl:   "{{.project}}",
+	},
+	"google_compute_shared_vpc_service_project": &importer.SimpleImporter{
+		Fields: []string{"host_project", "service_project"},
+		Tmpl:   "{{.host_project}}/{{.service_project}}",
+	},
 }
 
 // Resource represents a resource and an importer that can import it.

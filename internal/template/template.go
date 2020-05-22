@@ -36,8 +36,8 @@ var mergoOpts = []func(*mergo.Config){
 // FlattenInfo describes keys to flatten. If index is not a nil pointer then it is assumed the
 // value is a list that must be flattened at the specific index.
 type FlattenInfo struct {
-	Key   string `json:"key"`
-	Index *int   `json:"index"`
+	Key   string `hcl:"key,attr" json:"key"`
+	Index *int   `hcl:"index,optional" json:"index,omitempty"`
 }
 
 // WriteDir generates files to directory `outputDir` based on templates from directory `inputDir` and `data`.
