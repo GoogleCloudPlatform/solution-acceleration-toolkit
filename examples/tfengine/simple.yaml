@@ -43,6 +43,8 @@ templates:
 # Foundation for the org.
 - recipe_path: "{{$base}}/org/foundation.yaml"
   data:
+    parent_type: "folder" # One of `organization` or `folder`
+    parent_id: "12345678"
     devops:
       project_id: "example-devops"
       state_bucket: "example-terraform-state"
@@ -57,12 +59,8 @@ templates:
     monitor:
       project_id: "example-monitor"
       domain: "example.com"
-    org_policies:
-      parent_type: "folder" # one of `organization`, `folder` or `project`
-      parent_id: "12345678"
+    org_policies: {}
     cicd:
-      parent_type: "folder" # one of `organization` or `folder`
-      parent_id: "12345678"
       project_id: "example-devops"
       state_bucket: "example-state-bucket"
       repo_owner: "GoogleCloudPlatform"
