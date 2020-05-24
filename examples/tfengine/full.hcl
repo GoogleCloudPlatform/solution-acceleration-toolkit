@@ -111,7 +111,7 @@ templates {
   output_path = "./live/prod/team1"
   data = {
     project = {
-      project_id = "example-prod-networks"
+      project_id         = "example-prod-networks"
       is_shared_vpc_host = true
     }
     resources = {
