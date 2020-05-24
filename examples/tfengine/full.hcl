@@ -101,7 +101,7 @@ templates {
   recipe_path = "{{$base}}/folder/folder.yaml"
   output_path = "./live/prod"
   data = {
-    display_name: "team1"
+    display_name = "team1"
   }
 }
 
@@ -111,8 +111,8 @@ templates {
   output_path = "./live/prod/team1"
   data = {
     project = {
-      project_id: "example-prod-networks"
-      is_shared_vpc_host: true
+      project_id         = "example-prod-networks"
+      is_shared_vpc_host = true
     }
     resources = {
       compute_networks = [{
@@ -198,7 +198,7 @@ templates {
         master_ipv4_cidr_block = "192.168.0.0/28"
       }]
       service_accounts = [{
-        account_id: "example-sa"
+        account_id = "example-sa"
       }]
     }
   }
