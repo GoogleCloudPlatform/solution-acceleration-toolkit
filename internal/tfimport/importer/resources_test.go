@@ -15,7 +15,6 @@
 package importer
 
 import (
-	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -199,23 +198,20 @@ func TestLoadFields(t *testing.T) {
 
 func TestLoadFieldsErr(t *testing.T) {
 	tests := []struct {
-		fields []string
+		fields  []string
+		wantErr error
 	}{
-		// Multiple missing fields
-		{[]string{"missing1", "missing2"}},
+		// All fields missing.
+		{[]string{"missing1", "missing2"}, &InsufficientInfoErr{MissingFields: []string{"missing1", "missing2"}}},
+
+		// Not all fields missing
+		{[]string{"name", "missing2"}, &InsufficientInfoErr{MissingFields: []string{"missing2"}}},
 	}
 	for _, tc := range tests {
 		rc := resourceChange.Change.After
 		got, err := loadFields(tc.fields, false, configs[0], rc)
-		if err == nil {
-			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input, want error; got = %v", tc.fields, false, configs[0], rc, got)
-		}
-		var ie *InsufficientInfoErr
-		if !errors.As(err, &ie) {
-			t.Errorf("loadFields(%v, %v, %v, %v) wrong error type %T; want = %T", tc.fields, false, configs[0], rc, err, ie)
-		}
-		if !cmp.Equal(ie.MissingFields, tc.fields) {
-			t.Errorf("loadFields(%v, %v, %v, %v) error does not list all missing fields; got = %v; want = %v", tc.fields, false, configs[0], rc, ie.MissingFields, tc.fields)
+		if !cmp.Equal(err, tc.wantErr) {
+			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input; want %v; err = %v; got = %v", tc.fields, false, configs[0], rc, tc.wantErr, err, got)
 		}
 	}
 }
