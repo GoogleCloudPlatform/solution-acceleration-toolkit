@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "terragrunt" {
   component_path = "../../components/terragrunt/leaf"
 }
 
 {{if get . "vars"}}
-templates {
+template "variables" {
   component_path = "../../components/terraform/variables"
 }
 {{end}}
 
 {{if get . "outputs"}}
-templates {
+template "outputs" {
   component_path = "../../components/terraform/outputs"
 }
 {{end}}

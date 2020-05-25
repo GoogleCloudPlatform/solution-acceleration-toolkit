@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "terraform" {
   recipe_path = "../terraform/terraform.hcl"
   data = {
     vars = [{
@@ -33,31 +33,31 @@ templates {
 }
 
 {{if has . "bigquery_datasets"}}
-templates {
+template "bigquery_datasets" {
   component_path = "../../components/project/bigquery_datasets"
 }
 {{end}}
 
 {{if has . "compute_networks"}}
-templates {
+template "compute_networks" {
   component_path = "../../components/project/compute_networks"
 }
 {{end}}
 
 {{if has . "storage_buckets"}}
-templates {
+template "storage_buckets" {
   component_path = "../../components/project/storage_buckets"
 }
 {{end}}
 
 {{if has . "gke_clusters"}}
-templates {
+template "gke_clusters" {
   component_path = "../../components/project/gke_clusters"
 }
 {{end}}
 
 {{if has . "service_accounts"}}
-templates {
+template "service_accounts" {
   component_path = "../../components/project/service_accounts"
 }
 {{end}}

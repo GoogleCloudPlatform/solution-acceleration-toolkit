@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "terraform" {
   recipe_path = "../terraform/terraform.hcl"
   output_path = "{{.project.project_id}}/project"
   {{if has . "project.terraform_addons"}}
@@ -25,7 +25,7 @@ templates {
   {{end}}
 }
 
-templates {
+template "project" {
   component_path = "../../components/project/project"
   output_path    = "{{.project.project_id}}/project"
   flatten {
@@ -34,7 +34,7 @@ templates {
 }
 
 {{if has . "resources"}}
-templates {
+template "resources" {
   recipe_path = "../project/resources.hcl"
   output_path = "./{{.project.project_id}}/resources"
   flatten {
@@ -44,7 +44,7 @@ templates {
 {{end}}
 
 {{if index . "project_owners"}}
-templates {
+template "owners" {
   component_path = "../../components/project/owners"
   output_path    = "{{.project.project_id}}/project"
 }

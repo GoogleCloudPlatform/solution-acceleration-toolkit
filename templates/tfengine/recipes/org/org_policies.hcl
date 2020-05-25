@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "terragrunt" {
   component_path = "../../components/terragrunt/leaf"
   output_path    = "./org_policies"
 }
 
-templates {
+template "org_policies" {
   component_path = "../../../policygen/org_policies"
   output_path    = "./org_policies"
 }

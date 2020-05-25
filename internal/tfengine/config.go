@@ -37,10 +37,11 @@ type Config struct {
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
 	Data    map[string]interface{} `json:"data,omitempty"`
 
-	Templates []*templateInfo `hcl:"templates,block" json:"templates,omitempty"`
+	Templates []*templateInfo `hcl:"template,block" json:"template,omitempty"`
 }
 
 type templateInfo struct {
+	Name          string                  `hcl:",label"`
 	ComponentPath string                  `hcl:"component_path,optional" json:"component_path,omitempty"`
 	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
 	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`

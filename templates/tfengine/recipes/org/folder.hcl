@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "folder" {
   component_path = "../../components/folder/folder"
   output_path    = "{{.display_name}}/folder"
   data = {
@@ -21,7 +21,7 @@ templates {
   }
 }
 
-templates {
+template "terragrunt" {
   component_path = "../../components/terragrunt/leaf"
   output_path    = "{{.display_name}}/folder"
 }
