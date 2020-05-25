@@ -43,6 +43,8 @@ templates:
 # Foundation for the org.
 - recipe_path: "{{$base}}/org/foundation.yaml"
   data:
+    parent_type: "folder" # One of `organization` or `folder`
+    parent_id: "12345678"
     devops:
       project_id: "example-devops"
       state_bucket: "example-terraform-state"
@@ -57,9 +59,7 @@ templates:
     monitor:
       project_id: "example-monitor"
       domain: "example.com"
-    org_policies:
-      parent_type: organization
-      parent_id: "12345678"
+    org_policies: {}
     cicd:
       project_id: "example-devops"
       state_bucket: "example-state-bucket"

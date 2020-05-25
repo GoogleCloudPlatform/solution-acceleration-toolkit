@@ -23,7 +23,7 @@ forseti_policies:
   - example.com
 
 gcp_organization_policies:
-  parent_type: organization # one of `organization`, `folder` or `project`
+  parent_type: organization # One of `organization`, `folder` or `project`
   parent_id: "12345678"
   allowed_policy_member_domains:
   - example.com

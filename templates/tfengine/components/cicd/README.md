@@ -17,5 +17,5 @@ and Continuous Deployment (CD) component.
 
    should not be put here to let CI/CD manage them, which could lead to
    potential misconfiguration of CI/CD itself. Those resources should be
-   included in [manual/main.tf](./manual/main.tf) directory and deployed
-   manually by a human owner of the devops project.
+   included in [manual/main.tf](./manual/main.tf) and deployed manually by
+   a human owner of the devops project.
