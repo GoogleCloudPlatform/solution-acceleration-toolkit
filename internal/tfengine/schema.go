@@ -54,6 +54,7 @@ properties:
           descripton: Key value pairs passed to this template.
           type: object
           properties:
+            # TODO(xingao): Move these to a per-recipe schema.
             parent_type:
               description: |
                 Type of parent GCP resource: can be "organization" or "folder".
