@@ -53,7 +53,7 @@ func TestExamples(t *testing.T) {
 			if _, err := os.Stat(filepath.Join(tmp, "forseti_policies")); err != nil {
 				t.Errorf("os.Stat forseti_policies dir = %v", err)
 			}
-			if _, err := os.Stat(filepath.Join(tmp, "gcp_organization_policies")); err != nil {
+			if _, err := os.Stat(filepath.Join(tmp, "gcp_org_policies")); err != nil {
 				t.Fatalf("os.Stat gcp_organization_policies dir = %v", err)
 			}
 		})
