@@ -133,7 +133,7 @@ templates {
 # Prod central data project for team 1.
 templates {
   recipe_path = "{{$base}}/folder/project.yaml"
-  output_path ="./live/prod/team1"
+  output_path = "./live/prod/team1"
   data = {
     project = {
       project_id = "example-prod-data"
@@ -167,7 +167,7 @@ templates {
 # Prod central apps project for team 1.
 templates {
   recipe_path = "{{$base}}/folder/project.yaml"
-  output_path ="./live/prod/team1"
+  output_path = "./live/prod/team1"
   data = {
     project = {
       project_id = "example-prod-apps"
@@ -175,7 +175,7 @@ templates {
         "container.googleapis.com",
       ]
       shared_vpc_attachment = {
-        host_project_id ="example-prod-networks"
+        host_project_id = "example-prod-networks"
         subnets = [{
           name = "example-subnet"
         }]
