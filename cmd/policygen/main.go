@@ -27,28 +27,12 @@ import (
 
 var (
 	inputConfig = flag.String("input_config", "", "Path to the Policy Generator config.")
-	inputDir    = flag.String("input_dir", "", "Path to Terraform configs root directory. Cannot be specified together with other types of inputs.")
-	inputPlan   = flag.String("input_plan", "", "Path to Terraform plan in json format, Cannot be specified together with other types of inputs.")
-	inputState  = flag.String("input_state", "", "Path to Terraform state in json format. Cannot be specified together with other types of inputs.")
+	inputState  = flag.String("input_state", "", "Path to Terraform state in json format.")
 	outputDir   = flag.String("output_dir", "", "Path to directory to write generated policies")
 )
 
 func main() {
 	flag.Parse()
-
-	maxOneNonEmpty := func(ss ...string) bool {
-		var n int
-		for _, s := range ss {
-			if s != "" {
-				n++
-			}
-		}
-		return n <= 1
-	}
-
-	if !maxOneNonEmpty(*inputDir, *inputPlan, *inputState) {
-		log.Fatal("maximum one of --input_dir, --input_plan or --input_state must be specified")
-	}
 
 	if *inputConfig == "" {
 		log.Fatal("--input_config must be set")
@@ -60,8 +44,6 @@ func main() {
 
 	args := &policygen.RunArgs{
 		InputConfig: *inputConfig,
-		InputDir:    *inputDir,
-		InputPlan:   *inputPlan,
 		InputState:  *inputState,
 		OutputDir:   *outputDir,
 	}

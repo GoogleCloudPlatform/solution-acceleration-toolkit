@@ -17,16 +17,13 @@ package policygen
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
-	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/ghodss/yaml"
+	"github.com/hashicorp/terraform/states"
 )
 
 func loadConfig(path string) (*config, error) {
@@ -60,109 +57,16 @@ func loadConfig(path string) (*config, error) {
 	return c, nil
 }
 
-func loadResources(rn runner.Runner, inputDir, inputPlan, inputState string) ([]terraform.Resource, error) {
-	var resources []terraform.Resource
-	var err error
-	switch {
-	case inputDir != "":
-		if resources, err = resourcesFromDir(rn, inputDir); err != nil {
-			return nil, fmt.Errorf("load resources from configs directory: %v", err)
-		}
-	case inputPlan != "":
-		if resources, err = resourcesFromPlan(inputPlan); err != nil {
-			return nil, fmt.Errorf("load resources from plan: %v", err)
-		}
-	case inputState != "":
-		if resources, err = resourcesFromState(inputState); err != nil {
-			return nil, fmt.Errorf("load resources from state: %v", err)
-		}
-	default:
-		log.Println("No Terraform input given, only generating Terraform-agnostic security policies")
-	}
-	return resources, nil
-}
-
-func resourcesFromDir(rn runner.Runner, path string) ([]terraform.Resource, error) {
+func loadResources(path string) ([]*states.Resource, error) {
 	path, err := pathutil.Expand(path)
 	if err != nil {
 		return nil, fmt.Errorf("normalize path %q: %v", path, err)
 	}
 
-	tmpDir, err := ioutil.TempDir("", "")
+	resources, err := terraform.ResourcesFromState(path)
 	if err != nil {
-		return nil, err
-	}
-	defer os.RemoveAll(tmpDir)
-
-	tfCmd := func(args ...string) error {
-		cmd := exec.Command("terraform", args...)
-		cmd.Dir = tmpDir
-		return rn.CmdRun(cmd)
-	}
-	tfCmdOutput := func(args ...string) ([]byte, error) {
-		cmd := exec.Command("terraform", args...)
-		cmd.Dir = tmpDir
-		return rn.CmdOutput(cmd)
+		return nil, fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
 	}
 
-	fs, err := filepath.Glob(filepath.Join(path, "*"))
-	if err != nil {
-		return nil, err
-	}
-	cp := exec.Command("cp", append([]string{"-a", "-t", tmpDir}, fs...)...)
-	if err := rn.CmdRun(cp); err != nil {
-		return nil, fmt.Errorf("copy configs to temp directory: %v", err)
-	}
-
-	if err := tfCmd("init"); err != nil {
-		return nil, fmt.Errorf("terraform init: %v", err)
-	}
-
-	planPath := filepath.Join(tmpDir, "plan.tfplan")
-	if err := tfCmd("plan", "-out", planPath); err != nil {
-		return nil, fmt.Errorf("terraform plan: %v", err)
-	}
-
-	b, err := tfCmdOutput("show", "-json", planPath)
-	if err != nil {
-		return nil, fmt.Errorf("terraform show: %v", err)
-	}
-
-	resources, err := terraform.ReadPlanResources(b)
-	if err != nil {
-		return nil, fmt.Errorf("unmarshal json: %v", err)
-	}
-	return resources, nil
-}
-
-func resourcesFromPlan(path string) ([]terraform.Resource, error) {
-	path, err := pathutil.Expand(path)
-	if err != nil {
-		return nil, fmt.Errorf("normalize path %q: %v", path, err)
-	}
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("read json: %v", err)
-	}
-	resources, err := terraform.ReadPlanResources(b)
-	if err != nil {
-		return nil, fmt.Errorf("unmarshal json: %v", err)
-	}
-	return resources, nil
-}
-
-func resourcesFromState(path string) ([]terraform.Resource, error) {
-	path, err := pathutil.Expand(path)
-	if err != nil {
-		return nil, fmt.Errorf("normalize path %q: %v", path, err)
-	}
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("read json: %v", err)
-	}
-	resources, err := terraform.ReadStateResources(b)
-	if err != nil {
-		return nil, fmt.Errorf("unmarshal json: %v", err)
-	}
 	return resources, nil
 }

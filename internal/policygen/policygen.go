@@ -23,7 +23,6 @@ import (
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -31,8 +30,6 @@ import (
 // RunArgs is the struct representing the arguments passed to Run().
 type RunArgs struct {
 	InputConfig string
-	InputDir    string
-	InputPlan   string
 	InputState  string
 	OutputDir   string
 }
@@ -64,39 +61,15 @@ func Run(args *RunArgs) error {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(tmpDir, c); err != nil {
+	if err := generateForsetiPolicies(args.InputState, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
-
-	rn := &runner.Default{Quiet: true}
-	resources, err := loadResources(rn, args.InputDir, args.InputPlan, args.InputState)
-	if err != nil {
-		return err
-	}
-	log.Printf("Found %d resources from input Terraform resources", len(resources))
-
-	// TODO: generate policies that rely on input config.
 
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
 		return fmt.Errorf("mkdir %q: %v", outputDir, err)
 	}
 
 	return copy.Copy(tmpDir, outputDir)
-}
-
-func generateForsetiPolicies(outputDir string, c *config) error {
-	if c.Overall.ForsetiPolicies == nil {
-		return nil
-	}
-
-	data, err := mergeData(c)
-	if err != nil {
-		return fmt.Errorf("merge input data: %v", err)
-	}
-
-	in := filepath.Join(c.TemplateDir, "forseti", "org")
-	out := filepath.Join(outputDir, "forseti_policies", "overall")
-	return template.WriteDir(in, out, data)
 }
 
 func generateGCPOrgPolicies(outputDir string, c *config) error {
@@ -112,6 +85,47 @@ func generateGCPOrgPolicies(outputDir string, c *config) error {
 	in := filepath.Join(c.TemplateDir, "org_policies")
 	out := filepath.Join(outputDir, "gcp_org_policies")
 	return template.WriteDir(in, out, data)
+}
+
+func generateForsetiPolicies(inputState, outputDir string, c *config) error {
+	if c.Overall.ForsetiPolicies == nil {
+		return nil
+	}
+
+	if err := generateGeneralForsetiPolicies(outputDir, c); err != nil {
+		return err
+	}
+
+	if err := generateTerraformBasedForsetiPolicies(inputState, outputDir); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func generateGeneralForsetiPolicies(outputDir string, c *config) error {
+	data, err := mergeData(c)
+	if err != nil {
+		return fmt.Errorf("merge input data: %v", err)
+	}
+
+	in := filepath.Join(c.TemplateDir, "forseti", "org")
+	out := filepath.Join(outputDir, "forseti_policies", "overall")
+	return template.WriteDir(in, out, data)
+}
+
+func generateTerraformBasedForsetiPolicies(inputState, outputDir string) error {
+	if inputState == "" {
+		log.Println("No Terraform state given, only generating Terraform-agnostic security policies")
+		return nil
+	}
+
+	resources, err := loadResources(inputState)
+	if err != nil {
+		return err
+	}
+
+	return generateIAMBindingsPolicies(resources, outputDir)
 }
 
 func mergeData(c *config) (map[string]interface{}, error) {
