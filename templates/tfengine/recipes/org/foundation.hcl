@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "base" {
   recipe_path = "./base.hcl"
   flatten {
     key = "devops"
@@ -20,7 +20,7 @@ templates {
 }
 
 {{if has . "audit"}}
-templates {
+template "audit" {
   recipe_path = "./audit.hcl"
   output_path = "./live"
   flatten {
@@ -30,7 +30,7 @@ templates {
 {{end}}
 
 {{if has . "monitor"}}
-templates {
+template "monitor" {
   recipe_path = "./monitor.hcl"
   output_path = "./live"
   flatten {
@@ -40,7 +40,7 @@ templates {
 {{end}}
 
 {{if has . "org_policies"}}
-templates {
+template "org_policies" {
   recipe_path = "./org_policies.hcl"
   output_path = "./live"
   flatten {
@@ -50,7 +50,7 @@ templates {
 {{end}}
 
 {{if has . "cicd"}}
-templates {
+template "cicd_manual" {
   component_path = "../../components/cicd/manual"
   output_path    = "./cicd"
   flatten {
@@ -58,7 +58,7 @@ templates {
   }
 }
 
-templates {
+template "cicd_auto" {
   component_path = "../../components/cicd/auto"
   output_path    = "./live/cicd"
   flatten {

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates {
+template "project" {
   recipe_path = "./project.hcl"
   output_path = "./audit"
   data = {
@@ -27,7 +27,7 @@ templates {
   }
 }
 
-templates {
+template "audit" {
   component_path = "../../components/org/audit"
   output_path    = "./audit/resources"
 }

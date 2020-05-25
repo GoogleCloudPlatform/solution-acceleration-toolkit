@@ -25,24 +25,25 @@ data = {
   compute_network_region    = "us-central1"
   storage_bucket_location   = "us-central1"
 
-  # TODO: This block prevents certain parts of the configs from being generated
-  # which require dependencies to be deployed first.
-  #
-  # 1. Follow the steps for each field in the block.
-  # 2. Remove this block once nothing needs to be disabled.
+
+  # TODO(user): This block prevents certain parts of the configs from being
+  # generated which require dependencies to be deployed first.
+  # Follow the steps listed for each field in the block, then remove this block
+  # once nothing needs to be disabled.
   disabled = {
     # The bootstrap module creates the Terraform state bucket and thus
     # its own state cannot be backed up until the state bucket has been created.
     #
-    # 1. Deploy the bootstrap module. The state will be created locally in the same directory.
-    # 2. Remove this field and run the engine.
+    # 1. Deploy the bootstrap module (deployed by the foundation recipe).
+    #    The state will be created locally in the same directory.
+    # 2. Remove this field and re-run the engine.
     # 3. In the bootstrap module run `terraform init` to backup the bootstrap state to GCS.
     bootstrap_gcs_backend = true
   }
 }
 
 # Foundation for the org.
-templates {
+template "foundation" {
   recipe_path = "{{$base}}/org/foundation.hcl"
   data = {
     parent_type = "organization" # One of `organization` or `folder`.
