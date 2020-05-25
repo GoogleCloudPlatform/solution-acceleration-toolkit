@@ -53,6 +53,33 @@ properties:
         data:
           descripton: Key value pairs passed to this template.
           type: object
+          properties:
+            # TODO(xingao): Move these to a per-recipe schema.
+            parent_type:
+              description: |
+                Type of parent GCP resource: can be "organization" or "folder".
+              type: string
+              pattern: ^organization|folder$
+
+            parent_id:
+              description: |
+                ID of parent GCP resource: can be the organization ID or
+                folder ID according to parent_type.
+              type: string
+              pattern: ^[0-9]{8,25}$
+
+            org_policies:
+              # TODO(xingao): Get the full org policies schema from policygen schema.
+              description: |
+                Key value pairs passed to GCP Organization Policy constraint templates.
+              type: object
+              properties:
+                parent_type:
+                  description: |
+                    Type of parent GCP resource to apply the policy: can be one of "organization",
+                    "folder", or "project".
+                  type: string
+                  pattern: ^organization|folder|project$
 
         # ----------------------------------------------------------------------
         # NOTE: The fields below should typically be set by recipe maintainers and not end users.
