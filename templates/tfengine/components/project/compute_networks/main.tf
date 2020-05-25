@@ -27,11 +27,7 @@ module "{{resourceName .name}}" {
     {
       subnet_name            = "{{.name}}"
       subnet_ip              = "{{.ip_range}}"
-      {{- if has . "region"}}
-      subnet_region          = "{{.region}}"
-      {{- else}}
-      subnet_region          = "{{$.compute_network_region}}"
-      {{- end}}
+      subnet_region          = "{{get . "region" $.compute_region}}"
       subnet_flow_logs       = true
       subnets_private_access = true
     },

@@ -19,7 +19,7 @@ terraform {
 locals {
   forseti_vpc_name    = "forseti-vpc"
   forseti_subnet_name = "forseti-subnet"
-  forseti_subnet_key  = "{{.compute_network_region}}/${local.forseti_subnet_name}"
+  forseti_subnet_key  = "{{.compute_region}}/${local.forseti_subnet_name}"
 }
 
 # TODO(xingao): fix the data dependency in Forseti CloudSQL sub module
@@ -34,7 +34,7 @@ module "network" {
   subnets = [{
     subnet_name   = local.forseti_subnet_name
     subnet_ip     = "10.10.10.0/24"
-    subnet_region = "{{.compute_network_region}}"
+    subnet_region = "{{.compute_region}}"
   }]
 }
 
@@ -44,7 +44,7 @@ module "router" {
 
   name    = "forseti-router"
   project = var.project_id
-  region  = "{{.compute_network_region}}"
+  region  = "{{.compute_region}}"
   network = module.network.network_name
 
   nats = [{
@@ -71,10 +71,10 @@ module "forseti" {
     "organizations/${var.org_id}",
   ]
 
-  server_region           = "{{.compute_instance_region}}"
-  cloudsql_region         = "{{.cloud_sql_instance_region}}"
-  storage_bucket_location = "{{.storage_bucket_location}}"
-  bucket_cai_location     = "{{.storage_bucket_location}}"
+  server_region           = "{{.compute_region}}"
+  cloudsql_region         = "{{.cloud_sql_region}}"
+  storage_bucket_location = "{{.storage_location}}"
+  bucket_cai_location     = "{{.storage_location}}"
 
   cloudsql_private  = true
   client_enabled    = false

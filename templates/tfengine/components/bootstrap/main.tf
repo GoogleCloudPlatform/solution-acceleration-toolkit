@@ -58,7 +58,7 @@ module "state_bucket" {
 
   name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "{{.storage_bucket_location}}"
+  location   = "{{.storage_location}}"
 }
 
 # Project level IAM permissions for devops project owners.

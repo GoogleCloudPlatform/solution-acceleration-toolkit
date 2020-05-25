@@ -19,11 +19,10 @@ data = {
   billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.
-  bigquery_dataset_location = "us-east1"
-  cloud_sql_instance_region = "us-central1"
-  compute_instance_region   = "us-central1"
-  compute_network_region    = "us-central1"
-  storage_bucket_location   = "us-central1"
+  bigquery_location = "us-east1"
+  cloud_sql_region  = "us-central1"
+  compute_region    = "us-central1"
+  storage_location  = "us-central1"
 
 
   # TODO(user): This block prevents certain parts of the configs from being

@@ -20,7 +20,7 @@ module "{{resourceName .name}}" {
   # Required.
   name                   = "{{.name}}"
   project_id             = var.project_id
-  region                 = "{{get . "region" $.gke_cluster_region}}"
+  region                 = "{{get . "region" $.gke_region}}"
   regional               = true
   network                = "{{.network}}"
   subnetwork             = "{{.subnet}}"

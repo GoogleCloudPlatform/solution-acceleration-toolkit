@@ -59,7 +59,7 @@ module "bigquery_destination" {
 
   dataset_id                  = "{{.dataset_name}}"
   project_id                  = var.project_id
-  location                    = "{{.bigquery_dataset_location}}"
+  location                    = "{{.bigquery_location}}"
   default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
   access = [
     {
@@ -100,7 +100,7 @@ module "storage_destination" {
 
   name          = "{{.bucket_name}}"
   project_id    = var.project_id
-  location      = "{{.storage_bucket_location}}"
+  location      = "{{.storage_location}}"
   storage_class = "COLDLINE"
 
   lifecycle_rules = [{
