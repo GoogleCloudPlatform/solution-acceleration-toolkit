@@ -15,11 +15,14 @@
 package importer
 
 import (
+	"errors"
 	"os"
 	"strings"
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 var configs = []ProviderConfigMap{
@@ -161,6 +164,58 @@ func TestSimpleImporterErr(t *testing.T) {
 		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
 		if got, err := imp.ImportID(resourceChange, configs[0], false); err == nil {
 			t.Errorf("%v ImportID(%v, %v) succeeded for malformed input, want error; got = %v", imp, resourceChange, configs, got)
+		}
+	}
+}
+
+func TestLoadFields(t *testing.T) {
+	tests := []struct {
+		fields []string
+		want   map[string]string
+	}{
+		// Empty.
+		{[]string{}, map[string]string{}},
+
+		// Get some fields from both locations.
+		{
+			[]string{"", "name"},
+			map[string]string{
+				"":     "emptyValFirst",
+				"name": "myresourcename",
+			},
+		},
+	}
+	for _, tc := range tests {
+		rc := resourceChange.Change.After
+		got, err := loadFields(tc.fields, false, configs[0], rc)
+		if err != nil {
+			t.Fatalf("loadFields(%v, %v, %v, %v) failed: %v", tc.fields, false, configs[0], rc, err)
+		}
+		if !cmp.Equal(got, tc.want, cmpopts.EquateEmpty()) {
+			t.Errorf("loadFields(%v, %v, %v, %v) = %v; got %v", tc.fields, false, configs[0], rc, got, tc.want)
+		}
+	}
+}
+
+func TestLoadFieldsErr(t *testing.T) {
+	tests := []struct {
+		fields []string
+	}{
+		// Multiple missing fields
+		{[]string{"missing1", "missing2"}},
+	}
+	for _, tc := range tests {
+		rc := resourceChange.Change.After
+		got, err := loadFields(tc.fields, false, configs[0], rc)
+		if err == nil {
+			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input, want error; got = %v", tc.fields, false, configs[0], rc, got)
+		}
+		var ie *InsufficientInfoErr
+		if !errors.As(err, &ie) {
+			t.Errorf("loadFields(%v, %v, %v, %v) wrong error type %T; want = %T", tc.fields, false, configs[0], rc, err, ie)
+		}
+		if !cmp.Equal(ie.MissingFields, tc.fields) {
+			t.Errorf("loadFields(%v, %v, %v, %v) error does not list all missing fields; got = %v; want = %v", tc.fields, false, configs[0], rc, ie.MissingFields, tc.fields)
 		}
 	}
 }
