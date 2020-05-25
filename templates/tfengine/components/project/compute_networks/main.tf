@@ -27,7 +27,7 @@ module "{{resourceName .name}}" {
     {
       subnet_name            = "{{.name}}"
       subnet_ip              = "{{.ip_range}}"
-      subnet_region          = "{{get . "region" $.compute_region}}"
+      subnet_region          = "{{.compute_region}}"
       subnet_flow_logs       = true
       subnets_private_access = true
     },
