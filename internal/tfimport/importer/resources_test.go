@@ -20,6 +20,8 @@ import (
 	"testing"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 var configs = []ProviderConfigMap{
@@ -161,6 +163,56 @@ func TestSimpleImporterErr(t *testing.T) {
 		imp := &SimpleImporter{Fields: tc.reqFields, Tmpl: tc.tmpl}
 		if got, err := imp.ImportID(resourceChange, configs[0], false); err == nil {
 			t.Errorf("%v ImportID(%v, %v) succeeded for malformed input, want error; got = %v", imp, resourceChange, configs, got)
+		}
+	}
+}
+
+func TestLoadFields(t *testing.T) {
+	tests := []struct {
+		fields []string
+		want   map[string]string
+	}{
+		// Empty.
+		{[]string{}, map[string]string{}},
+
+		// Get some fields from both locations.
+		{
+			[]string{"", "name"},
+			map[string]string{
+				"":     "emptyValFirst",
+				"name": "myresourcename",
+			},
+		},
+	}
+	for _, tc := range tests {
+		rc := resourceChange.Change.After
+		got, err := loadFields(tc.fields, false, configs[0], rc)
+		if err != nil {
+			t.Fatalf("loadFields(%v, %v, %v, %v) failed: %v", tc.fields, false, configs[0], rc, err)
+		}
+		if !cmp.Equal(got, tc.want, cmpopts.EquateEmpty()) {
+			t.Errorf("loadFields(%v, %v, %v, %v) = %v; got %v", tc.fields, false, configs[0], rc, got, tc.want)
+		}
+	}
+}
+
+func TestLoadFieldsErr(t *testing.T) {
+	tests := []struct {
+		fields      []string
+		wantMissing []string
+	}{
+		// All fields missing.
+		{[]string{"missing1", "missing2"}, []string{"missing1", "missing2"}},
+
+		// Not all fields missing
+		{[]string{"name", "missing2"}, []string{"missing2"}},
+	}
+	for _, tc := range tests {
+		wantErr := &InsufficientInfoErr{MissingFields: tc.wantMissing}
+		rc := resourceChange.Change.After
+		got, err := loadFields(tc.fields, false, configs[0], rc)
+		if diff := cmp.Diff(err, wantErr); diff != "" {
+			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input; got = %v; error diff (-got +want):\n%s", tc.fields, false, configs[0], rc, got, diff)
 		}
 	}
 }

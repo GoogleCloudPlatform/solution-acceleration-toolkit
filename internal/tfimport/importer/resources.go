@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -27,14 +28,14 @@ type ProviderConfigMap map[string]interface{}
 
 // InsufficientInfoErr indicates that we do not have enough information to import a resource.
 type InsufficientInfoErr struct {
-	missingFields []string
-	msg           string
+	MissingFields []string
+	Msg           string
 }
 
 func (e *InsufficientInfoErr) Error() string {
-	err := fmt.Sprintf("missing fields: %v", strings.Join(e.missingFields, ", "))
-	if e.msg != "" {
-		err = fmt.Sprintf("%v; additional info: %v", err, e.msg)
+	err := fmt.Sprintf("missing fields: %v", strings.Join(e.MissingFields, ", "))
+	if e.Msg != "" {
+		err = fmt.Sprintf("%v; additional info: %v", err, e.Msg)
 	}
 	return err
 }
@@ -56,9 +57,9 @@ func showPrompt(fieldName, prompt string) {
 }
 func parseUserVal(fieldName, val string, err error) (string, error) {
 	if val == "" {
-		ie := &InsufficientInfoErr{missingFields: []string{fieldName}}
+		ie := &InsufficientInfoErr{MissingFields: []string{fieldName}}
 		if err != nil {
-			ie.msg = err.Error()
+			ie.Msg = err.Error()
 		}
 		return "", ie
 	}
@@ -82,4 +83,33 @@ func userValue(in io.Reader) (string, error) {
 	}
 	val = strings.TrimSpace(val)
 	return val, nil
+}
+
+// loadFields returns a map of field names to values, taking into account interactivity and multiple ProviderConfigMaps.
+// The result can be used in templates.
+func loadFields(fields []string, interactive bool, configValues ...ProviderConfigMap) (fieldsMap map[string]string, err error) {
+	fieldsMap = make(map[string]string)
+	var missingFields []string
+	for _, field := range fields {
+		val, err := fromConfigValues(field, configValues...)
+		// If interactive is set, try to get the field interactively.
+		if err != nil && interactive {
+			prompt := fmt.Sprintf("Please enter the exact value for %v", field)
+			val, err = fromUser(os.Stdin, field, prompt)
+		}
+
+		// If err is still not nil, then user didn't provide value, treat this as a missing field.
+		if err != nil {
+			missingFields = append(missingFields, field)
+		}
+
+		// A bit safer to use the printf string conversion than the type assertion (i.e. val.(string)).
+		fieldsMap[field] = fmt.Sprintf("%s", val)
+	}
+
+	if len(missingFields) > 0 {
+		return nil, &InsufficientInfoErr{missingFields, ""}
+	}
+
+	return fieldsMap, nil
 }
