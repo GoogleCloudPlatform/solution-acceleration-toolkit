@@ -20,7 +20,7 @@ title: Policy Generator Config Schema
 additionalProperties: false
 required:
 - template_dir
-- org_id
+- overall
 
 properties:
   template_dir:
@@ -29,49 +29,59 @@ properties:
       is relative to the directory where the config file lives.
     type: string
 
-  org_id:
+  overall:
     description: |
-      ID of the organization where the policies will be applied to.
-    type: string
-    pattern: ^[0-9]{8,25}$
-
-  forseti_policies:
-    description: |
-      Key value pairs passed to Forseti Policy Library constraint templates. If an optional
-      property is not specified, then the corresponding default setting will be applied.
+      Top level configs to control what policies to generate and their enforcing scope.
     type: object
     additionalProperties: false
     properties:
-      allowed_policy_member_domains:
+      gcp_org_policies:
         description: |
-          List of domains to allow their members to be granted IAM roles.
-          gserviceaccount.com is always allowed to make sure GCP internal services work properly.
-        type: array
-        items:
-          type: string
+          Key value pairs to define the scope to apply the policies.
+        type: object
+        additionalProperties: false
+        required:
+        - parent_type
+        - parent_id
+        properties:
+          parent_type:
+            description: |
+              Type of parent GCP resource to apply the policy: can be one of "organization",
+              "folder", or "project".
+            type: string
+            pattern: ^organization|folder|project$
 
-  gcp_organization_policies:
+          parent_id:
+            description: |
+              ID of parent GCP resource to apply the policy: can be one of the organization ID,
+              folder ID, or project ID according to parent_type.
+            type: string
+            pattern: ^[0-9]{8,25}$
+
+      forseti_policies:
+        description: |
+          Key value pairs to define the scope to apply the policies.
+        type: object
+        additionalProperties: false
+        required:
+        - targets
+        properties:
+          targets:
+            description: |
+              List of targets to apply the policies, e.g. organization/*,
+              organization/123/folder/456.
+            type: array
+            items:
+              type: string
+
+  iam:
     description: |
-      Key value pairs passed to GCP Organization Policy constraint templates. If an optional
+      Key value pairs to configure IAM related policies. If an optional
       property is not specified, then the corresponding default setting will be applied.
-      For example, if ALLOWED_* is not specified, then the corresponding policy will deny all.
+      For example, if allowed_* is not specified, then the corresponding policy will deny all.
     type: object
     additionalProperties: false
     properties:
-      parent_type:
-        description: |
-          Type of parent GCP resource to apply the policy: can be one of "organization",
-          "folder", or "project".
-        type: string
-        pattern: ^organization|folder|project$
-
-      parent_id:
-        description: |
-          ID of parent GCP resource to apply the policy: can be one of the organization ID,
-          folder ID, or project ID according to parent_type.
-        type: string
-        pattern: ^[0-9]{8,25}$
-
       allowed_policy_member_domains:
         description: |
           See templates/policygen/org_policies/variables.tf.
@@ -79,6 +89,14 @@ properties:
         items:
           type: string
 
+  network:
+    description: |
+      Key value pairs to configure network related policies. If an optional
+      property is not specified, then the corresponding default setting will be applied.
+      For example, if allowed_* is not specified, then the corresponding policy will deny all.
+    type: object
+    additionalProperties: false
+    properties:
       allowed_shared_vpc_host_projects:
         description: |
           See templates/policygen/org_policies/variables.tf.
@@ -86,6 +104,14 @@ properties:
         items:
           type: string
 
+  compute:
+    description: |
+      Key value pairs to configure compute related policies. If an optional
+      property is not specified, then the corresponding default setting will be applied.
+      For example, if allowed_* is not specified, then the corresponding policy will deny all.
+    type: object
+    additionalProperties: false
+    properties:
       allowed_trusted_image_projects:
         description: |
           See templates/policygen/org_policies/variables.tf.

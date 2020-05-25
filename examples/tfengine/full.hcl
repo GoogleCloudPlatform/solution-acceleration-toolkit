@@ -69,7 +69,11 @@ template "foundation" {
       domain     = "example.com"
     }
 
-    org_policies = {}
+    org_policies = {
+      allowed_policy_member_domains = [
+        "example.com"
+      ]
+    }
 
     cicd = {
       project_id                    = "example-devops"

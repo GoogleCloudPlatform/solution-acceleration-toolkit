@@ -12,23 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Required fields
 template_dir: ../../templates/policygen
-org_id: "12345678"
 
-# Optional fields
-forseti_policies:
-  # TODO(xingao): consider merging with same attributes in org policies
+overall:
+  gcp_org_policies:
+    parent_type: organization # One of `organization`, `folder` or `project`
+    parent_id: "12345678"
+  forseti_policies:
+    targets:
+    - organization/1234/*
+    - organization/5678/folder/*
+
+iam:
   allowed_policy_member_domains:
   - example.com
 
-gcp_organization_policies:
-  parent_type: organization # One of `organization`, `folder` or `project`
-  parent_id: "12345678"
-  allowed_policy_member_domains:
-  - example.com
+network:
   allowed_shared_vpc_host_projects:
   - under:folders/12345678
+
+compute:
   allowed_trusted_image_projects:
   - projects/example-image-project
   allowed_public_vms:
