@@ -89,7 +89,7 @@ Terraform configs. For details on fields for the input schema, see the
 there is no dependency on the engine any longer, and the user can directly use
 the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
-Replace the values in the [example](../../examples/tfengine/simple.yaml) with
+Replace the values in the [example](../../examples/tfengine/simple.hcl) with
 values for your infrastructure, then run the following commands:
 
 ```shell

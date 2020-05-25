@@ -23,7 +23,7 @@ import (
 
 // TestExamples is a basic test for the engine to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
-	exs, err := filepath.Glob("../../examples/tfengine/*.yaml")
+	exs, err := filepath.Glob("../../examples/tfengine/*.hcl")
 	if err != nil {
 		t.Fatalf("filepath.Glob = %v", err)
 	}
