@@ -198,20 +198,21 @@ func TestLoadFields(t *testing.T) {
 
 func TestLoadFieldsErr(t *testing.T) {
 	tests := []struct {
-		fields  []string
-		wantErr error
+		fields      []string
+		wantMissing []string
 	}{
 		// All fields missing.
-		{[]string{"missing1", "missing2"}, &InsufficientInfoErr{MissingFields: []string{"missing1", "missing2"}}},
+		{[]string{"missing1", "missing2"}, []string{"missing1", "missing2"}},
 
 		// Not all fields missing
-		{[]string{"name", "missing2"}, &InsufficientInfoErr{MissingFields: []string{"missing2"}}},
+		{[]string{"name", "missing2"}, []string{"missing2"}},
 	}
 	for _, tc := range tests {
+		wantErr := &InsufficientInfoErr{MissingFields: tc.wantMissing}
 		rc := resourceChange.Change.After
 		got, err := loadFields(tc.fields, false, configs[0], rc)
-		if !cmp.Equal(err, tc.wantErr) {
-			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input; want %v; err = %v; got = %v", tc.fields, false, configs[0], rc, tc.wantErr, err, got)
+		if diff := cmp.Diff(err, wantErr); diff != "" {
+			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input; got = %v; error diff (-got +want):\n%s", tc.fields, false, configs[0], rc, got, diff)
 		}
 	}
 }
