@@ -31,7 +31,8 @@ module "project" {
 
   shared_vpc_subnets = [
     {{- range get . "shared_vpc_attachment.subnets"}}
-    "projects/{{$host}}/regions/{{.compute_region}}/subnetworks/{{.name}}",
+    {{- $region := get . "region" $.compute_region}}
+    "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
   ]
   {{- end}}

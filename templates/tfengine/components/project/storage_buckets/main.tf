@@ -22,7 +22,7 @@ module "{{resourceName .name}}" {
   {{- if has . "location"}}
   location   = "{{.location}}"
   {{- else}}
-  location   = "{{.storage_location}}"
+  location   = "{{$.storage_location}}"
   {{- end}}
 
   {{- if index . "iam_members"}}
