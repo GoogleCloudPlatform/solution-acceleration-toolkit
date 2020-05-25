@@ -12,35 +12,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- recipe_path: "./base.yaml"
-  flatten:
-  - key: "devops"
+templates {
+  recipe_path = "./base.hcl"
+  flatten {
+    key = "devops"
+  }
+}
+
 {{if has . "audit"}}
-- recipe_path: "./audit.yaml"
-  output_path: "./live"
-  flatten:
-  - key: "audit"
+templates {
+  recipe_path = "./audit.hcl"
+  output_path = "./live"
+  flatten {
+    key = "audit"
+  }
+}
 {{end}}
+
 {{if has . "monitor"}}
-- recipe_path: "./monitor.yaml"
-  output_path: "./live"
-  flatten:
-  - key: "monitor"
+templates {
+  recipe_path = "./monitor.hcl"
+  output_path = "./live"
+  flatten {
+    key = "monitor"
+  }
+}
 {{end}}
+
 {{if has . "org_policies"}}
-- recipe_path: "./org_policies.yaml"
-  output_path: "./live"
-  flatten:
-  - key: "org_policies"
+templates {
+  recipe_path = "./org_policies.hcl"
+  output_path = "./live"
+  flatten {
+    key = "org_policies"
+  }
+}
 {{end}}
+
 {{if has . "cicd"}}
-- component_path: "../../components/cicd/manual"
-  output_path: "./cicd"
-  flatten:
-  - key: "cicd"
-- component_path: "../../components/cicd/auto"
-  output_path: "./live/cicd"
-  flatten:
-  - key: "cicd"
+templates {
+  component_path = "../../components/cicd/manual"
+  output_path    = "./cicd"
+  flatten {
+    key = "cicd"
+  }
+}
+
+templates {
+  component_path = "../../components/cicd/auto"
+  output_path    = "./live/cicd"
+  flatten {
+    key = "cicd"
+  }
+}
 {{end}}

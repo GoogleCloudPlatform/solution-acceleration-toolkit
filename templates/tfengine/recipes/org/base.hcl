@@ -12,8 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- component_path: "../../components/bootstrap"
-  output_path: "./bootstrap"
-- component_path: "../../components/terragrunt/root"
-  output_path: "./live"
+templates {
+  component_path = "../../components/bootstrap"
+  output_path    = "./bootstrap"
+}
+
+templates {
+  component_path = "../../components/terragrunt/root"
+  output_path    = "./live"
+}

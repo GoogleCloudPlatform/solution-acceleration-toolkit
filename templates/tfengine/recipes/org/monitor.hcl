@@ -12,15 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- recipe_path: "./project.yaml"
-  output_path: "./audit"
-  data:
-    output_path: "."
-    project:
-      project_id: "{{.project_id}}"
-      apis:
-      - "bigquery.googleapis.com"
-      - "logging.googleapis.com"
-- component_path: "../../components/org/audit"
-  output_path: "./audit/resources"
+templates {
+  recipe_path = "./project.hcl"
+  output_path = "./monitor"
+  data = {
+    output_path = "."
+    project = {
+      project_id = "{{.project_id}}"
+    }
+  }
+}
+
+templates {
+  component_path = "../../components/org/monitor/forseti"
+  output_path    = "./monitor/forseti"
+}

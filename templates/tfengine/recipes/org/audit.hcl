@@ -12,11 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- component_path: "../../components/terragrunt/leaf"
-{{if get . "vars"}}
-- component_path: "../../components/terraform/variables"
-{{end}}
-{{if get . "outputs"}}
-- component_path: "../../components/terraform/outputs"
-{{end}}
+templates {
+  recipe_path = "./project.hcl"
+  output_path = "./audit"
+  data = {
+    output_path = "."
+    project = {
+      project_id = "{{.project_id}}"
+      apis = [
+        "bigquery.googleapis.com",
+        "logging.googleapis.com",
+      ]
+    }
+  }
+}
+
+templates {
+  component_path = "../../components/org/audit"
+  output_path    = "./audit/resources"
+}

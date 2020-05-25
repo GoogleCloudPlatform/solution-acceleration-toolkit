@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- recipe_path: "./project.yaml"
-  output_path: "./monitor"
-  data:
-    output_path: "."
-    project:
-      project_id: "{{.project_id}}"
-- component_path: "../../components/org/monitor/forseti"
-  output_path: "./monitor/forseti"
+templates {
+  component_path = "../../components/folder/folder"
+  output_path    = "{{.display_name}}/folder"
+  data = {
+    display_name = "{{.display_name}}"
+    parent       =  "organizations/{{.org_id}}"
+  }
+}
+
+templates {
+  component_path = "../../components/terragrunt/leaf"
+  output_path    = "{{.display_name}}/folder"
+}

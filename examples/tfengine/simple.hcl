@@ -43,7 +43,7 @@ data = {
 
 # Foundation for the org.
 templates {
-  recipe_path = "{{$base}}/org/foundation.yaml"
+  recipe_path = "{{$base}}/org/foundation.hcl"
   data = {
     parent_type = "organization" # One of `organization` or `folder`.
     parent_id   = "12345678"

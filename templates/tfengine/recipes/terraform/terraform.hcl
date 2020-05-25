@@ -12,8 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-templates:
-- component_path: "../../components/terragrunt/leaf"
-  output_path: "./org_policies"
-- component_path: "../../../policygen/org_policies"
-  output_path: "./org_policies"
+templates {
+  component_path = "../../components/terragrunt/leaf"
+}
+
+{{if get . "vars"}}
+templates {
+  component_path = "../../components/terraform/variables"
+}
+{{end}}
+
+{{if get . "outputs"}}
+templates {
+  component_path = "../../components/terraform/outputs"
+}
+{{end}}
