@@ -44,7 +44,7 @@ data = {
 
 # Foundation for the org.
 templates {
-  recipe_path = "{{$base}}/org/foundation.yaml"
+  recipe_path = "{{$base}}/org/foundation.hcl"
   data = {
     parent_type = "organization" # One of `organization` or `folder`.
     parent_id   = "12345678"
@@ -89,7 +89,7 @@ templates {
 
 # Top level prod folder.
 templates {
-  recipe_path = "{{$base}}/org/folder.yaml"
+  recipe_path = "{{$base}}/org/folder.hcl"
   output_path = "./live"
   data = {
     display_name = "prod"
@@ -98,7 +98,7 @@ templates {
 
 # Prod folder for team 1.
 templates {
-  recipe_path = "{{$base}}/folder/folder.yaml"
+  recipe_path = "{{$base}}/folder/folder.hcl"
   output_path = "./live/prod"
   data = {
     display_name = "team1"
@@ -107,7 +107,7 @@ templates {
 
 # Prod central networks project for team 1.
 templates {
-  recipe_path = "{{$base}}/folder/project.yaml"
+  recipe_path = "{{$base}}/folder/project.hcl"
   output_path = "./live/prod/team1"
   data = {
     project = {
@@ -132,7 +132,7 @@ templates {
 
 # Prod central data project for team 1.
 templates {
-  recipe_path = "{{$base}}/folder/project.yaml"
+  recipe_path = "{{$base}}/folder/project.hcl"
   output_path = "./live/prod/team1"
   data = {
     project = {
@@ -166,7 +166,7 @@ templates {
 
 # Prod central apps project for team 1.
 templates {
-  recipe_path = "{{$base}}/folder/project.yaml"
+  recipe_path = "{{$base}}/folder/project.hcl"
   output_path = "./live/prod/team1"
   data = {
     project = {
