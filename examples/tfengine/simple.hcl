@@ -15,7 +15,7 @@
 {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
-  org_id          = "123"
+  org_id          = "12345678"
   billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.
@@ -45,6 +45,9 @@ data = {
 templates {
   recipe_path = "{{$base}}/org/foundation.yaml"
   data = {
+    parent_type = "organization" # One of `organization` or `folder`.
+    parent_id   = "12345678"
+
     devops = {
       project_id   = "example-devops"
       state_bucket = "example-terraform-state"
@@ -66,10 +69,7 @@ templates {
       domain     = "example.com"
     }
 
-    org_policies = {
-      parent_type = "organization"
-      parent_id   = "12345678"
-    }
+    org_policies = {}
 
     cicd = {
       project_id                    = "example-devops"
