@@ -17,7 +17,7 @@ template "terragrunt" {
 }
 
 {{if get . "vars"}}
-template "variables" {
+template "vars" {
   component_path = "../../components/terraform/variables"
 }
 {{end}}
