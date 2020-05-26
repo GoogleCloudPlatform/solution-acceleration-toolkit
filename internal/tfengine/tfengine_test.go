@@ -37,70 +37,61 @@ func TestExamples(t *testing.T) {
 	}
 
 	for _, ex := range exs {
-		ex := ex
+		ex := ex // capture range variable
 		t.Run(filepath.Base(ex), func(t *testing.T) {
 			t.Parallel()
 			tmp, err := ioutil.TempDir("", "")
 			if err != nil {
 				t.Fatalf("ioutil.TempDir = %v", err)
 			}
-			// defer os.RemoveAll(tmp)
+			defer os.RemoveAll(tmp)
 
 			if err := Run(ex, tmp); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
-			ds := []string{
-				// "bootstrap",
-				"live",
-			}
+			// Run plan on live dir to verify configs.
+			path := filepath.Join(tmp, "live")
 
-			if err := ioutil.WriteFile(filepath.Join(tmp, "live/terragrunt.hcl"), nil, 0664); err != nil {
-				t.Fatalf("ioutil.Write terragrunt root file: %v", err)
-			}
+			convertToLocalBackend(t, path)
 
-			for _, d := range ds {
-				path := filepath.Join(tmp, d)
-
-				fn := func(path string, info os.FileInfo, err error) error {
-					if filepath.Ext(path) != ".tf" {
-						return nil
-					}
-
-					b, err := ioutil.ReadFile(path)
-					if err != nil {
-						t.Fatalf("ioutil.ReadFile(%q) = %v", path, err)
-					}
-
-					b = backendRE.ReplaceAll(b, []byte(`backend "local" {}`))
-					if err := ioutil.WriteFile(path, b, 0644); err != nil {
-						t.Fatalf("ioutil.WriteFile %q: %v", path, err)
-					}
-
-					return nil
-				}
-
-				if err := filepath.Walk(path, fn); err != nil {
-					t.Fatalf("filepath.Walk = %v", err)
-				}
-
-				// bin, planCmd := "terraform", "plan"
-				// if d == "live" {
-				// 	bin, planCmd = "terragrunt", "plan-all"
-				// }
-
-				// init := exec.Command(bin, "init")
-				// init.Dir = path
-				// if b, err := init.CombinedOutput(); err != nil {
-				// 	t.Fatalf("command %v in %q: %v\n%v", init.Args, path, err, string(b))
-				// }
-
-				plan := exec.Command("terragrunt", "plan-all")
-				plan.Dir = path
-				if b, err := plan.CombinedOutput(); err != nil {
-					t.Fatalf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
-				}
+			plan := exec.Command("terragrunt", "plan-all")
+			plan.Dir = path
+			if b, err := plan.CombinedOutput(); err != nil {
+				t.Fatalf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
 			}
 		})
+	}
+}
+
+// convertToLocalBackend converts the Terraform and Terragrunt configs at path to not reference a GCS backend.
+// This allows the test to run plan-all without causing Terraform to lookup the GCS state bucket.
+func convertToLocalBackend(t *testing.T, path string) {
+	// Overwrite root terragrunt file with empty file so it doesn't try to setup remote backend.
+	if err := ioutil.WriteFile(filepath.Join(path, "terragrunt.hcl"), nil, 0664); err != nil {
+		t.Fatalf("ioutil.Write terragrunt root file: %v", err)
+	}
+
+	// Replace all GCS backend blocks with local.
+	fn := func(path string, info os.FileInfo, err error) error {
+		if filepath.Ext(path) != ".tf" {
+			return nil
+		}
+
+		b, err := ioutil.ReadFile(path)
+		if err != nil {
+			t.Fatalf("ioutil.ReadFile(%q) = %v", path, err)
+		}
+
+		b = backendRE.ReplaceAll(b, nil)
+		if err := ioutil.WriteFile(path, b, 0644); err != nil {
+			t.Fatalf("ioutil.WriteFile %q: %v", path, err)
+		}
+
+		return nil
+	}
+
+	if err := filepath.Walk(path, fn); err != nil {
+		t.Fatalf("filepath.Walk = %v", err)
 	}
 }

@@ -33,11 +33,19 @@ data = {
     # The bootstrap module creates the Terraform state bucket and thus
     # its own state cannot be backed up until the state bucket has been created.
     #
-    # 1. Deploy the bootstrap module (deployed by the foundation recipe).
+    # 1. Deploy the bootstrap module (in this example it is the "foundation" template).
     #    The state will be created locally in the same directory.
     # 2. Remove this field and re-run the engine.
     # 3. In the bootstrap module run `terraform init` to backup the bootstrap state to GCS.
     bootstrap_gcs_backend = true
+
+    # GKE clusters cannot be created until the project that will host the GKE
+    # clusters has been created.
+    #
+    # 1. Deploy the project hosting the GKE clusters (in this example it is the "project_apps" template).
+    # 2. Remove this field and re-run the engine.
+    # 3. Deploy the new configs (e.g. send a PR with the changes if CICD has been setup).
+    gke_clusters = true
   }
 }
 
