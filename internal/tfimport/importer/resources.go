@@ -117,10 +117,10 @@ func loadFields(fields []string, interactive bool, configValues ...ProviderConfi
 	return fieldsMap, nil
 }
 
-func fillTemplate(templ string, fieldsMap map[string]interface{}) (string, error) {
+func fillTemplate(tmpl string, fieldsMap map[string]interface{}) (string, error) {
 	// Build the template.
 	buf := &bytes.Buffer{}
-	t, err := template.New("").Option("missingkey=error").Parse(templ)
+	t, err := template.New("").Option("missingkey=error").Parse(tmpl)
 	if err != nil {
 		return "", err
 	}
