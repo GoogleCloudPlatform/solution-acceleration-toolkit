@@ -23,8 +23,6 @@ import (
 	"testing"
 )
 
-var backendRE = regexp.MustCompile(`(?s)backend "gcs" {.*?}`)
-
 // TestExamples is a basic test for the engine to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
 	exs, err := filepath.Glob("../../examples/tfengine/*.hcl")
@@ -37,7 +35,8 @@ func TestExamples(t *testing.T) {
 	}
 
 	for _, ex := range exs {
-		ex := ex // capture range variable
+		// https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables
+		ex := ex
 		t.Run(filepath.Base(ex), func(t *testing.T) {
 			t.Parallel()
 			tmp, err := ioutil.TempDir("", "")
@@ -53,6 +52,7 @@ func TestExamples(t *testing.T) {
 			// Run plan on live dir to verify configs.
 			path := filepath.Join(tmp, "live")
 
+			// Convert the configs not reference a GCS backend as the state bucket does not exist.
 			convertToLocalBackend(t, path)
 
 			plan := exec.Command("terragrunt", "plan-all")
@@ -64,8 +64,10 @@ func TestExamples(t *testing.T) {
 	}
 }
 
-// convertToLocalBackend converts the Terraform and Terragrunt configs at path to not reference a GCS backend.
-// This allows the test to run plan-all without causing Terraform to lookup the GCS state bucket.
+// backendRE is a regex to capture GCS backend blocks in configs.
+// The 's' and 'U' flags allow capturing multi line backend blocks in a lazy manner.
+var backendRE = regexp.MustCompile(`(?sU)backend "gcs" {.*}`)
+
 func convertToLocalBackend(t *testing.T, path string) {
 	// Overwrite root terragrunt file with empty file so it doesn't try to setup remote backend.
 	if err := ioutil.WriteFile(filepath.Join(path, "terragrunt.hcl"), nil, 0664); err != nil {
