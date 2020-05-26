@@ -23,7 +23,7 @@ steps:
   args: ["build/md_check.sh"]
   id: Markdownlint check
 
-- name: "gcr.io/cloud-builders/go"
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
   id: Go code check
