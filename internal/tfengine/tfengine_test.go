@@ -17,9 +17,13 @@ package tfengine
 import (
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"regexp"
 	"testing"
 )
+
+var backendRE = regexp.MustCompile(`(?s)backend "gcs" {.*?}`)
 
 // TestExamples is a basic test for the engine to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
@@ -34,19 +38,64 @@ func TestExamples(t *testing.T) {
 
 	for _, ex := range exs {
 		t.Run(filepath.Base(ex), func(t *testing.T) {
+			t.Parallel()
+
 			tmp, err := ioutil.TempDir("", "")
 			if err != nil {
 				t.Fatalf("ioutil.TempDir = %v", err)
 			}
-			defer os.RemoveAll(tmp)
+			// defer os.RemoveAll(tmp)
 
 			if err := Run(ex, tmp); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
-			// Check for the existence of the bootstrap folder.
-			if _, err := os.Stat(filepath.Join(tmp, "bootstrap")); err != nil {
-				t.Fatalf("os.Stat bootstrap dir = %v", err)
+			ds := []string{
+				// "bootstrap",
+				"live",
+			}
+
+			for _, d := range ds {
+				path := filepath.Join(tmp, d)
+
+				fn := func(path string, info os.FileInfo, err error) error {
+					if filepath.Ext(path) != ".tf" {
+						return nil
+					}
+
+					b, err := ioutil.ReadFile(path)
+					if err != nil {
+						t.Fatalf("ioutil.ReadFile(%q) = %v", path, err)
+					}
+
+					b = backendRE.ReplaceAll(b, []byte(`backend "local" {}`))
+					if err := ioutil.WriteFile(path, b, 0644); err != nil {
+						t.Fatalf("ioutil.WriteFile %q: %v", path, err)
+					}
+
+					return nil
+				}
+
+				if err := filepath.Walk(path, fn); err != nil {
+					t.Fatalf("filepath.Walk = %v", err)
+				}
+
+				// bin, planCmd := "terraform", "plan"
+				// if d == "live" {
+				// 	bin, planCmd = "terragrunt", "plan-all"
+				// }
+
+				// init := exec.Command(bin, "init")
+				// init.Dir = path
+				// if b, err := init.CombinedOutput(); err != nil {
+				// 	t.Fatalf("command %v in %q: %v\n%v", init.Args, path, err, string(b))
+				// }
+
+				plan := exec.Command("terragrunt", "plan-all")
+				plan.Dir = path
+				if b, err := plan.CombinedOutput(); err != nil {
+					t.Fatalf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
+				}
 			}
 		})
 	}
