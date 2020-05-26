@@ -22,6 +22,5 @@ type config struct {
 		GCPOrgPolicies  map[string]interface{} `json:"gcp_org_policies"`
 	} `json:"overall"`
 	IAM     map[string]interface{} `json:"iam"`
-	Network map[string]interface{} `json:"network"`
 	Compute map[string]interface{} `json:"compute"`
 }

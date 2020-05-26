@@ -119,7 +119,6 @@ func mergeData(c *config) (map[string]interface{}, error) {
 		c.Overall.ForsetiPolicies,
 		c.Overall.GCPOrgPolicies,
 		c.IAM,
-		c.Network,
 		c.Compute,
 	}
 

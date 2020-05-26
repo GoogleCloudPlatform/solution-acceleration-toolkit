@@ -89,9 +89,9 @@ properties:
         items:
           type: string
 
-  network:
+  compute:
     description: |
-      Key value pairs to configure network related policies. If an optional
+      Key value pairs to configure compute related policies. If an optional
       property is not specified, then the corresponding default setting will be applied.
       For example, if allowed_* is not specified, then the corresponding policy will deny all.
     type: object
@@ -104,14 +104,6 @@ properties:
         items:
           type: string
 
-  compute:
-    description: |
-      Key value pairs to configure compute related policies. If an optional
-      property is not specified, then the corresponding default setting will be applied.
-      For example, if allowed_* is not specified, then the corresponding policy will deny all.
-    type: object
-    additionalProperties: false
-    properties:
       allowed_trusted_image_projects:
         description: |
           See templates/policygen/org_policies/variables.tf.

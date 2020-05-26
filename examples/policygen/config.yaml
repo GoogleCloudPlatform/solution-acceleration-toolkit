@@ -27,11 +27,9 @@ iam:
   allowed_policy_member_domains:
   - example.com
 
-network:
+compute:
   allowed_shared_vpc_host_projects:
   - under:folders/12345678
-
-compute:
   allowed_trusted_image_projects:
   - projects/example-image-project
   allowed_public_vms:
