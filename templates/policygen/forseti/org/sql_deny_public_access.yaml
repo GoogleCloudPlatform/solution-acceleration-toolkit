@@ -19,5 +19,8 @@ metadata:
 spec:
   severity: high
   match:
-    target: ["organization/{{.org_id}}"]
+    target:
+    {{- range get . "targets"}}
+    - {{.}}
+    {{- end}}
   parameters: {}

@@ -85,35 +85,49 @@ func Run(args *RunArgs) error {
 }
 
 func generateForsetiPolicies(outputDir string, c *config) error {
-	if c.ForsetiPolicies == nil {
+	if c.Overall.ForsetiPolicies == nil {
 		return nil
 	}
-	data := map[string]interface{}{
-		"org_id": c.OrgID,
-	}
 
-	if err := template.MergeData(data, c.ForsetiPolicies, nil); err != nil {
-		return err
+	data, err := mergeData(c)
+	if err != nil {
+		return fmt.Errorf("merge input data: %v", err)
 	}
 
 	in := filepath.Join(c.TemplateDir, "forseti", "org")
-	out := filepath.Join(outputDir, "forseti_policies", fmt.Sprintf("org.%s", c.OrgID))
+	out := filepath.Join(outputDir, "forseti_policies", "overall")
 	return template.WriteDir(in, out, data)
 }
 
 func generateGCPOrgPolicies(outputDir string, c *config) error {
-	if c.GCPOrgPolicies == nil {
+	if c.Overall.GCPOrgPolicies == nil {
 		return nil
 	}
-	data := map[string]interface{}{
-		"org_id": c.OrgID,
-	}
 
-	if err := template.MergeData(data, c.GCPOrgPolicies, nil); err != nil {
-		return err
+	data, err := mergeData(c)
+	if err != nil {
+		return fmt.Errorf("merge input data: %v", err)
 	}
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
-	out := filepath.Join(outputDir, "gcp_organization_policies")
+	out := filepath.Join(outputDir, "gcp_org_policies")
 	return template.WriteDir(in, out, data)
+}
+
+func mergeData(c *config) (map[string]interface{}, error) {
+	inputs := []map[string]interface{}{
+		c.Overall.ForsetiPolicies,
+		c.Overall.GCPOrgPolicies,
+		c.IAM,
+		c.Compute,
+	}
+
+	data := make(map[string]interface{})
+	for _, i := range inputs {
+		if err := template.MergeData(data, i, nil); err != nil {
+			return nil, err
+		}
+	}
+
+	return data, nil
 }
