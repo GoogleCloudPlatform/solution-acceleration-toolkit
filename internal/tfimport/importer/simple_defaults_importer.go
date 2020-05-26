@@ -18,17 +18,17 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
-// SimpleImporter defines a struct with the necessary information to import a resource that only depends on fields from the plan.
-// Should be used by any resource that doesn't use interactivity, API calls, or complicated processing of fields.
-type SimpleImporter struct {
-	Fields []string
-	Tmpl   string
+// SimpleDefaultsImporter defines a struct with the necessary information to import a resource that only depends on fields from the plan.
+// Should be used when SimpleImporter almost works, but some fields have acceptable default values.
+type SimpleDefaultsImporter struct {
+	SimpleImporter
+	Defaults map[string]interface{}
 }
 
 // ImportID returns the ID of the resource to use in importing.
-func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
+func (i *SimpleDefaultsImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
 	// Get required fields.
-	fieldsMap, err := loadFields(i.Fields, interactive, rc.Change.After, pcv)
+	fieldsMap, err := loadFields(i.Fields, interactive, rc.Change.After, pcv, i.Defaults)
 	if err != nil {
 		return "", err
 	}
