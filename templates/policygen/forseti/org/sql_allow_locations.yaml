@@ -19,7 +19,10 @@ metadata:
 spec:
   severity: high
   match:
-    target: ["organization/{{.org_id}}"]
+    target:
+    {{- range get . "targets"}}
+    - {{.}}
+    {{- end}}
   parameters:
     mode: allowlist
     # https://cloud.google.com/sql/docs/mysql/locations and https://cloud.google.com/sql/docs/postgres/locations
