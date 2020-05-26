@@ -71,8 +71,10 @@ Terraform configs, including importing resources from within modules.
 
 ## Supported Resources by Provider
 
-## Google (GCP)
+## [Google Cloud Platform (GCP)](https://www.terraform.io/docs/providers/google/index.html)
 
+- AppEngine
+  - [`google_app_engine_application`](https://www.terraform.io/docs/providers/google/r/app_engine_application.html)
 - BigQuery
   - [`google_bigquery_dataset`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html)
   - [`google_bigquery_table`](https://www.terraform.io/docs/providers/google/r/bigquery_table.html)
@@ -81,41 +83,74 @@ Terraform configs, including importing resources from within modules.
 - Cloud Build
   - [`google_cloudbuild_trigger`](https://www.terraform.io/docs/providers/google/r/cloudbuild_trigger.html)
 - Cloud (Stackdriver) Logging
+  - [`google_logging_billing_account_sink`](https://www.terraform.io/docs/providers/google/r/logging_billing_account_sink.html)
+  - [`google_logging_folder_sink`](https://www.terraform.io/docs/providers/google/r/logging_folder_sink.html)
   - [`google_logging_organization_sink`](https://www.terraform.io/docs/providers/google/r/logging_organization_sink.html)
+  - [`google_logging_project_sink`](https://www.terraform.io/docs/providers/google/r/logging_project_sink.html)
 - Cloud DNS
   - [`google_dns_managed_zone`](https://www.terraform.io/docs/providers/google/r/dns_managed_zone.html)
   - [`google_dns_record_set`](https://www.terraform.io/docs/providers/google/r/dns_record_set.html)
+- Cloud Key Management Service
+  - [`google_kms_key_ring`](https://www.terraform.io/docs/providers/google/r/kms_key_ring.html)
 - Cloud Platform
+  - [`google_billing_account_iam_binding`](https://www.terraform.io/docs/providers/google/r/google_billing_account_iam_binding.html)
+  - [`google_billing_account_iam_member`](https://www.terraform.io/docs/providers/google/r/google_billing_account_iam_member.html)
+  - [`google_billing_account_iam_policy`](https://www.terraform.io/docs/providers/google/r/google_billing_account_iam_policy.html)
+  - [`google_folder`](https://www.terraform.io/docs/providers/google/r/google_folder.html)
+  - [`google_folder_iam_binding`](https://www.terraform.io/docs/providers/google/r/google_folder_iam_binding.html)
+  - [`google_folder_iam_member`](https://www.terraform.io/docs/providers/google/r/google_folder_iam_member.html)
+  - [`google_folder_iam_policy`](https://www.terraform.io/docs/providers/google/r/google_folder_iam_policy.html)
+  - [`google_folder_organization_policy`](https://www.terraform.io/docs/providers/google/r/google_folder_organization_policy.html)
   - [`google_organization_iam_audit_config`](https://www.terraform.io/docs/providers/google/r/google_organization_iam_audit_config.html)
+  - [`google_organization_iam_custom_role`](https://www.terraform.io/docs/providers/google/r/google_organization_iam_custom_role.html)
   - [`google_organization_iam_member`](https://www.terraform.io/docs/providers/google/r/google_organization_iam_member.html)
   - [`google_organization_policy`](https://www.terraform.io/docs/providers/google/r/google_organization_policy.html)
   - [`google_project`](https://www.terraform.io/docs/providers/google/r/google_project.html)
   - [`google_project_iam_binding`](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_binding-1)
   - [`google_project_iam_custom_role`](https://www.terraform.io/docs/providers/google/r/google_project_iam_custom_role.html)
   - [`google_project_iam_member`](https://www.terraform.io/docs/providers/google/r/google_project_iam.html#google_project_iam_member-1)
+  - [`google_project_organization_policy`](https://www.terraform.io/docs/providers/google/r/google_project_organization_policy.html)
   - [`google_project_service`](https://www.terraform.io/docs/providers/google/r/google_project_service.html)
+  - [`google_project_usage_export_bucket`](https://www.terraform.io/docs/providers/google/r/usage_export_bucket.html)
   - [`google_service_account`](https://www.terraform.io/docs/providers/google/r/google_service_account.html)
   - [`google_service_account_iam_binding`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
   - [`google_service_account_iam_member`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
   - [`google_service_account_iam_policy`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
 - Cloud Pub/Sub
   - [`google_pubsub_subscription`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription.html)
+  - [`google_pubsub_subscription_iam_binding`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription_iam.html)
+  - [`google_pubsub_subscription_iam_member`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription_iam.html)
+  - [`google_pubsub_subscription_iam_policy`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription_iam.html)
   - [`google_pubsub_topic`](https://www.terraform.io/docs/providers/google/r/pubsub_topic.html)
+  - [`google_pubsub_topic_iam_binding`](https://www.terraform.io/docs/providers/google/r/pubsub_topic_iam.html)
+  - [`google_pubsub_topic_iam_member`](https://www.terraform.io/docs/providers/google/r/pubsub_topic_iam.html)
+  - [`google_pubsub_topic_iam_policy`](https://www.terraform.io/docs/providers/google/r/pubsub_topic_iam.html)
 - Cloud SQL
   - [`google_sql_database`](https://www.terraform.io/docs/providers/google/r/sql_database.html)
   - [`google_sql_database_instance`](https://www.terraform.io/docs/providers/google/r/sql_database_instance.html)
   - [`google_sql_user`](https://www.terraform.io/docs/providers/google/r/sql_user.html)
 - Cloud Storage
   - [`google_storage_bucket`](https://www.terraform.io/docs/providers/google/r/storage_bucket.html)
-  - [`google_storage_bucket_iam_member`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html#google_storage_bucket_iam_member)
+  - [`google_storage_bucket_iam_binding`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
+  - [`google_storage_bucket_iam_member`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
+  - [`google_storage_bucket_iam_policy`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
 - Compute Engine
+  - [`google_compute_address`](https://www.terraform.io/docs/providers/google/r/compute_address.html)
   - [`google_compute_firewall`](https://www.terraform.io/docs/providers/google/r/compute_firewall.html)
+  - [`google_compute_forwarding_rule`](https://www.terraform.io/docs/providers/google/r/compute_forwarding_rule.html)
   - [`google_compute_global_address`](https://www.terraform.io/docs/providers/google/r/compute_global_address.html)
+  - [`google_compute_health_check`](https://www.terraform.io/docs/providers/google/r/compute_health_check.html)
   - [`google_compute_image`](https://www.terraform.io/docs/providers/google/r/compute_image.html)
   - [`google_compute_instance`](https://www.terraform.io/docs/providers/google/r/compute_instance.html)
+  - [`google_compute_interconnect_attachment`](https://www.terraform.io/docs/providers/google/r/compute_interconnect_attachment.html)
   - [`google_compute_network`](https://www.terraform.io/docs/providers/google/r/compute_network.html)
+  - [`google_compute_network_peering`](https://www.terraform.io/docs/providers/google/r/compute_network_peering.html)
+  - [`google_compute_project_metadata_item`](https://www.terraform.io/docs/providers/google/r/compute_project_metadata_item.html)
+  - [`google_compute_region_backend_service`](https://www.terraform.io/docs/providers/google/r/compute_region_backend_service.html)
   - [`google_compute_router`](https://www.terraform.io/docs/providers/google/r/compute_router.html)
+  - [`google_compute_router_interface`](https://www.terraform.io/docs/providers/google/r/compute_router_interface.html)
   - [`google_compute_router_nat`](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
+  - [`google_compute_router_peer`](https://www.terraform.io/docs/providers/google/r/compute_router_bgp_peer.html)
   - [`google_compute_shared_vpc_host_project`](https://www.terraform.io/docs/providers/google/r/compute_shared_vpc_host_project.html)
   - [`google_compute_shared_vpc_service_project`](https://www.terraform.io/docs/providers/google/r/compute_shared_vpc_service_project.html)
   - [`google_compute_subnetwork`](https://www.terraform.io/docs/providers/google/r/compute_subnetwork.html)
@@ -137,6 +172,37 @@ Terraform configs, including importing resources from within modules.
 - Service Networking
   - [`google_service_networking_connection`](https://www.terraform.io/docs/providers/google/r/service_networking_connection.html)
 
-### Random
+### [GSuite](https://github.com/DeviaVir/terraform-provider-gsuite)
 
-- [random_id](https://www.terraform.io/docs/providers/random/r/id.html)
+- [`gsuite_group`](https://github.com/DeviaVir/terraform-provider-gsuite/blob/master/gsuite/resource_group.go)
+- [`gsuite_group_member`](https://github.com/DeviaVir/terraform-provider-gsuite/blob/master/gsuite/resource_group_member.go)
+
+### [Helm](https://www.terraform.io/docs/providers/helm/index.html)
+
+- [`helm_release`](https://www.terraform.io/docs/providers/helm/r/release.html)
+
+### [Kubernetes](https://www.terraform.io/docs/providers/kubernetes/index.html)
+
+- [`kubernetes_config_map`](https://www.terraform.io/docs/providers/kubernetes/r/config_map.html)
+- [`kubernetes_namespace`](https://www.terraform.io/docs/providers/kubernetes/r/namespace.html)
+- [`kubernetes_pod`](https://www.terraform.io/docs/providers/kubernetes/r/pod.html)
+- [`kubernetes_role`](https://www.terraform.io/docs/providers/kubernetes/r/role.html)
+- [`kubernetes_role_binding`](https://www.terraform.io/docs/providers/kubernetes/r/role_binding.html)
+- [`kubernetes_service`](https://www.terraform.io/docs/providers/kubernetes/r/service.html)
+- [`kubernetes_service_account`](https://www.terraform.io/docs/providers/kubernetes/r/service_account.html)
+
+### [Random](https://www.terraform.io/docs/providers/random/index.html)
+
+- [`random_id`](https://www.terraform.io/docs/providers/random/r/id.html)
+- [`random_integer`](https://www.terraform.io/docs/providers/random/r/integer.html)
+
+## Resources Where Import Is Not Supported by Provider
+
+### Google
+
+- BigQuery
+  - [`google_bigquery_dataset_access`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset_access.html)
+- Cloud Platform
+  - [`google_service_account_key`](https://www.terraform.io/docs/providers/google/r/google_service_account_key.html)
+- Cloud Storage
+  - [`google_storage_bucket_object`](https://www.terraform.io/docs/providers/google/r/storage_bucket_object.html)
