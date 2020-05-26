@@ -15,6 +15,7 @@
 package tfengine
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -58,7 +59,7 @@ func TestExamples(t *testing.T) {
 			plan := exec.Command("terragrunt", "plan-all")
 			plan.Dir = path
 			if b, err := plan.CombinedOutput(); err != nil {
-				t.Fatalf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
+				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
 			}
 		})
 	}
@@ -82,12 +83,12 @@ func convertToLocalBackend(t *testing.T, path string) {
 
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
-			t.Fatalf("ioutil.ReadFile(%q) = %v", path, err)
+			return fmt.Errorf("ioutil.ReadFile(%q) = %v", path, err)
 		}
 
 		b = backendRE.ReplaceAll(b, nil)
 		if err := ioutil.WriteFile(path, b, 0644); err != nil {
-			t.Fatalf("ioutil.WriteFile %q: %v", path, err)
+			return fmt.Errorf("ioutil.WriteFile %q: %v", path, err)
 		}
 
 		return nil
