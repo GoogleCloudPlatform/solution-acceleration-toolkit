@@ -170,15 +170,15 @@ func TestSimpleImporterErr(t *testing.T) {
 func TestLoadFields(t *testing.T) {
 	tests := []struct {
 		fields []string
-		want   map[string]string
+		want   map[string]interface{}
 	}{
 		// Empty.
-		{[]string{}, map[string]string{}},
+		{[]string{}, map[string]interface{}{}},
 
 		// Get some fields from both locations.
 		{
 			[]string{"", "name"},
-			map[string]string{
+			map[string]interface{}{
 				"":     "emptyValFirst",
 				"name": "myresourcename",
 			},

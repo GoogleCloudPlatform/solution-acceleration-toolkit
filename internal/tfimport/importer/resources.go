@@ -89,8 +89,8 @@ func userValue(in io.Reader) (string, error) {
 
 // loadFields returns a map of field names to values, taking into account interactivity and multiple ProviderConfigMaps.
 // The result can be used in templates.
-func loadFields(fields []string, interactive bool, configValues ...ProviderConfigMap) (fieldsMap map[string]string, err error) {
-	fieldsMap = make(map[string]string)
+func loadFields(fields []string, interactive bool, configValues ...ProviderConfigMap) (fieldsMap map[string]interface{}, err error) {
+	fieldsMap = make(map[string]interface{})
 	var missingFields []string
 	for _, field := range fields {
 		val, err := fromConfigValues(field, configValues...)
@@ -105,8 +105,9 @@ func loadFields(fields []string, interactive bool, configValues ...ProviderConfi
 			missingFields = append(missingFields, field)
 		}
 
-		// A bit safer to use the printf string conversion than the type assertion (i.e. val.(string)).
-		fieldsMap[field] = fmt.Sprintf("%s", val)
+		// Leave the value as-is, to allow arbitrary nesting in the template, if it happens to not be a string.
+		// For example, in the google_container_node_pool resource, `node_config` is a map but has potentially useful sub-fields.
+		fieldsMap[field] = val
 	}
 
 	if len(missingFields) > 0 {
@@ -116,7 +117,7 @@ func loadFields(fields []string, interactive bool, configValues ...ProviderConfi
 	return fieldsMap, nil
 }
 
-func fillTemplate(templ string, fieldsMap map[string]string) (string, error) {
+func fillTemplate(templ string, fieldsMap map[string]interface{}) (string, error) {
 	// Build the template.
 	buf := &bytes.Buffer{}
 	t, err := template.New("").Option("missingkey=error").Parse(templ)
