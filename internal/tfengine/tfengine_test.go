@@ -37,9 +37,9 @@ func TestExamples(t *testing.T) {
 	}
 
 	for _, ex := range exs {
+		ex := ex
 		t.Run(filepath.Base(ex), func(t *testing.T) {
 			t.Parallel()
-
 			tmp, err := ioutil.TempDir("", "")
 			if err != nil {
 				t.Fatalf("ioutil.TempDir = %v", err)
@@ -53,6 +53,10 @@ func TestExamples(t *testing.T) {
 			ds := []string{
 				// "bootstrap",
 				"live",
+			}
+
+			if err := ioutil.WriteFile(filepath.Join(tmp, "live/terragrunt.hcl"), nil, 0664); err != nil {
+				t.Fatalf("ioutil.Write terragrunt root file: %v", err)
 			}
 
 			for _, d := range ds {
