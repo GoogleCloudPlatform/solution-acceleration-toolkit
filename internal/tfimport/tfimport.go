@@ -231,14 +231,14 @@ var importers = map[string]resourceImporter{
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
-	ProviderConfig importer.ProviderConfigMap
+	ProviderConfig importer.ConfigMap
 	Importer       resourceImporter
 }
 
 // resourceImporter is an interface that must be implemented by all resources to allow them to be imported.
 type resourceImporter interface {
 	// ImportID returns an ID that Terraform can use to import this resource.
-	ImportID(rc terraform.ResourceChange, pcv importer.ProviderConfigMap, interactive bool) (string, error)
+	ImportID(rc terraform.ResourceChange, pcv importer.ConfigMap, interactive bool) (string, error)
 }
 
 // ImportID is a convenience function for passing a resource's information to its importer.
@@ -248,7 +248,7 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
-func Importable(rc terraform.ResourceChange, pcv importer.ProviderConfigMap) (*Resource, bool) {
+func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
 	ri, ok := importers[rc.Kind]
 	if !ok {
 		return nil, false

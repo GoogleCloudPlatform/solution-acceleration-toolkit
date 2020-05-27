@@ -15,39 +15,39 @@
 timeout: 1200s
 
 steps:
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: terraform
     args: ["version"]
     id: Terraform version
 
   # live/cicd
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Init (CICD)
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: terraform
     args: ["plan", "--lock=false", "-out=plan.tfplan"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Speculative plan (CICD)
 
   # live
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: terragrunt
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live"
     id: Init (live)
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: bash
     args: ["../cicd/configs/terragrunt.sh", "plan-all"]
     dir: "${_TERRAFORM_ROOT}/live"
     id: Speculative plan (live)
 
   # Check for delete operations as an FYI, it won't fail the build.
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a09ad46f513847d31e2cfe20f818c2d64809e7d12695e2e6098900296f6527bf"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: bash
     args: ["../cicd/configs/tf-deletion-check.sh"]
     dir: "${_TERRAFORM_ROOT}/live"

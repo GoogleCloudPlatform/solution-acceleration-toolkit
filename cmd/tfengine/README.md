@@ -2,17 +2,22 @@
 
 Status: Early Access Program
 
-Terraform Engine is a framework to jump start your organization onto GCP. It is
-a Terraform module generator that puts together Terraform resources and modules
-into deployments complete with values for your infrastructure.
+The Terraform Engine is a tool to generate complete end-to-end Terraform
+deployments for Google Cloud with security, compliance and best practices baked
+in.
+
+It introduces the concept of "templates" to wrap Terraform modules which can
+define a vast variety of configuration specific to your Google Cloud
+organization and structure.
 
 ## Why
 
 Users hosting any type of sensitive data on GCP typically need to go through a
-few common and repetitive processes such as setting up devops, auditing and
-monitoring. By using our out of the box end-to-end configs that implement these
-steps for you, you can quickly setup a secure and compliant environment and
-focus on the parts of the infrastructure that drive your business.
+few common and repetitive processes such as setting up devops (Remote state,
+CICD), auditing and monitoring. By using our out of the box end-to-end configs
+that implement these steps for you, you can quickly setup a secure and compliant
+environment and focus on the parts of the infrastructure that drive your
+business.
 
 This tool will help you follow:
 

@@ -24,7 +24,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
-var configs = []ProviderConfigMap{
+var configs = []ConfigMap{
 	{
 		"":       "emptyValFirst",
 		"mykey1": "key1First",
@@ -75,7 +75,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 func TestFromConfigValuesErr(t *testing.T) {
 	tests := []struct {
 		key string
-		cvs []ProviderConfigMap
+		cvs []ConfigMap
 	}{
 		// Empty configs - should return err.
 		{"", nil},
@@ -170,15 +170,15 @@ func TestSimpleImporterErr(t *testing.T) {
 func TestLoadFields(t *testing.T) {
 	tests := []struct {
 		fields []string
-		want   map[string]string
+		want   map[string]interface{}
 	}{
 		// Empty.
-		{[]string{}, map[string]string{}},
+		{[]string{}, map[string]interface{}{}},
 
 		// Get some fields from both locations.
 		{
 			[]string{"", "name"},
-			map[string]string{
+			map[string]interface{}{
 				"":     "emptyValFirst",
 				"name": "myresourcename",
 			},
@@ -191,7 +191,7 @@ func TestLoadFields(t *testing.T) {
 			t.Fatalf("loadFields(%v, %v, %v, %v) failed: %v", tc.fields, false, configs[0], rc, err)
 		}
 		if !cmp.Equal(got, tc.want, cmpopts.EquateEmpty()) {
-			t.Errorf("loadFields(%v, %v, %v, %v) = %v; got %v", tc.fields, false, configs[0], rc, got, tc.want)
+			t.Errorf("loadFields(%v, %v, %v, %v) = %v; want %v", tc.fields, false, configs[0], rc, got, tc.want)
 		}
 	}
 }
