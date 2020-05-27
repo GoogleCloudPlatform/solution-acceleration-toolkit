@@ -5,7 +5,7 @@ Status: Early Access Program
 A security policy generator which generates policies for two purposes:
 
 1. Typical policies enforced in a HIPAA aligned GCP environment.
-1. (coming soon) Policies based on Terraform configs to monitor GCP changes
+1. (coming soon) Policies based on Terraform state to monitor GCP changes
     that are not deployed by Terraform.
 
 Currently supported Policy Libraries:
