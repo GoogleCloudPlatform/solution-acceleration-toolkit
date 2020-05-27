@@ -1,6 +1,6 @@
 # Terraform Engine Recipes
 
-Recipes put the building blocks defined by [Components](../components) into
+Recipes put the building blocks defined by [components](../components) into
 usable, end to end deployments.
 
 One recipe can define multiple Terraform deployments.
