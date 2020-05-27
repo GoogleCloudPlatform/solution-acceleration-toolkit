@@ -16,13 +16,11 @@ package importer
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
-	"text/template"
 )
 
 // ProviderConfigMap is a type alias to make variables more readable.
@@ -115,21 +113,4 @@ func loadFields(fields []string, interactive bool, configValues ...ProviderConfi
 	}
 
 	return fieldsMap, nil
-}
-
-func fillTemplate(tmpl string, fieldsMap map[string]interface{}) (string, error) {
-	// Build the template.
-	buf := &bytes.Buffer{}
-	t, err := template.New("").Option("missingkey=error").Parse(tmpl)
-	if err != nil {
-		return "", err
-	}
-
-	// Execute the template.
-	err = t.Execute(buf, fieldsMap)
-	if err != nil {
-		return "", err
-	}
-
-	return buf.String(), nil
 }

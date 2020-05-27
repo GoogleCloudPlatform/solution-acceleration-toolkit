@@ -15,6 +15,7 @@
 package importer
 
 import (
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 )
 
@@ -34,5 +35,9 @@ func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfi
 		return "", err
 	}
 
-	return fillTemplate(i.Tmpl, fieldsMap)
+	buf, err := template.WriteBuffer(i.Tmpl, fieldsMap)
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), err
 }
