@@ -43,59 +43,31 @@ func generateIAMBindingsPolicies(resources []*states.Resource, outputDir string)
 }
 
 func bindings(resources []*states.Resource) ([]*binding, error) {
+	typeToIDField := map[string]string{
+		"project":      "project",
+		"folder":       "folder",
+		"organization": "org_id",
+	}
+
 	var bindings []*binding
-	instances, err := terraform.GetInstancesForType(resources, "google_project_iam_member")
-	if err != nil {
-		return nil, fmt.Errorf("get resource instances for type %q: %v", "google_project_iam_member", err)
-	}
-
-	for _, i := range instances {
-		if err := validate(i, "project", "role", "member"); err != nil {
-			return nil, err
+	for t, idField := range typeToIDField {
+		instances, err := terraform.GetInstancesForType(resources, fmt.Sprintf("google_%s_iam_member", t))
+		if err != nil {
+			return nil, fmt.Errorf("get resource instances for type %q: %v", fmt.Sprintf("google_%s_iam_member", t), err)
 		}
 
-		bindings = append(bindings, &binding{
-			Type:   "project",
-			ID:     i["project"].(string), // Type checked in validate()
-			Role:   i["role"].(string),
-			Member: i["member"].(string),
-		})
-	}
+		for _, i := range instances {
+			if err := validate(i, idField, "role", "member"); err != nil {
+				return nil, err
+			}
 
-	instances, err = terraform.GetInstancesForType(resources, "google_folder_iam_member")
-	if err != nil {
-		return nil, fmt.Errorf("get resource instances for type %q: %v", "google_folder_iam_member", err)
-	}
-
-	for _, i := range instances {
-		if err := validate(i, "folder", "role", "member"); err != nil {
-			return nil, err
+			bindings = append(bindings, &binding{
+				Type:   t,
+				ID:     i[idField].(string), // Type checked in validate()
+				Role:   i["role"].(string),
+				Member: i["member"].(string),
+			})
 		}
-
-		bindings = append(bindings, &binding{
-			Type:   "folder",
-			ID:     i["folder"].(string), // Type checked in validate()
-			Role:   i["role"].(string),
-			Member: i["member"].(string),
-		})
-	}
-
-	instances, err = terraform.GetInstancesForType(resources, "google_organization_iam_member")
-	if err != nil {
-		return nil, fmt.Errorf("get resource instances for type %q: %v", "google_organization_iam_member", err)
-	}
-
-	for _, i := range instances {
-		if err := validate(i, "org_id", "role", "member"); err != nil {
-			return nil, err
-		}
-
-		bindings = append(bindings, &binding{
-			Type:   "organization",
-			ID:     i["org_id"].(string), // Type checked in validate()
-			Role:   i["role"].(string),
-			Member: i["member"].(string),
-		})
 	}
 	return bindings, nil
 }
