@@ -19,11 +19,8 @@ package terraform
 
 import (
 	"encoding/json"
-	"log"
 	"strings"
 )
-
-const maxChildModuleLevel = 100
 
 // https://www.terraform.io/docs/internals/json-format.html#plan-representation
 type plan struct {
@@ -35,11 +32,6 @@ type plan struct {
 
 type variable struct {
 	Value interface{} `json:"value"`
-}
-
-// https://www.terraform.io/docs/internals/json-format.html#state-representation
-type state struct {
-	Values values `json:"values"`
 }
 
 // https://www.terraform.io/docs/internals/json-format.html#values-representation
@@ -111,54 +103,6 @@ type ProviderConfig struct {
 }
 
 type expressions map[string]interface{}
-
-// ReadPlanResources unmarshal json data to go struct and returns array of all Resource from root and child modules.
-func ReadPlanResources(data []byte) ([]Resource, error) {
-	p := new(plan)
-	if err := json.Unmarshal(data, p); err != nil {
-		return nil, err
-	}
-	var result []Resource
-	for _, resource := range p.PlannedValues.RootModules.Resources {
-		result = append(result, resource)
-	}
-	for _, module := range p.PlannedValues.RootModules.ChildModules {
-		result = append(result, resourcesFromModule(&module, 0)...)
-	}
-	return result, nil
-}
-
-// ReadStateResources unmarshal json data to go struct and returns array of all Resource from root and child modules.
-func ReadStateResources(data []byte) ([]Resource, error) {
-	s := new(state)
-	if err := json.Unmarshal(data, s); err != nil {
-		return nil, err
-	}
-	var result []Resource
-	for _, resource := range s.Values.RootModules.Resources {
-		result = append(result, resource)
-	}
-	for _, module := range s.Values.RootModules.ChildModules {
-		result = append(result, resourcesFromModule(&module, 0)...)
-	}
-	return result, nil
-}
-
-// resourcesFromModule returns array of all Resource from the module recursively.
-func resourcesFromModule(module *childModule, level int) []Resource {
-	if level > maxChildModuleLevel {
-		log.Printf("The configuration has more than %d level of modules. Modules with a depth more than %d will be ignored.", maxChildModuleLevel, maxChildModuleLevel)
-		return nil
-	}
-	var result []Resource
-	for _, resource := range module.Resources {
-		result = append(result, resource)
-	}
-	for _, c := range module.ChildModules {
-		result = append(result, resourcesFromModule(&c, level+1)...)
-	}
-	return result
-}
 
 // ReadPlanChanges unmarshals b into a jsonPlan and returns the array of ResourceChange from it.
 // If actions is not "", will only return changes where one of the specified actions will be taken.

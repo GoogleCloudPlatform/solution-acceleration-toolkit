@@ -24,7 +24,6 @@ import (
 )
 
 const testPlanPath = "testdata/plan.json"
-const testStatePath = "testdata/state.json"
 
 // These functions will fatal out so there's no need to return errors.
 func readTestFile(t *testing.T, path string) []byte {
@@ -43,45 +42,6 @@ func unmarshalTestPlan(t *testing.T) *plan {
 		t.Fatalf("unmarshal json: %v", err)
 	}
 	return p
-}
-
-func TestReadPlanResources(t *testing.T) {
-	b := readTestFile(t, testPlanPath)
-
-	resources, err := ReadPlanResources(b)
-	if err != nil {
-		t.Fatalf("unmarshal json: %v", err)
-	}
-
-	if len(resources) != 12 {
-		t.Fatalf("retrieved number of resources differ: got %d, want 12", len(resources))
-	}
-
-	// TODO: check more things.
-}
-
-func TestReadStateResources(t *testing.T) {
-	b := readTestFile(t, testStatePath)
-
-	resources, err := ReadStateResources(b)
-	if err != nil {
-		t.Fatalf("unmarshal json: %v", err)
-	}
-
-	if len(resources) != 1 {
-		t.Fatalf("retrieved number of resources differ: got %d, want 1", len(resources))
-	}
-
-	want := Resource{
-		Name:    "allow-all-ingress",
-		Address: "google_compute_firewall.allow-all-ingress",
-		Kind:    "google_compute_firewall",
-		Mode:    "managed",
-	}
-
-	if diff := cmp.Diff(resources[0], want, cmpopts.IgnoreFields(Resource{}, "Values")); diff != "" {
-		t.Fatalf("retrieved resource differs (-got +want):\n%v", diff)
-	}
 }
 
 func TestReadPlanChanges(t *testing.T) {
