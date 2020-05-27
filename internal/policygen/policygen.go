@@ -29,21 +29,21 @@ import (
 
 // RunArgs is the struct representing the arguments passed to Run().
 type RunArgs struct {
-	InputConfig string
-	InputState  string
-	OutputDir   string
+	ConfigPath string
+	StatePath  string
+	OutputPath string
 }
 
 func Run(args *RunArgs) error {
 	var err error
-	inputConfig, err := pathutil.Expand(args.InputConfig)
+	configPath, err := pathutil.Expand(args.ConfigPath)
 	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", args.InputConfig, err)
+		return fmt.Errorf("normalize path %q: %v", args.ConfigPath, err)
 	}
 
-	outputDir, err := pathutil.Expand(args.OutputDir)
+	outputPath, err := pathutil.Expand(args.OutputPath)
 	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", args.OutputDir, err)
+		return fmt.Errorf("normalize path %q: %v", args.OutputPath, err)
 	}
 
 	tmpDir, err := ioutil.TempDir("", "")
@@ -52,7 +52,7 @@ func Run(args *RunArgs) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	c, err := loadConfig(inputConfig)
+	c, err := loadConfig(configPath)
 	if err != nil {
 		return fmt.Errorf("load config: %v", err)
 	}
@@ -61,18 +61,18 @@ func Run(args *RunArgs) error {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(args.InputState, tmpDir, c); err != nil {
+	if err := generateForsetiPolicies(args.StatePath, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		return fmt.Errorf("mkdir %q: %v", outputDir, err)
+	if err := os.MkdirAll(outputPath, 0755); err != nil {
+		return fmt.Errorf("mkdir %q: %v", outputPath, err)
 	}
 
-	return copy.Copy(tmpDir, outputDir)
+	return copy.Copy(tmpDir, outputPath)
 }
 
-func generateGCPOrgPolicies(outputDir string, c *config) error {
+func generateGCPOrgPolicies(outputPath string, c *config) error {
 	if c.Overall.GCPOrgPolicies == nil {
 		return nil
 	}
@@ -83,49 +83,49 @@ func generateGCPOrgPolicies(outputDir string, c *config) error {
 	}
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
-	out := filepath.Join(outputDir, "gcp_org_policies")
+	out := filepath.Join(outputPath, "gcp_org_policies")
 	return template.WriteDir(in, out, data)
 }
 
-func generateForsetiPolicies(inputState, outputDir string, c *config) error {
+func generateForsetiPolicies(statePath, outputPath string, c *config) error {
 	if c.Overall.ForsetiPolicies == nil {
 		return nil
 	}
 
-	if err := generateGeneralForsetiPolicies(outputDir, c); err != nil {
+	if err := generateGeneralForsetiPolicies(outputPath, c); err != nil {
 		return err
 	}
 
-	if err := generateTerraformBasedForsetiPolicies(inputState, outputDir); err != nil {
+	if err := generateTerraformBasedForsetiPolicies(statePath, outputPath); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func generateGeneralForsetiPolicies(outputDir string, c *config) error {
+func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 	data, err := mergeData(c)
 	if err != nil {
 		return fmt.Errorf("merge input data: %v", err)
 	}
 
 	in := filepath.Join(c.TemplateDir, "forseti", "org")
-	out := filepath.Join(outputDir, "forseti_policies", "overall")
+	out := filepath.Join(outputPath, "forseti_policies", "overall")
 	return template.WriteDir(in, out, data)
 }
 
-func generateTerraformBasedForsetiPolicies(inputState, outputDir string) error {
-	if inputState == "" {
+func generateTerraformBasedForsetiPolicies(statePath, outputPath string) error {
+	if statePath == "" {
 		log.Println("No Terraform state given, only generating Terraform-agnostic security policies")
 		return nil
 	}
 
-	resources, err := loadResources(inputState)
+	resources, err := loadResources(statePath)
 	if err != nil {
 		return err
 	}
 
-	return generateIAMBindingsPolicies(resources, outputDir)
+	return generateIAMBindingsPolicies(resources, outputPath)
 }
 
 func mergeData(c *config) (map[string]interface{}, error) {

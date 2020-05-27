@@ -41,8 +41,9 @@ func TestExamples(t *testing.T) {
 			defer os.RemoveAll(tmp)
 
 			args := &RunArgs{
-				InputConfig: ex,
-				OutputDir:   tmp,
+				ConfigPath: ex,
+				StatePath:  "../terraform/testdata/test.tfstate",
+				OutputPath: tmp,
 			}
 
 			if err := Run(args); err != nil {

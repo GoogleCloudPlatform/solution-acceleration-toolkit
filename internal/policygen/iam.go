@@ -29,7 +29,7 @@ type binding struct {
 	Member string
 }
 
-func generateIAMBindingsPolicies(resources []*states.Resource, outputDir string) error {
+func generateIAMBindingsPolicies(resources []*states.Resource, outputPath string) error {
 
 	bindings, err := bindings(resources)
 	if err != nil {
