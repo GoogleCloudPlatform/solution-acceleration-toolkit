@@ -54,10 +54,6 @@ func WriteDir(inputDir, outputDir string, data map[string]interface{}) error {
 		in := filepath.Join(inputDir, f.Name())
 		out := filepath.Join(outputDir, f.Name())
 
-		if err := os.MkdirAll(filepath.Dir(out), 0755); err != nil {
-			return fmt.Errorf("mkdir %q: %v", filepath.Dir(out), err)
-		}
-
 		if f.IsDir() {
 			if err := WriteDir(in, out, data); err != nil {
 				return err
@@ -65,25 +61,37 @@ func WriteDir(inputDir, outputDir string, data map[string]interface{}) error {
 			continue
 		}
 
-		b, err := ioutil.ReadFile(in)
-		if err != nil {
-			return fmt.Errorf("read %q: %v", in, err)
-		}
-
-		tmpl, err := template.New(in).Funcs(funcMap).Option("missingkey=error").Parse(string(b))
-		if err != nil {
-			return fmt.Errorf("parse template %q: %v", in, err)
-		}
-
-		outFile, err := os.OpenFile(out, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
+		if err := WriteFile(in, out, data); err != nil {
 			return err
 		}
-		defer outFile.Close()
+	}
+	return nil
+}
 
-		if err := tmpl.Execute(outFile, data); err != nil {
-			return fmt.Errorf("execute template %q: %v", in, err)
-		}
+// WriteFile generates `out` based on the `in` template and `data`.
+func WriteFile(in, out string, data map[string]interface{}) error {
+	if err := os.MkdirAll(filepath.Dir(out), 0755); err != nil {
+		return fmt.Errorf("mkdir %q: %v", filepath.Dir(out), err)
+	}
+
+	b, err := ioutil.ReadFile(in)
+	if err != nil {
+		return fmt.Errorf("read %q: %v", in, err)
+	}
+
+	tmpl, err := template.New(in).Funcs(funcMap).Option("missingkey=error").Parse(string(b))
+	if err != nil {
+		return fmt.Errorf("parse template %q: %v", in, err)
+	}
+
+	outFile, err := os.OpenFile(out, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer outFile.Close()
+
+	if err := tmpl.Execute(outFile, data); err != nil {
+		return fmt.Errorf("execute template %q: %v", in, err)
 	}
 	return nil
 }
