@@ -122,7 +122,7 @@ func TestMergeData(t *testing.T) {
 		})
 	}
 }
-func TestFillTemplate(t *testing.T) {
+func TestWriteBuffer(t *testing.T) {
 	type T map[string]interface{}
 	tests := []struct {
 		tmpl      string
@@ -166,7 +166,7 @@ func TestFillTemplate(t *testing.T) {
 	}
 }
 
-func TestFillTemplateErr(t *testing.T) {
+func TestWriteBufferErr(t *testing.T) {
 	type T map[string]interface{}
 	tests := []struct {
 		tmpl      string

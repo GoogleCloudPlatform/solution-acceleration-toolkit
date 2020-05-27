@@ -24,7 +24,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
-var configs = []ProviderConfigMap{
+var configs = []ConfigMap{
 	{
 		"":       "emptyValFirst",
 		"mykey1": "key1First",
@@ -75,7 +75,7 @@ func TestFromConfigValuesGot(t *testing.T) {
 func TestFromConfigValuesErr(t *testing.T) {
 	tests := []struct {
 		key string
-		cvs []ProviderConfigMap
+		cvs []ConfigMap
 	}{
 		// Empty configs - should return err.
 		{"", nil},

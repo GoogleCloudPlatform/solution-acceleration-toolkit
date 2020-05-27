@@ -28,8 +28,12 @@ type SimpleImporter struct {
 }
 
 // ImportID returns the ID of the resource to use in importing.
-func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
+func (i *SimpleImporter) ImportID(rc terraform.ResourceChange, pcv ConfigMap, interactive bool) (string, error) {
 	// Get required fields.
+	// The field will be looked up, in order, from:
+	// * rc.Change.After - the values from a Terraform plan, representing the intended state after an apply.
+	// * pcv - The provider config values from a Terraform plan. These are a typical fallback when a resource doesn't explicitly define i.e. the GCP project.
+	// * i.Defaults - Manually provided defaults. Some resources have default values from the provider, i.e. the "namespace" field of helm_release.
 	fieldsMap, err := loadFields(i.Fields, interactive, rc.Change.After, pcv, i.Defaults)
 	if err != nil {
 		return "", err

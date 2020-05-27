@@ -23,8 +23,10 @@ import (
 	"strings"
 )
 
-// ProviderConfigMap is a type alias to make variables more readable.
-type ProviderConfigMap map[string]interface{}
+// ConfigMap is a type alias for a map of resource config values.
+// It's supposed to hold values for keys used in determining a resource's ImportID.
+// May come from the provider block, the planned change values, manually provided defaults, or elsewhere.
+type ConfigMap map[string]interface{}
 
 // InsufficientInfoErr indicates that we do not have enough information to import a resource.
 type InsufficientInfoErr struct {
@@ -41,7 +43,7 @@ func (e *InsufficientInfoErr) Error() string {
 }
 
 // fromConfigValues returns the first matching config value for key, from the given config value maps cvs.
-func fromConfigValues(key string, cvs ...ProviderConfigMap) (interface{}, error) {
+func fromConfigValues(key string, cvs ...ConfigMap) (interface{}, error) {
 	for _, cv := range cvs {
 		if v, ok := cv[key]; ok {
 			return v, nil
@@ -85,9 +87,9 @@ func userValue(in io.Reader) (string, error) {
 	return val, nil
 }
 
-// loadFields returns a map of field names to values, taking into account interactivity and multiple ProviderConfigMaps.
+// loadFields returns a map of field names to values, taking into account interactivity and multiple ConfigMaps.
 // The result can be used in templates.
-func loadFields(fields []string, interactive bool, configValues ...ProviderConfigMap) (fieldsMap map[string]interface{}, err error) {
+func loadFields(fields []string, interactive bool, configValues ...ConfigMap) (fieldsMap map[string]interface{}, err error) {
 	fieldsMap = make(map[string]interface{})
 	var missingFields []string
 	for _, field := range fields {
