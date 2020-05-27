@@ -206,3 +206,22 @@ Terraform configs, including importing resources from within modules.
   - [`google_service_account_key`](https://www.terraform.io/docs/providers/google/r/google_service_account_key.html)
 - Cloud Storage
   - [`google_storage_bucket_object`](https://www.terraform.io/docs/providers/google/r/storage_bucket_object.html)
+
+### Local
+
+- [`local_file`](https://www.terraform.io/docs/providers/local/r/file.html)
+
+### Null
+
+- [`null_resource`](https://www.terraform.io/docs/providers/null/resource.html)
+
+### Random
+
+- [`random_password`](https://www.terraform.io/docs/providers/random/r/password.html)
+- [`random_pet`](https://www.terraform.io/docs/providers/random/r/pet.html)
+- [`random_shuffle`](https://www.terraform.io/docs/providers/random/r/shuffle.html)
+- [`random_string`](https://www.terraform.io/docs/providers/random/r/string.html)
+
+### TLS
+
+- [`tls_private_key`](https://www.terraform.io/docs/providers/tls/r/private_key.html)
