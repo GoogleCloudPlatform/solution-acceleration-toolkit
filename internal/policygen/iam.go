@@ -50,7 +50,7 @@ func bindings(resources []*states.Resource) ([]*binding, error) {
 	}
 
 	for _, i := range instances {
-		if err := validate(i, []string{"project", "role", "member"}); err != nil {
+		if err := validate(i, "project", "role", "member"); err != nil {
 			return nil, err
 		}
 
@@ -68,7 +68,7 @@ func bindings(resources []*states.Resource) ([]*binding, error) {
 	}
 
 	for _, i := range instances {
-		if err := validate(i, []string{"folder", "role", "member"}); err != nil {
+		if err := validate(i, "folder", "role", "member"); err != nil {
 			return nil, err
 		}
 
@@ -86,7 +86,7 @@ func bindings(resources []*states.Resource) ([]*binding, error) {
 	}
 
 	for _, i := range instances {
-		if err := validate(i, []string{"org_id", "role", "member"}); err != nil {
+		if err := validate(i, "org_id", "role", "member"); err != nil {
 			return nil, err
 		}
 
@@ -101,7 +101,7 @@ func bindings(resources []*states.Resource) ([]*binding, error) {
 }
 
 // validate checks the presense of mandatory fields and assert string type.
-func validate(instance map[string]interface{}, mandatoryFields []string) error {
+func validate(instance map[string]interface{}, mandatoryFields ...string) error {
 	for _, k := range mandatoryFields {
 		if _, ok := instance[k]; !ok {
 			return fmt.Errorf("mandatory field %q missing from instance: %v", k, instance)
