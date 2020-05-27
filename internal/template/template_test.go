@@ -122,6 +122,66 @@ func TestMergeData(t *testing.T) {
 		})
 	}
 }
+func TestWriteBuffer(t *testing.T) {
+	tests := []struct {
+		tmpl      string
+		fieldsMap map[string]interface{}
+		want      string
+	}{
+		// Empty.
+		{"", nil, ""},
+
+		// Template doesn't use fields.
+		{"mytext", map[string]interface{}{"field1": "val1"}, "mytext"},
+
+		// Simple string fields.
+		{"field value is: {{.field1}}", map[string]interface{}{"field1": "val1"}, "field value is: val1"},
+
+		// Nested fields.
+		{
+			"nested value is: {{(index .field1 1).inner.leaf}}",
+			map[string]interface{}{
+				"field1": []map[string]interface{}{
+					nil,
+					{
+						"inner": map[string]interface{}{
+							"leaf": "leaf value",
+						},
+					},
+				},
+			},
+			"nested value is: leaf value",
+		},
+	}
+	for _, tc := range tests {
+		buf, err := WriteBuffer(tc.tmpl, tc.fieldsMap)
+		if err != nil {
+			t.Fatalf("fillTemplate(%v, %v) failed: %v", tc.tmpl, tc.fieldsMap, err)
+		}
+		got := buf.String()
+		if !cmp.Equal(got, tc.want) {
+			t.Errorf("fillTemplate(%v, %v) = %v; want %v", tc.tmpl, tc.fieldsMap, got, tc.want)
+		}
+	}
+}
+
+func TestWriteBufferErr(t *testing.T) {
+	tests := []struct {
+		tmpl string
+	}{
+		// Invalid character, should fail to parse.
+		{"{{.field[0]}}"},
+
+		// Missing key, should fail to execute.
+		{"{{.field}}"},
+	}
+	for _, tc := range tests {
+		_, err := WriteBuffer(tc.tmpl, nil)
+		if err == nil {
+			t.Fatalf("fillTemplate(%v, %v) succeeded for malformed input, want error", tc.tmpl, nil)
+		}
+	}
+}
 
 func intPointer(i int) *int {
 	return &i

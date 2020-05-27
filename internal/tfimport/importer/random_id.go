@@ -29,7 +29,7 @@ import (
 type RandomID struct{}
 
 // ImportID returns the ID of the resource to use in importing.
-func (c *RandomID) ImportID(rc terraform.ResourceChange, pcv ProviderConfigMap, interactive bool) (string, error) {
+func (c *RandomID) ImportID(rc terraform.ResourceChange, pcv ConfigMap, interactive bool) (string, error) {
 	if !interactive {
 		return "", &InsufficientInfoErr{MissingFields: []string{"b64_url"}}
 	}

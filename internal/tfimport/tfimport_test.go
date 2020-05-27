@@ -100,7 +100,7 @@ var argsWant = []string{testTerraformPath, "import", testAddress, testImportID}
 
 type testImporter struct{}
 
-func (r *testImporter) ImportID(terraform.ResourceChange, importer.ProviderConfigMap, bool) (string, error) {
+func (r *testImporter) ImportID(terraform.ResourceChange, importer.ConfigMap, bool) (string, error) {
 	return testImportID, nil
 }
 
@@ -121,7 +121,7 @@ func (tr *testRunner) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 func TestImportArgs(t *testing.T) {
 	testResource := &Resource{
 		Change:         terraform.ResourceChange{Address: testAddress},
-		ProviderConfig: importer.ProviderConfigMap{},
+		ProviderConfig: importer.ConfigMap{},
 		Importer:       &testImporter{},
 	}
 
