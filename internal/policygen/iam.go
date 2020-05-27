@@ -36,8 +36,8 @@ func generateIAMBindingsPolicies(resources []*states.Resource, outputDir string)
 		return err
 	}
 	log.Printf("Found %d bindings from input Terraform resources", len(bindings))
-	// TODO(xingao): Support google_*_iam_bindings.
-	// TODO(xingao): Generate policies.
+	// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/152): Support google_*_iam_bindings.
+	// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/152): Generate policies.
 
 	return nil
 }
@@ -51,29 +51,30 @@ func bindings(resources []*states.Resource) ([]*binding, error) {
 
 	var bindings []*binding
 	for t, idField := range typeToIDField {
-		instances, err := terraform.GetInstancesForType(resources, fmt.Sprintf("google_%s_iam_member", t))
+		resourceType := fmt.Sprintf("google_%s_iam_member", t)
+		instances, err := terraform.GetInstancesForType(resources, resourceType)
 		if err != nil {
-			return nil, fmt.Errorf("get resource instances for type %q: %v", fmt.Sprintf("google_%s_iam_member", t), err)
+			return nil, fmt.Errorf("get resource instances for type %q: %v", resourceType, err)
 		}
 
-		for _, i := range instances {
-			if err := validate(i, idField, "role", "member"); err != nil {
+		for _, ins := range instances {
+			if err := validate(ins, []string{idField, "role", "member"}); err != nil {
 				return nil, err
 			}
 
 			bindings = append(bindings, &binding{
 				Type:   t,
-				ID:     i[idField].(string), // Type checked in validate()
-				Role:   i["role"].(string),
-				Member: i["member"].(string),
+				ID:     ins[idField].(string), // Type checked in validate()
+				Role:   ins["role"].(string),
+				Member: ins["member"].(string),
 			})
 		}
 	}
 	return bindings, nil
 }
 
-// validate checks the presense of mandatory fields and assert string type.
-func validate(instance map[string]interface{}, mandatoryFields ...string) error {
+// validate checks the presence of mandatory fields and assert string type.
+func validate(instance map[string]interface{}, mandatoryFields []string) error {
 	for _, k := range mandatoryFields {
 		if _, ok := instance[k]; !ok {
 			return fmt.Errorf("mandatory field %q missing from instance: %v", k, instance)
