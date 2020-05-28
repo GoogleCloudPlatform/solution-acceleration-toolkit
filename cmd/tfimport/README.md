@@ -191,6 +191,10 @@ Terraform configs, including importing resources from within modules.
 - [`kubernetes_service`](https://www.terraform.io/docs/providers/kubernetes/r/service.html)
 - [`kubernetes_service_account`](https://www.terraform.io/docs/providers/kubernetes/r/service_account.html)
 
+### [Kubernetes Provider (Alpha)](https://github.com/hashicorp/terraform-provider-kubernetes-alpha)
+
+- [`kubernetes_manifest`](https://github.com/hashicorp/terraform-provider-kubernetes-alpha#create-a-kubernetes-custom-resource-definition)
+
 ### [Random](https://www.terraform.io/docs/providers/random/index.html)
 
 - [`random_id`](https://www.terraform.io/docs/providers/random/r/id.html)
