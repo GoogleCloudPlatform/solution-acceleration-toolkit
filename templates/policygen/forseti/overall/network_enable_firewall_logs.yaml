@@ -13,14 +13,14 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPNetworkEnableFlowLogsConstraintV1
+kind: GCPNetworkEnableFirewallLogsConstraintV1
 metadata:
-  name: network_enable_flow_logs
+  name: network_enable_firewall_logs
 spec:
   severity: medium
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
   parameters: {}

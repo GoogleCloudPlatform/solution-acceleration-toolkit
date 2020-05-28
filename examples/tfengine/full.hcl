@@ -96,6 +96,10 @@ template "foundation" {
       build_viewers = [
        "group:example-cicd-viewers@example.com",
       ]
+      managed_services = [
+        "container.googleapis.com",
+        "sqladmin.googleapis.com",
+      ]
     }
   }
 }

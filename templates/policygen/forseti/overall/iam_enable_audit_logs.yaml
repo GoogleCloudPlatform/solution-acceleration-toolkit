@@ -13,25 +13,20 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPSQLLocationConstraintV1
+kind: GCPIAMAuditLogConstraintV1
 metadata:
-  name: sql_allow_locations
+  name: iam_enable_audit_logs
 spec:
   severity: high
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
   parameters:
-    mode: allowlist
-    # https://cloud.google.com/sql/docs/mysql/locations and https://cloud.google.com/sql/docs/postgres/locations
-    locations:
-    - us-central # First Generation MySQL instances only.
-    - us-central1
-    - us-east1
-    - us-east4
-    - us-west1
-    - us-west2
-    - us-west3
-    - us
+    log_types:
+    - DATA_READ
+    - DATA_WRITE
+    - ADMIN_READ
+    services:
+    - allServices

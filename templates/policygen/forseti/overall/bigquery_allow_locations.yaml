@@ -13,25 +13,22 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPStorageLocationConstraintV1
+kind: GCPBigQueryDatasetLocationConstraintV1
 metadata:
-  name: storage_allow_locations
+  name: bigquery_allow_locations
 spec:
   severity: high
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
   parameters:
     mode: allowlist
-    # https://cloud.google.com/storage/docs/locations
+    # https://cloud.google.com/bigquery/docs/locations
     locations:
     - US
-    - US-CENTRAL1
-    - US-EAST1
-    - US-EAST4
-    - US-WEST1
-    - US-WEST2
-    - US-WEST3
-    - NAM4
+    - us-east1
+    - us-east4
+    - us-west2
+    - us-west3

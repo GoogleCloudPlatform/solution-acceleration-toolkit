@@ -13,14 +13,17 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPNetworkEnableFirewallLogsConstraintV1
+kind: GCPDataprocLocationConstraintV1
 metadata:
-  name: network_enable_firewall_logs
+  name: dataproc_allow_locations
 spec:
-  severity: medium
+  severity: high
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
-  parameters: {}
+  parameters:
+    # https://cloud.google.com/compute/docs/regions-zones#available
+    locations:
+    - "us*"

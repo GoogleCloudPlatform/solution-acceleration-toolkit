@@ -13,19 +13,14 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedBindingsConstraintV1
+kind: GCPNetworkEnableFlowLogsConstraintV1
 metadata:
-  name: iam_deny_public_access
+  name: network_enable_flow_logs
 spec:
-  severity: high
+  severity: medium
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
-  parameters:
-    mode: blacklist
-    role: "roles/*"
-    members:
-    - allUsers
-    - allAuthenticatedUsers
+  parameters: {}
