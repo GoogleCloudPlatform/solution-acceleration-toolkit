@@ -149,6 +149,7 @@ template "project_data" {
       project_id = "example-prod-data"
       apis = [
         "bigquery.googleapis.com",
+        "sqladmin.googleapis.com",
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
