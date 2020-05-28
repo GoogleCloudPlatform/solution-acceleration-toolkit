@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "allowed_policy_member_domains" {
-  description = "The list of domains to allow users from, e.g. google.com. If not specified, iam.allowedPolicyMemberDomains constraint will deny all"
+variable "allowed_policy_member_customer_ids" {
+  description = "The list of Cloud Identity or G Suite customer IDs corresponding to the domains to allow users from. If not specified, iam.allowedPolicyMemberDomains constraint will deny all"
   default     = []
 }
 
