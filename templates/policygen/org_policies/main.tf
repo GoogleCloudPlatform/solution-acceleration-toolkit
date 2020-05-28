@@ -158,11 +158,6 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
 }
 
 # Cloud Identity and Access Management
-data "google_organization" "orgs" {
-  for_each = toset(var.allowed_policy_member_domains)
-  domain   = each.value
-}
-
 module "orgpolicy_iam_allowed_policy_member_domains" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
@@ -172,8 +167,8 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
   policy_type       = "list"
-  allow             = [for org in data.google_organization.orgs : org["directory_customer_id"]]
-  allow_list_length = length(var.allowed_policy_member_domains)
+  allow             = var.allowed_policy_member_customer_ids
+  allow_list_length = length(var.allowed_policy_member_customer_ids)
 }
 
 # Google Cloud Platform - Resource Locations

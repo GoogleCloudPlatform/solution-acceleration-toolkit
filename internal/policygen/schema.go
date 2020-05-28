@@ -82,9 +82,18 @@ properties:
     type: object
     additionalProperties: false
     properties:
+      allowed_policy_member_customer_ids:
+        description: |
+          Used in the Google Cloud Organization Policies. See templates/policygen/org_policies/variables.tf.
+          Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+        type: array
+        items:
+          type: string
+
       allowed_policy_member_domains:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          Used in the Forseti Policy Library constraints.
+          The list of domains to allow users from, e.g. example.com
         type: array
         items:
           type: string

@@ -24,6 +24,8 @@ overall:
     - organization/5678/folder/*
 
 iam:
+  allowed_policy_member_customer_ids:
+  - example_customer_id
   allowed_policy_member_domains:
   - example.com
 
