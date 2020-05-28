@@ -24,9 +24,9 @@ overall:
     - organization/5678/folder/*
 
 iam:
-  allowed_policy_member_customer_ids:
+  allowed_policy_member_customer_ids: # Used by Google Cloud Organization Policies
   - example_customer_id
-  allowed_policy_member_domains:
+  allowed_policy_member_domains: # # Used by Forseti Policy Library Constraints
   - example.com
 
 compute:
