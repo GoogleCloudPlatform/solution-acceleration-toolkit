@@ -146,6 +146,9 @@ template "project_data" {
   data = {
     project = {
       project_id = "example-prod-data"
+      apis = [
+        "bigquery.googleapis.com",
+      ]
     }
     resources = {
       bigquery_datasets = [{
