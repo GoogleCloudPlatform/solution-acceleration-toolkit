@@ -81,6 +81,7 @@ module "orgpolicy_compute_disable_serial_port_access" {
   enforce     = true
 }
 
+{{- if index . "allowed_shared_vpc_host_projects"}}
 module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
@@ -93,6 +94,7 @@ module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   allow             = var.allowed_shared_vpc_host_projects
   allow_list_length = length(var.allowed_shared_vpc_host_projects)
 }
+{{- end}}
 
 module "orgpolicy_compute_skip_default_network_creation" {
   source  = "terraform-google-modules/org-policy/google"
@@ -106,6 +108,7 @@ module "orgpolicy_compute_skip_default_network_creation" {
   enforce     = true
 }
 
+{{- if index . "allowed_trusted_image_projects"}}
 module "orgpolicy_compute_trusted_image_projects" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
@@ -118,7 +121,10 @@ module "orgpolicy_compute_trusted_image_projects" {
   allow             = var.allowed_trusted_image_projects
   allow_list_length = length(var.allowed_trusted_image_projects)
 }
+{{- end}}
 
+
+{{- if index . "allowed_ip_forwarding_vms"}}
 module "orgpolicy_compute_vm_can_ip_forward" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
@@ -131,6 +137,7 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   allow             = var.allowed_ip_forwarding_vms
   allow_list_length = length(var.allowed_ip_forwarding_vms)
 }
+{{- end}}
 
 module "orgpolicy_compute_vm_external_ip_access" {
   source  = "terraform-google-modules/org-policy/google"
