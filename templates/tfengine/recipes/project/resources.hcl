@@ -39,7 +39,7 @@ template "bigquery_datasets" {
 {{end}}
 
 {{if has . "cloud_sql_instances"}}
-template "bigquery_datasets" {
+template "cloud_sql_instances" {
   component_path = "../../components/project/cloud_sql_instances"
 }
 {{end}}

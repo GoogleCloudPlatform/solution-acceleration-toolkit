@@ -147,13 +147,16 @@ template "project_data" {
   data = {
     project = {
       project_id = "example-prod-data"
+      apis = [
+        "bigquery.googleapis.com",
+      ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
         subnets = [{
           name = "example-subnet"
         }]
       }
-       # Add dependency on network deployment.
+      # Add dependency on network deployment.
       terraform_addons = {
         deps = [{
           name = "networks"
@@ -185,7 +188,7 @@ template "project_data" {
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
-          role   = "roles/storage.objectviewer"
+          role   = "roles/storage.objectViewer"
           member = "group:example-readers@example.com"
         }]
       }]

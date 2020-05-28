@@ -15,7 +15,7 @@
 // policygen automates generation of Google-recommended Policy Library constraints based on your Terraform configs.
 //
 // Usage:
-// $ policygen --input_config=./samples/config.yaml --output_dir=/tmp/constraints {--input_dir=/path/to/configs/dir|--input_plan=/path/to/plan/json|--input_state=/path/to/state/json}
+// $ policygen --config_path=examples/policygen/config.yaml --state_path=/path/to/default.tfstate --output_path=/tmp/policies
 package main
 
 import (
@@ -26,44 +26,26 @@ import (
 )
 
 var (
-	inputConfig = flag.String("input_config", "", "Path to the Policy Generator config.")
-	inputDir    = flag.String("input_dir", "", "Path to Terraform configs root directory. Cannot be specified together with other types of inputs.")
-	inputPlan   = flag.String("input_plan", "", "Path to Terraform plan in json format, Cannot be specified together with other types of inputs.")
-	inputState  = flag.String("input_state", "", "Path to Terraform state in json format. Cannot be specified together with other types of inputs.")
-	outputDir   = flag.String("output_dir", "", "Path to directory to write generated policies")
+	configPath = flag.String("config_path", "", "Path to the Policy Generator config.")
+	statePath  = flag.String("state_path", "", "Path to Terraform state in json format.")
+	outputPath = flag.String("output_path", "", "Path to output directory to write generated policies")
 )
 
 func main() {
 	flag.Parse()
 
-	maxOneNonEmpty := func(ss ...string) bool {
-		var n int
-		for _, s := range ss {
-			if s != "" {
-				n++
-			}
-		}
-		return n <= 1
+	if *configPath == "" {
+		log.Fatal("--config_path must be set")
 	}
 
-	if !maxOneNonEmpty(*inputDir, *inputPlan, *inputState) {
-		log.Fatal("maximum one of --input_dir, --input_plan or --input_state must be specified")
-	}
-
-	if *inputConfig == "" {
-		log.Fatal("--input_config must be set")
-	}
-
-	if *outputDir == "" {
-		log.Fatal("--output_dir must be set")
+	if *outputPath == "" {
+		log.Fatal("--output_path must be set")
 	}
 
 	args := &policygen.RunArgs{
-		InputConfig: *inputConfig,
-		InputDir:    *inputDir,
-		InputPlan:   *inputPlan,
-		InputState:  *inputState,
-		OutputDir:   *outputDir,
+		ConfigPath: *configPath,
+		StatePath:  *statePath,
+		OutputPath: *outputPath,
 	}
 
 	if err := policygen.Run(args); err != nil {
