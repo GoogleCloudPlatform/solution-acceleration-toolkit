@@ -156,9 +156,9 @@ func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 				cmd = err.Error()
 			} else {
 				// The last arg in import could be several space-separated strings. These need to be quoted together.
-				args := strings.Split(cmd, " ")
-				if len(args) >= 4 {
-					cmd = fmt.Sprintf("%v %v %v %q\n", args[0], args[1], args[2], strings.Join(args[3:], ""))
+				args := strings.SplitN(cmd, " ", 4)
+				if len(args) == 4 {
+					cmd = fmt.Sprintf("%v %v %v %q\n", args[0], args[1], args[2], args[3])
 				}
 			}
 
