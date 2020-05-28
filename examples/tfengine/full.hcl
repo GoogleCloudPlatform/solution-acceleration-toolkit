@@ -92,6 +92,10 @@ template "foundation" {
       build_viewers = [
        "group:example-cicd-viewers@example.com",
       ]
+      managed_services = [
+        "container.googleapis.com",
+        "sqladmin.googleapis.com",
+      ]
     }
   }
 }
@@ -146,6 +150,9 @@ template "project_data" {
   data = {
     project = {
       project_id = "example-prod-data"
+      apis = [
+        "bigquery.googleapis.com",
+      ]
     }
     resources = {
       bigquery_datasets = [{
@@ -165,7 +172,7 @@ template "project_data" {
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
-          role   = "roles/storage.objectviewer"
+          role   = "roles/storage.objectViewer"
           member = "group:example-readers@example.com"
         }]
       }]
