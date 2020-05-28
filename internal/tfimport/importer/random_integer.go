@@ -43,7 +43,8 @@ func (c *RandomInteger) ImportID(rc terraform.ResourceChange, pcv ConfigMap, int
 	}
 
 	// Seed is optional.
-	seed, _ := fromConfigValues("seed", rc.Change.After)
+	seed, seedErr := fromConfigValues("seed", rc.Change.After)
+	seedExists := seedErr == nil
 
 	// Ask the user for the result.
 	prompt := "Please enter the generated integer as the value for \"result\""
@@ -53,7 +54,7 @@ func (c *RandomInteger) ImportID(rc terraform.ResourceChange, pcv ConfigMap, int
 	}
 
 	ret := fmt.Sprintf("%v,%v,%v", result, min, max)
-	if seed != nil && seed != "" {
+	if seedExists {
 		ret = fmt.Sprintf("%v,%v", ret, seed)
 	}
 	return ret, nil
