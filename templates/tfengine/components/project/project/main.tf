@@ -37,13 +37,11 @@ module "project" {
   ]
   {{- end}}
 
-  {{- if has . "apis"}}
   activate_apis = [
-    {{- range .apis}}
+    {{- range get . "apis"}}
     "{{.}}",
     {{- end}}
   ]
-  {{- end}}
 }
 
 {{if get . "is_shared_vpc_host" -}}
