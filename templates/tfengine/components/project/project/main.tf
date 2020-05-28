@@ -38,7 +38,7 @@ module "project" {
   {{- end}}
 
   activate_apis = [
-    {{- range .apis}}
+    {{- range get . "apis"}}
     "{{.}}",
     {{- end}}
   ]
