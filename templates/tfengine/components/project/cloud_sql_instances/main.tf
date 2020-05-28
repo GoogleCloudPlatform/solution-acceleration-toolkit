@@ -19,6 +19,8 @@ limitations under the License. */ -}}
 {{- if has . "network_project_id"}}
 {{- $network = printf "projects/%s/global/networks/%s" .network_project_id .network}}
 {{- end}}
+
+{{- if eq .type "mysql"}}
 module "{{$instance_resource_name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 3.2.0"
@@ -42,5 +44,6 @@ resource "google_sql_user" "{{resourceName .name}}" {
   password = "{{.password}}"
   project  = var.project_id
 }
+{{- end}}
 {{- end}}
 {{- end}}

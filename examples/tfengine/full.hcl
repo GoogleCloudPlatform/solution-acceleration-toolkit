@@ -182,6 +182,7 @@ template "project_data" {
       }]
       cloud_sql_instances = [{
         name               = "example-instance"
+        type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
         subnet             = "example-subnet"
@@ -227,7 +228,7 @@ template "project_apps" {
         network_project_id     = "example-prod-networks"
         network                = "example-network"
         subnet                 = "example-subnet"
-        ip_range_pods_name     = "example-pods-range"
+        ip_range_pods_name     = "example-range"
         ip_range_services_name = "example-services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
       }]
