@@ -73,22 +73,17 @@ func Run(args *RunArgs) error {
 }
 
 func generateGCPOrgPolicies(outputPath string, c *config) error {
-	if c.Overall.GCPOrgPolicies == nil {
+	if c.GCPOrgPolicies == nil {
 		return nil
-	}
-
-	data, err := mergeData(c)
-	if err != nil {
-		return fmt.Errorf("merge input data: %v", err)
 	}
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
 	out := filepath.Join(outputPath, "gcp_org_policies")
-	return template.WriteDir(in, out, data)
+	return template.WriteDir(in, out, c.GCPOrgPolicies)
 }
 
 func generateForsetiPolicies(statePath, outputPath string, c *config) error {
-	if c.Overall.ForsetiPolicies == nil {
+	if c.ForsetiPolicies == nil {
 		return nil
 	}
 
@@ -104,14 +99,9 @@ func generateForsetiPolicies(statePath, outputPath string, c *config) error {
 }
 
 func generateGeneralForsetiPolicies(outputPath string, c *config) error {
-	data, err := mergeData(c)
-	if err != nil {
-		return fmt.Errorf("merge input data: %v", err)
-	}
-
 	in := filepath.Join(c.TemplateDir, "forseti", "overall")
 	out := filepath.Join(outputPath, "forseti_policies", "overall")
-	return template.WriteDir(in, out, data)
+	return template.WriteDir(in, out, c.ForsetiPolicies)
 }
 
 func generateTerraformBasedForsetiPolicies(statePath, outputPath string) error {
@@ -126,22 +116,4 @@ func generateTerraformBasedForsetiPolicies(statePath, outputPath string) error {
 	}
 
 	return generateIAMBindingsPolicies(resources, outputPath)
-}
-
-func mergeData(c *config) (map[string]interface{}, error) {
-	inputs := []map[string]interface{}{
-		c.Overall.ForsetiPolicies,
-		c.Overall.GCPOrgPolicies,
-		c.IAM,
-		c.Compute,
-	}
-
-	data := make(map[string]interface{})
-	for _, i := range inputs {
-		if err := template.MergeData(data, i, nil); err != nil {
-			return nil, err
-		}
-	}
-
-	return data, nil
 }
