@@ -29,9 +29,13 @@ var (
 	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
 )
 
-var kubernetesNamespaceNameImporter = &importer.SimpleImporter{
+var kubernetesImporter = &importer.SimpleImporter{
 	Fields: []string{"metadata"},
 	Tmpl:   "{{or (index .metadata \"namespace\") \"default\"}}/{{.metadata.name}}",
+}
+var kubernetesAlphaImporter = &importer.SimpleImporter{
+	Fields: []string{"manifest"},
+	Tmpl:   "{{or (index .manifest.metadata \"namespace\") \"default\"}}/{{.manifest.metadata.name}}",
 }
 
 // Defines all supported resource importers
@@ -384,16 +388,20 @@ var importers = map[string]resourceImporter{
 	},
 
 	// Kubernetes provider
-	"kubernetes_config_map": kubernetesNamespaceNameImporter,
+	"kubernetes_config_map": kubernetesImporter,
 	"kubernetes_namespace": &importer.SimpleImporter{
 		Fields: []string{"metadata"},
 		Tmpl:   "{{.metadata.name}}",
 	},
-	"kubernetes_pod":             kubernetesNamespaceNameImporter,
-	"kubernetes_role":            kubernetesNamespaceNameImporter,
-	"kubernetes_role_binding":    kubernetesNamespaceNameImporter,
-	"kubernetes_service":         kubernetesNamespaceNameImporter,
-	"kubernetes_service_account": kubernetesNamespaceNameImporter,
+	"kubernetes_pod":             kubernetesImporter,
+	"kubernetes_role":            kubernetesImporter,
+	"kubernetes_role_binding":    kubernetesImporter,
+	"kubernetes_service":         kubernetesImporter,
+	"kubernetes_service_account": kubernetesImporter,
+
+	// Kubernetes generic provider (alpha)
+	// See https://github.com/hashicorp/terraform-provider-kubernetes-alpha
+	"kubernetes_manifest": kubernetesAlphaImporter,
 
 	// Random provider
 	"random_id":      &importer.RandomID{},
