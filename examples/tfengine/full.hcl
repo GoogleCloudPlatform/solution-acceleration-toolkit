@@ -165,7 +165,7 @@ template "project_data" {
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
-          role   = "roles/storage.objectviewer"
+          role   = "roles/storage.objectViewer"
           member = "group:example-readers@example.com"
         }]
       }]
