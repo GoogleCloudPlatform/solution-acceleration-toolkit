@@ -13,20 +13,14 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAuditLogConstraintV1
+kind: GCPStorageBucketPolicyOnlyConstraintV1
 metadata:
-  name: iam_enable_audit_logs
+  name: storage_allow_uniform_bucket_access_only
 spec:
-  severity: high
+  severity: medium
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
-  parameters:
-    log_types:
-    - DATA_READ
-    - DATA_WRITE
-    - ADMIN_READ
-    services:
-    - allServices
+  parameters: {}
