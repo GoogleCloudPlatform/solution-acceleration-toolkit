@@ -13,14 +13,25 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPStorageBucketPolicyOnlyConstraintV1
+kind: GCPStorageLocationConstraintV1
 metadata:
-  name: storage_allow_uniform_bucket_access_only
+  name: storage_allow_locations
 spec:
-  severity: medium
+  severity: high
   match:
     target:
     {{- range get . "targets"}}
-    - {{.}}
+    - "{{.}}"
     {{- end}}
-  parameters: {}
+  parameters:
+    mode: allowlist
+    # https://cloud.google.com/storage/docs/locations
+    locations:
+    - US
+    - US-CENTRAL1
+    - US-EAST1
+    - US-EAST4
+    - US-WEST1
+    - US-WEST2
+    - US-WEST3
+    - NAM4

@@ -109,7 +109,7 @@ func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 		return fmt.Errorf("merge input data: %v", err)
 	}
 
-	in := filepath.Join(c.TemplateDir, "forseti", "org")
+	in := filepath.Join(c.TemplateDir, "forseti", "overall")
 	out := filepath.Join(outputPath, "forseti_policies", "overall")
 	return template.WriteDir(in, out, data)
 }
