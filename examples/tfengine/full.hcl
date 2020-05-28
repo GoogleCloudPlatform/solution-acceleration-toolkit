@@ -21,6 +21,7 @@ data = {
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
   cloud_sql_region  = "us-central1"
+  cloud_sql_zone    = "a"
   compute_region    = "us-central1"
   gke_region        = "us-central1"
   storage_location  = "us-central1"
@@ -146,6 +147,19 @@ template "project_data" {
   data = {
     project = {
       project_id = "example-prod-data"
+      shared_vpc_attachment = {
+        host_project_id = "example-prod-networks"
+        subnets = [{
+          name = "example-subnet"
+        }]
+      }
+       # Add dependency on network deployment.
+      terraform_addons = {
+        deps = [{
+          name = "networks"
+          path = "../../example-prod-networks/resources"
+        }]
+      }
     }
     resources = {
       bigquery_datasets = [{
@@ -161,6 +175,12 @@ template "project_data" {
             group_by_email = "example-readers@example.com"
           },
         ]
+      }]
+      cloud_sql_instances = [{
+        name               = "example-instance"
+        network_project_id = "example-prod-networks"
+        network            = "example-network"
+        subnet             = "example-subnet"
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
@@ -200,6 +220,7 @@ template "project_apps" {
     resources = {
       gke_clusters = [{
         name                   = "example-prod-gke-cluster"
+        network_project_id     = "example-prod-networks"
         network                = "example-network"
         subnet                 = "example-subnet"
         ip_range_pods_name     = "example-pods-range"
