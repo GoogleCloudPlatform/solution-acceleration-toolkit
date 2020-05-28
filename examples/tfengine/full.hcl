@@ -80,7 +80,11 @@ template "foundation" {
       domain     = "example.com"
     }
 
-    org_policies = {}
+    org_policies = {
+      allowed_policy_member_customer_ids = [
+        "example_customer_id",
+      ]
+    }
 
     cicd = {
       project_id                    = "example-devops"
@@ -92,6 +96,10 @@ template "foundation" {
       trigger_enabled               = true
       build_viewers = [
        "group:example-cicd-viewers@example.com",
+      ]
+      managed_services = [
+        "container.googleapis.com",
+        "sqladmin.googleapis.com",
       ]
     }
   }

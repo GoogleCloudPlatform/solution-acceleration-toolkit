@@ -20,7 +20,6 @@ title: Policy Generator Config Schema
 additionalProperties: false
 required:
 - template_dir
-- overall
 
 properties:
   template_dir:
@@ -29,98 +28,87 @@ properties:
       is relative to the directory where the config file lives.
     type: string
 
-  overall:
+  gcp_org_policies:
     description: |
-      Top level configs to control what policies to generate and their enforcing scope.
+      Key value pairs configure Google Cloud Organization Policies.
     type: object
     additionalProperties: false
+    required:
+    - parent_type
+    - parent_id
+    - allowed_policy_member_customer_ids
     properties:
-      gcp_org_policies:
+      parent_type:
         description: |
-          Key value pairs to define the scope to apply the policies.
-        type: object
-        additionalProperties: false
-        required:
-        - parent_type
-        - parent_id
-        properties:
-          parent_type:
-            description: |
-              Type of parent GCP resource to apply the policy: can be one of "organization",
-              "folder", or "project".
-            type: string
-            pattern: ^organization|folder|project$
+          Type of parent GCP resource to apply the policy: can be one of "organization",
+          "folder", or "project".
+        type: string
+        pattern: ^organization|folder|project$
 
-          parent_id:
-            description: |
-              ID of parent GCP resource to apply the policy: can be one of the organization ID,
-              folder ID, or project ID according to parent_type.
-            type: string
-            pattern: ^[0-9]{8,25}$
-
-      forseti_policies:
+      parent_id:
         description: |
-          Key value pairs to define the scope to apply the policies.
-        type: object
-        additionalProperties: false
-        required:
-        - targets
-        properties:
-          targets:
-            description: |
-              List of targets to apply the policies, e.g. organization/*,
-              organization/123/folder/456.
-            type: array
-            items:
-              type: string
+          ID of parent GCP resource to apply the policy: can be one of the organization ID,
+          folder ID, or project ID according to parent_type.
+        type: string
+        pattern: ^[0-9]{8,25}$
 
-  iam:
-    description: |
-      Key value pairs to configure IAM related policies. If an optional
-      property is not specified, then the corresponding default setting will be applied.
-      For example, if allowed_* is not specified, then the corresponding policy will deny all.
-    type: object
-    additionalProperties: false
-    properties:
-      allowed_policy_member_domains:
+      allowed_policy_member_customer_ids:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
+          members that can be assigned IAM roles.
+          Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
         type: array
         items:
           type: string
 
-  compute:
-    description: |
-      Key value pairs to configure compute related policies. If an optional
-      property is not specified, then the corresponding default setting will be applied.
-      For example, if allowed_* is not specified, then the corresponding policy will deny all.
-    type: object
-    additionalProperties: false
-    properties:
       allowed_shared_vpc_host_projects:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
         type: array
         items:
           type: string
 
       allowed_trusted_image_projects:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
         type: array
         items:
           type: string
 
       allowed_public_vms:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
         type: array
         items:
           type: string
 
       allowed_ip_forwarding_vms:
         description: |
-          See templates/policygen/org_policies/variables.tf.
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        type: array
+        items:
+          type: string
+
+  forseti_policies:
+    description: |
+      Key value pairs configure Forseti Policy Library constraints.
+    type: object
+    additionalProperties: false
+    required:
+    - targets
+    properties:
+      targets:
+        description: |
+          List of targets to apply the policies, e.g. organization/*,
+          organization/123/folder/456.
+        type: array
+        items:
+          type: string
+
+      allowed_policy_member_domains:
+        description: |
+          Used in the Forseti Policy Library constraints.
+          The list of domains to allow users from, e.g. example.com
         type: array
         items:
           type: string

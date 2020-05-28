@@ -151,7 +151,18 @@ func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 
 		// In dry-run mode, the output is the command to run.
 		if *dryRun {
-			importCmds = append(importCmds, output)
+			cmd := output
+			if err != nil {
+				cmd = err.Error()
+			} else {
+				// The last arg in import could be several space-separated strings. These need to be quoted together.
+				args := strings.SplitN(cmd, " ", 4)
+				if len(args) == 4 {
+					cmd = fmt.Sprintf("%v %v %v %q\n", args[0], args[1], args[2], args[3])
+				}
+			}
+
+			importCmds = append(importCmds, cmd)
 			continue
 		}
 
@@ -188,11 +199,7 @@ func planAndImport(rn, importRn runner.Runner) (retry bool, err error) {
 	if *dryRun && len(importCmds) > 0 {
 		log.Printf("Import commands:")
 		fmt.Printf("cd %v\n", *inputDir)
-		// The last arg in import could be several space-separated strings. These need to be quoted together.
-		for _, c := range importCmds {
-			args := strings.Split(c, " ")
-			fmt.Printf("%v %v %v %q\n", args[0], args[1], args[2], strings.Join(args[3:], " "))
-		}
+		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
 
 		return false, nil
 	}
