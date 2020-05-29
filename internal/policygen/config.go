@@ -16,11 +16,7 @@ package policygen
 
 // config is the struct representing the Policy Generator configuration.
 type config struct {
-	TemplateDir string `json:"template_dir"`
-	Overall     struct {
-		ForsetiPolicies map[string]interface{} `json:"forseti_policies"`
-		GCPOrgPolicies  map[string]interface{} `json:"gcp_org_policies"`
-	} `json:"overall"`
-	IAM     map[string]interface{} `json:"iam"`
-	Compute map[string]interface{} `json:"compute"`
+	TemplateDir     string                 `json:"template_dir"`
+	ForsetiPolicies map[string]interface{} `json:"forseti_policies"`
+	GCPOrgPolicies  map[string]interface{} `json:"gcp_org_policies"`
 }

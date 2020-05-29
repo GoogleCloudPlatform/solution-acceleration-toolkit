@@ -18,6 +18,7 @@ package tfengine
 const schema = `
 title: Terraform Engine Config Schema
 
+additionalProperties: false
 properties:
   data:
     description: |
@@ -25,7 +26,7 @@ properties:
       It will be merged with data set in the templates.
     type: object
 
-  templates:
+  template:
     description: |
       Templates the engine will parse and fill in with values from data.
       Templates use the Go templating engine: https://golang.org/pkg/text/template/
@@ -35,7 +36,7 @@ properties:
       type: object
       additionalProperties: false
       properties:
-        name:
+        Name:
           description: Name of the template.
           type: string
 
@@ -73,6 +74,8 @@ properties:
               description: |
                 Key value pairs passed to GCP Organization Policy constraint templates.
               type: object
+              required:
+              - allowed_policy_member_customer_ids
               properties:
                 parent_type:
                   description: |
@@ -80,6 +83,15 @@ properties:
                     "folder", or "project".
                   type: string
                   pattern: ^organization|folder|project$
+
+                allowed_policy_member_customer_ids:
+                  description: |
+                    See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
+                    members that can be assigned IAM roles.
+                    Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+                  type: array
+                  items:
+                    type: string
 
         # ----------------------------------------------------------------------
         # NOTE: The fields below should typically be set by recipe maintainers and not end users.

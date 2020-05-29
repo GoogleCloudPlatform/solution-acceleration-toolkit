@@ -11,9 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-{{if index . "allowed_policy_member_domains"}}
-allowed_policy_member_domains = [
-  {{- range .allowed_policy_member_domains}}
+{{if index . "allowed_policy_member_customer_ids"}}
+allowed_policy_member_customer_ids = [
+  {{- range .allowed_policy_member_customer_ids}}
   "{{.}}",
   {{- end}}
 ]
