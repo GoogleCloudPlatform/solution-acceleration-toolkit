@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "cloud_sql_instances"}}
-{{- $instance_resource_name := resourceName .name}}
 
 {{- $network := .network}}
 {{- if has . "network_project_id"}}
@@ -21,7 +20,7 @@ limitations under the License. */ -}}
 {{- end}}
 
 {{- if eq .type "mysql"}}
-module "{{$instance_resource_name}}" {
+module "{{resourceName .name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 3.2.0"
 
@@ -35,15 +34,5 @@ module "{{$instance_resource_name}}" {
   {{hclField . "user_name" false}}
   {{hclField . "user_password" false}}
 }
-
-{{- range get . "users"}}
-resource "google_sql_user" "{{resourceName .name}}" {
-  name     = "{{.name}}"
-  instance = module.{{$instance_resource_name}}.instance_name
-  host     = "%"
-  password = "{{.password}}"
-  project  = var.project_id
-}
-{{- end}}
 {{- end}}
 {{- end}}
