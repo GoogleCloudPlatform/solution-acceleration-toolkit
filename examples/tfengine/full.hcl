@@ -21,6 +21,7 @@ data = {
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
   cloud_sql_region  = "us-central1"
+  cloud_sql_zone    = "a"
   compute_region    = "us-central1"
   gke_region        = "us-central1"
   storage_location  = "us-central1"
@@ -130,18 +131,36 @@ template "project_networks" {
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
+      apis = [
+        "compute.googleapis.com",
+        "container.googleapis.com",
+        "servicenetworking.googleapis.com",
+      ]
     }
     resources = {
       compute_networks = [{
         name = "example-network"
-        subnets = [{
-          name     = "example-subnet"
-          ip_range = "10.2.0.0/16"
-          secondary_ranges = [{
-            name     = "example-range"
-            ip_range = "192.168.10.0/24"
-          }]
-        }]
+        subnets = [
+          {
+            name           = "example-sql-subnet"
+            ip_range       = "10.1.0.0/16"
+          },
+          {
+            name     = "example-gke-subnet"
+            ip_range = "10.2.0.0/16"
+            secondary_ranges = [
+              {
+                name     = "example-pods-range"
+                ip_range = "172.16.0.0/14"
+              },
+              {
+                name     = "example-services-range"
+                ip_range = "172.20.0.0/14"
+              }
+            ]
+          },
+        ]
+        cloud_sql_private_service_access = {} # Enable SQL private service access.
       }]
     }
   }
@@ -156,7 +175,23 @@ template "project_data" {
       project_id = "example-prod-data"
       apis = [
         "bigquery.googleapis.com",
+        "compute.googleapis.com",
+        "servicenetworking.googleapis.com",
+        "sqladmin.googleapis.com",
       ]
+      shared_vpc_attachment = {
+        host_project_id = "example-prod-networks"
+        subnets = [{
+          name = "example-sql-subnet"
+        }]
+      }
+      # Add dependency on network deployment.
+      terraform_addons = {
+        deps = [{
+          name = "networks"
+          path = "../../example-prod-networks/resources"
+        }]
+      }
     }
     resources = {
       bigquery_datasets = [{
@@ -172,6 +207,13 @@ template "project_data" {
             group_by_email = "example-readers@example.com"
           },
         ]
+      }]
+      cloud_sql_instances = [{
+        name               = "example-instance"
+        type               = "mysql"
+        network_project_id = "example-prod-networks"
+        network            = "example-network"
+        subnet             = "example-subnet"
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
@@ -192,12 +234,13 @@ template "project_apps" {
     project = {
       project_id = "example-prod-apps"
       apis = [
+        "compute.googleapis.com",
         "container.googleapis.com",
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
         subnets = [{
-          name = "example-subnet"
+          name = "example-gke-subnet"
         }]
       }
       # Add dependency on network deployment.
@@ -211,8 +254,9 @@ template "project_apps" {
     resources = {
       gke_clusters = [{
         name                   = "example-prod-gke-cluster"
+        network_project_id     = "example-prod-networks"
         network                = "example-network"
-        subnet                 = "example-subnet"
+        subnet                 = "example-gke-subnet"
         ip_range_pods_name     = "example-pods-range"
         ip_range_services_name = "example-services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
