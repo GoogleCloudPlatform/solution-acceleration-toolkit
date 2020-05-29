@@ -1008,7 +1008,7 @@ func TestImportersSanity(t *testing.T) {
 		change := terraform.ResourceChange{Change: terraform.Change{After: tc.planFields}}
 		got, err := importer.ImportID(change, nil, false)
 		if err != nil {
-			t.Errorf("%v importer %T(%v, nil, false) returned error: %v", tc.resource, importer, change, err)
+			t.Fatalf("%v importer %T(%v, nil, false) returned error: %v", tc.resource, importer, change, err)
 		}
 		if diff := cmp.Diff(tc.want, got, cmpopts.EquateEmpty()); diff != "" {
 			t.Errorf("%v importer %T(%v, nil, false) returned diff (-want +got):\n%s", tc.resource, importer, change, diff)
