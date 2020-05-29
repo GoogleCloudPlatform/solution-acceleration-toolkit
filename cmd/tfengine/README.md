@@ -117,8 +117,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     go install ./cmd/tfengine
     ```
 
-1. To generate Terraform configs, edit the config with values for your
-   infra and then run the following commands:
+1. Run the engine to generate your Terraform configs:
 
     ```shell
     nano $CONFIG_PATH
