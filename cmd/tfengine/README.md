@@ -95,15 +95,15 @@ Terraform configs. For details on fields for the input schema, see the
 there is no longer a dependency on the engine and the user can directly use
 the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
-1. Replace the values in the [example](../../examples/tfengine/simple.hcl) with
-   values for your infrastructure.
-
 1. To clone the repo, run the following commands:
 
     ```shell
     git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
     cd healthcare-data-protection-suite
     ```
+1. Replace the values in the [example](../../examples/tfengine/simple.hcl) with
+   values for your infrastructure.
+
 1. To set up helper environment vars, run the following commands:
 
     ```shell
