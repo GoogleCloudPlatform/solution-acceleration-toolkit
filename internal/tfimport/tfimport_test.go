@@ -1016,6 +1016,8 @@ func TestImportersSanity(t *testing.T) {
 	}
 }
 
+// The template is looking for a field that isn't required by the importer.
+// This should cause the template to fail.
 func TestSimpleImporterTmplExtraField(t *testing.T) {
 	imp := &importer.SimpleImporter{
 		Fields: []string{"project", "role"},
@@ -1033,6 +1035,8 @@ func TestSimpleImporterTmplExtraField(t *testing.T) {
 	}
 }
 
+// The importer requires a field that isn't being passed in.
+// This should cause the template to fail.
 func TestSimpleImporterRequiredFieldMissing(t *testing.T) {
 	imp := &importer.SimpleImporter{
 		Fields: []string{"project", "role", "member"},
