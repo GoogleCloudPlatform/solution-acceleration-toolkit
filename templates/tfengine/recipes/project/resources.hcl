@@ -38,6 +38,12 @@ template "bigquery_datasets" {
 }
 {{end}}
 
+{{if has . "cloud_sql_instances"}}
+template "cloud_sql_instances" {
+  component_path = "../../components/project/cloud_sql_instances"
+}
+{{end}}
+
 {{if has . "compute_networks"}}
 template "compute_networks" {
   component_path = "../../components/project/compute_networks"

@@ -12,9 +12,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "compute_networks"}}
+{{- range get . "compute_networks"}}
+{{- $resource_name := resourceName .name}}
 {{- $has_secondary_ranges := false}}
-module "{{resourceName .name}}" {
+
+module "{{$resource_name}}" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.3.0"
 
@@ -56,4 +58,14 @@ module "{{resourceName .name}}" {
   }
   {{- end}}
 }
+
+{{- if has . "cloud_sql_private_service_access"}}
+module "cloud_sql_private_service_access_{{$resource_name}}" {
+  source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
+  version = "~> 3.2.0"
+
+  project_id  = var.project_id
+  vpc_network = module.{{$resource_name}}.network_name
+}
+{{- end}}
 {{- end}}
