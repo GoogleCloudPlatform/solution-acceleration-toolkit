@@ -21,6 +21,6 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.4.1
-	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2 // indirect
+	golang.org/x/net v0.0.0-20200528225125-3c3fba18258b // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
