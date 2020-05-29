@@ -120,7 +120,6 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 1. Run the engine to generate your Terraform configs:
 
     ```shell
-    nano $CONFIG_PATH
     tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
     ```
 
