@@ -109,10 +109,7 @@ var importers = map[string]resourceImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/networks/{{.name}}",
 	},
-	"google_compute_network_peering": &importer.SimpleImporter{
-		Fields: []string{"network", "name"},
-		Tmpl:   "{{.network}}/{{.name}}",
-	},
+	"google_compute_network_peering": &importer.ComputeNetworkPeering{},
 	"google_compute_project_metadata_item": &importer.SimpleImporter{
 		Fields: []string{"key"},
 		Tmpl:   "{{.key}}",
@@ -184,7 +181,7 @@ var importers = map[string]resourceImporter{
 	"google_folder": &importer.SimpleImporter{
 		// The user will always be asked for this, it cannot be automatically detemrined.
 		Fields: []string{"folder_id"},
-		Tmpl:   "folders/${folder_id}",
+		Tmpl:   "folders/{{.folder_id}}",
 	},
 	"google_folder_iam_binding": &importer.SimpleImporter{
 		Fields: []string{"folder", "role"},
@@ -224,7 +221,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_logging_folder_sink": &importer.SimpleImporter{
 		Fields: []string{"folder", "name"},
-		Tmpl:   "folders/{{.folder}}/{{.name}}/",
+		Tmpl:   "folders/{{.folder}}/sinks/{{.name}}",
 	},
 	"google_logging_organization_sink": &importer.SimpleImporter{
 		Fields: []string{"org_id", "name"},
@@ -248,7 +245,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_organization_policy": &importer.SimpleImporter{
 		Fields: []string{"org_id", "constraint"},
-		Tmpl:   "{{.org_id}}/{{.constraint}}",
+		Tmpl:   "{{.org_id}}/constraints/{{.constraint}}",
 	},
 	"google_project": &importer.SimpleImporter{
 		Fields: []string{"project_id"},
@@ -268,7 +265,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_project_organization_policy": &importer.SimpleImporter{
 		Fields: []string{"project", "constraint"},
-		Tmpl:   "project/{{.project}}:constraints/{{.constraint}}",
+		Tmpl:   "projects/{{.project}}:constraints/{{.constraint}}",
 	},
 	"google_project_service": &importer.SimpleImporter{
 		Fields: []string{"project", "service"},
@@ -326,8 +323,8 @@ var importers = map[string]resourceImporter{
 	"google_service_account_iam_binding": &importer.SimpleImporter{
 		// This already includes the project. It looks like this:
 		// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
-		Fields: []string{"service_account_id"},
-		Tmpl:   "{{.service_account_id}} roles/iam.serviceAccountUser",
+		Fields: []string{"service_account_id", "role"},
+		Tmpl:   "{{.service_account_id}} {{.role}}",
 	},
 	"google_service_account_iam_member": &importer.SimpleImporter{
 		// The service_account_id already includes the project. It looks like this:
