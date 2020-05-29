@@ -1015,3 +1015,37 @@ func TestImportersSanity(t *testing.T) {
 		}
 	}
 }
+
+func TestSimpleImporterTmplExtraField(t *testing.T) {
+	imp := &importer.SimpleImporter{
+		Fields: []string{"project", "role"},
+		Tmpl:   "{{.project}} {{.role}} {{.member}}",
+	}
+
+	fields := map[string]interface{}{
+		"project": "my-project",
+		"role":    "roles/owner",
+	}
+	change := terraform.ResourceChange{Change: terraform.Change{After: fields}}
+	_, err := imp.ImportID(change, nil, false)
+	if err == nil {
+		t.Errorf("importer %v ImportID(%v, nil, false) succeeded for malformed input, want error", imp, change)
+	}
+}
+
+func TestSimpleImporterRequiredFieldMissing(t *testing.T) {
+	imp := &importer.SimpleImporter{
+		Fields: []string{"project", "role", "member"},
+		Tmpl:   "{{.project}} {{.role}} {{.member}}",
+	}
+
+	fields := map[string]interface{}{
+		"project": "my-project",
+		"role":    "roles/owner",
+	}
+	change := terraform.ResourceChange{Change: terraform.Change{After: fields}}
+	_, err := imp.ImportID(change, nil, false)
+	if err == nil {
+		t.Errorf("importer %v ImportID(%v, nil, false) succeeded for malformed input, want error", imp, change)
+	}
+}
