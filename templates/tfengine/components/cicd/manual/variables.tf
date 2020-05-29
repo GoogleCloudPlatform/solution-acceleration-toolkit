@@ -26,21 +26,6 @@ variable "state_bucket" {
   type        = string
 }
 
-variable "repo_owner" {
-  description = "Owner of the GitHub repo"
-  type        = string
-}
-
-variable "repo_name" {
-  description = "Name of the GitHub repo"
-  type        = string
-}
-
-variable "branch_regex" {
-  description = "Regex of the branches to set the Cloud Build Triggers to monitor"
-  type        = string
-}
-
 variable "continuous_deployment_enabled" {
   description = "Whether or not to enable continuous deployment of Terraform configs"
   type        = bool
