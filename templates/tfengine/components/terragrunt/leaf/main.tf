@@ -21,6 +21,6 @@ terraform {
   backend "gcs" {}
 }
 
-{{- if has . "raw_config"}}
+{{if has . "raw_config" -}}
 {{.raw_config}}
 {{- end}}
