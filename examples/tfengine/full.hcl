@@ -89,8 +89,10 @@ template "foundation" {
     cicd = {
       project_id                    = "example-devops"
       state_bucket                  = "example-state-bucket"
-      repo_owner                    = "GoogleCloudPlatform"
-      repo_name                     = "example"
+      github = {
+        owner                       = "GoogleCloudPlatform"
+        name                        = "example"
+      }
       branch_regex                  = "master"
       continuous_deployment_enabled = true
       trigger_enabled               = true

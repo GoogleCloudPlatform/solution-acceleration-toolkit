@@ -156,13 +156,20 @@ resource "google_cloudbuild_trigger" "validate" {
     "${local.terraform_root_prefix}**",
   ]
 
+  {{if index . "github" -}}
   github {
-    owner = var.repo_owner
-    name  = var.repo_name
+    owner = "{{.github.owner}}"
+    name  = "{{.github.name}}"
     pull_request {
-      branch = var.branch_regex
+      branch = "{{.branch_regex}}"
     }
   }
+  {{- else if index . "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = "{{.cloud_source_repository.name}}"
+    branch_name = "{{.branch_regex}}"
+  }
+  {{- end}}
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
 
@@ -186,13 +193,20 @@ resource "google_cloudbuild_trigger" "plan" {
     "${local.terraform_root_prefix}cicd/configs/**"
   ]
 
+  {{if index . "github" -}}
   github {
-    owner = var.repo_owner
-    name  = var.repo_name
+    owner = "{{.github.owner}}"
+    name  = "{{.github.name}}"
     pull_request {
-      branch = var.branch_regex
+      branch = "{{.branch_regex}}"
     }
   }
+  {{- else if index . "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = "{{.cloud_source_repository.name}}"
+    branch_name = "{{.branch_regex}}"
+  }
+  {{- end}}
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-plan.yaml"
 
@@ -218,13 +232,20 @@ resource "google_cloudbuild_trigger" "apply" {
     "${local.terraform_root_prefix}cicd/configs/**"
   ]
 
+  {{if index . "github" -}}
   github {
-    owner = var.repo_owner
-    name  = var.repo_name
+    owner = "{{.github.owner}}"
+    name  = "{{.github.name}}"
     push {
-      branch = var.branch_regex
+      branch = "{{.branch_regex}}"
     }
   }
+  {{- else if index . "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = "{{.cloud_source_repository.name}}"
+    branch_name = "{{.branch_regex}}"
+  }
+  {{- end}}
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
 
