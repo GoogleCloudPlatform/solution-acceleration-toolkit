@@ -19,8 +19,13 @@ to detect changes in the repo, trigger builds and run the workloads.
         can be the organization ID or folder ID according to parent_type.
     * `project_id`: Project ID of the `devops` project
     * `state_bucket`: Name of the state bucket
-    * `repo_owner`: GitHub repo owner
-    * `repo_name`: GitHub repo name
+    * `github`: Configuration block for GitHub Cloud Build triggers,
+      which supports:
+      * `owner`: GitHub repo owner
+      * `name`: GitHub repo name
+    * `cloud_source_repository`: Configuration block for Google Cloud
+      Source Repository Cloud Build triggers, which supports:
+      * `name`: Cloud Source Repository repo name
     * `branch_regex`: Regex of the branches to set the Cloud Build Triggers to
         monitor
     * `continuous_deployment_enabled`: Whether or not to enable continuous

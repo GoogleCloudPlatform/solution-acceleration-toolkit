@@ -15,9 +15,6 @@
 billing_account               = "{{.billing_account}}"
 project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"
-repo_owner                    = "{{.repo_owner}}"
-repo_name                     = "{{.repo_name}}"
-branch_regex                  = "{{.branch_regex}}"
 {{- if index . "continuous_deployment_enabled"}}
 continuous_deployment_enabled = {{.continuous_deployment_enabled}}
 {{- end}}
