@@ -39,6 +39,7 @@ var kubernetesAlphaImporter = &importer.SimpleImporter{
 }
 
 // Defines all supported resource importers
+// These can be sorted in Vim using ":SortRangesByHeader" from https://github.com/jrhouston/tfk8s
 var Importers = map[string]resourceImporter{
 	// Google provider
 	"google_app_engine_application": &importer.SimpleImporter{
