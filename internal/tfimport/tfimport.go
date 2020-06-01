@@ -39,7 +39,7 @@ var kubernetesAlphaImporter = &importer.SimpleImporter{
 }
 
 // Defines all supported resource importers
-var importers = map[string]resourceImporter{
+var Importers = map[string]resourceImporter{
 	// Google provider
 	"google_app_engine_application": &importer.SimpleImporter{
 		Fields: []string{"project"},
@@ -408,6 +408,20 @@ var importers = map[string]resourceImporter{
 	"random_integer": &importer.RandomInteger{},
 }
 
+// The following are explicitly not supported by their provider.
+var Unimportable = map[string]bool{
+	"google_bigquery_dataset_access": true,
+	"google_service_account_key":     true,
+	"google_storage_bucket_object":   true,
+	"local_file":                     true,
+	"null_resource":                  true,
+	"random_password":                true,
+	"random_pet":                     true,
+	"random_shuffle":                 true,
+	"random_string":                  true,
+	"tls_private_key":                true,
+}
+
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
@@ -429,7 +443,7 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
 func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
-	ri, ok := importers[rc.Kind]
+	ri, ok := Importers[rc.Kind]
 	if !ok {
 		return nil, false
 	}
