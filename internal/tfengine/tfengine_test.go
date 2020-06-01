@@ -52,9 +52,8 @@ func TestExamples(t *testing.T) {
 			path := filepath.Join(tmp, "live")
 
 			// Convert the configs not reference a GCS backend as the state bucket does not exist.
-			err = ConvertToLocalBackend(path)
-			if err != nil {
-				t.Fatalf("%v", err)
+			if err = ConvertToLocalBackend(path); err != nil {
+				t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
 			}
 
 			plan := exec.Command("terragrunt", "plan-all")
