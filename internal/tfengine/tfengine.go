@@ -123,19 +123,19 @@ func ConvertToLocalBackend(path string) error {
 
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
-			return fmt.Errorf("ioutil.ReadFile(%q) = %v", path, err)
+			return fmt.Errorf("read file %q: %v", path, err)
 		}
 
 		b = backendRE.ReplaceAll(b, nil)
 		if err := ioutil.WriteFile(path, b, 0644); err != nil {
-			return fmt.Errorf("ioutil.WriteFile %q: %v", path, err)
+			return fmt.Errorf("write file %q: %v", path, err)
 		}
 
 		return nil
 	}
 
 	if err := filepath.Walk(path, fn); err != nil {
-		return fmt.Errorf("filepath.Walk = %v", err)
+		return fmt.Errorf("walk files: %v", err)
 	}
 
 	return nil

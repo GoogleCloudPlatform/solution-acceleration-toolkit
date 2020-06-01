@@ -33,41 +33,48 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
 
+const full = "examples/tfengine/full.hcl"
+
 func main() {
-	full := "examples/tfengine/full.hcl"
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	if _, err := os.Stat(full); os.IsNotExist(err) {
-		log.Fatalf("example file %v does not exist: %v", full, err)
+		return fmt.Errorf("example file %v does not exist: %v", full, err)
 	}
 
 	log.Printf("Creating tmpdir for outputting the configs")
 	tmp, err := ioutil.TempDir("", "")
 	if err != nil {
-		log.Fatalf("ioutil.TempDir = %v", err)
+		return fmt.Errorf("ioutil.TempDir = %v", err)
 	}
 	defer os.RemoveAll(tmp)
 
 	log.Printf("Generating configs from %v to %v", full, tmp)
 	if err := tfengine.Run(full, tmp); err != nil {
-		log.Fatalf("tfengine.Run(%q, %q) = %v", full, tmp, err)
+		return fmt.Errorf("tfengine.Run(%q, %q) = %v", full, tmp, err)
 	}
 
 	log.Printf("Converting all Terraform backend blocks to local")
 	path := filepath.Join(tmp, "live")
 	if err := tfengine.ConvertToLocalBackend(path); err != nil {
-		log.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+		return fmt.Errorf("ConvertToLocalBackend(%v): %v", path, err)
 	}
 
 	log.Printf("Initializing all modules in order to create and fill the .terraform/ dirs.")
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
 	if b, err := plan.CombinedOutput(); err != nil {
-		log.Fatalf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(b))
+		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(b))
 	}
 
 	log.Printf("Finding all resources")
 	resources, err := findAllResources(path)
 	if err != nil {
-		log.Fatalf("finding resources: %v", err)
+		return fmt.Errorf("finding resources: %v", err)
 	}
 
 	log.Printf("Filtering supported and unimportable resources")
@@ -84,9 +91,11 @@ func main() {
 	if len(unsupported) > 0 {
 		sort.Strings(unsupported)
 		log.Printf("Found unsupported resources:\n%v", strings.Join(unsupported, "\n"))
-		return
+		return nil
 	}
 	log.Println("All importable resources supported by importer!")
+
+	return nil
 }
 
 var resourceRE = regexp.MustCompile(`(?s)resource "(.*?)"`)
