@@ -30,6 +30,11 @@ template "terraform" {
       project_id = "dependency.project.outputs.project_id"
     }
   }
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
 }
 
 {{if has . "bigquery_datasets"}}
