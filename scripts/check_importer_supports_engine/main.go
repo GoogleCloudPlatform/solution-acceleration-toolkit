@@ -13,8 +13,8 @@
 // limitations under the License.
 
 // Generates configs from the full example, inits all modules, and checks if any resources are not supported by the importer.
-// Meant to be run from the scripts/ folder like so:
-// go run importer_engine_support_check.go
+// Meant to be run from the repo root like so:
+// go run ./scripts/check_importer_supports_engine
 
 package main
 
@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-	full := "../examples/tfengine/full.hcl"
+	full := "examples/tfengine/full.hcl"
 	if _, err := os.Stat(full); os.IsNotExist(err) {
 		log.Fatalf("example file %v does not exist: %v", full, err)
 	}
@@ -53,13 +53,15 @@ func main() {
 
 	log.Printf("Converting all Terraform backend blocks to local")
 	path := filepath.Join(tmp, "live")
-	tfengine.ConvertToLocalBackend(path)
+	if err := tfengine.ConvertToLocalBackend(path); err != nil {
+		log.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+	}
 
 	log.Printf("Initializing all modules in order to create and fill the .terraform/ dirs.")
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
 	if b, err := plan.CombinedOutput(); err != nil {
-		log.Printf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(b))
+		log.Fatalf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(b))
 	}
 
 	log.Printf("Finding all resources")
