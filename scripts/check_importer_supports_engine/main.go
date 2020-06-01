@@ -84,9 +84,9 @@ func main() {
 	if len(unsupported) > 0 {
 		sort.Strings(unsupported)
 		log.Printf("Found unsupported resources:\n%v", strings.Join(unsupported, "\n"))
-	} else {
-		log.Println("All importable resources supported by importer!")
+		return
 	}
+	log.Println("All importable resources supported by importer!")
 }
 
 var resourceRE = regexp.MustCompile(`(?s)resource "(.*?)"`)
