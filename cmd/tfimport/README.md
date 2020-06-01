@@ -60,7 +60,23 @@ Usage:
      a different version of terraform. (default "terraform")
 ```
 
-## Terraformer
+## Limitations
+
+### Unknown Fields
+
+Sometimes, fields required for import will not be known at plan time. This generally
+falls into a few cases:
+
+1. Another resource must be imported first. The importer will keep trying to
+   plan-and-import as long as it makes progress (i.e. successfully imports some resources,
+   but not all).
+2. Unknowable fields, including all `random_*` resources and `google_folder`.
+   In this case, the importer will ask the user to input the value. Where
+   possible, it will offer a choice as well.
+
+## Related Tools
+
+### Terraformer
 
 This tool is complementary to
 [Terraformer](https://github.com/GoogleCloudPlatform/terraformer).
@@ -69,7 +85,7 @@ Terraformer focuses on generating new Terraform configs from existing
 infrastructure, while the Importer allows you to define and organize your own
 Terraform configs, including importing resources from within modules.
 
-## Supported Resources by Provider
+## Supported Resources, by Provider
 
 ## [Google Cloud Platform (GCP)](https://www.terraform.io/docs/providers/google/index.html)
 
@@ -200,7 +216,7 @@ Terraform configs, including importing resources from within modules.
 - [`random_id`](https://www.terraform.io/docs/providers/random/r/id.html)
 - [`random_integer`](https://www.terraform.io/docs/providers/random/r/integer.html)
 
-## Resources Where Import Is Not Supported by Provider
+## Resources Where Import Is Not Supported, by Provider
 
 ### Google
 
