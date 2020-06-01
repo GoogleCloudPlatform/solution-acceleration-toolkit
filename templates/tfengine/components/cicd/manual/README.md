@@ -66,6 +66,8 @@ to detect changes in the repo, trigger builds, and run the workloads.
    * `tf-validate`: Perform Terraform format and syntax check.
    * `tf-plan`: Generate speculative plans to show a set of potential changes
      if the pending config changes are deployed.
+      * This also performs a non-blocking check for resource deletions. These are
+        worth reviewing, as deletions are potentially destructive.
 
     If `continuous_deployment_enabled` is set to `true` in your Terraform Engine
     config, `continuous_deployment_enabled` will be set to `true` in
@@ -94,6 +96,21 @@ Pull Request. They should be configured to block Pull Request submissions.
 Every new push to the Pull Request at the configured branches automatically
 triggers presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in the
 Pull Ruquest.
+
+The deletion check optionally accepts a whitelist of resources to ignore. To
+configure it:
+
+1. Create a file `tf-delete-whitelist.txt` in the `cicd/configs/` directory.
+2. Add [grep extended regex patterns](https://en.wikipedia.org/wiki/Regular_expression#POSIX_extended)
+   to it, one per line.
+
+Example:
+
+```text
+networks
+module.cloudsql.module.safer_mysql.google_sql_database.default
+google_sql_user.db_users\["user-creds"\]
+```
 
 ### Continuous deployment (postsubmit)
 

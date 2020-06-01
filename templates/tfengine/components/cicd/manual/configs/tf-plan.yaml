@@ -49,7 +49,7 @@ steps:
   # Check for delete operations as an FYI, it won't fail the build.
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
     entrypoint: bash
-    args: ["../cicd/configs/tf-deletion-check.sh"]
+    args: ["../cicd/configs/tf-deletion-check.sh", "../cicd/configs/tf-delete-whitelist.txt"]
     dir: "${_TERRAFORM_ROOT}/live"
     id: Resource deletion check
 
