@@ -216,6 +216,7 @@ template "project_data" {
         network_project_id = "example-prod-networks"
         network            = "example-network"
         subnet             = "example-subnet"
+        user_password      = "$${random_password.db_password.result}" // use $$ to escape
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
@@ -224,6 +225,14 @@ template "project_data" {
           member = "group:example-readers@example.com"
         }]
       }]
+      terraform_addons = {
+        raw_config = <<EOF
+resource "random_password" "db_password" {
+  length = 16
+  special = true
+}
+EOF
+      }
     }
   }
 }
