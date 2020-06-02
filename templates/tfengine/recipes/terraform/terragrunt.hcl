@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template "terraform" {
+  recipe_path = "./terraform.hcl"
+  data = {
+    # GCS backend config is set by terragrunt root.
+    disable_gcs_backend_config = true
+  }
+}
+
 template "terragrunt" {
   component_path = "../../components/terragrunt/leaf"
   {{if has . "terraform_addons"}}
@@ -19,12 +27,4 @@ template "terragrunt" {
     key = "terraform_addons"
   }
   {{end}}
-}
-
-template "terraform" {
-  recipe_path = "./terraform.hcl"
-  data = {
-    # GCS backend config is set by terragrunt root.
-    disable_gcs_backend_config = true
-  }
 }
