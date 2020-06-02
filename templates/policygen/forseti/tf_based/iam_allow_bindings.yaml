@@ -20,11 +20,11 @@ spec:
   severity: high
   match:
     target:
-    - "{{get . "target"}}"
+    - "{{.target}}"
   parameters:
     mode: whitelist
-    role: {{get . "role"}}
+    role: {{.role}}
     members:
-    {{- range .bindings}}
+    {{- range .members}}
     - {{.}}
     {{- end}}

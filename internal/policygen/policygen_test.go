@@ -29,8 +29,8 @@ func (*Fake) CmdRun(*exec.Cmd) error { return nil }
 
 func (*Fake) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 	cmdStr := strings.Join(cmd.Args, " ")
-	if contains(cmdStr, "gcloud projects describe", "--format=value(projectNumber)") {
-		return []byte("123\n"), nil
+	if contains(cmdStr, "gcloud projects describe", "--format json") {
+		return []byte("{\"projectNumber\": \"123\"}"), nil
 	}
 
 	return nil, nil

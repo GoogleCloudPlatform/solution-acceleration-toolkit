@@ -20,7 +20,7 @@ spec:
   severity: high
   match:
     target:
-    - "{{get . "target"}}"
+    - "{{.target}}"
   parameters:
     mode: "allow"
     roles:

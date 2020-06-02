@@ -15,6 +15,7 @@
 package policygen
 
 import (
+	"encoding/json"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -54,11 +55,11 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 		}
 
 		// Generate policies for allowed bindings for each role.
-		for role, bindings := range rbs {
+		for role, members := range rbs {
 			data := map[string]interface{}{
-				"target":   fmt.Sprintf("%s/%s", root.Type, root.ID),
-				"role":     role,
-				"bindings": bindings,
+				"target":  fmt.Sprintf("%s/%s", root.Type, root.ID),
+				"role":    role,
+				"members": members,
 			}
 			in := filepath.Join(templateDir, "forseti", "tf_based", "iam_allow_bindings.yaml")
 			out := filepath.Join(outputPath, forsetiOutputRoot, outputFolder, fmt.Sprintf("iam_allow_bindings_%s.yaml", strings.TrimPrefix(role, "roles/")))
@@ -130,16 +131,23 @@ func validate(instance map[string]interface{}, mandatoryFields []string) error {
 }
 
 func projectNumber(rn runner.Runner, id string) (string, error) {
-	cmd := exec.Command("gcloud", "projects", "describe", id, "--format=value(projectNumber)")
+	cmd := exec.Command("gcloud", "projects", "describe", id, "--format", "json")
 	out, err := rn.CmdOutput(cmd)
 	if err != nil {
 		return "", fmt.Errorf("failed to get project number for project %q: %v", id, err)
 	}
 
-	pn := strings.Trim(string(out), "\n")
-	if pn == "" {
+	var p struct {
+		ProjectNumber string `json:"projectNumber"`
+	}
+
+	if err := json.Unmarshal(out, &p); err != nil {
+		return "", fmt.Errorf("failed to parse project number from gcloud output: %v", err)
+	}
+
+	if p.ProjectNumber == "" {
 		return "", fmt.Errorf("project number is empty")
 	}
 
-	return pn, nil
+	return p.ProjectNumber, nil
 }
