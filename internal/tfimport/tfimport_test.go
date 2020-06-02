@@ -324,6 +324,14 @@ func TestImportersSanity(t *testing.T) {
 			"projects/my-compute-project/global/images/my_image",
 		},
 		{
+			"google_compute_instance_template",
+			map[string]interface{}{
+				"project": "my-compute-project",
+				"name":    "my_instance_template",
+			},
+			"projects/my-compute-project/global/instanceTemplates/my_instance_template",
+		},
+		{
 			"google_compute_instance_from_template",
 			map[string]interface{}{
 				"project": "my-compute-project",
