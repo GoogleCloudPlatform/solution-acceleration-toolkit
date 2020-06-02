@@ -5,7 +5,7 @@ Status: Early Access Program
 A security policy generator which generates policies for two purposes:
 
 1. Typical policies enforced in a HIPAA aligned GCP environment.
-1. (coming soon) Policies based on Terraform state to monitor GCP changes
+1. Policies based on Terraform states to monitor GCP changes
     that are not deployed by Terraform.
 
 Currently supported Policy Libraries:
@@ -19,6 +19,7 @@ Currently supported Policy Libraries:
 
 1. Install the following dependencies and add them to your PATH:
 
+    * [gcloud](https://cloud.google.com/sdk/gcloud)
     * [Terraform 0.12](https://www.terraform.io/)
     * [Go 1.14+](https://golang.org/dl/)
 
@@ -37,15 +38,16 @@ git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suit
 cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
-INPUT_CONFIG=examples/policygen/config.yaml
-OUTPUT_DIR=/tmp/policygen
+CONFIG_PATH=examples/policygen/config.yaml
+STATE_PATH=/path/to/your/tfstate/file
+OUTPUT_PATH=/tmp/policygen
 
 # Step 3: Install the policygen
 go install ./cmd/policygen
 
 # Step 4: Generate policies. Edit config with values of your infra.
-# nano $INPUT_CONFIG
-policygen --input_config=$INPUT_CONFIG --output_dir=$OUTPUT_DIR
+# nano $CONFIG_PATH
+policygen --config_path=$CONFIG_PATH --state_path=$STATE_PATH --output_path=$OUTPUT_PATH
 ```
 
 ### Use policies
@@ -55,7 +57,7 @@ policygen --input_config=$INPUT_CONFIG --output_dir=$OUTPUT_DIR
 To deploy GCP Organization Policy Constraints, execute the following commands:
 
 ```shell
-cd $OUTPUT_DIR/gcp_organization_policies
+cd $OUTPUT_PATH/gcp_org_policies
 terraform init
 terraform plan
 terraform apply

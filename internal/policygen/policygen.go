@@ -23,8 +23,14 @@ import (
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
+)
+
+const (
+	forsetiOutputRoot     = "forseti_policies"
+	orgPoliciesOutputRoot = "gcp_org_policies"
 )
 
 // RunArgs is the struct representing the arguments passed to Run().
@@ -34,7 +40,7 @@ type RunArgs struct {
 	OutputPath string
 }
 
-func Run(args *RunArgs) error {
+func Run(rn runner.Runner, args *RunArgs) error {
 	var err error
 	configPath, err := pathutil.Expand(args.ConfigPath)
 	if err != nil {
@@ -61,7 +67,7 @@ func Run(args *RunArgs) error {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(args.StatePath, tmpDir, c); err != nil {
+	if err := generateForsetiPolicies(rn, args.StatePath, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
@@ -78,11 +84,11 @@ func generateGCPOrgPolicies(outputPath string, c *config) error {
 	}
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
-	out := filepath.Join(outputPath, "gcp_org_policies")
+	out := filepath.Join(outputPath, orgPoliciesOutputRoot)
 	return template.WriteDir(in, out, c.GCPOrgPolicies)
 }
 
-func generateForsetiPolicies(statePath, outputPath string, c *config) error {
+func generateForsetiPolicies(rn runner.Runner, statePath, outputPath string, c *config) error {
 	if c.ForsetiPolicies == nil {
 		return nil
 	}
@@ -91,7 +97,7 @@ func generateForsetiPolicies(statePath, outputPath string, c *config) error {
 		return err
 	}
 
-	if err := generateTerraformBasedForsetiPolicies(statePath, outputPath); err != nil {
+	if err := generateTerraformBasedForsetiPolicies(rn, statePath, outputPath, c.TemplateDir); err != nil {
 		return err
 	}
 
@@ -100,11 +106,11 @@ func generateForsetiPolicies(statePath, outputPath string, c *config) error {
 
 func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 	in := filepath.Join(c.TemplateDir, "forseti", "overall")
-	out := filepath.Join(outputPath, "forseti_policies", "overall")
+	out := filepath.Join(outputPath, forsetiOutputRoot, "overall")
 	return template.WriteDir(in, out, c.ForsetiPolicies)
 }
 
-func generateTerraformBasedForsetiPolicies(statePath, outputPath string) error {
+func generateTerraformBasedForsetiPolicies(rn runner.Runner, statePath, outputPath, templateDir string) error {
 	if statePath == "" {
 		log.Println("No Terraform state given, only generating Terraform-agnostic security policies")
 		return nil
@@ -115,5 +121,5 @@ func generateTerraformBasedForsetiPolicies(statePath, outputPath string) error {
 		return err
 	}
 
-	return generateIAMBindingsPolicies(resources, outputPath)
+	return generateIAMPolicies(rn, resources, outputPath, templateDir)
 }

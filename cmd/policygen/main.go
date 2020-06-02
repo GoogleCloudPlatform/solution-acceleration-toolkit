@@ -23,6 +23,7 @@ import (
 	"log"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 )
 
 var (
@@ -48,7 +49,8 @@ func main() {
 		OutputPath: *outputPath,
 	}
 
-	if err := policygen.Run(args); err != nil {
+	rn := &runner.Default{Quiet: true}
+	if err := policygen.Run(rn, args); err != nil {
 		log.Fatalf("Failed to generate policies: %v", err)
 	}
 }
