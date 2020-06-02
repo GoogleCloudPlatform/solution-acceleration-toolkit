@@ -15,9 +15,16 @@
 package tfimport
 
 import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
 	"os/exec"
 	"regexp"
+	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
@@ -97,6 +104,10 @@ var Importers = map[string]resourceImporter{
 	"google_compute_image": &importer.SimpleImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/images/{{.name}}",
+	},
+	"google_compute_instance_template": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/instanceTemplates/{{.name}}",
 	},
 	"google_compute_instance_from_template": &importer.SimpleImporter{
 		Fields: []string{"project", "zone", "name"},
@@ -478,4 +489,168 @@ func NotImportable(output string) bool {
 // DoesNotExist parses the output of a `terraform import` command to determine if it indicated that a resource does not exist.
 func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
+}
+
+type RunArgs struct {
+	InputDir      string
+	TerraformPath string
+	DryRun        bool
+	Interactive   bool
+}
+
+func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
+	// Expand the config path (ex. expand ~).
+	inputDir, err := pathutil.Expand(runArgs.InputDir)
+	if err != nil {
+		return fmt.Errorf("expand path %q: %v", inputDir, err)
+	}
+
+	for {
+		retry, err := planAndImport(rn, importRn, runArgs)
+		if err != nil {
+			return err
+		}
+
+		// Break if fully succeeded, or failed to import anything.
+		if !retry {
+			break
+		}
+
+		log.Println("Some imports succeeded but others failed. Retrying the import, in case dependent values have now been populated.")
+	}
+
+	return nil
+}
+
+// This function does the full plan and import cycle.
+// If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
+// A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, err error) {
+	// Create Terraform command runners.
+	tfCmdOutput := func(args ...string) ([]byte, error) {
+		cmd := exec.Command(runArgs.TerraformPath, args...)
+		cmd.Dir = runArgs.InputDir
+		return rn.CmdOutput(cmd)
+	}
+
+	// Init is safe to run on an already-initialized config dir.
+	if out, err := tfCmdOutput("init"); err != nil {
+		return false, fmt.Errorf("init: %v\v%v", err, string(out))
+	}
+
+	// Generate and load the plan using a temp var.
+	tmpfile, err := ioutil.TempFile("", "")
+	if err != nil {
+		return false, fmt.Errorf("create temp file: %v", err)
+	}
+	defer os.Remove(tmpfile.Name())
+	planPath := tmpfile.Name()
+	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
+		return false, fmt.Errorf("plan: %v\n%v", err, string(out))
+	}
+	b, err := tfCmdOutput("show", "-json", planPath)
+	if err != nil {
+		return false, fmt.Errorf("show: %v\n%v", err, string(b))
+	}
+
+	// Load only "create" changes.
+	createChanges, err := terraform.ReadPlanChanges(b, []string{"create"})
+	if err != nil {
+		return false, fmt.Errorf("read Terraform plan changes: %q", err)
+	}
+
+	// Import all importable create changes.
+	importedSomething := false
+	var errs []string
+	var importCmds []string
+	for _, cc := range createChanges {
+		// Get the provider config values (pcv) for this particular resource.
+		// This is needed to determine if it's possible to import the resource.
+		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
+		if err != nil {
+			return false, fmt.Errorf("read provider config values from the Terraform plan: %q", err)
+		}
+
+		// Try to convert to an importable resource.
+		ir, ok := Importable(cc, pcv)
+		if !ok {
+			log.Printf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
+			continue
+		}
+
+		log.Printf("Found importable resource: %q\n", ir.Change.Address)
+
+		// Attempt the import.
+		output, err := Import(importRn, ir, runArgs.InputDir, runArgs.TerraformPath, runArgs.Interactive)
+
+		// In dry-run mode, the output is the command to run.
+		if runArgs.DryRun {
+			cmd := output
+			if err != nil {
+				cmd = err.Error()
+			} else {
+				// The last arg in import could be several space-separated strings. These need to be quoted together.
+				args := strings.SplitN(cmd, " ", 4)
+				if len(args) == 4 {
+					cmd = fmt.Sprintf("%v %v %v %q\n", args[0], args[1], args[2], args[3])
+				}
+			}
+
+			// If the output isn't command with 4 parts, just print it as-is.
+			importCmds = append(importCmds, cmd)
+			continue
+		}
+
+		// Handle the different outcomes of the import attempt.
+		var ie *importer.InsufficientInfoErr
+		switch {
+		// err will only be nil when the import succeed.
+		// Import succeeded, print the success output.
+		case err == nil:
+			// Import succeeded.
+			// Use fmt over log for the TF output because it prints colors and looks better when using it.
+			fmt.Println(output)
+			importedSomething = true
+
+		// Check if the error indicates insufficient information.
+		case errors.As(err, &ie):
+			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
+			errs = append(errs, errMsg)
+			log.Println("Skipping")
+
+		// Check if error indicates resource is not importable or does not exist.
+		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
+		case NotImportable(output):
+			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
+		case DoesNotExist(output):
+			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
+
+		// Important to handle this last.
+		default:
+			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
+			errs = append(errs, errMsg)
+		}
+	}
+
+	if runArgs.DryRun && len(importCmds) > 0 {
+		log.Printf("Import commands:")
+		fmt.Printf("cd %v\n", runArgs.InputDir)
+		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
+
+		return false, nil
+	}
+
+	if len(errs) > 0 {
+		if importedSomething {
+			// Time to retry. Some resources imported successfully, but others didn't.
+			return true, nil
+		}
+		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if !importedSomething {
+		log.Printf("No resources imported.")
+	}
+
+	return false, nil
 }
