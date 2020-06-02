@@ -35,11 +35,9 @@ type root struct {
 // All IAM members associated with a single role.
 type roleBindings map[string][]string
 
-// All roles associated with a root resource (organization, folder or project)
-var bindings = make(map[root]roleBindings)
-
 func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputPath, templateDir string) error {
-	if err := allBindings(rn, resources); err != nil {
+	bindings, err := allBindings(rn, resources)
+	if err != nil {
 		return err
 	}
 
@@ -73,7 +71,11 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 	return nil
 }
 
-func allBindings(rn runner.Runner, resources []*states.Resource) error {
+func allBindings(rn runner.Runner, resources []*states.Resource) (map[root]roleBindings, error) {
+
+	// All roles associated with a root resource (organization, folder or project).
+	var bindings = make(map[root]roleBindings)
+
 	typeToIDField := map[string]string{
 		"project":      "project",
 		"folder":       "folder",
@@ -85,19 +87,19 @@ func allBindings(rn runner.Runner, resources []*states.Resource) error {
 		resourceType := fmt.Sprintf("google_%s_iam_member", t)
 		instances, err := terraform.GetInstancesForType(resources, resourceType)
 		if err != nil {
-			return fmt.Errorf("get resource instances for type %q: %v", resourceType, err)
+			return nil, fmt.Errorf("get resource instances for type %q: %v", resourceType, err)
 		}
 
 		for _, ins := range instances {
 			if err := validate(ins, []string{idField, "role", "member"}); err != nil {
-				return err
+				return nil, err
 			}
 
 			id := ins[idField].(string) // Type checked in validate()
 			// For projects, the ID in the state is the project ID, but we need project number in policies.
 			if t == "project" {
 				if id, err = projectNumber(rn, id); err != nil {
-					return err
+					return nil, err
 				}
 			}
 
@@ -108,10 +110,11 @@ func allBindings(rn runner.Runner, resources []*states.Resource) error {
 				bindings[key] = make(roleBindings)
 			}
 
-			bindings[key][ins["role"].(string)] = append(bindings[key][ins["role"].(string)], ins["member"].(string))
+			role := ins["role"].(string)
+			bindings[key][role] = append(bindings[key][role], ins["member"].(string))
 		}
 	}
-	return nil
+	return bindings, nil
 }
 
 // validate checks the presence of mandatory fields and assert string type.
