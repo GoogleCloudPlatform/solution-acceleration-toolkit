@@ -25,30 +25,26 @@ import (
 
 type Fake struct{}
 
-func (*Fake) CmdRun(*exec.Cmd) error {
-	return nil
-}
+func (*Fake) CmdRun(*exec.Cmd) error { return nil }
 
 func (*Fake) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
-	contains := func(s string, subs ...string) bool {
-		for _, sub := range subs {
-			if !strings.Contains(s, sub) {
-				return false
-			}
-		}
-		return true
-	}
-
 	cmdStr := strings.Join(cmd.Args, " ")
-	if contains(cmdStr, "gcloud projects describe", "--format json") {
-		return []byte("{\"projectNumber\": \"123\"}"), nil
+	if contains(cmdStr, "gcloud projects describe", "--format=value(projectNumber)") {
+		return []byte("123\n"), nil
 	}
 
 	return nil, nil
 }
 
-func (*Fake) CmdCombinedOutput(*exec.Cmd) ([]byte, error) {
-	return nil, nil
+func (*Fake) CmdCombinedOutput(*exec.Cmd) ([]byte, error) { return nil, nil }
+
+func contains(s string, subs ...string) bool {
+	for _, sub := range subs {
+		if !strings.Contains(s, sub) {
+			return false
+		}
+	}
+	return true
 }
 
 // TestExamples is a basic test for the policygen to ensure it runs without error on the examples.

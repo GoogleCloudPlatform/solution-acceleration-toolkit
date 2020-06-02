@@ -15,7 +15,6 @@
 package policygen
 
 import (
-	"encoding/json"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -131,24 +130,16 @@ func validate(instance map[string]interface{}, mandatoryFields []string) error {
 }
 
 func projectNumber(rn runner.Runner, id string) (string, error) {
-	cmd := exec.Command("gcloud", "projects", "describe", id, "--format", "json")
+	cmd := exec.Command("gcloud", "projects", "describe", id, "--format=value(projectNumber)")
 	out, err := rn.CmdOutput(cmd)
 	if err != nil {
 		return "", fmt.Errorf("failed to get project number for project %q: %v", id, err)
 	}
 
-	type project struct {
-		ProjectNumber string `json:"projectNumber"`
-	}
-
-	var p project
-	if err := json.Unmarshal(out, &p); err != nil {
-		return "", fmt.Errorf("failed to parse project number from gcloud output: %v", err)
-	}
-
-	if p.ProjectNumber == "" {
+	pn := strings.Trim(string(out), "\n")
+	if pn == "" {
 		return "", fmt.Errorf("project number is empty")
 	}
 
-	return p.ProjectNumber, nil
+	return pn, nil
 }
