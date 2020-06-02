@@ -25,6 +25,6 @@ template "terraform" {
   recipe_path = "./terraform.hcl"
   data = {
     # GCS backend config is set by terragrunt root.
-    gcs_backend_config = false
+    disable_gcs_backend_config = true
   }
 }
