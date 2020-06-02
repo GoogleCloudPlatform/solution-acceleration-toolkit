@@ -33,7 +33,13 @@ variable "continuous_deployment_enabled" {
 }
 
 variable "trigger_enabled" {
-  description = "Whether or not to enable all Cloud Build Triggers"
+  description = "Whether or not to enable all Cloud Build triggers"
+  type        = bool
+  default     = true
+}
+
+variable "deployment_trigger_enabled" {
+  description = "Whether or not to enable the post-submit Cloud Build trigger to deploy Terraform configs"
   type        = bool
   default     = true
 }

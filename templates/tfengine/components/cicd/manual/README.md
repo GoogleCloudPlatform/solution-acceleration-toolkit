@@ -31,6 +31,10 @@ to detect changes in the repo, trigger builds, and run the workloads.
     * `continuous_deployment_enabled`: Whether or not to enable continuous
         deployment of Terraform configs.
     * `trigger_enabled`: Whether or not to enable all Cloud Build triggers.
+    * `deployment_trigger_enabled`: Whether or not to enable the post-submit
+        Cloud Build trigger to deploy Terraform configs. The post-submit
+        Cloud Build trigger for deployment will be disabled as long as one of
+        `trigger_enabled` or `deployment_trigger_enabled` is set to `false`.
     * `terraform_root`: Path of the directory relative to the repo root
         containing the Terraform configs.
     * `build_viewers`: IAM members to grant `cloudbuild.builds.viewer` role
