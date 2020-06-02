@@ -119,7 +119,7 @@ terraform init
 terraform plan
 terraform apply
 
-# Step 6 (Optional): Deploy Continuous Integration (CI) and Continuous
+# Step 7 (Optional): Deploy Continuous Integration (CI) and Continuous
 # Deployment (CD) resources by following the instructions in
 # components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in
 # the generated Terraform configs directory.
@@ -129,14 +129,14 @@ terraform apply
 # reviews. Once approval is granted and CI tests pass, merge the PR. The CD job
 # will automatically deploy the change to your GCP infra.
 
-# Step 7: Deploy org infrastructure and other resources by sending a PR for
+# Step 8: Deploy org infrastructure and other resources by sending a PR for
 # local changes to the config repo.
 
-# Step 8: Follow the instructions of all commented out blocks starting with
+# Step 9: Follow the instructions of all commented out blocks starting with
 # `TODO(user)` in the config to deploy the changes. Remove the comment once
 # done.
 
-# Step 9 (Optional): Modify and/or add deployments as needed...
+# Step 10 (Optional): Modify and/or add deployments as needed...
 cd $OUTPUT_PATH/live/.../example-deployment
 # And then send the change as a PR.
 ```

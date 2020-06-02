@@ -220,8 +220,8 @@ template "project_data" {
         }]
       }]
       # TODO(user): Uncomment and re-run the engine after deploying secrets.
-      #      terraform_addons = {
-      #       raw_config = <<EOF
+      # terraform_addons = {
+      #   raw_config = <<EOF
       # data "google_secret_manager_secret_version" "db_password" {
       #   provider = google-beta
 
@@ -229,7 +229,7 @@ template "project_data" {
       #   project = "example-data"
       # }
       # EOF
-      #      }
+      # }
     }
   }
 }
