@@ -1000,7 +1000,7 @@ func TestImportersSanity(t *testing.T) {
 		},
 	}
 	for _, tc := range tests {
-		importer, ok := importers[tc.resource]
+		importer, ok := Importers[tc.resource]
 		if !ok {
 			t.Fatalf("importer does not exist for %v", tc.resource)
 		}
