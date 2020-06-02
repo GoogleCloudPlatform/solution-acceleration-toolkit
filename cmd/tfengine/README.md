@@ -132,9 +132,9 @@ terraform apply
 # Step 7: Deploy org infrastructure and other resources by sending a PR for
 # local changes to the config repo.
 
-# Step 8: If a `DISABLED` block is present in the config, follow the steps for
-# all fields within the block and deploy the changes. Remove the `DISABLED`
-# block from the config once done.
+# Step 8: Follow the instructions of all commented out blocks starting with
+# `TODO(user)` in the config to deploy the changes. Remove the comment once
+# done.
 
 # Step 9 (Optional): Modify and/or add deployments as needed...
 cd $OUTPUT_PATH/live/.../example-deployment
