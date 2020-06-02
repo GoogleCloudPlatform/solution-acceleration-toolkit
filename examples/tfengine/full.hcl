@@ -95,7 +95,7 @@ template "secrets" {
   data = {
     project_id = "example-devops"
     secrets = [{
-      secret_id   = "manual-sql-db-password"
+      secret_id = "manual-sql-db-password"
     }]
   }
 }
@@ -124,7 +124,7 @@ template "project_networks" {
   output_path = "./live/prod/team1"
   data = {
     project = {
-      project_id = "example-prod-networks"
+      project_id         = "example-prod-networks"
       is_shared_vpc_host = true
       apis = [
         "compute.googleapis.com",
@@ -137,19 +137,19 @@ template "project_networks" {
         name = "example-network"
         subnets = [
           {
-            name = "example-sql-subnet"
+            name     = "example-sql-subnet"
             ip_range = "10.1.0.0/16"
           },
           {
-            name = "example-gke-subnet"
+            name     = "example-gke-subnet"
             ip_range = "10.2.0.0/16"
             secondary_ranges = [
               {
-                name = "example-pods-range"
+                name     = "example-pods-range"
                 ip_range = "172.16.0.0/14"
               },
               {
-                name = "example-services-range"
+                name     = "example-services-range"
                 ip_range = "172.20.0.0/14"
               }
             ]
@@ -190,46 +190,46 @@ template "project_data" {
     }
     resources = {
       bigquery_datasets = [{
-        dataset_id = "example_dataset"
+        dataset_id                  = "example_dataset"
         default_table_expiration_ms = 10000000000
         access = [
           {
-            role = "roles/bigquery.dataOwner"
+            role          = "roles/bigquery.dataOwner"
             special_group = "projectOwners"
           },
           {
-            role = "roles/bigquery.dataViewer"
+            role           = "roles/bigquery.dataViewer"
             group_by_email = "example-readers@example.com"
           },
         ]
       }]
       cloud_sql_instances = [{
-        name = "example-instance"
-        type = "mysql"
+        name               = "example-instance"
+        type               = "mysql"
         network_project_id = "example-prod-networks"
-        network = "example-network"
-        subnet = "example-subnet"
+        network            = "example-network"
+        subnet             = "example-subnet"
         # TODO(user): Uncomment and re-run the engine after deploying secrets.
         # user_password = "$${data.google_secret_manager_secret_version.db_password.secret_data}" // Use $$ to escape.
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
-          role = "roles/storage.objectViewer"
+          role   = "roles/storage.objectViewer"
           member = "group:example-readers@example.com"
         }]
       }]
-# TODO(user): Uncomment and re-run the engine after deploying secrets.
-#      terraform_addons = {
-#       raw_config = <<EOF
-# data "google_secret_manager_secret_version" "db_password" {
-#   provider = google-beta
+      # TODO(user): Uncomment and re-run the engine after deploying secrets.
+      #      terraform_addons = {
+      #       raw_config = <<EOF
+      # data "google_secret_manager_secret_version" "db_password" {
+      #   provider = google-beta
 
-#   secret  = "manual-sql-db-password"
-#   project = "example-data"
-# }
-# EOF
-#      }
+      #   secret  = "manual-sql-db-password"
+      #   project = "example-data"
+      # }
+      # EOF
+      #      }
     }
   }
 }
