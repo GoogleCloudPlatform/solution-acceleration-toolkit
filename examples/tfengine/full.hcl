@@ -95,17 +95,8 @@ template "secrets" {
   data = {
     project_id = "example-devops"
     secrets = [{
-      secret_id   = "auto-sql-db-password"
-      secret_data = "$${random_password.db.result}" // Use $$ to escape.
+      secret_id   = "manual-sql-db-password"
     }]
-    terraform_addons = {
-      raw_config = <<EOF
-resource "random_password" "db" {
-  length = 16
-  special = true
-}
-EOF
-    }
   }
 }
 
@@ -234,7 +225,7 @@ template "project_data" {
 # data "google_secret_manager_secret_version" "db_password" {
 #   provider = google-beta
 
-#   secret  = "auto-sql-db-password"
+#   secret  = "manual-sql-db-password"
 #   project = "example-data"
 # }
 # EOF
