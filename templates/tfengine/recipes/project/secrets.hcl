@@ -20,5 +20,5 @@ template "terraform" {
 }
 
 template "secrets" {
-  component_path = "../../components/project/secrets"
+  component_path = "../../components/secrets"
 }
