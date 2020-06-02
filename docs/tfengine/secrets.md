@@ -29,15 +29,18 @@ set in plaintext. Secrets are deployed in the devops project.
 1. In the deployment that needs to access the secret value, use the data source:
 
    ```hcl
-   terraform_addons = {
-    raw_config = <<EOF
-    data "google_secret_manager_secret_version" "db_password" {
-        provider = google-beta
+   template "project" {
+     ...
+     terraform_addons = {
+       raw_config = <<EOF
+         data "google_secret_manager_secret_version" "db_password" {
+           provider = google-beta
 
-        secret  = "manual-sql-db-password"
-        project = "example-data"
-    }
-    EOF
+           secret  = "manual-sql-db-password"
+           project = "example-data"
+         }
+       EOF
+     }
    }
    ```
 
