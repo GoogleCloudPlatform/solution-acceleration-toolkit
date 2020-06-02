@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terragrunt" {
-  component_path = "../../components/terragrunt/leaf"
+  component_path = "../terraform/terragrunt.hcl"
   output_path    = "{{.display_name}}/folder"
   data = {
     deps = [{
@@ -30,7 +30,7 @@ template "terragrunt" {
 }
 
 template "folder" {
-  component_path = "../../components/folder/folder"
+  recipe_path = "../../components/folder/folder"
   output_path    = "{{.display_name}}/folder"
   data = {
     display_name = "{{.display_name}}"

@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$base := "../../templates/tfengine/recipes"}}
+# {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
   org_id          = "12345678"
   billing_account = "000-000-000"
+  state_bucket    = "example-terraform-state"
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
@@ -60,11 +61,10 @@ template "foundation" {
     parent_id   = "12345678"
 
     devops = {
-      project_id   = "example-devops"
-      state_bucket = "example-terraform-state"
-      org_admin    = "group:example-org-admin@example.com"
+      project_id = "example-devops"
+      org_admin  = "group:example-org-admin@example.com"
       project_owners = [
-       "group:example-devops-owners@example.com",
+        "group:example-devops-owners@example.com",
       ]
     }
 
@@ -87,22 +87,45 @@ template "foundation" {
     }
 
     cicd = {
-      project_id                    = "example-devops"
-      state_bucket                  = "example-state-bucket"
+      project_id = "example-devops"
       github = {
-        owner                       = "GoogleCloudPlatform"
-        name                        = "example"
+        owner = "GoogleCloudPlatform"
+        name  = "example"
       }
       branch_regex                  = "master"
       continuous_deployment_enabled = true
       trigger_enabled               = true
       build_viewers = [
-       "group:example-cicd-viewers@example.com",
+        "group:example-cicd-viewers@example.com",
       ]
       managed_services = [
         "container.googleapis.com",
         "sqladmin.googleapis.com",
       ]
+    }
+  }
+}
+
+# Central secrets deployment hosted in the devops project.
+# NOTE: This deployment must be deployed first before any deployments in the
+# live folder. Any non-auto filled secret data must be manually filled in by
+# entering the secret manager page in console for the devops project.
+template "secrets" {
+  recipe_path = "{{$base}}/project/secrets.hcl"
+  output_path = "./secrets"
+  data = {
+    project_id = "example-devops"
+    secrets = [{
+      secret_id   = "auto-sql-db-password"
+      secret_data = "$${random_password.db.result}" // Use $$ to escape.
+    }]
+    terraform_addons = {
+      raw_config = <<EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
     }
   }
 }
@@ -131,7 +154,7 @@ template "project_networks" {
   output_path = "./live/prod/team1"
   data = {
     project = {
-      project_id         = "example-prod-networks"
+      project_id = "example-prod-networks"
       is_shared_vpc_host = true
       apis = [
         "compute.googleapis.com",
@@ -144,19 +167,19 @@ template "project_networks" {
         name = "example-network"
         subnets = [
           {
-            name           = "example-sql-subnet"
-            ip_range       = "10.1.0.0/16"
+            name = "example-sql-subnet"
+            ip_range = "10.1.0.0/16"
           },
           {
-            name     = "example-gke-subnet"
+            name = "example-gke-subnet"
             ip_range = "10.2.0.0/16"
             secondary_ranges = [
               {
-                name     = "example-pods-range"
+                name = "example-pods-range"
                 ip_range = "172.16.0.0/14"
               },
               {
-                name     = "example-services-range"
+                name = "example-services-range"
                 ip_range = "172.20.0.0/14"
               }
             ]
@@ -201,38 +224,40 @@ template "project_data" {
         default_table_expiration_ms = 10000000000
         access = [
           {
-            role          = "roles/bigquery.dataOwner"
+            role = "roles/bigquery.dataOwner"
             special_group = "projectOwners"
           },
           {
-            role           = "roles/bigquery.dataViewer"
+            role = "roles/bigquery.dataViewer"
             group_by_email = "example-readers@example.com"
           },
         ]
       }]
       cloud_sql_instances = [{
-        name               = "example-instance"
-        type               = "mysql"
+        name = "example-instance"
+        type = "mysql"
         network_project_id = "example-prod-networks"
-        network            = "example-network"
-        subnet             = "example-subnet"
-        user_password      = "$${random_password.db_password.result}" // use $$ to escape
+        network = "example-network"
+        subnet = "example-subnet"
+        user_password = "$${data.google_secret_manager_secret_version.db_password.secret_data}" // Use $$ to escape.
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
-          role   = "roles/storage.objectViewer"
+          role = "roles/storage.objectViewer"
           member = "group:example-readers@example.com"
         }]
       }]
-      terraform_addons = {
-        raw_config = <<EOF
-resource "random_password" "db_password" {
-  length = 16
-  special = true
-}
-EOF
-      }
+#      terraform_addons = {
+#       raw_config = <<EOF
+# data "google_secret_manager_secret_version" "db_password" {
+#   provider = google-beta
+
+#   secret  = "auto-sql-db-password"
+#   project = "example-data"
+# }
+# EOF
+#      }
     }
   }
 }

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{$base := "../../templates/tfengine/recipes"}}
+# {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
   org_id          = "12345678"
@@ -54,7 +54,7 @@ template "foundation" {
       state_bucket = "example-terraform-state"
       org_admin    = "group:example-org-admin@example.com"
       project_owners = [
-       "group:example-devops-owners@example.com",
+        "group:example-devops-owners@example.com",
       ]
     }
 
@@ -77,17 +77,17 @@ template "foundation" {
     }
 
     cicd = {
-      project_id                    = "example-devops"
-      state_bucket                  = "example-state-bucket"
+      project_id   = "example-devops"
+      state_bucket = "example-state-bucket"
       github = {
-        owner                       = "GoogleCloudPlatform"
-        name                        = "example"
+        owner = "GoogleCloudPlatform"
+        name  = "example"
       }
       branch_regex                  = "master"
       continuous_deployment_enabled = true
       trigger_enabled               = true
       build_viewers = [
-       "group:example-cicd-viewers@example.com",
+        "group:example-cicd-viewers@example.com",
       ]
     }
   }

@@ -12,33 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template "terragrunt" {
+  component_path = "../../components/terragrunt/leaf"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
+}
+
 template "terraform" {
-  component_path = "../../components/terraform/main"
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
+  recipe_path = "./terraform.hcl"
+  data = {
+    disabled = {
+      # GCS backend config is set by terragrunt root.
+      gcs_backend_config = true
+    }
   }
-  {{end}}
 }
-
-{{if get . "vars"}}
-template "vars" {
-  component_path = "../../components/terraform/variables"
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
-  }
-  {{end}}
-}
-{{end}}
-
-{{if get . "outputs"}}
-template "outputs" {
-  component_path = "../../components/terraform/outputs"
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
-  }
-  {{end}}
-}
-{{end}}

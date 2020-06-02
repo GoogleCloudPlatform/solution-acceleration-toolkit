@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
+  recipe_path = "../terraform/terragrunt.hcl"
   data = {
     vars = [{
       name =  "project_id"
@@ -30,11 +30,6 @@ template "terraform" {
       project_id = "dependency.project.outputs.project_id"
     }
   }
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
-  }
-  {{end}}
 }
 
 {{if has . "bigquery_datasets"}}

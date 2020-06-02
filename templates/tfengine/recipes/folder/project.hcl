@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
+template "terragrunt" {
+  recipe_path = "../terraform/terragrunt.hcl"
   output_path = "{{.project.project_id}}/project"
   data = {
     deps = [{
@@ -27,12 +27,9 @@ template "terraform" {
       folder_id = "dependency.parent_folder.outputs.name"
     }
   }
-  {{if has . "project.terraform_addons"}}
+  {{if has . "project"}}
   flatten {
     key = "project"
-  }
-  flatten {
-    key = "terraform_addons"
   }
   {{end}}
 }

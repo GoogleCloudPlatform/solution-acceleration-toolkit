@@ -14,15 +14,12 @@
 
 {{$output_path := get . "output_path" .project.project_id}}
 
-template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
+template "terragrunt" {
+  recipe_path = "../terraform/terragrunt.hcl"
   output_path = "{{$output_path}}/project"
-  {{if has . "project.terraform_addons"}}
+  {{if has . "project"}}
   flatten {
     key = "project"
-  }
-  flatten {
-    key = "terraform_addons"
   }
   {{end}}
 }
