@@ -65,10 +65,12 @@ func run() error {
 	}
 
 	log.Printf("Initializing all modules in order to create and fill the .terraform/ dirs.")
+	// Use plan-all because init-all fails due to trying to init an empty directory.
+	// plan-all still ends up calling init recursively, but doesn't fail.
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
-	if b, err := plan.CombinedOutput(); err != nil {
-		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(b))
+	if err := plan.Run(); err != nil {
+		return fmt.Errorf("command %v in %q: %v", plan.Args, plan.Dir, err)
 	}
 
 	log.Printf("Finding all resources")
