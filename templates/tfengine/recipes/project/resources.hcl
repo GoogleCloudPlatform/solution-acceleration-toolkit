@@ -56,7 +56,7 @@ template "storage_buckets" {
 }
 {{end}}
 
-{{if and (has . "gke_clusters") (enabled . "gke_clusters")}}
+{{if has . "gke_clusters"}}
 template "gke_clusters" {
   component_path = "../../components/project/gke_clusters"
 }
