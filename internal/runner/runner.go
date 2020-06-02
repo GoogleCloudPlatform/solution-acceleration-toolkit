@@ -21,7 +21,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 // Runner is the interface to execute commands.
@@ -87,14 +86,4 @@ func (d *Dry) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 
 func (d *Dry) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 	return []byte(cmd.String()), d.CmdRun(cmd)
-}
-
-// Private helper functions.
-func contains(s string, subs ...string) bool {
-	for _, sub := range subs {
-		if !strings.Contains(s, sub) {
-			return false
-		}
-	}
-	return true
 }
