@@ -87,4 +87,6 @@ module "forseti" {
   }
 
   manage_rules_enabled = false
+
+  config_validator_enabled = true
 }
