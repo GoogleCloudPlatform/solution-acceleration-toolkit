@@ -62,6 +62,12 @@ template "gke_clusters" {
 }
 {{end}}
 
+{{if has . "secrets"}}
+template "secrets" {
+  component_path = "../../components/org/secrets"
+}
+{{end}}
+
 {{if has . "service_accounts"}}
 template "service_accounts" {
   component_path = "../../components/project/service_accounts"

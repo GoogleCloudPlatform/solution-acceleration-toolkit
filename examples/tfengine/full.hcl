@@ -90,15 +90,34 @@ template "foundation" {
 # live folder. Any non-auto filled secret data must be manually filled in by
 # entering the secret manager page in console.
 template "secrets" {
-  recipe_path = "{{$base}}/org/secrets.hcl"
-  output_path = "./live"
+  recipe_path = "{{$base}}/org/project.hcl"
+  output_path = "./live/secrets"
   data = {
     project = {
-      project_id = "example-secrets"
+      project_id  = "example-secrets"
+      apis = [
+        "secretmanager.googleapis.com"
+      ]
     }
-    secrets = [{
-      secret_id = "manual-sql-db-password"
-    }]
+    resources = {
+      secrets = [
+        {
+          secret_id = "manual-sql-db-user"
+        },
+        {
+          secret_id   = "auto-sql-db-password"
+          secret_data = "$${random_password.db.result}"  // Use $$ to escape.
+        },
+      ]
+      terraform_addons = {
+        raw_config = <<EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
+      }
+    }
   }
 }
 

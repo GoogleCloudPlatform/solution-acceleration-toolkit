@@ -16,7 +16,6 @@ template "project" {
   recipe_path = "./project.hcl"
   output_path = "./audit"
   data = {
-    output_path = "."
     project = {
       project_id = "{{.project_id}}"
       apis = [
