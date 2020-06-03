@@ -164,6 +164,8 @@ Terraform configs, including importing resources from within modules.
   - [`google_compute_health_check`](https://www.terraform.io/docs/providers/google/r/compute_health_check.html)
   - [`google_compute_image`](https://www.terraform.io/docs/providers/google/r/compute_image.html)
   - [`google_compute_instance`](https://www.terraform.io/docs/providers/google/r/compute_instance.html)
+  - [`google_compute_instance_template`](https://www.terraform.io/docs/providers/google/r/compute_instance_template.html)
+  - [`google_compute_instance_from_template`](https://www.terraform.io/docs/providers/google/r/compute_instance_from_template.html)
   - [`google_compute_interconnect_attachment`](https://www.terraform.io/docs/providers/google/r/compute_interconnect_attachment.html)
   - [`google_compute_network`](https://www.terraform.io/docs/providers/google/r/compute_network.html)
   - [`google_compute_network_peering`](https://www.terraform.io/docs/providers/google/r/compute_network_peering.html)

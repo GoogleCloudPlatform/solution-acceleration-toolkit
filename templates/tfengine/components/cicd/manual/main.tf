@@ -225,7 +225,7 @@ resource "google_cloudbuild_trigger" "plan" {
 # Cloud Build Triggers for CD.
 resource "google_cloudbuild_trigger" "apply" {
   count    = var.continuous_deployment_enabled ? 1 : 0
-  disabled = ! var.trigger_enabled
+  disabled = (! var.trigger_enabled) || (! var.deployment_trigger_enabled)
   provider = google-beta
   project  = var.project_id
   name     = "tf-apply"
