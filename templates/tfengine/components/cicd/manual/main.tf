@@ -54,7 +54,6 @@ locals {
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
     "roles/iam.securityReviewer",
-    "roles/secretmanager.viewer",
     "roles/secretmanager.secretAccessor",
   ]
   cloudbuild_sa_editor_roles = [
@@ -62,7 +61,6 @@ locals {
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
     "roles/resourcemanager.{{.parent_type}}Admin",
-    "roles/secretmanager.admin",
     {{- if eq (get . "parent_type") "organization"}}
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderCreator",
