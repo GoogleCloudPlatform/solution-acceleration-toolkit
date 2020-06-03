@@ -15,30 +15,30 @@
 timeout: 600s
 
 steps:
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
     entrypoint: terraform
     args: ["version"]
     id: Terraform version
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}"
     id: Init
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
     entrypoint: terraform
     args: ["fmt", "-recursive", "-check"]
     dir: "${_TERRAFORM_ROOT}"
     id: Terraform configs format check
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
     entrypoint: terragrunt
     args: ["hclfmt", "--terragrunt-check"]
     dir: "${_TERRAFORM_ROOT}"
     id: Terragrunt configs format check
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
     entrypoint: terraform
     args: ["validate"]
     dir: "${_TERRAFORM_ROOT}"
