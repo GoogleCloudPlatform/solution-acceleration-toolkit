@@ -68,13 +68,42 @@ terraform apply
 * To use Policy Library Constraints with **Forseti**, follow
     [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
 
-    The `target` values under `match` block in the auto-generated policies might
-    need to be adjusted manually to match the `composite_root_resources` field
-    set in your Forseti Terraform module.
-
 * To use Policy Library Constraints with **Terraform Validator**, follow
     [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
 
-    The `target` values under `match` block in the auto-generated policies might
-    need to be adjusted manually to match the `--ancestry` path when you run
-    Terraform Validator.
+The `target` value under the `match` block in the generated policies based on
+Terraform state might need to be adjusted manually to include the ancestor paths
+in the `composite_root_resources` field set in your Forseti Terraform module or
+the `--ancestry` path set when you run Terraform Validator.
+
+For example, a Terraform state based `allow_iam_roles.yaml` policy might look
+like the following, which is to restrict allowed IAM roles in project with
+project number 123.
+
+```yaml
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPIAMAllowBanRolesConstraintV1
+metadata:
+  name: iam_allow_roles
+spec:
+  severity: high
+  match:
+    target:
+    - "project/789"
+  parameters:
+    mode: "allow"
+    roles:
+    - roles/cloudsql.client
+    - roles/logging.logWriter
+    - roles/storage.objectCreator
+```
+
+Assume project 789 is located under folder 456 in organization 123. If the
+`composite_root_resources` in the Forseti Terraform module is configured at
+project level, e.g. `projects/789` or `projects/*`, then the policy is good to
+go. However, if the `composite_root_resources` is set to higher level ancestors,
+e.g. `organizations/123/*` or `folders/456/*`, then your `target` field should
+be modified to include the ancestors in the `target` path as well. In this
+example, your `target` field should be modified to be
+`organizations/123/folders/456/projects/789` and `folders/456/projects/789`,
+respectively.
