@@ -105,6 +105,10 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/images/{{.name}}",
 	},
+	"google_compute_instance": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "name"},
+		Tmpl:   "projects/{{.project}}/zones/{{.zone}}/instances/{{.name}}",
+	},
 	"google_compute_instance_template": &importer.SimpleImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/instanceTemplates/{{.name}}",
