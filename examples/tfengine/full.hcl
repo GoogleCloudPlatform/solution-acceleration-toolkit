@@ -94,7 +94,7 @@ template "secrets" {
   output_path = "./live/secrets"
   data = {
     project = {
-      project_id  = "example-secrets"
+      project_id = "example-secrets"
       apis = [
         "secretmanager.googleapis.com"
       ]
@@ -106,7 +106,7 @@ template "secrets" {
         },
         {
           secret_id   = "auto-sql-db-password"
-          secret_data = "$${random_password.db.result}"  // Use $$ to escape.
+          secret_data = "$${random_password.db.result}" // Use $$ to escape.
         },
       ]
       terraform_addons = {
@@ -231,7 +231,8 @@ template "project_data" {
         network            = "example-network"
         subnet             = "example-subnet"
         # TODO(user): Uncomment and re-run the engine after deploying secrets.
-        # user_password = "$${data.google_secret_manager_secret_version.db_password.secret_data}" // Use $$ to escape.
+        # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
+        # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
@@ -240,17 +241,23 @@ template "project_data" {
           member = "group:example-readers@example.com"
         }]
       }]
-      # TODO(user): Uncomment and re-run the engine after deploying secrets.
-      # terraform_addons = {
-      #   raw_config = <<EOF
-      # data "google_secret_manager_secret_version" "db_password" {
-      #   provider = google-beta
+      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
+      terraform_addons = {
+        raw_config = <<EOF
+data "google_secret_manager_secret_version" "db_user" {
+  provider = google-beta
 
-      #   secret  = "manual-sql-db-password"
-      #   project = "example-data"
-      # }
-      # EOF
-      # }
+  secret  = "manual-sql-db-user"
+  project = "example-secrets"
+}
+data "google_secret_manager_secret_version" "db_password" {
+  provider = google-beta
+
+  secret  = "auto-sql-db-password"
+  project = "example-secrets"
+}
+EOF
+      } */
     }
   }
 }
