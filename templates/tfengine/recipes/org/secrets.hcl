@@ -12,8 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template "project" {
+  recipe_path = "./project.hcl"
+  output_path = "./secrets"
+  data = {
+    output_path = "."
+    apis = [
+      "secretmanager.googleapis.com",
+    ]
+  }
+}
+
 template "terragrunt" {
   recipe_path = "../terraform/terragrunt.hcl"
+  output_path = "./secrets/resources"
   data = {
     vars = [{
       name =  "project_id"
@@ -32,38 +44,10 @@ template "terragrunt" {
   }
 }
 
-{{if has . "bigquery_datasets"}}
-template "bigquery_datasets" {
-  component_path = "../../components/project/bigquery_datasets"
+template "secrets" {
+  component_path = "../../components/org/secrets"
+  output_path    = "./secrets/resources"
+  flatten {
+    key = "project"
+  }
 }
-{{end}}
-
-{{if has . "cloud_sql_instances"}}
-template "cloud_sql_instances" {
-  component_path = "../../components/project/cloud_sql_instances"
-}
-{{end}}
-
-{{if has . "compute_networks"}}
-template "compute_networks" {
-  component_path = "../../components/project/compute_networks"
-}
-{{end}}
-
-{{if has . "storage_buckets"}}
-template "storage_buckets" {
-  component_path = "../../components/project/storage_buckets"
-}
-{{end}}
-
-{{if has . "gke_clusters"}}
-template "gke_clusters" {
-  component_path = "../../components/project/gke_clusters"
-}
-{{end}}
-
-{{if has . "service_accounts"}}
-template "service_accounts" {
-  component_path = "../../components/project/service_accounts"
-}
-{{end}}

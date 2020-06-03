@@ -85,15 +85,17 @@ template "foundation" {
   }
 }
 
-# Central secrets deployment hosted in the devops project.
+# Central secrets project and deployment.
 # NOTE: This deployment must be deployed first before any deployments in the
 # live folder. Any non-auto filled secret data must be manually filled in by
-# entering the secret manager page in console for the devops project.
+# entering the secret manager page in console.
 template "secrets" {
-  recipe_path = "{{$base}}/project/secrets.hcl"
-  output_path = "./secrets"
+  recipe_path = "{{$base}}/org/secrets.hcl"
+  output_path = "./live"
   data = {
-    project_id = "example-devops"
+    project = {
+      project_id = "example-secrets"
+    }
     secrets = [{
       secret_id = "manual-sql-db-password"
     }]

@@ -35,7 +35,7 @@ template "project" {
 {{if has . "resources"}}
 template "resources" {
   recipe_path = "../project/resources.hcl"
-  output_path = "./{{.project.project_id}}/resources"
+  output_path = "./{{$output_path}}/resources"
   flatten {
     key = "resources"
   }
