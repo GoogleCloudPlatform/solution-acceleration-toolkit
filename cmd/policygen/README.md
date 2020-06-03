@@ -78,7 +78,7 @@ the `--ancestry` path set when you run Terraform Validator.
 
 For example, a Terraform state based `allow_iam_roles.yaml` policy might look
 like the following, which is to restrict allowed IAM roles in project with
-project number 123.
+project number 789.
 
 ```yaml
 apiVersion: constraints.gatekeeper.sh/v1alpha1
