@@ -111,7 +111,7 @@ To configure a whitelist:
 Example:
 
 ```text
-networks
+network
 ^module.cloudsql.module.safer_mysql.google_sql_database.default$
 google_sql_user.db_users\["user-creds"\]
 ```
