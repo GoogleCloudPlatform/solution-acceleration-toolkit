@@ -54,6 +54,7 @@ locals {
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
     "roles/iam.securityReviewer",
+    "roles/secretmanager.secretViewer",
     "roles/secretmanager.secretAccessor",
   ]
   cloudbuild_sa_editor_roles = [
