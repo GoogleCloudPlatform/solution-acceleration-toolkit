@@ -89,7 +89,7 @@ template "foundation" {
 # NOTE: This deployment must be deployed first before any deployments in the
 # live folder. Any non-auto filled secret data must be manually filled in by
 # entering the secret manager page in console.
-template "secrets" {
+template "project_secrets" {
   recipe_path = "{{$base}}/org/project.hcl"
   output_path = "./live/secrets"
   data = {
