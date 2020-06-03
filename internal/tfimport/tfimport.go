@@ -323,6 +323,7 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"project", "topic"},
 		Tmpl:   "projects/{{.project}}/topics/{{.topic}}",
 	},
+	"google_resource_manager_lien": &importer.ResourceManagerLien{},
 	"google_secret_manager_secret": &importer.SimpleImporter{
 		Fields: []string{"project", "secret_id"},
 		Tmpl:   "projects/{{.project}}/secrets/{{.secret_id}}",

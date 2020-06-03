@@ -789,6 +789,14 @@ func TestImportersSanity(t *testing.T) {
 			"projects/my-project/topics/my-topic",
 		},
 		{
+			"google_resource_manager_lien",
+			map[string]interface{}{
+				"parent": "projects/1234567890",
+				"name":   "auto-generated-name",
+			},
+			"1234567890/auto-generated-name",
+		},
+		{
 			"google_secret_manager_secret",
 			map[string]interface{}{
 				"project":   "my-project",

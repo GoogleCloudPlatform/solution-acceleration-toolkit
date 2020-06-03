@@ -190,6 +190,8 @@ Terraform configs, including importing resources from within modules.
 - Kubernetes (Container) Engine
   - [`google_container_cluster`](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
   - [`google_container_node_pool`](https://www.terraform.io/docs/providers/google/r/container_node_pool.html)
+- Resource Manager
+  - [`google_resource_manager_lien`](https://www.terraform.io/docs/providers/google/r/resource_manager_lien.html)
 - Secret Manager
   - [`google_secret_manager_secret`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html)
   - [`google_secret_manager_secret_version`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret_version.html)
