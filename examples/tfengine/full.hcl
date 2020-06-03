@@ -212,7 +212,7 @@ template "project_data" {
     resources = {
       bigquery_datasets = [{
         dataset_id                  = "example_dataset"
-        default_table_expiration_ms = 10000000000
+        default_table_expiration_ms = 1e+10
         access = [
           {
             role          = "roles/bigquery.dataOwner"
