@@ -5,8 +5,8 @@ Status: Early Access Program
 A security policy generator which generates policies for two purposes:
 
 1. Typical policies enforced in a HIPAA aligned GCP environment.
-1. Policies based on Terraform states to monitor GCP changes
-    that are not deployed by Terraform.
+1. Policies based on Terraform states to monitor GCP changes that are not
+    deployed by Terraform.
 
 Currently supported Policy Libraries:
 
@@ -65,8 +65,16 @@ terraform apply
 
 #### Policy Library Constraints
 
-To use Policy Library Constraints with **Forseti**, follow
-[How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
+* To use Policy Library Constraints with **Forseti**, follow
+    [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
 
-To use Policy Library Constraints with **Terraform Validator**, follow
-[How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+    The `target` values under `match` block in the auto-generated policies might
+    need to be adjusted manually to match the `composite_root_resources` field
+    set in your Forseti Terraform module.
+
+* To use Policy Library Constraints with **Terraform Validator**, follow
+    [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+
+    The `target` values under `match` block in the auto-generated policies might
+    need to be adjusted manually to match the `--ancestry` path when you run
+    Terraform Validator.
