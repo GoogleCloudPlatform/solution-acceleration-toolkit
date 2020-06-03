@@ -105,7 +105,7 @@ matched against the Terraform resource **address** from the plan.
 
 To configure a whitelist:
 
-1. Create a file `tf-delete-whitelist.txt` in the `cicd/configs/` directory.
+1. Create a file `tf-deletion-whitelist.txt` in the `cicd/configs/` directory.
 2. Add patterns to it, one per line.
 
 Example:
