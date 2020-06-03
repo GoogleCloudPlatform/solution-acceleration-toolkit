@@ -250,6 +250,7 @@ data "google_secret_manager_secret_version" "db_user" {
   secret  = "manual-sql-db-user"
   project = "example-secrets"
 }
+
 data "google_secret_manager_secret_version" "db_password" {
   provider = google-beta
 
