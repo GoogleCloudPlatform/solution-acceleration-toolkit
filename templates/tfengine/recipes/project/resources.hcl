@@ -68,7 +68,7 @@ template "gke_clusters" {
 {{end}}
 
 {{if has . "healthcare_datasets"}}
-template "gke_clusters" {
+template "healthcare_datasets" {
   component_path = "../../components/project/healthcare_datasets"
 }
 {{end}}
