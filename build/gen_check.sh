@@ -23,10 +23,14 @@ go version
 # Check format
 if ! git -C . rev-parse; then
   # Not a git repo, init and add all files.
-  echo 'Not a git repo, initializing and adding all files'
+  set -x
+  echo 'Not a git repo, initializing with all files'
   git init
+  git config user.email "noname@nomail.com"
+  git config user.name "No Name"
   git add .
-  git commit --author "No Name <noname@nomail.com>" -a --allow-empty-message -m ''
+  git commit -a --allow-empty-message -m ''
+  set +x
 fi
 
 # Generate files and check for changes.
