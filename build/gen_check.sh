@@ -26,7 +26,7 @@ if ! git -C . rev-parse; then
   echo 'Not a git repo, initializing and adding all files'
   git init
   git add .
-  git commit -a --allow-empty-message -m ''
+  git commit --author "noname" -a --allow-empty-message -m ''
 fi
 
 # Generate files and check for changes.
