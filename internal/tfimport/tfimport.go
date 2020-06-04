@@ -73,6 +73,7 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"billing_account_id"},
 		Tmpl:   "{{.billing_account_id}}",
 	},
+	"google_billing_budget": &importer.BillingBudget{},
 	"google_binary_authorization_policy": &importer.SimpleImporter{
 		Fields: []string{"project"},
 		Tmpl:   "projects/{{.project}}",
