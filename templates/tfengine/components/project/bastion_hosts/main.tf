@@ -20,7 +20,11 @@ module "{{resourceName .name}}" {
   name         = "{{.name}}"
   project      = var.project_id
   zone         = "{{get . "region" $.compute_region}}-{{get . "zone" $.compute_zone}}"
+  {{- if has . "host_project_id"}}
   host_project = "{{.host_project_id}}"
+  {{- else}}
+  host_project = var.project_id
+  {{- end}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"
   {{hclField . "image_family" false}}
