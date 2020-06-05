@@ -38,7 +38,9 @@ module "{{resourceName .name}}" {
   fhir_stores = [
     {{range .fhir_stores -}}
     {
-      name = "{{.name}}"
+      name    = "{{.name}}"
+      version = "{{.version}}"
+
       {{hclField . "iam_members" false -}}
     }
     {{- end}}
