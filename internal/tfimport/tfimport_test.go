@@ -391,6 +391,14 @@ func TestImportersSanity(t *testing.T) {
 			"projects/my-backend-project/regions/us-east1/backendServices/my_backend_service",
 		},
 		{
+			"google_compute_route",
+			map[string]interface{}{
+				"project": "my-route-project",
+				"name":    "my-compute-route",
+			},
+			"projects/my-route-project/global/routes/my-compute-route",
+		},
+		{
 			"google_compute_router",
 			map[string]interface{}{
 				"project": "my-router-project",

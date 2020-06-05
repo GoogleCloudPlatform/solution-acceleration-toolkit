@@ -54,10 +54,3 @@ template "resources" {
   }
 }
 {{end}}
-
-{{if index . "project_owners"}}
-template "owners" {
-  component_path = "../../components/project/owners"
-  output_path    = "{{.project.project_id}}/project"
-}
-{{end}}
