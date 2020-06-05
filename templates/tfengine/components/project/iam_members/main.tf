@@ -12,6 +12,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-variable "owners" {
-  type = list(string)
+module "project_iam_members" {
+  source   = "terraform-google-modules/iam/google//modules/projects_iam"
+  version  = "~> 6.1.0"
+
+  projects = [var.project_id]
+  mode     = "additive"
+
+  bindings = {
+    {{range $role, $members := .iam_members -}}
+    "{{$role}}" = [
+      {{range $members -}}
+      "{{.}}",
+      {{- end}}
+    ],
+    {{- end}}
+  }
 }
