@@ -36,7 +36,7 @@ fi
 # Generate files and check for changes.
 cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path=examples/policygen/example.tfstate --output_path=examples/policygen/generated'
 ${cmd}
-changed="$(git diff-index --name-only HEAD)"
+changed="$(git diff --name-only)"
 if [[ -n "${changed}" ]]; then
   cat <<EOF
 The following generated files have changes:
