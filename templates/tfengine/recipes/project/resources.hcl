@@ -37,6 +37,12 @@ template "terraform" {
   {{end}}
 }
 
+{{if has . "bastion_hosts"}}
+template "bastion_hosts" {
+  component_path = "../../components/project/bastion_hosts"
+}
+{{end}}
+
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
   component_path = "../../components/project/bigquery_datasets"
@@ -52,6 +58,12 @@ template "cloud_sql_instances" {
 {{if has . "compute_networks"}}
 template "compute_networks" {
   component_path = "../../components/project/compute_networks"
+}
+{{end}}
+
+{{if has . "compute_routers"}}
+template "compute_routers" {
+  component_path = "../../components/project/compute_routers"
 }
 {{end}}
 

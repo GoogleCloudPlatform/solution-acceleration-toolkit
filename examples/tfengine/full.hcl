@@ -23,6 +23,7 @@ data = {
   cloud_sql_region  = "us-central1"
   cloud_sql_zone    = "a"
   compute_region    = "us-central1"
+  compute_zone      = "a"
   gke_region        = "us-central1"
   storage_location  = "us-central1"
 
