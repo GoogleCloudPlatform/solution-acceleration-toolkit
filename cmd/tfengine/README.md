@@ -119,10 +119,7 @@ terraform init
 terraform plan
 terraform apply
 
-# Step 6 (Optional): Deploy secrets if set and set the values for manual ones
-# in the GCP console.
-
-# Step 7 (Optional): Deploy Continuous Integration (CI) and Continuous
+# Step 6 (Optional): Deploy Continuous Integration (CI) and Continuous
 # Deployment (CD) resources by following the instructions in
 # components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in
 # the generated Terraform configs directory.
@@ -131,6 +128,9 @@ terraform apply
 # following changes should be made as Pull Requests (PRs) and go though code
 # reviews. Once approval is granted and CI tests pass, merge the PR. The CD job
 # will automatically deploy the change to your GCP infra.
+
+# Step 7 (Optional): Deploy secrets if set and set the values for manual ones
+# in the GCP console.
 
 # Step 8: Deploy org infrastructure and other resources by sending a PR for
 # local changes to the config repo.
