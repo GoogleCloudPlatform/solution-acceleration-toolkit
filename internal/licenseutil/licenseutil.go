@@ -17,14 +17,13 @@ package licenseutil
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-const licenseString = `# Copyright 2020 Google LLC
+var license = []byte(`# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,35 +37,25 @@ const licenseString = `# Copyright 2020 Google LLC
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-`
+`)
 
 // AddLicense adds Google LLC Apache 2.0 license header to Terraform files in dir.
 func AddLicense(dir string) error {
-	fs, err := ioutil.ReadDir(dir)
-	if err != nil {
-		return fmt.Errorf("read dir %q: %v", dir, err)
-	}
-	if len(fs) == 0 {
-		return fmt.Errorf("found no files in %q to write", dir)
-	}
 
-	for _, f := range fs {
-		out := filepath.Join(dir, f.Name())
-
-		if f.IsDir() {
-			if err := AddLicense(out); err != nil {
-				return err
-			}
-			continue
-		}
-
-		if !isTerraformFile(out) {
-			continue
-		}
-
-		if err := writeLicense(out, f.Mode()); err != nil {
+	fn := func(path string, info os.FileInfo, err error) error {
+		if !isTerraformFile(path) {
 			return nil
 		}
+
+		if err := writeLicense(path, info.Mode()); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if err := filepath.Walk(dir, fn); err != nil {
+		return err
 	}
 
 	return nil
@@ -82,8 +71,7 @@ func writeLicense(path string, fmode os.FileMode) error {
 		return nil
 	}
 
-	b = append([]byte(licenseString), b...)
-	return ioutil.WriteFile(path, b, fmode)
+	return ioutil.WriteFile(path, append(license, b...), fmode)
 }
 
 func isTerraformFile(name string) bool {
@@ -92,10 +80,6 @@ func isTerraformFile(name string) bool {
 		return true
 	}
 
-	ext := name
-	if v := filepath.Ext(name); v != "" {
-		ext = strings.ToLower(v)
-	}
-
+	ext := filepath.Ext(name)
 	return ext == ".tf" || ext == ".tfvars"
 }
