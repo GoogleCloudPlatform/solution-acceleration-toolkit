@@ -135,6 +135,10 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"project", "region", "name"},
 		Tmpl:   "projects/{{.project}}/regions/{{.region}}/backendServices/{{.name}}",
 	},
+	"google_compute_route": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/routes/{{.name}}",
+	},
 	"google_compute_router": &importer.SimpleImporter{
 		Fields: []string{"project", "region", "name"},
 		Tmpl:   "projects/{{.project}}/regions/{{.region}}/routers/{{.name}}",

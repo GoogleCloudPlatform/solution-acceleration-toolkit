@@ -55,6 +55,12 @@ template "compute_networks" {
 }
 {{end}}
 
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../../components/project/iam_members"
+}
+{{end}}
+
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
   component_path = "../../components/project/storage_buckets"
