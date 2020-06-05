@@ -20,12 +20,13 @@ data = {
   state_bucket    = "example-terraform-state"
 
   # Default locations for resources. Can be overridden in individual templates.
-  bigquery_location = "us-east1"
-  cloud_sql_region  = "us-central1"
-  cloud_sql_zone    = "a"
-  compute_region    = "us-central1"
-  gke_region        = "us-central1"
-  storage_location  = "us-central1"
+  bigquery_location   = "us-east1"
+  cloud_sql_region    = "us-central1"
+  cloud_sql_zone      = "a"
+  compute_region      = "us-central1"
+  gke_region          = "us-central1"
+  healthcare_location = "us-central1"
+  storage_location    = "us-central1"
 }
 
 # Foundation for the org.
@@ -192,6 +193,7 @@ template "project_data" {
       apis = [
         "bigquery.googleapis.com",
         "compute.googleapis.com",
+        "healthcare.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
       ]
@@ -225,7 +227,7 @@ template "project_data" {
         ]
       }]
       cloud_sql_instances = [{
-        name               = "example-instance"
+        name               = "example-mysql-instance"
         type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
@@ -233,6 +235,27 @@ template "project_data" {
         # TODO(user): Uncomment and re-run the engine after deploying secrets.
         # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
         # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
+      }]
+      healthcare_datasets = [{
+        name = "example-healthcare-dataset"
+        iam_members = [{
+            role = "roles/healthcare.datasetViewer"
+            member = "group:example-healthcare-dataset-viewers@example.com",
+        }]
+        dicom_stores = [{
+          name = "example-dicom-store"
+        }]
+        fhir_stores = [{
+          name         = "example-fhir-store"
+          version      = "R4"
+          iam_members = [{
+              role = "roles/healthcare.fhirStoreViewer"
+              member = "group:example-fhir-viewers@example.com",
+          }]
+        }]
+        hl7_v2_stores = [{
+          name = "example-hl7-store"
+        }]
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
@@ -302,6 +325,9 @@ template "project_apps" {
       service_accounts = [{
         account_id = "example-sa"
       }]
+      iam_members = {
+        "roles/container.viewer" = ["group:example-viewers@example.com"]
+      }
     }
   }
 }

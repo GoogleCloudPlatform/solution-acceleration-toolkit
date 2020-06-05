@@ -50,6 +50,12 @@ template "compute_networks" {
 }
 {{end}}
 
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../../components/project/iam_members"
+}
+{{end}}
+
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
   component_path = "../../components/project/storage_buckets"
@@ -59,6 +65,12 @@ template "storage_buckets" {
 {{if has . "gke_clusters"}}
 template "gke_clusters" {
   component_path = "../../components/project/gke_clusters"
+}
+{{end}}
+
+{{if has . "healthcare_datasets"}}
+template "healthcare_datasets" {
+  component_path = "../../components/project/healthcare_datasets"
 }
 {{end}}
 
