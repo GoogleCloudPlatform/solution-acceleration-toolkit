@@ -10,7 +10,7 @@ require (
 	github.com/google/go-cmp v0.4.1
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/hcl/v2 v2.5.1
+	github.com/hashicorp/hcl/v2 v2.6.0
 	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
 	github.com/hashicorp/terraform v0.12.26
 	github.com/hashicorp/terraform-svchost v0.0.0-20191119180714-d2e4933b9136 // indirect
@@ -27,6 +27,6 @@ require (
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 	google.golang.org/api v0.26.0
-	google.golang.org/genproto v0.0.0-20200604104852-0b0486081ffb // indirect
+	google.golang.org/genproto v0.0.0-20200605102947-12044bf5ea91 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

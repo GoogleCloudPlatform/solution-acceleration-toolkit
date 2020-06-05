@@ -73,6 +73,7 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"billing_account_id"},
 		Tmpl:   "{{.billing_account_id}}",
 	},
+	"google_billing_budget": &importer.BillingBudget{},
 	"google_binary_authorization_policy": &importer.SimpleImporter{
 		Fields: []string{"project"},
 		Tmpl:   "projects/{{.project}}",
@@ -133,6 +134,10 @@ var Importers = map[string]resourceImporter{
 	"google_compute_region_backend_service": &importer.SimpleImporter{
 		Fields: []string{"project", "region", "name"},
 		Tmpl:   "projects/{{.project}}/regions/{{.region}}/backendServices/{{.name}}",
+	},
+	"google_compute_route": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/routes/{{.name}}",
 	},
 	"google_compute_router": &importer.SimpleImporter{
 		Fields: []string{"project", "region", "name"},

@@ -171,6 +171,7 @@ Terraform configs, including importing resources from within modules.
   - [`google_compute_network_peering`](https://www.terraform.io/docs/providers/google/r/compute_network_peering.html)
   - [`google_compute_project_metadata_item`](https://www.terraform.io/docs/providers/google/r/compute_project_metadata_item.html)
   - [`google_compute_region_backend_service`](https://www.terraform.io/docs/providers/google/r/compute_region_backend_service.html)
+  - [`google_compute_route`](https://www.terraform.io/docs/providers/google/r/compute_route.html)
   - [`google_compute_router`](https://www.terraform.io/docs/providers/google/r/compute_router.html)
   - [`google_compute_router_interface`](https://www.terraform.io/docs/providers/google/r/compute_router_interface.html)
   - [`google_compute_router_nat`](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
