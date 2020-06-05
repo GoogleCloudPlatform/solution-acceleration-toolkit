@@ -298,6 +298,9 @@ template "project_apps" {
       service_accounts = [{
         account_id = "example-sa"
       }]
+      iam_members = {
+        "roles/container.viewer" = ["group:example-viewers@example.com"]
+      }
     }
   }
 }
