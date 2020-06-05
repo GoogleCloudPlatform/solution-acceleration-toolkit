@@ -226,6 +226,9 @@ template "project_data" {
             role = "roles/healthcare.datasetViewer"
             member = "group:example-healthcare-dataset-viewers@example.com",
         }]
+        dicom_stores = [{
+          name = "example-dicom-store"
+        }]
         fhir_stores = [{
           name         = "example-fhir-store"
           version      = "R4"
@@ -233,6 +236,9 @@ template "project_data" {
               role = "roles/healthcare.fhirStoreViewer"
               member = "group:example-fhir-viewers@example.com",
           }]
+        }]
+        hl7_v2_stores = [{
+          name = "example-hl7-store"
         }]
       }]
       storage_buckets = [{
