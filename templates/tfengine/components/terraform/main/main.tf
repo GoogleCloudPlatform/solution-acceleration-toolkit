@@ -18,7 +18,12 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-  backend "gcs" {}
+  backend "gcs" {
+    {{- if not (get . "disable_gcs_backend_config")}}
+    bucket = "{{.state_bucket}}"
+    prefix = "{{.state_path_prefix}}"
+    {{- end}}
+  }
 }
 
 {{if has . "raw_config" -}}

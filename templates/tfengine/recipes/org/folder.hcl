@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template "terragrunt" {
+  recipe_path = "../terraform/terragrunt.hcl"
+  output_path    = "{{.display_name}}/folder"
+}
+
 template "folder" {
   component_path = "../../components/folder/folder"
   output_path    = "{{.display_name}}/folder"
@@ -19,9 +24,4 @@ template "folder" {
     display_name = "{{.display_name}}"
     parent       =  "organizations/{{.org_id}}"
   }
-}
-
-template "terragrunt" {
-  component_path = "../../components/terragrunt/leaf"
-  output_path    = "{{.display_name}}/folder"
 }
