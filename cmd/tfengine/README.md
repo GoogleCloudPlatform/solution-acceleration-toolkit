@@ -119,6 +119,9 @@ terraform init
 terraform plan
 terraform apply
 
+# Step 6 (Optional): Deploy secrets if set and set the values for manual ones
+# in the GCP console.
+
 # Step 7 (Optional): Deploy Continuous Integration (CI) and Continuous
 # Deployment (CD) resources by following the instructions in
 # components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in

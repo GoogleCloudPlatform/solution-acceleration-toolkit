@@ -1,7 +1,7 @@
 # Secrets
 
 The secrets deployment is used to define sensitive values that should not be
-set in plaintext. Secrets are deployed in the devops project.
+set in plaintext. Secrets are typically deployed in their own dedicated project.
 
 ## How-to
 

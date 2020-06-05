@@ -12,6 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
+{{- /* TODO(umairidris): add helpers for auto secrets for auto generating strings and passwords */}}
+
 {{range get . "secrets" -}}
 {{- $resource_name := resourceName .secret_id}}
 resource "google_secret_manager_secret" "{{$resource_name}}" {

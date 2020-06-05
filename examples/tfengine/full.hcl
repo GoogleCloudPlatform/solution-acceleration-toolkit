@@ -106,7 +106,7 @@ template "project_secrets" {
         },
         {
           secret_id   = "auto-sql-db-password"
-          secret_data = "$${random_password.db.result}" // Use $$ to escape.
+          secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
         },
       ]
       terraform_addons = {
