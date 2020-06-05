@@ -169,12 +169,12 @@ template "project_networks" {
           },
         ]
         cloud_sql_private_service_access = {} # Enable SQL private service access.
-        bastion_hosts = [{
-          name    = "bastion-vm"
-          network = "$${module.example_network.network_name.self_link}"
-          # subnet  = "$${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
-          members = ["group:bastion-accessors@example.com"]
-        }]
+      }]
+      bastion_hosts = [{
+        name    = "bastion-vm"
+        network = "$${module.example_network.self_link}"
+        subnet  = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+        members = ["group:bastion-accessors@example.com"]
       }]
     }
   }
