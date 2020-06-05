@@ -171,6 +171,7 @@ Terraform configs, including importing resources from within modules.
   - [`google_compute_network_peering`](https://www.terraform.io/docs/providers/google/r/compute_network_peering.html)
   - [`google_compute_project_metadata_item`](https://www.terraform.io/docs/providers/google/r/compute_project_metadata_item.html)
   - [`google_compute_region_backend_service`](https://www.terraform.io/docs/providers/google/r/compute_region_backend_service.html)
+  - [`google_compute_route`](https://www.terraform.io/docs/providers/google/r/compute_route.html)
   - [`google_compute_router`](https://www.terraform.io/docs/providers/google/r/compute_router.html)
   - [`google_compute_router_interface`](https://www.terraform.io/docs/providers/google/r/compute_router_interface.html)
   - [`google_compute_router_nat`](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
@@ -190,6 +191,8 @@ Terraform configs, including importing resources from within modules.
 - Kubernetes (Container) Engine
   - [`google_container_cluster`](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
   - [`google_container_node_pool`](https://www.terraform.io/docs/providers/google/r/container_node_pool.html)
+- Resource Manager
+  - [`google_resource_manager_lien`](https://www.terraform.io/docs/providers/google/r/resource_manager_lien.html)
 - Secret Manager
   - [`google_secret_manager_secret`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html)
   - [`google_secret_manager_secret_version`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret_version.html)
