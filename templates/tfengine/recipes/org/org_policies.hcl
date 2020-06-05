@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terragrunt" {
-  component_path = "../../components/terragrunt/leaf"
+  recipe_path = "../terraform/terragrunt.hcl"
   output_path    = "./org_policies"
 }
 

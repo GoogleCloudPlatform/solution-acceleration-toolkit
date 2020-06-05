@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "project" {
-  recipe_path = "./project.hcl"
-  output_path = "./audit"
+template "terraform" {
+  recipe_path = "./terraform.hcl"
   data = {
-    project = {
-      project_id = "{{.project_id}}"
-      apis = [
-        "bigquery.googleapis.com",
-        "logging.googleapis.com",
-      ]
-    }
+    # GCS backend config is set by terragrunt root.
+    disable_gcs_backend_config = true
   }
 }
 
-template "audit" {
-  component_path = "../../components/org/audit"
-  output_path    = "./audit/resources"
+template "terragrunt" {
+  component_path = "../../components/terragrunt/leaf"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
 }

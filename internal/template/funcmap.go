@@ -25,7 +25,6 @@ var funcMap = map[string]interface{}{
 	"get":          get,
 	"has":          has,
 	"hclField":     hclField,
-	"enabled":      enabled,
 	"resourceName": resourceName,
 }
 
@@ -77,13 +76,6 @@ func hclField(m map[string]interface{}, key string, req bool) (string, error) {
 	default:
 		return "", nil
 	}
-}
-
-// enabled is a helper to cleanly check if a key is set and its value is set to false.
-// This is useful for checks for DISABLED keys.
-func enabled(m map[string]interface{}, key string) bool {
-	v := get(m, "disabled."+key)
-	return v == nil || !v.(bool)
 }
 
 // resourceName builds a Terraform resource name.

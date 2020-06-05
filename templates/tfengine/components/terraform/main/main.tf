@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http:#www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,21 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "project" {
-  recipe_path = "./project.hcl"
-  output_path = "./audit"
-  data = {
-    project = {
-      project_id = "{{.project_id}}"
-      apis = [
-        "bigquery.googleapis.com",
-        "logging.googleapis.com",
-      ]
-    }
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
+    {{- if not (get . "disable_gcs_backend_config")}}
+    bucket = "{{.state_bucket}}"
+    prefix = "{{.state_path_prefix}}"
+    {{- end}}
   }
 }
 
-template "audit" {
-  component_path = "../../components/org/audit"
-  output_path    = "./audit/resources"
-}
+{{if has . "raw_config" -}}
+{{.raw_config}}
+{{- end}}

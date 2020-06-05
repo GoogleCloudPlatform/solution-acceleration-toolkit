@@ -12,15 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = "~> 0.12.0"
-  required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-  }
-  backend "gcs" {}
-}
-
-{{if has . "raw_config" -}}
-{{.raw_config}}
-{{- end}}
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPIAMAuditLogConstraintV1
+metadata:
+  name: iam_enable_audit_logs
+spec:
+  severity: high
+  match:
+    target:
+    - "organization/1234/*"
+    - "folder/4567/*"
+  parameters:
+    log_types:
+    - DATA_READ
+    - DATA_WRITE
+    - ADMIN_READ
+    services:
+    - allServices

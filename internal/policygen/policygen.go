@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
@@ -69,6 +70,10 @@ func Run(rn runner.Runner, args *RunArgs) error {
 
 	if err := generateForsetiPolicies(rn, args.StatePath, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
+	}
+
+	if err := licenseutil.AddLicense(tmpDir); err != nil {
+		return fmt.Errorf("add license header: %v", err)
 	}
 
 	if err := os.MkdirAll(outputPath, 0755); err != nil {
