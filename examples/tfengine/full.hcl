@@ -19,12 +19,13 @@ data = {
   billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.
-  bigquery_location = "us-east1"
-  cloud_sql_region  = "us-central1"
-  cloud_sql_zone    = "a"
-  compute_region    = "us-central1"
-  gke_region        = "us-central1"
-  storage_location  = "us-central1"
+  bigquery_location   = "us-east1"
+  cloud_sql_region    = "us-central1"
+  cloud_sql_zone      = "a"
+  compute_region      = "us-central1"
+  gke_region          = "us-central1"
+  healthcare_location = "us-central1"
+  storage_location    = "us-central1"
 
   # TODO(user): This block prevents certain parts of the configs from being
   # generated which require dependencies to be deployed first.
@@ -178,6 +179,7 @@ template "project_data" {
       apis = [
         "bigquery.googleapis.com",
         "compute.googleapis.com",
+        "healthcare.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
       ]
@@ -211,12 +213,33 @@ template "project_data" {
         ]
       }]
       cloud_sql_instances = [{
-        name               = "example-instance"
+        name               = "example-mysql-instance"
         type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
         subnet             = "example-subnet"
         user_password      = "$${random_password.db_password.result}" // use $$ to escape
+      }]
+      healthcare_datasets = [{
+        name = "example-healthcare-dataset"
+        iam_members = [{
+            role = "roles/healthcare.datasetViewer"
+            member = "group:example-healthcare-dataset-viewers@example.com",
+        }]
+        dicom_stores = [{
+          name = "example-dicom-store"
+        }]
+        fhir_stores = [{
+          name         = "example-fhir-store"
+          version      = "R4"
+          iam_members = [{
+              role = "roles/healthcare.fhirStoreViewer"
+              member = "group:example-fhir-viewers@example.com",
+          }]
+        }]
+        hl7_v2_stores = [{
+          name = "example-hl7-store"
+        }]
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
