@@ -42,7 +42,8 @@ if [[ -n "${changed}" ]]; then
 The following generated files have changes:
 ${changed}
 
-Please run ${cmd} and check in the changes.
+Please run the following command and check in the changes:
+${cmd}
 EOF
   exit 1
 fi
