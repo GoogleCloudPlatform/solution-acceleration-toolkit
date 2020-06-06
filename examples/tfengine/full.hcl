@@ -191,7 +191,7 @@ template "project_networks" {
         members = ["group:bastion-accessors@example.com"]
 
         # TODO(https://github.com/rodaine/hclencoder/pull/16): Split over multiple lines.
-        startup_script = "sudo apt-get -y update && sudo apt-get -y install mysql-client-core-5.7 &&sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy && sudo chmod +x /usr/local/bin/cloud_sql_proxy"
+        startup_script = "sudo apt-get -y update && sudo apt-get -y install mysql-client-core-5.7 && sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy && sudo chmod +x /usr/local/bin/cloud_sql_proxy"
       }]
       terraform_addons = {
         outputs = [{
@@ -210,7 +210,6 @@ template "project_networks" {
           source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
           secondary_ip_range_names = []
         }]
-
       }]
     }]
   }
