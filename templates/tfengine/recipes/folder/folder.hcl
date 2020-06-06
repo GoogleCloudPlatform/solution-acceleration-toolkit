@@ -20,7 +20,7 @@ template "terragrunt" {
       name = "parent_folder"
       path = "../../folder"
       mock_outputs = {
-        name = "\"mock-folder\""
+        name = "mock-folder"
       }
     }]
     inputs = {

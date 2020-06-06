@@ -28,7 +28,7 @@ dependency "{{.name}}" {
   {{- if index . "mock_outputs"}}
   mock_outputs = {
     {{- range $k, $v := .mock_outputs}}
-    {{$k}} = {{$v}}
+    {{$k}} = {{hcl $v}}
     {{- end}}
   }
   {{- end}}
@@ -37,8 +37,8 @@ dependency "{{.name}}" {
 
 {{if index . "inputs" -}}
 inputs = {
-  {{- range $k, $v := .inputs}}
-  {{$k}} = {{$v}}
+  {{- range $k, $v:= .inputs}}
+  {{$k}} = {{hcl $v}}
   {{- end}}
 }
 {{- end}}

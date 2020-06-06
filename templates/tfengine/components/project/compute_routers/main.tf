@@ -19,14 +19,26 @@ module "{{resourceName .name}}" {
 
   name         = "{{.name}}"
   project      = var.project_id
-  zone         = "{{get . "region" $.compute_region}}"
+  region       = "{{get . "region" $.compute_region}}"
   network      = "{{.network}}"
 
   {{if has . "nats" -}}
   nats = [
     {{- range .nats}}
     {
-      name = "{{.}}"
+      name = "{{.name}}"
+      {{hclField . "source_subnetwork_ip_ranges_to_nat" false}}
+      {{- if has . "subnetworks"}}
+      subnetworks = [
+        {{- range .subnetworks}}
+        {
+          name = "{{.name}}"
+          {{hclField . "source_ip_ranges_to_nat" true}}
+          secondary_ip_range_names = []
+        },
+        {{- end}}
+      ]
+      {{- end}}
     },
     {{- end}}
   ]

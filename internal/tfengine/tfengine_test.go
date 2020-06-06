@@ -16,7 +16,6 @@ package tfengine
 
 import (
 	"io/ioutil"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
@@ -42,7 +41,7 @@ func TestExamples(t *testing.T) {
 			if err != nil {
 				t.Fatalf("ioutil.TempDir = %v", err)
 			}
-			defer os.RemoveAll(tmp)
+			// defer os.RemoveAll(tmp)
 
 			if err := Run(ex, tmp); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)

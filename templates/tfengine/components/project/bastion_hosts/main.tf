@@ -12,10 +12,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .bastion_hosts}}
+{{range .bastion_hosts -}}
 module "{{resourceName .name}}" {
-  source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 1.0.0"
+  source = "git::https://github.com/terraform-google-modules/terraform-google-bastion-host.git?ref=umairidris-patch-1"
+
+#   source  = "terraform-google-modules/bastion-host/google"
+#   version = "~> 1.0.0"
 
   name         = "{{.name}}"
   project      = var.project_id

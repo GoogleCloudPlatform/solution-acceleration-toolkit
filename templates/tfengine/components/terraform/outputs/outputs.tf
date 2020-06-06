@@ -14,6 +14,6 @@ limitations under the License. */ -}}
 
 {{- range .outputs}}
 output "{{.name}}" {
-  value = {{.value}}
+  value = {{hcl .value}}
 }
 {{- end}}
