@@ -19,7 +19,7 @@ set -e
 
 # Generate in a tmp dir, then diff with examples.
 tmp="$(mktemp -d)"
-trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
+trap "rm -rf '${tmp}'" EXIT INT TERM
 examples='examples/policygen/generated'
 
 cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path'
