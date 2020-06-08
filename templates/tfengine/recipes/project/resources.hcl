@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
+template "terragrunt" {
+  recipe_path = "../terraform/terragrunt.hcl"
   data = {
     vars = [{
       name =  "project_id"
@@ -30,11 +30,6 @@ template "terraform" {
       project_id = "dependency.project.outputs.project_id"
     }
   }
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
-  }
-  {{end}}
 }
 
 {{if has . "bigquery_datasets"}}
@@ -67,7 +62,7 @@ template "storage_buckets" {
 }
 {{end}}
 
-{{if and (has . "gke_clusters") (enabled . "gke_clusters")}}
+{{if has . "gke_clusters"}}
 template "gke_clusters" {
   component_path = "../../components/project/gke_clusters"
 }
@@ -76,6 +71,12 @@ template "gke_clusters" {
 {{if has . "healthcare_datasets"}}
 template "healthcare_datasets" {
   component_path = "../../components/project/healthcare_datasets"
+}
+{{end}}
+
+{{if has . "secrets"}}
+template "secrets" {
+  component_path = "../../components/org/secrets"
 }
 {{end}}
 

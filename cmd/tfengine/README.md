@@ -129,14 +129,17 @@ terraform apply
 # reviews. Once approval is granted and CI tests pass, merge the PR. The CD job
 # will automatically deploy the change to your GCP infra.
 
-# Step 7: Deploy org infrastructure and other resources by sending a PR for
+# Step 7 (Optional): Deploy secrets if set and set the values for manual ones
+# in the GCP console.
+
+# Step 8: Deploy org infrastructure and other resources by sending a PR for
 # local changes to the config repo.
 
-# Step 8: If a `DISABLED` block is present in the config, follow the steps for
-# all fields within the block and deploy the changes. Remove the `DISABLED`
-# block from the config once done.
+# Step 9: Follow the instructions of all commented out blocks starting with
+# `TODO(user)` in the config to deploy the changes. Remove the comment once
+# done.
 
-# Step 9 (Optional): Modify and/or add deployments as needed...
+# Step 10 (Optional): Modify and/or add deployments as needed...
 cd $OUTPUT_PATH/live/.../example-deployment
 # And then send the change as a PR.
 ```
