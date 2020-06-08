@@ -17,33 +17,22 @@
 #!/bin/bash
 set -e
 
-# Print versions
-go version
+# Generate in a tmp dir, then diff with examples.
+tmp="$(mktemp -d)"
+trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
+examples='examples/policygen/generated'
 
-# Check format
-if ! git -C . rev-parse; then
-  # Not a git repo, init and add all files.
-  set -x
-  echo 'Not a git repo, initializing with all files'
-  git init
-  git config user.email "noname@nomail.com"
-  git config user.name "No Name"
-  git add .
-  git commit -a --allow-empty-message -m ''
-  set +x
-fi
+cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path'
+${cmd} "${tmp}"
 
-# Generate files and check for changes.
-cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path=examples/policygen/example.tfstate --output_path=examples/policygen/generated'
-${cmd}
-changed="$(git diff --name-only)"
+changed="$(diff -r ./${examples} ${tmp})" || true
 if [[ -n "${changed}" ]]; then
   cat <<EOF
 The following generated files have changes:
 ${changed}
 
 Please run the following command and check in the changes:
-${cmd}
+${cmd} ${examples}
 EOF
   exit 1
 fi
