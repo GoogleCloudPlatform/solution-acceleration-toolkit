@@ -31,6 +31,7 @@ steps:
 - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
   entrypoint: "sh"
   args: ["build/gen_check.sh"]
+  waitFor: ["-"]
   id: Generated files check
 
 options:
