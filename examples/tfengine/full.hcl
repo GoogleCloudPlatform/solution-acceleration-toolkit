@@ -81,7 +81,7 @@ template "foundation" {
       ]
       managed_services = [
         "container.googleapis.com",
-        "healthcare.googlepis.com",
+        "healthcare.googleapis.com",
         "iap.googleapis.com",
         "secretmanager.googleapis.com",
       ]
