@@ -25,7 +25,9 @@ examples='examples/policygen/generated'
 cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path'
 ${cmd} "${tmp}"
 
-changed="$(diff -r ./${examples} ${tmp})" || true
+# Don't use diff -x because that matches basenames in any directory.
+# We specifically want to exclude only the top-level README.md.
+changed="$(diff -r ./${examples} ${tmp} | grep -v ': README.md')" || true
 if [[ -n "${changed}" ]]; then
   cat <<EOF
 The following generated files have changes:
