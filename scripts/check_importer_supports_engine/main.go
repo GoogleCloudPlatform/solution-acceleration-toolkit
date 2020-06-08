@@ -69,8 +69,10 @@ func run() error {
 	// plan-all still ends up calling init recursively, but doesn't fail.
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
-	if err := plan.Run(); err != nil {
-		return fmt.Errorf("command %v in %q: %v", plan.Args, plan.Dir, err)
+
+	// Use CombinedOutput because err is just "exit status 1" without details.
+	if out, err := plan.CombinedOutput(); err != nil {
+		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(out))
 	}
 
 	log.Printf("Finding all resources")
