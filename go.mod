@@ -27,6 +27,6 @@ require (
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 	google.golang.org/api v0.26.0
-	google.golang.org/genproto v0.0.0-20200605102947-12044bf5ea91 // indirect
+	google.golang.org/genproto v0.0.0-20200608115520-7c474a2e3482 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
