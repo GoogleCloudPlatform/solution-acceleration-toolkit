@@ -23,6 +23,7 @@ dependency "parent_folder" {
 
   }
 }
+
 inputs = {
   folder_id = "${dependency.parent_folder.outputs.name}"
 

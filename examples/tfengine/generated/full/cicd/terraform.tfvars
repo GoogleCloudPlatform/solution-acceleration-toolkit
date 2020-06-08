@@ -14,7 +14,7 @@
 
 billing_account               = "000-000-000"
 project_id                    = "example-devops"
-state_bucket                  = "example-terraform-state"
+state_bucket                  = "example-state-bucket"
 continuous_deployment_enabled = true
 trigger_enabled               = true
 build_viewers = [

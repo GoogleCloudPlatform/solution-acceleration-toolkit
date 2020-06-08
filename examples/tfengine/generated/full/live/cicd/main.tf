@@ -32,7 +32,7 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    bucket = "example-terraform-state"
+    bucket = "example-state-bucket"
     prefix = "cicd/auto"
   }
 }

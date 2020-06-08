@@ -23,6 +23,7 @@ dependency "parent_folder" {
 
   }
 }
+
 inputs = {
   parent = "${dependency.parent_folder.outputs.name}"
 

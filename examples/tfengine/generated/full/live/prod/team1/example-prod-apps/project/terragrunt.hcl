@@ -28,6 +28,7 @@ dependency "networks" {
   config_path = "../../example-prod-networks/resources"
   skip_outputs = true
 }
+
 inputs = {
   folder_id = "${dependency.parent_folder.outputs.name}"
 

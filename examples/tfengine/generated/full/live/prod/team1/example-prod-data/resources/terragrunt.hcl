@@ -31,6 +31,7 @@ dependency "networks" {
 
   }
 }
+
 inputs = {
   project_id = "${dependency.project.outputs.project_id}"
 

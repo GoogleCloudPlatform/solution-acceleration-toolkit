@@ -44,6 +44,7 @@ dependency "{{.name}}" {
 {{- end}}
 
 {{- if $has_inputs}}
+
 inputs = {
   {{- range $k, $v:= get . "inputs"}}
   {{$k}} = {{hcl $v}}

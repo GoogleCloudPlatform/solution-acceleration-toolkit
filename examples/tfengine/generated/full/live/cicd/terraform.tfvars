@@ -13,8 +13,3 @@
 # limitations under the License.
 
 project_id = "example-devops"
-managed_services = [
-  "container.googleapis.com",
-  "healthchare.googlepis.com",
-  "secretmanager.googleapis.com",
-]
