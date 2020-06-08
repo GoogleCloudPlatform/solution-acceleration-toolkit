@@ -1,0 +1,62 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+timeout: 21600s
+
+steps:
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: terraform
+    args: ["version"]
+    id: Terraform version
+
+  # live/cicd
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: terraform
+    args: ["init"]
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
+    id: Init (CICD)
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: terraform
+    args: ["plan"]
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
+    id: Speculative plan (CICD)
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: terraform
+    args: ["apply", "-auto-approve"]
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
+    id: Deployment (CICD)
+
+  # live/
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: terragrunt
+    args: ["init"]
+    dir: "${_TERRAFORM_ROOT}/live"
+    id: Init (live)
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: bash
+    args: ["../cicd/configs/terragrunt.sh", "plan-all"]
+    dir: "${_TERRAFORM_ROOT}/live"
+    id: Speculative plan (live)
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+    entrypoint: bash
+    args: ["../cicd/configs/terragrunt.sh", "apply-all"]
+    dir: "${_TERRAFORM_ROOT}/live"
+    id: Deployment (live)
+
+substitutions:
+    _TERRAFORM_ROOT: "."

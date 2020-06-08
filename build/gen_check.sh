@@ -14,27 +14,39 @@
 
 # This file ensures that the checked-in generated examples are up-to-date.
 
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-# Generate in a tmp dir, then diff with examples.
-tmp="$(mktemp -d)"
-trap "rm -rf '${tmp}'" EXIT INT TERM
-examples='examples/policygen/generated'
+function test_gen() {
+  local cmd="${1}"
+  local reference_dir="${2}"
+  shift 2
 
-cmd='go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path'
-${cmd} "${tmp}"
+  # Generate in a tmp dir, then diff with examples.
+  # Give the tmpdir a more meaningful name
+  suffix="$(echo "${reference_dir}" | cut -d'/' -f2,4 --output-delimiter='-')"
+  tmp="$(mktemp -d "/tmp/tmp-${suffix}.XXXXXX")"
+  trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
 
-# Don't use diff -x because that matches basenames in any directory.
-# We specifically want to exclude only the top-level README.md.
-changed="$(diff -r ./${examples} ${tmp} | grep -v ': README.md')" || true
-if [[ -n "${changed}" ]]; then
-  cat <<EOF
+  ${cmd} "${tmp}"
+
+  # Don't use diff -x because that matches basenames in any directory.
+  # We specifically want to exclude only the top-level README.md.
+  changed="$(diff -qr ./${reference_dir} ${tmp} | grep -v ': README.md')" || true
+  if [[ -n "${changed}" ]]; then
+    cat <<EOF
 The following generated files have changes:
 ${changed}
 
 Please run the following command and check in the changes:
-${cmd} ${examples}
+${cmd} ${reference_dir}
 EOF
-  exit 1
-fi
+    exit 1
+  fi
+}
+
+
+# Run the tests
+test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
+test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/simple.hcl --output_path' 'examples/tfengine/generated/simple'
+test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/full.hcl --output_path' 'examples/tfengine/generated/full'
