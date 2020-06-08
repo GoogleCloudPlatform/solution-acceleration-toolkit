@@ -96,6 +96,8 @@ Terraform configs, including importing resources from within modules.
   - [`google_bigquery_table`](https://www.terraform.io/docs/providers/google/r/bigquery_table.html)
   - **Unimportable**:
     - [`google_bigquery_dataset_access`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset_access.html)
+- Billing
+  - [`google_billing_budget`](https://www.terraform.io/docs/providers/google/r/billing_budget.html)
 - Binary Authorization
   - [`google_binary_authorization_policy`](https://www.terraform.io/docs/providers/google/r/binary_authorization_policy.html)
 - Cloud Build
