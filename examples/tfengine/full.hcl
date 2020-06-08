@@ -81,7 +81,8 @@ template "foundation" {
       ]
       managed_services = [
         "container.googleapis.com",
-        "sqladmin.googleapis.com",
+        "healthchare.googlepis.com",
+        "secretmanager.googleapis.com",
       ]
     }
   }
@@ -160,16 +161,12 @@ template "project_networks" {
         name = "example-network"
         subnets = [
           {
-            name           = "example-bastion-subnet"
-            ip_range       = "10.1.0.0/16"
-          },
-          {
-            name           = "example-sql-subnet"
-            ip_range       = "10.2.0.0/16"
+            name     = "example-bastion-subnet"
+            ip_range = "10.1.0.0/16"
           },
           {
             name     = "example-gke-subnet"
-            ip_range = "10.3.0.0/16"
+            ip_range = "10.2.0.0/16"
             secondary_ranges = [
               {
                 name     = "example-pods-range"
@@ -180,6 +177,10 @@ template "project_networks" {
                 ip_range = "172.20.0.0/14"
               }
             ]
+          },
+          {
+            name     = "example-sql-subnet"
+            ip_range = "10.3.0.0/16"
           },
         ]
         cloud_sql_private_service_access = {} # Enable SQL private service access.

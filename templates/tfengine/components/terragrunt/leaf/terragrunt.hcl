@@ -35,6 +35,15 @@ dependency "{{.name}}" {
 }
 {{- end}}
 
+
+{{- $has_inputs := has . "inputs"}}
+{{- range get . "vars"}}
+  {{- if has . "terragrunt_input"}}
+    {{- $has_inputs = true}}
+  {{- end}}
+{{- end}}
+
+{{- if $has_inputs}}
 inputs = {
   {{- range $k, $v:= get . "inputs"}}
   {{$k}} = {{hcl $v}}
@@ -46,3 +55,4 @@ inputs = {
   {{- end}}
   {{- end}}
 }
+{{- end}}
