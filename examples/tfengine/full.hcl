@@ -81,7 +81,8 @@ template "foundation" {
       ]
       managed_services = [
         "container.googleapis.com",
-        "healthchare.googlepis.com",
+        "healthcare.googlepis.com",
+        "iap.googleapis.com",
         "secretmanager.googleapis.com",
       ]
     }
@@ -153,6 +154,7 @@ template "project_networks" {
       apis = [
         "compute.googleapis.com",
         "container.googleapis.com",
+        "iap.googleapis.com",
         "servicenetworking.googleapis.com",
       ]
     }
