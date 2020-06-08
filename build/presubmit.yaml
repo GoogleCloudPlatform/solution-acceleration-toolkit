@@ -16,16 +16,19 @@ steps:
 - name: "gcr.io/cloud-builders/go"
   entrypoint: "sh"
   args: ["build/license_check.sh"]
+  waitFor: ["-"]
   id: License headers check
 
 - name: "gcr.io/cloud-builders/npm:current"
   entrypoint: "sh"
   args: ["build/md_check.sh"]
+  waitFor: ["-"]
   id: Markdownlint check
 
 - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
+  waitFor: ["-"]
   id: Go code check
 
 options:
