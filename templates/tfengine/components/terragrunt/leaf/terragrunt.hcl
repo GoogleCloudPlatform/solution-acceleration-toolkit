@@ -35,10 +35,14 @@ dependency "{{.name}}" {
 }
 {{- end}}
 
-{{if index . "inputs" -}}
 inputs = {
-  {{- range $k, $v:= .inputs}}
+  {{- range $k, $v:= get . "inputs"}}
   {{$k}} = {{hcl $v}}
   {{- end}}
+
+  {{- range get . "vars"}}
+  {{- if has . "terragrunt_input"}}
+  {{.name}} = {{hcl .terragrunt_input}}
+  {{- end}}
+  {{- end}}
 }
-{{- end}}

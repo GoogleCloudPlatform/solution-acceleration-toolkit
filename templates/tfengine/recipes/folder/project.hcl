@@ -24,7 +24,7 @@ template "terragrunt" {
       }
     }]
     inputs = {
-      folder_id = "dependency.parent_folder.outputs.name"
+      folder_id = "$${dependency.parent_folder.outputs.name}"
     }
   }
   {{if has . "project"}}

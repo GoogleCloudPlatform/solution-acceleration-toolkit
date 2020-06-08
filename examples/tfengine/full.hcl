@@ -189,9 +189,25 @@ template "project_networks" {
         network = "$${module.example_network.network.network.self_link}"
         subnet  = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
         members = ["group:bastion-accessors@example.com"]
+        startup_script = <<EOF
+sudo apt-get -y update
+sudo apt-get -y install mysql-client-core-5.7
+sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
+EOF
+      }]
+      compute_routers = [{
+        name = "example-router"
+        network = "$${module.example_network.network.network.self_link}"
+        nats = [{
+          name = "example-nat"
+          subnetworks = [{
+            name = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+            source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
+            secondary_ip_range_names = []
+          }]
 
-        # TODO(https://github.com/rodaine/hclencoder/pull/16): Split over multiple lines.
-        startup_script = "sudo apt-get -y update && sudo apt-get -y install mysql-client-core-5.7 && sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy && sudo chmod +x /usr/local/bin/cloud_sql_proxy"
+        }]
       }]
       terraform_addons = {
         outputs = [{
@@ -200,18 +216,6 @@ template "project_networks" {
         }]
       }
     }
-    compute_routers = [{
-      name = "example-router"
-      network = "$${module.example_network.network.network.self_link}"
-      nats = [{
-        name = "example-nat"
-        subnetworks = [{
-          name = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
-          source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
-          secondary_ip_range_names = []
-        }]
-      }]
-    }]
   }
 }
 
@@ -289,6 +293,11 @@ template "project_data" {
           name = "example-hl7-store"
         }]
       }]
+      iam_members = {
+        "roles/cloudsql.client" = [
+          "serviceAccount:$${var.bastion_service_account}",
+        ]
+      }
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
@@ -296,12 +305,7 @@ template "project_data" {
           member = "group:example-readers@example.com"
         }]
       }]
-
       terraform_addons = {
-        vars = [{
-          name = "bastion_service_account"
-          type = "string"
-        }]
         deps = [{
           name = "networks"
           path = "../../example-prod-networks/resources"
@@ -309,9 +313,11 @@ template "project_data" {
             bastion_service_account = "mock-sa"
           }
         }]
-        inputs = {
-          bastion_service_account = "$${dependency.networks.outputs.bastion_service_account}"
-        }
+        vars = [{
+          name             = "bastion_service_account"
+          type             = "string"
+          terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
+        }]
       /* TODO(user): Uncomment and re-run the engine after deploying secrets.
         raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {

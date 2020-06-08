@@ -24,7 +24,7 @@ template "terragrunt" {
       }
     }]
     inputs = {
-      parent = "dependency.parent_folder.outputs.name"
+      parent = "$${dependency.parent_folder.outputs.name}"
     }
   }
 }

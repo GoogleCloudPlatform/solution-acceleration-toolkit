@@ -32,6 +32,11 @@ module "{{resourceName .name}}" {
   {{hclField . "image_family" false}}
   {{hclField . "members" true}}
   {{hclField . "scopes" false}}
-  {{hclField . "startup_script" false}}
+
+  {{- if has . "startup_script"}}
+  startup_script = <<EOF
+{{.startup_script}}
+EOF
+  {{- end}}
 }
 {{- end}}
