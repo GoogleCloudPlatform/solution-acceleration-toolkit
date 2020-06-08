@@ -23,6 +23,30 @@ terraform {
 }
 
 
+module "bastion_vm" {
+  source = "git::https://github.com/terraform-google-modules/terraform-google-bastion-host.git?ref=umairidris-patch-1"
+
+#   source  = "terraform-google-modules/bastion-host/google"
+#   version = "~> 1.0.0"
+
+  name         = "bastion-vm"
+  project      = var.project_id
+  zone         = "us-central1-a"
+  host_project = var.project_id
+  network      = "${module.example_network.network.network.self_link}"
+  subnet       = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+  
+  members = ["group:bastion-accessors@example.com"]
+
+  
+  startup_script = <<EOF
+sudo apt-get -y update
+sudo apt-get -y install mysql-client-core-5.7
+sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
+
+EOF
+}
 
 
 module "example_network" {
@@ -33,7 +57,7 @@ module "example_network" {
   project_id   = var.project_id
   subnets = [
     {
-      subnet_name            = "example-sql-subnet"
+      subnet_name            = "example-bastion-subnet"
       subnet_ip              = "10.1.0.0/16"
       subnet_region          = "us-central1"
       subnet_flow_logs       = true
@@ -47,6 +71,13 @@ module "example_network" {
       subnets_private_access = true
     },
     
+    {
+      subnet_name            = "example-sql-subnet"
+      subnet_ip              = "10.3.0.0/16"
+      subnet_region          = "us-central1"
+      subnet_flow_logs       = true
+      subnets_private_access = true
+    },
   ]
   secondary_ranges = {
     "example-gke-subnet" = [
@@ -67,4 +98,28 @@ module "cloud_sql_private_service_access_example_network" {
 
   project_id  = var.project_id
   vpc_network = module.example_network.network_name
+}
+module "example_router" {
+  source  = "terraform-google-modules/cloud-router/google"
+  version = "~> 0.1.0"
+
+  name         = "example-router"
+  project      = var.project_id
+  region       = "us-central1"
+  network      = "${module.example_network.network.network.self_link}"
+
+  nats = [
+    {
+      name = "example-nat"
+      
+      subnetworks = [
+        {
+          name = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+          source_ip_ranges_to_nat = ["PRIMARY_IP_RANGE"]
+
+          secondary_ip_range_names = []
+        },
+      ]
+    },
+  ]
 }
