@@ -188,10 +188,12 @@ template "project_networks" {
         cloud_sql_private_service_access = {} # Enable SQL private service access.
       }]
       bastion_hosts = [{
-        name    = "bastion-vm"
-        network = "$${module.example_network.network.network.self_link}"
-        subnet  = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
-        members = ["group:bastion-accessors@example.com"]
+        name           = "bastion-vm"
+        network        = "$${module.example_network.network.network.self_link}"
+        subnet         = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+        image_family   = "ubuntu-2004-lts"
+        image_project  = "ubuntu-os-cloud"
+        members        = ["group:bastion-accessors@example.com"]
         startup_script = <<EOF
 sudo apt-get -y update
 sudo apt-get -y install mysql-client-core-5.7
@@ -200,13 +202,13 @@ sudo chmod +x /usr/local/bin/cloud_sql_proxy
 EOF
       }]
       compute_routers = [{
-        name = "example-router"
+        name    = "example-router"
         network = "$${module.example_network.network.network.self_link}"
         nats = [{
-          name = "example-nat"
+          name                               = "example-nat"
           source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
           subnetworks = [{
-            name = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+            name                     = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
             source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
             secondary_ip_range_names = []
           }]
@@ -279,18 +281,18 @@ template "project_data" {
       healthcare_datasets = [{
         name = "example-healthcare-dataset"
         iam_members = [{
-            role = "roles/healthcare.datasetViewer"
-            member = "group:example-healthcare-dataset-viewers@example.com",
+          role   = "roles/healthcare.datasetViewer"
+          member = "group:example-healthcare-dataset-viewers@example.com",
         }]
         dicom_stores = [{
           name = "example-dicom-store"
         }]
         fhir_stores = [{
-          name         = "example-fhir-store"
-          version      = "R4"
+          name    = "example-fhir-store"
+          version = "R4"
           iam_members = [{
-              role = "roles/healthcare.fhirStoreViewer"
-              member = "group:example-fhir-viewers@example.com",
+            role   = "roles/healthcare.fhirStoreViewer"
+            member = "group:example-fhir-viewers@example.com",
           }]
         }]
         hl7_v2_stores = [{
@@ -322,7 +324,7 @@ template "project_data" {
           type             = "string"
           terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
         }]
-      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
+        /* TODO(user): Uncomment and re-run the engine after deploying secrets.
         raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta

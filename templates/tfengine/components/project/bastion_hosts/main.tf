@@ -29,7 +29,8 @@ module "{{resourceName .name}}" {
   {{- end}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"
-  image_family = "{{get . "image_family" "ubuntu-2004-lts"}}"
+  {{hclField . "image_family" false}}
+  {{hclField . "image_project" false}}
   {{hclField . "members" true}}
   {{hclField . "scopes" false}}
 

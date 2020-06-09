@@ -36,6 +36,9 @@ module "bastion_vm" {
   network      = "${module.example_network.network.network.self_link}"
   subnet       = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
   image_family = "ubuntu-2004-lts"
+
+  image_project = "ubuntu-os-cloud"
+
   members = ["group:bastion-accessors@example.com"]
 
   
