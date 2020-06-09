@@ -55,7 +55,7 @@ module "bigquery_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52 is merged.
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   dataset_id                  = "1yr_org_audit_logs"
   project_id                  = var.project_id
