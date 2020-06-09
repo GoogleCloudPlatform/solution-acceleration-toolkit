@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terragrunt" {
-  recipe_path = "../deployment/terragrunt.hcl"
+  recipe_path = "../terraform/terragrunt.hcl"
   output_path    = "{{.display_name}}/folder"
   data = {
     deps = [{
