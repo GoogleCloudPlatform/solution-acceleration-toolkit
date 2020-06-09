@@ -46,6 +46,7 @@ locals {
     "cloudbilling.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com",
     "iam.googleapis.com",
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",

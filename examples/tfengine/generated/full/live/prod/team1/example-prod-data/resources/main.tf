@@ -61,6 +61,19 @@ module "example_mysql_instance" {
   
   
 }
+module "project_iam_members" {
+  source   = "terraform-google-modules/iam/google//modules/projects_iam"
+  version  = "~> 6.1.0"
+
+  projects = [var.project_id]
+  mode     = "additive"
+
+  bindings = {
+    "roles/cloudsql.client" = [
+      "serviceAccount:${var.bastion_service_account}",
+    ],
+  }
+}
 
 module "example_prod_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
