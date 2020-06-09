@@ -89,6 +89,16 @@ properties:
         items:
           type: string
 
+      disable_sa_key_creation:
+        description: |
+          Whether or not to disable the creation of service account external keys. If not specified, default to true.
+        type: boolean
+
+      disable_sa_key_upload:
+        description: |
+          Whether or not to disable the uploading of public key to service account. If not specified, default to true.
+        type: boolean
+
   forseti_policies:
     description: |
       Key value pairs configure Forseti Policy Library constraints.

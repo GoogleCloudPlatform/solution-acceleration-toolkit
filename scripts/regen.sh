@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     https://www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,21 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
 
-# Print versions
-go version
-
-# Check format
-f=$(gofmt -l .)
-if [[ "${f}" ]]; then
-  echo "The following files are not formatted:"
-  echo "${f}"
-  exit 1
-fi
-
-go mod tidy
-go vet ./...
-go build ./...
-go test ./...
+# Helper to regenerate generated files.
+go run ./cmd/policygen --config_path examples/policygen/config.yaml --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/tfengine --config_path examples/tfengine/simple.hcl --output_path examples/tfengine/generated/simple
+go run ./cmd/tfengine --config_path examples/tfengine/full.hcl --output_path examples/tfengine/generated/full

@@ -27,6 +27,7 @@ gcp_org_policies:
   - projects/example-project/zones/us-central1-a/instances/example-public-instance
   allowed_ip_forwarding_vms:
   - projects/example-project/zones/us-central1-a/instances/example-routing-instance
+  disable_sa_key_upload: false
 
 forseti_policies:
   targets:
