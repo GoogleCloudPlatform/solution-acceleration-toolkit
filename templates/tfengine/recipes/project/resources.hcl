@@ -23,14 +23,20 @@ template "terragrunt" {
       name = "project"
       path = "../project"
       mock_outputs = {
-        project_id = "\"mock-project\""
+        project_id = "mock-project"
       }
     }]
     inputs = {
-      project_id = "dependency.project.outputs.project_id"
+      project_id = "$${dependency.project.outputs.project_id}"
     }
   }
 }
+
+{{if has . "bastion_hosts"}}
+template "bastion_hosts" {
+  component_path = "../../components/project/bastion_hosts"
+}
+{{end}}
 
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
@@ -47,6 +53,12 @@ template "cloud_sql_instances" {
 {{if has . "compute_networks"}}
 template "compute_networks" {
   component_path = "../../components/project/compute_networks"
+}
+{{end}}
+
+{{if has . "compute_routers"}}
+template "compute_routers" {
+  component_path = "../../components/project/compute_routers"
 }
 {{end}}
 

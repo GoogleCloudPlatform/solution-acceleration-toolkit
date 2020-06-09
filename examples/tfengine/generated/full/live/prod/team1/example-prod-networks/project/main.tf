@@ -39,7 +39,9 @@ module "project" {
   activate_apis = [
     "compute.googleapis.com",
     "container.googleapis.com",
+    "iap.googleapis.com",
     "servicenetworking.googleapis.com",
+    "sqladmin.googleapis.com",
   ]
 }
 
