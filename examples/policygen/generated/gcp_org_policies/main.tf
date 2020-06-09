@@ -165,6 +165,17 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   allow             = var.allowed_policy_member_customer_ids
   allow_list_length = length(var.allowed_policy_member_customer_ids)
 }
+module "orgpolicy_disable_service_account_key_creation" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for = "organization"
+  organization_id = "12345678"
+
+  constraint  = "constraints/iam.disableServiceAccountKeyCreation"
+  policy_type = "boolean"
+  enforce     = true
+}
 
 # Google Cloud Platform - Resource Locations
 module "orgpolicy_gcp_resource_locations" {
