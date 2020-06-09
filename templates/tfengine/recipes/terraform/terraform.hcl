@@ -21,7 +21,7 @@ template "terraform" {
   {{end}}
 }
 
-{{if get . "vars"}}
+{{if or (has . "vars") (has . "terraform_addons.vars")}}
 template "vars" {
   component_path = "../../components/terraform/variables"
   {{if has . "terraform_addons"}}
@@ -32,7 +32,7 @@ template "vars" {
 }
 {{end}}
 
-{{if get . "outputs"}}
+{{if or (has . "outputs") (has . "terraform_addons.outputs")}}
 template "outputs" {
   component_path = "../../components/terraform/outputs"
   {{if has . "terraform_addons"}}

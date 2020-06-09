@@ -12,19 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include {
-  path = find_in_parent_folders()
-}
+#!/usr/bin/env bash
 
-dependency "parent_folder" {
-  config_path = "../../folder"
-  mock_outputs = {
-    name = "mock-folder"
-
-  }
-}
-
-inputs = {
-  parent = "${dependency.parent_folder.outputs.name}"
-
-}
+# Helper to regenerate generated files.
+go run ./cmd/policygen --config_path examples/policygen/config.yaml --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/tfengine --config_path examples/tfengine/simple.hcl --output_path examples/tfengine/generated/simple
+go run ./cmd/tfengine --config_path examples/tfengine/full.hcl --output_path examples/tfengine/generated/full

@@ -37,10 +37,6 @@ module "project" {
   skip_gcloud_download    = true
   shared_vpc              = "example-prod-networks"
 
-  shared_vpc_subnets = [
-    "projects/example-prod-networks/regions/us-central1/subnetworks/example-sql-subnet",
-  ]
-
   activate_apis = [
     "bigquery.googleapis.com",
     "compute.googleapis.com",

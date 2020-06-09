@@ -24,6 +24,7 @@ import (
 var funcMap = map[string]interface{}{
 	"get":          get,
 	"has":          has,
+	"hcl":          hcl,
 	"hclField":     hclField,
 	"resourceName": resourceName,
 }
@@ -59,6 +60,15 @@ func get(m map[string]interface{}, key string, def ...interface{}) interface{} {
 // (e.g. L1.L2 will lookup key L1 in the top level map then L2 within the value.)
 func has(m map[string]interface{}, key string) bool {
 	return get(m, key) != nil
+}
+
+// hcl marshals the given value to HCL.
+func hcl(v interface{}) (string, error) {
+	b, err := hclencoder.Encode(v)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }
 
 // hclField returns a hcl marshaled field e.g. `name = "foo"`
