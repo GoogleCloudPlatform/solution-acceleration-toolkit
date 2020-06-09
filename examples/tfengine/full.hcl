@@ -392,7 +392,7 @@ template "project_firebase" {
   output_path = "./live/prod/team1"
   data = {
     project = {
-      project_id = "example-prod-apps"
+      project_id = "example-prod-firebase"
       apis = [
         "firebase.googleapis.com",
       ]

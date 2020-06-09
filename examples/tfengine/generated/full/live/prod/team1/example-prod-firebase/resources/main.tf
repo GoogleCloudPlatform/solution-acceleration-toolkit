@@ -12,19 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include {
-  path = find_in_parent_folders()
-}
-
-dependency "project" {
-  config_path = "../project"
-  mock_outputs = {
-    project_id = "mock-project"
-
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
   }
 }
 
-inputs = {
-  project_id = "${dependency.project.outputs.project_id}"
-
+resource "google_firebase_project" "firebase" {
+  provider = google-beta
+  project  = var.project_id
 }
+
+resource "google_firestore_index" "index" {
+  project    = var.project_id
+  collection = "example-collection"
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "example-field"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "createdTimestamp"
+    order      = "ASCENDING"
+  }
+}
+

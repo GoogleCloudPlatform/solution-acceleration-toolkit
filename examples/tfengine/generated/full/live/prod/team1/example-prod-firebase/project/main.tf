@@ -28,21 +28,16 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 8.0.0"
 
-  name                    = "example-prod-apps"
+  name                    = "example-prod-firebase"
   org_id                  = var.org_id
   folder_id               = var.folder_id
   billing_account         = var.billing_account
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  shared_vpc              = "example-prod-networks"
-  shared_vpc_subnets = [
-    "projects/example-prod-networks/regions/us-central1/subnetworks/example-gke-subnet",
-  ]
 
   activate_apis = [
-    "compute.googleapis.com",
-    "container.googleapis.com",
+    "firebase.googleapis.com",
   ]
 }
 

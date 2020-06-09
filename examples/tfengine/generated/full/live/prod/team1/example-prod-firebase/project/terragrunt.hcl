@@ -16,15 +16,15 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "project" {
-  config_path = "../project"
+dependency "parent_folder" {
+  config_path = "../../folder"
   mock_outputs = {
-    project_id = "mock-project"
+    name = "mock-folder"
 
   }
 }
 
 inputs = {
-  project_id = "${dependency.project.outputs.project_id}"
+  folder_id = "${dependency.parent_folder.outputs.name}"
 
 }
