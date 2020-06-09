@@ -38,8 +38,8 @@ function test_gen() {
 The following generated files have changes:
 ${changed}
 
-Please run the following command and check in the changes:
-${cmd} ${reference_dir}
+Please run the following command from the repo root and check in the changes:
+./scripts/regen.sh
 EOF
     exit 1
   fi
