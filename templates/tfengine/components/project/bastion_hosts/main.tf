@@ -14,10 +14,10 @@ limitations under the License. */ -}}
 
 {{range .bastion_hosts -}}
 module "{{resourceName .name}}" {
+  # TODO(user): switch to v2 when it is available.
+  # source  = "terraform-google-modules/bastion-host/google"
+  # version = "~> 2.0.0"
   source = "git::https://github.com/terraform-google-modules/terraform-google-bastion-host.git?ref=umairidris-patch-1"
-
-#   source  = "terraform-google-modules/bastion-host/google"
-#   version = "~> 1.0.0"
 
   name         = "{{.name}}"
   project      = var.project_id
