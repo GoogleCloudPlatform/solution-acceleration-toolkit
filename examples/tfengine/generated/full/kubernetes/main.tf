@@ -41,18 +41,11 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
 }
 
-resource "kubernetes_pod" "pod" {
+resource "kubernetes_namespace" "example_namespace" {
   metadata {
-    name = "example-pod"
-    labels = {
-      app = "ExampleApp"
-    }
-  }
-
-  spec {
-    container {
-      image = "nginx:1.7.9"
-      name  = "example-container"
+    name = "example-namespace"
+    annotations = {
+      name = "example-namespace"
     }
   }
 }
