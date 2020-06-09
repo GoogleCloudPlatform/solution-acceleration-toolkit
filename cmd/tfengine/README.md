@@ -25,7 +25,7 @@ This tool helps you follow:
 
 - [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
     through the use of the
-    [Terragrunt](https://terragrunt.gruntwork.io/) open source tool to define 
+    [Terragrunt](https://terragrunt.gruntwork.io/) open source tool to define
     smaller and more modular configs.
 
 Use our [example](../../examples/tfengine) configs to quickly get started.
@@ -41,9 +41,9 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 
 1. Familiarize yourself with the tools you'll use:
 
-    * [Google Cloud](https://cloud.google.com/docs/overview)
-    * [Terraform](https://www.terraform.io/intro/index.html)
-    * [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8)
+    - [Google Cloud](https://cloud.google.com/docs/overview)
+    - [Terraform](https://www.terraform.io/intro/index.html)
+    - [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8)
 
     The infrastructure is deployed using Terraform, which is an industry
     standard for defining infrastructure-as-code. Terragrunt is used as a
@@ -101,6 +101,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
     cd healthcare-data-protection-suite
     ```
+
 1. Replace the values in the [example](../../examples/tfengine/simple.hcl) with
    values for your infrastructure.
 
@@ -111,7 +112,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     OUTPUT_PATH=/tmp/engine
     ```
 
-1. To install the engine, run the following command: 
+1. To install the engine, run the following command:
 
     ```shell
     go install ./cmd/tfengine
