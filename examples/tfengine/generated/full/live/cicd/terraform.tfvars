@@ -15,5 +15,7 @@
 project_id = "example-devops"
 managed_services = [
   "container.googleapis.com",
-  "sqladmin.googleapis.com",
+  "healthcare.googleapis.com",
+  "iap.googleapis.com",
+  "secretmanager.googleapis.com",
 ]

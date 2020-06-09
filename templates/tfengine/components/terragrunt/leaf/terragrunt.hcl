@@ -28,17 +28,32 @@ dependency "{{.name}}" {
   {{- if index . "mock_outputs"}}
   mock_outputs = {
     {{- range $k, $v := .mock_outputs}}
-    {{$k}} = {{$v}}
+    {{$k}} = {{hcl $v}}
     {{- end}}
   }
   {{- end}}
 }
 {{- end}}
 
-{{if index . "inputs" -}}
+
+{{- $has_inputs := has . "inputs"}}
+{{- range get . "vars"}}
+  {{- if has . "terragrunt_input"}}
+    {{- $has_inputs = true}}
+  {{- end}}
+{{- end}}
+
+{{- if $has_inputs}}
+
 inputs = {
-  {{- range $k, $v := .inputs}}
-  {{$k}} = {{$v}}
+  {{- range $k, $v:= get . "inputs"}}
+  {{$k}} = {{hcl $v}}
+  {{- end}}
+
+  {{- range get . "vars"}}
+  {{- if has . "terragrunt_input"}}
+  {{.name}} = {{hcl .terragrunt_input}}
+  {{- end}}
   {{- end}}
 }
 {{- end}}
