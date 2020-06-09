@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terragrunt" {
-  recipe_path = "../terraform/terragrunt.hcl"
+  recipe_path = "../deployment/terragrunt.hcl"
   output_path = "./project"
   {{if has . "project"}}
   flatten {

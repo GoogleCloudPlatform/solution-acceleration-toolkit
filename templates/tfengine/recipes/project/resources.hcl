@@ -13,23 +13,7 @@
 # limitations under the License.
 
 template "terragrunt" {
-  recipe_path = "../terraform/terragrunt.hcl"
-  data = {
-    vars = [{
-      name =  "project_id"
-      type = "string"
-    }]
-    deps = [{
-      name = "project"
-      path = "../project"
-      mock_outputs = {
-        project_id = "mock-project"
-      }
-    }]
-    inputs = {
-      project_id = "$${dependency.project.outputs.project_id}"
-    }
-  }
+  recipe_path = "../deployment/project.hcl"
 }
 
 {{if has . "bastion_hosts"}}
