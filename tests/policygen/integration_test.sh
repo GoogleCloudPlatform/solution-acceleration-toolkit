@@ -27,14 +27,13 @@ curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/latest/cft-linux-am
 chmod +x ${tmp}/cft
 
 # Package policies.
-root="$(git rev-parse --show-toplevel)"
-${root}/scripts/package_policies.sh -s ${root}/examples/policygen/generated/forseti_policies -d ${tmp}
+scripts/package_policies.sh -s examples/policygen/generated/forseti_policies -d ${tmp}
 
 # Run CFT Scorecard.
 touch ${tmp}/scorecard.csv
-${tmp}/cft scorecard --policy-path ${tmp} --dir-path ${root}/tests/policygen/assets --output-format csv --output-path ${tmp}
+${tmp}/cft scorecard --policy-path ${tmp} --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
 
-changed="$(diff ${root}/tests/policygen/reports/want_report.csv ${tmp}/scorecard.csv)" || true
+changed="$(diff tests/policygen/reports/want_report.csv ${tmp}/scorecard.csv)" || true
 if [[ -n "${changed}" ]]; then
     cat <<EOF
 
