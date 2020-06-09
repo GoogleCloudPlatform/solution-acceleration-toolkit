@@ -204,6 +204,7 @@ EOF
         network = "$${module.example_network.network.network.self_link}"
         nats = [{
           name = "example-nat"
+          source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
           subnetworks = [{
             name = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
             source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
