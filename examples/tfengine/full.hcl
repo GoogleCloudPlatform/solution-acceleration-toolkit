@@ -368,7 +368,7 @@ template "project_apps" {
     resources = {
       # TODO(user): Uncomment and re-run the engine after the apps project has been deployed.
       # gke_clusters = [{
-      #   name                   = "example-prod-gke-cluster"
+      #   name                   = "example-gke-cluster"
       #   network_project_id     = "example-prod-networks"
       #   network                = "example-network"
       #   subnet                 = "example-gke-subnet"
@@ -382,6 +382,95 @@ template "project_apps" {
       iam_members = {
         "roles/container.viewer" = ["group:example-viewers@example.com"]
       }
+    }
+  }
+}
+
+# Prod firebase project for team 1.
+template "project_firebase" {
+  recipe_path = "{{$base}}/folder/project.hcl"
+  output_path = "./live/prod/team1"
+  data = {
+    project = {
+      project_id = "example-prod-apps"
+      apis = [
+        "firebase.googleapis.com",
+      ]
+    }
+    resources = {
+      terraform_addons = {
+        raw_config = <<EOF
+resource "google_firebase_project" "firebase" {
+  provider = google-beta
+  project  = var.project_id
+}
+
+resource "google_firestore_index" "index" {
+  project    = var.project_id
+  collection = "example-collection"
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "example-field"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "createdTimestamp"
+    order      = "ASCENDING"
+  }
+}
+EOF
+      }
+    }
+  }
+}
+
+# Kubernetes Terraform deployment. This should be deployed manually as Cloud
+# Build cannot access the GKE cluster and should be deployed after the GKE
+# Cluster has been deployed.
+template "kubernetes" {
+  recipe_path = "{{$base}}/deployment/terraform.hcl"
+  output_path = "./kubernetes"
+
+  data = {
+    state_path_prefix = "kubernetes"
+    terraform_addons = {
+      raw_config = <<EOF
+data "google_client_config" "default" {}
+
+data "google_container_cluster" "gke_cluster" {
+  name     = "example-gke-cluster"
+  location = "us-central1"
+  project  = "example-prod-apps"
+}
+
+provider "kubernetes" {
+  load_config_file       = false
+  token                  = data.google_client_config.default.access_token
+  host                   = data.google_container_cluster.gke_cluster.endpoint
+  client_certificate     = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_certificate)
+  client_key             = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_key)
+  cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
+}
+
+resource "kubernetes_pod" "pod" {
+  metadata {
+    name = "example-pod"
+    labels = {
+      app = "ExampleApp"
+    }
+  }
+
+  spec {
+    container {
+      image = "nginx:1.7.9"
+      name  = "example-container"
+    }
+  }
+}
+EOF
     }
   }
 }
