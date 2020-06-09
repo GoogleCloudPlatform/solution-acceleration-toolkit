@@ -31,7 +31,7 @@ gcp_org_policies:
 
 forseti_policies:
   targets:
-  - "organization/1234/*"
+  - "organization/12345678/*"
   - "folder/4567/*"
   allowed_policy_member_domains:
   - example.com
