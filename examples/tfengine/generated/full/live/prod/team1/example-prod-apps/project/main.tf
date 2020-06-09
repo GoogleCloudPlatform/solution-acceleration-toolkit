@@ -36,7 +36,6 @@ module "project" {
   default_service_account = "keep"
   skip_gcloud_download    = true
   shared_vpc              = "example-prod-networks"
-
   shared_vpc_subnets = [
     "projects/example-prod-networks/regions/us-central1/subnetworks/example-gke-subnet",
   ]

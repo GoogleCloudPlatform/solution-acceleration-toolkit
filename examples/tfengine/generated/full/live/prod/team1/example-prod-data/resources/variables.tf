@@ -14,3 +14,6 @@
 variable "project_id" {
   type = string
 }
+variable "bastion_service_account" {
+  type = string
+}

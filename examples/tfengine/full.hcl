@@ -24,6 +24,7 @@ data = {
   cloud_sql_region    = "us-central1"
   cloud_sql_zone      = "a"
   compute_region      = "us-central1"
+  compute_zone        = "a"
   gke_region          = "us-central1"
   healthcare_location = "us-central1"
   storage_location    = "us-central1"
@@ -80,7 +81,9 @@ template "foundation" {
       ]
       managed_services = [
         "container.googleapis.com",
-        "sqladmin.googleapis.com",
+        "healthcare.googleapis.com",
+        "iap.googleapis.com",
+        "secretmanager.googleapis.com",
       ]
     }
   }
@@ -151,7 +154,9 @@ template "project_networks" {
       apis = [
         "compute.googleapis.com",
         "container.googleapis.com",
+        "iap.googleapis.com",
         "servicenetworking.googleapis.com",
+        "sqladmin.googleapis.com",
       ]
     }
     resources = {
@@ -159,7 +164,7 @@ template "project_networks" {
         name = "example-network"
         subnets = [
           {
-            name     = "example-sql-subnet"
+            name     = "example-bastion-subnet"
             ip_range = "10.1.0.0/16"
           },
           {
@@ -179,6 +184,40 @@ template "project_networks" {
         ]
         cloud_sql_private_service_access = {} # Enable SQL private service access.
       }]
+      bastion_hosts = [{
+        name           = "bastion-vm"
+        network        = "$${module.example_network.network.network.self_link}"
+        subnet         = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+        image_family   = "ubuntu-2004-lts"
+        image_project  = "ubuntu-os-cloud"
+        members        = ["group:bastion-accessors@example.com"]
+        startup_script = <<EOF
+sudo apt-get -y update
+sudo apt-get -y install mysql-client
+sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
+EOF
+      }]
+      compute_routers = [{
+        name    = "example-router"
+        network = "$${module.example_network.network.network.self_link}"
+        nats = [{
+          name                               = "example-nat"
+          source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+          subnetworks = [{
+            name                     = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+            source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
+            secondary_ip_range_names = []
+          }]
+
+        }]
+      }]
+      terraform_addons = {
+        outputs = [{
+          name  = "bastion_service_account"
+          value = "$${module.bastion_vm.service_account}"
+        }]
+      }
     }
   }
 }
@@ -199,9 +238,6 @@ template "project_data" {
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
-        subnets = [{
-          name = "example-sql-subnet"
-        }]
       }
       # Add dependency on network deployment.
       terraform_addons = {
@@ -239,24 +275,29 @@ template "project_data" {
       healthcare_datasets = [{
         name = "example-healthcare-dataset"
         iam_members = [{
-            role = "roles/healthcare.datasetViewer"
-            member = "group:example-healthcare-dataset-viewers@example.com",
+          role   = "roles/healthcare.datasetViewer"
+          member = "group:example-healthcare-dataset-viewers@example.com",
         }]
         dicom_stores = [{
           name = "example-dicom-store"
         }]
         fhir_stores = [{
-          name         = "example-fhir-store"
-          version      = "R4"
+          name    = "example-fhir-store"
+          version = "R4"
           iam_members = [{
-              role = "roles/healthcare.fhirStoreViewer"
-              member = "group:example-fhir-viewers@example.com",
+            role   = "roles/healthcare.fhirStoreViewer"
+            member = "group:example-fhir-viewers@example.com",
           }]
         }]
         hl7_v2_stores = [{
           name = "example-hl7-store"
         }]
       }]
+      iam_members = {
+        "roles/cloudsql.client" = [
+          "serviceAccount:$${var.bastion_service_account}",
+        ]
+      }
       storage_buckets = [{
         name = "example-prod-bucket"
         iam_members = [{
@@ -264,8 +305,20 @@ template "project_data" {
           member = "group:example-readers@example.com"
         }]
       }]
-      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
       terraform_addons = {
+        deps = [{
+          name = "networks"
+          path = "../../example-prod-networks/resources"
+          mock_outputs = {
+            bastion_service_account = "mock-sa"
+          }
+        }]
+        vars = [{
+          name             = "bastion_service_account"
+          type             = "string"
+          terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
+        }]
+        /* TODO(user): Uncomment and re-run the engine after deploying secrets.
         raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta
@@ -281,7 +334,8 @@ data "google_secret_manager_secret_version" "db_password" {
   project = "example-secrets"
 }
 EOF
-      } */
+ */
+      }
     }
   }
 }

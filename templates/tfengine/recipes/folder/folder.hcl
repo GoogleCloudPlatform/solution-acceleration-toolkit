@@ -20,11 +20,11 @@ template "terragrunt" {
       name = "parent_folder"
       path = "../../folder"
       mock_outputs = {
-        name = "\"mock-folder\""
+        name = "mock-folder"
       }
     }]
     inputs = {
-      parent = "dependency.parent_folder.outputs.name"
+      parent = "$${dependency.parent_folder.outputs.name}"
     }
   }
 }
