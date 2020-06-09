@@ -96,7 +96,7 @@ module "storage_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52  is fixed.
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.5.0"
+  version = "~> 1.6.0"
 
   name          = "{{.bucket_name}}"
   project_id    = var.project_id
