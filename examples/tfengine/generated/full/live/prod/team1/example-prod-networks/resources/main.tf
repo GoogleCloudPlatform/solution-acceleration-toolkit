@@ -74,13 +74,6 @@ module "example_network" {
       subnets_private_access = true
     },
     
-    {
-      subnet_name            = "example-sql-subnet"
-      subnet_ip              = "10.3.0.0/16"
-      subnet_region          = "us-central1"
-      subnet_flow_logs       = true
-      subnets_private_access = true
-    },
   ]
   secondary_ranges = {
     "example-gke-subnet" = [

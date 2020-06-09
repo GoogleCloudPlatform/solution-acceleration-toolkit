@@ -29,12 +29,14 @@ module "project" {
   {{- $host := .shared_vpc_attachment.host_project_id}}
   shared_vpc              = "{{$host}}"
 
+  {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [
     {{- range get . "shared_vpc_attachment.subnets"}}
     {{- $region := get . "region" $.compute_region}}
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
   ]
+  {{- end}}
   {{- end}}
 
   activate_apis = [

@@ -181,10 +181,6 @@ template "project_networks" {
               }
             ]
           },
-          {
-            name     = "example-sql-subnet"
-            ip_range = "10.3.0.0/16"
-          },
         ]
         cloud_sql_private_service_access = {} # Enable SQL private service access.
       }]
@@ -242,9 +238,6 @@ template "project_data" {
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
-        subnets = [{
-          name = "example-sql-subnet"
-        }]
       }
       # Add dependency on network deployment.
       terraform_addons = {
