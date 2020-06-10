@@ -151,17 +151,6 @@ module "orgpolicy_disable_service_account_key_creation" {
   policy_type = "boolean"
   enforce     = true
 }
-module "orgpolicy_disable_service_account_key_upload" {
-  source  = "terraform-google-modules/org-policy/google"
-  version = "~> 3.0.2"
-
-  policy_for = "organization"
-  organization_id = "12345678"
-
-  constraint  = "constraints/iam.disableServiceAccountKeyUpload"
-  policy_type = "boolean"
-  enforce     = true
-}
 
 # Google Cloud Platform - Resource Locations
 module "orgpolicy_gcp_resource_locations" {
