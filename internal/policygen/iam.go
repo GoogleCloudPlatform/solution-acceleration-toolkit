@@ -56,13 +56,17 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 
 		// Generate policies for allowed bindings for each role.
 		for role, members := range rbs {
+			// Removes 'roles/' prefix, replaces '.' with '_'  and turns each character to lower case.
+			// E.g. roles/orgpolicy.policyViewer --> orgpolicy_policyviewer
+			suffix := strings.ToLower(strings.Replace(strings.TrimPrefix(role, "roles/"), ".", "_", -1))
 			data := map[string]interface{}{
 				"target":  fmt.Sprintf("%s/%s", root.Type, root.ID),
+				"suffix":  suffix,
 				"role":    role,
 				"members": members,
 			}
 			in := filepath.Join(templateDir, "forseti", "tf_based", "iam_allow_bindings.yaml")
-			out := filepath.Join(outputPath, forsetiOutputRoot, outputFolder, fmt.Sprintf("iam_allow_bindings_%s.yaml", strings.TrimPrefix(role, "roles/")))
+			out := filepath.Join(outputPath, forsetiOutputRoot, outputFolder, fmt.Sprintf("iam_allow_bindings_%s.yaml", suffix))
 			if err := template.WriteFile(in, out, data); err != nil {
 				return err
 			}

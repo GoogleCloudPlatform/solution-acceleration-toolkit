@@ -20,7 +20,7 @@ spec:
   severity: high
   match:
     target:
-    - "organization/1234/*"
+    - "organization/12345678/*"
     - "folder/4567/*"
   parameters:
     # https://cloud.google.com/compute/docs/regions-zones#available
