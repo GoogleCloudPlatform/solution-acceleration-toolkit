@@ -21,19 +21,22 @@ set -e
 tmp="$(mktemp -d "/tmp/xingao-tmp.XXXXXX")"
 trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
 
-# Install CFT tool.
-# TODO(xingao): add to CFT dev tools container.
-curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/latest/cft-linux-amd64
+# Install a fixed version of CFT tool. Output generated can be different from version to version.
+curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/v0.3.4/cft-linux-amd64
 chmod +x ${tmp}/cft
 
 # Package policies.
 scripts/package_policies.sh -s examples/policygen/generated/forseti_policies -d ${tmp}
 
-# Run CFT Scorecard.
-touch ${tmp}/scorecard.csv
+# Run CFT Scorecard. scorecard.csv is hardcoded in CFT Scorecard as the output file name.
+output_file="${tmp}/scorecard.csv"
+touch ${output_file}
 ${tmp}/cft scorecard --policy-path ${tmp} --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
 
-changed="$(diff tests/policygen/reports/want_report.csv ${tmp}/scorecard.csv)" || true
+# Sort the output file without the CSV header line.
+sort -o ${output_file} <(tail -n+2 ${output_file})
+
+changed="$(diff -u tests/policygen/reports/want_report.csv ${output_file})" || true
 if [[ -n "${changed}" ]]; then
     cat <<EOF
 

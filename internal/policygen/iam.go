@@ -56,6 +56,8 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 
 		// Generate policies for allowed bindings for each role.
 		for role, members := range rbs {
+			// Removes 'roles/' prefix, replaces '.' with '_'  and turns each character to lower case.
+			// E.g. roles/orgpolicy.policyViewer --> orgpolicy_policyviewer
 			suffix := strings.ToLower(strings.Replace(strings.TrimPrefix(role, "roles/"), ".", "_", -1))
 			data := map[string]interface{}{
 				"target":  fmt.Sprintf("%s/%s", root.Type, root.ID),
