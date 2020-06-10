@@ -42,7 +42,7 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("convert schema to JSON: %v", err)
 	}
 
-	if err := jsonschema.Validate(sj, cj); err != nil {
+	if err := jsonschema.ValidateJSONBytes(sj, cj); err != nil {
 		return nil, err
 	}
 

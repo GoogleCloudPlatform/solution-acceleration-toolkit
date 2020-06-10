@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
@@ -84,6 +85,11 @@ func dump(conf *Config, root, outputPath string) error {
 				return fmt.Errorf("load recipe %q: %v", rp, err)
 			}
 			rc.Data = ti.Data
+			if len(rc.Schema) > 0 {
+				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
+					return fmt.Errorf("recipe %q: %v", rp, err)
+				}
+			}
 			if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}

@@ -104,5 +104,10 @@ properties = {
       }
     }
   }
+
+  schema = {
+    description = "Schema the data for this template must adhere to. Typically only set in recipes."
+    type        = "object"
+  }
 }
 `

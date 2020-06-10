@@ -37,6 +37,9 @@ type Config struct {
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
 	Data    map[string]interface{} `json:"data,omitempty"`
 
+	SchemaCty *cty.Value             `hcl:"schema,optional" json:"-"`
+	Schema    map[string]interface{} `json:"schema,omitempty"`
+
 	Templates []*templateInfo `hcl:"template,block" json:"template,omitempty"`
 }
 
@@ -61,11 +64,18 @@ func (c *Config) Init() error {
 		}
 	}
 
+	if c.SchemaCty != nil {
+		c.Schema, err = ctyValueToMap((c.SchemaCty))
+		if err != nil {
+			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
+		}
+	}
+
 	for _, t := range c.Templates {
 		if t.DataCty != nil {
 			t.Data, err = ctyValueToMap(t.DataCty)
 			if err != nil {
-				return fmt.Errorf("failed to convert %v to map: %v", t.DataCty, err)
+				return fmt.Errorf("failed to convert data %v to map: %v", t.DataCty, err)
 			}
 		}
 	}
@@ -82,7 +92,7 @@ func (c *Config) validate() error {
 		return err
 	}
 
-	return jsonschema.Validate(sj, cj)
+	return jsonschema.ValidateJSONBytes(sj, cj)
 }
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
