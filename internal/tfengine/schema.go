@@ -15,7 +15,7 @@
 package tfengine
 
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
-const schemaHCL = `
+const schema = `
 title = "Terraform Engine Config Schema"
 
 additionalProperties = false
