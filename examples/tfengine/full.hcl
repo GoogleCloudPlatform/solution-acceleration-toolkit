@@ -65,7 +65,7 @@ template "foundation" {
       allowed_policy_member_customer_ids = [
         "example_customer_id",
       ]
-      disable_sa_key_upload = false
+      disable_sa_key_creation = false
     }
 
     cicd = {

@@ -192,20 +192,6 @@ module "orgpolicy_disable_service_account_key_creation" {
 }
 {{- end}}
 
-{{- if get . "disable_sa_key_upload" true}}
-module "orgpolicy_disable_service_account_key_upload" {
-  source  = "terraform-google-modules/org-policy/google"
-  version = "~> 3.0.2"
-
-  policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
-
-  constraint  = "constraints/iam.disableServiceAccountKeyUpload"
-  policy_type = "boolean"
-  enforce     = true
-}
-{{- end}}
-
 # Google Cloud Platform - Resource Locations
 module "orgpolicy_gcp_resource_locations" {
   source  = "terraform-google-modules/org-policy/google"
