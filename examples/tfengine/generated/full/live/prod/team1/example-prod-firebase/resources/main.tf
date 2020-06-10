@@ -22,25 +22,25 @@ terraform {
   }
 }
 
-  resource "google_firebase_project" "firebase" {
-    provider = google-beta
-    project  = var.project_id
-  }
+resource "google_firebase_project" "firebase" {
+  provider = google-beta
+  project  = var.project_id
+}
 
-  resource "google_firestore_index" "index" {
-    project    = var.project_id
-    collection = "example-collection"
-    fields {
-      field_path = "__name__"
-      order      = "ASCENDING"
-    }
-    fields {
-      field_path = "example-field"
-      order      = "ASCENDING"
-    }
-    fields {
-      field_path = "createdTimestamp"
-      order      = "ASCENDING"
-    }
+resource "google_firestore_index" "index" {
+  project    = var.project_id
+  collection = "example-collection"
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
   }
+  fields {
+    field_path = "example-field"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "createdTimestamp"
+    order      = "ASCENDING"
+  }
+}
 

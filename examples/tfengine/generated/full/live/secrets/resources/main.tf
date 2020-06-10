@@ -22,10 +22,10 @@ terraform {
   }
 }
 
-  resource "random_password" "db" {
-    length = 16
-    special = true
-  }
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
 
 
 
