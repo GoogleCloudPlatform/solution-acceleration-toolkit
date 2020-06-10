@@ -129,6 +129,8 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 }
 
 func hclToJSON(b []byte) ([]byte, error) {
+	// Directly trying to unmarshal to cty.Value doesn't seem to work,
+	// so wrap in a dummy field.
 	wrap := struct {
 		Value *cty.Value `hcl:"value"`
 	}{}
