@@ -93,14 +93,14 @@ func TestExamples(t *testing.T) {
 					11,
 					[]string{
 						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudasset.viewer.yaml",
+						"iam_allow_bindings_cloudasset_viewer.yaml",
 					}},
 				{
 					filepath.Join(tmp, "forseti_policies", "project_123"),
 					6,
 					[]string{
 						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudsql.client.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
 					}},
 				{
 					filepath.Join(tmp, "gcp_org_policies"),

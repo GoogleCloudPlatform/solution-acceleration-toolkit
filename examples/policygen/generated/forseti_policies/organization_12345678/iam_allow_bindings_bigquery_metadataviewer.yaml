@@ -15,7 +15,7 @@
 apiVersion: constraints.gatekeeper.sh/v1alpha1
 kind: GCPIAMAllowedBindingsConstraintV1
 metadata:
-  name: whitelist_owner_role
+  name: iam_allowed_bindings_bigquery_metadataviewer
 spec:
   severity: high
   match:
