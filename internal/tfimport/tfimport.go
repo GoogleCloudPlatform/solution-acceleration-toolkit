@@ -15,9 +15,16 @@
 package tfimport
 
 import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
 	"os/exec"
 	"regexp"
+	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
@@ -39,7 +46,8 @@ var kubernetesAlphaImporter = &importer.SimpleImporter{
 }
 
 // Defines all supported resource importers
-var importers = map[string]resourceImporter{
+// These can be sorted in Vim using ":SortRangesByHeader" from https://github.com/jrhouston/tfk8s
+var Importers = map[string]resourceImporter{
 	// Google provider
 	"google_app_engine_application": &importer.SimpleImporter{
 		Fields: []string{"project"},
@@ -65,6 +73,7 @@ var importers = map[string]resourceImporter{
 		Fields: []string{"billing_account_id"},
 		Tmpl:   "{{.billing_account_id}}",
 	},
+	"google_billing_budget": &importer.BillingBudget{},
 	"google_binary_authorization_policy": &importer.SimpleImporter{
 		Fields: []string{"project"},
 		Tmpl:   "projects/{{.project}}",
@@ -97,6 +106,14 @@ var importers = map[string]resourceImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/images/{{.name}}",
 	},
+	"google_compute_instance": &importer.SimpleImporter{
+		Fields: []string{"project", "zone", "name"},
+		Tmpl:   "projects/{{.project}}/zones/{{.zone}}/instances/{{.name}}",
+	},
+	"google_compute_instance_template": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/instanceTemplates/{{.name}}",
+	},
 	"google_compute_instance_from_template": &importer.SimpleImporter{
 		Fields: []string{"project", "zone", "name"},
 		Tmpl:   "projects/{{.project}}/zones/{{.zone}}/instances/{{.name}}",
@@ -109,10 +126,7 @@ var importers = map[string]resourceImporter{
 		Fields: []string{"project", "name"},
 		Tmpl:   "projects/{{.project}}/global/networks/{{.name}}",
 	},
-	"google_compute_network_peering": &importer.SimpleImporter{
-		Fields: []string{"network", "name"},
-		Tmpl:   "{{.network}}/{{.name}}",
-	},
+	"google_compute_network_peering": &importer.ComputeNetworkPeering{},
 	"google_compute_project_metadata_item": &importer.SimpleImporter{
 		Fields: []string{"key"},
 		Tmpl:   "{{.key}}",
@@ -120,6 +134,10 @@ var importers = map[string]resourceImporter{
 	"google_compute_region_backend_service": &importer.SimpleImporter{
 		Fields: []string{"project", "region", "name"},
 		Tmpl:   "projects/{{.project}}/regions/{{.region}}/backendServices/{{.name}}",
+	},
+	"google_compute_route": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "projects/{{.project}}/global/routes/{{.name}}",
 	},
 	"google_compute_router": &importer.SimpleImporter{
 		Fields: []string{"project", "region", "name"},
@@ -184,7 +202,7 @@ var importers = map[string]resourceImporter{
 	"google_folder": &importer.SimpleImporter{
 		// The user will always be asked for this, it cannot be automatically detemrined.
 		Fields: []string{"folder_id"},
-		Tmpl:   "folders/${folder_id}",
+		Tmpl:   "folders/{{.folder_id}}",
 	},
 	"google_folder_iam_binding": &importer.SimpleImporter{
 		Fields: []string{"folder", "role"},
@@ -224,7 +242,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_logging_folder_sink": &importer.SimpleImporter{
 		Fields: []string{"folder", "name"},
-		Tmpl:   "folders/{{.folder}}/{{.name}}/",
+		Tmpl:   "folders/{{.folder}}/sinks/{{.name}}",
 	},
 	"google_logging_organization_sink": &importer.SimpleImporter{
 		Fields: []string{"org_id", "name"},
@@ -248,7 +266,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_organization_policy": &importer.SimpleImporter{
 		Fields: []string{"org_id", "constraint"},
-		Tmpl:   "{{.org_id}}/{{.constraint}}",
+		Tmpl:   "{{.org_id}}/constraints/{{.constraint}}",
 	},
 	"google_project": &importer.SimpleImporter{
 		Fields: []string{"project_id"},
@@ -268,7 +286,7 @@ var importers = map[string]resourceImporter{
 	},
 	"google_project_organization_policy": &importer.SimpleImporter{
 		Fields: []string{"project", "constraint"},
-		Tmpl:   "project/{{.project}}:constraints/{{.constraint}}",
+		Tmpl:   "projects/{{.project}}:constraints/{{.constraint}}",
 	},
 	"google_project_service": &importer.SimpleImporter{
 		Fields: []string{"project", "service"},
@@ -310,6 +328,7 @@ var importers = map[string]resourceImporter{
 		Fields: []string{"project", "topic"},
 		Tmpl:   "projects/{{.project}}/topics/{{.topic}}",
 	},
+	"google_resource_manager_lien": &importer.ResourceManagerLien{},
 	"google_secret_manager_secret": &importer.SimpleImporter{
 		Fields: []string{"project", "secret_id"},
 		Tmpl:   "projects/{{.project}}/secrets/{{.secret_id}}",
@@ -326,8 +345,8 @@ var importers = map[string]resourceImporter{
 	"google_service_account_iam_binding": &importer.SimpleImporter{
 		// This already includes the project. It looks like this:
 		// projects/my-network-project/serviceAccounts/my-sa@my-network-project.iam.gserviceaccount.com
-		Fields: []string{"service_account_id"},
-		Tmpl:   "{{.service_account_id}} roles/iam.serviceAccountUser",
+		Fields: []string{"service_account_id", "role"},
+		Tmpl:   "{{.service_account_id}} {{.role}}",
 	},
 	"google_service_account_iam_member": &importer.SimpleImporter{
 		// The service_account_id already includes the project. It looks like this:
@@ -408,6 +427,20 @@ var importers = map[string]resourceImporter{
 	"random_integer": &importer.RandomInteger{},
 }
 
+// The following are explicitly not supported by their provider.
+var Unimportable = map[string]bool{
+	"google_bigquery_dataset_access": true,
+	"google_service_account_key":     true,
+	"google_storage_bucket_object":   true,
+	"local_file":                     true,
+	"null_resource":                  true,
+	"random_password":                true,
+	"random_pet":                     true,
+	"random_shuffle":                 true,
+	"random_string":                  true,
+	"tls_private_key":                true,
+}
+
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
@@ -429,7 +462,7 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
 func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
-	ri, ok := importers[rc.Kind]
+	ri, ok := Importers[rc.Kind]
 	if !ok {
 		return nil, false
 	}
@@ -466,4 +499,168 @@ func NotImportable(output string) bool {
 // DoesNotExist parses the output of a `terraform import` command to determine if it indicated that a resource does not exist.
 func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
+}
+
+type RunArgs struct {
+	InputDir      string
+	TerraformPath string
+	DryRun        bool
+	Interactive   bool
+}
+
+func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
+	// Expand the config path (ex. expand ~).
+	inputDir, err := pathutil.Expand(runArgs.InputDir)
+	if err != nil {
+		return fmt.Errorf("expand path %q: %v", inputDir, err)
+	}
+
+	for {
+		retry, err := planAndImport(rn, importRn, runArgs)
+		if err != nil {
+			return err
+		}
+
+		// Break if fully succeeded, or failed to import anything.
+		if !retry {
+			break
+		}
+
+		log.Println("Some imports succeeded but others failed. Retrying the import, in case dependent values have now been populated.")
+	}
+
+	return nil
+}
+
+// This function does the full plan and import cycle.
+// If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
+// A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, err error) {
+	// Create Terraform command runners.
+	tfCmdOutput := func(args ...string) ([]byte, error) {
+		cmd := exec.Command(runArgs.TerraformPath, args...)
+		cmd.Dir = runArgs.InputDir
+		return rn.CmdOutput(cmd)
+	}
+
+	// Init is safe to run on an already-initialized config dir.
+	if out, err := tfCmdOutput("init"); err != nil {
+		return false, fmt.Errorf("init: %v\v%v", err, string(out))
+	}
+
+	// Generate and load the plan using a temp var.
+	tmpfile, err := ioutil.TempFile("", "")
+	if err != nil {
+		return false, fmt.Errorf("create temp file: %v", err)
+	}
+	defer os.Remove(tmpfile.Name())
+	planPath := tmpfile.Name()
+	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
+		return false, fmt.Errorf("plan: %v\n%v", err, string(out))
+	}
+	b, err := tfCmdOutput("show", "-json", planPath)
+	if err != nil {
+		return false, fmt.Errorf("show: %v\n%v", err, string(b))
+	}
+
+	// Load only "create" changes.
+	createChanges, err := terraform.ReadPlanChanges(b, []string{"create"})
+	if err != nil {
+		return false, fmt.Errorf("read Terraform plan changes: %q", err)
+	}
+
+	// Import all importable create changes.
+	importedSomething := false
+	var errs []string
+	var importCmds []string
+	for _, cc := range createChanges {
+		// Get the provider config values (pcv) for this particular resource.
+		// This is needed to determine if it's possible to import the resource.
+		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
+		if err != nil {
+			return false, fmt.Errorf("read provider config values from the Terraform plan: %q", err)
+		}
+
+		// Try to convert to an importable resource.
+		ir, ok := Importable(cc, pcv)
+		if !ok {
+			log.Printf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
+			continue
+		}
+
+		log.Printf("Found importable resource: %q\n", ir.Change.Address)
+
+		// Attempt the import.
+		output, err := Import(importRn, ir, runArgs.InputDir, runArgs.TerraformPath, runArgs.Interactive)
+
+		// In dry-run mode, the output is the command to run.
+		if runArgs.DryRun {
+			cmd := output
+			if err != nil {
+				cmd = err.Error()
+			} else {
+				// The last arg in import could be several space-separated strings. These need to be quoted together.
+				args := strings.SplitN(cmd, " ", 4)
+				if len(args) == 4 {
+					cmd = fmt.Sprintf("%v %v %v %q\n", args[0], args[1], args[2], args[3])
+				}
+			}
+
+			// If the output isn't command with 4 parts, just print it as-is.
+			importCmds = append(importCmds, cmd)
+			continue
+		}
+
+		// Handle the different outcomes of the import attempt.
+		var ie *importer.InsufficientInfoErr
+		switch {
+		// err will only be nil when the import succeed.
+		// Import succeeded, print the success output.
+		case err == nil:
+			// Import succeeded.
+			// Use fmt over log for the TF output because it prints colors and looks better when using it.
+			fmt.Println(output)
+			importedSomething = true
+
+		// Check if the error indicates insufficient information.
+		case errors.As(err, &ie):
+			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
+			errs = append(errs, errMsg)
+			log.Println("Skipping")
+
+		// Check if error indicates resource is not importable or does not exist.
+		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
+		case NotImportable(output):
+			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
+		case DoesNotExist(output):
+			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
+
+		// Important to handle this last.
+		default:
+			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
+			errs = append(errs, errMsg)
+		}
+	}
+
+	if runArgs.DryRun && len(importCmds) > 0 {
+		log.Printf("Import commands:")
+		fmt.Printf("cd %v\n", runArgs.InputDir)
+		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
+
+		return false, nil
+	}
+
+	if len(errs) > 0 {
+		if importedSomething {
+			// Time to retry. Some resources imported successfully, but others didn't.
+			return true, nil
+		}
+		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+	}
+
+	if !importedSomething {
+		log.Printf("No resources imported.")
+	}
+
+	return false, nil
 }

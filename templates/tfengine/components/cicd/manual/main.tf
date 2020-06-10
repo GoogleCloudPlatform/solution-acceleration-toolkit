@@ -46,6 +46,7 @@ locals {
     "cloudbilling.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com",
     "iam.googleapis.com",
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
@@ -54,6 +55,8 @@ locals {
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
     "roles/iam.securityReviewer",
+    "roles/secretmanager.secretViewer",
+    "roles/secretmanager.secretAccessor",
   ]
   cloudbuild_sa_editor_roles = [
     "roles/compute.xpnAdmin",
@@ -222,7 +225,7 @@ resource "google_cloudbuild_trigger" "plan" {
 # Cloud Build Triggers for CD.
 resource "google_cloudbuild_trigger" "apply" {
   count    = var.continuous_deployment_enabled ? 1 : 0
-  disabled = ! var.trigger_enabled
+  disabled = (! var.trigger_enabled) || (! var.deployment_trigger_enabled)
   provider = google-beta
   project  = var.project_id
   name     = "tf-apply"

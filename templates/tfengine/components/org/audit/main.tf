@@ -55,7 +55,7 @@ module "bigquery_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52 is merged.
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   dataset_id                  = "{{.dataset_name}}"
   project_id                  = var.project_id
@@ -96,7 +96,7 @@ module "storage_log_export" {
 # once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52  is fixed.
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.5.0"
+  version = "~> 1.6.0"
 
   name          = "{{.bucket_name}}"
   project_id    = var.project_id

@@ -60,7 +60,23 @@ Usage:
      a different version of terraform. (default "terraform")
 ```
 
-## Terraformer
+## Limitations
+
+### Unknown Fields
+
+Sometimes, fields required for import will not be known at plan time. This generally
+falls into a few cases:
+
+1. Another resource must be imported first. The importer will keep trying to
+   plan-and-import as long as it makes progress (i.e. successfully imports some resources,
+   but not all).
+2. Unknowable fields, including all `random_*` resources and `google_folder`.
+   In this case, the importer will ask the user to input the value. Where
+   possible, it will offer a choice as well.
+
+## Related Tools
+
+### Terraformer
 
 This tool is complementary to
 [Terraformer](https://github.com/GoogleCloudPlatform/terraformer).
@@ -69,15 +85,19 @@ Terraformer focuses on generating new Terraform configs from existing
 infrastructure, while the Importer allows you to define and organize your own
 Terraform configs, including importing resources from within modules.
 
-## Supported Resources by Provider
+## Resource Support by Provider
 
-## [Google Cloud Platform (GCP)](https://www.terraform.io/docs/providers/google/index.html)
+### [Google Cloud Platform (GCP)](https://www.terraform.io/docs/providers/google/index.html)
 
 - AppEngine
   - [`google_app_engine_application`](https://www.terraform.io/docs/providers/google/r/app_engine_application.html)
 - BigQuery
   - [`google_bigquery_dataset`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset.html)
   - [`google_bigquery_table`](https://www.terraform.io/docs/providers/google/r/bigquery_table.html)
+  - **Unimportable**:
+    - [`google_bigquery_dataset_access`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset_access.html)
+- Billing
+  - [`google_billing_budget`](https://www.terraform.io/docs/providers/google/r/billing_budget.html)
 - Binary Authorization
   - [`google_binary_authorization_policy`](https://www.terraform.io/docs/providers/google/r/binary_authorization_policy.html)
 - Cloud Build
@@ -116,6 +136,8 @@ Terraform configs, including importing resources from within modules.
   - [`google_service_account_iam_binding`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
   - [`google_service_account_iam_member`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
   - [`google_service_account_iam_policy`](https://www.terraform.io/docs/providers/google/r/google_service_account_iam.html)
+  - **Unimportable**:
+    - [`google_service_account_key`](https://www.terraform.io/docs/providers/google/r/google_service_account_key.html)
 - Cloud Pub/Sub
   - [`google_pubsub_subscription`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription.html)
   - [`google_pubsub_subscription_iam_binding`](https://www.terraform.io/docs/providers/google/r/pubsub_subscription_iam.html)
@@ -134,6 +156,8 @@ Terraform configs, including importing resources from within modules.
   - [`google_storage_bucket_iam_binding`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
   - [`google_storage_bucket_iam_member`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
   - [`google_storage_bucket_iam_policy`](https://www.terraform.io/docs/providers/google/r/storage_bucket_iam.html)
+  - **Unimportable**:
+    - [`google_storage_bucket_object`](https://www.terraform.io/docs/providers/google/r/storage_bucket_object.html)
 - Compute Engine
   - [`google_compute_address`](https://www.terraform.io/docs/providers/google/r/compute_address.html)
   - [`google_compute_firewall`](https://www.terraform.io/docs/providers/google/r/compute_firewall.html)
@@ -142,11 +166,14 @@ Terraform configs, including importing resources from within modules.
   - [`google_compute_health_check`](https://www.terraform.io/docs/providers/google/r/compute_health_check.html)
   - [`google_compute_image`](https://www.terraform.io/docs/providers/google/r/compute_image.html)
   - [`google_compute_instance`](https://www.terraform.io/docs/providers/google/r/compute_instance.html)
+  - [`google_compute_instance_template`](https://www.terraform.io/docs/providers/google/r/compute_instance_template.html)
+  - [`google_compute_instance_from_template`](https://www.terraform.io/docs/providers/google/r/compute_instance_from_template.html)
   - [`google_compute_interconnect_attachment`](https://www.terraform.io/docs/providers/google/r/compute_interconnect_attachment.html)
   - [`google_compute_network`](https://www.terraform.io/docs/providers/google/r/compute_network.html)
   - [`google_compute_network_peering`](https://www.terraform.io/docs/providers/google/r/compute_network_peering.html)
   - [`google_compute_project_metadata_item`](https://www.terraform.io/docs/providers/google/r/compute_project_metadata_item.html)
   - [`google_compute_region_backend_service`](https://www.terraform.io/docs/providers/google/r/compute_region_backend_service.html)
+  - [`google_compute_route`](https://www.terraform.io/docs/providers/google/r/compute_route.html)
   - [`google_compute_router`](https://www.terraform.io/docs/providers/google/r/compute_router.html)
   - [`google_compute_router_interface`](https://www.terraform.io/docs/providers/google/r/compute_router_interface.html)
   - [`google_compute_router_nat`](https://www.terraform.io/docs/providers/google/r/compute_router_nat.html)
@@ -166,6 +193,8 @@ Terraform configs, including importing resources from within modules.
 - Kubernetes (Container) Engine
   - [`google_container_cluster`](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
   - [`google_container_node_pool`](https://www.terraform.io/docs/providers/google/r/container_node_pool.html)
+- Resource Manager
+  - [`google_resource_manager_lien`](https://www.terraform.io/docs/providers/google/r/resource_manager_lien.html)
 - Secret Manager
   - [`google_secret_manager_secret`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html)
   - [`google_secret_manager_secret_version`](https://www.terraform.io/docs/providers/google/r/secret_manager_secret_version.html)
@@ -195,37 +224,27 @@ Terraform configs, including importing resources from within modules.
 
 - [`kubernetes_manifest`](https://github.com/hashicorp/terraform-provider-kubernetes-alpha#create-a-kubernetes-custom-resource-definition)
 
+### [Local](https://www.terraform.io/docs/providers/local/)
+
+- **Unimportable**:
+  - [`local_file`](https://www.terraform.io/docs/providers/local/r/file.html)
+
+### [Null](https://www.terraform.io/docs/providers/null/)
+
+- **Unimportable**:
+  - [`null_resource`](https://www.terraform.io/docs/providers/null/resource.html)
+
 ### [Random](https://www.terraform.io/docs/providers/random/index.html)
 
 - [`random_id`](https://www.terraform.io/docs/providers/random/r/id.html)
 - [`random_integer`](https://www.terraform.io/docs/providers/random/r/integer.html)
+- **Unimportable**:
+  - [`random_password`](https://www.terraform.io/docs/providers/random/r/password.html)
+  - [`random_pet`](https://www.terraform.io/docs/providers/random/r/pet.html)
+  - [`random_shuffle`](https://www.terraform.io/docs/providers/random/r/shuffle.html)
+  - [`random_string`](https://www.terraform.io/docs/providers/random/r/string.html)
 
-## Resources Where Import Is Not Supported by Provider
+### [TLS](https://www.terraform.io/docs/providers/tls/)
 
-### Google
-
-- BigQuery
-  - [`google_bigquery_dataset_access`](https://www.terraform.io/docs/providers/google/r/bigquery_dataset_access.html)
-- Cloud Platform
-  - [`google_service_account_key`](https://www.terraform.io/docs/providers/google/r/google_service_account_key.html)
-- Cloud Storage
-  - [`google_storage_bucket_object`](https://www.terraform.io/docs/providers/google/r/storage_bucket_object.html)
-
-### Local
-
-- [`local_file`](https://www.terraform.io/docs/providers/local/r/file.html)
-
-### Null
-
-- [`null_resource`](https://www.terraform.io/docs/providers/null/resource.html)
-
-### Random
-
-- [`random_password`](https://www.terraform.io/docs/providers/random/r/password.html)
-- [`random_pet`](https://www.terraform.io/docs/providers/random/r/pet.html)
-- [`random_shuffle`](https://www.terraform.io/docs/providers/random/r/shuffle.html)
-- [`random_string`](https://www.terraform.io/docs/providers/random/r/string.html)
-
-### TLS
-
-- [`tls_private_key`](https://www.terraform.io/docs/providers/tls/r/private_key.html)
+- **Unimportable**:
+  - [`tls_private_key`](https://www.terraform.io/docs/providers/tls/r/private_key.html)

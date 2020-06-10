@@ -17,9 +17,35 @@ package policygen
 import (
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
+
+type Fake struct{}
+
+func (*Fake) CmdRun(*exec.Cmd) error { return nil }
+
+func (*Fake) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
+	cmdStr := strings.Join(cmd.Args, " ")
+	if contains(cmdStr, "gcloud projects describe", "--format json") {
+		return []byte("{\"projectNumber\": \"123\"}"), nil
+	}
+
+	return nil, nil
+}
+
+func (*Fake) CmdCombinedOutput(*exec.Cmd) ([]byte, error) { return nil, nil }
+
+func contains(s string, subs ...string) bool {
+	for _, sub := range subs {
+		if !strings.Contains(s, sub) {
+			return false
+		}
+	}
+	return true
+}
 
 // TestExamples is a basic test for the policygen to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
@@ -46,16 +72,66 @@ func TestExamples(t *testing.T) {
 				OutputPath: tmp,
 			}
 
-			if err := Run(args); err != nil {
+			if err := Run(&Fake{}, args); err != nil {
 				t.Fatalf("policygen.Run(%+v) = %v", args, err)
 			}
 
-			// Check for the existence of policy folders.
-			if _, err := os.Stat(filepath.Join(tmp, "forseti_policies")); err != nil {
-				t.Errorf("os.Stat forseti_policies dir = %v", err)
+			// Check for the existence of policy folders and files.
+			dirs := []struct {
+				path           string
+				wantFilesCount int
+				wantFiles      []string // Check some files.
+			}{
+				{
+					filepath.Join(tmp, "forseti_policies", "overall"),
+					11,
+					[]string{
+						"bigquery_allow_locations.yaml",
+					}},
+				{
+					filepath.Join(tmp, "forseti_policies", "organization_12345678"),
+					11,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudasset_viewer.yaml",
+					}},
+				{
+					filepath.Join(tmp, "forseti_policies", "project_123"),
+					6,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+					}},
+				{
+					filepath.Join(tmp, "gcp_org_policies"),
+					3,
+					[]string{
+						"main.tf",
+						"variables.tf",
+						"terraform.tfvars",
+					}},
 			}
-			if _, err := os.Stat(filepath.Join(tmp, "gcp_org_policies")); err != nil {
-				t.Fatalf("os.Stat gcp_organization_policies dir = %v", err)
+
+			for _, d := range dirs {
+				if _, err := os.Stat(d.path); err != nil {
+					t.Errorf("os.Stat dir %q = %v", d, err)
+				}
+
+				fs, err := ioutil.ReadDir(d.path)
+				if err != nil {
+					t.Fatalf("ioutil.ReadDir(%q) = %v", d, err)
+				}
+
+				if len(fs) != d.wantFilesCount {
+					t.Errorf("retrieved number of files differ for dir %q: got %d, want %d", d.path, len(fs), d.wantFilesCount)
+				}
+
+				for _, f := range d.wantFiles {
+					path := filepath.Join(d.path, f)
+					if _, err := os.Stat(path); err != nil {
+						t.Errorf("os.Stat file %q = %v", path, err)
+					}
+				}
 			}
 		})
 	}

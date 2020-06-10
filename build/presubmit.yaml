@@ -16,17 +16,32 @@ steps:
 - name: "gcr.io/cloud-builders/go"
   entrypoint: "sh"
   args: ["build/license_check.sh"]
+  waitFor: ["-"]
   id: License headers check
 
 - name: "gcr.io/cloud-builders/npm:current"
   entrypoint: "sh"
   args: ["build/md_check.sh"]
+  waitFor: ["-"]
   id: Markdownlint check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:1dc28cd8c9a01a0a85330e2292035a6661c5adf19917fe1dff0ac43f66397693"
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
+  waitFor: ["-"]
   id: Go code check
+
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+  entrypoint: "bash"
+  args: ["build/gen_check.sh"]
+  waitFor: ["-"]
+  id: Generated files check
+
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:b007041726d4f2d7e5270b8fcfc47656850242186825611b33ee97b3867d74ed"
+  entrypoint: "bash"
+  args: ["tests/policygen/integration_test.sh"]
+  waitFor: ["-"]
+  id: Policy Generator integration tests
 
 options:
   env: ["GOPATH=/go"]

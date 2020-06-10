@@ -15,16 +15,19 @@
 billing_account               = "{{.billing_account}}"
 project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"
-{{- if index . "continuous_deployment_enabled"}}
+{{- if has . "continuous_deployment_enabled"}}
 continuous_deployment_enabled = {{.continuous_deployment_enabled}}
 {{- end}}
-{{- if index . "trigger_enabled"}}
+{{- if has . "trigger_enabled"}}
 trigger_enabled               = {{.trigger_enabled}}
 {{- end}}
-{{- if index . "terraform_root"}}
+{{- if has . "deployment_trigger_enabled"}}
+deployment_trigger_enabled    = {{.deployment_trigger_enabled}}
+{{- end}}
+{{- if has . "terraform_root"}}
 terraform_root                = "{{.terraform_root}}"
 {{- end}}
-{{- if index . "build_viewers"}}
+{{- if has . "build_viewers"}}
 build_viewers = [
   {{- range .build_viewers}}
   "{{.}}",

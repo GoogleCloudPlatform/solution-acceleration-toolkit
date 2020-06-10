@@ -12,27 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
+template "terragrunt" {
+  recipe_path = "../deployment/terragrunt.hcl"
   output_path = "{{.project.project_id}}/project"
   data = {
     deps = [{
       name = "parent_folder"
       path = "../../folder"
       mock_outputs = {
-        name = "\"mock-folder\""
+        name = "mock-folder"
       }
     }]
     inputs = {
-      folder_id = "dependency.parent_folder.outputs.name"
+      folder_id = "$${dependency.parent_folder.outputs.name}"
     }
   }
-  {{if has . "project.terraform_addons"}}
+  {{if has . "project"}}
   flatten {
     key = "project"
-  }
-  flatten {
-    key = "terraform_addons"
   }
   {{end}}
 }
@@ -52,12 +49,5 @@ template "resources" {
   flatten {
     key = "resources"
   }
-}
-{{end}}
-
-{{if index . "project_owners"}}
-template "owners" {
-  component_path = "../../components/project/owners"
-  output_path    = "{{.project.project_id}}/project"
 }
 {{end}}

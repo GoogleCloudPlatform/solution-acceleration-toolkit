@@ -15,12 +15,10 @@
 package tfengine
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"testing"
 )
 
@@ -54,7 +52,9 @@ func TestExamples(t *testing.T) {
 			path := filepath.Join(tmp, "live")
 
 			// Convert the configs not reference a GCS backend as the state bucket does not exist.
-			convertToLocalBackend(t, path)
+			if err := ConvertToLocalBackend(path); err != nil {
+				t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+			}
 
 			plan := exec.Command("terragrunt", "plan-all")
 			plan.Dir = path
@@ -62,39 +62,5 @@ func TestExamples(t *testing.T) {
 				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
 			}
 		})
-	}
-}
-
-// backendRE is a regex to capture GCS backend blocks in configs.
-// The 's' and 'U' flags allow capturing multi line backend blocks in a lazy manner.
-var backendRE = regexp.MustCompile(`(?sU)backend "gcs" {.*}`)
-
-func convertToLocalBackend(t *testing.T, path string) {
-	// Overwrite root terragrunt file with empty file so it doesn't try to setup remote backend.
-	if err := ioutil.WriteFile(filepath.Join(path, "terragrunt.hcl"), nil, 0664); err != nil {
-		t.Fatalf("ioutil.Write terragrunt root file: %v", err)
-	}
-
-	// Replace all GCS backend blocks with local.
-	fn := func(path string, info os.FileInfo, err error) error {
-		if filepath.Ext(path) != ".tf" {
-			return nil
-		}
-
-		b, err := ioutil.ReadFile(path)
-		if err != nil {
-			return fmt.Errorf("ioutil.ReadFile(%q) = %v", path, err)
-		}
-
-		b = backendRE.ReplaceAll(b, nil)
-		if err := ioutil.WriteFile(path, b, 0644); err != nil {
-			return fmt.Errorf("ioutil.WriteFile %q: %v", path, err)
-		}
-
-		return nil
-	}
-
-	if err := filepath.Walk(path, fn); err != nil {
-		t.Fatalf("filepath.Walk = %v", err)
 	}
 }

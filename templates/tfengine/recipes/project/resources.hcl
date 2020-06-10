@@ -12,25 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "terraform" {
-  recipe_path = "../terraform/terraform.hcl"
-  data = {
-    vars = [{
-      name =  "project_id"
-      type = "string"
-    }]
-    deps = [{
-      name = "project"
-      path = "../project"
-      mock_outputs = {
-        project_id = "\"mock-project\""
-      }
-    }]
-    inputs = {
-      project_id = "dependency.project.outputs.project_id"
-    }
-  }
+template "deployment" {
+  recipe_path = "../deployment/project.hcl"
 }
+
+{{if has . "bastion_hosts"}}
+template "bastion_hosts" {
+  component_path = "../../components/project/bastion_hosts"
+}
+{{end}}
 
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
@@ -50,15 +40,39 @@ template "compute_networks" {
 }
 {{end}}
 
+{{if has . "compute_routers"}}
+template "compute_routers" {
+  component_path = "../../components/project/compute_routers"
+}
+{{end}}
+
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../../components/project/iam_members"
+}
+{{end}}
+
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
   component_path = "../../components/project/storage_buckets"
 }
 {{end}}
 
-{{if and (has . "gke_clusters") (enabled . "gke_clusters")}}
+{{if has . "gke_clusters"}}
 template "gke_clusters" {
   component_path = "../../components/project/gke_clusters"
+}
+{{end}}
+
+{{if has . "healthcare_datasets"}}
+template "healthcare_datasets" {
+  component_path = "../../components/project/healthcare_datasets"
+}
+{{end}}
+
+{{if has . "secrets"}}
+template "secrets" {
+  component_path = "../../components/org/secrets"
 }
 {{end}}
 

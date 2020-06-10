@@ -13,18 +13,18 @@
 # limitations under the License.
 
 template "terragrunt" {
-  component_path = "../../components/terragrunt/leaf"
+  recipe_path = "../deployment/terragrunt.hcl"
   output_path    = "{{.display_name}}/folder"
   data = {
     deps = [{
       name = "parent_folder"
       path = "../../folder"
       mock_outputs = {
-        name = "\"mock-folder\""
+        name = "mock-folder"
       }
     }]
     inputs = {
-      parent = "dependency.parent_folder.outputs.name"
+      parent = "$${dependency.parent_folder.outputs.name}"
     }
   }
 }

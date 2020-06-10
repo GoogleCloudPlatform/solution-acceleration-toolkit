@@ -24,8 +24,8 @@ import (
 var funcMap = map[string]interface{}{
 	"get":          get,
 	"has":          has,
+	"hcl":          hcl,
 	"hclField":     hclField,
-	"enabled":      enabled,
 	"resourceName": resourceName,
 }
 
@@ -62,6 +62,15 @@ func has(m map[string]interface{}, key string) bool {
 	return get(m, key) != nil
 }
 
+// hcl marshals the given value to HCL.
+func hcl(v interface{}) (string, error) {
+	b, err := hclencoder.Encode(v)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 // hclField returns a hcl marshaled field e.g. `name = "foo"`
 func hclField(m map[string]interface{}, key string, req bool) (string, error) {
 	v, ok := m[key]
@@ -77,13 +86,6 @@ func hclField(m map[string]interface{}, key string, req bool) (string, error) {
 	default:
 		return "", nil
 	}
-}
-
-// enabled is a helper to cleanly check if a key is set and its value is set to false.
-// This is useful for checks for DISABLED keys.
-func enabled(m map[string]interface{}, key string) bool {
-	v := get(m, "disabled."+key)
-	return v == nil || !v.(bool)
 }
 
 // resourceName builds a Terraform resource name.
