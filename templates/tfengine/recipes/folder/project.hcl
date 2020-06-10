@@ -42,15 +42,15 @@ template "project" {
   }
 }
 
-{{range $k, $v := get . "deployments"}}
-template "resources_{{$k}}" {
+{{range $name, $_ := get . "deployments"}}
+template "resources_{{$name}}" {
   recipe_path = "../project/resources.hcl"
-  output_path = "./{{$.project.project_id}}/{{$k}}"
+  output_path = "./{{$.project.project_id}}/{{$name}}"
   flatten {
     key = "deployments"
   }
   flatten {
-    key = "{{$k}}"
+    key = "{{$name}}"
   }
 }
 {{end}}
