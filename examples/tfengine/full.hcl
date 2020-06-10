@@ -118,11 +118,11 @@ template "project_secrets" {
         ]
         terraform_addons = {
           raw_config = <<EOF
-  resource "random_password" "db" {
-    length = 16
-    special = true
-  }
-  EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
         }
       }
     }
@@ -197,11 +197,11 @@ template "project_networks" {
           image_project  = "ubuntu-os-cloud"
           members        = ["group:bastion-accessors@example.com"]
           startup_script = <<EOF
-  sudo apt-get -y update
-  sudo apt-get -y install mysql-client
-  sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
-  sudo chmod +x /usr/local/bin/cloud_sql_proxy
-  EOF
+sudo apt-get -y update
+sudo apt-get -y install mysql-client
+sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
+EOF
         }]
         compute_routers = [{
           name    = "example-router"
