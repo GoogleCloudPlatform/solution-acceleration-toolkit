@@ -14,40 +14,18 @@
 
 template "terragrunt" {
   recipe_path = "../deployment/terragrunt.hcl"
-  output_path = "{{.project.project_id}}/project"
   data = {
+    vars = [{
+      name             =  "project_id"
+      type             = "string"
+      terragrunt_input = "$${dependency.project.outputs.project_id}"
+    }]
     deps = [{
-      name = "parent_folder"
-      path = "../../folder"
+      name = "project"
+      path = "../project"
       mock_outputs = {
-        name = "mock-folder"
+        project_id = "mock-project"
       }
     }]
-    inputs = {
-      folder_id = "$${dependency.parent_folder.outputs.name}"
-    }
-  }
-  {{if has . "project"}}
-  flatten {
-    key = "project"
-  }
-  {{end}}
-}
-
-template "project" {
-  component_path = "../../components/project/project"
-  output_path    = "{{.project.project_id}}/project"
-  flatten {
-    key = "project"
   }
 }
-
-{{if has . "resources"}}
-template "resources" {
-  recipe_path = "../project/resources.hcl"
-  output_path = "./{{.project.project_id}}/resources"
-  flatten {
-    key = "resources"
-  }
-}
-{{end}}
