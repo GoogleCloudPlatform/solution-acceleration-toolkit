@@ -15,7 +15,7 @@
 apiVersion: constraints.gatekeeper.sh/v1alpha1
 kind: GCPIAMAllowedBindingsConstraintV1
 metadata:
-  name: whitelist_owner_role
+  name: iam_allowed_bindings_compute_networkviewer
 spec:
   severity: high
   match:
@@ -23,6 +23,6 @@ spec:
     - "organization/12345678"
   parameters:
     mode: whitelist
-    role: roles/iam.securityReviewer
+    role: roles/compute.networkViewer
     members:
     - serviceAccount:forseti-server-gcp-suffix@example-project.iam.gserviceaccount.com

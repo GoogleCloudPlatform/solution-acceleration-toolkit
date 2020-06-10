@@ -1,0 +1,2 @@
+Other,iam_allow_domains,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public contains member from unexpected domain: allAuthenticatedUsers
+Other,iam_deny_public_access,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public grants roles/storage.objectViewer to allAuthenticatedUsers

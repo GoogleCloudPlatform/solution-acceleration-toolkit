@@ -17,7 +17,7 @@ module "{{resourceName .name}}" {
   # TODO(user): switch to v2 when it is available.
   # source  = "terraform-google-modules/bastion-host/google"
   # version = "~> 2.0.0"
-  source = "git::https://github.com/terraform-google-modules/terraform-google-bastion-host.git?ref=umairidris-patch-1"
+  source = "git::https://github.com/terraform-google-modules/terraform-google-bastion-host.git?ref=d337cc85786bdf471941ec089684b7ce6bfb163b"
 
   name         = "{{.name}}"
   project      = var.project_id
