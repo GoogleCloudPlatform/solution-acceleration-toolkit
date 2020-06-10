@@ -327,21 +327,21 @@ template "project_data" {
           }]
           /* TODO(user): Uncomment and re-run the engine after deploying secrets.
           raw_config = <<EOF
-  data "google_secret_manager_secret_version" "db_user" {
-    provider = google-beta
+data "google_secret_manager_secret_version" "db_user" {
+  provider = google-beta
 
-    secret  = "manual-sql-db-user"
-    project = "example-secrets"
-  }
+  secret  = "manual-sql-db-user"
+  project = "example-secrets"
+}
 
-  data "google_secret_manager_secret_version" "db_password" {
-    provider = google-beta
+data "google_secret_manager_secret_version" "db_password" {
+  provider = google-beta
 
-    secret  = "auto-sql-db-password"
-    project = "example-secrets"
-  }
-  EOF
-  */
+  secret  = "auto-sql-db-password"
+  project = "example-secrets"
+}
+EOF
+*/
         }
       }
     }
@@ -411,28 +411,28 @@ template "project_firebase" {
       resources = {
         terraform_addons = {
           raw_config = <<EOF
-  resource "google_firebase_project" "firebase" {
-    provider = google-beta
-    project  = var.project_id
-  }
+resource "google_firebase_project" "firebase" {
+  provider = google-beta
+  project  = var.project_id
+}
 
-  resource "google_firestore_index" "index" {
-    project    = var.project_id
-    collection = "example-collection"
-    fields {
-      field_path = "__name__"
-      order      = "ASCENDING"
-    }
-    fields {
-      field_path = "example-field"
-      order      = "ASCENDING"
-    }
-    fields {
-      field_path = "createdTimestamp"
-      order      = "ASCENDING"
-    }
+resource "google_firestore_index" "index" {
+  project    = var.project_id
+  collection = "example-collection"
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
   }
-  EOF
+  fields {
+    field_path = "example-field"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "createdTimestamp"
+    order      = "ASCENDING"
+  }
+}
+EOF
         }
       }
     }
