@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{- /* TODO(umairidris): add helpers for auto secrets for auto generating strings and passwords */}}
 
 {{range get . "secrets" -}}
-{{- $resource_name := resourceName .secret_id}}
+{{- $resource_name := resourceName . "secret_id"}}
 resource "google_secret_manager_secret" "{{$resource_name}}" {
   provider = google-beta
 

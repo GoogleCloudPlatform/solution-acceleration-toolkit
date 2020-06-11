@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range .compute_routers -}}
-module "{{resourceName .name}}" {
+module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.1.0"
 
