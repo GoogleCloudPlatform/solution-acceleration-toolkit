@@ -65,7 +65,7 @@ func (c *Config) Init() error {
 	}
 
 	if c.SchemaCty != nil {
-		c.Schema, err = ctyValueToMap((c.SchemaCty))
+		c.Schema, err = ctyValueToMap(c.SchemaCty)
 		if err != nil {
 			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
 		}
@@ -131,9 +131,9 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 func hclToJSON(b []byte) ([]byte, error) {
 	// Directly trying to unmarshal to cty.Value doesn't seem to work,
 	// so wrap in a dummy field.
-	wrap := struct {
+	var wrap struct {
 		Value *cty.Value `hcl:"value"`
-	}{}
+	}
 	b = []byte(fmt.Sprintf("value = {\n%v\n}", string(b)))
 
 	if err := hclsimple.Decode("file.hcl", []byte(b), nil, &wrap); err != nil {
