@@ -3,31 +3,30 @@
 Status: Early Access Program
 
 The Terraform Engine is a tool to generate complete end-to-end Terraform
-deployments for Google Cloud with security, compliance and best practices baked
+deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates" to wrap Terraform modules which can
-define a vast variety of configuration specific to your Google Cloud
-organization and structure.
+It introduces the concept of "templates" to wrap Terraform modules. Templates
+define configuration specific to your Google Cloud organization and structure.
 
 ## Why
 
-Users hosting any type of sensitive data on GCP typically need to go through a
-few common and repetitive processes such as setting up devops (Remote state,
-CICD), auditing and monitoring. By using our out of the box end-to-end configs
-that implement these steps for you, you can quickly setup a secure and compliant
+Users hosting sensitive data on Google Cloud typically complete
+common and repetitive processes such as setting up devops (Remote state,
+CICD), auditing, and monitoring. By using out-of-the-box end-to-end configs
+that implement these steps for you, you can quickly set up a secure and compliant
 environment and focus on the parts of the infrastructure that drive your
 business.
 
-This tool will help you follow:
+This tool helps you follow:
 
-- GCP best practices through use of modules from the
+- Google Cloud best practices through the use of modules from the
 [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
 
 - [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
-through use of the popular open source tool
-[Terragrunt](https://terragrunt.gruntwork.io/) to define smaller and more
-modular configs.
+    through the use of the
+    [Terragrunt](https://terragrunt.gruntwork.io/) open source tool to define
+    smaller and more modular configs.
 
 Use our [example](../../examples/tfengine) configs to quickly get started.
 
@@ -40,45 +39,47 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - [Terragrunt](https://terragrunt.gruntwork.io/)
     - [Go 1.14+](https://golang.org/dl/)
 
-1. Get familiar with [GCP](https://cloud.google.com/docs/overview),
-    [Terraform](https://www.terraform.io/intro/index.html) and
-    [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8).
+1. Familiarize yourself with the tools you'll use:
+
+    - [Google Cloud](https://cloud.google.com/docs/overview)
+    - [Terraform](https://www.terraform.io/intro/index.html)
+    - [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8)
 
     The infrastructure is deployed using Terraform, which is an industry
     standard for defining infrastructure-as-code. Terragrunt is used as a
     wrapper around Terraform to manage multiple Terraform deployments and reduce
     duplication.
 
-1. Setup your
+1. Set up your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
-    for GCP resources and [G Suite Domain](https://gsuite.google.com/) for
+    for Google Cloud resources and [G Suite Domain](https://gsuite.google.com/) for
     groups.
 
-1. [Create administrative groups](https://support.google.com/a/answer/33343?hl=en)
+1. [Create the following administrative groups](https://support.google.com/a/answer/33343?hl=en)
     in the G Suite Domain:
 
-    - {PREFIX}-org-admins@{DOMAIN}: This group will get administrative access
+    - {PREFIX}-org-admins@{DOMAIN}: Members of this group get administrative access
         to the entire org. This group can be used in break-glass situations to
         give humans access to the org to make changes.
 
-    - {PREFIX}-devops-owners@{DOMAIN}: This group will get owners access to
-        the devops project to make changes to the CICD project or make changes
+    - {PREFIX}-devops-owners@{DOMAIN}: Members of this group get owners access to
+        the devops project to make changes to the CICD project or to make changes
         to the Terraform state.
 
-    - {PREFIX}-auditors@{DOMAIN}: This group will get security reviewer
-        (metadata viewer) access to the entire org, as well as viewer access to
+    - {PREFIX}-auditors@{DOMAIN}: Members of this group get security reviewer
+        (metadata viewer) access to the entire org and viewer access to
         the audit logs BigQuery and Cloud Storage resources.
 
-    - {PREFIX}-approvers@{DOMAIN}: This group will get access to view
-        Terraform plans and should approve PRs in the GitHub repo.
+    - {PREFIX}-approvers@{DOMAIN}: Members of this group get access to view
+        Terraform plans. Members of this group approve PRs in the GitHub repo.
 
-    For example, with sample prefix "gcp" and domain "example.com" the group
-    "gcp-org-admins@example.com" should be created.
+    For example, with sample prefix "gcp" and domain "example.com", the admin group
+    "gcp-org-admins@example.com" would be created.
 
-    WARNING: It is always recommended to use CICD to deploy the changes instead.
+    WARNING: The best practice is to always deploy changes using CICD.
     The privileged groups should remain empty and only have humans added for
     emergency situations or when investigation is required. This does not apply
-    to view only groups such as approvers.
+    to view-only groups such as approvers.
 
 1. The running user will need to be a super admin or have the following roles:
 
@@ -91,73 +92,81 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 The engine takes a path to an input config and a path to output the generated
 Terraform configs. For details on fields for the input schema, see the
 [schema](../../internal/tfengine/schema.go). After the output has been generated,
-there is no dependency on the engine any longer, and the user can directly use
+there is no longer a dependency on the engine and the user can directly use
 the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
-Replace the values in the [example](../../examples/tfengine/simple.hcl) with
-values for your infrastructure, then run the following commands:
+1. To clone the repo, run the following commands:
 
-```shell
-# Step 1: Clone repo
-git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
-cd healthcare-data-protection-suite
+    ```shell
+    git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
+    cd healthcare-data-protection-suite
+    ```
 
-# Step 2: Setup helper env vars
-CONFIG_PATH=examples/tfengine/simple.yaml
-OUTPUT_PATH=/tmp/engine
+1. Replace the values in the [example](../../examples/tfengine/simple.hcl) with
+   values for your infrastructure.
 
-# Step 3: Install the engine
-go install ./cmd/tfengine
+1. To set up helper environment vars, run the following commands:
 
-# Step 4: Generate Terraform configs. Edit config with values of your infra.
-nano $CONFIG_PATH
-tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
+    ```shell
+    CONFIG_PATH=examples/tfengine/simple.yaml
+    OUTPUT_PATH=/tmp/engine
+    ```
 
-# Step 5: Run one time bootstrap to setup devops project to host Terraform state.
-cd $OUTPUT_PATH/bootstrap
-terraform init
-terraform plan
-terraform apply
+1. To install the engine, run the following command:
 
-# Step 6 (Optional): Deploy Continuous Integration (CI) and Continuous
-# Deployment (CD) resources by following the instructions in
-# components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in
-# the generated Terraform configs directory.
+    ```shell
+    go install ./cmd/tfengine
+    ```
 
-# After the above is done. Your devops project and CICD pipelines are ready, and
-# following changes should be made as Pull Requests (PRs) and go though code
-# reviews. Once approval is granted and CI tests pass, merge the PR. The CD job
-# will automatically deploy the change to your GCP infra.
+1. Run the engine to generate your Terraform configs:
 
-# Step 7 (Optional): Deploy secrets if set and set the values for manual ones
-# in the GCP console.
+    ```shell
+    tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
+    ```
 
-# Step 8: Deploy org infrastructure and other resources by sending a PR for
-# local changes to the config repo.
+1. To run the one-time bootstrap to set up the devops project to host the Terraform
+   state, run the following commands:
 
-# Step 9: Follow the instructions of all commented out blocks starting with
-# `TODO(user)` in the config to deploy the changes. Remove the comment once
-# done.
+   ```shell
+    cd $OUTPUT_PATH/bootstrap
+    terraform init
+    terraform plan
+    terraform apply
+    ```
 
-# Step 10 (Optional): Modify and/or add deployments as needed...
-cd $OUTPUT_PATH/live/.../example-deployment
-# And then send the change as a PR.
-```
+1. (Optional) To deploy Continuous Integration (CI) and Continuous
+   Deployment (CD) resources, follow the instructions in
+   components/cicd/README.md in this directory or $OUTPUT_PATH/cicd/README.md in
+   the generated Terraform configs directory.
+
+   Your devops project and CICD pipelines are ready. The
+   following changes should be made as Pull Requests (PRs) and go though code
+   reviews. After approval is granted and CI tests pass, merge the PR. The CD job
+   automatically deploys the change to your Google Cloud infra.
+
+1. Deploy org infrastructure and other resources by sending a PR for
+   local changes to the config repo.
+
+1. (Optional) Deploy secrets if set and set the values for manual ones in the GCP
+    console.
+
+1. Follow the instructions of all commented out blocks starting with
+   `TODO(user)` in the config to deploy the changes. Remove the comment once done.
 
 ## Tips
 
-- Before running `terragrunt apply-all` always run `terragrunt plan-all` and
-  carefully review the output. The CICD will create a trigger to generate the
+- Before running `terragrunt apply-all`, always run `terragrunt plan-all` and
+  carefully review the output. The CICD creates a trigger to generate the
   plan. Look for the values of the known fields to ensure they are what you
   expect. You may see some values with the word "mock" in them. These values
   are coming from other deployments and will be filled with the real value
-  once Terragrunt runs the dependent deployment.
+  after Terragrunt runs the dependent deployment.
 
 - If you plan on using the engine again, do not manually modify any generated
   file as it will be overwritten the next time the engine runs. Instead,
-  prefer to change the input config, recipe or component for the generated
+  prefer to change the input config, recipe, or component for the generated
   files and add new resources under new deployments that are not generated by
   the engine.
 
-- Always backup any engine configs as well as the generated Terraform configs
+- Always back up any engine configs as well as the generated Terraform configs
   and any modifications to the Terraform configs to version control.
