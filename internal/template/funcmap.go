@@ -98,7 +98,7 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 	if !ok {
 		v, ok = m[key]
 		if !ok {
-			return "", fmt.Errorf("map did not contain key \"resource_name\" nor %q", k)
+			return "", fmt.Errorf("map did not contain key \"resource_name\" nor %q", key)
 		}
 	}
 
