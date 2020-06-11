@@ -101,7 +101,7 @@ func resourceName(m map[string]interface{}, k string) (string, error) {
 
 	name, ok := v.(string)
 	if !ok {
-		return "", fmt.Errorf("resource_name value %v is not a string", v)
+		return "", fmt.Errorf("resource name value %v is not a string", v)
 	}
 	return strings.Replace(name, "-", "_", -1), nil
 }
