@@ -37,11 +37,14 @@ type Config struct {
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
 	Data    map[string]interface{} `json:"data,omitempty"`
 
+	SchemaCty *cty.Value             `hcl:"schema,optional" json:"-"`
+	Schema    map[string]interface{} `json:"schema,omitempty"`
+
 	Templates []*templateInfo `hcl:"template,block" json:"template,omitempty"`
 }
 
 type templateInfo struct {
-	Name          string                  `hcl:",label"`
+	Name          string                  `hcl:",label" json:"name"`
 	ComponentPath string                  `hcl:"component_path,optional" json:"component_path,omitempty"`
 	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
 	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`
@@ -61,46 +64,35 @@ func (c *Config) Init() error {
 		}
 	}
 
+	if c.SchemaCty != nil {
+		c.Schema, err = ctyValueToMap(c.SchemaCty)
+		if err != nil {
+			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
+		}
+	}
+
 	for _, t := range c.Templates {
 		if t.DataCty != nil {
 			t.Data, err = ctyValueToMap(t.DataCty)
 			if err != nil {
-				return fmt.Errorf("failed to convert %v to map: %v", t.DataCty, err)
+				return fmt.Errorf("failed to convert data %v to map: %v", t.DataCty, err)
 			}
 		}
 	}
 	return c.validate()
 }
 
-func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
-	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
-	if err != nil {
-		return nil, err
-	}
-
-	var jr struct {
-		Value map[string]interface{}
-	}
-
-	if err := json.Unmarshal(b, &jr); err != nil {
-		return nil, err
-	}
-
-	return jr.Value, nil
-}
-
 func (c *Config) validate() error {
-	sj, err := yaml.YAMLToJSON([]byte(schema))
+	sj, err := hclToJSON([]byte(schema))
 	if err != nil {
-		return fmt.Errorf("convert schema to JSON: %v", err)
+		return err
 	}
-
 	cj, err := json.Marshal(c)
 	if err != nil {
 		return err
 	}
 
-	return jsonschema.Validate(sj, cj)
+	return jsonschema.ValidateJSONBytes(sj, cj)
 }
 
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
@@ -134,4 +126,40 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 	return c, nil
+}
+
+func hclToJSON(b []byte) ([]byte, error) {
+	// Directly trying to unmarshal to cty.Value doesn't seem to work,
+	// so wrap in a dummy field.
+	var wrap struct {
+		Value *cty.Value `hcl:"value"`
+	}
+	b = []byte(fmt.Sprintf("value = {\n%v\n}", string(b)))
+
+	if err := hclsimple.Decode("file.hcl", []byte(b), nil, &wrap); err != nil {
+		return nil, fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	m, err := ctyValueToMap(wrap.Value)
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(m)
+}
+
+func ctyValueToMap(value *cty.Value) (map[string]interface{}, error) {
+	b, err := ctyjson.Marshal(*value, cty.DynamicPseudoType)
+	if err != nil {
+		return nil, err
+	}
+
+	var jr struct {
+		Value map[string]interface{}
+	}
+
+	if err := json.Unmarshal(b, &jr); err != nil {
+		return nil, err
+	}
+
+	return jr.Value, nil
 }

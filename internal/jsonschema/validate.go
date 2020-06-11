@@ -23,8 +23,18 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
-func Validate(schemaJSON []byte, confJSON []byte) error {
-	result, err := gojsonschema.Validate(gojsonschema.NewBytesLoader(schemaJSON), gojsonschema.NewBytesLoader(confJSON))
+// ValidateMap validates the given config map against the given schema map.
+func ValidateMap(schema, conf map[string]interface{}) error {
+	return validate(gojsonschema.NewGoLoader(schema), gojsonschema.NewGoLoader(conf))
+}
+
+// Validate validates the given config JSON against hte given schema JSON.
+func ValidateJSONBytes(schema, conf []byte) error {
+	return validate(gojsonschema.NewBytesLoader(schema), gojsonschema.NewBytesLoader(conf))
+}
+
+func validate(schema, conf gojsonschema.JSONLoader) error {
+	result, err := gojsonschema.Validate(schema, conf)
 	if err != nil {
 		return fmt.Errorf("validate config: %v", err)
 	}

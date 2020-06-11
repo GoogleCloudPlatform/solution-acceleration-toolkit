@@ -16,93 +16,65 @@ package tfengine
 
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
 const schema = `
-title: Terraform Engine Config Schema
+title = "Terraform Engine Config Schema"
 
-additionalProperties: false
-properties:
-  data:
-    description: |
+additionalProperties = false
+
+properties = {
+  data = {
+    description = <<EOF
       Global set of key-value pairs to pass to all templates.
       It will be merged with data set in the templates.
-    type: object
+    EOF
+    type = "object"
+  }
 
-  template:
-    description: |
+  template = {
+    description = <<EOF
       Templates the engine will parse and fill in with values from data.
       Templates use the Go templating engine: https://golang.org/pkg/text/template/
       Helper template funcs are also defined in ../template/funcmap.go.
-    type: array
-    items:
-      type: object
-      additionalProperties: false
-      properties:
-        Name:
-          description: Name of the template.
-          type: string
+    EOF
+    type = "array"
+    items = {
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        name = {
+          description = "Name of the template."
+          type        = "string"
+        }
 
-        recipe_path:
-          description: Path to a recipe YAML config. Mutually exclusive with 'component_path'.
-          type: string
+        recipe_path = {
+          description = "Path to a recipe YAML config. Mutually exclusive with 'component_path'."
+          type        =  "string"
+        }
 
-        output_path:
-          description: |
+        output_path = {
+          description = <<EOF
             Relative path for this template to write its contents.
             This value will be joined with the value passed in by the flag at
             --output_path.
-          type: string
+          EOF
+          type = "string"
+        }
 
-        data:
-          descripton: Key value pairs passed to this template.
-          type: object
-          properties:
-            # TODO(xingao): Move these to a per-recipe schema.
-            parent_type:
-              description: |
-                Type of parent GCP resource: can be "organization" or "folder".
-              type: string
-              pattern: ^organization|folder$
-
-            parent_id:
-              description: |
-                ID of parent GCP resource: can be the organization ID or
-                folder ID according to parent_type.
-              type: string
-              pattern: ^[0-9]{8,25}$
-
-            org_policies:
-              # TODO(xingao): Get the full org policies schema from policygen schema.
-              description: |
-                Key value pairs passed to GCP Organization Policy constraint templates.
-              type: object
-              required:
-              - allowed_policy_member_customer_ids
-              properties:
-                parent_type:
-                  description: |
-                    Type of parent GCP resource to apply the policy: can be one of "organization",
-                    "folder", or "project".
-                  type: string
-                  pattern: ^organization|folder|project$
-
-                allowed_policy_member_customer_ids:
-                  description: |
-                    See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-                    members that can be assigned IAM roles.
-                    Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
-                  type: array
-                  items:
-                    type: string
+        data = {
+          description = "Key value pairs passed to this template."
+          type        = "object"
+        }
 
         # ----------------------------------------------------------------------
         # NOTE: The fields below should typically be set by recipe maintainers and not end users.
         # ----------------------------------------------------------------------
 
-        component_path:
-          description: Path to a component directory. Mutually exclusive with 'recipe_path'.
-          type: string
+        component_path = {
+          description = "Path to a component directory. Mutually exclusive with 'recipe_path'."
+          type        = "string"
+        }
 
-        flatten:
-          description: |
+        flatten = {
+          description = <<EOF
             Keys to flatten within an object or list of objects.
             Any resulting key value pairs will be merged into data.
             This is not recursive.
@@ -112,17 +84,30 @@ properties:
               Thus a user will likely write 'AUDIT: { PROJECT_ID: "foo"}' in their config.
               However, the audit template itself will look for the field 'PROJECT_ID'.
               Thus, the audit template should flatten the 'AUDIT' key.
-          type: array
-          items:
-            type: object
-            required:
-            - key
-            properties:
-              key:
-                description: Name of key in data to flatten.
-                type: string
+          EOF
+          type = "array"
+          items = {
+            type = "object"
+            required = ["key"]
+            properties = {
+              key = {
+                description = "Name of key in data to flatten."
+                type        = "string"
+              }
+              index = {
+                description = "If set, assume value is a list and the index is being flattened."
+                type        = "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
-              index:
-                description: If set, assume value is a list and the index is being flattened.
-                type: integer
+  schema = {
+    description = "Schema the data for this template must adhere to. Typically only set in recipes."
+    type        = "object"
+  }
+}
 `
