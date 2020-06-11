@@ -24,14 +24,14 @@ terraform {
 
 
 
-module "example_dataset" {
+module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
 
-  dataset_id = "example_dataset"
+  dataset_id = "1billion_ms_example_dataset"
   project_id = var.project_id
   location   = "us-east1"
-  default_table_expiration_ms = 1e+10
+  default_table_expiration_ms = 1e+09
 
 
   access = [

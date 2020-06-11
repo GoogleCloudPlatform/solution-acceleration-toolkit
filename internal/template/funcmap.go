@@ -90,6 +90,21 @@ func hclField(m map[string]interface{}, key string, req bool) (string, error) {
 
 // resourceName builds a Terraform resource name.
 // GCP resource names often use "-" but Terraform resource names should use "_".
-func resourceName(s string) string {
-	return strings.Replace(s, "-", "_", -1)
+// The resource name is fetched from the given map and key.
+// To override the default behaviour, a user can set the key 'resource_name' in
+// given map, which will be given precedence.
+func resourceName(m map[string]interface{}, key string) (string, error) {
+	v, ok := m["resource_name"]
+	if !ok {
+		v, ok = m[key]
+		if !ok {
+			return "", fmt.Errorf("map did not contain key \"resource_name\" nor %q", key)
+		}
+	}
+
+	name, ok := v.(string)
+	if !ok {
+		return "", fmt.Errorf("resource name value %v is not a string", v)
+	}
+	return strings.Replace(name, "-", "_", -1), nil
 }
