@@ -258,8 +258,8 @@ template "project_data" {
         bigquery_datasets = [{
           # Override Terraform resource name as it cannot start with a number.
           resource_name               = "one_billion_ms_example_dataset"
-          dataset_id                  = "example_dataset"
-          default_table_expiration_ms = 1e+10
+          dataset_id                  = "1billion_ms_example_dataset"
+          default_table_expiration_ms = 1e+9
           access = [
             {
               role          = "roles/bigquery.dataOwner"
