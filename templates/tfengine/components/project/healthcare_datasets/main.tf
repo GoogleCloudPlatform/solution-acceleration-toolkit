@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "healthcare_datasets"}}
-module "{{resourceName .name}}" {
+module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
   version = "~> 1.0.0"
 

@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range .bastion_hosts -}}
-module "{{resourceName .name}}" {
+module "{{resourceName . "name"}}" {
   # TODO(user): switch to v2 when it is available.
   # source  = "terraform-google-modules/bastion-host/google"
   # version = "~> 2.0.0"

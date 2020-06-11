@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "bigquery_datasets"}}
-module "{{resourceName .dataset_id}}" {
+module "{{resourceName . "dataset_id"}}" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
 
