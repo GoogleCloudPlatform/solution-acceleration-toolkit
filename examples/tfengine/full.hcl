@@ -105,23 +105,25 @@ template "project_secrets" {
         "secretmanager.googleapis.com"
       ]
     }
-    resources = {
-      secrets = [
-        {
-          secret_id = "manual-sql-db-user"
-        },
-        {
-          secret_id   = "auto-sql-db-password"
-          secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
-        },
-      ]
-      terraform_addons = {
-        raw_config = <<EOF
+    deployments = {
+      resources = {
+        secrets = [
+          {
+            secret_id = "manual-sql-db-user"
+          },
+          {
+            secret_id   = "auto-sql-db-password"
+            secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
+          },
+        ]
+        terraform_addons = {
+          raw_config = <<EOF
 resource "random_password" "db" {
   length = 16
   special = true
 }
 EOF
+        }
       }
     }
   }
@@ -161,64 +163,66 @@ template "project_networks" {
         "sqladmin.googleapis.com",
       ]
     }
-    resources = {
-      compute_networks = [{
-        name = "example-network"
-        subnets = [
-          {
-            name     = "example-bastion-subnet"
-            ip_range = "10.1.0.0/16"
-          },
-          {
-            name     = "example-gke-subnet"
-            ip_range = "10.2.0.0/16"
-            secondary_ranges = [
-              {
-                name     = "example-pods-range"
-                ip_range = "172.16.0.0/14"
-              },
-              {
-                name     = "example-services-range"
-                ip_range = "172.20.0.0/14"
-              }
-            ]
-          },
-        ]
-        cloud_sql_private_service_access = {} # Enable SQL private service access.
-      }]
-      bastion_hosts = [{
-        name           = "bastion-vm"
-        network        = "$${module.example_network.network.network.self_link}"
-        subnet         = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
-        image_family   = "ubuntu-2004-lts"
-        image_project  = "ubuntu-os-cloud"
-        members        = ["group:bastion-accessors@example.com"]
-        startup_script = <<EOF
+    deployments = {
+      resources = {
+        compute_networks = [{
+          name = "example-network"
+          subnets = [
+            {
+              name     = "example-bastion-subnet"
+              ip_range = "10.1.0.0/16"
+            },
+            {
+              name     = "example-gke-subnet"
+              ip_range = "10.2.0.0/16"
+              secondary_ranges = [
+                {
+                  name     = "example-pods-range"
+                  ip_range = "172.16.0.0/14"
+                },
+                {
+                  name     = "example-services-range"
+                  ip_range = "172.20.0.0/14"
+                }
+              ]
+            },
+          ]
+          cloud_sql_private_service_access = {} # Enable SQL private service access.
+        }]
+        bastion_hosts = [{
+          name           = "bastion-vm"
+          network        = "$${module.example_network.network.network.self_link}"
+          subnet         = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+          image_family   = "ubuntu-2004-lts"
+          image_project  = "ubuntu-os-cloud"
+          members        = ["group:bastion-accessors@example.com"]
+          startup_script = <<EOF
 sudo apt-get -y update
 sudo apt-get -y install mysql-client
 sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
 sudo chmod +x /usr/local/bin/cloud_sql_proxy
 EOF
-      }]
-      compute_routers = [{
-        name    = "example-router"
-        network = "$${module.example_network.network.network.self_link}"
-        nats = [{
-          name                               = "example-nat"
-          source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-          subnetworks = [{
-            name                     = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
-            source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
-            secondary_ip_range_names = []
-          }]
+        }]
+        compute_routers = [{
+          name    = "example-router"
+          network = "$${module.example_network.network.network.self_link}"
+          nats = [{
+            name                               = "example-nat"
+            source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+            subnetworks = [{
+              name                     = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+              source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
+              secondary_ip_range_names = []
+            }]
 
+          }]
         }]
-      }]
-      terraform_addons = {
-        outputs = [{
-          name  = "bastion_service_account"
-          value = "$${module.bastion_vm.service_account}"
-        }]
+        terraform_addons = {
+          outputs = [{
+            name  = "bastion_service_account"
+            value = "$${module.bastion_vm.service_account}"
+          }]
+        }
       }
     }
   }
@@ -249,79 +253,82 @@ template "project_data" {
         }]
       }
     }
-    resources = {
-      bigquery_datasets = [{
-        dataset_id                  = "example_dataset"
-        default_table_expiration_ms = 1e+10
-        access = [
-          {
-            role          = "roles/bigquery.dataOwner"
-            special_group = "projectOwners"
-          },
-          {
-            role           = "roles/bigquery.dataViewer"
-            group_by_email = "example-readers@example.com"
-          },
-        ]
-      }]
-      cloud_sql_instances = [{
-        name               = "example-mysql-instance"
-        type               = "mysql"
-        network_project_id = "example-prod-networks"
-        network            = "example-network"
-        subnet             = "example-subnet"
-        # TODO(user): Uncomment and re-run the engine after deploying secrets.
-        # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
-        # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
-      }]
-      healthcare_datasets = [{
-        name = "example-healthcare-dataset"
-        iam_members = [{
-          role   = "roles/healthcare.datasetViewer"
-          member = "group:example-healthcare-dataset-viewers@example.com",
+    deployments = {
+      resources = {
+        bigquery_datasets = [{
+          # Override Terraform resource name as it cannot start with a number.
+          resource_name               = "one_billion_ms_example_dataset"
+          dataset_id                  = "1billion_ms_example_dataset"
+          default_table_expiration_ms = 1e+9
+          access = [
+            {
+              role          = "roles/bigquery.dataOwner"
+              special_group = "projectOwners"
+            },
+            {
+              role           = "roles/bigquery.dataViewer"
+              group_by_email = "example-readers@example.com"
+            },
+          ]
         }]
-        dicom_stores = [{
-          name = "example-dicom-store"
+        cloud_sql_instances = [{
+          name               = "example-mysql-instance"
+          type               = "mysql"
+          network_project_id = "example-prod-networks"
+          network            = "example-network"
+          subnet             = "example-subnet"
+          # TODO(user): Uncomment and re-run the engine after deploying secrets.
+          # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
+          # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
         }]
-        fhir_stores = [{
-          name    = "example-fhir-store"
-          version = "R4"
+        healthcare_datasets = [{
+          name = "example-healthcare-dataset"
           iam_members = [{
-            role   = "roles/healthcare.fhirStoreViewer"
-            member = "group:example-fhir-viewers@example.com",
+            role   = "roles/healthcare.datasetViewer"
+            member = "group:example-healthcare-dataset-viewers@example.com",
+          }]
+          dicom_stores = [{
+            name = "example-dicom-store"
+          }]
+          fhir_stores = [{
+            name    = "example-fhir-store"
+            version = "R4"
+            iam_members = [{
+              role   = "roles/healthcare.fhirStoreViewer"
+              member = "group:example-fhir-viewers@example.com",
+            }]
+          }]
+          hl7_v2_stores = [{
+            name = "example-hl7-store"
           }]
         }]
-        hl7_v2_stores = [{
-          name = "example-hl7-store"
+        iam_members = {
+          "roles/cloudsql.client" = [
+            "serviceAccount:$${var.bastion_service_account}",
+          ]
+        }
+        storage_buckets = [{
+          name = "example-prod-bucket"
+          iam_members = [{
+            role   = "roles/storage.objectViewer"
+            member = "group:example-readers@example.com"
+          }]
         }]
-      }]
-      iam_members = {
-        "roles/cloudsql.client" = [
-          "serviceAccount:$${var.bastion_service_account}",
-        ]
-      }
-      storage_buckets = [{
-        name = "example-prod-bucket"
-        iam_members = [{
-          role   = "roles/storage.objectViewer"
-          member = "group:example-readers@example.com"
-        }]
-      }]
-      terraform_addons = {
-        deps = [{
-          name = "networks"
-          path = "../../example-prod-networks/resources"
-          mock_outputs = {
-            bastion_service_account = "mock-sa"
-          }
-        }]
-        vars = [{
-          name             = "bastion_service_account"
-          type             = "string"
-          terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
-        }]
-        /* TODO(user): Uncomment and re-run the engine after deploying secrets.
-        raw_config = <<EOF
+        terraform_addons = {
+          deps = [{
+            name = "networks"
+            path = "../../example-prod-networks/resources"
+            mock_outputs = {
+              bastion_service_account = "mock-sa"
+            }
+          }]
+          vars = [{
+            name             = "bastion_service_account"
+            type             = "string"
+            terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
+          }]
+          /* TODO(user): Uncomment and re-run the engine after deploying secrets.
+          raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta
 
@@ -336,7 +343,8 @@ data "google_secret_manager_secret_version" "db_password" {
   project = "example-secrets"
 }
 EOF
- */
+*/
+        }
       }
     }
   }
@@ -367,22 +375,24 @@ template "project_apps" {
         }]
       }
     }
-    resources = {
-      # TODO(user): Uncomment and re-run the engine after the apps project has been deployed.
-      # gke_clusters = [{
-      #   name                   = "example-gke-cluster"
-      #   network_project_id     = "example-prod-networks"
-      #   network                = "example-network"
-      #   subnet                 = "example-gke-subnet"
-      #   ip_range_pods_name     = "example-pods-range"
-      #   ip_range_services_name = "example-services-range"
-      #   master_ipv4_cidr_block = "192.168.0.0/28"
-      # }]
-      service_accounts = [{
-        account_id = "example-sa"
-      }]
-      iam_members = {
-        "roles/container.viewer" = ["group:example-viewers@example.com"]
+    deployments = {
+      resources = {
+        # TODO(user): Uncomment and re-run the engine after the apps project has been deployed.
+        # gke_clusters = [{
+        #   name                   = "example-gke-cluster"
+        #   network_project_id     = "example-prod-networks"
+        #   network                = "example-network"
+        #   subnet                 = "example-gke-subnet"
+        #   ip_range_pods_name     = "example-pods-range"
+        #   ip_range_services_name = "example-services-range"
+        #   master_ipv4_cidr_block = "192.168.0.0/28"
+        # }]
+        service_accounts = [{
+          account_id = "example-sa"
+        }]
+        iam_members = {
+          "roles/container.viewer" = ["group:example-viewers@example.com"]
+        }
       }
     }
   }
@@ -399,9 +409,10 @@ template "project_firebase" {
         "firebase.googleapis.com",
       ]
     }
-    resources = {
-      terraform_addons = {
-        raw_config = <<EOF
+    deployments = {
+      resources = {
+        terraform_addons = {
+          raw_config = <<EOF
 resource "google_firebase_project" "firebase" {
   provider = google-beta
   project  = var.project_id
@@ -424,6 +435,7 @@ resource "google_firestore_index" "index" {
   }
 }
 EOF
+        }
       }
     }
   }

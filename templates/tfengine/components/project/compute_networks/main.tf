@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{- range get . "compute_networks"}}
-{{- $resource_name := resourceName .name}}
+{{- $resource_name := resourceName . "name"}}
 {{- $has_secondary_ranges := false}}
 
 module "{{$resource_name}}" {
