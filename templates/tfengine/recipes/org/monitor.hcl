@@ -12,6 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+schema = {
+  title = "Org Monitor Recipe"
+  required = [
+    "project_id",
+    "domain",
+  ]
+  properties = {
+    project_id = {
+      description = "ID of the project to host monitoring resources."
+      type        = "string"
+    }
+    domain = {
+      description = "Domain for the Forseti instance."
+      type        = "string"
+    }
+    cloud_sql_region = {
+      description = "Location of cloud sql instances."
+      type        = "string"
+    }
+    compute_region = {
+      description = "Location of compute instances."
+      type        = "string"
+    }
+    storage_location = {
+      description = "Location of storage buckets."
+      type        = "string"
+    }
+  }
+}
+
 template "project" {
   recipe_path = "./project.hcl"
   output_path = "./monitor"

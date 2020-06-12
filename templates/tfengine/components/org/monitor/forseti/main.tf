@@ -86,7 +86,6 @@ module "forseti" {
     enable_integrity_monitoring = true
   }
 
-  manage_rules_enabled = false
-
+  manage_rules_enabled     = false
   config_validator_enabled = true
 }
