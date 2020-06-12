@@ -28,7 +28,7 @@ func ValidateMap(schema, conf map[string]interface{}) error {
 	return validate(gojsonschema.NewGoLoader(schema), gojsonschema.NewGoLoader(conf))
 }
 
-// Validate validates the given config JSON against hte given schema JSON.
+// Validate validates the given config JSON against the given schema JSON.
 func ValidateJSONBytes(schema, conf []byte) error {
 	return validate(gojsonschema.NewBytesLoader(schema), gojsonschema.NewBytesLoader(conf))
 }
