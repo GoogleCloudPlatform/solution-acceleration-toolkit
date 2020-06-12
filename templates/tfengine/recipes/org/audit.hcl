@@ -12,6 +12,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+schema = {
+  title = "Org Audit Recipe"
+  required = [
+    "project_id",
+    "dataset_name",
+    "bucket_name",
+    "auditors",
+    "bigquery_location",
+    "storage_location",
+  ]
+  properties = {
+    project_id = {
+      description = "ID of the project to host audit resources."
+      type        = "string"
+    }
+    dataset_name = {
+      description = "Name of the Bigquery Dataset to store 1 year audit logs."
+      type        = "string"
+    }
+    bucket_name = {
+      description = "Name of GCS Bucket to store 7 year audit logs."
+      type        = "string"
+    }
+    auditors = {
+      description = <<EOF
+        This group will be granted viewer access to the audit log dataset and
+        bucket as well as security reviewer permission on the entire org.
+      EOF
+      type        = "string"
+      pattern     = "group:.+"
+    }
+    bigquery_location = {
+      description = "Default location of bigquery datasets."
+      type        = "string"
+    }
+    storage_location = {
+      description = "Default location of storage buckets."
+      type        = "string"
+    }
+  }
+}
+
 template "project" {
   recipe_path = "./project.hcl"
   output_path = "./audit"
