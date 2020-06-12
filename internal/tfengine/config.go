@@ -20,7 +20,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hclutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/ghodss/yaml"
@@ -58,14 +58,14 @@ type templateInfo struct {
 func (c *Config) Init() error {
 	var err error
 	if c.DataCty != nil {
-		c.Data, err = hclutil.CtyValueToMap(c.DataCty)
+		c.Data, err = hcl.CtyValueToMap(c.DataCty)
 		if err != nil {
 			return fmt.Errorf("failed to convert %v to map: %v", c.DataCty, err)
 		}
 	}
 
 	if c.SchemaCty != nil {
-		c.Schema, err = hclutil.CtyValueToMap(c.SchemaCty)
+		c.Schema, err = hcl.CtyValueToMap(c.SchemaCty)
 		if err != nil {
 			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
 		}
@@ -73,7 +73,7 @@ func (c *Config) Init() error {
 
 	for _, t := range c.Templates {
 		if t.DataCty != nil {
-			t.Data, err = hclutil.CtyValueToMap(t.DataCty)
+			t.Data, err = hcl.CtyValueToMap(t.DataCty)
 			if err != nil {
 				return fmt.Errorf("failed to convert data %v to map: %v", t.DataCty, err)
 			}
@@ -83,7 +83,7 @@ func (c *Config) Init() error {
 }
 
 func (c *Config) validate() error {
-	sj, err := hclutil.HCLToJSON([]byte(schema))
+	sj, err := hcl.ToJSON([]byte(schema))
 	if err != nil {
 		return err
 	}

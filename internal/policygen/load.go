@@ -19,7 +19,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hclutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
@@ -49,7 +49,7 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("convert config to JSON: %v", err)
 	}
 
-	sj, err := hclutil.HCLToJSON([]byte(schema))
+	sj, err := hcl.ToJSON([]byte(schema))
 	if err != nil {
 		return nil, fmt.Errorf("convert schema to JSON: %v", err)
 	}

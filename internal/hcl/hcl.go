@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package hclutil
+package hcl
 
 import (
 	"encoding/json"
@@ -23,8 +23,8 @@ import (
 	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
 
-// HCLToJSON converts input bytes in HCL format to output bytes in JSON format.
-func HCLToJSON(b []byte) ([]byte, error) {
+// ToJSON converts input bytes in HCL format to output bytes in JSON format.
+func ToJSON(b []byte) ([]byte, error) {
 	// Directly trying to unmarshal to cty.Value doesn't seem to work,
 	// so wrap in a dummy field.
 	var wrap struct {
