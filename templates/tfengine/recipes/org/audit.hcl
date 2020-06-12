@@ -38,7 +38,8 @@ schema = {
     auditors = {
       description = <<EOF
         This group will be granted viewer access to the audit log dataset and
-        bucket as well as security reviewer permission on the entire org.
+        bucket as well as security reviewer permission on the root resource
+        specified.
       EOF
       type        = "string"
       pattern     = "group:.+"
