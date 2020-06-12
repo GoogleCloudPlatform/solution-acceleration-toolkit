@@ -15,106 +15,127 @@
 package policygen
 
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
-const schema = `
-title: Policy Generator Config Schema
-additionalProperties: false
-required:
-- template_dir
 
-properties:
-  template_dir:
-    description: |
+const schema = `
+title = "Policy Generator Config Schema"
+additionalProperties = false
+required = ["template_dir"]
+
+properties = {
+  template_dir = {
+    description = <<EOF
       Absolute or relative path to the template directory. If relative, this path
       is relative to the directory where the config file lives.
-    type: string
+    EOF
+    type = "string"
+  }
 
-  gcp_org_policies:
-    description: |
-      Key value pairs configure Google Cloud Organization Policies.
-    type: object
-    additionalProperties: false
-    required:
-    - parent_type
-    - parent_id
-    - allowed_policy_member_customer_ids
-    properties:
-      parent_type:
-        description: |
-          Type of parent GCP resource to apply the policy: can be one of "organization",
-          "folder", or "project".
-        type: string
-        pattern: ^organization|folder|project$
-
-      parent_id:
-        description: |
-          ID of parent GCP resource to apply the policy: can be one of the organization ID,
-          folder ID, or project ID according to parent_type.
-        type: string
-        pattern: ^[0-9]{8,25}$
-
-      allowed_policy_member_customer_ids:
-        description: |
-          See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-          members that can be assigned IAM roles.
-          Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
-        type: array
-        items:
-          type: string
-
-      allowed_shared_vpc_host_projects:
-        description: |
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        type: array
-        items:
-          type: string
-
-      allowed_trusted_image_projects:
-        description: |
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        type: array
-        items:
-          type: string
-
-      allowed_public_vms:
-        description: |
-          See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
-        type: array
-        items:
-          type: string
-
-      allowed_ip_forwarding_vms:
-        description: |
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        type: array
-        items:
-          type: string
-
-      disable_sa_key_creation:
-        description: |
-          Whether or not to disable the creation of service account external keys. If not specified, default to true.
-        type: boolean
-
-  forseti_policies:
-    description: |
-      Key value pairs configure Forseti Policy Library constraints.
-    type: object
-    additionalProperties: false
-    required:
-    - targets
-    properties:
-      targets:
-        description: |
+  forseti_policies = {
+    description = "Key value pairs configure Forseti Policy Library constraints."
+    type = "object"
+    additionalProperties = false
+    required = ["targets"]
+    properties = {
+      targets = {
+        description = <<EOF
           List of targets to apply the policies, e.g. organization/*,
           organization/123/folder/456.
-        type: array
-        items:
-          type: string
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+      allowed_policy_member_domains = {
+        description = "The list of domains to allow users from, e.g. example.com"
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+    }
+  }
 
-      allowed_policy_member_domains:
-        description: |
-          Used in the Forseti Policy Library constraints.
-          The list of domains to allow users from, e.g. example.com
-        type: array
-        items:
-          type: string
+  gcp_org_policies = {
+    description = "Key value pairs configure Google Cloud Organization Policies."
+    type = "object"
+    additionalProperties = false
+    required = [
+      "parent_type",
+      "parent_id",
+      "allowed_policy_member_customer_ids",
+    ]
+    properties = {
+      parent_type = {
+        description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
+        type = "string"
+        pattern = "^organization|folder|project$"
+      }
+
+      parent_id = {
+        description = <<EOF
+          ID of parent GCP resource to apply the policy: can be one of the organization ID,
+          folder ID, or project ID according to parent_type.
+        EOF
+        type = "string"
+        pattern = "^[0-9]{8,25}$"
+      }
+
+      allowed_policy_member_customer_ids = {
+        description = <<EOF
+          See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
+          members that can be assigned IAM roles. Obtain the ID by following
+          https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+
+      allowed_shared_vpc_host_projects = {
+        description = <<EOF
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+      allowed_trusted_image_projects = {
+        description = <<EOF
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+      allowed_public_vms = {
+        description = <<EOF
+          See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+      allowed_ip_forwarding_vms = {
+        description = <<EOF
+          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        EOF
+        type = "array"
+        items = {
+          type = "string"
+        }
+      }
+      disable_sa_key_creation = {
+        description = <<EOF
+          Whether or not to disable the creation of service account external keys. If not specified, default to true.
+        EOF
+        type = "boolean"
+      }
+    }
+  }
+}
 `

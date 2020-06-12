@@ -19,12 +19,24 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hclutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/ghodss/yaml"
 	"github.com/hashicorp/terraform/states"
+	"github.com/zclconf/go-cty/cty"
 )
+
+// config is the struct representing the Policy Generator configuration.
+type config struct {
+	TemplateDir     string                 `json:"template_dir"`
+	ForsetiPolicies map[string]interface{} `json:"forseti_policies"`
+	GCPOrgPolicies  map[string]interface{} `json:"gcp_org_policies"`
+
+	SchemaCty *cty.Value             `hcl:"schema,optional" json:"-"`
+	Schema    map[string]interface{} `json:"schema,omitempty"`
+}
 
 func loadConfig(path string) (*config, error) {
 	b, err := ioutil.ReadFile(path)
@@ -37,7 +49,7 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("convert config to JSON: %v", err)
 	}
 
-	sj, err := yaml.YAMLToJSON([]byte(schema))
+	sj, err := hclutil.HCLToJSON([]byte(schema))
 	if err != nil {
 		return nil, fmt.Errorf("convert schema to JSON: %v", err)
 	}
