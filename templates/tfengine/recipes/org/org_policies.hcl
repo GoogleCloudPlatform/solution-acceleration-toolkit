@@ -12,31 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO(xingao): expand schema to all supported fields.
-schema = {
-  title = "Org Policies Recipe"
-  required = [
-    "allowed_policy_member_customer_ids"
-  ]
-  properties = {
-    parent_type = {
-      description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
-      type        = "string"
-      pattern     = "^organization|folder|project$"
-    }
-
-    allowed_policy_member_customer_ids = {
-      description = <<EOF
-        See templates/policygen/org_policies/variables.tf. Must be specified to restrict domainmembers that can be assigned IAM roles.
-        Obtain the ID by following https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
-      EOF
-      type = "array"
-      items = {
-        type = "string"
-      }
-    }
-  }
-}
+# Schema for Organization Policies are handled by policygen.ValidateOrgPoliciesConfig().
 
 template "terragrunt" {
   recipe_path = "../deployment/terragrunt.hcl"

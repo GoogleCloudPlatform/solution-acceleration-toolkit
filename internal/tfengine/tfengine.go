@@ -24,6 +24,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -67,6 +68,7 @@ func dump(conf *Config, root, outputPath string) error {
 		if ti.Data == nil {
 			ti.Data = make(map[string]interface{})
 		}
+
 		if err := template.MergeData(ti.Data, conf.Data, ti.Flatten); err != nil {
 			return err
 		}
@@ -90,10 +92,16 @@ func dump(conf *Config, root, outputPath string) error {
 					return fmt.Errorf("recipe %q: %v", rp, err)
 				}
 			}
+
 			if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
 		case ti.ComponentPath != "":
+			if ti.Name == "org_policies" {
+				if err := policygen.ValidateOrgPoliciesConfig(ti.Data, true); err != nil {
+					return err
+				}
+			}
 			cp, err := pathutil.Expand(ti.ComponentPath)
 			if err != nil {
 				return err

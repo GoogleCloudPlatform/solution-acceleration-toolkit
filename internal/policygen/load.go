@@ -15,6 +15,7 @@
 package policygen
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
@@ -38,6 +39,23 @@ type config struct {
 	Schema    map[string]interface{} `json:"schema,omitempty"`
 }
 
+func ValidateOrgPoliciesConfig(conf map[string]interface{}, allowAdditionalProperties bool) error {
+	if !allowAdditionalProperties {
+		orgPoliciesSchema = append(orgPoliciesSchema, []byte("additionalProperties = false")...)
+	}
+
+	sj, err := hcl.ToJSON(orgPoliciesSchema)
+	if err != nil {
+		return err
+	}
+	cj, err := json.Marshal(conf)
+	if err != nil {
+		return err
+	}
+
+	return jsonschema.ValidateJSONBytes(sj, cj)
+}
+
 func loadConfig(path string) (*config, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -49,7 +67,7 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("convert config to JSON: %v", err)
 	}
 
-	sj, err := hcl.ToJSON([]byte(schema))
+	sj, err := hcl.ToJSON(schema)
 	if err != nil {
 		return nil, fmt.Errorf("convert schema to JSON: %v", err)
 	}
@@ -61,6 +79,12 @@ func loadConfig(path string) (*config, error) {
 	c := new(config)
 	if err := yaml.Unmarshal(cj, c); err != nil {
 		return nil, fmt.Errorf("unmarshal config %q: %v", path, err)
+	}
+
+	if c.GCPOrgPolicies != nil {
+		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies, false); err != nil {
+			return nil, err
+		}
 	}
 
 	if !filepath.IsAbs(c.TemplateDir) {
