@@ -28,15 +28,15 @@ schema = {
       type        = "string"
     }
     cloud_sql_region = {
-      description = "Default location for compute instances."
+      description = "Location of cloud sql instances."
       type        = "string"
     }
     compute_region = {
-      description = "Default location for compute instances."
+      description = "Location of compute instances."
       type        = "string"
     }
     storage_location = {
-      description = "Default location for storage buckets."
+      description = "Location of storage buckets."
       type        = "string"
     }
   }

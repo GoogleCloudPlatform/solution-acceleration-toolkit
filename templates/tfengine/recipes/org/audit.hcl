@@ -44,11 +44,11 @@ schema = {
       pattern     = "group:.+"
     }
     bigquery_location = {
-      description = "Default location of bigquery datasets."
+      description = "Location of logs bigquery dataset."
       type        = "string"
     }
     storage_location = {
-      description = "Default location of storage buckets."
+      description = "Location of logs storage bucket."
       type        = "string"
     }
   }
