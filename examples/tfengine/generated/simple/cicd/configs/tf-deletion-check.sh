@@ -50,7 +50,7 @@ for planfile in $(find "$(pwd)" -name 'plan.tfplan'); do
   plandir="$(dirname ${planfile})"
   pushd "${plandir}" &>/dev/null
 
-  delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[] | select(.change.actions | index("delete")) | .address')"
+  delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[]? | select(.change.actions | index("delete")) | .address')"
 
   # Filter through the whitelist, if configured.
   # Removes any matching resources, so they are no longer considered.
