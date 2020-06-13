@@ -57,8 +57,9 @@ template "foundation" {
     }
 
     monitor = {
-      project_id = "example-monitor"
-      domain     = "example.com"
+      project_id     = "example-monitor"
+      domain         = "example.com"
+      cscc_source_id = "organizations/12345678/sources/88888888"
     }
 
     org_policies = {
