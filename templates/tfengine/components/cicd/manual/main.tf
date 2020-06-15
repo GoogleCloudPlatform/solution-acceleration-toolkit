@@ -126,9 +126,9 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_iam" {
   for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
   {{- if eq (get . "parent_type") "organization"}}
-  org_id   = {{.parent_id}}
+  org_id   = {{.org_id}}
   {{- else}}
-  folder   = {{.parent_id}}
+  folder   = {{.folder_id}}
   {{- end}}
   role     = each.value
   member   = local.cloud_build_sa

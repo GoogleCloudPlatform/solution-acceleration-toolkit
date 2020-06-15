@@ -17,6 +17,12 @@ limitations under the License. */ -}}
 # See the following resources for the details of policies enforced.
 
 {{- $type_field := printf "%s_id" .parent_type}}
+{{- $parent_id := ""}}
+{{- if eq .parent_type "organization"}}
+{{- $parent_id = .org_id}}
+{{- else}}
+{{- $parent_id = .folder_id}}
+{{- end}}
 
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
@@ -24,7 +30,7 @@ module "orgpolicy_appengine_disable_code_download" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/appengine.disableCodeDownload"
   policy_type = "boolean"
@@ -37,7 +43,7 @@ module "orgpolicy_sql_restrict_authorized_networks" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/sql.restrictAuthorizedNetworks"
   policy_type = "boolean"
@@ -49,7 +55,7 @@ module "orgpolicy_sql_restrict_public_ip" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/sql.restrictPublicIp"
   policy_type = "boolean"
@@ -62,7 +68,7 @@ module "orgpolicy_compute_disable_nested_virtualization" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/compute.disableNestedVirtualization"
   policy_type = "boolean"
@@ -74,7 +80,7 @@ module "orgpolicy_compute_disable_serial_port_access" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/compute.disableSerialPortAccess"
   policy_type = "boolean"
@@ -87,7 +93,7 @@ module "orgpolicy_compute_restrict_shared_vpc_host_projects" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/compute.restrictSharedVpcHostProjects"
   policy_type       = "list"
@@ -101,7 +107,7 @@ module "orgpolicy_compute_skip_default_network_creation" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/compute.skipDefaultNetworkCreation"
   policy_type = "boolean"
@@ -114,7 +120,7 @@ module "orgpolicy_compute_trusted_image_projects" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/compute.trustedImageProjects"
   policy_type       = "list"
@@ -130,7 +136,7 @@ module "orgpolicy_compute_vm_can_ip_forward" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/compute.vmCanIpForward"
   policy_type       = "list"
@@ -144,7 +150,7 @@ module "orgpolicy_compute_vm_external_ip_access" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/compute.vmExternalIpAccess"
   policy_type       = "list"
@@ -157,7 +163,7 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
   policy_type = "boolean"
@@ -170,7 +176,7 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
   policy_type       = "list"
@@ -184,7 +190,7 @@ module "orgpolicy_disable_service_account_key_creation" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/iam.disableServiceAccountKeyCreation"
   policy_type = "boolean"
@@ -198,7 +204,7 @@ module "orgpolicy_gcp_resource_locations" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint        = "constraints/gcp.resourceLocations"
   policy_type       = "list"
@@ -212,7 +218,7 @@ module "orgpolicy_storage_uniform_bucket_level_access" {
   version = "~> 3.0.2"
 
   policy_for = "{{.parent_type}}"
-  {{$type_field}} = "{{.parent_id}}"
+  {{$type_field}} = "{{$parent_id}}"
 
   constraint  = "constraints/storage.uniformBucketLevelAccess"
   policy_type = "boolean"

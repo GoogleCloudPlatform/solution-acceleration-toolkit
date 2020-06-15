@@ -13,10 +13,13 @@
 # limitations under the License.
 
 schema = {
-  title = "Org Monitor Recipe"
+  title = "Devops Recipe"
   required = [
     "project_id",
-    "domain",
+    "org_id",
+    "billing_account",
+    "org_admin",
+    "project_owners",
   ]
   properties = {
     project_id = {
@@ -40,20 +43,8 @@ schema = {
       type        = "string"
       pattern     = "group:.+"
     }
-    compute_region = {
-      description = "Location of compute instances."
-      type        = "string"
-    }
     storage_location = {
       description = "Location of storage buckets."
-      type        = "string"
-    }
-    cscc_source_id = {
-      description = <<EOF
-        CSCC Source ID used for Forseti notification. Follow
-        https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
-        to enable Forseti in CSCC and obtain the source ID first.
-      EOF
       type        = "string"
     }
   }
