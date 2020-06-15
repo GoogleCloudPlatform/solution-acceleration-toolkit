@@ -38,14 +38,19 @@ schema = {
       description = "Name of Terraform remote state bucket."
       type        = "string"
     }
+    storage_location = {
+      description = "Location of state bucket."
+      type        = "string"
+    }
     org_admin = {
       description = "Group who will be given org admin access."
       type        = "string"
       pattern     = "group:.+"
     }
-    storage_location = {
-      description = "Location of storage buckets."
-      type        = "string"
+    # TODO(xingao): expand CICD schema.
+    cicd = {
+      description = "Config for CICD. If unset there will be no CICD."
+      type        = "object"
     }
   }
 }
