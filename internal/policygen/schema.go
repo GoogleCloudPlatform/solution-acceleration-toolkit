@@ -16,7 +16,7 @@ package policygen
 
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
 
-const schema = `
+var schema = []byte(`
 title = "Policy Generator Config Schema"
 additionalProperties = false
 required = ["template_dir"]
@@ -46,6 +46,7 @@ properties = {
           type = "string"
         }
       }
+
       allowed_policy_member_domains = {
         description = "The list of domains to allow users from, e.g. example.com"
         type = "array"
@@ -56,86 +57,91 @@ properties = {
     }
   }
 
-  gcp_org_policies = {
-    description = "Key value pairs configure Google Cloud Organization Policies."
-    type = "object"
-    additionalProperties = false
-    required = [
-      "parent_type",
-      "allowed_policy_member_customer_ids",
-    ]
-    properties = {
-      parent_type = {
-        description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
-        type = "string"
-        pattern = "^organization|folder|project$"
-      }
+  gcp_org_policies = {}
+}
+`)
 
-      org_id = {
-        description = "ID of organization. Used if parent_type is 'organization'"
-        type        = "string"
-      }
+var orgPoliciesSchema = []byte(`
+title = "Google Cloud Organization Policies Config Schema"
+required = [
+  "parent_type",
+  "allowed_policy_member_customer_ids",
+]
 
-      folder_id = {
-        description = "ID of folder. Used if parent_type is 'folder'"
-        type        = "folder"
-      }
+properties = {
+  parent_type = {
+    description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
+    type = "string"
+    pattern = "^organization|folder|project$"
+  }
 
-      allowed_policy_member_customer_ids = {
-        description = <<EOF
-          See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-          members that can be assigned IAM roles. Obtain the ID by following
-          https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
-        EOF
-        type = "array"
-        items = {
-          type = "string"
-        }
-      }
+  org_id = {
+    description = "ID of organization. Used if parent_type is 'organization'"
+    type        = "string"
+  }
 
-      allowed_shared_vpc_host_projects = {
-        description = <<EOF
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        EOF
-        type = "array"
-        items = {
-          type = "string"
-        }
-      }
-      allowed_trusted_image_projects = {
-        description = <<EOF
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        EOF
-        type = "array"
-        items = {
-          type = "string"
-        }
-      }
-      allowed_public_vms = {
-        description = <<EOF
-          See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
-        EOF
-        type = "array"
-        items = {
-          type = "string"
-        }
-      }
-      allowed_ip_forwarding_vms = {
-        description = <<EOF
-          See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
-        EOF
-        type = "array"
-        items = {
-          type = "string"
-        }
-      }
-      disable_sa_key_creation = {
-        description = <<EOF
-          Whether or not to disable the creation of service account external keys. If not specified, default to true.
-        EOF
-        type = "boolean"
-      }
+  folder_id = {
+    description = "ID of folder. Used if parent_type is 'folder'"
+    type        = "folder"
+  }
+
+  allowed_policy_member_customer_ids = {
+    description = <<EOF
+      See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
+      members that can be assigned IAM roles. Obtain the ID by following
+      https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+    EOF
+    type = "array"
+    items = {
+      type = "string"
     }
   }
+
+  allowed_shared_vpc_host_projects = {
+    description = <<EOF
+      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+    EOF
+    type = "array"
+    items = {
+      type = "string"
+    }
+  }
+
+  allowed_trusted_image_projects = {
+    description = <<EOF
+      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+    EOF
+    type = "array"
+    items = {
+      type = "string"
+    }
+  }
+
+  allowed_public_vms = {
+    description = <<EOF
+      See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
+    EOF
+    type = "array"
+    items = {
+      type = "string"
+    }
+  }
+
+  allowed_ip_forwarding_vms = {
+    description = <<EOF
+      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+    EOF
+    type = "array"
+    items = {
+      type = "string"
+    }
+  }
+
+  disable_sa_key_creation = {
+    description = <<EOF
+      Whether or not to disable the creation of service account external keys. If not specified, default to true.
+    EOF
+    type = "boolean"
+  }
 }
-`
+`)
