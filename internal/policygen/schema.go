@@ -76,13 +76,18 @@ properties = {
   }
 
   org_id = {
-    description = "ID of organization. Used if parent_type is 'organization'"
+    description = "ID of organization. Used if parent_type is 'organization'."
     type        = "string"
   }
 
   folder_id = {
-    description = "ID of folder. Used if parent_type is 'folder'"
-    type        = "folder"
+    description = "ID of folder. Used if parent_type is 'folder'."
+    type        = "string"
+  }
+
+  project_id = {
+    description = "ID of project. Used if parent_type is 'project'."
+    type        = "string"
   }
 
   allowed_policy_member_customer_ids = {

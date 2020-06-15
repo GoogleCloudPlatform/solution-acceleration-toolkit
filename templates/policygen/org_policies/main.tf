@@ -17,11 +17,14 @@ limitations under the License. */ -}}
 # See the following resources for the details of policies enforced.
 
 {{- $type_field := printf "%s_id" .parent_type}}
+
 {{- $parent_id := ""}}
 {{- if eq .parent_type "organization"}}
 {{- $parent_id = .org_id}}
-{{- else}}
+{{- else if eq .parent_type "folder"}}
 {{- $parent_id = .folder_id}}
+{{- else}}
+{{- $parent_id = .project_id}}
 {{- end}}
 
 # App Engine
