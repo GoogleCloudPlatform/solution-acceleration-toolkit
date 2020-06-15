@@ -40,12 +40,12 @@ type config struct {
 }
 
 func ValidateOrgPoliciesConfig(conf map[string]interface{}, allowAdditionalProperties bool) error {
-	schema := orgPoliciesSchema
+	s := orgPoliciesSchema
 	if !allowAdditionalProperties {
-		schema = append(schema, []byte("additionalProperties = false")...)
+		s = append(s, []byte("additionalProperties = false")...)
 	}
 
-	sj, err := hcl.ToJSON(schema)
+	sj, err := hcl.ToJSON(s)
 	if err != nil {
 		return err
 	}
