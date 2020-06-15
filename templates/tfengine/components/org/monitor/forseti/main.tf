@@ -88,4 +88,11 @@ module "forseti" {
 
   manage_rules_enabled     = false
   config_validator_enabled = true
+
+  {{- if has . "cscc_source_id"}}
+
+  # Enable Cloud Security Command Center (CSCC) notification.
+  cscc_violations_enabled  = true
+  cscc_source_id           = "{{.cscc_source_id}}"
+  {{- end}}
 }

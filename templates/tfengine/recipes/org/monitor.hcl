@@ -39,6 +39,14 @@ schema = {
       description = "Location of storage buckets."
       type        = "string"
     }
+    cscc_source_id = {
+      description = <<EOF
+        CSCC Source ID used for Forseti notification. Follow
+        https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
+        to enable Forseti in CSCC and obtain the source ID first.
+      EOF
+      type        = "string"
+    }
   }
 }
 
