@@ -15,6 +15,7 @@
 # {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
+  parent_type     = "organization" # One of `organization` or `folder`.
   org_id          = "12345678"
   billing_account = "000-000-000"
   state_bucket    = "example-terraform-state"
@@ -81,8 +82,9 @@ template "monitor" {
   recipe_path = "{{$base}}/org/monitor.hcl"
   output_path = "./live"
   data = {
-    project_id = "example-monitor"
-    domain     = "example.com"
+    project_id     = "example-monitor"
+    domain         = "example.com"
+    cscc_source_id = "organizations/12345678/sources/88888888"
   }
 }
 
