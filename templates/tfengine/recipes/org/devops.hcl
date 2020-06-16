@@ -15,8 +15,9 @@
 schema = {
   title = "Devops Recipe"
   required = [
+    "parent_type",
+    "parent_id",
     "project_id",
-    "org_id",
     "billing_account",
     "org_admin",
     "project_owners",
@@ -26,9 +27,18 @@ schema = {
       description = "Project ID to host devops related resources such as state bucket and CICD."
       type        = "string"
     }
-    org_id = {
-      description = "ID of organization to create project in."
-      type        = "string"
+    parent_type = {
+      description = "Type of parent GCP resource to apply the policy. Currently only 'organization' is supported."
+      type = "string"
+      pattern = "^organization$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of parent GCP resource to apply the policy: can be one of the organization ID,
+        folder ID according to parent_type.
+      EOF
+      type = "string"
+      pattern = "^[0-9]{8,25}$"
     }
     billing_account = {
       description = "ID of billing account to attach to this project."

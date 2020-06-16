@@ -65,6 +65,7 @@ var orgPoliciesSchema = []byte(`
 title = "Google Cloud Organization Policies Config Schema"
 required = [
   "parent_type",
+  "parent_id",
   "allowed_policy_member_customer_ids",
 ]
 
@@ -75,19 +76,13 @@ properties = {
     pattern = "^organization|folder|project$"
   }
 
-  org_id = {
-    description = "ID of organization. Used if parent_type is 'organization'."
-    type        = "string"
-  }
-
-  folder_id = {
-    description = "ID of folder. Used if parent_type is 'folder'."
-    type        = "string"
-  }
-
-  project_id = {
-    description = "ID of project. Used if parent_type is 'project'."
-    type        = "string"
+  parent_id = {
+    description = <<EOF
+      ID of parent GCP resource to apply the policy: can be one of the organization ID,
+      folder ID, or project ID according to parent_type.
+    EOF
+    type = "string"
+    pattern = "^[0-9]{8,25}$"
   }
 
   allowed_policy_member_customer_ids = {
