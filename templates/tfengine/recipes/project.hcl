@@ -17,14 +17,14 @@ schema = {
   description = "See schema for fields in ../project/base_project.hcl."
 }
 
-{{/* TODO(umairidris): Consider stopping doing this */}}
+{{/* TODO(umairidris): Stop doing this */}}
 {{$base := ""}}
 {{if eq .parent_type "folder"}}
 {{$base = .project.project_id}}
 {{end}}
 
 template "terragrunt" {
-  recipe_path = "../deployment/terragrunt.hcl"
+  recipe_path = "./terragrunt_deployment.hcl"
   output_path = "{{$base}}/project"
   {{if has . "project"}}
   flatten {
@@ -50,7 +50,7 @@ template "terragrunt" {
 }
 
 template "project" {
-  component_path = "../../components/project/project"
+  component_path = "../components/project/project"
   output_path    = "{{$base}}/project"
   flatten {
     key = "project"
@@ -59,7 +59,7 @@ template "project" {
 
 {{range $name, $_ := get . "deployments"}}
 template "resources_{{$name}}" {
-  recipe_path = "../project/resources.hcl"
+  recipe_path = "./resources.hcl"
   output_path = "{{$base}}/{{$name}}"
   flatten {
     key = "deployments"

@@ -56,7 +56,7 @@ schema = {
 }
 
 template "project" {
-  recipe_path = "../project/project.hcl"
+  recipe_path = "./project.hcl"
   output_path = "./audit"
   data = {
     project = {
@@ -70,6 +70,6 @@ template "project" {
 }
 
 template "audit" {
-  component_path = "../../components/org/audit"
+  component_path = "../components/org/audit"
   output_path    = "./audit/resources"
 }

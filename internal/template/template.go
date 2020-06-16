@@ -28,6 +28,8 @@ import (
 )
 
 var mergoOpts = []func(*mergo.Config){
+	mergo.WithOverride,
+	mergo.WithOverwriteWithEmptyValue,
 	mergo.WithAppendSlice,
 }
 

@@ -12,32 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-schema = {
-  title       = "Recipe for folders within folders."
-  description = "See schema for fields in ./base_folder.hcl."
-}
-
 template "terragrunt" {
-  recipe_path = "../deployment/terragrunt.hcl"
+  recipe_path = "./terragrunt_deployment.hcl"
   output_path    = "{{.display_name}}/folder"
+  {{if eq .parent_type "folder"}}
   data = {
-    deps = [{
-      name = "parent_folder"
-      path = "../../folder"
-      mock_outputs = {
-        name = "mock-folder"
+    terraform_addons = {
+      deps = [{
+        name = "parent_folder"
+        path = "../../folder"
+        mock_outputs = {
+          name = "mock-folder"
+        }
+      }]
+      inputs = {
+        parent = "$${dependency.parent_folder.outputs.name}"
       }
-    }]
-    inputs = {
-      parent = "$${dependency.parent_folder.outputs.name}"
     }
   }
+  {{end}}
 }
 
 template "folder" {
-  component_path = "../../components/folder/folder"
+  component_path = "../components/folder/folder"
   output_path    = "{{.display_name}}/folder"
   data = {
     display_name = "{{.display_name}}"
+    {{if eq .parent_type "organization"}}
+    parent       =  "organizations/{{.org_id}}"
+    {{end}}
   }
 }

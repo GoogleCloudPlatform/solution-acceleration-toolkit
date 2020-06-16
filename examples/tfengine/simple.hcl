@@ -28,7 +28,7 @@ data = {
 }
 
 template "devops" {
-  recipe_path = "{{$base}}/org/devops.hcl"
+  recipe_path = "{{$base}}/devops.hcl"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
@@ -57,7 +57,7 @@ template "devops" {
 }
 
 template "audit" {
-  recipe_path = "{{$base}}/org/audit.hcl"
+  recipe_path = "{{$base}}/audit.hcl"
   output_path = "./live"
   data = {
     project_id   = "example-audit"
@@ -68,7 +68,7 @@ template "audit" {
 }
 
 template "monitor" {
-  recipe_path = "{{$base}}/org/monitor.hcl"
+  recipe_path = "{{$base}}/monitor.hcl"
   output_path = "./live"
   data = {
     project_id = "example-monitor"
@@ -77,7 +77,7 @@ template "monitor" {
 }
 
 template "org_policies" {
-  recipe_path = "{{$base}}/org/org_policies.hcl"
+  recipe_path = "{{$base}}/org_policies.hcl"
   output_path = "./live"
   data = {
     allowed_policy_member_customer_ids = [

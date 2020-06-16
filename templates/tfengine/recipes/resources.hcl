@@ -12,72 +12,86 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "deployment" {
-  recipe_path = "../deployment/project.hcl"
+template "terragrunt" {
+  recipe_path = "./terragrunt_deployment.hcl"
+  data = {
+    vars = [{
+      name             = "project_id"
+      type             = "string"
+      terragrunt_input = "$${dependency.project.outputs.project_id}"
+    }]
+    deps = [{
+      name = "project"
+      path = "../project"
+      mock_outputs = {
+        project_id = "mock-project"
+      }
+    }]
+  }
 }
 
 {{if has . "bastion_hosts"}}
 template "bastion_hosts" {
-  component_path = "../../components/project/bastion_hosts"
+  component_path = "../components/project/bastion_hosts"
 }
 {{end}}
 
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
-  component_path = "../../components/project/bigquery_datasets"
+  component_path = "../components/project/bigquery_datasets"
 }
 {{end}}
 
 {{if has . "cloud_sql_instances"}}
 template "cloud_sql_instances" {
-  component_path = "../../components/project/cloud_sql_instances"
+  component_path = "../components/project/cloud_sql_instances"
 }
 {{end}}
 
 {{if has . "compute_networks"}}
 template "compute_networks" {
-  component_path = "../../components/project/compute_networks"
+  component_path = "../components/project/compute_networks"
 }
 {{end}}
 
 {{if has . "compute_routers"}}
 template "compute_routers" {
-  component_path = "../../components/project/compute_routers"
+  component_path = "../components/project/compute_routers"
 }
 {{end}}
 
 {{if has . "iam_members"}}
 template "iam_members" {
-  component_path = "../../components/project/iam_members"
+  component_path = "../components/project/iam_members"
 }
 {{end}}
 
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
-  component_path = "../../components/project/storage_buckets"
+  component_path = "../components/project/storage_buckets"
 }
 {{end}}
 
 {{if has . "gke_clusters"}}
 template "gke_clusters" {
-  component_path = "../../components/project/gke_clusters"
+  component_path = "../components/project/gke_clusters"
 }
 {{end}}
 
 {{if has . "healthcare_datasets"}}
 template "healthcare_datasets" {
-  component_path = "../../components/project/healthcare_datasets"
+  component_path = "../components/project/healthcare_datasets"
 }
 {{end}}
 
 {{if has . "secrets"}}
 template "secrets" {
-  component_path = "../../components/org/secrets"
+  component_path = "../components/org/secrets"
 }
 {{end}}
 
 {{if has . "service_accounts"}}
 template "service_accounts" {
-  component_path = "../../components/project/service_accounts"
+  component_path = "../components/project/service_accounts"
 }
 {{end}}
