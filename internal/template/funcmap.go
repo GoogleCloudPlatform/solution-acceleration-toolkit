@@ -26,6 +26,7 @@ var funcMap = map[string]interface{}{
 	"has":          has,
 	"hcl":          hcl,
 	"hclField":     hclField,
+	"replace":      replace,
 	"resourceName": resourceName,
 }
 
@@ -107,4 +108,9 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 		return "", fmt.Errorf("resource name value %v is not a string", v)
 	}
 	return strings.Replace(name, "-", "_", -1), nil
+}
+
+// alias for strings.Replace with the number of characters fixed to -1 (all).
+func replace(s, old, new string) string {
+	return strings.Replace(s, old, new, -1)
 }
