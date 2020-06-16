@@ -89,7 +89,11 @@ schema = {
           }
         }
         deployments = {
-          description = "Map of deployment name to resource deployment config."
+          description = <<EOF
+            Map of deployment name to resources config.
+            Each key will be a directory in the output path.
+            For resource schema see ./resources.hcl.
+          EOF
           type        = "object"
         }
       }
