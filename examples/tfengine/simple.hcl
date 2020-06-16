@@ -15,7 +15,9 @@
 # {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
-  org_id          = "12345678"
+  parent_type     = "organization" # One of `organization` or `folder`.
+  parent_id       = "12345678"
+  org_id          = "12345678" # TODO(umairidris): deprecate this field.
   billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.
@@ -25,47 +27,21 @@ data = {
   storage_location  = "us-central1"
 }
 
-# Foundation for the org.
-template "foundation" {
-  recipe_path = "{{$base}}/org/foundation.hcl"
+template "devops" {
+  recipe_path = "{{$base}}/org/devops.hcl"
   data = {
-    parent_type = "organization" # One of `organization` or `folder`.
-    parent_id   = "12345678"
+    # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
+    # Run `terraform init` in the bootstrap module to backup its state to GCS.
+    # bootstrap_gcs_backend = true
 
-    devops = {
-      project_id   = "example-devops"
-      state_bucket = "example-terraform-state"
-      org_admin    = "group:example-org-admin@example.com"
-      project_owners = [
-        "group:example-devops-owners@example.com",
-      ]
-
-      # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
-      # Run `terraform init` in the bootstrap module to backup its state to GCS.
-      # bootstrap_gcs_backend = true
-    }
-
-    audit = {
-      project_id   = "example-audit"
-      dataset_name = "1yr_org_audit_logs"
-      bucket_name  = "7yr-org-audit-logs"
-      auditors     = "group:example-dev-auditors@example.com",
-    }
-
-    monitor = {
-      project_id = "example-monitor"
-      domain     = "example.com"
-    }
-
-    org_policies = {
-      allowed_policy_member_customer_ids = [
-        "example_customer_id",
-      ]
-    }
+    project_id   = "example-devops"
+    state_bucket = "example-terraform-state"
+    org_admin    = "group:example-org-admin@example.com"
+    project_owners = [
+      "group:example-devops-owners@example.com",
+    ]
 
     cicd = {
-      project_id   = "example-devops"
-      state_bucket = "example-state-bucket"
       github = {
         owner = "GoogleCloudPlatform"
         name  = "example"
@@ -77,5 +53,35 @@ template "foundation" {
         "group:example-cicd-viewers@example.com",
       ]
     }
+  }
+}
+
+template "audit" {
+  recipe_path = "{{$base}}/org/audit.hcl"
+  output_path = "./live"
+  data = {
+    project_id   = "example-audit"
+    dataset_name = "1yr_org_audit_logs"
+    bucket_name  = "7yr-org-audit-logs"
+    auditors     = "group:example-dev-auditors@example.com"
+  }
+}
+
+template "monitor" {
+  recipe_path = "{{$base}}/org/monitor.hcl"
+  output_path = "./live"
+  data = {
+    project_id = "example-monitor"
+    domain     = "example.com"
+  }
+}
+
+template "org_policies" {
+  recipe_path = "{{$base}}/org/org_policies.hcl"
+  output_path = "./live"
+  data = {
+    allowed_policy_member_customer_ids = [
+      "example_customer_id",
+    ]
   }
 }
