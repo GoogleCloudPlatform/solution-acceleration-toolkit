@@ -24,6 +24,7 @@ import (
 	"path/filepath"
 	"text/template"
 
+	"github.com/Masterminds/sprig"
 	"github.com/imdario/mergo"
 )
 
@@ -79,7 +80,7 @@ func WriteFile(in, out string, data map[string]interface{}) error {
 		return fmt.Errorf("read %q: %v", in, err)
 	}
 
-	tmpl, err := template.New(in).Funcs(funcMap).Option("missingkey=error").Parse(string(b))
+	tmpl, err := template.New(in).Funcs(sprig.TxtFuncMap()).Funcs(funcMap).Option("missingkey=error").Parse(string(b))
 	if err != nil {
 		return fmt.Errorf("parse template %q: %v", in, err)
 	}
@@ -99,7 +100,7 @@ func WriteFile(in, out string, data map[string]interface{}) error {
 // WriteBuffer creates a buffer with template `text` filled with values from `data`.
 func WriteBuffer(text string, data map[string]interface{}) (*bytes.Buffer, error) {
 	var buf bytes.Buffer
-	tmpl, err := template.New("").Funcs(funcMap).Option("missingkey=error").Parse(text)
+	tmpl, err := template.New("").Funcs(sprig.TxtFuncMap()).Funcs(funcMap).Option("missingkey=error").Parse(text)
 	if err != nil {
 		return nil, err
 	}
