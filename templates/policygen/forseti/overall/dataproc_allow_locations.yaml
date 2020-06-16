@@ -26,4 +26,4 @@ spec:
   parameters:
     # https://cloud.google.com/compute/docs/regions-zones#available
     locations:
-    - "us*"
+    - "us"
