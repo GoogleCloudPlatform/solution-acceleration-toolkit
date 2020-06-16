@@ -16,7 +16,8 @@
 
 data = {
   parent_type     = "organization" # One of `organization` or `folder`.
-  org_id          = "12345678"
+  parent_id       = "12345678"
+  org_id          = "12345678" # TODO(umairidris): deprecate this field.
   billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.

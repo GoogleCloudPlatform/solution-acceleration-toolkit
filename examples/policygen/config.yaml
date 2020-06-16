@@ -16,7 +16,7 @@ template_dir: ../../templates/policygen
 
 gcp_org_policies:
   parent_type: organization # One of `organization`, `folder` or `project`
-  org_id: "12345678"
+  parent_id: "12345678"
   allowed_policy_member_customer_ids:
   - example_customer_id
   allowed_shared_vpc_host_projects:
