@@ -12,9 +12,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO(umairidris): fill in resources and detailed project object schema.
 schema = {
-  title       = "Recipe for creating GCP projects."
-  description = "See schema for fields in ../project/base_project.hcl."
+  title = "Recipe for creating GCP projects."
+  required = [
+    "parent_type",
+    "parent_id",
+    "project",
+  ]
+  properties = {
+    parent_type = {
+      description = "Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'."
+      type    = "string"
+      pattern = "^organization|folder$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of parent GCP resource to apply the policy: can be one of the organization ID or folder ID according to parent_type.
+      EOF
+      type    = "string"
+      pattern = "^[0-9]{8,25}$"
+    }
+    project = {
+      description = "Config for the project."
+      type        = "object"
+      required = [
+        "project_id",
+      ]
+      properties = {
+        project_id = {
+          description = "ID of project to create."
+          type        = "string"
+        }
+      }
+    }
+  }
 }
 
 {{/* TODO(umairidris): Stop doing this */}}
@@ -26,11 +58,9 @@ schema = {
 template "terragrunt" {
   recipe_path = "./terragrunt_deployment.hcl"
   output_path = "{{$base}}/project"
-  {{if has . "project"}}
   flatten {
     key = "project"
   }
-  {{end}}
   {{if eq .parent_type "folder"}}
   data = {
     terraform_addons = {
