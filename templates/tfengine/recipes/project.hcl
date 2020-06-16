@@ -44,6 +44,54 @@ schema = {
           description = "ID of project to create."
           type        = "string"
         }
+        apis = {
+          description = "APIs to enable in the project."
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+        is_shared_vpc_host = {
+          description = "Whether this project is a shared VPC host. Defaults to 'false'."
+          type        = "boolean"
+        }
+        shared_vpc_attachment = {
+          description = "If set, treats this project as a shared VPC service project."
+          type        = "object"
+          required = [
+            "host_project_id",
+          ]
+          properties = {
+            host_project_id = {
+              description = "ID of host project to connect this project to."
+              type        = "string"
+            }
+            subnets = {
+              description = "Subnets within the host project to grant this project access to."
+              type        = "array"
+              items = {
+                type = "object"
+                required = [
+                  "name",
+                ]
+                properties = {
+                  name = {
+                    description = "Name of subnet."
+                    type        = "string"
+                  }
+                  compute_region = {
+                    description = "Region of subnet."
+                    type        = "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+        deployments = {
+          description = "Map of deployment name to resource deployment config."
+          type        = "object"
+        }
       }
     }
   }
