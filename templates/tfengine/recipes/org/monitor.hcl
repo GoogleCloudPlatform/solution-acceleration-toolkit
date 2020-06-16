@@ -51,7 +51,7 @@ schema = {
 }
 
 template "project" {
-  recipe_path = "./project.hcl"
+  recipe_path = "../project/project.hcl"
   output_path = "./monitor"
   data = {
     project = {

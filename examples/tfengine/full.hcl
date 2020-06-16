@@ -15,6 +15,7 @@
 # {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
+  parent_type     = "organization"
   org_id          = "12345678"
   billing_account = "000-000-000"
   state_bucket    = "example-terraform-state"
@@ -66,7 +67,7 @@ template "foundation" {
       allowed_policy_member_customer_ids = [
         "example_customer_id",
       ]
-      disable_sa_key_creation = false
+      disable_enable_sa_key_creation = false
     }
 
     cicd = {
@@ -97,7 +98,7 @@ template "foundation" {
 # live folder. Any non-auto filled secret data must be manually filled in by
 # entering the secret manager page in console.
 template "project_secrets" {
-  recipe_path = "{{$base}}/org/project.hcl"
+  recipe_path = "{{$base}}/project/project.hcl"
   output_path = "./live/secrets"
   data = {
     project = {
@@ -150,9 +151,10 @@ template "folder_team1" {
 
 # Prod central networks project for team 1.
 template "project_networks" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$base}}/project/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -231,9 +233,10 @@ EOF
 
 # Prod central data project for team 1.
 template "project_data" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$base}}/project/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -353,9 +356,10 @@ EOF
 
 # Prod central apps project for team 1.
 template "project_apps" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$base}}/project/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -401,9 +405,10 @@ template "project_apps" {
 
 # Prod firebase project for team 1.
 template "project_firebase" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$base}}/project/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-firebase"
       apis = [

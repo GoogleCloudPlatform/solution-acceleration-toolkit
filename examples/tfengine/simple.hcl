@@ -15,6 +15,7 @@
 # {{$base := "../../templates/tfengine/recipes"}}
 
 data = {
+  parent_type     = "organization"
   org_id          = "12345678"
   billing_account = "000-000-000"
 
