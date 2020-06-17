@@ -34,3 +34,6 @@ spec:
     - us-west2
     - us-west3
     - us
+    # TODO(https://github.com/forseti-security/policy-library/issues/369): remove the need
+    # for an empty exemptions list.
+    exemptions: []
