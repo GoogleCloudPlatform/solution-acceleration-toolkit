@@ -34,7 +34,7 @@ touch ${output_file}
 ${tmp}/cft scorecard --policy-path ${tmp} --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
 
 # Sort the output file without the CSV header line.
-sort -o ${output_file} <(tail -n+2 ${output_file})
+LC_ALL=C sort -o ${output_file} <(tail -n+2 ${output_file})
 
 changed="$(diff -u tests/policygen/reports/want_report.csv ${output_file})" || true
 if [[ -n "${changed}" ]]; then
