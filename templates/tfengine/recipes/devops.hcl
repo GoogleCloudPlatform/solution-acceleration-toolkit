@@ -66,18 +66,18 @@ schema = {
 }
 
 template "bootstrap" {
-  component_path = "../../components/bootstrap"
+  component_path = "../components/bootstrap"
   output_path    = "./bootstrap"
 }
 
 template "root" {
-  component_path = "../../components/terragrunt/root"
+  component_path = "../components/terragrunt/root"
   output_path    = "./live"
 }
 
 {{if has . "cicd"}}
 template "cicd_manual" {
-  component_path = "../../components/cicd/manual"
+  component_path = "../components/cicd/manual"
   output_path    = "./cicd"
   flatten {
     key = "cicd"
@@ -85,7 +85,7 @@ template "cicd_manual" {
 }
 
 template "cicd_auto" {
-  component_path = "../../components/cicd/auto"
+  component_path = "../components/cicd/auto"
   output_path    = "./live/cicd"
   flatten {
     key = "cicd"

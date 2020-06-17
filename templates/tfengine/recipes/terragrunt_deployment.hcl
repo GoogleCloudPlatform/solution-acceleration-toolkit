@@ -12,14 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Schema for Organization Policies are handled by policygen.ValidateOrgPoliciesConfig().
-
-template "terragrunt" {
-  recipe_path = "../deployment/terragrunt.hcl"
-  output_path    = "./org_policies"
+template "terraform" {
+  recipe_path = "./terraform_deployment.hcl"
+  data = {
+    # GCS backend config is set by terragrunt root.
+    disable_gcs_backend_config = true
+  }
 }
 
-template "org_policies" {
-  component_path = "../../../policygen/org_policies"
-  output_path    = "./org_policies"
+template "terragrunt" {
+  component_path = "../components/terragrunt/leaf"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
 }
