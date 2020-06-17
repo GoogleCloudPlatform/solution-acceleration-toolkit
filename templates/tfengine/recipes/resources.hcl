@@ -15,6 +15,14 @@
 schema = {
   title = "Recipe for project resources."
   properties = {
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the project deployment.
+        Can be used to support arbitrary resources not supported in the following list.
+        For schema see ./terragrunt_deployment.hcl.
+      EOF
+      type        = "object"
+    }
     bastion_hosts = {
       description = "https://github.com/terraform-google-modules/terraform-google-bastion-host"
       type        = "array"
