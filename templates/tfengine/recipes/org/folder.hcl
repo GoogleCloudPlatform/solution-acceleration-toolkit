@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data = {
-	parent = "organizations/{{.org_id}}"
-}
-
 template "terragrunt" {
   recipe_path = "../deployment/terragrunt.hcl"
   output_path    = "{{.display_name}}/folder"
@@ -26,5 +22,6 @@ template "folder" {
   output_path    = "{{.display_name}}/folder"
   data = {
     display_name = "{{.display_name}}"
+    parent       =  "organizations/{{.org_id}}"
   }
 }
