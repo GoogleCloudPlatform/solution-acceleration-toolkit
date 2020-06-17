@@ -97,7 +97,7 @@ func dump(conf *Config, root, outputPath string) error {
 
 			// Validate the schema, if present.
 			if len(rc.Schema) > 0 {
-				if err := jsonschema.ValidateMap(rc.Schema, data); err != nil {
+				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
 					return fmt.Errorf("recipe %q: %v", rp, err)
 				}
 			}
