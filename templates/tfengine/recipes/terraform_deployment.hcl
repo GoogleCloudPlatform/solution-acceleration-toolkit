@@ -13,7 +13,7 @@
 # limitations under the License.
 
 template "terraform" {
-  component_path = "../../components/terraform/main"
+  component_path = "../components/terraform/main"
   {{if has . "terraform_addons"}}
   flatten {
     key = "terraform_addons"
@@ -23,7 +23,7 @@ template "terraform" {
 
 {{if or (has . "vars") (has . "terraform_addons.vars")}}
 template "vars" {
-  component_path = "../../components/terraform/variables"
+  component_path = "../components/terraform/variables"
   {{if has . "terraform_addons"}}
   flatten {
     key = "terraform_addons"
@@ -34,7 +34,7 @@ template "vars" {
 
 {{if or (has . "outputs") (has . "terraform_addons.outputs")}}
 template "outputs" {
-  component_path = "../../components/terraform/outputs"
+  component_path = "../components/terraform/outputs"
   {{if has . "terraform_addons"}}
   flatten {
     key = "terraform_addons"

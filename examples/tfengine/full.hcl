@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# {{$base := "../../templates/tfengine/recipes"}}
+# {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
   parent_type     = "organization" # One of `organization` or `folder`.
@@ -33,7 +33,7 @@ data = {
 }
 
 template "devops" {
-  recipe_path = "{{$base}}/org/devops.hcl"
+  recipe_path = "{{$recipes}}/devops.hcl"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
@@ -69,7 +69,7 @@ template "devops" {
 }
 
 template "audit" {
-  recipe_path = "{{$base}}/org/audit.hcl"
+  recipe_path = "{{$recipes}}/audit.hcl"
   output_path = "./live"
   data = {
     project_id   = "example-audit"
@@ -80,7 +80,7 @@ template "audit" {
 }
 
 template "monitor" {
-  recipe_path = "{{$base}}/org/monitor.hcl"
+  recipe_path = "{{$recipes}}/monitor.hcl"
   output_path = "./live"
   data = {
     project_id     = "example-monitor"
@@ -90,7 +90,7 @@ template "monitor" {
 }
 
 template "org_policies" {
-  recipe_path = "{{$base}}/org/org_policies.hcl"
+  recipe_path = "{{$recipes}}/org_policies.hcl"
   output_path = "./live"
   data = {
     allowed_policy_member_customer_ids = [
@@ -104,7 +104,7 @@ template "org_policies" {
 # live folder. Any non-auto filled secret data must be manually filled in by
 # entering the secret manager page in console.
 template "project_secrets" {
-  recipe_path = "{{$base}}/org/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/secrets"
   data = {
     project = {
@@ -139,7 +139,7 @@ EOF
 
 # Top level prod folder.
 template "folder_prod" {
-  recipe_path = "{{$base}}/org/folder.hcl"
+  recipe_path = "{{$recipes}}/folder.hcl"
   output_path = "./live"
   data = {
     display_name = "prod"
@@ -148,18 +148,20 @@ template "folder_prod" {
 
 # Prod folder for team 1.
 template "folder_team1" {
-  recipe_path = "{{$base}}/folder/folder.hcl"
+  recipe_path = "{{$recipes}}/folder.hcl"
   output_path = "./live/prod"
   data = {
+    parent_type  = "folder"
     display_name = "team1"
   }
 }
 
 # Prod central networks project for team 1.
 template "project_networks" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -238,9 +240,10 @@ EOF
 
 # Prod central data project for team 1.
 template "project_data" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -360,9 +363,10 @@ EOF
 
 # Prod central apps project for team 1.
 template "project_apps" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -408,9 +412,10 @@ template "project_apps" {
 
 # Prod firebase project for team 1.
 template "project_firebase" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-firebase"
       apis = [
@@ -453,7 +458,7 @@ EOF
 # Build cannot access the GKE cluster and should be deployed after the GKE
 # Cluster has been deployed.
 template "kubernetes" {
-  recipe_path = "{{$base}}/deployment/terraform.hcl"
+  recipe_path = "{{$recipes}}/terraform_deployment.hcl"
   output_path = "./kubernetes"
 
   data = {

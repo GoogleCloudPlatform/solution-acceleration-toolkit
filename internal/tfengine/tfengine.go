@@ -65,11 +65,11 @@ func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
 		outputPath := filepath.Join(outputPath, ti.OutputPath)
 
-		if ti.Data == nil {
-			ti.Data = make(map[string]interface{})
+		data := make(map[string]interface{})
+		if err := template.MergeData(data, conf.Data, nil); err != nil {
+			return err
 		}
-
-		if err := template.MergeData(ti.Data, conf.Data, ti.Flatten); err != nil {
+		if err := template.MergeData(data, ti.Data, ti.Flatten); err != nil {
 			return err
 		}
 
@@ -82,7 +82,7 @@ func dump(conf *Config, root, outputPath string) error {
 			if !filepath.IsAbs(rp) {
 				rp = filepath.Join(root, rp)
 			}
-			rc, err := loadConfig(rp, ti.Data)
+			rc, err := loadConfig(rp, data)
 			if err != nil {
 				return fmt.Errorf("load recipe %q: %v", rp, err)
 			}
@@ -91,13 +91,13 @@ func dump(conf *Config, root, outputPath string) error {
 			if rc.Data == nil {
 				rc.Data = make(map[string]interface{})
 			}
-			if err := template.MergeData(rc.Data, ti.Data, nil); err != nil {
+			if err := template.MergeData(rc.Data, data, nil); err != nil {
 				return err
 			}
 
 			// Validate the schema, if present.
 			if len(rc.Schema) > 0 {
-				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
+				if err := jsonschema.ValidateMap(rc.Schema, data); err != nil {
 					return fmt.Errorf("recipe %q: %v", rp, err)
 				}
 			}
@@ -107,7 +107,7 @@ func dump(conf *Config, root, outputPath string) error {
 			}
 		case ti.ComponentPath != "":
 			if ti.Name == "org_policies" {
-				if err := policygen.ValidateOrgPoliciesConfig(ti.Data, true); err != nil {
+				if err := policygen.ValidateOrgPoliciesConfig(data, true); err != nil {
 					return err
 				}
 			}
@@ -118,7 +118,7 @@ func dump(conf *Config, root, outputPath string) error {
 			if !filepath.IsAbs(cp) {
 				cp = filepath.Join(root, cp)
 			}
-			if err := template.WriteDir(cp, outputPath, ti.Data); err != nil {
+			if err := template.WriteDir(cp, outputPath, data); err != nil {
 				return fmt.Errorf("component %q: %v", cp, err)
 			}
 		}

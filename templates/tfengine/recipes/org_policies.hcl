@@ -12,20 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Schema for Organization Policies are handled by policygen.ValidateOrgPoliciesConfig().
+
 template "terragrunt" {
-  recipe_path = "../deployment/terragrunt.hcl"
-  data = {
-    vars = [{
-      name             =  "project_id"
-      type             = "string"
-      terragrunt_input = "$${dependency.project.outputs.project_id}"
-    }]
-    deps = [{
-      name = "project"
-      path = "../project"
-      mock_outputs = {
-        project_id = "mock-project"
-      }
-    }]
-  }
+  recipe_path = "./terragrunt_deployment.hcl"
+  output_path = "./org_policies"
+}
+
+template "org_policies" {
+  component_path = "../../policygen/org_policies"
+  output_path    = "./org_policies"
 }

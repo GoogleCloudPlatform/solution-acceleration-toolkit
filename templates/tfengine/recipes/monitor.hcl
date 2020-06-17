@@ -61,6 +61,6 @@ template "project" {
 }
 
 template "forseti" {
-  component_path = "../../components/org/monitor/forseti"
+  component_path = "../components/org/monitor/forseti"
   output_path    = "./monitor/forseti"
 }
