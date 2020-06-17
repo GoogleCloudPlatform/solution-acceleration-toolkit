@@ -2,6 +2,8 @@ Other,bigquery_allow_locations,//bigquery.googleapis.com/projects/sandbox2/datas
 Other,dataproc_allow_locations,//dataproc.googleapis.com/projects/test-project/regions/asia-east1/clusters/bad-2,//dataproc.googleapis.com/projects/test-project/regions/asia-east1/clusters/bad-2 is in violation.
 Other,dataproc_allow_locations,//dataproc.googleapis.com/projects/test-project/regions/europe-west2/clusters/bad,//dataproc.googleapis.com/projects/test-project/regions/europe-west2/clusters/bad is in violation.
 Other,iam_allow_domains,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public contains member from unexpected domain: allAuthenticatedUsers
+Other,iam_allow_roles,//cloudresourcemanager.googleapis.com/organizations/12345678,roles/owner is NOT in the allowed list of IAM policy for //cloudresourcemanager.googleapis.com/organizations/12345678
+Other,iam_allowed_bindings_appengine_appviewer,//cloudresourcemanager.googleapis.com/organizations/12345678,IAM policy for //cloudresourcemanager.googleapis.com/organizations/12345678 grants roles/appengine.appViewer to user:foo@example.com
 Other,iam_deny_public_access,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public grants roles/storage.objectViewer to allAuthenticatedUsers
 Other,network_enable_firewall_logs,//compute.googleapis.com/projects/test-project/global/firewalls/bad,Firewall logs are disabled in firewall //compute.googleapis.com/projects/test-project/global/firewalls/bad.
 Other,network_enable_flow_logs,//compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad,Flow logs are disabled in subnetwork //compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad.
