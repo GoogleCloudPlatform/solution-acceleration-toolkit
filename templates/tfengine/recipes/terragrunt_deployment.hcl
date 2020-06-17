@@ -12,12 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template "bootstrap" {
-  component_path = "../../components/bootstrap"
-  output_path    = "./bootstrap"
+template "terraform" {
+  recipe_path = "./terraform_deployment.hcl"
+  data = {
+    # GCS backend config is set by terragrunt root.
+    disable_gcs_backend_config = true
+  }
 }
 
-template "root" {
-  component_path = "../../components/terragrunt/root"
-  output_path    = "./live"
+template "terragrunt" {
+  component_path = "../components/terragrunt/leaf"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
 }

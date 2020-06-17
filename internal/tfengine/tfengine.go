@@ -24,6 +24,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -64,10 +65,11 @@ func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
 		outputPath := filepath.Join(outputPath, ti.OutputPath)
 
-		if ti.Data == nil {
-			ti.Data = make(map[string]interface{})
+		data := make(map[string]interface{})
+		if err := template.MergeData(data, conf.Data, nil); err != nil {
+			return err
 		}
-		if err := template.MergeData(ti.Data, conf.Data, ti.Flatten); err != nil {
+		if err := template.MergeData(data, ti.Data, ti.Flatten); err != nil {
 			return err
 		}
 
@@ -80,20 +82,26 @@ func dump(conf *Config, root, outputPath string) error {
 			if !filepath.IsAbs(rp) {
 				rp = filepath.Join(root, rp)
 			}
-			rc, err := loadConfig(rp, ti.Data)
+			rc, err := loadConfig(rp, data)
 			if err != nil {
 				return fmt.Errorf("load recipe %q: %v", rp, err)
 			}
-			rc.Data = ti.Data
+			rc.Data = data
 			if len(rc.Schema) > 0 {
-				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
+				if err := jsonschema.ValidateMap(rc.Schema, data); err != nil {
 					return fmt.Errorf("recipe %q: %v", rp, err)
 				}
 			}
+
 			if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
 		case ti.ComponentPath != "":
+			if ti.Name == "org_policies" {
+				if err := policygen.ValidateOrgPoliciesConfig(data, true); err != nil {
+					return err
+				}
+			}
 			cp, err := pathutil.Expand(ti.ComponentPath)
 			if err != nil {
 				return err
@@ -101,7 +109,7 @@ func dump(conf *Config, root, outputPath string) error {
 			if !filepath.IsAbs(cp) {
 				cp = filepath.Join(root, cp)
 			}
-			if err := template.WriteDir(cp, outputPath, ti.Data); err != nil {
+			if err := template.WriteDir(cp, outputPath, data); err != nil {
 				return fmt.Errorf("component %q: %v", cp, err)
 			}
 		}

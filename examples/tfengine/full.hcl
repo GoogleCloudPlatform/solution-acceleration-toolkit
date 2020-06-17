@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# {{$base := "../../templates/tfengine/recipes"}}
+# {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  org_id          = "12345678"
+  parent_type     = "organization" # One of `organization` or `folder`.
+  parent_id       = "12345678"
+  org_id          = "12345678" # TODO(umairidris): deprecate this field.
   billing_account = "000-000-000"
   state_bucket    = "example-terraform-state"
 
@@ -30,47 +32,21 @@ data = {
   storage_location    = "us-central1"
 }
 
-# Foundation for the org.
-template "foundation" {
-  recipe_path = "{{$base}}/org/foundation.hcl"
+template "devops" {
+  recipe_path = "{{$recipes}}/devops.hcl"
   data = {
-    parent_type = "organization" # One of `organization` or `folder`.
-    parent_id   = "12345678"
+    # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
+    # Run `terraform init` in the bootstrap module to backup its state to GCS.
+    # bootstrap_gcs_backend = true
 
-    devops = {
-      project_id = "example-devops"
-      org_admin  = "group:example-org-admin@example.com"
-      project_owners = [
-        "group:example-devops-owners@example.com",
-      ]
-
-      # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
-      # Run `terraform init` in the bootstrap module to backup its state to GCS.
-      # bootstrap_gcs_backend = true
-    }
-
-    audit = {
-      project_id   = "example-audit"
-      dataset_name = "1yr_org_audit_logs"
-      bucket_name  = "7yr-org-audit-logs"
-      auditors     = "group:example-dev-auditors@example.com",
-    }
-
-    monitor = {
-      project_id     = "example-monitor"
-      domain         = "example.com"
-      cscc_source_id = "organizations/12345678/sources/88888888"
-    }
-
-    org_policies = {
-      allowed_policy_member_customer_ids = [
-        "example_customer_id",
-      ]
-      disable_sa_key_creation = false
-    }
+    project_id   = "example-devops"
+    state_bucket = "example-terraform-state"
+    org_admin    = "group:example-org-admin@example.com"
+    project_owners = [
+      "group:example-devops-owners@example.com",
+    ]
 
     cicd = {
-      project_id = "example-devops"
       github = {
         owner = "GoogleCloudPlatform"
         name  = "example"
@@ -92,12 +68,43 @@ template "foundation" {
   }
 }
 
+template "audit" {
+  recipe_path = "{{$recipes}}/audit.hcl"
+  output_path = "./live"
+  data = {
+    project_id   = "example-audit"
+    dataset_name = "1yr_org_audit_logs"
+    bucket_name  = "7yr-org-audit-logs"
+    auditors     = "group:example-dev-auditors@example.com"
+  }
+}
+
+template "monitor" {
+  recipe_path = "{{$recipes}}/monitor.hcl"
+  output_path = "./live"
+  data = {
+    project_id     = "example-monitor"
+    domain         = "example.com"
+    cscc_source_id = "organizations/12345678/sources/88888888"
+  }
+}
+
+template "org_policies" {
+  recipe_path = "{{$recipes}}/org_policies.hcl"
+  output_path = "./live"
+  data = {
+    allowed_policy_member_customer_ids = [
+      "example_customer_id",
+    ]
+  }
+}
+
 # Central secrets project and deployment.
 # NOTE: This deployment must be deployed first before any deployments in the
 # live folder. Any non-auto filled secret data must be manually filled in by
 # entering the secret manager page in console.
 template "project_secrets" {
-  recipe_path = "{{$base}}/org/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/secrets"
   data = {
     project = {
@@ -132,7 +139,7 @@ EOF
 
 # Top level prod folder.
 template "folder_prod" {
-  recipe_path = "{{$base}}/org/folder.hcl"
+  recipe_path = "{{$recipes}}/folder.hcl"
   output_path = "./live"
   data = {
     display_name = "prod"
@@ -141,18 +148,20 @@ template "folder_prod" {
 
 # Prod folder for team 1.
 template "folder_team1" {
-  recipe_path = "{{$base}}/folder/folder.hcl"
+  recipe_path = "{{$recipes}}/folder.hcl"
   output_path = "./live/prod"
   data = {
+    parent_type  = "folder"
     display_name = "team1"
   }
 }
 
 # Prod central networks project for team 1.
 template "project_networks" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -231,9 +240,10 @@ EOF
 
 # Prod central data project for team 1.
 template "project_data" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -353,9 +363,10 @@ EOF
 
 # Prod central apps project for team 1.
 template "project_apps" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -401,9 +412,10 @@ template "project_apps" {
 
 # Prod firebase project for team 1.
 template "project_firebase" {
-  recipe_path = "{{$base}}/folder/project.hcl"
+  recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1"
   data = {
+    parent_type = "folder"
     project = {
       project_id = "example-prod-firebase"
       apis = [
@@ -446,7 +458,7 @@ EOF
 # Build cannot access the GKE cluster and should be deployed after the GKE
 # Cluster has been deployed.
 template "kubernetes" {
-  recipe_path = "{{$base}}/deployment/terraform.hcl"
+  recipe_path = "{{$recipes}}/terraform_deployment.hcl"
   output_path = "./kubernetes"
 
   data = {
