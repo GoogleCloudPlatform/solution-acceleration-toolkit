@@ -86,9 +86,18 @@ func dump(conf *Config, root, outputPath string) error {
 			if err != nil {
 				return fmt.Errorf("load recipe %q: %v", rp, err)
 			}
-			rc.Data = data
+
+			// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
+			if rc.Data == nil {
+				rc.Data = make(map[string]interface{})
+			}
+			if err := template.MergeData(rc.Data, data, nil); err != nil {
+				return err
+			}
+
+			// Validate the schema, if present.
 			if len(rc.Schema) > 0 {
-				if err := jsonschema.ValidateMap(rc.Schema, data); err != nil {
+				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
 					return fmt.Errorf("recipe %q: %v", rp, err)
 				}
 			}
