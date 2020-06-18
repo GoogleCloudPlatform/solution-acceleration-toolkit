@@ -592,18 +592,20 @@ schema = {
 template "terragrunt" {
   recipe_path = "./terragrunt_deployment.hcl"
   data = {
-    vars = [{
-      name             = "project_id"
-      type             = "string"
-      terragrunt_input = "$${dependency.project.outputs.project_id}"
-    }]
-    deps = [{
-      name = "project"
-      path = "../project"
-      mock_outputs = {
-        project_id = "mock-project"
-      }
-    }]
+    terraform_addons = {
+      vars = [{
+        name             = "project_id"
+        type             = "string"
+        terragrunt_input = "$${dependency.project.outputs.project_id}"
+      }]
+      deps = [{
+        name = "project"
+        path = "../project"
+        mock_outputs = {
+          project_id = "mock-project"
+        }
+      }]
+    }
   }
 }
 

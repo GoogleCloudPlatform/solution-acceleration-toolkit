@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title       = "Terraform Deployment Recipe."
+  title       = "Terragrunt Deployment Recipe."
   description = "This recipe should be used to setup a new Terraform deployment directory."
   properties = {
     disable_gcs_backend_config = {
