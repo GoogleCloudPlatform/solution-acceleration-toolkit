@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title = "Recipe for project resources."
+  title = "Recipe for resources within projects."
   properties = {
     terraform_addons = {
       description = <<EOF
@@ -115,7 +115,6 @@ schema = {
               Each object should contain exactly one of the following keys:
               - group_by_email: An email address of a Google Group to grant access to.
               - user_by_email:  An email address of a user to grant access to.
-              - group_by_email: An email address of a Google Group to grant access to.
               - special_group: A special group to grant access to.
             EOF
             type        = "array"
