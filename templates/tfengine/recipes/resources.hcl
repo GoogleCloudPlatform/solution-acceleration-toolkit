@@ -19,7 +19,7 @@ schema = {
       description = <<EOF
         Additional Terraform configuration for the project deployment.
         Can be used to support arbitrary resources not supported in the following list.
-        For schema see ./terragrunt_deployment.hcl.
+        For schema see ./deployment.hcl.
       EOF
       type        = "object"
     }
@@ -589,9 +589,10 @@ schema = {
   }
 }
 
-template "terragrunt" {
-  recipe_path = "./terragrunt_deployment.hcl"
+template "deployment" {
+  recipe_path = "./deployment.hcl"
   data = {
+    enable_terragrunt = true
     terraform_addons = {
       vars = [{
         name             = "project_id"

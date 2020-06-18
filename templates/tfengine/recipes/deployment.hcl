@@ -16,12 +16,19 @@ schema = {
   title       = "Terraform Deployment Recipe."
   description = "This recipe should be used to setup a new Terraform deployment directory."
   properties = {
+    enable_terragrunt = {
+      description = "Whether to convert to a Terragrunt deployment. Adds a terragrunt.hcl file in the deployment."
+    }
     disable_gcs_backend_config = {
-      description = "Whether to omit the GCS backend block. Defaults to false."
+      description = "Whether to omit the GCS backend block. Defaults to false. Automatically set to true if 'enable_terragrunt' is true."
       type        = "boolean"
     }
     state_bucket = {
-      description = "State bucket to use for GCS backend."
+      description = "State bucket to use for GCS backend. Does nothing if 'enable_terragrunt' is true."
+      type        = "string"
+    }
+    state_path_prefix = {
+      description = "Object path prefix for GCS backend. Does nothing if 'enable_terragrunt' is true."
       type        = "string"
     }
     terraform_addons = {
@@ -95,6 +102,11 @@ template "terraform" {
     key = "terraform_addons"
   }
   {{end}}
+  data = {
+    {{if get . "enable_terragrunt"}}
+    disable_gcs_backend_config = true
+    {{end}}
+  }
 }
 
 {{if has . "terraform_addons.vars"}}
@@ -111,6 +123,17 @@ template "vars" {
 {{if has . "terraform_addons.outputs"}}
 template "outputs" {
   component_path = "../components/terraform/outputs"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
+}
+{{end}}
+
+{{if get . "enable_terragrunt"}}
+template "terragrunt" {
+  component_path = "../components/terragrunt/leaf"
   {{if has . "terraform_addons"}}
   flatten {
     key = "terraform_addons"
