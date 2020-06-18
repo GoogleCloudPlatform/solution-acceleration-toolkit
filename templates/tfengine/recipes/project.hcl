@@ -107,15 +107,9 @@ schema = {
   }
 }
 
-{{/* TODO(umairidris): Stop doing this */}}
-{{$base := ""}}
-{{if eq .parent_type "folder"}}
-{{$base = .project.project_id}}
-{{end}}
-
 template "terragrunt" {
   recipe_path = "./terragrunt_deployment.hcl"
-  output_path = "{{$base}}/project"
+  output_path = "./project"
   flatten {
     key = "project"
   }
@@ -139,7 +133,7 @@ template "terragrunt" {
 
 template "project" {
   component_path = "../components/project/project"
-  output_path    = "{{$base}}/project"
+  output_path    = "./project"
   flatten {
     key = "project"
   }
@@ -148,7 +142,7 @@ template "project" {
 {{range $name, $_ := get . "deployments"}}
 template "resources_{{$name}}" {
   recipe_path = "./resources.hcl"
-  output_path = "{{$base}}/{{$name}}"
+  output_path = "{{$name}}"
   flatten {
     key = "deployments"
   }
