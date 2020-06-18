@@ -91,7 +91,7 @@ schema = {
         terraform_addons = {
           description = <<EOF
             Additional Terraform configuration for the project deployment.
-            For schema see ./terragrunt_deployment.hcl.
+            For schema see ./deployment.hcl.
           EOF
         }
       }
@@ -107,14 +107,15 @@ schema = {
   }
 }
 
-template "terragrunt" {
-  recipe_path = "./terragrunt_deployment.hcl"
+template "deployment" {
+  recipe_path = "./deployment.hcl"
   output_path = "./project"
   flatten {
     key = "project"
   }
-  {{if eq .parent_type "folder"}}
   data = {
+    enable_terragrunt = true
+    {{if eq .parent_type "folder"}}
     terraform_addons = {
       deps = [{
         name = "parent_folder"
@@ -127,8 +128,8 @@ template "terragrunt" {
         folder_id = "$${dependency.parent_folder.outputs.name}"
       }
     }
+    {{end}}
   }
-  {{end}}
 }
 
 template "project" {

@@ -14,9 +14,12 @@
 
 # Schema for Organization Policies are handled by policygen.ValidateOrgPoliciesConfig().
 
-template "terragrunt" {
-  recipe_path = "./terragrunt_deployment.hcl"
+template "deployment" {
+  recipe_path = "./deployment.hcl"
   output_path = "./org_policies"
+  data = {
+    enable_terragrunt = true
+  }
 }
 
 template "org_policies" {

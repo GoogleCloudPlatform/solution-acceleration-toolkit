@@ -91,15 +91,15 @@ schema = {
   }
 }
 
-template "terraform" {
-  recipe_path = "./terraform_deployment.hcl"
+template "deployment" {
+  recipe_path = "./deployment.hcl"
   data = {
     # GCS backend config is set by terragrunt root.
     disable_gcs_backend_config = true
   }
 }
 
-template "terragrunt" {
+template "deployment" {
   component_path = "../components/terragrunt/leaf"
   {{if has . "terraform_addons"}}
   flatten {
