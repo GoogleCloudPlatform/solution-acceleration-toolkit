@@ -159,7 +159,7 @@ template "folder_team1" {
 # Prod central networks project for team 1.
 template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./live/prod/team1/example-prod-networks"
   data = {
     parent_type = "folder"
     project = {
@@ -241,7 +241,7 @@ EOF
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./live/prod/team1/example-prod-data"
   data = {
     parent_type = "folder"
     project = {
@@ -364,7 +364,7 @@ EOF
 # Prod central apps project for team 1.
 template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./live/prod/team1/example-prod-apps"
   data = {
     parent_type = "folder"
     project = {
@@ -413,7 +413,7 @@ template "project_apps" {
 # Prod firebase project for team 1.
 template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./live/prod/team1/example-prod-firebase"
   data = {
     parent_type = "folder"
     project = {
