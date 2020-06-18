@@ -1,9 +1,15 @@
+Other,bigquery_allow_locations,//bigquery.googleapis.com/projects/sandbox2/datasets/bad,//bigquery.googleapis.com/projects/sandbox2/datasets/bad is in a disallowed location.
 Other,dataproc_allow_locations,//dataproc.googleapis.com/projects/test-project/regions/asia-east1/clusters/bad-2,//dataproc.googleapis.com/projects/test-project/regions/asia-east1/clusters/bad-2 is in violation.
 Other,dataproc_allow_locations,//dataproc.googleapis.com/projects/test-project/regions/europe-west2/clusters/bad,//dataproc.googleapis.com/projects/test-project/regions/europe-west2/clusters/bad is in violation.
 Other,iam_allow_domains,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public contains member from unexpected domain: allAuthenticatedUsers
+Other,iam_allow_roles,//cloudresourcemanager.googleapis.com/organizations/12345678,roles/owner is NOT in the allowed list of IAM policy for //cloudresourcemanager.googleapis.com/organizations/12345678
+Other,iam_allowed_bindings_appengine_appviewer,//cloudresourcemanager.googleapis.com/organizations/12345678,IAM policy for //cloudresourcemanager.googleapis.com/organizations/12345678 grants roles/appengine.appViewer to user:foo@example.com
 Other,iam_deny_public_access,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public grants roles/storage.objectViewer to allAuthenticatedUsers
 Other,network_enable_firewall_logs,//compute.googleapis.com/projects/test-project/global/firewalls/bad,Firewall logs are disabled in firewall //compute.googleapis.com/projects/test-project/global/firewalls/bad.
 Other,network_enable_flow_logs,//compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad,Flow logs are disabled in subnetwork //compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad.
+Other,sql_allow_locations,//cloudsql.googleapis.com/projects/test-project/instances/bad-mysql,//cloudsql.googleapis.com/projects/test-project/instances/bad-mysql is in a disallowed location (australia-southeast1).
+Other,sql_allow_locations,//cloudsql.googleapis.com/projects/test-project/instances/bad-postgres,//cloudsql.googleapis.com/projects/test-project/instances/bad-postgres is in a disallowed location (asia-southeast1).
 Other,sql_deny_public_access,//cloudsql.googleapis.com/projects/test-project/instances/public-sql,//cloudsql.googleapis.com/projects/test-project/instances/public-sql is not allowed to have a Public IP.
+Other,storage_allow_locations,//storage.googleapis.com/my-storage-bucket-with-bad-location,//storage.googleapis.com/my-storage-bucket-with-bad-location is in a disallowed location.
 Other,storage_allow_uniform_bucket_access_only,//storage.googleapis.com/my-storage-bucket-with-no-bucketpolicyonly-data,//storage.googleapis.com/my-storage-bucket-with-no-bucketpolicyonly-data does not have bucket policy only enabled.
 Other,storage_allow_uniform_bucket_access_only,//storage.googleapis.com/my-storage-bucket-with-null-bucketpolicyonly,//storage.googleapis.com/my-storage-bucket-with-null-bucketpolicyonly does not have bucket policy only enabled.
