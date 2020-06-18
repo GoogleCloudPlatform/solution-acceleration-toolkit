@@ -16,14 +16,6 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "project" {
-  config_path = "../project"
-  mock_outputs = {
-    project_id = "mock-project"
-
-  }
-}
-
 dependency "networks" {
   config_path = "../../example-prod-networks/resources"
   mock_outputs = {
@@ -32,9 +24,17 @@ dependency "networks" {
   }
 }
 
-inputs = {
-  project_id = "${dependency.project.outputs.project_id}"
+dependency "project" {
+  config_path = "../project"
+  mock_outputs = {
+    project_id = "mock-project"
 
+  }
+}
+
+inputs = {
   bastion_service_account = "${dependency.networks.outputs.bastion_service_account}"
+
+  project_id = "${dependency.project.outputs.project_id}"
 
 }

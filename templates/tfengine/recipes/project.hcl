@@ -88,14 +88,20 @@ schema = {
             }
           }
         }
-        deployments = {
+        terraform_addons = {
           description = <<EOF
-            Map of deployment name to resources config.
-            Each key will be a directory in the output path.
-            For resource schema see ./resources.hcl.
+            Additional Terraform configuration for the project deployment.
+            For schema see ./terragrunt_deployment.hcl.
           EOF
-          type        = "object"
         }
+      }
+      deployments = {
+        description = <<EOF
+          Map of deployment name to resources config.
+          Each key will be a directory in the output path.
+          For resource schema see ./resources.hcl.
+        EOF
+        type        = "object"
       }
     }
   }

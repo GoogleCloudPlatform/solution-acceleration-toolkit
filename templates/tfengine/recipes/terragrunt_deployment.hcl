@@ -12,6 +12,85 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+schema = {
+  title       = "Terragrunt Deployment Recipe."
+  description = "This recipe should be used to setup a new Terraform deployment directory."
+  properties = {
+    disable_gcs_backend_config = {
+      description = "Whether to omit the GCS backend block. Defaults to false."
+      type        = "boolean"
+    }
+    state_bucket = {
+      description = "State bucket to use for GCS backend."
+      type        = "string"
+    }
+    terraform_addons = {
+      description = "Extra addons to set in the deployment."
+      type        = "object"
+      properties = {
+        raw_config = {
+          description = <<EOF
+            Raw text to insert in the Terraform main.tf file.
+            Can be used to add arbitrary blocks or resources that the engine does not support.
+          EOF
+          type        = "string"
+        }
+        vars = {
+          description = "Additional vars to set in the deployment in variables.tf."
+          type = "array"
+          items = {
+            type = "object"
+            required = [
+              "name",
+              "type",
+            ]
+            properties = {
+              name = {
+                description = "Name of the variable."
+                type        = "string"
+              }
+              type = {
+                description = "Type of variable."
+                type        = "string"
+              }
+              value = {
+                description = "Value of variable to set in terraform.tfvars."
+              }
+              terragrunt_input = {
+                description = "Value of variable set in terragrunt.hcl."
+              }
+              default = {
+                description = "Default value of variable."
+              }
+            }
+          }
+        }
+        outputs = {
+          description = "Additional outputs to set in outputs.tf."
+          type = "array"
+          items = {
+            type = "object"
+            required = [
+              "name",
+              "value",
+            ]
+            properties = {
+              name = {
+                description = "Name of output."
+                type        = "string"
+              }
+              value = {
+                description = "Value of output."
+                type        = "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 template "terraform" {
   recipe_path = "./terraform_deployment.hcl"
   data = {
