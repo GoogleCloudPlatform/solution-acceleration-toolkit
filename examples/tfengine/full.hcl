@@ -39,7 +39,6 @@ template "devops" {
     # bootstrap_gcs_backend = true
 
     project_id   = "example-devops"
-    state_bucket = "example-terraform-state"
     org_admin    = "group:example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
