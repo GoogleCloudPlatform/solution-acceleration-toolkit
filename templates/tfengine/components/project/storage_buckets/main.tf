@@ -19,11 +19,7 @@ module "{{resourceName . "name"}}" {
 
   name       = "{{.name}}"
   project_id = var.project_id
-  {{- if has . "location"}}
-  location   = "{{.location}}"
-  {{- else}}
-  location   = "{{$.storage_location}}"
-  {{- end}}
+  location   = "{{get . "storage_location" $.storage_location}}"
 
   {{- if index . "iam_members"}}
   iam_members = [

@@ -20,8 +20,8 @@ module "{{resourceName . "name"}}" {
   name         = "{{.name}}"
   project      = var.project_id
   zone         = "{{get . "region" $.compute_region}}-{{get . "zone" $.compute_zone}}"
-  {{- if has . "host_project_id"}}
-  host_project = "{{.host_project_id}}"
+  {{- if has . "network_project_id"}}
+  host_project = "{{.network_project_id}}"
   {{- else}}
   host_project = var.project_id
   {{- end}}
