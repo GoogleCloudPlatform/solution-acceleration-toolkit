@@ -457,7 +457,7 @@ EOF
 # Build cannot access the GKE cluster and should be deployed after the GKE
 # Cluster has been deployed.
 template "kubernetes" {
-  recipe_path = "{{$recipes}}/terraform_deployment.hcl"
+  recipe_path = "{{$recipes}}/deployment.hcl"
   output_path = "./kubernetes"
 
   data = {
