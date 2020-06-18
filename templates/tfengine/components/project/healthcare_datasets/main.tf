@@ -19,7 +19,7 @@ module "{{resourceName . "name"}}" {
 
   name     = "{{.name}}"
   project  = var.project_id
-  location = "{{get . "location" $.healthcare_location}}"
+  location = "{{get . "healthcare_location" $.healthcare_location}}"
 
   {{hclField . "iam_members" false}}
 

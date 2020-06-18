@@ -19,7 +19,7 @@ module "{{resourceName . "name"}}" {
 
   name         = "{{.name}}"
   project      = var.project_id
-  region       = "{{get . "region" $.compute_region}}"
+  region       = "{{get . "compute_region" $.compute_region}}"
   network      = "{{.network}}"
 
   {{if has . "nats" -}}
