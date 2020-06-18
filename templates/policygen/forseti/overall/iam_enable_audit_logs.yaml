@@ -23,10 +23,13 @@ spec:
     {{- range get . "targets"}}
     - "{{.}}"
     {{- end}}
+# TODO(xingao): reenable once the following issues are addressed.
+# https://github.com/forseti-security/policy-library/issues/367
+# https://github.com/forseti-security/config-validator/issues/145
   parameters:
-    log_types:
-    - DATA_READ
-    - DATA_WRITE
-    - ADMIN_READ
-    services:
-    - allServices
+#     log_types:
+#     - DATA_READ
+#     - DATA_WRITE
+#     - ADMIN_READ
+#     services:
+#     - allServices
