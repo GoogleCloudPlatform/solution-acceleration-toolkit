@@ -66,7 +66,7 @@ template "folder" {
   data = {
     display_name = "{{.display_name}}"
     {{if eq .parent_type "organization"}}
-    parent       =  "organizations/{{.org_id}}"
+    parent       =  "organizations/{{.parent_id}}"
     {{end}}
   }
 }
