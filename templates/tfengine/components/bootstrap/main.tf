@@ -43,7 +43,7 @@ module "project" {
   name                    = var.project_id
   org_id                  = var.org_id
   billing_account         = var.billing_account
-  lien                    = true
+  lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
   activate_apis = [
