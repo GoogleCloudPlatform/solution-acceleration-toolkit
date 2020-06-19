@@ -12,4 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+remote_state {
+  backend = "gcs"
+  config = {
+    bucket = "example-terraform-state"
+    prefix = "${path_relative_to_include()}"
+  }
+}

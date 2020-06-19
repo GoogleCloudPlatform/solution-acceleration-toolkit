@@ -12,4 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+variable "project_id" {
+  type = string
+}
+
+variable "devops_owners" {
+  type = list(string)
+}
+
+variable "org_id" {
+  type = string
+}
+
+variable "billing_account" {
+  type = string
+}
+
+variable "state_bucket" {
+  type = string
+}
+
+variable "org_admin" {
+  type = string
+}

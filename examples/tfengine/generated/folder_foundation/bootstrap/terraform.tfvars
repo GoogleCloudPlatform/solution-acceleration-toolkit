@@ -12,4 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+project_id      = "example-devops"
+org_id          = "12345678"
+billing_account = "000-000-000"
+state_bucket    = "example-terraform-state"
+org_admin       = "group:example-org-admin@example.com"
+devops_owners = [
+  "group:example-devops-owners@example.com",
+]
