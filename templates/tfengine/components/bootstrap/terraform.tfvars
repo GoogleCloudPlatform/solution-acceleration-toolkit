@@ -13,7 +13,7 @@
 # limitations under the License.
 
 project_id      = "{{.project_id}}"
-org_id          = "{{.org_id}}"
+org_id          = "{{.parent_id}}"
 billing_account = "{{.billing_account}}"
 state_bucket    = "{{.state_bucket}}"
 org_admin       = "{{.org_admin}}"
