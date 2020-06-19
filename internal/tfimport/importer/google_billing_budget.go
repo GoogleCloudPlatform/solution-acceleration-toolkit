@@ -84,9 +84,7 @@ func (i *BillingBudget) getBudgets(billingAccount string) (budgets []*billingbud
 		if err != nil {
 			return budgets, err
 		}
-		for _, budget := range resp.Budgets {
-			budgets = append(budgets, budget)
-		}
+		budgets = append(budgets, resp.Budgets...)
 		if resp.NextPageToken == "" {
 			// No more pages, break out.
 			break

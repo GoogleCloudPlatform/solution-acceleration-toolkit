@@ -18,6 +18,10 @@ set -e
 # Print versions
 go version
 
+# Install more advanced linter.
+# See https://golangci-lint.run/usage/install/#ci-installation
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.27.0
+
 # Check format
 f=$(gofmt -l .)
 if [[ "${f}" ]]; then
@@ -27,6 +31,7 @@ if [[ "${f}" ]]; then
 fi
 
 go mod tidy
-go vet ./...
 go build ./...
+go vet ./...
+golangci-lint run
 go test ./...
