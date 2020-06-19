@@ -75,7 +75,7 @@ module "forseti" {
     {{- if eq .parent_type "organization"}}
     "organizations/{{.parent_id}}",
     {{- else}}
-    "folders/{{.folder_id}}",
+    "folders/{{.parent_id}}",
     {{- end}}
   ]
 

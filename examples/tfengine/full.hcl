@@ -15,7 +15,7 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type     = "folder"
+  parent_type     = "organization" # One of `organization` or `folder`.
   parent_id       = "12345678"
   billing_account = "000-000-000"
 
