@@ -141,7 +141,6 @@ func ConvertToLocalBackend(path string) error {
 
 	// Replace all GCS backend blocks with local.
 	fn := func(path string, info os.FileInfo, err error) error {
-		// Don't ignore the incoming error.
 		if err != nil {
 			return fmt.Errorf("walk path %q: %v", path, err)
 		}
