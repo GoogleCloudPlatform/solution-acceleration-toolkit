@@ -26,6 +26,11 @@ if [[ "${f}" ]]; then
   exit 1
 fi
 
+# Lint.
+# See https://golangci-lint.run/usage/install/#ci-installation
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.27.0
+golangci-lint run
+
 go mod tidy
 go vet ./...
 go build ./...

@@ -109,11 +109,19 @@ func findAllResources(path string) (resources []string, err error) {
 
 	// Find all resource delcarations.
 	fn := func(path string, info os.FileInfo, err error) error {
+		// Don't ignore the incoming error.
+		if err != nil {
+			return fmt.Errorf("walk path %q: %v", path, err)
+		}
+
 		if filepath.Ext(path) != ".tf" {
 			return nil
 		}
 
 		b, err := ioutil.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read file %q: %v", path, err)
+		}
 		match := resourceRE.FindAllStringSubmatch(string(b), -1)
 		for _, m := range match {
 			resource := m[len(m)-1]

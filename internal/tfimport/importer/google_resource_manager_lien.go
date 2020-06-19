@@ -87,9 +87,7 @@ func (i *ResourceManagerLien) getLiens(parent string) (liens []*cloudresourceman
 		if err != nil {
 			return liens, err
 		}
-		for _, lien := range resp.Liens {
-			liens = append(liens, lien)
-		}
+		liens = append(liens, resp.Liens...)
 		if resp.NextPageToken == "" {
 			// No more pages, break out.
 			break
