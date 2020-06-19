@@ -33,8 +33,8 @@
 set -e
 
 # https://github.com/forseti-security/policy-library repo constants
-COMMIT=f30bf774fb914959a9a18c132947eae95543001e
-SHA256=df40ad1133c3d48e9c34066b03d93ee08a15f134c8dcdce750ba36ba06cb4c84
+COMMIT=20914add8744141018d1056e2be16e9faf6b58fc
+SHA256=d5a688741644312beeebd9459250926449f08c02535519c1ede03e721cbfc0fb
 
 while getopts ":s:d:" opt; do
   case $opt in
