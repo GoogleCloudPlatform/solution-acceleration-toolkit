@@ -12,14 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "org_id" {
-  type = string
-}
-
-variable "project_id" {
-  type = string
-}
-
-variable "auditors" {
-  type = string
-}
+{{if eq .parent_type "organization" -}}
+org_id = "{{.parent_id}}"
+{{- else}}
+folder_id = "{{.parent_id}}"
+{{- end}}
+auditors  = "{{.auditors}}"

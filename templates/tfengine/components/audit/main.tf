@@ -22,9 +22,18 @@ terraform {
   backend "gcs" {}
 }
 
+{{- $parent_field := "org_id"}}
+{{- $parent_var := "var.org_id"}}
+{{- if eq .parent_type "folder"}}
+{{- $parent_field = "folder_id"}}
+{{- $parent_var = "var.folder_id"}}
+{{- end}}
+
+{{if eq .parent_type "organization"}}
+{{/* TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/327): remove if statement*/}}
 # IAM Audit log configs to enable collection of all possible audit logs.
-resource "google_organization_iam_audit_config" "config" {
-  org_id  = var.org_id
+resource "google_{{.parent_type}}_iam_audit_config" "config" {
+  {{$parent_field}} = {{$parent_var}}
   service = "allServices"
 
   audit_log_config {
@@ -37,6 +46,7 @@ resource "google_organization_iam_audit_config" "config" {
     log_type = "ADMIN_READ"
   }
 }
+{{end}}
 
 # BigQuery log sink.
 module "bigquery_log_export" {
@@ -44,8 +54,8 @@ module "bigquery_log_export" {
   version = "~> 4.0.0"
 
   log_sink_name        = "bigquery-org-sink"
-  parent_resource_type = "organization"
-  parent_resource_id   = var.org_id
+  parent_resource_type = "{{.parent_type}}"
+  parent_resource_id   = {{$parent_var}}
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination_uri      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
@@ -85,8 +95,8 @@ module "storage_log_export" {
   version = "~> 4.0.0"
 
   log_sink_name        = "storage-org-sink"
-  parent_resource_type = "organization"
-  parent_resource_id   = var.org_id
+  parent_resource_type = "{{.parent_type}}"
+  parent_resource_id   = {{$parent_var}}
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination_uri      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
@@ -131,8 +141,8 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 }
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
-resource "google_organization_iam_member" "security_reviewer_auditors" {
-  org_id = var.org_id
+resource "google_{{.parent_type}}_iam_member" "security_reviewer_auditors" {
+  {{$parent_field}} = {{$parent_var}}
   role   = "roles/iam.securityReviewer"
   member = var.auditors
 }

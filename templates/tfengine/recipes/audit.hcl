@@ -15,6 +15,8 @@
 schema = {
   title = "Org Audit Recipe"
   required = [
+    "parent_type",
+    "parent_id",
     "project_id",
     "dataset_name",
     "bucket_name",
@@ -23,6 +25,19 @@ schema = {
     "storage_location",
   ]
   properties = {
+    parent_type = {
+      description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
+      type = "string"
+      pattern = "^organization|folder$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of parent GCP resource to apply the policy: can be one of the organization ID,
+        folder ID according to parent_type.
+      EOF
+      type = "string"
+      pattern = "^[0-9]{8,25}$"
+    }
     project_id = {
       description = "ID of the project to host audit resources."
       type        = "string"
@@ -70,6 +85,6 @@ template "project" {
 }
 
 template "audit" {
-  component_path = "../components/org/audit"
+  component_path = "../components/audit"
   output_path    = "./audit/resources"
 }

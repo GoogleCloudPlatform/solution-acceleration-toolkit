@@ -28,9 +28,9 @@ schema = {
       type        = "string"
     }
     parent_type = {
-      description = "Type of parent GCP resource to apply the policy. Currently only 'organization' is supported."
+      description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
       type = "string"
-      pattern = "^organization$"
+      pattern = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF

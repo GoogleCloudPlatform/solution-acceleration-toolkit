@@ -22,9 +22,11 @@ terraform {
   backend "gcs" {}
 }
 
+
+
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
-  org_id  = var.org_id
+  org_id = var.org_id
   service = "allServices"
 
   audit_log_config {
@@ -37,6 +39,7 @@ resource "google_organization_iam_audit_config" "config" {
     log_type = "ADMIN_READ"
   }
 }
+
 
 # BigQuery log sink.
 module "bigquery_log_export" {

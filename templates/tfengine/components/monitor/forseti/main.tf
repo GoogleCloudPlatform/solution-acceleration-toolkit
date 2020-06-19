@@ -64,11 +64,19 @@ module "forseti" {
 
   domain     = "{{.domain}}"
   project_id = var.project_id
-  org_id     = var.org_id
+  {{- if eq .parent_type "organization"}}
+  org_id     = "{{.parent_id}}"
+  {{- else}}
+  folder_id  = "{{.parent_id}}"
+  {{- end}}
   network    = module.network.network_name
   subnetwork = module.network.subnets[local.forseti_subnet_key].name
   composite_root_resources = [
-    "organizations/${var.org_id}",
+    {{- if eq .parent_type "organization"}}
+    "organizations/{{.parent_id}}",
+    {{- else}}
+    "folders/{{.folder_id}}",
+    {{- end}}
   ]
 
   server_region           = "{{.compute_region}}"

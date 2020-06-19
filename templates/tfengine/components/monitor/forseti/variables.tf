@@ -12,5 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id   = "{{.org_id}}"
-auditors = "{{.auditors}}"
+variable "project_id" {
+  type = string
+}
