@@ -45,8 +45,12 @@ EOF
   fi
 }
 
-
 # Run the tests
+# Policygen
 test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
-test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/simple.hcl --output_path' 'examples/tfengine/generated/simple'
-test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/full.hcl --output_path' 'examples/tfengine/generated/full'
+
+# TF Engine
+for example in examples/tfengine/*.hcl; do
+  gendir="examples/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
+  test_gen "go run ./cmd/tfengine --config_path=${example} --output_path" "${gendir}"
+done
