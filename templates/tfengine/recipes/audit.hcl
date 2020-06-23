@@ -70,6 +70,6 @@ template "project" {
 }
 
 template "audit" {
-  component_path = "../components/org/audit"
+  component_path = "../components/audit"
   output_path    = "./audit/resources"
 }

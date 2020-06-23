@@ -62,7 +62,7 @@ template "deployment" {
 }
 
 template "folder" {
-  component_path = "../components/folder/folder"
+  component_path = "../components/folder"
   output_path    = "{{.display_name}}/folder"
   data = {
     display_name = "{{.display_name}}"
