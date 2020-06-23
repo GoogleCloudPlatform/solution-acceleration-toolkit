@@ -48,5 +48,7 @@ EOF
 
 # Run the tests
 test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
-test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/simple.hcl --output_path' 'examples/tfengine/generated/simple'
-test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/full.hcl --output_path' 'examples/tfengine/generated/full'
+for f in org_foundation folder_foundation full
+do
+  test_gen 'go run ./cmd/tfengine --config_path=examples/tfengine/$f.hcl --output_path' 'examples/tfengine/generated/$f'
+done
