@@ -19,7 +19,7 @@ schema = {
     "parent_id",
     "project_id",
     "billing_account",
-    "org_admin",
+    "admin",
     "project_owners",
   ]
   properties = {
@@ -28,9 +28,9 @@ schema = {
       type        = "string"
     }
     parent_type = {
-      description = "Type of parent GCP resource to apply the policy. Currently only 'organization' is supported."
+      description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
       type = "string"
-      pattern = "^organization$"
+      pattern = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF
@@ -52,7 +52,7 @@ schema = {
       description = "Location of state bucket."
       type        = "string"
     }
-    org_admin = {
+    admin = {
       description = "Group who will be given org admin access."
       type        = "string"
       pattern     = "group:.+"

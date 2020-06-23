@@ -22,9 +22,18 @@ terraform {
   backend "gcs" {}
 }
 
+{{- $parent_field := "org_id"}}
+{{- $parent_var := "var.org_id"}}
+{{- if eq .parent_type "folder"}}
+{{- $parent_field = "folder"}}
+{{- $parent_var = "var.folder_id"}}
+{{- end}}
+
+{{if eq .parent_type "organization"}}
+{{/* TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/327): remove if statement*/}}
 # IAM Audit log configs to enable collection of all possible audit logs.
-resource "google_organization_iam_audit_config" "config" {
-  org_id  = var.org_id
+resource "google_{{.parent_type}}_iam_audit_config" "config" {
+  {{$parent_field}} = {{$parent_var}}
   service = "allServices"
 
   audit_log_config {
@@ -37,11 +46,12 @@ resource "google_organization_iam_audit_config" "config" {
     log_type = "ADMIN_READ"
   }
 }
+{{end}}
 
 # BigQuery log sink.
-resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
+resource "google_logging_{{.parent_type}}_sink" "bigquery_audit_logs_sink" {
   name                 = "bigquery-audit-logs-sink"
-  org_id               = var.org_id
+  {{$parent_field}}    = {{$parent_var}}
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
@@ -70,13 +80,13 @@ module "bigquery_destination" {
 resource "google_project_iam_member" "bigquery_sink_member" {
   project = module.bigquery_destination.bigquery_dataset.project
   role    = "roles/bigquery.dataEditor"
-  member  = google_logging_organization_sink.bigquery_audit_logs_sink.writer_identity
+  member  = google_logging_{{.parent_type}}_sink.bigquery_audit_logs_sink.writer_identity
 }
 
 # Cloud Storage log sink.
-resource "google_logging_organization_sink" "storage_audit_logs_sink" {
+resource "google_logging_{{.parent_type}}_sink" "storage_audit_logs_sink" {
   name                 = "storage-audit-logs-sink"
-  org_id               = var.org_id
+  {{$parent_field}}    = {{$parent_var}}
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
@@ -115,12 +125,12 @@ module "storage_destination" {
 resource "google_storage_bucket_iam_member" "storage_sink_member" {
   bucket = module.storage_destination.bucket.name
   role   = "roles/storage.objectCreator"
-  member = google_logging_organization_sink.storage_audit_logs_sink.writer_identity
+  member = google_logging_{{.parent_type}}_sink.storage_audit_logs_sink.writer_identity
 }
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
-resource "google_organization_iam_member" "security_reviewer_auditors" {
-  org_id = var.org_id
+resource "google_{{.parent_type}}_iam_member" "security_reviewer_auditors" {
+  {{$parent_field}} = {{$parent_var}}
   role   = "roles/iam.securityReviewer"
   member = var.auditors
 }
