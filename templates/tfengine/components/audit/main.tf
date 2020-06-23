@@ -62,7 +62,7 @@ module "bigquery_destination" {
     },
     {
       role           = "roles/bigquery.dataViewer",
-      group_by_email = split(":", var.auditors)[1] // trim 'group:' prefix
+      group_by_email = trimprefix(var.auditors, "group:")
     },
   ]
 }

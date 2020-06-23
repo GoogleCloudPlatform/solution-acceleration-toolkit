@@ -47,8 +47,6 @@ resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
   destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
-# TODO: replace with terraform-google-modules/log-export/google//modules/bigquery
-# once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52 is merged.
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
@@ -64,7 +62,7 @@ module "bigquery_destination" {
     },
     {
       role           = "roles/bigquery.dataViewer",
-      group_by_email = split(":", var.auditors)[1] // trim 'group:' prefix
+      group_by_email = trimprefix(var.auditors, "group:")
     },
   ]
 }
@@ -84,9 +82,6 @@ resource "google_logging_organization_sink" "storage_audit_logs_sink" {
   destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
-
-# TODO: Replace with terraform-google-modules/log-export/google//modules/storage
-# once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52  is fixed.
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.6.0"
