@@ -36,7 +36,7 @@ module "project" {
 
   name                    = "example-devops"
   org_id                  = "12345678"
-  billing_account         = var.billing_account
+  billing_account         = "000-000-000"
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
