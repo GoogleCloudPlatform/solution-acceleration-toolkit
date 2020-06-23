@@ -102,8 +102,9 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     cd healthcare-data-protection-suite
     ```
 
-1. Replace the values in the [example](../../examples/tfengine/org_foundation.hcl) with
-   values for your infrastructure.
+1. Replace the values in the
+   [example](../../examples/tfengine/org_foundation.hcl) with values for your
+   infrastructure.
 
 1. To set up helper environment vars, run the following commands:
 
