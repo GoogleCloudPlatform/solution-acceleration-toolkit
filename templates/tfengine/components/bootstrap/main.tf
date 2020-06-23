@@ -47,7 +47,7 @@ module "project" {
   org_id                  = ""
   folder_id               = "{{.parent_id}}"
   {{- end}}
-  billing_account         = var.billing_account
+  billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
@@ -75,7 +75,7 @@ resource "google_project_iam_binding" "devops_owners" {
 
 # Org level IAM permissions for org admins.
 resource "google_{{.parent_type}}_iam_member" "admin" {
-  {{if eq .parent_type "organization" -}}
+  {{- if eq .parent_type "organization"}}
   org_id = "{{.parent_id}}"
   {{- else}}
   folder = "folders/{{.parent_id}}"

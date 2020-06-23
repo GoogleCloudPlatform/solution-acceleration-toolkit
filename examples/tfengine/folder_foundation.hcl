@@ -20,7 +20,7 @@ data = {
   billing_account       = "000-000-000"
 
   # Don't add helper folder dependency for projects as the parent folder is not created in this config.
-  add_parent_dependency = false
+  add_parent_folder_dependency = false
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
