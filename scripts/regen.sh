@@ -16,9 +16,12 @@
 
 # Helper to regenerate generated files.
 rm -rf examples/*/generated/*
+
+# Policygen
 go run ./cmd/policygen --config_path examples/policygen/config.yaml --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
 
-for f in org_foundation folder_foundation full
-do
-    go run ./cmd/tfengine --config_path examples/tfengine/$f.hcl --output_path examples/tfengine/generated/$f
+# TF Engine
+for example in examples/tfengine/*.hcl; do
+  gendir="examples/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
+  go run ./cmd/tfengine --config_path ${example} --output_path ${gendir}
 done
