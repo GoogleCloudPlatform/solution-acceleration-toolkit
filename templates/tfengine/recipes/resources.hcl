@@ -612,66 +612,66 @@ template "deployment" {
 
 {{if has . "bastion_hosts"}}
 template "bastion_hosts" {
-  component_path = "../components/project/bastion_hosts"
+  component_path = "../components/resources/bastion_hosts"
 }
 {{end}}
 
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
-  component_path = "../components/project/bigquery_datasets"
+  component_path = "../components/resources/bigquery_datasets"
 }
 {{end}}
 
 {{if has . "cloud_sql_instances"}}
 template "cloud_sql_instances" {
-  component_path = "../components/project/cloud_sql_instances"
+  component_path = "../components/resources/cloud_sql_instances"
 }
 {{end}}
 
 {{if has . "compute_networks"}}
 template "compute_networks" {
-  component_path = "../components/project/compute_networks"
+  component_path = "../components/resources/compute_networks"
 }
 {{end}}
 
 {{if has . "compute_routers"}}
 template "compute_routers" {
-  component_path = "../components/project/compute_routers"
+  component_path = "../components/resources/compute_routers"
 }
 {{end}}
 
 {{if has . "iam_members"}}
 template "iam_members" {
-  component_path = "../components/project/iam_members"
+  component_path = "../components/resources/iam_members"
 }
 {{end}}
 
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
-  component_path = "../components/project/storage_buckets"
+  component_path = "../components/resources/storage_buckets"
 }
 {{end}}
 
 {{if has . "gke_clusters"}}
 template "gke_clusters" {
-  component_path = "../components/project/gke_clusters"
+  component_path = "../components/resources/gke_clusters"
 }
 {{end}}
 
 {{if has . "healthcare_datasets"}}
 template "healthcare_datasets" {
-  component_path = "../components/project/healthcare_datasets"
+  component_path = "../components/resources/healthcare_datasets"
 }
 {{end}}
 
 {{if has . "secrets"}}
 template "secrets" {
-  component_path = "../components/project/secrets"
+  component_path = "../components/resources/secrets"
 }
 {{end}}
 
 {{if has . "service_accounts"}}
 template "service_accounts" {
-  component_path = "../components/project/service_accounts"
+  component_path = "../components/resources/service_accounts"
 }
 {{end}}

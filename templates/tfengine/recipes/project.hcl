@@ -133,7 +133,7 @@ template "deployment" {
 }
 
 template "project" {
-  component_path = "../components/project/project"
+  component_path = "../components/project"
   output_path    = "./project"
   flatten {
     key = "project"
