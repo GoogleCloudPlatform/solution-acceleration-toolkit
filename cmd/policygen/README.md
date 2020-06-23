@@ -39,7 +39,7 @@ cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
 CONFIG_PATH=examples/policygen/config.yaml
-STATE_PATH=/path/to/your/tfstate/file
+STATE_PATH=/path/to/your/tfstate/file/or/dir
 OUTPUT_PATH=/tmp/policygen
 
 # Step 3: Install the policygen
@@ -67,6 +67,7 @@ terraform apply
 
 * To use Policy Library Constraints with **Forseti**, follow
     [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
+    Forseti Terraform module version >= 5.2.1 is needed.
 
 * To use Policy Library Constraints with **Terraform Validator**, follow
     [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).

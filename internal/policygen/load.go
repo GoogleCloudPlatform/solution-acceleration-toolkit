@@ -18,11 +18,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/ghodss/yaml"
 	"github.com/hashicorp/terraform/states"
@@ -94,16 +94,31 @@ func loadConfig(path string) (*config, error) {
 	return c, nil
 }
 
+// loadResources loads Terraform state resources from the given path. If the path is a single
+// .tfstate file, it loads resouces it. If the path is a directory, it walks the directory
+// recursively and loads resources from each .tfstate file.
 func loadResources(path string) ([]*states.Resource, error) {
-	path, err := pathutil.Expand(path)
-	if err != nil {
-		return nil, fmt.Errorf("normalize path %q: %v", path, err)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return nil, err
 	}
 
-	resources, err := terraform.ResourcesFromState(path)
-	if err != nil {
-		return nil, fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
+	var allResources []*states.Resource
+	fn := func(path string, _ os.FileInfo, _ error) error {
+		if filepath.Ext(path) != ".tfstate" {
+			return nil
+		}
+
+		resources, err := terraform.ResourcesFromState(path)
+		if err != nil {
+			return fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
+		}
+		allResources = append(allResources, resources...)
+
+		return nil
 	}
 
-	return resources, nil
+	if err := filepath.Walk(path, fn); err != nil {
+		return nil, err
+	}
+	return allResources, nil
 }
