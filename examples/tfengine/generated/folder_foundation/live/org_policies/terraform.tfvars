@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+allowed_policy_member_customer_ids = [
+  "example_customer_id",
+]

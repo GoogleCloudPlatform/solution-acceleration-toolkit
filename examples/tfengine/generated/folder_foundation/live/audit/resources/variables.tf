@@ -12,4 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+
+variable "folder_id" {
+  type = string
+}
+
+variable "project_id" {
+  type = string
+}
+
+variable "auditors" {
+  type = string
+}

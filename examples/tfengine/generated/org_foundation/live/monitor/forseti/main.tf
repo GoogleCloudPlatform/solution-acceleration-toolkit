@@ -64,11 +64,11 @@ module "forseti" {
 
   domain     = "example.com"
   project_id = var.project_id
-  org_id     = var.org_id
+  org_id     = "12345678"
   network    = module.network.network_name
   subnetwork = module.network.subnets[local.forseti_subnet_key].name
   composite_root_resources = [
-    "organizations/${var.org_id}",
+    "organizations/12345678",
   ]
 
   server_region           = "us-central1"

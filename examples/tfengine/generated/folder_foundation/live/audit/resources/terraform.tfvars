@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+
+folder_id = "12345678"
+auditors  = "group:example-dev-auditors@example.com"

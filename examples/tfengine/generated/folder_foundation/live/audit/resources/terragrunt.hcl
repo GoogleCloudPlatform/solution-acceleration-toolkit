@@ -12,4 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-project_id = "example-devops"
+include {
+  path = find_in_parent_folders()
+}
+
+dependency "project" {
+  config_path = "../project"
+  mock_outputs = {
+    project_id = "mock-project"
+  }
+}
+
+inputs = {
+  project_id = dependency.project.outputs.project_id
+}

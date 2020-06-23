@@ -24,27 +24,10 @@ terraform {
 
 
 
-# IAM Audit log configs to enable collection of all possible audit logs.
-resource "google_organization_iam_audit_config" "config" {
-  org_id = var.org_id
-  service = "allServices"
-
-  audit_log_config {
-    log_type = "DATA_READ"
-  }
-  audit_log_config {
-    log_type = "DATA_WRITE"
-  }
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-}
-
-
 # BigQuery log sink.
-resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
+resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
   name                 = "bigquery-audit-logs-sink"
-  org_id    = var.org_id
+  folder    = var.folder_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
@@ -73,13 +56,13 @@ module "bigquery_destination" {
 resource "google_project_iam_member" "bigquery_sink_member" {
   project = module.bigquery_destination.bigquery_dataset.project
   role    = "roles/bigquery.dataEditor"
-  member  = google_logging_organization_sink.bigquery_audit_logs_sink.writer_identity
+  member  = google_logging_folder_sink.bigquery_audit_logs_sink.writer_identity
 }
 
 # Cloud Storage log sink.
-resource "google_logging_organization_sink" "storage_audit_logs_sink" {
+resource "google_logging_folder_sink" "storage_audit_logs_sink" {
   name                 = "storage-audit-logs-sink"
-  org_id    = var.org_id
+  folder    = var.folder_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
@@ -118,12 +101,12 @@ module "storage_destination" {
 resource "google_storage_bucket_iam_member" "storage_sink_member" {
   bucket = module.storage_destination.bucket.name
   role   = "roles/storage.objectCreator"
-  member = google_logging_organization_sink.storage_audit_logs_sink.writer_identity
+  member = google_logging_folder_sink.storage_audit_logs_sink.writer_identity
 }
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
-resource "google_organization_iam_member" "security_reviewer_auditors" {
-  org_id = var.org_id
+resource "google_folder_iam_member" "security_reviewer_auditors" {
+  folder = var.folder_id
   role   = "roles/iam.securityReviewer"
   member = var.auditors
 }
