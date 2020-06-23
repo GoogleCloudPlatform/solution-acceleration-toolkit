@@ -115,7 +115,7 @@ template "deployment" {
   }
   data = {
     enable_terragrunt = true
-    {{if eq .parent_type "folder"}}
+    {{if and (eq .parent_type "folder") (get . "add_parent_dependency" true)}}
     terraform_addons = {
       deps = [{
         name = "parent_folder"

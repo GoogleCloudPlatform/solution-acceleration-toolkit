@@ -40,8 +40,13 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 8.0.0"
 
-  name                    = var.project_id
-  org_id                  = var.org_id
+  name                    = "{{.project_id}}"
+  {{- if eq .parent_type "organization"}}
+  org_id                  = "{{.parent_id}}"
+  {{- else}}
+  org_id                  = ""
+  folder_id               = "{{.parent_id}}"
+  {{- end}}
   billing_account         = var.billing_account
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
@@ -56,7 +61,7 @@ module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = var.state_bucket
+  name       = "{{.state_bucket}}"
   project_id = module.project.project_id
   location   = "{{.storage_location}}"
 }
@@ -65,12 +70,16 @@ module "state_bucket" {
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = var.devops_owners
+  members = {{hcl .project_owners}}
 }
 
 # Org level IAM permissions for org admins.
-resource "google_organization_iam_member" "org_admin" {
-  org_id = var.org_id
-  role   = "roles/resourcemanager.organizationAdmin"
-  member = var.org_admin
+resource "google_{{.parent_type}}_iam_member" "admin" {
+  {{if eq .parent_type "organization" -}}
+  org_id = "{{.parent_id}}"
+  {{- else}}
+  folder = "folders/{{.parent_id}}"
+  {{- end}}
+  role   = "roles/resourcemanager.{{.parent_type}}Admin"
+  member = "{{.admin}}"
 }

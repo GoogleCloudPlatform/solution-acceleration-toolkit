@@ -15,9 +15,12 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type     = "folder"
-  parent_id       = "12345678"
-  billing_account = "000-000-000"
+  parent_type           = "folder"
+  parent_id             = "12345678"
+  billing_account       = "000-000-000"
+
+  # Don't add helper folder dependency for projects as the parent folder is not created in this config.
+  add_parent_dependency = false
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
@@ -35,7 +38,7 @@ template "devops" {
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
-    org_admin    = "group:example-org-admin@example.com"
+    admin        = "group:example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]

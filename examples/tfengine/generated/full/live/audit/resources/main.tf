@@ -42,20 +42,14 @@ resource "google_organization_iam_audit_config" "config" {
 
 
 # BigQuery log sink.
-module "bigquery_log_export" {
-  source  = "terraform-google-modules/log-export/google"
-  version = "~> 4.0.0"
-
-  log_sink_name        = "bigquery-org-sink"
-  parent_resource_type = "organization"
-  parent_resource_id   = var.org_id
+resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
+  name                 = "bigquery-audit-logs-sink"
+  org_id    = var.org_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination_uri      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+  destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
-# TODO: replace with terraform-google-modules/log-export/google//modules/bigquery
-# once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52 is merged.
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
@@ -71,7 +65,7 @@ module "bigquery_destination" {
     },
     {
       role           = "roles/bigquery.dataViewer",
-      group_by_email = split(":", var.auditors)[1] // trim 'group:' prefix
+      group_by_email = trimprefix(var.auditors, "group:")
     },
   ]
 }
@@ -79,24 +73,18 @@ module "bigquery_destination" {
 resource "google_project_iam_member" "bigquery_sink_member" {
   project = module.bigquery_destination.bigquery_dataset.project
   role    = "roles/bigquery.dataEditor"
-  member  = module.bigquery_log_export.writer_identity
+  member  = google_logging_organization_sink.bigquery_audit_logs_sink.writer_identity
 }
 
 # Cloud Storage log sink.
-module "storage_log_export" {
-  source  = "terraform-google-modules/log-export/google"
-  version = "~> 4.0.0"
-
-  log_sink_name        = "storage-org-sink"
-  parent_resource_type = "organization"
-  parent_resource_id   = var.org_id
+resource "google_logging_organization_sink" "storage_audit_logs_sink" {
+  name                 = "storage-audit-logs-sink"
+  org_id    = var.org_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination_uri      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
+  destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
-# TODO: Replace with terraform-google-modules/log-export/google//modules/storage
-# once https://github.com/terraform-google-modules/terraform-google-log-export/pull/52  is fixed.
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.6.0"
@@ -130,7 +118,7 @@ module "storage_destination" {
 resource "google_storage_bucket_iam_member" "storage_sink_member" {
   bucket = module.storage_destination.bucket.name
   role   = "roles/storage.objectCreator"
-  member = module.storage_log_export.writer_identity
+  member = google_logging_organization_sink.storage_audit_logs_sink.writer_identity
 }
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.

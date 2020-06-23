@@ -19,7 +19,7 @@ schema = {
     "parent_id",
     "project_id",
     "billing_account",
-    "org_admin",
+    "admin",
     "project_owners",
   ]
   properties = {
@@ -52,7 +52,7 @@ schema = {
       description = "Location of state bucket."
       type        = "string"
     }
-    org_admin = {
+    admin = {
       description = "Group who will be given org admin access."
       type        = "string"
       pattern     = "group:.+"

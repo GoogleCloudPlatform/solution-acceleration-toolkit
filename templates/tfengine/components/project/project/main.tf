@@ -18,9 +18,13 @@ module "project" {
   version = "~> 8.0.0"
 
   name                    = "{{.project_id}}"
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
+  {{- if eq .parent_type "organization"}}
+  org_id                  = "{{.parent_id}}"
+  {{- else }}
+  org_id                  = ""
+  folder_id               = "{{.parent_id}}"
+  {{- end}}
+  billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
