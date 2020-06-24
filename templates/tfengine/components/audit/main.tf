@@ -40,16 +40,16 @@ resource "google_organization_iam_audit_config" "config" {
 
 # BigQuery log sink.
 resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
-  name                 = "bigquery-audit-logs-sink"
-  org_id               = var.org_id
-  include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+  name             = "bigquery-audit-logs-sink"
+  org_id           = var.org_id
+  include_children = true
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  destination      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.2.0"
+  version = "~> 4.1.0"
 
   dataset_id                  = "{{.dataset_name}}"
   project_id                  = var.project_id
@@ -75,11 +75,11 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 
 # Cloud Storage log sink.
 resource "google_logging_organization_sink" "storage_audit_logs_sink" {
-  name                 = "storage-audit-logs-sink"
-  org_id               = var.org_id
-  include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
+  name             = "storage-audit-logs-sink"
+  org_id           = var.org_id
+  include_children = true
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  destination      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
 module "storage_destination" {

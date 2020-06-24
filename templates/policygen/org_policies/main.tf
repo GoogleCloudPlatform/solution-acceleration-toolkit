@@ -21,7 +21,7 @@ limitations under the License. */ -}}
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "~> 3.0.2"
+  version = "~> 3.0.1"
 
   policy_for = "{{.parent_type}}"
   {{$type_field}} = "{{.parent_id}}"

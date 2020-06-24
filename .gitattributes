@@ -1,1 +1,3 @@
-**/generated/** linguist-generated=true
+examples/tfengine/generated/** linguist-generated=true
+examples/policygen/generated/** linguist-generated=true
+**/generated/**/* linguist-generated=true
