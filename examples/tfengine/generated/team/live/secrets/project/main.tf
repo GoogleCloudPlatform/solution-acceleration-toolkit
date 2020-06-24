@@ -28,13 +28,15 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 8.0.0"
 
-  name                    = "example-monitor"
-  org_id                  = "12345678"
+  name                    = "example-secrets"
+  org_id                  = ""
+  folder_id               = "12345678"
   billing_account         = "000-000-000"
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
   activate_apis = [
+    "secretmanager.googleapis.com",
   ]
 }
 

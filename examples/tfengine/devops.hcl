@@ -41,6 +41,7 @@ template "devops" {
         name  = "example"
       }
       branch_regex                  = "^master$"
+      terraform_root                = "terraform"
       continuous_deployment_enabled = true
       trigger_enabled               = true
       build_viewers = [

@@ -62,9 +62,7 @@ locals {
     "roles/compute.xpnAdmin",
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
-    "roles/resourcemanager.organizationAdmin",
-    "roles/orgpolicy.policyAdmin",
-    "roles/resourcemanager.folderCreator",
+    "roles/resourcemanager.folderAdmin",
   ]
   cloudbuild_devops_roles = [
     # Enable Cloud Build SA to list and enable APIs in the devops project.
@@ -120,10 +118,10 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   ]
 }
 
-# Grant Cloud Build Service Account access to the organization.
-resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
+# Grant Cloud Build Service Account access to the folder.
+resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
   for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
-  org_id   = 12345678
+  folder   = 12345678
   role     = each.value
   member   = local.cloud_build_sa
   depends_on = [

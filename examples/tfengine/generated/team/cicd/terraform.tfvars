@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project_id" {
-  type = string
-}
+billing_account               = "000-000-000"
+project_id                    = "example-devops"
+state_bucket                  = "example-terraform-state"
+continuous_deployment_enabled = true
+trigger_enabled               = true
+terraform_root                = "terraform"
+build_viewers = [
+  "group:example-cicd-viewers@example.com",
+]

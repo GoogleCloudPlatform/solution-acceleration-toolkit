@@ -17,6 +17,7 @@ project_id                    = "example-devops"
 state_bucket                  = "example-terraform-state"
 continuous_deployment_enabled = true
 trigger_enabled               = true
+terraform_root                = "terraform"
 build_viewers = [
   "group:example-cicd-viewers@example.com",
 ]

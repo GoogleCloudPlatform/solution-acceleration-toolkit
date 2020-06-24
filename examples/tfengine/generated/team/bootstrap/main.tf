@@ -35,7 +35,8 @@ module "project" {
   version = "~> 8.0.0"
 
   name                    = "example-devops"
-  org_id                  = "12345678"
+  org_id                  = ""
+  folder_id               = "12345678"
   billing_account         = "000-000-000"
   lien                    = true
   default_service_account = "keep"
@@ -64,8 +65,8 @@ resource "google_project_iam_binding" "devops_owners" {
 }
 
 # Org level IAM permissions for org admins.
-resource "google_organization_iam_member" "admin" {
-  org_id = "12345678"
-  role   = "roles/resourcemanager.organizationAdmin"
+resource "google_folder_iam_member" "admin" {
+  folder = "folders/12345678"
+  role   = "roles/resourcemanager.folderAdmin"
   member = "group:example-org-admin@example.com"
 }

@@ -15,7 +15,7 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type     = "organization" # One of `organization` or `folder`.
+  parent_type     = "folder"
   parent_id       = "12345678"
   billing_account = "000-000-000"
   state_bucket    = "example-terraform-state"
@@ -50,6 +50,7 @@ template "devops" {
         name  = "example"
       }
       branch_regex                  = "^master$"
+      terraform_root                = "terraform"
       continuous_deployment_enabled = true
       trigger_enabled               = true
       build_viewers = [
@@ -66,11 +67,10 @@ template "devops" {
   }
 }
 
-
 # Central secrets project and deployment.
-# NOTE: This deployment must be deployed first before any deployments in the
-# live folder. Any non-auto filled secret data must be manually filled in by
-# entering the secret manager page in console.
+# NOTE: Any secret in this deployment that is not automatically filled in with
+# a value must be filled manually in the GCP console secret manager page before
+# any deployment can access its value.
 template "project_secrets" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/secrets"
@@ -108,10 +108,9 @@ EOF
 # Prod central networks project for team 1.
 template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1/example-prod-networks"
+  output_path = "./live/example-prod-networks"
   data = {
     parent_type                  = "folder"
-    add_parent_folder_dependency = true
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -191,10 +190,9 @@ EOF
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1/example-prod-data"
+  output_path = "./live/example-prod-data"
   data = {
     parent_type                  = "folder"
-    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -315,10 +313,9 @@ EOF
 # Prod central apps project for team 1.
 template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1/example-prod-apps"
+  output_path = "./live/example-prod-apps"
   data = {
     parent_type                  = "folder"
-    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -365,10 +362,9 @@ template "project_apps" {
 # Prod firebase project for team 1.
 template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/prod/team1/example-prod-firebase"
+  output_path = "./live/example-prod-firebase"
   data = {
     parent_type                  = "folder"
-    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-firebase"
       apis = [
