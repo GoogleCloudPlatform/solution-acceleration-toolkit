@@ -73,10 +73,10 @@ template "devops" {
 # any deployment can access its value.
 template "project_secrets" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/secrets"
+  output_path = "./live/example-prod-secrets"
   data = {
     project = {
-      project_id = "example-secrets"
+      project_id = "example-prod-secrets"
       apis = [
         "secretmanager.googleapis.com"
       ]
@@ -293,14 +293,14 @@ data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta
 
   secret  = "manual-sql-db-user"
-  project = "example-secrets"
+  project = "example-prod-secrets"
 }
 
 data "google_secret_manager_secret_version" "db_password" {
   provider = google-beta
 
   secret  = "auto-sql-db-password"
-  project = "example-secrets"
+  project = "example-prod-secrets"
 }
 EOF
 */

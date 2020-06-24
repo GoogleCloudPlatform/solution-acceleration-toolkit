@@ -16,20 +16,7 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "parent_folder" {
-  config_path = "../../folder"
-  mock_outputs = {
-    name = "mock-folder"
-
-  }
-}
-
 dependency "networks" {
   config_path = "../../example-prod-networks/resources"
   skip_outputs = true
-}
-
-inputs = {
-  folder_id = "${dependency.parent_folder.outputs.name}"
-
 }
