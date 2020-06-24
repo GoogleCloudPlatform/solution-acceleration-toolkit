@@ -19,7 +19,7 @@ schema = {
     "parent_id",
     "project_id",
     "billing_account",
-    "admin",
+    "admins_group",
     "project_owners",
   ]
   properties = {
@@ -52,10 +52,9 @@ schema = {
       description = "Location of state bucket."
       type        = "string"
     }
-    admin = {
+    admins_group = {
       description = "Group who will be given org admin access."
       type        = "string"
-      pattern     = "group:.+"
     }
     # TODO(xingao): expand CICD schema.
     cicd = {

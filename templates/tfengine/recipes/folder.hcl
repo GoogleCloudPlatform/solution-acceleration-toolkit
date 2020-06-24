@@ -36,6 +36,8 @@ schema = {
       description = <<EOF
         Whether to automatically add dependency on parent folder.
         Only applicable if 'parent_type' is folder. Defaults to true.
+        This should be set to false if the parent of this folder is deployed
+        outside of this config.
       EOF
       type = "boolean"
     }

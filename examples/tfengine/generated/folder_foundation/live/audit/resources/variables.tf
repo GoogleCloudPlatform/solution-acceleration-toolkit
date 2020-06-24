@@ -21,6 +21,6 @@ variable "project_id" {
   type = string
 }
 
-variable "auditors" {
+variable "auditors_group" {
   type = string
 }

@@ -13,8 +13,8 @@
 # limitations under the License.
 
 {{if eq .parent_type "organization" -}}
-org_id = "{{.parent_id}}"
+org_id          = "{{.parent_id}}"
 {{- else}}
-folder_id = "{{.parent_id}}"
+folder_id       = "{{.parent_id}}"
 {{- end}}
-auditors  = "{{.auditors}}"
+auditors_group  = "{{.auditors_group}}"

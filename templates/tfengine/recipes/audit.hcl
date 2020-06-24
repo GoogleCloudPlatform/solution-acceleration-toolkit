@@ -20,7 +20,7 @@ schema = {
     "project_id",
     "dataset_name",
     "bucket_name",
-    "auditors",
+    "auditors_group",
     "bigquery_location",
     "storage_location",
   ]
@@ -50,14 +50,13 @@ schema = {
       description = "Name of GCS Bucket to store 7 year audit logs."
       type        = "string"
     }
-    auditors = {
+    auditors_group = {
       description = <<EOF
         This group will be granted viewer access to the audit log dataset and
         bucket as well as security reviewer permission on the root resource
         specified.
       EOF
       type        = "string"
-      pattern     = "group:.+"
     }
     bigquery_location = {
       description = "Location of logs bigquery dataset."

@@ -48,7 +48,7 @@ module "bigquery_destination" {
     },
     {
       role           = "roles/bigquery.dataViewer",
-      group_by_email = trimprefix(var.auditors, "group:")
+      group_by_email = var.auditors_group
     },
   ]
 }
@@ -90,7 +90,7 @@ module "storage_destination" {
   iam_members = [
     {
       role   = "roles/storage.objectViewer"
-      member = var.auditors
+      member = "group:${var.auditors_group}"
     },
   ]
 }
@@ -108,5 +108,5 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 resource "google_folder_iam_member" "security_reviewer_auditors" {
   folder = var.folder_id
   role   = "roles/iam.securityReviewer"
-  member = var.auditors
+  member = "group:${var.auditors_group}"
 }

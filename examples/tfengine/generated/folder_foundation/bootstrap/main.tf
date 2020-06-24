@@ -68,5 +68,5 @@ resource "google_project_iam_binding" "devops_owners" {
 resource "google_folder_iam_member" "admin" {
   folder = "folders/12345678"
   role   = "roles/resourcemanager.folderAdmin"
-  member = "group:example-org-admin@example.com"
+  member = "group:group:example-org-admin@example.com"
 }

@@ -13,5 +13,5 @@
 # limitations under the License.
 
 
-folder_id = "12345678"
-auditors  = "group:example-dev-auditors@example.com"
+folder_id       = "12345678"
+auditors_group  = "group:example-dev-auditors@example.com"

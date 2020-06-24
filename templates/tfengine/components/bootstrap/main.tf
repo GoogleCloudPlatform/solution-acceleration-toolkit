@@ -81,5 +81,5 @@ resource "google_{{.parent_type}}_iam_member" "admin" {
   folder = "folders/{{.parent_id}}"
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
-  member = "{{.admin}}"
+  member = "group:{{.admins_group}}"
 }
