@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id   = "12345678"
-auditors = "group:example-dev-auditors@example.com"
+org_id          = "12345678"
+auditors_group  = "example-auditors@example.com"

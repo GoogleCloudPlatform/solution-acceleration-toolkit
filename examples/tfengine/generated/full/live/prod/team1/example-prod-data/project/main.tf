@@ -29,14 +29,13 @@ module "project" {
   version = "~> 8.0.0"
 
   name                    = "example-prod-data"
-  org_id                  = var.org_id
-  folder_id               = var.folder_id
-  billing_account         = var.billing_account
+  org_id                  = ""
+  folder_id               = "12345678"
+  billing_account         = "000-000-000"
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
   shared_vpc              = "example-prod-networks"
-
   activate_apis = [
     "bigquery.googleapis.com",
     "compute.googleapis.com",

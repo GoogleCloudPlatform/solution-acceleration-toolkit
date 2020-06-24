@@ -35,7 +35,7 @@ template "devops" {
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
-    org_admin    = "group:example-org-admin@example.com"
+    admins_group = "example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
@@ -59,10 +59,10 @@ template "audit" {
   recipe_path = "{{$recipes}}/audit.hcl"
   output_path = "./live"
   data = {
-    project_id   = "example-audit"
-    dataset_name = "1yr_org_audit_logs"
-    bucket_name  = "7yr-org-audit-logs"
-    auditors     = "group:example-dev-auditors@example.com"
+    project_id     = "example-audit"
+    dataset_name   = "1yr_org_audit_logs"
+    bucket_name    = "7yr-org-audit-logs"
+    auditors_group = "example-auditors@example.com"
   }
 }
 

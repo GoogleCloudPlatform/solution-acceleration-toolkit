@@ -15,14 +15,29 @@
 schema = {
   title = "Org Audit Recipe"
   required = [
+    "parent_type",
+    "parent_id",
     "project_id",
     "dataset_name",
     "bucket_name",
-    "auditors",
+    "auditors_group",
     "bigquery_location",
     "storage_location",
   ]
   properties = {
+    parent_type = {
+      description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
+      type = "string"
+      pattern = "^organization|folder$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of parent GCP resource to apply the policy: can be one of the organization ID,
+        folder ID according to parent_type.
+      EOF
+      type = "string"
+      pattern = "^[0-9]{8,25}$"
+    }
     project_id = {
       description = "ID of the project to host audit resources."
       type        = "string"
@@ -35,14 +50,13 @@ schema = {
       description = "Name of GCS Bucket to store 7 year audit logs."
       type        = "string"
     }
-    auditors = {
+    auditors_group = {
       description = <<EOF
         This group will be granted viewer access to the audit log dataset and
         bucket as well as security reviewer permission on the root resource
         specified.
       EOF
       type        = "string"
-      pattern     = "group:.+"
     }
     bigquery_location = {
       description = "Location of logs bigquery dataset."

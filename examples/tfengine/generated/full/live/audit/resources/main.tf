@@ -22,9 +22,11 @@ terraform {
   backend "gcs" {}
 }
 
+
+
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
-  org_id  = var.org_id
+  org_id = var.org_id
   service = "allServices"
 
   audit_log_config {
@@ -38,10 +40,11 @@ resource "google_organization_iam_audit_config" "config" {
   }
 }
 
+
 # BigQuery log sink.
 resource "google_logging_organization_sink" "bigquery_audit_logs_sink" {
   name                 = "bigquery-audit-logs-sink"
-  org_id               = var.org_id
+  org_id    = var.org_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
@@ -62,7 +65,7 @@ module "bigquery_destination" {
     },
     {
       role           = "roles/bigquery.dataViewer",
-      group_by_email = trimprefix(var.auditors, "group:")
+      group_by_email = var.auditors_group
     },
   ]
 }
@@ -76,7 +79,7 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 # Cloud Storage log sink.
 resource "google_logging_organization_sink" "storage_audit_logs_sink" {
   name                 = "storage-audit-logs-sink"
-  org_id               = var.org_id
+  org_id    = var.org_id
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
   destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
@@ -104,7 +107,7 @@ module "storage_destination" {
   iam_members = [
     {
       role   = "roles/storage.objectViewer"
-      member = var.auditors
+      member = "group:${var.auditors_group}"
     },
   ]
 }
@@ -122,5 +125,5 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 resource "google_organization_iam_member" "security_reviewer_auditors" {
   org_id = var.org_id
   role   = "roles/iam.securityReviewer"
-  member = var.auditors
+  member = "group:${var.auditors_group}"
 }

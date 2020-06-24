@@ -32,6 +32,16 @@ schema = {
       type    = "string"
       pattern = "^[0-9]{8,25}$"
     }
+    add_parent_folder_dependency = {
+      description = <<EOF
+        Whether to automatically add dependency on parent folder.
+        Only applicable if 'parent_type' is folder. Defaults to false.
+        If the parent folder is created in the same config as this folder then
+        this field should be set to true to create a dependency and pass the
+        folder id once it has been created.
+      EOF
+      type = "boolean"
+    }
     display_name = {
       description = "Name of folder."
       type        = "string"
@@ -44,7 +54,7 @@ template "deployment" {
   output_path = "./folder"
   data = {
     enable_terragrunt = true
-    {{if eq .parent_type "folder"}}
+    {{if and (eq .parent_type "folder") (get . "add_parent_folder_dependency" false)}}
     terraform_addons = {
       deps = [{
         name = "parent_folder"
