@@ -155,7 +155,7 @@ resource "google_cloudbuild_trigger" "validate" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "master"
+      branch = "^master$"
     }
   }
 
@@ -185,7 +185,7 @@ resource "google_cloudbuild_trigger" "plan" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "master"
+      branch = "^master$"
     }
   }
 
@@ -217,7 +217,7 @@ resource "google_cloudbuild_trigger" "apply" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     push {
-      branch = "master"
+      branch = "^master$"
     }
   }
 
