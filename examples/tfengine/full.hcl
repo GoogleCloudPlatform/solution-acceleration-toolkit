@@ -66,37 +66,6 @@ template "devops" {
   }
 }
 
-template "audit" {
-  recipe_path = "{{$recipes}}/audit.hcl"
-  output_path = "./live"
-  data = {
-    project_id     = "example-audit"
-    dataset_name   = "1yr_org_audit_logs"
-    bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "example-auditors@example.com"
-  }
-}
-
-template "monitor" {
-  recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./live"
-  data = {
-    project_id     = "example-monitor"
-    domain         = "example.com"
-    # TODO(user): Follow steps in templates/tfengine/recipes/monitor.hcl to obtain the ID.
-    # security_command_center_source_id = "organizations/12345678/sources/88888888"
-  }
-}
-
-template "org_policies" {
-  recipe_path = "{{$recipes}}/org_policies.hcl"
-  output_path = "./live"
-  data = {
-    allowed_policy_member_customer_ids = [
-      "example_customer_id",
-    ]
-  }
-}
 
 # Central secrets project and deployment.
 # NOTE: This deployment must be deployed first before any deployments in the
@@ -133,26 +102,6 @@ EOF
         }
       }
     }
-  }
-}
-
-# Top level prod folder.
-template "folder_prod" {
-  recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod"
-  data = {
-    display_name = "prod"
-  }
-}
-
-# Prod folder for team 1.
-template "folder_team1" {
-  recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod/team1"
-  data = {
-    parent_type                  = "folder"
-    add_parent_folder_dependency = true
-    display_name                 = "team1"
   }
 }
 
