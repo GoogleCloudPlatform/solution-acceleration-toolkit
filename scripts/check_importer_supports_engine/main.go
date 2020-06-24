@@ -33,7 +33,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
 
-const full = "examples/tfengine/full.hcl"
+const examples = "examples/tfengine"
 
 func main() {
 	if err := run(); err != nil {
@@ -42,10 +42,35 @@ func main() {
 }
 
 func run() error {
-	if _, err := os.Stat(full); os.IsNotExist(err) {
-		return fmt.Errorf("example file %v does not exist: %v", full, err)
+	examples, err := filepath.Glob(filepath.Join(examples, "*.hcl"))
+	if err != nil {
+		return fmt.Errorf("filepath.Glob = %v", err)
 	}
 
+	if len(examples) == 0 {
+		return fmt.Errorf("found no examples")
+	}
+
+	unsupported := make(map[string]bool)
+	for _, ex := range examples {
+		if err := resourcesFromConfig(ex, unsupported); err != nil {
+			return fmt.Errorf("finding resources from %v: %v", ex, err)
+		}
+	}
+
+	resources := make([]string, 0, len(unsupported))
+	for r := range unsupported {
+		resources = append(resources, r)
+	}
+
+	sort.Strings(resources)
+	fmt.Println(strings.Join(resources, "\n"))
+
+	return nil
+}
+
+// resourcesFromConfig generates configs from an engine config, and populates the map unsupported with unsupported resources
+func resourcesFromConfig(configPath string, unsupported map[string]bool) error {
 	// Create tmpdir for outputting the configs
 	tmp, err := ioutil.TempDir("", "")
 	if err != nil {
@@ -53,9 +78,9 @@ func run() error {
 	}
 	defer os.RemoveAll(tmp)
 
-	// Generate configs from full example
-	if err := tfengine.Run(full, tmp); err != nil {
-		return fmt.Errorf("tfengine.Run(%q, %q) = %v", full, tmp, err)
+	// Generate configs from the top-level config
+	if err := tfengine.Run(configPath, tmp); err != nil {
+		return fmt.Errorf("tfengine.Run(%q, %q) = %v", configPath, tmp, err)
 	}
 
 	// Convert all Terraform backend blocks to local
@@ -67,45 +92,21 @@ func run() error {
 	// Initialize all modules in order to create and fill the .terraform/ dirs
 	// Use plan-all because init-all tries to init an empty directory and fails
 	// plan-all still ends up calling init recursively, but doesn't fail
+	// Use CombinedOutput because err is just "exit status 1" without details
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
-
-	// Use CombinedOutput because err is just "exit status 1" without details
 	if out, err := plan.CombinedOutput(); err != nil {
 		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(out))
 	}
 
 	// Find all resources
-	resources, err := findAllResources(path)
-	if err != nil {
-		return fmt.Errorf("finding resources: %v", err)
-	}
-
-	// Filter supported and unimportable resources
-	unsupported := []string{}
-	for _, r := range resources {
-		_, unimportable := tfimport.Unimportable[r]
-		_, supported := tfimport.Importers[r]
-		if unimportable || supported {
-			continue
-		}
-		unsupported = append(unsupported, r)
-	}
-
-	if len(unsupported) > 0 {
-		sort.Strings(unsupported)
-		fmt.Println(strings.Join(unsupported, "\n"))
-	}
-
-	return nil
+	return addResources(path, unsupported)
 }
 
 var resourceRE = regexp.MustCompile(`(?s)resource "(.*?)"`)
 
-func findAllResources(path string) (resources []string, err error) {
-	set := make(map[string]bool)
-
-	// Find all resource delcarations.
+// addResources search for resource declarations in .tf files and adds them to the map unsupported if they're importable and not supported.
+func addResources(path string, unsupported map[string]bool) error {
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("walk path %q: %v", path, err)
@@ -122,20 +123,26 @@ func findAllResources(path string) (resources []string, err error) {
 		match := resourceRE.FindAllStringSubmatch(string(b), -1)
 		for _, m := range match {
 			resource := m[len(m)-1]
-			if _, ok := set[resource]; !ok {
-				set[resource] = true
+			if _, ok := unsupported[resource]; ok {
+				continue
 			}
+
+			// Skip if it's supported or not importable.
+			_, supported := tfimport.Importers[resource]
+			_, unimportable := tfimport.Unimportable[resource]
+			if supported || unimportable {
+				continue
+			}
+
+			unsupported[resource] = true
 		}
 
 		return nil
 	}
 
 	if err := filepath.Walk(path, fn); err != nil {
-		return []string{}, fmt.Errorf("filepath.Walk = %v", err)
+		return fmt.Errorf("filepath.Walk = %v", err)
 	}
 
-	for resource := range set {
-		resources = append(resources, resource)
-	}
-	return resources, nil
+	return nil
 }
