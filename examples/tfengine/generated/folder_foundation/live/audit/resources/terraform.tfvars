@@ -14,4 +14,4 @@
 
 
 folder_id       = "12345678"
-auditors_group  = "group:example-dev-auditors@example.com"
+auditors_group  = "example-dev-auditors@example.com"

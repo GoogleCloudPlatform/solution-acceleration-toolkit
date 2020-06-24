@@ -38,7 +38,7 @@ template "devops" {
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
-    admins_group  = "group:example-org-admin@example.com"
+    admins_group  = "example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
@@ -65,7 +65,7 @@ template "audit" {
     project_id     = "example-audit"
     dataset_name   = "1yr_org_audit_logs"
     bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "group:example-dev-auditors@example.com"
+    auditors_group = "example-dev-auditors@example.com"
   }
 }
 
