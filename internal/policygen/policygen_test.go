@@ -49,90 +49,142 @@ func contains(s string, subs ...string) bool {
 
 // TestExamples is a basic test for the policygen to ensure it runs without error on the examples.
 func TestExamples(t *testing.T) {
-	exs, err := filepath.Glob("../../examples/policygen/*.yaml")
-	if err != nil {
-		t.Fatalf("filepath.Glob = %v", err)
+
+	type wantDir struct {
+		path           string
+		wantFilesCount int
+		wantFiles      []string // Check some files.
 	}
 
-	if len(exs) == 0 {
-		t.Error("found no examples")
-	}
-
-	for _, ex := range exs {
-		t.Run(filepath.Base(ex), func(t *testing.T) {
-			tmp, err := ioutil.TempDir("", "")
-			if err != nil {
-				t.Fatalf("ioutil.TempDir = %v", err)
-			}
-			defer os.RemoveAll(tmp)
-
-			args := &RunArgs{
-				ConfigPath: ex,
-				StatePath:  "../terraform/testdata/test.tfstate",
-				OutputPath: tmp,
-			}
-
-			if err := Run(&Fake{}, args); err != nil {
-				t.Fatalf("policygen.Run(%+v) = %v", args, err)
-			}
-
-			// Check for the existence of policy folders and files.
-			dirs := []struct {
-				path           string
-				wantFilesCount int
-				wantFiles      []string // Check some files.
-			}{
+	tests := []struct {
+		statePath string
+		wantDirs  []wantDir
+	}{
+		{
+			// A single state file that does not have the .tfstate extension should still work.
+			"testdata/state",
+			[]wantDir{
 				{
-					filepath.Join(tmp, "forseti_policies", "overall"),
-					11,
+					filepath.Join("forseti_policies", "organization_12345678"),
+					2,
 					[]string{
-						"bigquery_allow_locations.yaml",
-					}},
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudbuild_builds_editor.yaml",
+					},
+				},
+			},
+		},
+		{
+			"testdata/org.tfstate",
+			[]wantDir{
 				{
-					filepath.Join(tmp, "forseti_policies", "organization_12345678"),
+					filepath.Join("forseti_policies", "organization_12345678"),
 					11,
 					[]string{
 						"iam_allow_roles.yaml",
 						"iam_allow_bindings_cloudasset_viewer.yaml",
-					}},
+					},
+				},
+			},
+		},
+		{
+			"testdata/subfolder/project.tfstate",
+			[]wantDir{
 				{
-					filepath.Join(tmp, "forseti_policies", "project_123"),
+					filepath.Join("forseti_policies", "project_123"),
 					6,
 					[]string{
 						"iam_allow_roles.yaml",
 						"iam_allow_bindings_cloudsql_client.yaml",
-					}},
+					},
+				},
+			},
+		},
+		{
+			"testdata",
+			[]wantDir{
 				{
-					filepath.Join(tmp, "gcp_org_policies"),
-					3,
+					filepath.Join("forseti_policies", "organization_12345678"),
+					11,
 					[]string{
-						"main.tf",
-						"variables.tf",
-						"terraform.tfvars",
-					}},
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudasset_viewer.yaml",
+					},
+				},
+				{
+					filepath.Join("forseti_policies", "project_123"),
+					6,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+					},
+				},
+			},
+		},
+	}
+
+	configPath := "../../examples/policygen/config.yaml"
+	common := []wantDir{
+		{
+			filepath.Join("forseti_policies", "overall"),
+			11,
+			[]string{
+				"bigquery_allow_locations.yaml",
+			},
+		},
+		{
+			filepath.Join("gcp_org_policies"),
+			3,
+			[]string{
+				"main.tf",
+				"variables.tf",
+				"terraform.tfvars",
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		tmp, err := ioutil.TempDir("", "")
+		if err != nil {
+			t.Fatalf("ioutil.TempDir = %v", err)
+		}
+		defer os.RemoveAll(tmp)
+
+		args := &RunArgs{
+			ConfigPath: configPath,
+			StatePath:  tc.statePath,
+			OutputPath: tmp,
+		}
+
+		if err := Run(&Fake{}, args); err != nil {
+			t.Fatalf("policygen.Run(%+v) = %v", args, err)
+		}
+
+		// Append common output dir and files.
+		wantDirs := append(common, tc.wantDirs...)
+
+		// Check for the existence of policy folders and files.
+		for _, d := range wantDirs {
+			dirPath := filepath.Join(tmp, d.path)
+			if _, err := os.Stat(dirPath); err != nil {
+				t.Errorf("os.Stat dir %q = %v", d, err)
 			}
 
-			for _, d := range dirs {
-				if _, err := os.Stat(d.path); err != nil {
-					t.Errorf("os.Stat dir %q = %v", d, err)
-				}
+			fs, err := ioutil.ReadDir(dirPath)
+			if err != nil {
+				t.Fatalf("ioutil.ReadDir(%q) = %v", d, err)
+			}
 
-				fs, err := ioutil.ReadDir(d.path)
-				if err != nil {
-					t.Fatalf("ioutil.ReadDir(%q) = %v", d, err)
-				}
+			if len(fs) != d.wantFilesCount {
+				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, configPath, tc.statePath, len(fs), d.wantFilesCount)
+			}
 
-				if len(fs) != d.wantFilesCount {
-					t.Errorf("retrieved number of files differ for dir %q: got %d, want %d", d.path, len(fs), d.wantFilesCount)
-				}
-
-				for _, f := range d.wantFiles {
-					path := filepath.Join(d.path, f)
-					if _, err := os.Stat(path); err != nil {
-						t.Errorf("os.Stat file %q = %v", path, err)
-					}
+			for _, f := range d.wantFiles {
+				path := filepath.Join(dirPath, f)
+				if _, err := os.Stat(path); err != nil {
+					t.Errorf("os.Stat file %q = %v", path, err)
 				}
 			}
-		})
+		}
 	}
 }

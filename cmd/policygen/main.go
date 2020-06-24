@@ -28,7 +28,7 @@ import (
 
 var (
 	configPath = flag.String("config_path", "", "Path to the Policy Generator config.")
-	statePath  = flag.String("state_path", "", "Path to Terraform state in json format.")
+	statePath  = flag.String("state_path", "", "Path to Terraform states in Terraform native .tfstate format. If a directory path is given, then all .tfstate files will be read recursively.")
 	outputPath = flag.String("output_path", "", "Path to output directory to write generated policies")
 )
 
