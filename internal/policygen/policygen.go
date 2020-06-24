@@ -48,6 +48,11 @@ func Run(rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("normalize path %q: %v", args.ConfigPath, err)
 	}
 
+	statePath, err := pathutil.Expand(args.StatePath)
+	if err != nil {
+		return fmt.Errorf("normalize path %q: %v", args.StatePath, err)
+	}
+
 	outputPath, err := pathutil.Expand(args.OutputPath)
 	if err != nil {
 		return fmt.Errorf("normalize path %q: %v", args.OutputPath, err)
@@ -68,7 +73,7 @@ func Run(rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(rn, args.StatePath, tmpDir, c); err != nil {
+	if err := generateForsetiPolicies(rn, statePath, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
