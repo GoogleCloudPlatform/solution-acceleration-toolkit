@@ -61,6 +61,20 @@ func TestExamples(t *testing.T) {
 		wantDirs  []wantDir
 	}{
 		{
+			// A single state file that does not have the .tfstate extension should still work.
+			"testdata/state",
+			[]wantDir{
+				{
+					filepath.Join("forseti_policies", "organization_12345678"),
+					2,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudbuild_builds_editor.yaml",
+					},
+				},
+			},
+		},
+		{
 			"testdata/org.tfstate",
 			[]wantDir{
 				{
@@ -162,7 +176,7 @@ func TestExamples(t *testing.T) {
 			}
 
 			if len(fs) != d.wantFilesCount {
-				t.Errorf("retrieved number of files differ for dir %q: got %d, want %d", dirPath, len(fs), d.wantFilesCount)
+				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, configPath, tc.statePath, len(fs), d.wantFilesCount)
 			}
 
 			for _, f := range d.wantFiles {

@@ -95,11 +95,21 @@ func loadConfig(path string) (*config, error) {
 }
 
 // loadResources loads Terraform state resources from the given path. If the path is a single
-// .tfstate file, it loads resouces it. If the path is a directory, it walks the directory
+// file, it loads resouces from it. If the path is a directory, it walks the directory
 // recursively and loads resources from each .tfstate file.
 func loadResources(path string) ([]*states.Resource, error) {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
+	fi, err := os.Stat(path)
+	if os.IsNotExist(err) {
 		return nil, err
+	}
+
+	// If the input is a file, also process it even if the extension is not .tfstate.
+	if !fi.IsDir() {
+		resources, err := terraform.ResourcesFromState(path)
+		if err != nil {
+			return nil, fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
+		}
+		return resources, nil
 	}
 
 	var allResources []*states.Resource
