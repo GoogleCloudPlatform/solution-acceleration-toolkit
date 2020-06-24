@@ -48,7 +48,7 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "{{.display_name}}/folder"
+  output_path = "./folder"
   data = {
     enable_terragrunt = true
     {{if and (eq .parent_type "folder") (get . "add_parent_folder_dependency" true)}}
@@ -70,7 +70,7 @@ template "deployment" {
 
 template "folder" {
   component_path = "../components/folder"
-  output_path    = "{{.display_name}}/folder"
+  output_path    = "./folder"
   data = {
     display_name = "{{.display_name}}"
     {{if eq .parent_type "organization"}}
