@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#      http:#www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,15 +15,9 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type           = "folder"
-  parent_id             = "12345678"
-  billing_account       = "000-000-000"
-
-  # Default locations for resources. Can be overridden in individual templates.
-  bigquery_location = "us-east1"
-  cloud_sql_region  = "us-central1"
-  compute_region    = "us-central1"
-  storage_location  = "us-central1"
+  parent_type     = "organization" # One of `organization` or `folder`.
+  parent_id       = "12345678"
+  billing_account = "000-000-000"
 }
 
 template "devops" {
@@ -33,9 +27,10 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # bootstrap_gcs_backend = true
 
-    project_id   = "example-devops"
-    state_bucket = "example-terraform-state"
-    admins_group = "example-folder-admins@example.com"
+    project_id       = "example-devops"
+    state_bucket     = "example-terraform-state"
+    storage_location = "us-central1"
+    admins_group     = "example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
@@ -52,25 +47,5 @@ template "devops" {
         "group:example-cicd-viewers@example.com",
       ]
     }
-  }
-}
-
-template "audit" {
-  recipe_path = "{{$recipes}}/audit.hcl"
-  output_path = "./live"
-  data = {
-    project_id     = "example-audit"
-    dataset_name   = "1yr_org_audit_logs"
-    bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "example-auditors@example.com"
-  }
-}
-
-template "monitor" {
-  recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./live"
-  data = {
-    project_id = "example-monitor"
-    domain     = "example.com"
   }
 }
