@@ -18,9 +18,6 @@ data = {
   parent_type     = "organization" # One of `organization` or `folder`.
   parent_id       = "12345678"
   billing_account = "000-000-000"
-
-  # Location for Terraform state bucket.
-  storage_location  = "us-central1"
 }
 
 template "devops" {
@@ -30,9 +27,10 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # bootstrap_gcs_backend = true
 
-    project_id   = "example-devops"
-    state_bucket = "example-terraform-state"
-    admins_group = "example-org-admin@example.com"
+    project_id       = "example-devops"
+    state_bucket     = "example-terraform-state"
+    storage_location = "us-central1"
+    admins_group     = "example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
