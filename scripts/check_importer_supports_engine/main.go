@@ -33,7 +33,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
 
-const examples = "examples/tfengine"
+const examplesDir = "examples/tfengine"
 
 func main() {
 	if err := run(); err != nil {
@@ -42,9 +42,9 @@ func main() {
 }
 
 func run() error {
-	examples, err := filepath.Glob(filepath.Join(examples, "*.hcl"))
+	examples, err := filepath.Glob(filepath.Join(examplesDir, "*.hcl"))
 	if err != nil {
-		return fmt.Errorf("filepath.Glob = %v", err)
+		return fmt.Errorf("glob .hcl files under %v: %v", examplesDir, err)
 	}
 
 	if len(examples) == 0 {
