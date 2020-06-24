@@ -42,7 +42,7 @@ schema = {
     cscc_source_id = {
       description = <<EOF
         Cloud Security Command Center (CSCC) Source ID used for Forseti notification.
-        To enable viewing Forseti violations in Cloud Security Command Center:
+        To enable viewing Forseti violations in CSCC:
           1) Omit this field initially, generate the Terraform configs and do a
              full deployment of Forseti;
           2) Follow https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
