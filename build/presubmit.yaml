@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+options:
+  env: ["GOPATH=/go"]
+  machineType: 'N1_HIGHCPU_8'
+
 steps:
 - name: "gcr.io/cloud-builders/go"
   entrypoint: "sh"
@@ -42,6 +46,3 @@ steps:
   args: ["tests/policygen/integration_test.sh"]
   waitFor: ["-"]
   id: Policy Generator integration tests
-
-options:
-  env: ["GOPATH=/go"]
