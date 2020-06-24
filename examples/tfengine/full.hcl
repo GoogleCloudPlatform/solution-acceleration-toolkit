@@ -73,7 +73,7 @@ template "audit" {
     project_id     = "example-audit"
     dataset_name   = "1yr_org_audit_logs"
     bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "example-dev-auditors@example.com"
+    auditors_group = "example-auditors@example.com"
   }
 }
 
@@ -149,8 +149,9 @@ template "folder_team1" {
   recipe_path = "{{$recipes}}/folder.hcl"
   output_path = "./live/prod/team1"
   data = {
-    parent_type  = "folder"
-    display_name = "team1"
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
+    display_name                 = "team1"
   }
 }
 
@@ -159,7 +160,8 @@ template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1/example-prod-networks"
   data = {
-    parent_type = "folder"
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -241,7 +243,8 @@ template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1/example-prod-data"
   data = {
-    parent_type = "folder"
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -364,7 +367,8 @@ template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1/example-prod-apps"
   data = {
-    parent_type = "folder"
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -413,7 +417,8 @@ template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/prod/team1/example-prod-firebase"
   data = {
-    parent_type = "folder"
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
     project = {
       project_id = "example-prod-firebase"
       apis = [

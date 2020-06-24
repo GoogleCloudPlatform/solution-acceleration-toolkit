@@ -19,9 +19,6 @@ data = {
   parent_id             = "12345678"
   billing_account       = "000-000-000"
 
-  # Don't add helper folder dependency for projects as the parent folder is not created in this config.
-  add_parent_folder_dependency = false
-
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
   cloud_sql_region  = "us-central1"
@@ -38,7 +35,7 @@ template "devops" {
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
-    admins_group = "example-org-admin@example.com"
+    admins_group = "example-folder-admins@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
@@ -65,7 +62,7 @@ template "audit" {
     project_id     = "example-audit"
     dataset_name   = "1yr_org_audit_logs"
     bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "example-dev-auditors@example.com"
+    auditors_group = "example-auditors@example.com"
   }
 }
 

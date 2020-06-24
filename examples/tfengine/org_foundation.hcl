@@ -62,7 +62,7 @@ template "audit" {
     project_id     = "example-audit"
     dataset_name   = "1yr_org_audit_logs"
     bucket_name    = "7yr-org-audit-logs"
-    auditors_group = "example-dev-auditors@example.com"
+    auditors_group = "example-auditors@example.com"
   }
 }
 
