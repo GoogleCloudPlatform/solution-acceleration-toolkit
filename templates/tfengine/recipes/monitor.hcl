@@ -48,8 +48,8 @@ schema = {
           2) Follow https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
              to enable Forseti in CSCC (you need a valid Forseti instance to do so)
              and obtain the CSCC source ID;
-          3) Add the the ID through this field, generate the Terraform configs
-             and deploy Forseti again.
+          3) Add the ID through this field, generate the Terraform configs and
+             deploy Forseti again.
       EOF
       type        = "string"
     }
