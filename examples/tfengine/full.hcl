@@ -49,7 +49,7 @@ template "devops" {
         owner = "GoogleCloudPlatform"
         name  = "example"
       }
-      branch_regex                  = "master"
+      branch_regex                  = "^master$"
       continuous_deployment_enabled = true
       trigger_enabled               = true
       build_viewers = [
