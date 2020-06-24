@@ -46,42 +46,42 @@ func run() error {
 		return fmt.Errorf("example file %v does not exist: %v", full, err)
 	}
 
-	log.Printf("Creating tmpdir for outputting the configs")
+	// Create tmpdir for outputting the configs
 	tmp, err := ioutil.TempDir("", "")
 	if err != nil {
 		return fmt.Errorf("ioutil.TempDir = %v", err)
 	}
 	defer os.RemoveAll(tmp)
 
-	log.Printf("Generating configs from %v to %v", full, tmp)
+	// Generate configs from full example
 	if err := tfengine.Run(full, tmp); err != nil {
 		return fmt.Errorf("tfengine.Run(%q, %q) = %v", full, tmp, err)
 	}
 
-	log.Printf("Converting all Terraform backend blocks to local")
+	// Convert all Terraform backend blocks to local
 	path := filepath.Join(tmp, "live")
 	if err := tfengine.ConvertToLocalBackend(path); err != nil {
 		return fmt.Errorf("ConvertToLocalBackend(%v): %v", path, err)
 	}
 
-	log.Printf("Initializing all modules in order to create and fill the .terraform/ dirs.")
-	// Use plan-all because init-all fails due to trying to init an empty directory.
-	// plan-all still ends up calling init recursively, but doesn't fail.
+	// Initialize all modules in order to create and fill the .terraform/ dirs
+	// Use plan-all because init-all tries to init an empty directory and fails
+	// plan-all still ends up calling init recursively, but doesn't fail
 	plan := exec.Command("terragrunt", "plan-all")
 	plan.Dir = path
 
-	// Use CombinedOutput because err is just "exit status 1" without details.
+	// Use CombinedOutput because err is just "exit status 1" without details
 	if out, err := plan.CombinedOutput(); err != nil {
 		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(out))
 	}
 
-	log.Printf("Finding all resources")
+	// Find all resources
 	resources, err := findAllResources(path)
 	if err != nil {
 		return fmt.Errorf("finding resources: %v", err)
 	}
 
-	log.Printf("Filtering supported and unimportable resources")
+	// Filter supported and unimportable resources
 	unsupported := []string{}
 	for _, r := range resources {
 		_, unimportable := tfimport.Unimportable[r]
@@ -94,10 +94,8 @@ func run() error {
 
 	if len(unsupported) > 0 {
 		sort.Strings(unsupported)
-		log.Printf("Found unsupported resources:\n%v", strings.Join(unsupported, "\n"))
-		return nil
+		fmt.Println(strings.Join(unsupported, "\n"))
 	}
-	log.Println("All importable resources supported by importer!")
 
 	return nil
 }
