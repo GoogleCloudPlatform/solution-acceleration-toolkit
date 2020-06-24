@@ -35,7 +35,7 @@ template "devops" {
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
-    admins_group  = "example-org-admin@example.com"
+    admins_group = "example-org-admin@example.com"
     project_owners = [
       "group:example-devops-owners@example.com",
     ]
