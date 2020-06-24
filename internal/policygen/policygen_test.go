@@ -56,6 +56,59 @@ func TestExamples(t *testing.T) {
 		wantFiles      []string // Check some files.
 	}
 
+	tests := []struct {
+		statePath string
+		wantDirs  []wantDir
+	}{
+		{
+			"testdata/org.tfstate",
+			[]wantDir{
+				{
+					filepath.Join("forseti_policies", "organization_12345678"),
+					11,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudasset_viewer.yaml",
+					},
+				},
+			},
+		},
+		{
+			"testdata/subfolder/project.tfstate",
+			[]wantDir{
+				{
+					filepath.Join("forseti_policies", "project_123"),
+					6,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+					},
+				},
+			},
+		},
+		{
+			"testdata",
+			[]wantDir{
+				{
+					filepath.Join("forseti_policies", "organization_12345678"),
+					11,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudasset_viewer.yaml",
+					},
+				},
+				{
+					filepath.Join("forseti_policies", "project_123"),
+					6,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+					},
+				},
+			},
+		},
+	}
+
 	configPath := "../../examples/policygen/config.yaml"
 	common := []wantDir{
 		{
@@ -63,7 +116,8 @@ func TestExamples(t *testing.T) {
 			11,
 			[]string{
 				"bigquery_allow_locations.yaml",
-			}},
+			},
+		},
 		{
 			filepath.Join("gcp_org_policies"),
 			3,
@@ -71,62 +125,7 @@ func TestExamples(t *testing.T) {
 				"main.tf",
 				"variables.tf",
 				"terraform.tfvars",
-			}},
-	}
-
-	tests := []struct {
-		configPath string
-		statePath  string
-		wantDirs   []wantDir
-	}{
-		{
-			configPath,
-			"testdata/org.tfstate",
-			append(
-				common,
-				wantDir{
-					filepath.Join("forseti_policies", "organization_12345678"),
-					11,
-					[]string{
-						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudasset_viewer.yaml",
-					}},
-			),
-		},
-		{
-			configPath,
-			"testdata/subfolder/project.tfstate",
-			append(
-				common,
-				wantDir{
-					filepath.Join("forseti_policies", "project_123"),
-					6,
-					[]string{
-						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudsql_client.yaml",
-					}},
-			),
-		},
-		{
-			configPath,
-			"testdata",
-			append(
-				common,
-				wantDir{
-					filepath.Join("forseti_policies", "organization_12345678"),
-					11,
-					[]string{
-						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudasset_viewer.yaml",
-					}},
-				wantDir{
-					filepath.Join("forseti_policies", "project_123"),
-					6,
-					[]string{
-						"iam_allow_roles.yaml",
-						"iam_allow_bindings_cloudsql_client.yaml",
-					}},
-			),
+			},
 		},
 	}
 
@@ -138,7 +137,7 @@ func TestExamples(t *testing.T) {
 		defer os.RemoveAll(tmp)
 
 		args := &RunArgs{
-			ConfigPath: tc.configPath,
+			ConfigPath: configPath,
 			StatePath:  tc.statePath,
 			OutputPath: tmp,
 		}
@@ -147,8 +146,11 @@ func TestExamples(t *testing.T) {
 			t.Fatalf("policygen.Run(%+v) = %v", args, err)
 		}
 
+		// Append common output dir and files.
+		wantDirs := append(common, tc.wantDirs...)
+
 		// Check for the existence of policy folders and files.
-		for _, d := range tc.wantDirs {
+		for _, d := range wantDirs {
 			dirPath := filepath.Join(tmp, d.path)
 			if _, err := os.Stat(dirPath); err != nil {
 				t.Errorf("os.Stat dir %q = %v", d, err)
