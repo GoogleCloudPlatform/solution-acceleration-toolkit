@@ -39,11 +39,17 @@ schema = {
       description = "Location of storage buckets."
       type        = "string"
     }
-    cscc_source_id = {
+    security_command_center_source_id = {
       description = <<EOF
-        CSCC Source ID used for Forseti notification. Follow
-        https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
-        to enable Forseti in CSCC and obtain the source ID first.
+        Security Command Center (SCC) Source ID used for Forseti notification.
+        To enable viewing Forseti violations in SCC:
+          1) Omit this field initially, generate the Terraform configs and do a
+             full deployment of Forseti;
+          2) Follow https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
+             to enable Forseti in SCC (you need a valid Forseti instance to do so)
+             and obtain the SCC source ID;
+          3) Add the ID through this field, generate the Terraform configs and
+             deploy Forseti again.
       EOF
       type        = "string"
     }

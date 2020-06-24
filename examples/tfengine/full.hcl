@@ -83,7 +83,8 @@ template "monitor" {
   data = {
     project_id     = "example-monitor"
     domain         = "example.com"
-    cscc_source_id = "organizations/12345678/sources/88888888"
+    # TODO(user): Follow steps in templates/tfengine/recipes/monitor.hcl to obtain the ID.
+    # security_command_center_source_id = "organizations/12345678/sources/88888888"
   }
 }
 
