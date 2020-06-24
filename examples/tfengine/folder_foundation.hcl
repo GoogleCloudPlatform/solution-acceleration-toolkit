@@ -77,13 +77,3 @@ template "monitor" {
     domain     = "example.com"
   }
 }
-
-template "org_policies" {
-  recipe_path = "{{$recipes}}/org_policies.hcl"
-  output_path = "./live"
-  data = {
-    allowed_policy_member_customer_ids = [
-      "example_customer_id",
-    ]
-  }
-}
