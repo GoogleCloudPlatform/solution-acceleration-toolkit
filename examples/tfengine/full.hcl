@@ -138,7 +138,7 @@ EOF
 # Top level prod folder.
 template "folder_prod" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live"
+  output_path = "./live/prod"
   data = {
     display_name = "prod"
   }
@@ -147,7 +147,7 @@ template "folder_prod" {
 # Prod folder for team 1.
 template "folder_team1" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod"
+  output_path = "./live/prod/team1"
   data = {
     parent_type  = "folder"
     display_name = "team1"
