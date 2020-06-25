@@ -6,8 +6,9 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates" to wrap Terraform modules. Templates
-define configuration specific to your Google Cloud organization and structure.
+It introduces the concept of "templates". Templates can be used to manage
+Terraform modules and generate configuration specific to your Google Cloud
+organization and structure.
 
 ## Why
 
@@ -87,20 +88,32 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - `roles/resourcemanager.projectCreator` on the org
     - `roles/billing.user` on the billing account
 
-1. Plan out your org architecture and map them to engine configs.
-   Our configs can help you setup a wide variety of architecture that suits your
-   org.
+## Defining Architecture
 
-   As a rule of thumb, we recommend having one org config that sets up core
-   security and compliance infrastructure such as auditing, monitoring and org
-   policies. You can also use this config to define the org's folder hierarchy.
-   This config should define one devops project and CICD pipeline.
+Plan out your org architecture and map them to engine configs.
+Our configs can help you setup a wide variety of architectures that suit your
+needs.
 
-   For each team or major application, we recommend having a separate engine
-   config. This config should set the root parent folder to be one of the
-   folders setup by the org config. Each config should define one devops project
-   and CICD pipeline. You may wish to replicate these across different
-   environments.
+As a rule of thumb, we recommend having one org config that sets up core
+security and compliance infrastructure such as auditing, monitoring and org
+policies. It should define a devops project to manage Terraform
+state and a CICD pipeline.You can also use this config to define the org's
+folder hierarchy. We recommend creating a folder for each team and major
+application in the org.
+
+To define projects for a team or application, we recommend having a separate
+config. These configs should set the root parent folder to be one of the
+folders setup by the org config. Each config should define a devops project
+to manage Terraform state and a CICD pipeline.
+
+You may wish to replicate the configs across multiple environments (dev,
+staging, etc).
+
+All configs and the generated Terraform code should be checked into version
+control. You can use a separate repo for each CICD pipeline. Note if using
+GitHub you can share a single repo but with different paths within the repo.
+For Cloud Source Repository, you must use a repo within each individual
+devops project.
 
 ## Usage
 
