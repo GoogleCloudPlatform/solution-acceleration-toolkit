@@ -7,24 +7,24 @@ infrastructure.
 
 - [./devops.hcl](./devops.hcl): This example is the minimal config needed to
   setup an infra-as-code Terraform environment for your infrastructure. This is
-  a good starting point to just test how the generated configs and CICD
-  pipelines work.
+  a good starting point to understand the generated configs and CICD
+  pipelines.
 
 - [./org_foundation.hcl](./org_foundation.hcl): This example expands upon the
-  [./devops.hcl](./devops.hcl) example to setup an org with security and
-  compliance in place. This should be a minimum done for an org.
-  It can also be used to define the folder hierarchy of the org.
+  [./devops.hcl](./devops.hcl) example to setup an org with additional security
+  and compliance. This should be a minimum done for an org. It can also be used
+  to define the folder hierarchy of the org.
 
 - [./folder_foundation.hcl](./folder_foundation.hcl): This example is similar to
   the [./org_foundation.hcl](./org_foundation.hcl) example except it sets
-  everything on a folder instead of an org. This is useful if you want to set
-  the generated configs in an isolated environment, or reproduce your org setup
-  in a dev folder environment. This example assumes the root folder has already
-  been created (for example by an org foundation config or other means).
+  everything on a folder instead of an org. This is useful if you want to test
+  the generated configs in an isolated environment before promoting them to org
+  level. This example assumes the root folder has already been created (for
+  example by an org foundation config or other means).
 
 - [./team.hcl](./team.hcl): This example sets up a sample team or application
   within a folder. This example focusses on projects and concrete resources to
-  provide real services and assumes that core security, compliance and folder
-  structure has already been by other configs.
+  run services and assumes that core security, compliance and folder
+  structure has already been seti up by other configs.
 
-The [generated/](./generated) directory shows the output of the examples.
+The [generated/](./generated) directory shows the output of each example.
