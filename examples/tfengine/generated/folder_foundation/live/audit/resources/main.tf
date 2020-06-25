@@ -26,11 +26,11 @@ terraform {
 
 # BigQuery log sink.
 resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
-  name                 = "bigquery-audit-logs-sink"
-  folder    = var.folder_id
-  include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+  name             = "bigquery-audit-logs-sink"
+  folder           = var.folder_id
+  include_children = true
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  destination      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
 module "bigquery_destination" {
@@ -61,11 +61,11 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 
 # Cloud Storage log sink.
 resource "google_logging_folder_sink" "storage_audit_logs_sink" {
-  name                 = "storage-audit-logs-sink"
-  folder    = var.folder_id
-  include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
+  name             = "storage-audit-logs-sink"
+  folder           = var.folder_id
+  include_children = true
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  destination      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
 module "storage_destination" {
