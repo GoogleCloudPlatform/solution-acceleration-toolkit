@@ -56,9 +56,21 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 
 		// Generate policies for allowed bindings for each role.
 		for role, members := range rbs {
-			// Removes 'roles/' prefix, replaces '.' with '_'  and turns each character to lower case.
+			// Removes any prefix before the role name ('roles/' or 'projects/<my-project>/roles/' for a custom role).
+			// Prepend 'custom_' if custom role.
+			// Replaces '.' with '_'  and turns each character to lower case.
 			// E.g. roles/orgpolicy.policyViewer --> orgpolicy_policyviewer
-			suffix := strings.ToLower(strings.Replace(strings.TrimPrefix(role, "roles/"), ".", "_", -1))
+			//      projects/<my-project>/roles/osLoginProjectGet_6afd --> custom_osloginprojectget_6afd
+			suffix := role
+			// Predefined roles, e.g. roles/orgpolicy.policyViewer.
+			if strings.HasPrefix(suffix, "roles/") {
+				suffix = strings.TrimPrefix(suffix, "roles/")
+			} else { // Custom roles, e.g. projects/<my-project>/roles/osLoginProjectGet_6afd.
+				segs := strings.Split(suffix, "/")
+				suffix = "custom_" + segs[len(segs)-1]
+			}
+			suffix = strings.ToLower(strings.Replace(suffix, ".", "_", -1))
+
 			data := map[string]interface{}{
 				"target":  fmt.Sprintf("%s/%s", root.Type, root.ID),
 				"suffix":  suffix,

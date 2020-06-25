@@ -13,25 +13,16 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowBanRolesConstraintV1
+kind: GCPIAMAllowedBindingsConstraintV1
 metadata:
-  name: iam_allow_roles
+  name: iam_allowed_bindings_custom_osloginprojectget_6afd
 spec:
   severity: high
   match:
     target:
     - "organization/12345678"
   parameters:
-    mode: "allow"
-    roles:
-    - projects/example-project/roles/osLoginProjectGet_6afd
-    - roles/appengine.appViewer
-    - roles/bigquery.metadataViewer
-    - roles/browser
-    - roles/cloudasset.viewer
-    - roles/cloudsql.viewer
-    - roles/compute.networkViewer
-    - roles/iam.securityReviewer
-    - roles/orgpolicy.policyViewer
-    - roles/servicemanagement.quotaViewer
-    - roles/serviceusage.serviceUsageConsumer
+    mode: whitelist
+    role: projects/example-project/roles/osLoginProjectGet_6afd
+    members:
+    - serviceAccount:bastion@example-project.iam.gserviceaccount.com

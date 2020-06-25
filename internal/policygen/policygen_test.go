@@ -93,10 +93,11 @@ func TestExamples(t *testing.T) {
 			[]wantDir{
 				{
 					filepath.Join("forseti_policies", "project_123"),
-					6,
+					7,
 					[]string{
 						"iam_allow_roles.yaml",
 						"iam_allow_bindings_cloudsql_client.yaml",
+						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
 					},
 				},
 			},
@@ -114,10 +115,11 @@ func TestExamples(t *testing.T) {
 				},
 				{
 					filepath.Join("forseti_policies", "project_123"),
-					6,
+					7,
 					[]string{
 						"iam_allow_roles.yaml",
 						"iam_allow_bindings_cloudsql_client.yaml",
+						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
 					},
 				},
 			},
