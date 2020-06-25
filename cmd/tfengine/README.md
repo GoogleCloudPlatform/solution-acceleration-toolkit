@@ -6,8 +6,9 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates" to wrap Terraform modules. Templates
-define configuration specific to your Google Cloud organization and structure.
+It introduces the concept of "templates". Templates can be used to generate
+multiple Terraform modules and configuration specific to your Google Cloud
+organization and structure.
 
 ## Why
 
@@ -87,6 +88,33 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - `roles/resourcemanager.projectCreator` on the org
     - `roles/billing.user` on the billing account
 
+## Defining Architecture
+
+Plan out your org architecture and map them to engine configs.
+Our configs can help you setup a wide variety of architectures that suit your
+needs.
+
+As a rule of thumb, we recommend having one org config that sets up core
+security and compliance infrastructure such as auditing, monitoring and org
+policies. It should define a devops project to manage Terraform
+state and a CICD pipeline. You can also use this config to define the org's
+folder hierarchy. We recommend creating a folder for each team and major
+application in the org.
+
+To define projects for a team or application, we recommend having a separate
+config. These configs should set the root parent folder to be one of the
+folders setup by the org config. Each config should define a devops project
+to manage Terraform state and a CICD pipeline.
+
+You may wish to replicate the configs across multiple environments (dev,
+staging, etc).
+
+All configs and the generated Terraform code should be checked into version
+control. You can use a separate repo for each CICD pipeline. Note if using
+GitHub you can share a single repo but with different paths within the repo.
+For Cloud Source Repository, you must use a repo within each individual
+devops project.
+
 ## Usage
 
 The engine takes a path to an input config and a path to output the generated
@@ -102,9 +130,8 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     cd healthcare-data-protection-suite
     ```
 
-1. Replace the values in the
-   [example](../../examples/tfengine/org_foundation.hcl) with values for your
-   infrastructure.
+1. Replace the values in a suitable
+   [example](../../examples/tfengine) with values for your infrastructure.
 
 1. To set up helper environment vars, run the following commands:
 
