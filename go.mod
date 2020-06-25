@@ -5,6 +5,7 @@ go 1.14
 require (
 	cloud.google.com/go v0.58.0 // indirect
 	cloud.google.com/go/storage v1.10.0
+	github.com/GoogleCloudPlatform/healthcare v0.0.0-20200624150056-b6d57fa4ad8b
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.0
@@ -23,7 +24,7 @@ require (
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zclconf/go-cty v1.5.0
+	github.com/zclconf/go-cty v1.5.1
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 	google.golang.org/api v0.28.0
