@@ -97,6 +97,7 @@ func loadConfig(path string) (*config, error) {
 	if !filepath.IsAbs(c.TemplateDir) {
 		c.TemplateDir = filepath.Join(filepath.Dir(path), c.TemplateDir)
 	}
+
 	return c, nil
 }
 
@@ -138,6 +139,7 @@ func loadResources(path string) ([]*states.Resource, error) {
 	if err := filepath.Walk(path, fn); err != nil {
 		return nil, err
 	}
+
 	return allResources, nil
 }
 
