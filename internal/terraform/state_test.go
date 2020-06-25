@@ -20,8 +20,8 @@ import (
 
 const testStatePath = "testdata/test.tfstate"
 
-func TestResourcesFromState(t *testing.T) {
-	resources, err := ResourcesFromState(testStatePath)
+func TestResourcesFromStateFile(t *testing.T) {
+	resources, err := ResourcesFromStateFile(testStatePath)
 	if err != nil {
 		t.Fatalf("read resources from state: %v", err)
 	}
@@ -33,7 +33,7 @@ func TestResourcesFromState(t *testing.T) {
 }
 
 func TestGetInstancesForType(t *testing.T) {
-	resources, err := ResourcesFromState(testStatePath)
+	resources, err := ResourcesFromStateFile(testStatePath)
 	if err != nil {
 		t.Fatalf("read resources from state: %v", err)
 	}

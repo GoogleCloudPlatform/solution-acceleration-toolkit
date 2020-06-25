@@ -20,20 +20,28 @@ package terraform
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/hashicorp/terraform/states"
 	"github.com/hashicorp/terraform/states/statefile"
 )
 
-func ResourcesFromState(path string) ([]*states.Resource, error) {
+// StateFileExtension is the default extension of Terraform state file.
+const StateFileExtension string = ".tfstate"
+
+func ResourcesFromStateFile(path string) ([]*states.Resource, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
-	stateFile, err := statefile.Read(f)
+	return ResourcesFromState(f)
+}
+
+func ResourcesFromState(r io.Reader) ([]*states.Resource, error) {
+	stateFile, err := statefile.Read(r)
 	if err != nil {
 		return nil, err
 	}
