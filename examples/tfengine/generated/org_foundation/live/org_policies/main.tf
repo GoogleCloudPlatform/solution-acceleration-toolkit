@@ -32,7 +32,7 @@ module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/appengine.disableCodeDownload"
@@ -45,7 +45,7 @@ module "orgpolicy_sql_restrict_authorized_networks" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/sql.restrictAuthorizedNetworks"
@@ -57,7 +57,7 @@ module "orgpolicy_sql_restrict_public_ip" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/sql.restrictPublicIp"
@@ -70,7 +70,7 @@ module "orgpolicy_compute_disable_nested_virtualization" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/compute.disableNestedVirtualization"
@@ -82,7 +82,7 @@ module "orgpolicy_compute_disable_serial_port_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/compute.disableSerialPortAccess"
@@ -94,7 +94,7 @@ module "orgpolicy_compute_skip_default_network_creation" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/compute.skipDefaultNetworkCreation"
@@ -106,7 +106,7 @@ module "orgpolicy_compute_vm_external_ip_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint        = "constraints/compute.vmExternalIpAccess"
@@ -119,7 +119,7 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/compute.restrictXpnProjectLienRemoval"
@@ -132,7 +132,7 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint        = "constraints/iam.allowedPolicyMemberDomains"
@@ -144,7 +144,7 @@ module "orgpolicy_disable_service_account_key_creation" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/iam.disableServiceAccountKeyCreation"
@@ -157,7 +157,7 @@ module "orgpolicy_gcp_resource_locations" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint        = "constraints/gcp.resourceLocations"
@@ -171,7 +171,7 @@ module "orgpolicy_storage_uniform_bucket_level_access" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
 
-  policy_for = "organization"
+  policy_for      = "organization"
   organization_id = "12345678"
 
   constraint  = "constraints/storage.uniformBucketLevelAccess"

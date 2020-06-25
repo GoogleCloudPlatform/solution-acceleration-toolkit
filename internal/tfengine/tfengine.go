@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
@@ -51,6 +52,10 @@ func Run(confPath, outPath string) error {
 	defer os.RemoveAll(tmpDir)
 
 	if err := dump(c, filepath.Dir(confPath), tmpDir); err != nil {
+		return err
+	}
+
+	if err := hcl.FormatDir(tmpDir); err != nil {
 		return err
 	}
 

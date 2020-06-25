@@ -17,6 +17,6 @@ include {
 }
 
 dependency "networks" {
-  config_path = "../../example-prod-networks/resources"
+  config_path  = "../../example-prod-networks/resources"
   skip_outputs = true
 }
