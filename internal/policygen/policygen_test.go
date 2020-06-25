@@ -15,6 +15,7 @@
 package policygen
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -156,7 +157,7 @@ func TestExamples(t *testing.T) {
 			OutputPath: tmp,
 		}
 
-		if err := Run(&Fake{}, args); err != nil {
+		if err := Run(context.Background(), &Fake{}, args); err != nil {
 			t.Fatalf("policygen.Run(%+v) = %v", args, err)
 		}
 

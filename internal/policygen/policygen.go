@@ -16,6 +16,7 @@
 package policygen
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -41,7 +42,7 @@ type RunArgs struct {
 	OutputPath string
 }
 
-func Run(rn runner.Runner, args *RunArgs) error {
+func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	var err error
 	configPath, err := pathutil.Expand(args.ConfigPath)
 	if err != nil {
@@ -73,7 +74,7 @@ func Run(rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(rn, statePath, tmpDir, c); err != nil {
+	if err := generateForsetiPolicies(ctx, rn, statePath, tmpDir, c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
@@ -98,7 +99,7 @@ func generateGCPOrgPolicies(outputPath string, c *config) error {
 	return template.WriteDir(in, out, c.GCPOrgPolicies)
 }
 
-func generateForsetiPolicies(rn runner.Runner, statePath, outputPath string, c *config) error {
+func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath string, c *config) error {
 	if c.ForsetiPolicies == nil {
 		return nil
 	}
@@ -107,7 +108,7 @@ func generateForsetiPolicies(rn runner.Runner, statePath, outputPath string, c *
 		return err
 	}
 
-	if err := generateTerraformBasedForsetiPolicies(rn, statePath, outputPath, c.TemplateDir); err != nil {
+	if err := generateTerraformBasedForsetiPolicies(ctx, rn, statePath, outputPath, c.TemplateDir); err != nil {
 		return err
 	}
 
@@ -120,13 +121,13 @@ func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 	return template.WriteDir(in, out, c.ForsetiPolicies)
 }
 
-func generateTerraformBasedForsetiPolicies(rn runner.Runner, statePath, outputPath, templateDir string) error {
+func generateTerraformBasedForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath, templateDir string) error {
 	if statePath == "" {
 		log.Println("No Terraform state given, only generating Terraform-agnostic security policies")
 		return nil
 	}
 
-	resources, err := loadResources(statePath)
+	resources, err := loadResources(ctx, statePath)
 	if err != nil {
 		return err
 	}

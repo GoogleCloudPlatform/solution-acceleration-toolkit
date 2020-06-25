@@ -17,6 +17,7 @@ package licenseutil
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -43,6 +44,10 @@ var license = []byte(`# Copyright 2020 Google LLC
 func AddLicense(dir string) error {
 
 	fn := func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return fmt.Errorf("walk path %q: %v", path, err)
+		}
+
 		if !isTerraformFile(path) {
 			return nil
 		}
