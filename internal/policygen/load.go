@@ -15,18 +15,24 @@
 package policygen
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"cloud.google.com/go/storage"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/ghodss/yaml"
 	"github.com/hashicorp/terraform/states"
 	"github.com/zclconf/go-cty/cty"
+	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
 )
 
 // config is the struct representing the Policy Generator configuration.
@@ -94,10 +100,16 @@ func loadConfig(path string) (*config, error) {
 	return c, nil
 }
 
-// loadResources loads Terraform state resources from the given path. If the path is a single
-// file, it loads resouces from it. If the path is a directory, it walks the directory
-// recursively and loads resources from each .tfstate file.
+// loadResources loads Terraform state resources from the given path.
+// - If the path is a single local file, it loads resouces from it.
+// - If the path is a local directory, it walks the directory recursively and loads resources from each .tfstate file.
+// - If the path is a GCS bucket (indicated by 'gs://' prefix), it walks the bucket recursively and loads resources from each .tfstate file.
+//   It currently ignores the file/dir path inside the bucket and considers all .tfstate file in the bucket.
 func loadResources(path string) ([]*states.Resource, error) {
+	if strings.HasPrefix(path, "gs://") {
+		return loadResourcesFromCloudStorageBucket(path)
+	}
+
 	fi, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return nil, err
@@ -105,22 +117,18 @@ func loadResources(path string) ([]*states.Resource, error) {
 
 	// If the input is a file, also process it even if the extension is not .tfstate.
 	if !fi.IsDir() {
-		resources, err := terraform.ResourcesFromState(path)
-		if err != nil {
-			return nil, fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
-		}
-		return resources, nil
+		return loadResourcesFromSingleLocalFile(path)
 	}
 
 	var allResources []*states.Resource
 	fn := func(path string, _ os.FileInfo, _ error) error {
-		if filepath.Ext(path) != ".tfstate" {
+		if filepath.Ext(path) != terraform.StateFileExtension {
 			return nil
 		}
 
-		resources, err := terraform.ResourcesFromState(path)
+		resources, err := loadResourcesFromSingleLocalFile(path)
 		if err != nil {
-			return fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
+			return err
 		}
 		allResources = append(allResources, resources...)
 
@@ -130,5 +138,65 @@ func loadResources(path string) ([]*states.Resource, error) {
 	if err := filepath.Walk(path, fn); err != nil {
 		return nil, err
 	}
+	return allResources, nil
+}
+
+func loadResourcesFromSingleLocalFile(path string) ([]*states.Resource, error) {
+	resources, err := terraform.ResourcesFromStateFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("read resources from Terraform state file %q: %v", path, err)
+	}
+	return resources, nil
+}
+
+func loadResourcesFromCloudStorageBucket(path string) ([]*states.Resource, error) {
+	// Trim the 'gs://' prefix and split the path into the bucket name and cloud storage file path.
+	bucketName := strings.SplitN(strings.TrimPrefix(path, "gs://"), "/", 2)[0]
+	log.Printf("Reading state files from Cloud Storage bucket %q", bucketName)
+
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx, option.WithScopes(storage.ScopeReadOnly))
+	if err != nil {
+		return nil, fmt.Errorf("start cloud storage client: %v", err)
+	}
+
+	bucket := client.Bucket(bucketName)
+	// Stat the bucket, check existence and caller permission.
+	if _, err := bucket.Attrs(ctx); err != nil {
+		return nil, fmt.Errorf("read bucket: %v", err)
+	}
+
+	var names []string
+	it := bucket.Objects(ctx, &storage.Query{})
+	for {
+		attrs, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		name := attrs.Name
+		if filepath.Ext(name) != terraform.StateFileExtension {
+			continue
+		}
+		names = append(names, name)
+	}
+
+	var allResources []*states.Resource
+	for _, name := range names {
+		log.Printf("reading remote file: gs://%s/%s", bucketName, name)
+		obj := bucket.Object(name)
+		r, err := obj.NewReader(ctx)
+		if err != nil {
+			return nil, err
+		}
+		resources, err := terraform.ResourcesFromState(r)
+		if err != nil {
+			return nil, err
+		}
+		allResources = append(allResources, resources...)
+	}
+
 	return allResources, nil
 }
