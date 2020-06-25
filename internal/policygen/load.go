@@ -193,6 +193,7 @@ func loadResourcesFromCloudStorageBucket(path string) ([]*states.Resource, error
 		if err != nil {
 			return nil, err
 		}
+		defer r.Close()
 		resources, err := terraform.ResourcesFromState(r)
 		if err != nil {
 			return nil, err
