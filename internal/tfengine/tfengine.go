@@ -19,14 +19,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -56,7 +55,7 @@ func Run(confPath, outPath string) error {
 		return err
 	}
 
-	if err := formatDir(tmpDir); err != nil {
+	if err := hcl.FormatDir(tmpDir); err != nil {
 		return err
 	}
 
@@ -170,24 +169,6 @@ func ConvertToLocalBackend(path string) error {
 
 	if err := filepath.Walk(path, fn); err != nil {
 		return fmt.Errorf("walk %qs: %v", path, err)
-	}
-
-	return nil
-}
-
-func formatDir(dir string) error {
-	rn := &runner.Default{}
-
-	tfFmt := exec.Command("terraform", "fmt", "-recursive")
-	tfFmt.Dir = dir
-	if err := rn.CmdRun(tfFmt); err != nil {
-		return fmt.Errorf("failed to format terraform files: %v", err)
-	}
-
-	tgFmt := exec.Command("terragrunt", "hclfmt")
-	tgFmt.Dir = dir
-	if err := rn.CmdRun(tgFmt); err != nil {
-		return fmt.Errorf("failed to format terragrunt and hcl files: %v", err)
 	}
 
 	return nil

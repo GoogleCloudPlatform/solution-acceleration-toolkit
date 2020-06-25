@@ -17,11 +17,33 @@ package hcl
 import (
 	"encoding/json"
 	"fmt"
+	"os/exec"
 
+	"github.com/GoogleCloudPlatform/healthcare/deploy/runner"
 	"github.com/hashicorp/hcl/v2/hclsimple"
 	"github.com/zclconf/go-cty/cty"
 	ctyjson "github.com/zclconf/go-cty/cty/json"
 )
+
+// FormatDir formats the hcl files in the given directory.
+// The user must have terraform and terragrunt binaries in their PATH.
+func FormatDir(dir string) error {
+	rn := &runner.Default{}
+
+	tfFmt := exec.Command("terraform", "fmt", "-recursive")
+	tfFmt.Dir = dir
+	if err := rn.CmdRun(tfFmt); err != nil {
+		return fmt.Errorf("failed to format terraform files: %v", err)
+	}
+
+	tgFmt := exec.Command("terragrunt", "hclfmt")
+	tgFmt.Dir = dir
+	if err := rn.CmdRun(tgFmt); err != nil {
+		return fmt.Errorf("failed to format terragrunt and hcl files: %v", err)
+	}
+
+	return nil
+}
 
 // ToJSON converts input bytes in HCL format to output bytes in JSON format.
 func ToJSON(b []byte) ([]byte, error) {
