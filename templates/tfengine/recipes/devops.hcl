@@ -56,6 +56,13 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
+    enable_terragrunt = {
+      description = <<EOF
+        Whether to convert to a Terragrunt deployment. If set to "false", generate Terraform-only
+        configs and the CICD pipelines will only use Terraform. Default to "true".
+    EOF
+      type        = "boolean"
+    }
     # TODO(xingao): expand CICD schema.
     cicd = {
       description = "Config for CICD. If unset there will be no CICD."
@@ -69,10 +76,17 @@ template "bootstrap" {
   output_path    = "./bootstrap"
 }
 
+{{if get . "enable_terragrunt" true}}
 template "root" {
   component_path = "../components/terragrunt/root"
   output_path    = "./live"
 }
+{{else}}
+template "root" {
+  component_path = "../components/terraform/root"
+  output_path    = "./live"
+}
+{{end}}
 
 {{if has . "cicd"}}
 template "cicd_manual" {
@@ -82,6 +96,13 @@ template "cicd_manual" {
     key = "cicd"
   }
 }
+
+{{if get . "enable_terragrunt" true}}
+template "root" {
+  component_path = "../components/cicd/terragrunt"
+  output_path    = "./cicd"
+}
+{{end}}
 
 template "cicd_auto" {
   component_path = "../components/cicd/auto"
