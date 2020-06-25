@@ -39,7 +39,14 @@ cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
 CONFIG_PATH=examples/policygen/config.yaml
-STATE_PATH=/path/to/your/tfstate/file/or/dir
+# A single local file, a local directory or a Google Cloud Storage bucket (indicated by 'gs://' prefix) are supported.
+# - If the path is a single local file, it loads Terraform states from it.
+# - If the path is a local directory, it walks the directory recursively and loads Terraform states from each .tfstate file.
+# - If the path is a Cloud Storage bucket (indicated by 'gs://' prefix), it walks the bucket recursively and loads Terraform states from each .tfstate file.
+#   It only reads the bucket name from the --state_path and ignores the file/dir, if specified. All .tfstate file from the bucket will be read.
+#   The program uses Application Default Credentials (https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
+#   to authenticate with GCP. Make sure you have at least roles/storage.objectViewer permission on the bucket.
+STATE_PATH=/path/to/your/tfstate
 OUTPUT_PATH=/tmp/policygen
 
 # Step 3: Install the policygen
