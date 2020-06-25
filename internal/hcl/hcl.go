@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/GoogleCloudPlatform/healthcare/deploy/runner"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/hashicorp/hcl/v2/hclsimple"
 	"github.com/zclconf/go-cty/cty"
 	ctyjson "github.com/zclconf/go-cty/cty/json"
