@@ -12,8 +12,9 @@ infrastructure.
 
 - [./org_foundation.hcl](./org_foundation.hcl): This example expands upon the
   [./devops.hcl](./devops.hcl) example to setup an org with additional security
-  and compliance. This should be a minimum done for an org. It can also be used
-  to define the folder hierarchy of the org.
+  and compliance (e.g. long term and short term audit log retention, Forseti
+  monitoring, etc). This should be a minimum done for an org. It can also be
+  used to define the folder hierarchy of the org.
 
 - [./folder_foundation.hcl](./folder_foundation.hcl): This example is similar to
   the [./org_foundation.hcl](./org_foundation.hcl) example except it sets
@@ -23,7 +24,7 @@ infrastructure.
   example by an org foundation config or other means).
 
 - [./team.hcl](./team.hcl): This example sets up a sample team or application
-  within a folder. This example focusses on projects and concrete resources to
+  within a folder. This example focuses on projects and concrete resources to
   run services and assumes that core security, compliance and folder
   structure has already been seti up by other configs.
 

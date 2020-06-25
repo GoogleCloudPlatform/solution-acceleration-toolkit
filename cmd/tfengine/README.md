@@ -6,8 +6,8 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates". Templates can be used to manage
-Terraform modules and generate configuration specific to your Google Cloud
+It introduces the concept of "templates". Templates can be used to generate
+multiple Terraform modules and configuration specific to your Google Cloud
 organization and structure.
 
 ## Why
@@ -97,7 +97,7 @@ needs.
 As a rule of thumb, we recommend having one org config that sets up core
 security and compliance infrastructure such as auditing, monitoring and org
 policies. It should define a devops project to manage Terraform
-state and a CICD pipeline.You can also use this config to define the org's
+state and a CICD pipeline. You can also use this config to define the org's
 folder hierarchy. We recommend creating a folder for each team and major
 application in the org.
 
