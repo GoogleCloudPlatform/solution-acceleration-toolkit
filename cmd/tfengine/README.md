@@ -87,6 +87,21 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - `roles/resourcemanager.projectCreator` on the org
     - `roles/billing.user` on the billing account
 
+1. Plan out your org architecture and map them to engine configs.
+   Our configs can help you setup a wide variety of architecture that suits your
+   org.
+
+   As a rule of thumb, we recommend having one org config that sets up core
+   security and compliance infrastructure such as auditing, monitoring and org
+   policies. You can also use this config to define the org's folder hierarchy.
+   This config should define one devops project and CICD pipeline.
+
+   For each team or major application, we recommend having a separate engine
+   config. This config should set the root parent folder to be one of the
+   folders setup by the org config. Each config should define one devops project
+   and CICD pipeline. You may wish to replicate these across different
+   environments.
+
 ## Usage
 
 The engine takes a path to an input config and a path to output the generated
@@ -102,9 +117,8 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     cd healthcare-data-protection-suite
     ```
 
-1. Replace the values in the
-   [example](../../examples/tfengine/org_foundation.hcl) with values for your
-   infrastructure.
+1. Replace the values in a suitable
+   [example](../../examples/tfengine) with values for your infrastructure.
 
 1. To set up helper environment vars, run the following commands:
 
