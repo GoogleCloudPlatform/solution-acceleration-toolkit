@@ -19,6 +19,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 
@@ -50,7 +51,7 @@ func main() {
 	}
 
 	rn := &runner.Default{Quiet: true}
-	if err := policygen.Run(rn, args); err != nil {
+	if err := policygen.Run(context.Background(), rn, args); err != nil {
 		log.Fatalf("Failed to generate policies: %v", err)
 	}
 }

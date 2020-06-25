@@ -106,9 +106,9 @@ func loadConfig(path string) (*config, error) {
 // - If the path is a local directory, it walks the directory recursively and loads resources from each .tfstate file.
 // - If the path is a Cloud Storage bucket (indicated by 'gs://' prefix), it walks the bucket recursively and loads resources from each .tfstate file.
 //   It only reads the bucket name from the path and ignores the file/dir, if specified. All .tfstate file from the bucket will be read.
-func loadResources(path string) ([]*states.Resource, error) {
+func loadResources(ctx context.Context, path string) ([]*states.Resource, error) {
 	if strings.HasPrefix(path, "gs://") {
-		return loadResourcesFromCloudStorageBucket(path)
+		return loadResourcesFromCloudStorageBucket(ctx, path)
 	}
 
 	fi, err := os.Stat(path)
@@ -121,8 +121,16 @@ func loadResources(path string) ([]*states.Resource, error) {
 		return loadResourcesFromSingleLocalFile(path)
 	}
 
+	return loadResourcesFromLocalDir(path)
+}
+
+func loadResourcesFromLocalDir(path string) ([]*states.Resource, error) {
 	var allResources []*states.Resource
-	fn := func(path string, _ os.FileInfo, _ error) error {
+	fn := func(path string, _ os.FileInfo, err error) error {
+		if err != nil {
+			return fmt.Errorf("walk path %q: %v", path, err)
+		}
+
 		if filepath.Ext(path) != terraform.StateFileExtension {
 			return nil
 		}
@@ -151,12 +159,11 @@ func loadResourcesFromSingleLocalFile(path string) ([]*states.Resource, error) {
 	return resources, nil
 }
 
-func loadResourcesFromCloudStorageBucket(path string) ([]*states.Resource, error) {
+func loadResourcesFromCloudStorageBucket(ctx context.Context, path string) ([]*states.Resource, error) {
 	// Trim the 'gs://' prefix and split the path into the bucket name and cloud storage file path.
 	bucketName := strings.SplitN(strings.TrimPrefix(path, "gs://"), "/", 2)[0]
 	log.Printf("Reading state files from Cloud Storage bucket %q", bucketName)
 
-	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithScopes(storage.ScopeReadOnly))
 	if err != nil {
 		return nil, fmt.Errorf("start cloud storage client: %v", err)
