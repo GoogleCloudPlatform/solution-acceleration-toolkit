@@ -5,7 +5,6 @@ go 1.14
 require (
 	cloud.google.com/go v0.58.0 // indirect
 	cloud.google.com/go/storage v1.10.0
-	github.com/GoogleCloudPlatform/healthcare v0.0.0-20200624150056-b6d57fa4ad8b
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.0
