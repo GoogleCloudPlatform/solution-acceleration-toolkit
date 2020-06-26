@@ -59,6 +59,9 @@ schema = {
     cicd = {
       description = "Config for CICD. If unset there will be no CICD."
       type        = "object"
+      required = [
+        "branch_regex",
+      ]
       properties = {
         github = {
           description = "Config for GitHub Cloud Build triggers."
