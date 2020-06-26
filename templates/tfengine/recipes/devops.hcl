@@ -162,6 +162,9 @@ template "root" {
 template "root" {
   component_path = "../components/terraform/root"
   output_path    = "./live/deployments"
+  data = {
+    state_path_prefix = "deployments"
+  }
 }
 {{end}}
 
