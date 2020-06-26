@@ -30,14 +30,14 @@ import (
 func FormatDir(rn runner.Runner, dir string) error {
 	tfFmt := exec.Command("terraform", "fmt", "-recursive")
 	tfFmt.Dir = dir
-	// Silent stdout.
+	// Silence stdout.
 	if _, err := rn.CmdOutput(tfFmt); err != nil {
 		return fmt.Errorf("failed to format terraform files: %v", err)
 	}
 
 	tgFmt := exec.Command("terragrunt", "hclfmt")
 	tgFmt.Dir = dir
-	// Silent stdout.
+	// Silence stdout.
 	if _, err := rn.CmdOutput(tgFmt); err != nil {
 		return fmt.Errorf("failed to format terragrunt and hcl files: %v", err)
 	}
