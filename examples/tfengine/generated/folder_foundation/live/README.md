@@ -1,4 +1,4 @@
-# Root
+# Live
 
 This directory defines the entire architecture in Terraform.
 

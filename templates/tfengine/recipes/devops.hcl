@@ -161,10 +161,7 @@ template "root" {
 {{else}}
 template "root" {
   component_path = "../components/terraform/root"
-  output_path    = "./live/deployment"
-  data = {
-    state_path_prefix = "deployment"
-  }
+  output_path    = "./live"
 }
 {{end}}
 
