@@ -39,7 +39,7 @@ module "bastion_vm" {
 
   members = ["group:bastion-accessors@example.com"]
 
-  
+
   startup_script = <<EOF
 sudo apt-get -y update
 sudo apt-get -y install mysql-client
@@ -71,7 +71,7 @@ module "example_network" {
       subnet_flow_logs       = true
       subnets_private_access = true
     },
-    
+
   ]
   secondary_ranges = {
     "example-gke-subnet" = [
@@ -97,19 +97,19 @@ module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.1.0"
 
-  name         = "example-router"
-  project      = var.project_id
-  region       = "us-central1"
-  network      = "${module.example_network.network.network.self_link}"
+  name    = "example-router"
+  project = var.project_id
+  region  = "us-central1"
+  network = "${module.example_network.network.network.self_link}"
 
   nats = [
     {
-      name = "example-nat"
+      name                               = "example-nat"
       source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
       subnetworks = [
         {
-          name = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+          name                    = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
           source_ip_ranges_to_nat = ["PRIMARY_IP_RANGE"]
 
           secondary_ip_range_names = []

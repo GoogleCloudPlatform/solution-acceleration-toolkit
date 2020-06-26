@@ -47,8 +47,8 @@ template "devops" {
       }
       branch_regex                  = "^master$"
       terraform_root                = "terraform"
-      continuous_deployment_enabled = true
-      trigger_enabled               = true
+      enable_continuous_deployment  = true
+      enable_triggers               = true
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]
@@ -73,5 +73,25 @@ template "monitor" {
   data = {
     project_id = "example-monitor"
     domain     = "example.com"
+  }
+}
+
+# Top level prod folder.
+template "folder_prod" {
+  recipe_path = "{{$recipes}}/folder.hcl"
+  output_path = "./live/prod"
+  data = {
+    display_name = "prod"
+  }
+}
+
+# Prod folder for team 1.
+template "folder_team1" {
+  recipe_path = "{{$recipes}}/folder.hcl"
+  output_path = "./live/prod/team1"
+  data = {
+    parent_type                  = "folder"
+    add_parent_folder_dependency = true
+    display_name                 = "team1"
   }
 }

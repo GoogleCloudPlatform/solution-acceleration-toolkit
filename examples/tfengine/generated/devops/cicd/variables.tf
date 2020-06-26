@@ -26,19 +26,19 @@ variable "state_bucket" {
   type        = string
 }
 
-variable "continuous_deployment_enabled" {
+variable "enable_continuous_deployment" {
   description = "Whether or not to enable continuous deployment of Terraform configs"
   type        = bool
   default     = false
 }
 
-variable "trigger_enabled" {
+variable "enable_triggers" {
   description = "Whether or not to enable all Cloud Build triggers"
   type        = bool
   default     = true
 }
 
-variable "deployment_trigger_enabled" {
+variable "enable_deployment_trigger" {
   description = "Whether or not to enable the post-submit Cloud Build trigger to deploy Terraform configs"
   type        = bool
   default     = true

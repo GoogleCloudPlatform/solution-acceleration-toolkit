@@ -28,22 +28,22 @@ module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.2.0"
 
-  dataset_id = "1billion_ms_example_dataset"
-  project_id = var.project_id
-  location   = "us-east1"
+  dataset_id                  = "1billion_ms_example_dataset"
+  project_id                  = var.project_id
+  location                    = "us-east1"
   default_table_expiration_ms = 1e+09
 
 
   access = [
-  {
-    role          = "roles/bigquery.dataOwner"
-    special_group = "projectOwners"
-  },
-  {
-    group_by_email = "example-readers@example.com"
-    role           = "roles/bigquery.dataViewer"
-  },
-]
+    {
+      role          = "roles/bigquery.dataOwner"
+      special_group = "projectOwners"
+    },
+    {
+      group_by_email = "example-readers@example.com"
+      role           = "roles/bigquery.dataViewer"
+    },
+  ]
 
 }
 
@@ -58,12 +58,12 @@ module "example_mysql_instance" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
-  
-  
+
+
 }
 module "project_iam_members" {
-  source   = "terraform-google-modules/iam/google//modules/projects_iam"
-  version  = "~> 6.1.0"
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 6.1.0"
 
   projects = [var.project_id]
   mode     = "additive"
@@ -100,17 +100,17 @@ module "example_healthcare_dataset" {
   location = "us-central1"
 
   iam_members = [
-  {
-    member = "group:example-healthcare-dataset-viewers@example.com"
-    role   = "roles/healthcare.datasetViewer"
-  },
-]
+    {
+      member = "group:example-healthcare-dataset-viewers@example.com"
+      role   = "roles/healthcare.datasetViewer"
+    },
+  ]
 
 
   dicom_stores = [
     {
       name = "example-dicom-store"
-      
+
     }
   ]
   fhir_stores = [
@@ -119,17 +119,17 @@ module "example_healthcare_dataset" {
       version = "R4"
 
       iam_members = [
-  {
-    member = "group:example-fhir-viewers@example.com"
-    role   = "roles/healthcare.fhirStoreViewer"
-  },
-]
-}
+        {
+          member = "group:example-fhir-viewers@example.com"
+          role   = "roles/healthcare.fhirStoreViewer"
+        },
+      ]
+    }
   ]
   hl7_v2_stores = [
     {
       name = "example-hl7-store"
-      
+
     }
   ]
 }

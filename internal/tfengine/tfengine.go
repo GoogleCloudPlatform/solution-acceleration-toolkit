@@ -22,9 +22,11 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -51,6 +53,10 @@ func Run(confPath, outPath string) error {
 	defer os.RemoveAll(tmpDir)
 
 	if err := dump(c, filepath.Dir(confPath), tmpDir); err != nil {
+		return err
+	}
+
+	if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 		return err
 	}
 

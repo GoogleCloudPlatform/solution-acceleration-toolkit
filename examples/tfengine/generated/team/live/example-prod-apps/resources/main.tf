@@ -24,8 +24,8 @@ terraform {
 
 
 module "project_iam_members" {
-  source   = "terraform-google-modules/iam/google//modules/projects_iam"
-  version  = "~> 6.1.0"
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 6.1.0"
 
   projects = [var.project_id]
   mode     = "additive"

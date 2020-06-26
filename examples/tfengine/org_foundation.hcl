@@ -46,8 +46,8 @@ template "devops" {
         name  = "example"
       }
       branch_regex                  = "^master$"
-      continuous_deployment_enabled = true
-      trigger_enabled               = true
+      enable_continuous_deployment  = true
+      enable_triggers               = true
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]
