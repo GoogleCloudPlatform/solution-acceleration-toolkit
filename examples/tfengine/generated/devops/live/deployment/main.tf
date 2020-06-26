@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "deployments"
+    prefix = "deployment"
   }
 }
 

@@ -1,6 +1,6 @@
-# Deployment
+# Deployments
 
-This directory defines the entire architecture in Terraform.
+This directory defines custom Terraform configs for your infrastructure.
 
 After [bootstrap/](../../bootstrap) has been deployed, you can deploy the
 configs here by running
