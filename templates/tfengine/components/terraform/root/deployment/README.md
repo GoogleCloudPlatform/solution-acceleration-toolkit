@@ -1,4 +1,4 @@
-# Deployments
+# Deployment
 
 This directory defines custom Terraform configs for your infrastructure.
 
