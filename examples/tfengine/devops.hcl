@@ -35,6 +35,8 @@ template "devops" {
       "group:example-devops-owners@example.com",
     ]
 
+    enable_terragrunt = false,
+
     cicd = {
       github = {
         owner = "GoogleCloudPlatform"
