@@ -94,22 +94,22 @@ schema = {
           description = "Regex of the branches to set the Cloud Build Triggers to monitor."
           type        = "string"
         }
-        continuous_deployment_enabled = {
+        enable_continuous_deployment = {
           description = "Whether or not to enable continuous deployment of Terraform configs."
           type        = "boolean"
         }
-        trigger_enabled = {
+        enable_triggers = {
           description = "Whether or not to enable all Cloud Build triggers."
           type        = "boolean"
         }
-        deployment_trigger_enabled = {
+        enable_deployment_trigger = {
           description = <<EOF
             Whether or not to enable the post-submit Cloud Build trigger to deploy
             Terraform configs. This is useful when you want to create the Cloud Build
             trigger and manually run it to deploy Terraform configs, but don't want
             it to be triggered automatically by a push to branch. The post-submit
             Cloud Build trigger for deployment will be disabled as long as one of
-            `trigger_enabled` or `deployment_trigger_enabled` is set to `false`.
+            `enable_triggers` or `enable_deployment_trigger` is set to `false`.
           EOF
           type        = "boolean"
         }

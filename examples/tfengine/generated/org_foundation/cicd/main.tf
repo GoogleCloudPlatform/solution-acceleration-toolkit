@@ -113,7 +113,7 @@ resource "google_project_iam_member" "cloudbuild_viewers" {
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
-  role   = var.continuous_deployment_enabled ? "roles/storage.admin" : "roles/storage.objectViewer"
+  role   = var.enable_continuous_deployment ? "roles/storage.admin" : "roles/storage.objectViewer"
   member = local.cloud_build_sa
   depends_on = [
     google_project_service.services,
@@ -122,7 +122,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 
 # Grant Cloud Build Service Account access to the organization.
 resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
-  for_each = toset(var.continuous_deployment_enabled ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
+  for_each = toset(var.enable_continuous_deployment ? local.cloudbuild_sa_editor_roles : local.cloudbuild_sa_viewer_roles)
   org_id   = 12345678
   role     = each.value
   member   = local.cloud_build_sa
@@ -144,7 +144,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 
 # Cloud Build Triggers for CI.
 resource "google_cloudbuild_trigger" "validate" {
-  disabled = ! var.trigger_enabled
+  disabled = ! var.enable_triggers
   provider = google-beta
   project  = var.project_id
   name     = "tf-validate"
@@ -173,7 +173,7 @@ resource "google_cloudbuild_trigger" "validate" {
 }
 
 resource "google_cloudbuild_trigger" "plan" {
-  disabled = ! var.trigger_enabled
+  disabled = ! var.enable_triggers
   provider = google-beta
   project  = var.project_id
   name     = "tf-plan"
@@ -204,8 +204,8 @@ resource "google_cloudbuild_trigger" "plan" {
 
 # Cloud Build Triggers for CD.
 resource "google_cloudbuild_trigger" "apply" {
-  count    = var.continuous_deployment_enabled ? 1 : 0
-  disabled = (! var.trigger_enabled) || (! var.deployment_trigger_enabled)
+  count    = var.enable_continuous_deployment ? 1 : 0
+  disabled = (! var.enable_triggers) || (! var.enable_deployment_trigger)
   provider = google-beta
   project  = var.project_id
   name     = "tf-apply"

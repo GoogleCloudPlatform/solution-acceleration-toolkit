@@ -23,16 +23,16 @@ to detect changes in the repo, trigger builds, and run the workloads.
             Repository should be hosted under the devops project.
     * `branch_regex`: Regex of the branches to set the Cloud Build Triggers to
         monitor.
-    * `continuous_deployment_enabled`: Whether or not to enable continuous
+    * `enable_continuous_deployment`: Whether or not to enable continuous
         deployment of Terraform configs.
-    * `trigger_enabled`: Whether or not to enable all Cloud Build triggers.
-    * `deployment_trigger_enabled`: Whether or not to enable the post-submit
+    * `enable_triggers`: Whether or not to enable all Cloud Build triggers.
+    * `enable_deployment_trigger`: Whether or not to enable the post-submit
         Cloud Build trigger to deploy Terraform configs. This is useful when you
         want to create the Cloud Build trigger and manually run it to deploy
         Terraform configs, but don't want it to be triggered automatically by a
         push to branch. The post-submit Cloud Build trigger for deployment will
-        be disabled as long as one of `trigger_enabled` or
-        `deployment_trigger_enabled` is set to `false`.
+        be disabled as long as one of `enable_triggers` or
+        `enable_deployment_trigger` is set to `false`.
     * `terraform_root`: Path of the directory relative to the repo root
         containing the Terraform configs.
     * `build_viewers`: IAM members to grant `cloudbuild.builds.viewer` role in
@@ -71,15 +71,15 @@ to detect changes in the repo, trigger builds, and run the workloads.
         * This also performs a non-blocking check for resource deletions.
             These are worth reviewing, as deletions are potentially destructive.
 
-    If `continuous_deployment_enabled` is set to `true` in your Terraform Engine
-    config, `continuous_deployment_enabled` will be set to `true` in
+    If `enable_continuous_deployment` is set to `true` in your Terraform Engine
+    config, `enable_continuous_deployment` will be set to `true` in
     [terraform.tfvars](./terraform.tfvars) to create an additional Cloud Build
     trigger and grant the Cloud Build service account broder permissions. After
     the Pull Request is approved and submitted, this postsubmit deployment job
     can automatically apply the config changes to Google Cloud.
 
     After the triggers are created, to temporarily disable or re-enable them,
-    set the `trigger_enabled` in [terraform.tfvars](./terraform.tfvars) to
+    set the `enable_triggers` in [terraform.tfvars](./terraform.tfvars) to
     `false` or `true` and apply the changes by running the following commands:
 
     ```shell
