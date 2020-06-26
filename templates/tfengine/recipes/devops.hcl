@@ -61,6 +61,8 @@ schema = {
       type        = "object"
       required = [
         "branch_regex",
+        "enable_continuous_deployment",
+        "enable_triggers",
       ]
       properties = {
         github = {
