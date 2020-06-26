@@ -19,9 +19,8 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    {{- if not (get . "disable_gcs_backend_config")}}
     bucket = "{{.state_bucket}}"
-    {{- end}}
+    prefix = "deployments"
   }
 }
 

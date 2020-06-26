@@ -84,7 +84,7 @@ template "root" {
 {{else}}
 template "root" {
   component_path = "../components/terraform/root"
-  output_path    = "./live"
+  output_path    = "./live/deployments"
 }
 {{end}}
 
