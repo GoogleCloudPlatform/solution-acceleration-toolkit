@@ -27,18 +27,18 @@ import (
 
 // FormatDir formats the hcl files in the given directory.
 // The user must have terraform and terragrunt binaries in their PATH.
-func FormatDir(dir string) error {
-	rn := &runner.Default{}
-
+func FormatDir(rn runner.Runner, dir string) error {
 	tfFmt := exec.Command("terraform", "fmt", "-recursive")
 	tfFmt.Dir = dir
-	if err := rn.CmdRun(tfFmt); err != nil {
+	// Silent stdout.
+	if _, err := rn.CmdOutput(tfFmt); err != nil {
 		return fmt.Errorf("failed to format terraform files: %v", err)
 	}
 
 	tgFmt := exec.Command("terragrunt", "hclfmt")
 	tgFmt.Dir = dir
-	if err := rn.CmdRun(tgFmt); err != nil {
+	// Silent stdout.
+	if _, err := rn.CmdOutput(tgFmt); err != nil {
 		return fmt.Errorf("failed to format terragrunt and hcl files: %v", err)
 	}
 

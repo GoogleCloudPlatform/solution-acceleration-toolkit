@@ -26,6 +26,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
 )
@@ -55,7 +56,7 @@ func Run(confPath, outPath string) error {
 		return err
 	}
 
-	if err := hcl.FormatDir(tmpDir); err != nil {
+	if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 		return err
 	}
 
