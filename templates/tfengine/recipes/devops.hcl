@@ -29,16 +29,16 @@ schema = {
     }
     parent_type = {
       description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
-      type = "string"
-      pattern = "^organization|folder$"
+      type        = "string"
+      pattern     = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF
         ID of parent GCP resource to apply the policy: can be one of the organization ID,
         folder ID according to parent_type.
       EOF
-      type = "string"
-      pattern = "^[0-9]{8,25}$"
+      type        = "string"
+      pattern     = "^[0-9]{8,25}$"
     }
     billing_account = {
       description = "ID of billing account to attach to this project."
@@ -56,10 +56,85 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
-    # TODO(xingao): expand CICD schema.
     cicd = {
       description = "Config for CICD. If unset there will be no CICD."
       type        = "object"
+      required = [
+        "branch_regex",
+      ]
+      properties = {
+        github = {
+          description = "Config for GitHub Cloud Build triggers."
+          type        = "object"
+          properties = {
+            owner = {
+              description = "GitHub repo owner."
+              type        = "string"
+            }
+            name = {
+              description = "GitHub repo name."
+              type        = "string"
+            }
+          }
+        }
+        cloud_source_repository = {
+          description = "Config for Google Cloud Source Repository Cloud Build triggers."
+          type        = "object"
+          properties = {
+            name = {
+              description = <<EOF
+                Cloud Source Repository repo name.
+                The Cloud Source Repository should be hosted under the devops project.
+              EOF
+              type        = "string"
+            }
+          }
+        }
+        branch_regex = {
+          description = "Regex of the branches to set the Cloud Build Triggers to monitor."
+          type        = "string"
+        }
+        continuous_deployment_enabled = {
+          description = "Whether or not to enable continuous deployment of Terraform configs."
+          type        = "boolean"
+        }
+        trigger_enabled = {
+          description = "Whether or not to enable all Cloud Build triggers."
+          type        = "boolean"
+        }
+        deployment_trigger_enabled = {
+          description = <<EOF
+            Whether or not to enable the post-submit Cloud Build trigger to deploy
+            Terraform configs. This is useful when you want to create the Cloud Build
+            trigger and manually run it to deploy Terraform configs, but don't want
+            it to be triggered automatically by a push to branch. The post-submit
+            Cloud Build trigger for deployment will be disabled as long as one of
+            `trigger_enabled` or `deployment_trigger_enabled` is set to `false`.
+          EOF
+          type        = "boolean"
+        }
+        terraform_root = {
+          description = "Path of the directory relative to the repo root containing the Terraform configs."
+          type        = "string"
+        }
+        build_viewers = {
+          description = "IAM members to grant `cloudbuild.builds.viewer` role in the devops project to see CICD results."
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+        managed_services = {
+          description = <<EOF
+            APIs to enable in the devops project so the Cloud Build service account can manage
+            those services in other projects.
+          EOF
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+      }
     }
   }
 }
