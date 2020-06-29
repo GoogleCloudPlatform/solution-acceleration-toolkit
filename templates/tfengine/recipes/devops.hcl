@@ -64,6 +64,7 @@ schema = {
         after the bootstrap deployment has been applied. Then the user can run `terraform init`
         in the bootstrapd deployment to transfer the state from local to GCS.
       EOF
+      type       = "boolean"
     }
     enable_terragrunt = {
       description = <<EOF
