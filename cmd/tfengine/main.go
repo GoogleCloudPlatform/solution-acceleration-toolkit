@@ -28,6 +28,7 @@ import (
 var (
 	configPath = flag.String("config_path", "", "Path to config file")
 	outputPath = flag.String("output_path", "", "Path to directory dump output")
+	format     = flag.Bool("format", true, "Whether to format generated files.")
 )
 
 func main() {
@@ -40,7 +41,7 @@ func main() {
 		log.Fatal("--output_path must be set")
 	}
 
-	if err := tfengine.Run(*configPath, *outputPath); err != nil {
+	if err := tfengine.Run(*configPath, *outputPath, *format); err != nil {
 		log.Fatal(err)
 	}
 }
