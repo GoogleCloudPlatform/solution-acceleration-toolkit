@@ -79,7 +79,7 @@ func resourcesFromConfig(configPath string, unsupported map[string]bool) error {
 	defer os.RemoveAll(tmp)
 
 	// Generate configs from the top-level config
-	if err := tfengine.Run(configPath, tmp); err != nil {
+	if err := tfengine.Run(configPath, tmp, false); err != nil {
 		return fmt.Errorf("tfengine.Run(%q, %q) = %v", configPath, tmp, err)
 	}
 
