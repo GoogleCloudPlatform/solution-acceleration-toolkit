@@ -100,8 +100,7 @@ resource "google_project_iam_member" "cloudbuild_viewers" {
     google_project_service.services,
   ]
 }
-
-{{- if has . "apply_trigger"}}
+{{if has . "apply_trigger"}}
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
