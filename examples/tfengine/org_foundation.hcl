@@ -45,9 +45,11 @@ template "devops" {
         owner = "GoogleCloudPlatform"
         name  = "example"
       }
-      branch_regex                  = "^master$"
-      enable_continuous_deployment  = true
-      enable_triggers               = true
+      branch_regex = "^master$"
+      # Prepare and enable default triggers.
+      validate_trigger = {}
+      plan_trigger     = {}
+      apply_trigger    = {}
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]

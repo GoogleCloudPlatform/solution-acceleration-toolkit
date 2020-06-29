@@ -49,10 +49,12 @@ template "devops" {
         owner = "GoogleCloudPlatform"
         name  = "example"
       }
-      branch_regex                  = "^master$"
-      terraform_root                = "terraform"
-      enable_continuous_deployment  = true
-      enable_triggers               = true
+      branch_regex   = "^master$"
+      terraform_root = "terraform"
+      # Prepare and enable default triggers.
+      validate_trigger = {}
+      plan_trigger     = {}
+      apply_trigger    = {}
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]
@@ -110,7 +112,7 @@ template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/example-prod-networks"
   data = {
-    parent_type                  = "folder"
+    parent_type = "folder"
     project = {
       project_id         = "example-prod-networks"
       is_shared_vpc_host = true
@@ -192,7 +194,7 @@ template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/example-prod-data"
   data = {
-    parent_type                  = "folder"
+    parent_type = "folder"
     project = {
       project_id = "example-prod-data"
       apis = [
@@ -315,7 +317,7 @@ template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/example-prod-apps"
   data = {
-    parent_type                  = "folder"
+    parent_type = "folder"
     project = {
       project_id = "example-prod-apps"
       apis = [
@@ -364,7 +366,7 @@ template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./live/example-prod-firebase"
   data = {
-    parent_type                  = "folder"
+    parent_type = "folder"
     project = {
       project_id = "example-prod-firebase"
       apis = [

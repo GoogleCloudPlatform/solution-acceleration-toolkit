@@ -31,7 +31,7 @@ import (
 	"github.com/otiai10/copy"
 )
 
-func Run(confPath, outPath string) error {
+func Run(confPath, outPath string, format bool) error {
 	var err error
 	confPath, err = pathutil.Expand(confPath)
 	if err != nil {
@@ -56,8 +56,10 @@ func Run(confPath, outPath string) error {
 		return err
 	}
 
-	if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
-		return err
+	if format {
+		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
+			return err
+		}
 	}
 
 	if err := os.MkdirAll(outPath, 0755); err != nil {
