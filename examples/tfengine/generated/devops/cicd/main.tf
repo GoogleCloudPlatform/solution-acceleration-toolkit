@@ -98,12 +98,21 @@ resource "google_project_iam_member" "cloudbuild_viewers" {
     google_project_service.services,
   ]
 }
+# IAM permissions to allow Cloud Build Service Account use the billing account.
+resource "google_billing_account_iam_member" "binding" {
+  billing_account_id = var.billing_account
+  role               = "roles/billing.user"
+  member             = local.cloud_build_sa
+  depends_on = [
+    google_project_service.services,
+  ]
+}
 
 # Cloud Build - Cloud Build Service Account IAM permissions
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
-  role   = "roles/storage.objectViewer"
+  role   = "roles/storage.admin"
   member = local.cloud_build_sa
   depends_on = [
     google_project_service.services,
@@ -112,7 +121,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 
 # Grant Cloud Build Service Account access to the organization.
 resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
-  for_each = toset(local.cloudbuild_sa_viewer_roles)
+  for_each = toset(local.cloudbuild_sa_editor_roles)
   org_id   = 12345678
   role     = each.value
   member   = local.cloud_build_sa
@@ -189,4 +198,31 @@ resource "google_cloudbuild_trigger" "plan" {
   ]
 }
 
+resource "google_cloudbuild_trigger" "apply" {
+  provider = google-beta
+  project  = var.project_id
+  name     = "tf-apply"
 
+  included_files = [
+    "${local.terraform_root_prefix}live/**",
+    "${local.terraform_root_prefix}cicd/configs/**"
+  ]
+
+  github {
+    owner = "GoogleCloudPlatform"
+    name  = "example"
+    push {
+      branch = "^master$"
+    }
+  }
+
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
+
+  substitutions = {
+    _TERRAFORM_ROOT = local.terraform_root
+  }
+
+  depends_on = [
+    google_project_service.services,
+  ]
+}
