@@ -12,9 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-billing_account = "000-000-000"
-project_id      = "example-devops"
-state_bucket    = "example-terraform-state"
-build_viewers = [
-  "group:example-cicd-viewers@example.com",
-]
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
+    bucket = "{{.state_bucket}}"
+    prefix = "deployment"
+  }
+}
+
+# Add your Terraform configs below.

@@ -56,13 +56,18 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
+    enable_terragrunt = {
+      description = <<EOF
+        Whether to convert to a Terragrunt deployment. If set to "false", generate Terraform-only
+        configs and the CICD pipelines will only use Terraform. Default to "true".
+    EOF
+      type        = "boolean"
+    }
     cicd = {
       description = "Config for CICD. If unset there will be no CICD."
       type        = "object"
       required = [
         "branch_regex",
-        "enable_continuous_deployment",
-        "enable_triggers",
       ]
       properties = {
         github = {
@@ -96,25 +101,6 @@ schema = {
           description = "Regex of the branches to set the Cloud Build Triggers to monitor."
           type        = "string"
         }
-        enable_continuous_deployment = {
-          description = "Whether or not to enable continuous deployment of Terraform configs."
-          type        = "boolean"
-        }
-        enable_triggers = {
-          description = "Whether or not to enable all Cloud Build triggers."
-          type        = "boolean"
-        }
-        enable_deployment_trigger = {
-          description = <<EOF
-            Whether or not to enable the post-submit Cloud Build trigger to deploy
-            Terraform configs. This is useful when you want to create the Cloud Build
-            trigger and manually run it to deploy Terraform configs, but don't want
-            it to be triggered automatically by a push to branch. The post-submit
-            Cloud Build trigger for deployment will be disabled as long as one of
-            `enable_triggers` or `enable_deployment_trigger` is set to `false`.
-          EOF
-          type        = "boolean"
-        }
         terraform_root = {
           description = "Path of the directory relative to the repo root containing the Terraform configs."
           type        = "string"
@@ -136,6 +122,57 @@ schema = {
             type = "string"
           }
         }
+        validate_trigger = {
+          description = <<EOF
+            Config block for the presubmit validation Cloud Build trigger. If specified, create
+            the trigger and grant the Cloud Build Service Account necessary permissions to perform
+            the build.
+          EOF
+          type        = "object"
+          properties = {
+            disable = {
+              description = <<EOF
+                Whether or not to disable automatic triggering from a PR/push to branch. Default
+                to false.
+              EOF
+              type        = "boolean"
+            }
+          }
+        }
+        plan_trigger = {
+          description = <<EOF
+            Config block for the presubmit plan Cloud Build trigger. If specified, create
+            the trigger and grant the Cloud Build Service Account necessary permissions to perform
+            the build.
+          EOF
+          type        = "object"
+          properties = {
+            disable = {
+              description = <<EOF
+                Whether or not to disable automatic triggering from a PR/push to branch. Default
+                to false.
+              EOF
+              type        = "boolean"
+            }
+          }
+        }
+        apply_trigger = {
+          description = <<EOF
+            Config block for the postsubmit apply/deployyemt Cloud Build trigger. If specified,
+            create the trigger and grant the Cloud Build Service Account necessary permissions
+            to perform the build.
+          EOF
+          type        = "object"
+          properties = {
+            disable = {
+              description = <<EOF
+                Whether or not to disable automatic triggering from a PR/push to branch. Default
+                to false.
+              EOF
+              type        = "boolean"
+            }
+          }
+        }
       }
     }
   }
@@ -146,12 +183,20 @@ template "bootstrap" {
   output_path    = "./bootstrap"
 }
 
+{{if get . "enable_terragrunt" true}}
 template "root" {
   component_path = "../components/terragrunt/root"
   output_path    = "./live"
 }
+{{else}}
+template "root" {
+  component_path = "../components/terraform/root"
+  output_path    = "./live"
+}
+{{end}}
 
-{{if has . "cicd"}}
+# At least one trigger is specified.
+{{if and (has . "cicd") (or (has .cicd "validate_trigger") (has .cicd "plan_trigger") (has .cicd "apply_trigger"))}}
 template "cicd_manual" {
   component_path = "../components/cicd/manual"
   output_path    = "./cicd"
@@ -159,6 +204,13 @@ template "cicd_manual" {
     key = "cicd"
   }
 }
+
+{{if get . "enable_terragrunt" true}}
+template "root" {
+  component_path = "../components/cicd/terragrunt"
+  output_path    = "./cicd"
+}
+{{end}}
 
 template "cicd_auto" {
   component_path = "../components/cicd/auto"

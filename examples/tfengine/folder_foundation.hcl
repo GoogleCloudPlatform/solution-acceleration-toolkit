@@ -15,9 +15,9 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type           = "folder"
-  parent_id             = "12345678"
-  billing_account       = "000-000-000"
+  parent_type     = "folder"
+  parent_id       = "12345678"
+  billing_account = "000-000-000"
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
@@ -45,10 +45,12 @@ template "devops" {
         owner = "GoogleCloudPlatform"
         name  = "example"
       }
-      branch_regex                  = "^master$"
-      terraform_root                = "terraform"
-      enable_continuous_deployment  = true
-      enable_triggers               = true
+      branch_regex   = "^master$"
+      terraform_root = "terraform"
+      # Prepare and enable default triggers.
+      validate_trigger = {}
+      plan_trigger     = {}
+      apply_trigger    = {}
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]

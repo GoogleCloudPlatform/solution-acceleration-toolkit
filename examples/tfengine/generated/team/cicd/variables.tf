@@ -26,24 +26,6 @@ variable "state_bucket" {
   type        = string
 }
 
-variable "enable_continuous_deployment" {
-  description = "Whether or not to enable continuous deployment of Terraform configs"
-  type        = bool
-  default     = false
-}
-
-variable "enable_triggers" {
-  description = "Whether or not to enable all Cloud Build triggers"
-  type        = bool
-  default     = true
-}
-
-variable "enable_deployment_trigger" {
-  description = "Whether or not to enable the post-submit Cloud Build trigger to deploy Terraform configs"
-  type        = bool
-  default     = true
-}
-
 variable "terraform_root" {
   description = "Path of the directory relative to the repo root containing the Terraform configs"
   default     = "."
