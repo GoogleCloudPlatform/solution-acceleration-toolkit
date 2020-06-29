@@ -15,15 +15,6 @@
 billing_account               = "{{.billing_account}}"
 project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"
-{{- if has . "enable_continuous_deployment"}}
-enable_continuous_deployment  = {{.enable_continuous_deployment}}
-{{- end}}
-{{- if has . "enable_triggers"}}
-enable_triggers               = {{.enable_triggers}}
-{{- end}}
-{{- if has . "enable_deployment_trigger"}}
-enable_deployment_trigger     = {{.enable_deployment_trigger}}
-{{- end}}
 {{- if has . "terraform_root"}}
 terraform_root                = "{{.terraform_root}}"
 {{- end}}
