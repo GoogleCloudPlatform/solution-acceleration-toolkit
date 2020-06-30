@@ -104,7 +104,7 @@ func WriteBuffer(text string, data map[string]interface{}) (*bytes.Buffer, error
 		return nil, err
 	}
 	if err := tmpl.Execute(&buf, data); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("execute buffer %s with data %v: %v", text, data, err)
 	}
 	return &buf, nil
 }
