@@ -48,6 +48,16 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
+    enable_bootstrap_gcs_backend = {
+      description = <<EOF
+        Whether to enable GCS backend for the bootstrap deployment. Defaults to false.
+        Since the bootstrap deployment creates the state bucket, it cannot back the state
+        to the GCS bucket on the first deployment. Thus, this field should be set to true
+        after the bootstrap deployment has been applied. Then the user can run `terraform init`
+        in the bootstrapd deployment to transfer the state from local to GCS.
+      EOF
+      type       = "boolean"
+    }
     enable_terragrunt = {
       description = <<EOF
         Whether to convert to a Terragrunt deployment. If set to "false", generate Terraform-only
