@@ -13,7 +13,8 @@
 # limitations under the License.
 
 schema = {
-  title = "Recipe for resources within projects."
+  title                = "Recipe for resources within projects."
+  additionalProperties = false
   properties = {
     terraform_addons = {
       description = <<EOF
@@ -21,13 +22,14 @@ schema = {
         Can be used to support arbitrary resources not supported in the following list.
         For schema see ./deployment.hcl.
       EOF
-      type        = "object"
+      type                 = "object"
     }
     bastion_hosts = {
       description = "https://github.com/terraform-google-modules/terraform-google-bastion-host"
       type        = "array"
       items = {
-        type = "object"
+        type                 = "object"
+        additionalProperties = false
         required = [
           "name",
           "network",
@@ -92,7 +94,8 @@ schema = {
       description = "https://github.com/terraform-google-modules/terraform-google-bigquery"
       type        = "array"
       items = {
-        type = "object"
+        type                 = "object"
+        additionalProperties = false
         required = [
           "dataset_id",
         ]
@@ -113,13 +116,28 @@ schema = {
             description = <<EOF
               Access for this bigquery dataset.
               Each object should contain exactly one of the following keys:
-              - group_by_email: An email address of a Google Group to grant access to.
-              - user_by_email:  An email address of a user to grant access to.
-              - special_group: A special group to grant access to.
+              - group_by_email
+              - user_by_email
+              - special_group
             EOF
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                group_by_email = {
+                  description = "An email address of a Google Group to grant access to."
+                  type        = "string"
+                }
+                user_by_email = {
+                  description = "An email address of a user to grant access to."
+                  type        = "string"
+                }
+                special_group = {
+                  description = "A special group to grant access to."
+                  type        = "string"
+                }
+              }
             }
           }
         }
@@ -180,7 +198,8 @@ schema = {
             description = "Subnetworks within the network."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "name",
               ]
@@ -205,7 +224,8 @@ schema = {
                   description = "Secondary ranges of the subnet."
                   type        = "array"
                   items = {
-                    type = "object"
+                    type                 = "object"
+                    additionalProperties = false
                     required = [
                       "name",
                     ]
@@ -251,7 +271,8 @@ schema = {
             description = "NATs to attach to the router."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "name",
               ]
@@ -268,7 +289,8 @@ schema = {
                   description = "Subnet NAT configurations. Only applicable if 'source_subnetwork_ip_ranges_to_nat' is 'LIST_OF_SUBNETWORKS'."
                   type        = "array"
                   items = {
-                    type = "object"
+                    type                 = "object"
+                    additionalProperties = false
                     required = [
                       "name",
                       "source_ip_ranges_to_nat",
@@ -305,7 +327,8 @@ schema = {
       description = "https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant"
       type        = "array"
       items = {
-        type = "object"
+        type                 = "object"
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -365,7 +388,8 @@ schema = {
             description = "IAM member to grant access for."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "role",
                 "member",
@@ -386,7 +410,8 @@ schema = {
             description = "Dicom stores to create."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "name",
               ]
@@ -399,7 +424,8 @@ schema = {
                   description = "IAM member to grant access for."
                   type        = "array"
                   items = {
-                    type = "object"
+                    type                 = "object"
+                    additionalProperties = false
                     required = [
                       "role",
                       "member",
@@ -423,7 +449,8 @@ schema = {
             description = "FHIR stores to create."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "name",
                 "version",
@@ -441,7 +468,8 @@ schema = {
                   description = "IAM member to grant access for."
                   type        = "array"
                   items = {
-                    type = "object"
+                    type                 = "object"
+                    additionalProperties = false
                     required = [
                       "role",
                       "member",
@@ -465,7 +493,8 @@ schema = {
             description = "HL7 V2 stores to create."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "name",
               ]
@@ -478,7 +507,8 @@ schema = {
                   description = "IAM member to grant access for."
                   type        = "array"
                   items = {
-                    type = "object"
+                    type                 = "object"
+                    additionalProperties = false
                     required = [
                       "role",
                       "member",
@@ -566,7 +596,8 @@ schema = {
             description = "IAM member to grant access for."
             type        = "array"
             items = {
-              type = "object"
+              type                 = "object"
+              additionalProperties = false
               required = [
                 "role",
                 "member",

@@ -14,12 +14,8 @@
 
 # TODO(umairidris): fill in resources and detailed project object schema.
 schema = {
-  title = "Recipe for creating GCP projects."
-  required = [
-    "parent_type",
-    "parent_id",
-    "project",
-  ]
+  title                = "Recipe for creating GCP projects."
+  additionalProperties = false
   properties = {
     parent_type = {
       description = "Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'."
@@ -44,8 +40,9 @@ schema = {
       type = "boolean"
     }
     project = {
-      description = "Config for the project."
-      type        = "object"
+      description          = "Config for the project."
+      type                 = "object"
+      additionalProperties = false
       required = [
         "project_id",
       ]
@@ -66,8 +63,9 @@ schema = {
           type        = "boolean"
         }
         shared_vpc_attachment = {
-          description = "If set, treats this project as a shared VPC service project."
-          type        = "object"
+          description          = "If set, treats this project as a shared VPC service project."
+          type                 = "object"
+          additionalProperties = false
           required = [
             "host_project_id",
           ]
@@ -80,7 +78,8 @@ schema = {
               description = "Subnets within the host project to grant this project access to."
               type        = "array"
               items = {
-                type = "object"
+                type                 = "object"
+                additionalProperties = false
                 required = [
                   "name",
                 ]
@@ -105,14 +104,14 @@ schema = {
           EOF
         }
       }
-      deployments = {
-        description = <<EOF
-          Map of deployment name to resources config.
-          Each key will be a directory in the output path.
-          For resource schema see ./resources.hcl.
-        EOF
-        type        = "object"
-      }
+    }
+    deployments = {
+      description = <<EOF
+        Map of deployment name to resources config.
+        Each key will be a directory in the output path.
+        For resource schema see ./resources.hcl.
+      EOF
+      type        = "object"
     }
   }
 }
