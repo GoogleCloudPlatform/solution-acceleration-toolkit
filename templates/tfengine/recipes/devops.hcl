@@ -14,14 +14,6 @@
 
 schema = {
   title = "Devops Recipe"
-  required = [
-    "parent_type",
-    "parent_id",
-    "project_id",
-    "billing_account",
-    "admins_group",
-    "project_owners",
-  ]
   properties = {
     project_id = {
       description = "Project ID to host devops related resources such as state bucket and CICD."
