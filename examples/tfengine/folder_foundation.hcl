@@ -31,7 +31,7 @@ template "devops" {
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
-    # bootstrap_gcs_backend = true
+    # enable_bootstrap_gcs_backend = true
 
     project_id   = "example-devops"
     state_bucket = "example-terraform-state"
