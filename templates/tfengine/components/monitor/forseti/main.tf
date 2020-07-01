@@ -40,7 +40,7 @@ module "network" {
 
 module "router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.0"
+  version = "~> 0.2.0"
 
   name    = "forseti-router"
   project = var.project_id
