@@ -127,7 +127,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 	case ti.ComponentPath != "":
 		if ti.Name == "org_policies" {
 			// Only check against unmerged template data so we can disallow additional properties in the schema.
-			if err := policygen.ValidateOrgPoliciesConfig(ti.Data, true); err != nil {
+			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
 				return err
 			}
 		}
