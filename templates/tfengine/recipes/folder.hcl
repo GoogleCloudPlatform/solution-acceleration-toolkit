@@ -13,10 +13,9 @@
 # limitations under the License.
 
 schema = {
-  title = "Recipe for creating GCP folders."
+  title                = "Recipe for creating GCP folders."
+  additionalProperties = false
   required = [
-    "parent_type",
-    "parent_id",
     "display_name",
   ]
   properties = {

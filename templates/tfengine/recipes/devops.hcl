@@ -13,15 +13,8 @@
 # limitations under the License.
 
 schema = {
-  title = "Devops Recipe"
-  required = [
-    "parent_type",
-    "parent_id",
-    "project_id",
-    "billing_account",
-    "admins_group",
-    "project_owners",
-  ]
+  title                = "Devops Recipe"
+  additionalProperties = false
   properties = {
     project_id = {
       description = "Project ID to host devops related resources such as state bucket and CICD."
@@ -56,6 +49,13 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
+    project_owners = {
+      description = "Owners of the devops project."
+      type        = "array"
+      items = {
+        type = "string"
+      }
+    }
     enable_bootstrap_gcs_backend = {
       description = <<EOF
         Whether to enable GCS backend for the bootstrap deployment. Defaults to false.
@@ -74,15 +74,17 @@ schema = {
       type        = "boolean"
     }
     cicd = {
-      description = "Config for CICD. If unset there will be no CICD."
-      type        = "object"
+      description          = "Config for CICD. If unset there will be no CICD."
+      type                 = "object"
+      additionalProperties = false
       required = [
         "branch_regex",
       ]
       properties = {
         github = {
-          description = "Config for GitHub Cloud Build triggers."
-          type        = "object"
+          description          = "Config for GitHub Cloud Build triggers."
+          type                 = "object"
+          additionalProperties = false
           properties = {
             owner = {
               description = "GitHub repo owner."
@@ -95,8 +97,9 @@ schema = {
           }
         }
         cloud_source_repository = {
-          description = "Config for Google Cloud Source Repository Cloud Build triggers."
-          type        = "object"
+          description          = "Config for Google Cloud Source Repository Cloud Build triggers."
+          type                 = "object"
+          additionalProperties = false
           properties = {
             name = {
               description = <<EOF
@@ -138,7 +141,8 @@ schema = {
             the trigger and grant the Cloud Build Service Account necessary permissions to perform
             the build.
           EOF
-          type        = "object"
+          type                 = "object"
+          additionalProperties = false
           properties = {
             disable = {
               description = <<EOF
@@ -155,7 +159,8 @@ schema = {
             the trigger and grant the Cloud Build Service Account necessary permissions to perform
             the build.
           EOF
-          type        = "object"
+          type                 = "object"
+          additionalProperties = false
           properties = {
             disable = {
               description = <<EOF
@@ -172,7 +177,8 @@ schema = {
             create the trigger and grant the Cloud Build Service Account necessary permissions
             to perform the build.
           EOF
-          type        = "object"
+          type                 = "object"
+          additionalProperties = false
           properties = {
             disable = {
               description = <<EOF

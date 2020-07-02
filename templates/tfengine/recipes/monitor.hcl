@@ -13,11 +13,8 @@
 # limitations under the License.
 
 schema = {
-  title = "Org Monitor Recipe"
-  required = [
-    "project_id",
-    "domain",
-  ]
+  title                = "Org Monitor Recipe"
+  additionalProperties = false
   properties = {
     project_id = {
       description = "ID of the project to host monitoring resources."
