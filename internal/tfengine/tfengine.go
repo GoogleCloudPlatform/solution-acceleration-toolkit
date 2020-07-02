@@ -71,64 +71,75 @@ func Run(confPath, outPath string, format bool) error {
 
 func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
-		outputPath := filepath.Join(outputPath, ti.OutputPath)
+		if err := dumpTemplate(conf, root, outputPath, ti); err != nil {
+			return fmt.Errorf("template %q: %v", ti.Name, err)
+		}
+	}
+	return nil
+}
 
-		data := make(map[string]interface{})
-		if err := template.MergeData(data, conf.Data, nil); err != nil {
+func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error {
+	outputPath = filepath.Join(outputPath, ti.OutputPath)
+
+	data := make(map[string]interface{})
+	if err := template.MergeData(data, conf.Data, nil); err != nil {
+		return err
+	}
+	if err := template.MergeData(data, ti.Data, ti.Flatten); err != nil {
+		return err
+	}
+
+	switch {
+	case ti.RecipePath != "":
+		rp, err := pathutil.Expand(ti.RecipePath)
+		if err != nil {
 			return err
 		}
-		if err := template.MergeData(data, ti.Data, ti.Flatten); err != nil {
-			return err
+		if !filepath.IsAbs(rp) {
+			rp = filepath.Join(root, rp)
+		}
+		rc, err := loadConfig(rp, data)
+		if err != nil {
+			return fmt.Errorf("load recipe %q: %v", rp, err)
 		}
 
-		switch {
-		case ti.RecipePath != "":
-			rp, err := pathutil.Expand(ti.RecipePath)
-			if err != nil {
-				return err
-			}
-			if !filepath.IsAbs(rp) {
-				rp = filepath.Join(root, rp)
-			}
-			rc, err := loadConfig(rp, data)
-			if err != nil {
-				return fmt.Errorf("load recipe %q: %v", rp, err)
-			}
-
-			// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
-			if rc.Data == nil {
-				rc.Data = make(map[string]interface{})
-			}
-			if err := template.MergeData(rc.Data, data, nil); err != nil {
-				return err
-			}
-
-			// Validate the schema, if present.
-			if len(rc.Schema) > 0 {
-				if err := jsonschema.ValidateMap(rc.Schema, rc.Data); err != nil {
-					return fmt.Errorf("recipe %q: %v", rp, err)
-				}
-			}
-
-			if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
+		// Validate the schema, if present.
+		if len(rc.Schema) > 0 {
+			// Only check against unmerged template data so we can disallow additional properties in the schema.
+			if err := jsonschema.ValidateMap(rc.Schema, ti.Data); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
-		case ti.ComponentPath != "":
-			if ti.Name == "org_policies" {
-				if err := policygen.ValidateOrgPoliciesConfig(data, true); err != nil {
-					return err
-				}
-			}
-			cp, err := pathutil.Expand(ti.ComponentPath)
-			if err != nil {
+		}
+
+		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
+		if rc.Data == nil {
+			rc.Data = make(map[string]interface{})
+		}
+
+		if err := template.MergeData(rc.Data, data, nil); err != nil {
+			return err
+		}
+
+		if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
+			return fmt.Errorf("recipe %q: %v", rp, err)
+		}
+
+	case ti.ComponentPath != "":
+		if ti.Name == "org_policies" {
+			// Only check against unmerged template data so we can disallow additional properties in the schema.
+			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
 				return err
 			}
-			if !filepath.IsAbs(cp) {
-				cp = filepath.Join(root, cp)
-			}
-			if err := template.WriteDir(cp, outputPath, data); err != nil {
-				return fmt.Errorf("component %q: %v", cp, err)
-			}
+		}
+		cp, err := pathutil.Expand(ti.ComponentPath)
+		if err != nil {
+			return err
+		}
+		if !filepath.IsAbs(cp) {
+			cp = filepath.Join(root, cp)
+		}
+		if err := template.WriteDir(cp, outputPath, data); err != nil {
+			return fmt.Errorf("component %q: %v", cp, err)
 		}
 	}
 	return nil

@@ -13,8 +13,9 @@
 # limitations under the License.
 
 schema = {
-  title       = "Terraform Deployment Recipe."
-  description = "This recipe should be used to setup a new Terraform deployment directory."
+  title                = "Terraform Deployment Recipe."
+  description          = "This recipe should be used to setup a new Terraform deployment directory."
+  additionalProperties = false
   properties = {
     enable_terragrunt = {
       description = "Whether to convert to a Terragrunt deployment. Adds a terragrunt.hcl file in the deployment."
@@ -28,8 +29,9 @@ schema = {
       type        = "string"
     }
     terraform_addons = {
-      description = "Extra addons to set in the deployment."
-      type        = "object"
+      description          = "Extra addons to set in the deployment."
+      type                 = "object"
+      additionalProperties = false
       properties = {
         raw_config = {
           description = <<EOF
@@ -42,7 +44,8 @@ schema = {
           description = "Additional vars to set in the deployment in variables.tf."
           type = "array"
           items = {
-            type = "object"
+            type                 = "object"
+            additionalProperties = false
             required = [
               "name",
               "type",
@@ -62,6 +65,9 @@ schema = {
               default = {
                 description = "Default value of variable."
               }
+              terragrunt_input = {
+                description = "Input value to set in terragrunt.hcl for this var."
+              }
             }
           }
         }
@@ -69,7 +75,8 @@ schema = {
           description = "Additional outputs to set in outputs.tf."
           type = "array"
           items = {
-            type = "object"
+            type                 = "object"
+            additionalProperties = false
             required = [
               "name",
               "value",
@@ -82,6 +89,36 @@ schema = {
               value = {
                 description = "Value of output."
                 type        = "string"
+              }
+            }
+          }
+        }
+        inputs = {
+          description = "Additional inputs to be set in terraform.tfvars"
+          type        = "object"
+        }
+        deps = {
+          description = "Additional dependencies on other deployments."
+          type        = "array"
+          items = {
+            type                 = "object"
+            additionalProperties = false
+            required = [
+              "name",
+              "path",
+            ]
+            properties = {
+              name = {
+                description = "Name of dependency."
+                type        = "string"
+              }
+              path = {
+                description = "Path to deployment."
+                type        = "string"
+              }
+              mock_outputs = {
+                description = "Mock outputs for the deployment to add."
+                type        = "object"
               }
             }
           }
