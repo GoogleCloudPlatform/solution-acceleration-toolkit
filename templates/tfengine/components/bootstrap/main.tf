@@ -40,7 +40,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 8.0.0"
 
-  name                    = "{{.project_id}}"
+  name                    = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
   org_id                  = "{{.parent_id}}"
   {{- else}}
@@ -61,7 +61,7 @@ module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "{{.state_bucket}}"
+  name       = "{{.state_bucket.name}}"
   project_id = module.project.project_id
   location   = "{{.storage_location}}"
 }
@@ -70,7 +70,7 @@ module "state_bucket" {
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = {{hcl .project_owners}}
+  members = {{hcl .project.owners}}
 }
 
 # Org level IAM permissions for org admins.
