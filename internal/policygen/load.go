@@ -45,13 +45,8 @@ type config struct {
 	Schema    map[string]interface{} `json:"schema,omitempty"`
 }
 
-func ValidateOrgPoliciesConfig(conf map[string]interface{}, allowAdditionalProperties bool) error {
-	s := orgPoliciesSchema
-	if !allowAdditionalProperties {
-		s = append(s, []byte("additionalProperties = false")...)
-	}
-
-	sj, err := hcl.ToJSON(s)
+func ValidateOrgPoliciesConfig(conf map[string]interface{}) error {
+	sj, err := hcl.ToJSON(orgPoliciesSchema)
 	if err != nil {
 		return err
 	}
@@ -89,7 +84,7 @@ func loadConfig(path string) (*config, error) {
 	}
 
 	if c.GCPOrgPolicies != nil {
-		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies, false); err != nil {
+		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies); err != nil {
 			return nil, err
 		}
 	}

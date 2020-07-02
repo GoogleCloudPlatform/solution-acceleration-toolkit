@@ -13,17 +13,8 @@
 # limitations under the License.
 
 schema = {
-  title = "Org Audit Recipe"
-  required = [
-    "parent_type",
-    "parent_id",
-    "project_id",
-    "dataset_name",
-    "bucket_name",
-    "auditors_group",
-    "bigquery_location",
-    "storage_location",
-  ]
+  title                = "Org Audit Recipe"
+  additionalProperties = false
   properties = {
     parent_type = {
       description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
