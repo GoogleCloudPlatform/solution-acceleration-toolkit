@@ -136,7 +136,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 1. To set up helper environment vars, run the following commands:
 
     ```shell
-    CONFIG_PATH=examples/tfengine/org_foundation.yaml
+    CONFIG_PATH=examples/tfengine/org_foundation.hcl
     OUTPUT_PATH=/tmp/engine
     ```
 
