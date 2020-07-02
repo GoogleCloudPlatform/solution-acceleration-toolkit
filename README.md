@@ -9,11 +9,11 @@ of your Google Cloud organization.
 
 ## Tools
 
-- [Terraform Engine](./cmd/tfengine): Generate end-to-end infra-as-code for
+- [Terraform Engine](./docs/tfengine): Generate end-to-end infra-as-code for
     Google Cloud with security, compliance, and best practices built in.
 
-- [Policy Generator](./cmd/policygen): Generate best practices policies for
+- [Policy Generator](./docs/policygen): Generate best practices policies for
     Forseti and other monitoring solutions, customized for your infra.
 
-- [Terraform Importer](./cmd/tfimport): Automatically detect and import
+- [Terraform Importer](./docs/tfimport): Automatically detect and import
     existing resources defined by your Terraform configs.

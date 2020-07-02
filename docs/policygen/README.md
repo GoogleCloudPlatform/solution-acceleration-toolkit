@@ -42,7 +42,7 @@ CONFIG_PATH=examples/policygen/config.yaml
 STATE_PATH=/path/to/your/tfstate
 OUTPUT_PATH=/tmp/policygen
 
-# Step 3: Install the policygen
+# Step 3: Install the policygen from the repo root
 go install ./cmd/policygen
 
 # Step 4: Generate policies. Edit config with values of your infra.
