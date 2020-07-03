@@ -29,8 +29,17 @@ module "{{resourceName . "name"}}" {
   ip_range_services      = "{{.ip_range_services_name}}"
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
 
-  # Optional.
-  master_authorized_networks = var.master_authorized_networks
+  {{- if has . "master_authorized_networks"}}
+  master_authorized_networks = [
+    {{- range .master_authorized_networks}}
+    {
+      cidr_block   = "{{.cidr_block}}"
+      display_name = "{{.display_name}}"
+    },
+    {{- end}}
+  ]
+  {{- end}}
+
   istio                      = true
   skip_provisioners          = true
   enable_private_endpoint    = false
