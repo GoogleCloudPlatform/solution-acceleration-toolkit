@@ -62,7 +62,7 @@ module "forseti" {
   source  = "terraform-google-modules/forseti/google"
   version = "~> 5.2.1"
 
-  domain     = "{{.domain}}"
+  domain     = "{{.forseti.domain}}"
   project_id = var.project_id
   {{- if eq .parent_type "organization"}}
   org_id     = "{{.parent_id}}"

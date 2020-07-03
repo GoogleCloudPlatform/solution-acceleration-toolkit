@@ -16,10 +16,16 @@ schema = {
   title                = "Org Monitor Recipe"
   additionalProperties = false
   properties = {
-    project_id = {
-      description = "ID of the project to host monitoring resources."
-      type        = "string"
+    project = {
+    # project_id = {
+    #  description = "ID of the project to host monitoring resources."
+    #  type        = "string"
+    #}
+
     }
+  forseti = {
+
+  }
     domain = {
       description = "Domain for the Forseti instance."
       type        = "string"
@@ -56,11 +62,6 @@ schema = {
 template "project" {
   recipe_path = "./project.hcl"
   output_path = "./monitor"
-  data = {
-    project = {
-      project_id = "{{.project_id}}"
-    }
-  }
 }
 
 template "forseti" {

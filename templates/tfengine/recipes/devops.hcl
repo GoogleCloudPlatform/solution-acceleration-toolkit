@@ -16,10 +16,14 @@ schema = {
   title                = "Devops Recipe"
   additionalProperties = false
   properties = {
-    project_id = {
-      description = "Project ID to host devops related resources such as state bucket and CICD."
-      type        = "string"
+    project = {
+      type = "object"
+      # project_id = {
+      # description = "Project ID to host devops related resources such as state bucket and CICD."
+      # type        = "string"
+      #}
     }
+
     parent_type = {
       description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
       type        = "string"

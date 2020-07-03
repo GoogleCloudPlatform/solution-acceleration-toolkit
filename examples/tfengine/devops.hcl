@@ -15,9 +15,10 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type     = "organization" # One of `organization` or `folder`.
-  parent_id       = "12345678"
-  billing_account = "000-000-000"
+  parent_type      = "organization" # One of `organization` or `folder`.
+  parent_id        = "12345678"
+  billing_account  = "000-000-000"
+  storage_location = "us-central1"
 }
 
 template "devops" {
@@ -27,16 +28,16 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # enable_bootstrap_gcs_backend = true
 
-    project_id       = "example-devops"
-    state_bucket     = "example-terraform-state"
-    storage_location = "us-central1"
-    admins_group     = "example-org-admin@example.com"
-    project_owners = [
-      "group:example-devops-owners@example.com",
-    ]
+    admins_group      = "example-org-admin@example.com"
+    state_bucket      = "example-terraform-state"
+    enable_terragrunt = false
 
-    enable_terragrunt = false,
-
+    project = {
+      project_id       = "example-devops"
+      owners = [
+        "group:example-devops-owners@example.com",
+      ]
+    }
     cicd = {
       github = {
         owner = "GoogleCloudPlatform"
@@ -44,6 +45,7 @@ template "devops" {
       }
       branch_regex   = "^master$"
       terraform_root = "terraform"
+
       # Prepare and enable default triggers.
       validate_trigger = {}
       plan_trigger     = {}

@@ -18,7 +18,7 @@ data = {
   parent_type     = "folder"
   parent_id       = "12345678"
   billing_account = "000-000-000"
-  state_bucket    = "example-terraform-state"
+  state_bucket    = "example-teraform-state"
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location   = "us-east1"
@@ -38,12 +38,14 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # enable_bootstrap_gcs_backend = true
 
-    project_id   = "example-devops"
-    admins_group = "example-org-admin@example.com"
-    project_owners = [
-      "group:example-devops-owners@example.com",
-    ]
+    admins_group = "example-team-admins@example.com"
 
+    project = {
+      project_id       = "example-devops"
+      owners = [
+        "group:example-devops-owners@example.com",
+      ]
+    }
     cicd = {
       github = {
         owner = "GoogleCloudPlatform"
@@ -51,19 +53,13 @@ template "devops" {
       }
       branch_regex   = "^master$"
       terraform_root = "terraform"
+
       # Prepare and enable default triggers.
       validate_trigger = {}
       plan_trigger     = {}
       apply_trigger    = {}
       build_viewers = [
         "group:example-cicd-viewers@example.com",
-      ]
-      managed_services = [
-        "container.googleapis.com",
-        "firebase.googleapis.com",
-        "healthcare.googleapis.com",
-        "iap.googleapis.com",
-        "secretmanager.googleapis.com",
       ]
     }
   }
