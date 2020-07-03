@@ -140,7 +140,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     OUTPUT_PATH=/tmp/engine
     ```
 
-1. To install the engine, run the following command:
+1. To install the engine, run the following command from the repo root:
 
     ```shell
     go install ./cmd/tfengine
