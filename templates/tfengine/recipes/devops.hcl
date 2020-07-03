@@ -16,14 +16,6 @@ schema = {
   title                = "Devops Recipe"
   additionalProperties = false
   properties = {
-    project = {
-      type = "object"
-      # project_id = {
-      # description = "Project ID to host devops related resources such as state bucket and CICD."
-      # type        = "string"
-      #}
-    }
-
     parent_type = {
       description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
       type        = "string"
@@ -40,6 +32,29 @@ schema = {
     billing_account = {
       description = "ID of billing account to attach to this project."
       type        = "string"
+    }
+    project = {
+      description          = "Config for the project to host devops related resources such as state bucket and CICD."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        project_id = {
+          description = "ID of project."
+          type        = "string"
+        }
+        owners = {
+          description = <<EOF
+            List of members to transfer ownership of the project to.
+            NOTE: By default the creating user will be the owner of the project.
+            Thus, there should be a group in this list and you must be part of that group,
+            so a group owns the project going forward.
+          EOF
+          type = "array"
+          items = {
+            type = "string"
+          }
+        }
+      }
     }
     state_bucket = {
       description = "Name of Terraform remote state bucket."

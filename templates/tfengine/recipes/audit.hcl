@@ -30,26 +30,37 @@ schema = {
       pattern = "^[0-9]{8,25}$"
     }
     project = {
-      type = "object"
-      #project_id = {
-      #  description = "ID of the project to host audit resources."
-      #  type        = "string"
-      #}
+      description          = "Config of project to host auditing resources"
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        project_id = {
+          description = "ID of project."
+          type        = "string"
+        }
+      }
     }
     logs_bigquery_dataset = {
-      type = "object"
-      #dataset_name = {
-      #  description = "Name of the Bigquery Dataset to store 1 year audit logs."
-      #  type        = "string"
-      #}
+      description          = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        dataset_id = {
+          description = "ID of Bigquery Dataset."
+          type        = "string"
+        }
+      }
     }
-
     logs_storage_bucket = {
-      type = "object"
-    #  bucket_name = {
-    #  description = "Name of GCS Bucket to store 7 year audit logs."
-    #  type        = "string"
-    #}
+      description          = "GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        name = {
+          description = "Name of GCS bucket."
+          type        = "string"
+        }
+      }
     }
     auditors_group = {
       description = <<EOF
