@@ -41,7 +41,7 @@ template "devops" {
     admins_group = "example-team-admins@example.com"
 
     project = {
-      project_id       = "example-devops"
+      project_id = "example-devops"
       owners = [
         "group:example-devops-owners@example.com",
       ]

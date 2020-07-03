@@ -33,7 +33,7 @@ template "devops" {
     enable_terragrunt = false
 
     project = {
-      project_id       = "example-devops"
+      project_id = "example-devops"
       owners = [
         "group:example-devops-owners@example.com",
       ]
