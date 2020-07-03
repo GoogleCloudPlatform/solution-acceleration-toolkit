@@ -28,18 +28,7 @@ module "{{resourceName . "name"}}" {
   ip_range_pods          = "{{.ip_range_pods_name}}"
   ip_range_services      = "{{.ip_range_services_name}}"
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
-
-  {{- if has . "master_authorized_networks"}}
-  master_authorized_networks = [
-    {{- range .master_authorized_networks}}
-    {
-      cidr_block   = "{{.cidr_block}}"
-      display_name = "{{.display_name}}"
-    },
-    {{- end}}
-  ]
-  {{- end}}
-
+  {{hclField . "master_authorized_networks" false -}}
   istio                      = true
   skip_provisioners          = true
   enable_private_endpoint    = false
