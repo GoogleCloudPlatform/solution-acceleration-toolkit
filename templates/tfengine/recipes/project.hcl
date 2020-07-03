@@ -43,9 +43,6 @@ schema = {
       description          = "Config for the project."
       type                 = "object"
       additionalProperties = false
-      required = [
-        "project_id",
-      ]
       properties = {
         project_id = {
           description = "ID of project to create."

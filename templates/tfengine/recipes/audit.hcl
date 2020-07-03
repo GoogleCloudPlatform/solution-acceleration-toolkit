@@ -29,17 +29,38 @@ schema = {
       type = "string"
       pattern = "^[0-9]{8,25}$"
     }
-    project_id = {
-      description = "ID of the project to host audit resources."
-      type        = "string"
+    project = {
+      description          = "Config of project to host auditing resources"
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        project_id = {
+          description = "ID of project."
+          type        = "string"
+        }
+      }
     }
-    dataset_name = {
-      description = "Name of the Bigquery Dataset to store 1 year audit logs."
-      type        = "string"
+    logs_bigquery_dataset = {
+      description          = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        dataset_id = {
+          description = "ID of Bigquery Dataset."
+          type        = "string"
+        }
+      }
     }
-    bucket_name = {
-      description = "Name of GCS Bucket to store 7 year audit logs."
-      type        = "string"
+    logs_storage_bucket = {
+      description          = "GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        name = {
+          description = "Name of GCS bucket."
+          type        = "string"
+        }
+      }
     }
     auditors_group = {
       description = <<EOF
@@ -65,7 +86,6 @@ template "project" {
   output_path = "./audit"
   data = {
     project = {
-      project_id = "{{.project_id}}"
       apis = [
         "bigquery.googleapis.com",
         "logging.googleapis.com",

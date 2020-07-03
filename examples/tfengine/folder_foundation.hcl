@@ -33,13 +33,15 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # enable_bootstrap_gcs_backend = true
 
-    project_id   = "example-devops"
-    state_bucket = "example-terraform-state"
     admins_group = "example-folder-admins@example.com"
-    project_owners = [
-      "group:example-devops-owners@example.com",
-    ]
+    state_bucket = "example-terraform-state"
 
+    project = {
+      project_id = "example-devops"
+      owners = [
+        "group:example-devops-owners@example.com",
+      ]
+    }
     cicd = {
       github = {
         owner = "GoogleCloudPlatform"
@@ -47,6 +49,7 @@ template "devops" {
       }
       branch_regex   = "^master$"
       terraform_root = "terraform"
+
       # Prepare and enable default triggers.
       validate_trigger = {}
       plan_trigger     = {}
@@ -62,10 +65,16 @@ template "audit" {
   recipe_path = "{{$recipes}}/audit.hcl"
   output_path = "./live"
   data = {
-    project_id     = "example-audit"
-    dataset_name   = "1yr_org_audit_logs"
-    bucket_name    = "7yr-org-audit-logs"
     auditors_group = "example-auditors@example.com"
+    project = {
+      project_id = "example-audit"
+    }
+    logs_bigquery_dataset = {
+      dataset_id = "1yr_org_audit_logs"
+    }
+    logs_storage_bucket = {
+      name = "7yr-org-audit-logs"
+    }
   }
 }
 
@@ -73,8 +82,12 @@ template "monitor" {
   recipe_path = "{{$recipes}}/monitor.hcl"
   output_path = "./live"
   data = {
-    project_id = "example-monitor"
-    domain     = "example.com"
+    project = {
+      project_id = "example-monitor"
+    }
+    forseti = {
+      domain = "example.com"
+    }
   }
 }
 
