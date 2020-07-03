@@ -33,7 +33,7 @@ template "devops" {
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # enable_bootstrap_gcs_backend = true
 
-    admins_group = "example-folder-admins@example.com"
+    admins_group = "example-org-admins@example.com"
     state_bucket = "example-terraform-state"
 
     project = {
