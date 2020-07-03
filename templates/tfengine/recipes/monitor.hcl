@@ -28,8 +28,9 @@ schema = {
       }
     }
     forseti = {
-      description = "Config for the Forseti instance."
-      type        = "object"
+      description          = "Config for the Forseti instance."
+      type                 = "object"
+      additionalProperties = false
       properties = {
         domain = {
           description = "Domain for the Forseti instance."
