@@ -22,11 +22,10 @@ import (
 
 func TestMergeData(t *testing.T) {
 	cases := []struct {
-		name    string
-		dst     map[string]interface{}
-		src     map[string]interface{}
-		flatten []*FlattenInfo
-		want    map[string]interface{}
+		name string
+		dst  map[string]interface{}
+		src  map[string]interface{}
+		want map[string]interface{}
 	}{
 		{
 			name: "all_empty",
@@ -77,43 +76,11 @@ func TestMergeData(t *testing.T) {
 				"a": 2,
 			},
 		},
-		{
-			name: "flatten_map",
-			dst: map[string]interface{}{
-				"a": 1,
-			},
-			src: map[string]interface{}{
-				"b": map[string]interface{}{
-					"c": 1,
-				},
-			},
-			flatten: []*FlattenInfo{{Key: "b"}},
-			want: map[string]interface{}{
-				"a": 1,
-				"c": 1,
-			},
-		},
-		{
-			name: "flatten_list",
-			dst: map[string]interface{}{
-				"a": 1,
-			},
-			src: map[string]interface{}{
-				"bs": []interface{}{
-					map[string]interface{}{"c": 1},
-				},
-			},
-			flatten: []*FlattenInfo{{Key: "bs", Index: intPointer(0)}},
-			want: map[string]interface{}{
-				"a": 1,
-				"c": 1,
-			},
-		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			if err := MergeData(tc.dst, tc.src, tc.flatten); err != nil {
+			if err := MergeData(tc.dst, tc.src); err != nil {
 				t.Fatalf("MergeData: %v", err)
 			}
 			if diff := cmp.Diff(tc.dst, tc.want); diff != "" {
@@ -122,6 +89,42 @@ func TestMergeData(t *testing.T) {
 		})
 	}
 }
+
+// func TestFlattenData(t *testing.T) {
+// 	{
+// 		name: "flatten_map",
+// 		dst: map[string]interface{}{
+// 			"a": 1,
+// 		},
+// 		src: map[string]interface{}{
+// 			"b": map[string]interface{}{
+// 				"c": 1,
+// 			},
+// 		},
+// 		flatten: []*FlattenInfo{{Key: "b"}},
+// 		want: map[string]interface{}{
+// 			"a": 1,
+// 			"c": 1,
+// 		},
+// 	},
+// 	{
+// 		name: "flatten_list",
+// 		dst: map[string]interface{}{
+// 			"a": 1,
+// 		},
+// 		src: map[string]interface{}{
+// 			"bs": []interface{}{
+// 				map[string]interface{}{"c": 1},
+// 			},
+// 		},
+// 		flatten: []*FlattenInfo{{Key: "bs", Index: intPointer(0)}},
+// 		want: map[string]interface{}{
+// 			"a": 1,
+// 			"c": 1,
+// 		},
+// 	},
+// }
+
 func TestWriteBuffer(t *testing.T) {
 	tests := []struct {
 		tmpl      string
