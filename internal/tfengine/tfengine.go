@@ -119,6 +119,11 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			if err := jsonschema.ValidateMap(rc.Schema, ti.Data); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
+		} else if ti.Name == "org_policies" {
+			// Only check against unmerged template data so we can disallow additional properties in the schema.
+			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
+				return err
+			}
 		}
 
 		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
@@ -135,12 +140,6 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 		}
 
 	case ti.ComponentPath != "":
-		if ti.Name == "org_policies" {
-			// Only check against unmerged template data so we can disallow additional properties in the schema.
-			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
-				return err
-			}
-		}
 		cp, err := pathutil.Expand(ti.ComponentPath)
 		if err != nil {
 			return err
