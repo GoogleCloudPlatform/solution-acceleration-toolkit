@@ -376,6 +376,31 @@ schema = {
             description = "IP range in CIDR notation to use for the hosted master network."
             type        = "string"
           }
+          master_authorized_networks = {
+            description = <<EOF
+              List of master authorized networks. If none are provided, disallow external
+              access (except the cluster node IPs, which GKE automatically allows).
+            EOF
+            type  = "array"
+            items = {
+              type = "object"
+              additionalProperties = false
+              required = [
+                "cidr_block",
+                "display_name",
+              ]
+              properties = {
+                cidr_block = {
+                  description = "CIDR block of the master authorized network."
+                  type        = "string"
+                }
+                display_name = {
+                  description = "Display name of the master authorized network."
+                  type        = "string"
+                }
+              }
+            }
+          }
         }
       }
     }
