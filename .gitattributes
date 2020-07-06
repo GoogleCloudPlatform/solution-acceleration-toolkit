@@ -1,1 +1,7 @@
+# Ignore generated files in GitHub diffs.
+# See https://docs.github.com/en/github/administering-a-repository/customizing-how-changed-files-appear-on-github
 **/generated/** linguist-generated=true
+
+# Except these, which are useful to show by default.
+examples/tfengine/generated/team/** linguist-generated=false
+examples/tfengine/generated/org_foundation/** linguist-generated=false
