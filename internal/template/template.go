@@ -24,7 +24,6 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/imdario/mergo"
 )
 
@@ -125,7 +124,6 @@ func FlattenData(dst map[string]interface{}, fis []*FlattenInfo, schema map[stri
 		if v == nil {
 			return fmt.Errorf("flatten key %q not found in data: %v", fi.Key, dst)
 		}
-		delete(dst, fi.Key)
 
 		// If index is set assume value is a list and the index is being flattened.
 		if i := fi.Index; i != nil {
@@ -140,14 +138,15 @@ func FlattenData(dst map[string]interface{}, fis []*FlattenInfo, schema map[stri
 		if !ok {
 			return fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
 		}
-		if len(schema) > 0 {
-			if err := jsonschema.ValidateMap(schema, m); err != nil {
-				return err
-			}
-		}
-		if err := MergeData(dst, m); err != nil {
+		// if len(schema) > 0 {
+		// 	if err := jsonschema.ValidateMap(schema, m); err != nil {
+		// 		return err
+		// 	}
+		// }
+		if err := mergo.Merge(&dst, m, mergoOpts...); err != nil {
 			return err
 		}
 	}
+	fmt.Println(dst)
 	return nil
 }

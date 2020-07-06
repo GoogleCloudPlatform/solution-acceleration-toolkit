@@ -104,6 +104,13 @@ schema = {
             description = "ID of bigquery dataset."
             type        = "string"
           }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized dataset_id.
+              Normalization will occur based on the
+            EOF
+            type        = "string"
+          }
           bigquery_location = {
             description = "Location to create the bigquery dataset. Can be defined in global data block."
             type        = "string"
@@ -125,6 +132,10 @@ schema = {
               type                 = "object"
               additionalProperties = false
               properties = {
+                role = {
+                  description = "Role to grant."
+                  type        = "string"
+                }
                 group_by_email = {
                   description = "An email address of a Google Group to grant access to."
                   type        = "string"

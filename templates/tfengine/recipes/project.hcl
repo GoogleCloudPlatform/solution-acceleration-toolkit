@@ -151,7 +151,10 @@ template "resources_{{$name}}" {
   recipe_path = "./resources.hcl"
   output_path = "{{$name}}"
   flatten {
-    key = "deployments.{{$name}}"
+    key = "deployments"
+  }
+  flatten {
+    key = "{{$name}}"
   }
 }
 {{end}}
