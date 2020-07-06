@@ -118,7 +118,8 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 	return mergo.Merge(&dst, src, mergoOpts...)
 }
 
-func ExtractFlattenedData(src map[string]interface{}, fis []*FlattenInfo) (map[string]interface{}, error) {
+// FlattenData returns the map of kes from src flattened into a single map.
+func FlattenData(src map[string]interface{}, fis []*FlattenInfo) (map[string]interface{}, error) {
 	res := make(map[string]interface{})
 	for _, fi := range fis {
 		v := get(src, fi.Key)
@@ -141,11 +142,6 @@ func ExtractFlattenedData(src map[string]interface{}, fis []*FlattenInfo) (map[s
 		if !ok {
 			return nil, fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
 		}
-		// if len(schema) > 0 {
-		// 	if err := jsonschema.ValidateMap(schema, m); err != nil {
-		// 		return err
-		// 	}
-		// }
 		if err := MergeData(res, m); err != nil {
 			return nil, err
 		}

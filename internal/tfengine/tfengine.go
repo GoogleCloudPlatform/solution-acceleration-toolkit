@@ -88,7 +88,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 	if err := template.MergeData(data, conf.Data); err != nil {
 		return err
 	}
-	flattenedData, err := template.ExtractFlattenedData(data, ti.Flatten)
+	flattenedData, err := template.FlattenData(data, ti.Flatten)
 	if err != nil {
 		return err
 	}
