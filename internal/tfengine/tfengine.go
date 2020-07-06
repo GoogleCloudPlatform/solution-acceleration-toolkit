@@ -71,6 +71,9 @@ func Run(confPath, outPath string, format bool) error {
 
 func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
+		if ti.Data == nil {
+			ti.Data = make(map[string]interface{})
+		}
 		if err := dumpTemplate(conf, root, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
@@ -83,6 +86,13 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 
 	data := make(map[string]interface{})
 	if err := template.MergeData(data, conf.Data); err != nil {
+		return err
+	}
+	flattenedData, err := template.ExtractFlattenedData(data, ti.Flatten)
+	if err != nil {
+		return err
+	}
+	if err := template.MergeData(ti.Data, flattenedData); err != nil {
 		return err
 	}
 	if err := template.MergeData(data, ti.Data); err != nil {
@@ -110,9 +120,6 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
 		}
-		if err := template.FlattenData(data, ti.Flatten, rc.Schema); err != nil {
-			return fmt.Errorf("recipe %q: %v", rp, err)
-		}
 
 		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
 		if rc.Data == nil {
@@ -128,9 +135,6 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 		}
 
 	case ti.ComponentPath != "":
-		if err := template.FlattenData(data, ti.Flatten, nil); err != nil {
-			return err
-		}
 		if ti.Name == "org_policies" {
 			// Only check against unmerged template data so we can disallow additional properties in the schema.
 			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {

@@ -118,35 +118,37 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 	return mergo.Merge(&dst, src, mergoOpts...)
 }
 
-func FlattenData(dst map[string]interface{}, fis []*FlattenInfo, schema map[string]interface{}) error {
+func ExtractFlattenedData(src map[string]interface{}, fis []*FlattenInfo) (map[string]interface{}, error) {
+	res := make(map[string]interface{})
 	for _, fi := range fis {
-		v := get(dst, fi.Key)
+		v := get(src, fi.Key)
 		if v == nil {
-			return fmt.Errorf("flatten key %q not found in data: %v", fi.Key, dst)
+			return nil, fmt.Errorf("flatten key %q not found in data: %v", fi.Key, src)
 		}
+		// TODO(umairidris): Support deleting multi level key
+		delete(src, fi.Key)
 
 		// If index is set assume value is a list and the index is being flattened.
 		if i := fi.Index; i != nil {
 			vs := v.([]interface{})
 			if *i >= len(vs) {
-				return fmt.Errorf("flatten index for key %q out of range: got %v, want value between 0 and %v", fi.Key, fi.Index, len(vs))
+				return nil, fmt.Errorf("flatten index for key %q out of range: got %v, want value between 0 and %v", fi.Key, fi.Index, len(vs))
 			}
 			v = vs[*i]
 		}
 
 		m, ok := v.(map[string]interface{})
 		if !ok {
-			return fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
+			return nil, fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
 		}
 		// if len(schema) > 0 {
 		// 	if err := jsonschema.ValidateMap(schema, m); err != nil {
 		// 		return err
 		// 	}
 		// }
-		if err := mergo.Merge(&dst, m, mergoOpts...); err != nil {
-			return err
+		if err := MergeData(res, m); err != nil {
+			return nil, err
 		}
 	}
-	fmt.Println(dst)
-	return nil
+	return res, nil
 }
