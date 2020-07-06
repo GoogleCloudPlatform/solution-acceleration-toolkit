@@ -110,8 +110,8 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
 		}
-		if err := flatten(data, ti.Flatten, rc.Schema); err != nil {
-			return err
+		if err := template.FlattenData(data, ti.Flatten, rc.Schema); err != nil {
+			return fmt.Errorf("recipe %q: %v", rp, err)
 		}
 
 		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
@@ -128,7 +128,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 		}
 
 	case ti.ComponentPath != "":
-		if err := flatten(data, ti.Flatten, nil); err != nil {
+		if err := template.FlattenData(data, ti.Flatten, nil); err != nil {
 			return err
 		}
 		if ti.Name == "org_policies" {
@@ -191,38 +191,5 @@ func ConvertToLocalBackend(path string) error {
 		return fmt.Errorf("walk %qs: %v", path, err)
 	}
 
-	return nil
-}
-
-func flatten(dst map[string]interface{}, fis []*template.FlattenInfo, schema map[string]interface{}) error {
-	for _, fi := range fis {
-		v, ok := dst[fi.Key]
-		if !ok {
-			return fmt.Errorf("flatten key %q not found in data: %v", fi.Key, dst)
-		}
-		delete(dst, fi.Key)
-
-		// If index is set assume value is a list and the index is being flattened.
-		if i := fi.Index; i != nil {
-			vs := v.([]interface{})
-			if *i >= len(vs) {
-				return fmt.Errorf("flatten index for key %q out of range: got %v, want value between 0 and %v", fi.Key, fi.Index, len(vs))
-			}
-			v = vs[*i]
-		}
-
-		m, ok := v.(map[string]interface{})
-		if !ok {
-			return fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
-		}
-		if len(schema) > 0 {
-			if err := jsonschema.ValidateMap(schema, m); err != nil {
-				return err
-			}
-		}
-		if err := template.MergeData(dst, m); err != nil {
-			return err
-		}
-	}
 	return nil
 }
