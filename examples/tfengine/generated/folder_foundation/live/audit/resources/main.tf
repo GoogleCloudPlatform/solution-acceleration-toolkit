@@ -24,7 +24,7 @@ terraform {
 
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_folder_iam_audit_config" "config" {
-  folder  = "folders/12345678"
+  folder  = var.folder
   service = "allServices"
 
   audit_log_config {
@@ -41,7 +41,7 @@ resource "google_folder_iam_audit_config" "config" {
 # BigQuery log sink.
 resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
   name             = "bigquery-audit-logs-sink"
-  folder           = "folders/12345678"
+  folder           = var.folder
   include_children = true
   filter           = "logName:\"logs/cloudaudit.googleapis.com\""
   destination      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
@@ -76,7 +76,7 @@ resource "google_project_iam_member" "bigquery_sink_member" {
 # Cloud Storage log sink.
 resource "google_logging_folder_sink" "storage_audit_logs_sink" {
   name             = "storage-audit-logs-sink"
-  folder           = "folders/12345678"
+  folder           = var.folder
   include_children = true
   filter           = "logName:\"logs/cloudaudit.googleapis.com\""
   destination      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
@@ -120,7 +120,7 @@ resource "google_storage_bucket_iam_member" "storage_sink_member" {
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
 resource "google_folder_iam_member" "security_reviewer_auditors" {
-  folder = "folders/12345678"
+  folder = var.folder
   role   = "roles/iam.securityReviewer"
   member = "group:${var.auditors_group}"
 }

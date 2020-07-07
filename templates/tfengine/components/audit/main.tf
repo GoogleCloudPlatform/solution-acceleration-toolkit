@@ -23,10 +23,10 @@ terraform {
 }
 
 {{- $parent_field := "org_id"}}
-{{- $parent_var := printf "\"%s\"" .parent_id}}
+{{- $parent_var := "var.org_id"}}
 {{- if eq .parent_type "folder"}}
   {{- $parent_field = "folder"}}
-  {{- $parent_var = printf "\"folders/%s\"" .parent_id}}
+  {{- $parent_var = "var.folder"}}
 {{- end}}
 
 # IAM Audit log configs to enable collection of all possible audit logs.

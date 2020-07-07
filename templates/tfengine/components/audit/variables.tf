@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{if eq .parent_type "organization" -}}
+variable "org_id" {
+  type = string
+}
+{{- else}}
+variable "folder" {
+  type = string
+}
+{{- end}}
+
 variable "project_id" {
   type = string
 }
