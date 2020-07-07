@@ -58,18 +58,18 @@ module "example_network" {
   project_id   = var.project_id
   subnets = [
     {
-      subnet_name            = "example-bastion-subnet"
-      subnet_ip              = "10.1.0.0/16"
-      subnet_region          = "us-central1"
-      subnet_flow_logs       = true
-      subnets_private_access = true
+      subnet_name           = "example-bastion-subnet"
+      subnet_ip             = "10.1.0.0/16"
+      subnet_region         = "us-central1"
+      subnet_flow_logs      = true
+      subnet_private_access = true
     },
     {
-      subnet_name            = "example-gke-subnet"
-      subnet_ip              = "10.2.0.0/16"
-      subnet_region          = "us-central1"
-      subnet_flow_logs       = true
-      subnets_private_access = true
+      subnet_name           = "example-gke-subnet"
+      subnet_ip             = "10.2.0.0/16"
+      subnet_region         = "us-central1"
+      subnet_flow_logs      = true
+      subnet_private_access = true
     },
 
   ]
