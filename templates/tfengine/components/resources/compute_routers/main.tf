@@ -27,13 +27,13 @@ module "{{resourceName . "name"}}" {
     {{- range .nats}}
     {
       name = "{{.name}}"
-      {{hclField . "source_subnetwork_ip_ranges_to_nat" false}}
+      {{hclField . "source_subnetwork_ip_ranges_to_nat"}}
       {{- if has . "subnetworks"}}
       subnetworks = [
         {{- range .subnetworks}}
         {
           name = "{{.name}}"
-          {{hclField . "source_ip_ranges_to_nat" true}}
+          source_ip_ranges_to_nat  = {{hcl .source_ip_ranges_to_nat}}
           secondary_ip_range_names = []
         },
         {{- end}}

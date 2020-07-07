@@ -27,10 +27,10 @@ module "{{resourceName . "name"}}" {
   {{- end}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"
-  {{hclField . "image_family" false}}
-  {{hclField . "image_project" false}}
-  {{hclField . "members" true}}
-  {{hclField . "scopes" false}}
+  members      = {{hcl .members}}
+  {{hclField . "image_family"}}
+  {{hclField . "image_project"}}
+  {{hclField . "scopes"}}
 
   {{- if has . "startup_script"}}
   startup_script = <<EOF

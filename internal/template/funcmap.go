@@ -72,21 +72,17 @@ func hcl(v interface{}) (string, error) {
 	return string(b), nil
 }
 
-// hclField returns a hcl marshaled field e.g. `name = "foo"`
-func hclField(m map[string]interface{}, key string, req bool) (string, error) {
+// hclField returns a hcl marshaled field e.g. `name = "foo"`, if present.
+func hclField(m map[string]interface{}, key string) (string, error) {
 	v, ok := m[key]
-	switch {
-	case ok:
-		b, err := hclencoder.Encode(v)
-		if err != nil {
-			return "", err
-		}
-		return fmt.Sprintf("%s = %s", key, string(b)), nil
-	case req:
-		return "", fmt.Errorf("required field missing: %v", key)
-	default:
+	if !ok {
 		return "", nil
 	}
+	b, err := hclencoder.Encode(v)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s = %s", key, string(b)), nil
 }
 
 // resourceName builds a Terraform resource name.

@@ -31,8 +31,8 @@ module "{{resourceName . "name"}}" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "{{$network}}"
-  {{hclField . "user_name" false}}
-  {{hclField . "user_password" false}}
+  {{hclField . "user_name"}}
+  {{hclField . "user_password"}}
 }
 {{- end}}
 {{- end}}
