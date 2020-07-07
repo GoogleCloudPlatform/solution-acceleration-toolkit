@@ -168,17 +168,17 @@ schema = {
             description = "Name of the cloud sql instance."
             type        = "string"
           }
-          type = {
-            description = "Type of the cloud sql instance. Currently only supports 'mysql'."
-            type        = "string"
-            pattern = "^mysql$"
-          }
           resource_name = {
             description = <<EOF
               Override for Terraform resource name. If unset, defaults to normalized name.
               Normalization will make all characters alphanumeric with underscores.
             EOF
             type        = "string"
+          }
+          type = {
+            description = "Type of the cloud sql instance. Currently only supports 'mysql'."
+            type        = "string"
+            pattern = "^mysql$"
           }
           cloud_sql_region = {
             description = "Region to create cloud sql instance in. Can be defined in global data block."
