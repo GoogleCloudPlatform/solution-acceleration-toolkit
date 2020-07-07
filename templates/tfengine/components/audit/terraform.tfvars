@@ -12,9 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{if eq .parent_type "organization" -}}
-org_id          = "{{.parent_id}}"
-{{- else}}
-folder_id       = "{{.parent_id}}"
-{{- end}}
 auditors_group  = "{{.auditors_group}}"

@@ -23,14 +23,12 @@ terraform {
 }
 
 {{- $parent_field := "org_id"}}
-{{- $parent_var := "var.org_id"}}
+{{- $parent_var := printf "\"%s\"" .parent_id}}
 {{- if eq .parent_type "folder"}}
 {{- $parent_field = "folder"}}
-{{- $parent_var = "var.folder_id"}}
+{{- $parent_var = printf "\"folders/%s\"" .parent_id}}
 {{- end}}
 
-{{if eq .parent_type "organization"}}
-{{/* TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/327): remove if statement*/}}
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_{{.parent_type}}_iam_audit_config" "config" {
   {{$parent_field}} = {{$parent_var}}
@@ -46,7 +44,6 @@ resource "google_{{.parent_type}}_iam_audit_config" "config" {
     log_type = "ADMIN_READ"
   }
 }
-{{end}}
 
 # BigQuery log sink.
 resource "google_logging_{{.parent_type}}_sink" "bigquery_audit_logs_sink" {
