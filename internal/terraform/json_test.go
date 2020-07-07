@@ -78,13 +78,13 @@ func TestReadPlanChanges(t *testing.T) {
 		{[]string{"create", "delete"}, []ResourceChange{}},
 	}
 
-	for _, testcase := range tests {
-		changes, err := ReadPlanChanges(b, testcase.actions)
+	for _, tc := range tests {
+		changes, err := ReadPlanChanges(b, tc.actions)
 		if err != nil {
 			t.Fatalf("unmarshal json: %v", err)
 		}
-		if diff := cmp.Diff(changes, testcase.want, cmpopts.IgnoreFields(ResourceChange{}, "Change"), cmpopts.EquateEmpty()); diff != "" {
-			t.Errorf("ReadPlanChanges(%v, %v) returned diff (-got +want):\n%s", testPlanPath, testcase.actions, diff)
+		if diff := cmp.Diff(tc.want, changes, cmpopts.IgnoreFields(ResourceChange{}, "Change"), cmpopts.EquateEmpty()); diff != "" {
+			t.Errorf("ReadPlanChanges(%v, %v) returned diff (-want +got):\n%s", testPlanPath, tc.actions, diff)
 		}
 	}
 }
@@ -118,16 +118,16 @@ func TestResourceProviderConfig(t *testing.T) {
 			"zone":        map[string]interface{}{"references": []interface{}{"var.zone"}},
 		},
 	}
-	for _, testcase := range tests {
-		config, ok := resourceProviderConfig(testcase.kind, testcase.name, p)
+	for _, tc := range tests {
+		config, ok := resourceProviderConfig(tc.kind, tc.name, p)
 
-		expected := ProviderConfig{}
+		want := ProviderConfig{}
 		if ok {
-			expected = expectedProviderConfig
+			want = expectedProviderConfig
 		}
 
-		if diff := cmp.Diff(config, expected, cmpopts.EquateEmpty()); diff != "" {
-			t.Errorf("resourceProviderConfig(%q, %q, %v) returned diff (-got +want):\n%s", testcase.kind, testcase.name, testPlanPath, diff)
+		if diff := cmp.Diff(want, config, cmpopts.EquateEmpty()); diff != "" {
+			t.Errorf("resourceProviderConfig(%q, %q, %v) returned diff (-want +got):\n%s", tc.kind, tc.name, testPlanPath, diff)
 		}
 	}
 }
@@ -150,10 +150,10 @@ func TestResolveReference(t *testing.T) {
 
 		// No other reference types are supported at the moment.
 	}
-	for _, testcase := range tests {
-		resolved := resolveReference(testcase.ref, p)
-		if !cmp.Equal(resolved, testcase.want) {
-			t.Errorf("resolveReference(%q, %v) = %v; want %v", testcase.ref, testPlanPath, resolved, testcase.want)
+	for _, tc := range tests {
+		resolved := resolveReference(tc.ref, p)
+		if !cmp.Equal(resolved, tc.want) {
+			t.Errorf("resolveReference(%q, %v) = %v; want %v", tc.ref, testPlanPath, resolved, tc.want)
 		}
 	}
 }
@@ -211,10 +211,10 @@ func TestResolveExpression(t *testing.T) {
 			"test-project",
 		},
 	}
-	for _, testcase := range tests {
-		resolved := resolveExpression(testcase.expr, p)
-		if diff := cmp.Diff(resolved, testcase.want); diff != "" {
-			t.Errorf("resolveExpression(%q, %v) returned diff (-got +want):\n%s", testcase.expr, testPlanPath, diff)
+	for _, tc := range tests {
+		resolved := resolveExpression(tc.expr, p)
+		if diff := cmp.Diff(tc.want, resolved); diff != "" {
+			t.Errorf("resolveExpression(%q, %v) returned diff (-want +got):\n%s", tc.expr, testPlanPath, diff)
 		}
 	}
 }
@@ -237,7 +237,7 @@ func TestReadProviderConfigValues(t *testing.T) {
 		"zone":        "us-central1-c",
 	}
 
-	if diff := cmp.Diff(got, want, cmpopts.EquateEmpty()); diff != "" {
-		t.Fatalf("retrieved provider configs differ (-got +want):\n%v", diff)
+	if diff := cmp.Diff(want, got, cmpopts.EquateEmpty()); diff != "" {
+		t.Fatalf("retrieved provider configs differ (-want +got):\n%v", diff)
 	}
 }
