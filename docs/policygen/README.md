@@ -38,7 +38,7 @@ git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suit
 cd healthcare-data-protection-suite
 
 # Step 2: Setup helper env vars
-CONFIG_PATH=examples/policygen/config.yaml
+CONFIG_PATH=examples/policygen/config.hcl
 STATE_PATH=/path/to/your/tfstate
 OUTPUT_PATH=/tmp/policygen
 

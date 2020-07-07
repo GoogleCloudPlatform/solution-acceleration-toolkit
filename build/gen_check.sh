@@ -47,7 +47,7 @@ EOF
 
 # Run the tests
 # Policygen
-test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.yaml --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
+test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.hcl --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
 
 # TF Engine
 for example in examples/tfengine/*.hcl; do

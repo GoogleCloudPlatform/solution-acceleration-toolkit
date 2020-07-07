@@ -18,7 +18,7 @@
 rm -rf examples/*/generated/*
 
 # Policygen
-go run ./cmd/policygen --config_path examples/policygen/config.yaml --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
 
 # TF Engine
 for example in examples/tfengine/*.hcl; do

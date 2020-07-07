@@ -29,6 +29,7 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/ghodss/yaml"
+	"github.com/hashicorp/hcl/v2/hclsimple"
 	"github.com/hashicorp/terraform/states"
 	"github.com/zclconf/go-cty/cty"
 	"google.golang.org/api/iterator"
@@ -37,12 +38,16 @@ import (
 
 // config is the struct representing the Policy Generator configuration.
 type config struct {
-	TemplateDir     string                 `json:"template_dir"`
-	ForsetiPolicies map[string]interface{} `json:"forseti_policies"`
-	GCPOrgPolicies  map[string]interface{} `json:"gcp_org_policies"`
+	TemplateDir string `hcl:"template_dir" json:"template_dir"`
 
-	SchemaCty *cty.Value             `hcl:"schema,optional" json:"-"`
-	Schema    map[string]interface{} `json:"schema,omitempty"`
+	// HCL decoder can't unmarshal into map[string]interface{},
+	// so make it unmarshal to a cty.Value and manually convert to map.
+	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for DataCty.
+	ForsetiPoliciesCty *cty.Value             `hcl:"forseti_policies,optional" json:"-"`
+	ForsetiPolicies    map[string]interface{} `json:"forseti_policies"`
+
+	GCPOrgPoliciesCty *cty.Value             `hcl:"gcp_org_policies,optional" json:"-"`
+	GCPOrgPolicies    map[string]interface{} `json:"gcp_org_policies"`
 }
 
 func ValidateOrgPoliciesConfig(conf map[string]interface{}) error {
@@ -64,28 +69,67 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("read config %q: %v", path, err)
 	}
 
-	cj, err := yaml.YAMLToJSON(b)
-	if err != nil {
-		return nil, fmt.Errorf("convert config to JSON: %v", err)
+	// Save unmodified path to use in init().
+	originalPath := path
+
+	// Convert yaml to json so hcl decoder can parse it.
+	cj := b
+	if filepath.Ext(path) == ".yaml" {
+		cj, err = yaml.YAMLToJSON(cj)
+		if err != nil {
+			return nil, err
+		}
+		// hclsimple.Decode doesn't actually use the path for anything other
+		// than its extension, so just pass in any file name ending with json so
+		// the library knows to treat these bytes as json and not yaml.
+		path = "file.json"
+	}
+
+	c := new(config)
+	if err := hclsimple.Decode(path, cj, nil, c); err != nil {
+		return nil, err
+	}
+
+	if err := c.init(originalPath); err != nil {
+		return nil, err
+	}
+
+	return c, nil
+}
+
+func (c *config) init(path string) error {
+	var err error
+	if c.ForsetiPoliciesCty != nil {
+		c.ForsetiPolicies, err = hcl.CtyValueToMap(c.ForsetiPoliciesCty)
+		if err != nil {
+			return fmt.Errorf("failed to convert %v to map: %v", c.ForsetiPoliciesCty, err)
+		}
+	}
+
+	if c.GCPOrgPoliciesCty != nil {
+		c.GCPOrgPolicies, err = hcl.CtyValueToMap(c.GCPOrgPoliciesCty)
+		if err != nil {
+			return fmt.Errorf("failed to convert %v to map: %v", c.GCPOrgPoliciesCty, err)
+		}
 	}
 
 	sj, err := hcl.ToJSON(schema)
 	if err != nil {
-		return nil, fmt.Errorf("convert schema to JSON: %v", err)
+		return fmt.Errorf("convert schema to JSON: %v", err)
+	}
+
+	cj, err := json.Marshal(c)
+	if err != nil {
+		return err
 	}
 
 	if err := jsonschema.ValidateJSONBytes(sj, cj); err != nil {
-		return nil, err
-	}
-
-	c := new(config)
-	if err := yaml.Unmarshal(cj, c); err != nil {
-		return nil, fmt.Errorf("unmarshal config %q: %v", path, err)
+		return err
 	}
 
 	if c.GCPOrgPolicies != nil {
 		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -93,7 +137,7 @@ func loadConfig(path string) (*config, error) {
 		c.TemplateDir = filepath.Join(filepath.Dir(path), c.TemplateDir)
 	}
 
-	return c, nil
+	return nil
 }
 
 // loadResources loads Terraform state resources from the given path.
