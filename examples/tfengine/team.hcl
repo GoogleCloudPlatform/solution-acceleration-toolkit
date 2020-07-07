@@ -239,7 +239,6 @@ template "project_data" {
           type               = "mysql"
           network_project_id = "example-prod-networks"
           network            = "example-network"
-          subnet             = "example-subnet"
           # TODO(user): Uncomment and re-run the engine after deploying secrets.
           # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
           # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"

@@ -158,6 +158,8 @@ schema = {
       description = "https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql"
       type        = "array"
       items = {
+        type                 = "object"
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -165,6 +167,11 @@ schema = {
           name = {
             description = "Name of the cloud sql instance."
             type        = "string"
+          }
+          type = {
+            description = "Type of the cloud sql instance. Currently only supports 'mysql'."
+            type        = "string"
+            pattern = "^mysql$"
           }
           resource_name = {
             description = <<EOF
