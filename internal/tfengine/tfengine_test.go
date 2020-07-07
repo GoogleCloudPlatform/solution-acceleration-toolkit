@@ -56,10 +56,11 @@ func TestExamples(t *testing.T) {
 				t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
 			}
 
-			plan := exec.Command("terragrunt", "plan-all")
-			plan.Dir = path
-			if b, err := plan.CombinedOutput(); err != nil {
-				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
+			// Validate all configs, which will also run init everywhere.
+			validate := exec.Command("terragrunt", "validate-all")
+			validate.Dir = path
+			if b, err := validate.CombinedOutput(); err != nil {
+				t.Errorf("command %v in %q: %v\n%v", validate.Args, path, err, string(b))
 			}
 		})
 	}
