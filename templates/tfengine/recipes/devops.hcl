@@ -68,13 +68,6 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
-    project_owners = {
-      description = "Owners of the devops project."
-      type        = "array"
-      items = {
-        type = "string"
-      }
-    }
     enable_bootstrap_gcs_backend = {
       description = <<EOF
         Whether to enable GCS backend for the bootstrap deployment. Defaults to false.
