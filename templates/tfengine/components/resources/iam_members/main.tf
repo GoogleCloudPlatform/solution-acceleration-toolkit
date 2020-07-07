@@ -22,7 +22,7 @@ module "project_iam_members" {
   bindings = {
     {{range $role, $members := .iam_members -}}
     "{{$role}}" = [
-      {{range $members -}}
+      {{- range $members}}
       "{{.}}",
       {{- end}}
     ],
