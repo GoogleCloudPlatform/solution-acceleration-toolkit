@@ -13,5 +13,5 @@
 # limitations under the License.
 
 
-folder_id      = "12345678"
+folder         = "folders/12345678"
 auditors_group = "example-auditors@example.com"

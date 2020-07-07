@@ -17,7 +17,7 @@ variable "org_id" {
   type = string
 }
 {{- else}}
-variable "folder_id" {
+variable "folder" {
   type = string
 }
 {{- end}}

@@ -15,6 +15,6 @@
 {{if eq .parent_type "organization" -}}
 org_id          = "{{.parent_id}}"
 {{- else}}
-folder_id       = "{{.parent_id}}"
+folder          = "folders/{{.parent_id}}"
 {{- end}}
 auditors_group  = "{{.auditors_group}}"

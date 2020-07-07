@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-variable "folder_id" {
+variable "folder" {
   type = string
 }
 
