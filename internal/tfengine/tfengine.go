@@ -92,6 +92,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 	if err != nil {
 		return err
 	}
+	// Merge flattened data into template data so that it gets checked by the schema check later.
 	if err := template.MergeData(ti.Data, flattenedData); err != nil {
 		return err
 	}

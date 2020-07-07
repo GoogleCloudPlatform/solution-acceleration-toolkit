@@ -64,6 +64,9 @@ properties = {
 var orgPoliciesSchema = []byte(`
 title                = "Google Cloud Organization Policies Config Schema"
 additionalProperties = false
+required = [
+  "allowed_policy_member_customer_ids",
+]
 properties = {
   parent_type = {
     description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
