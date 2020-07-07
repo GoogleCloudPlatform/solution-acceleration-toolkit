@@ -158,6 +158,8 @@ schema = {
       description = "https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql"
       type        = "array"
       items = {
+        type                 = "object"
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -172,6 +174,11 @@ schema = {
               Normalization will make all characters alphanumeric with underscores.
             EOF
             type        = "string"
+          }
+          type = {
+            description = "Type of the cloud sql instance. Currently only supports 'mysql'."
+            type        = "string"
+            pattern = "^mysql$"
           }
           cloud_sql_region = {
             description = "Region to create cloud sql instance in. Can be defined in global data block."
