@@ -73,6 +73,7 @@ func hcl(v interface{}) (string, error) {
 }
 
 // hclField returns a hcl marshaled field e.g. `name = "foo"`, if present.
+// For required fields, use the hcl func.
 func hclField(m map[string]interface{}, key string) (string, error) {
 	v, ok := m[key]
 	if !ok {
