@@ -22,13 +22,13 @@ module "{{resourceName . "name"}}" {
   project_id             = var.project_id
   region                 = "{{get . "gke_region" $.gke_region}}"
   regional               = true
-  {{hclField . "network_project_id" false}}
+  {{hclField . "network_project_id"}}
   network                = "{{.network}}"
   subnetwork             = "{{.subnet}}"
   ip_range_pods          = "{{.ip_range_pods_name}}"
   ip_range_services      = "{{.ip_range_services_name}}"
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
-  {{hclField . "master_authorized_networks" false -}}
+  {{hclField . "master_authorized_networks" -}}
   istio                      = true
   skip_provisioners          = true
   enable_private_endpoint    = false
