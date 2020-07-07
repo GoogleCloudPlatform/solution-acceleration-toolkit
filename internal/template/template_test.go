@@ -84,8 +84,8 @@ func TestMergeData(t *testing.T) {
 			if err := MergeData(tc.dst, tc.src); err != nil {
 				t.Fatalf("MergeData: %v", err)
 			}
-			if diff := cmp.Diff(tc.dst, tc.want); diff != "" {
-				t.Errorf("MergeData destination differs (-got +want):\n%v", diff)
+			if diff := cmp.Diff(tc.want, tc.dst); diff != "" {
+				t.Errorf("MergeData destination differs (-want +got):\n%v", diff)
 			}
 		})
 	}
@@ -137,8 +137,8 @@ func TestFlattenData(t *testing.T) {
 			if err != nil {
 				t.Errorf("FlattenData: %v", err)
 			}
-			if diff := cmp.Diff(got, tc.want, cmpopts.EquateEmpty()); diff != "" {
-				t.Errorf("flattened data differs (-got +want):\n%v", diff)
+			if diff := cmp.Diff(tc.want, got, cmpopts.EquateEmpty()); diff != "" {
+				t.Errorf("flattened data differs (-want +got):\n%v", diff)
 			}
 		})
 	}
@@ -181,8 +181,8 @@ func TestWriteBuffer(t *testing.T) {
 			t.Fatalf("fillTemplate(%v, %v) failed: %v", tc.tmpl, tc.fieldsMap, err)
 		}
 		got := buf.String()
-		if diff := cmp.Diff(got, tc.want); diff != "" {
-			t.Errorf("fillTemplate buffer differs (-got +want):\n%v", diff)
+		if diff := cmp.Diff(tc.want, got); diff != "" {
+			t.Errorf("fillTemplate buffer differs (-want +got):\n%v", diff)
 		}
 	}
 }

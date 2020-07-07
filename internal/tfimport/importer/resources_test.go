@@ -210,9 +210,9 @@ func TestLoadFieldsErr(t *testing.T) {
 	for _, tc := range tests {
 		wantErr := &InsufficientInfoErr{MissingFields: tc.wantMissing}
 		rc := resourceChange.Change.After
-		got, err := loadFields(tc.fields, false, configs[0], rc)
-		if diff := cmp.Diff(err, wantErr); diff != "" {
-			t.Errorf("loadFields(%v, %v, %v, %v) succeeded for malformed input; got = %v; error diff (-got +want):\n%s", tc.fields, false, configs[0], rc, got, diff)
+		_, err := loadFields(tc.fields, false, configs[0], rc)
+		if diff := cmp.Diff(wantErr, err); diff != "" {
+			t.Errorf("loadFields error differs (-want +got):\n%s", diff)
 		}
 	}
 }
