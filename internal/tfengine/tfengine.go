@@ -71,6 +71,9 @@ func Run(confPath, outPath string, format bool) error {
 
 func dump(conf *Config, root, outputPath string) error {
 	for _, ti := range conf.Templates {
+		if ti.Data == nil {
+			ti.Data = make(map[string]interface{})
+		}
 		if err := dumpTemplate(conf, root, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
@@ -82,10 +85,18 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
 
 	data := make(map[string]interface{})
-	if err := template.MergeData(data, conf.Data, nil); err != nil {
+	if err := template.MergeData(data, conf.Data); err != nil {
 		return err
 	}
-	if err := template.MergeData(data, ti.Data, ti.Flatten); err != nil {
+	flattenedData, err := template.FlattenData(data, ti.Flatten)
+	if err != nil {
+		return err
+	}
+	// Merge flattened data into template data so that it gets checked by the schema check later.
+	if err := template.MergeData(ti.Data, flattenedData); err != nil {
+		return err
+	}
+	if err := template.MergeData(data, ti.Data); err != nil {
 		return err
 	}
 
@@ -109,6 +120,11 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			if err := jsonschema.ValidateMap(rc.Schema, ti.Data); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
 			}
+		} else if ti.Name == "org_policies" {
+			// Only check against unmerged template data so we can disallow additional properties in the schema.
+			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
+				return err
+			}
 		}
 
 		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
@@ -116,7 +132,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			rc.Data = make(map[string]interface{})
 		}
 
-		if err := template.MergeData(rc.Data, data, nil); err != nil {
+		if err := template.MergeData(rc.Data, data); err != nil {
 			return err
 		}
 
@@ -125,12 +141,6 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 		}
 
 	case ti.ComponentPath != "":
-		if ti.Name == "org_policies" {
-			// Only check against unmerged template data so we can disallow additional properties in the schema.
-			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
-				return err
-			}
-		}
 		cp, err := pathutil.Expand(ti.ComponentPath)
 		if err != nil {
 			return err

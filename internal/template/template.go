@@ -111,36 +111,40 @@ func WriteBuffer(text string, data map[string]interface{}) (*bytes.Buffer, error
 
 // MergeData merges template data from src to dst.
 // For all keys in flatten it will pop the key and merge back into dst.
-func MergeData(dst map[string]interface{}, src map[string]interface{}, flatten []*FlattenInfo) error {
+func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 	if dst == nil {
 		return errors.New("dst must not be nil")
 	}
-	if err := mergo.Merge(&dst, src, mergoOpts...); err != nil {
-		return err
-	}
-	for _, fi := range flatten {
-		v, ok := dst[fi.Key]
-		if !ok {
-			return fmt.Errorf("flatten key %q not found in data: %v", fi.Key, dst)
+	return mergo.Merge(&dst, src, mergoOpts...)
+}
+
+// FlattenData returns the map of kes from src flattened into a single map.
+func FlattenData(src map[string]interface{}, fis []*FlattenInfo) (map[string]interface{}, error) {
+	res := make(map[string]interface{})
+	for _, fi := range fis {
+		v := get(src, fi.Key)
+		if v == nil {
+			return nil, fmt.Errorf("flatten key %q not found in data: %v", fi.Key, src)
 		}
-		delete(dst, fi.Key)
+		// TODO(umairidris): Support deleting multi level key
+		delete(src, fi.Key)
 
 		// If index is set assume value is a list and the index is being flattened.
 		if i := fi.Index; i != nil {
 			vs := v.([]interface{})
 			if *i >= len(vs) {
-				return fmt.Errorf("flatten index for key %q out of range: got %v, want value between 0 and %v", fi.Key, fi.Index, len(vs))
+				return nil, fmt.Errorf("flatten index for key %q out of range: got %v, want value between 0 and %v", fi.Key, fi.Index, len(vs))
 			}
 			v = vs[*i]
 		}
 
 		m, ok := v.(map[string]interface{})
 		if !ok {
-			return fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
+			return nil, fmt.Errorf("flatten key %q is not a map, got type %T, value %v", fi.Key, v, v)
 		}
-		if err := mergo.Merge(&dst, m, mergoOpts...); err != nil {
-			return err
+		if err := MergeData(res, m); err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return res, nil
 }

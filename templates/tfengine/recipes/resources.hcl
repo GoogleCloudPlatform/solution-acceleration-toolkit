@@ -104,6 +104,13 @@ schema = {
             description = "ID of bigquery dataset."
             type        = "string"
           }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized dataset_id.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
           bigquery_location = {
             description = "Location to create the bigquery dataset. Can be defined in global data block."
             type        = "string"
@@ -125,6 +132,10 @@ schema = {
               type                 = "object"
               additionalProperties = false
               properties = {
+                role = {
+                  description = "Role to grant."
+                  type        = "string"
+                }
                 group_by_email = {
                   description = "An email address of a Google Group to grant access to."
                   type        = "string"
@@ -153,6 +164,13 @@ schema = {
         properties = {
           name = {
             description = "Name of the cloud sql instance."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
             type        = "string"
           }
           cloud_sql_region = {
@@ -192,6 +210,13 @@ schema = {
         properties = {
           name = {
             description = "Name of network."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
             type        = "string"
           }
           subnets = {
@@ -257,6 +282,13 @@ schema = {
         properties = {
           name = {
             description = "Name of router."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
             type        = "string"
           }
           compute_region = {
@@ -335,6 +367,13 @@ schema = {
         properties = {
           name = {
             description = "Name of GKE cluster."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
             type        = "string"
           }
           gke_region = {
@@ -572,6 +611,13 @@ schema = {
             description = "ID of secret."
             type        = "string"
           }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized secret_id.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
           locations = {
             description = "Locations to replicate secret. If unset, will automatically replicate."
             type        = "array"
@@ -598,6 +644,13 @@ schema = {
             description = "ID of service account."
             type        = "string"
           }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized account_id.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
         }
       }
     }
@@ -611,6 +664,13 @@ schema = {
         properties = {
           name = {
             description = "Name of storage bucket."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
             type        = "string"
           }
           storage_location = {

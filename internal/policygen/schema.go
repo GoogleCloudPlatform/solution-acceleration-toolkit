@@ -65,8 +65,6 @@ var orgPoliciesSchema = []byte(`
 title                = "Google Cloud Organization Policies Config Schema"
 additionalProperties = false
 required = [
-  "parent_type",
-  "parent_id",
   "allowed_policy_member_customer_ids",
 ]
 properties = {

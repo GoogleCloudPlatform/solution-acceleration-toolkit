@@ -15,7 +15,7 @@
 schema = {
   title                = "Terraform Deployment Recipe."
   description          = "This recipe should be used to setup a new Terraform deployment directory."
-  additionalProperties = false
+  # Additional properties allowed as this template is usually passed extra fields that are used by other templates.
   properties = {
     enable_terragrunt = {
       description = "Whether to convert to a Terragrunt deployment. Adds a terragrunt.hcl file in the deployment."
