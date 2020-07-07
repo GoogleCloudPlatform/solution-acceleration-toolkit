@@ -27,10 +27,10 @@ module "{{$resource_name}}" {
   subnets = [
     {{- range .subnets}}
     {
-      subnet_name            = "{{.name}}"
-      subnet_ip              = "{{.ip_range}}"
-      subnet_region          = "{{get . "compute_region" $.compute_region}}"
-      subnet_flow_logs       = true
+      subnet_name           = "{{.name}}"
+      subnet_ip             = "{{.ip_range}}"
+      subnet_region         = "{{get . "compute_region" $.compute_region}}"
+      subnet_flow_logs      = true
       subnet_private_access = true
     },
 
