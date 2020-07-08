@@ -48,18 +48,40 @@ func TestExamples(t *testing.T) {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
-			// Run plan on live dir to verify configs.
-			path := filepath.Join(tmp, "live")
-
-			// Convert the configs not reference a GCS backend as the state bucket does not exist.
-			if err := ConvertToLocalBackend(path); err != nil {
-				t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+			// Run plan to verify configs.
+			fs, err := ioutil.ReadDir(tmp)
+			if err != nil {
+				t.Fatalf("ioutil.ReadDir = %v", err)
 			}
 
-			plan := exec.Command("terragrunt", "plan-all")
-			plan.Dir = path
-			if b, err := plan.CombinedOutput(); err != nil {
-				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
+			// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
+			skipDirs := map[string]bool{
+				"cicd":       true,
+				"kubernetes": true,
+				// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/397): remove this as live folder shouldn't exist.
+				"live": true,
+			}
+			for _, f := range fs {
+				if !f.IsDir() || skipDirs[f.Name()] {
+					continue
+				}
+				fn := filepath.Join(tmp, f.Name())
+
+				// Convert the configs not reference a GCS backend as the state bucket does not exist.
+				if err := ConvertToLocalBackend(fn); err != nil {
+					t.Fatalf("ConvertToLocalBackend(%v): %v", fn, err)
+				}
+				init := exec.Command("terraform", "init")
+				init.Dir = fn
+				if b, err := init.CombinedOutput(); err != nil {
+					t.Errorf("command %v in %q: %v\n%v", init.Args, fn, err, string(b))
+				}
+
+				plan := exec.Command("terraform", "plan")
+				plan.Dir = fn
+				if b, err := plan.CombinedOutput(); err != nil {
+					t.Errorf("command %v in %q: %v\n%v", plan.Args, fn, err, string(b))
+				}
 			}
 		})
 	}
