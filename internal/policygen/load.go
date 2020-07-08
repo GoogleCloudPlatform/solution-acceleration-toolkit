@@ -42,7 +42,7 @@ type config struct {
 
 	// HCL decoder can't unmarshal into map[string]interface{},
 	// so make it unmarshal to a cty.Value and manually convert to map.
-	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for DataCty.
+	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for ForsetiPoliciesCty and GCPOrgPoliciesCty.
 	ForsetiPoliciesCty *cty.Value             `hcl:"forseti_policies,optional" json:"-"`
 	ForsetiPolicies    map[string]interface{} `json:"forseti_policies"`
 
