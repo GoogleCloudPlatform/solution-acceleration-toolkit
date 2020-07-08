@@ -73,9 +73,8 @@ func loadConfig(path string) (*config, error) {
 	originalPath := path
 
 	// Convert yaml to json so hcl decoder can parse it.
-	cj := b
 	if filepath.Ext(path) == ".yaml" {
-		cj, err = yaml.YAMLToJSON(cj)
+		b, err = yaml.YAMLToJSON(b)
 		if err != nil {
 			return nil, err
 		}
@@ -86,7 +85,7 @@ func loadConfig(path string) (*config, error) {
 	}
 
 	c := new(config)
-	if err := hclsimple.Decode(path, cj, nil, c); err != nil {
+	if err := hclsimple.Decode(path, b, nil, c); err != nil {
 		return nil, err
 	}
 
