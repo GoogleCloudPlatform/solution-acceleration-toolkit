@@ -15,7 +15,7 @@
 // policygen automates generation of Google-recommended Policy Library constraints based on your Terraform configs.
 //
 // Usage:
-// $ policygen --config_path=examples/policygen/config.yaml --state_path=/path/to/default.tfstate --output_path=/tmp/policies
+// $ policygen --config_path=examples/policygen/config.hcl --state_path=/path/to/default.tfstate --output_path=/tmp/policies
 package main
 
 import (

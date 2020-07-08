@@ -58,10 +58,12 @@ func TestExamples(t *testing.T) {
 	}
 
 	tests := []struct {
-		statePath string
-		wantDirs  []wantDir
+		configPath string
+		statePath  string
+		wantDirs   []wantDir
 	}{
 		{
+			"../../examples/policygen/config.hcl",
 			// A single state file that does not have the .tfstate extension should still work.
 			"testdata/state",
 			[]wantDir{
@@ -76,6 +78,7 @@ func TestExamples(t *testing.T) {
 			},
 		},
 		{
+			"../../examples/policygen/config.hcl",
 			"testdata/org.tfstate",
 			[]wantDir{
 				{
@@ -89,6 +92,7 @@ func TestExamples(t *testing.T) {
 			},
 		},
 		{
+			"../../examples/policygen/config.yaml",
 			"testdata/subfolder/project.tfstate",
 			[]wantDir{
 				{
@@ -103,6 +107,7 @@ func TestExamples(t *testing.T) {
 			},
 		},
 		{
+			"../../examples/policygen/config.yaml",
 			"testdata",
 			[]wantDir{
 				{
@@ -126,7 +131,6 @@ func TestExamples(t *testing.T) {
 		},
 	}
 
-	configPath := "../../examples/policygen/config.yaml"
 	common := []wantDir{
 		{
 			filepath.Join("forseti_policies", "overall"),
@@ -154,7 +158,7 @@ func TestExamples(t *testing.T) {
 		defer os.RemoveAll(tmp)
 
 		args := &RunArgs{
-			ConfigPath: configPath,
+			ConfigPath: tc.configPath,
 			StatePath:  tc.statePath,
 			OutputPath: tmp,
 		}
@@ -179,7 +183,7 @@ func TestExamples(t *testing.T) {
 			}
 
 			if len(fs) != d.wantFilesCount {
-				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, configPath, tc.statePath, len(fs), d.wantFilesCount)
+				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, tc.configPath, tc.statePath, len(fs), d.wantFilesCount)
 			}
 
 			for _, f := range d.wantFiles {
