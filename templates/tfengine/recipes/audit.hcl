@@ -85,6 +85,7 @@ template "project" {
   recipe_path = "./project.hcl"
   output_path = "./audit"
   data = {
+    state_path_prefix = "audit"
     project = {
       apis = [
         "bigquery.googleapis.com",

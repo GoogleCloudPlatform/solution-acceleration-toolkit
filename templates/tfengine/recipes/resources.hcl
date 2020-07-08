@@ -16,6 +16,14 @@ schema = {
   title                = "Recipe for resources within projects."
   additionalProperties = false
   properties = {
+    state_bucket = {
+      description = "Bucket to store remote state."
+      type        = "string"
+    }
+    state_path_prefix = {
+      description = "Path within bucket to store state."
+      type        = "string"
+    }
     terraform_addons = {
       description = <<EOF
         Additional Terraform configuration for the project deployment.
@@ -714,23 +722,6 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  data = {
-    enable_terragrunt = true
-    terraform_addons = {
-      vars = [{
-        name             = "project_id"
-        type             = "string"
-        terragrunt_input = "$${dependency.project.outputs.project_id}"
-      }]
-      deps = [{
-        name = "project"
-        path = "../project"
-        mock_outputs = {
-          project_id = "mock-project"
-        }
-      }]
-    }
-  }
 }
 
 {{if has . "bastion_hosts"}}

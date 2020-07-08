@@ -38,7 +38,6 @@ steps:
     args: ["apply", "-auto-approve"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Deployment (CICD)
-
   # live/deployment
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
     entrypoint: terraform
@@ -57,6 +56,5 @@ steps:
     args: ["apply", "-auto-approve"]
     dir: "${_TERRAFORM_ROOT}/live/deployment"
     id: Deployment (deployment)
-
 substitutions:
     _TERRAFORM_ROOT: "."

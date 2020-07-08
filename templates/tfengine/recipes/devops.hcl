@@ -78,13 +78,6 @@ schema = {
       EOF
       type       = "boolean"
     }
-    enable_terragrunt = {
-      description = <<EOF
-        Whether to convert to a Terragrunt deployment. If set to "false", generate Terraform-only
-        configs and the CICD pipelines will only use Terraform. Default to "true".
-    EOF
-      type        = "boolean"
-    }
     cicd = {
       description          = "Config for CICD. If unset there will be no CICD."
       type                 = "object"
@@ -211,17 +204,6 @@ template "bootstrap" {
   output_path    = "./bootstrap"
 }
 
-{{if get . "enable_terragrunt" true}}
-template "root" {
-  component_path = "../components/terragrunt/root"
-  output_path    = "./live"
-}
-{{else}}
-template "root" {
-  component_path = "../components/terraform/root"
-  output_path    = "./live"
-}
-{{end}}
 
 # At least one trigger is specified.
 {{if and (has . "cicd") (or (has .cicd "validate_trigger") (has .cicd "plan_trigger") (has .cicd "apply_trigger"))}}
@@ -232,13 +214,6 @@ template "cicd_manual" {
     key = "cicd"
   }
 }
-
-{{if get . "enable_terragrunt" true}}
-template "root" {
-  component_path = "../components/cicd/terragrunt"
-  output_path    = "./cicd"
-}
-{{end}}
 
 template "cicd_auto" {
   component_path = "../components/cicd/auto"

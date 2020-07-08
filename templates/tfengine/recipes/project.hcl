@@ -17,6 +17,14 @@ schema = {
   title                = "Recipe for creating GCP projects."
   additionalProperties = false
   properties = {
+    state_bucket = {
+      description = "Bucket to store remote state."
+      type        = "string"
+    }
+    state_path_prefix = {
+      description = "Path within bucket to store state."
+      type        = "string"
+    }
     parent_type = {
       description = "Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'."
       type    = "string"
@@ -120,21 +128,7 @@ template "deployment" {
     key = "project"
   }
   data = {
-    enable_terragrunt = true
-    {{if and (eq .parent_type "folder") (get . "add_parent_folder_dependency" false)}}
-    terraform_addons = {
-      deps = [{
-        name = "parent_folder"
-        path = "../../folder"
-        mock_outputs = {
-          name = "mock-folder"
-        }
-      }]
-      inputs = {
-        folder_id = "$${dependency.parent_folder.outputs.name}"
-      }
-    }
-    {{end}}
+    state_path_prefix = "{{.project.project_id}}"
   }
 }
 
@@ -146,12 +140,17 @@ template "project" {
   }
 }
 
+{{$project_id := .project.project_id}}
 {{range $name, $_ := get . "deployments"}}
-template "resources_{{$name}}" {
+template "deployment_{{$name}}" {
   recipe_path = "./resources.hcl"
   output_path = "{{$name}}"
   flatten {
     key = "deployments.{{$name}}"
+  }
+  # TODO(umairidris): once deployments are merged remove this.
+  data = {
+    state_path_prefix = "resources_{{$project_id}}"
   }
 }
 {{end}}

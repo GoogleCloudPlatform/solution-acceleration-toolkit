@@ -71,6 +71,9 @@ schema = {
 template "project" {
   recipe_path = "./project.hcl"
   output_path = "./monitor"
+  data = {
+    state_path_prefix = "audit"
+  }
 }
 
 template "forseti" {

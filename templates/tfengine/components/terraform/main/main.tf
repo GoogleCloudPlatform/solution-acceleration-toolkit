@@ -19,10 +19,8 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    {{- if not (get . "enable_terragrunt" false)}}
     bucket = "{{.state_bucket}}"
     prefix = "{{.state_path_prefix}}"
-    {{- end}}
   }
 }
 
