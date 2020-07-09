@@ -78,7 +78,6 @@ template "devops" {
 # any deployment can access its value.
 template "project_secrets" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-secrets"
   data = {
     project = {
       project_id = "example-prod-secrets"
@@ -113,7 +112,6 @@ EOF
 # Prod central networks project for team 1.
 template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-networks"
   data = {
     project = {
       project_id         = "example-prod-networks"
@@ -194,7 +192,6 @@ EOF
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-data"
   data = {
     project = {
       project_id = "example-prod-data"
@@ -315,7 +312,6 @@ EOF
 # Prod central apps project for team 1.
 template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-apps"
   data = {
     project = {
       project_id = "example-prod-apps"
@@ -363,7 +359,6 @@ template "project_apps" {
 # Prod firebase project for team 1.
 template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-firebase"
   data = {
     project = {
       project_id = "example-prod-firebase"

@@ -63,7 +63,6 @@ template "devops" {
 
 template "audit" {
   recipe_path = "{{$recipes}}/audit.hcl"
-  output_path = "./live"
   data = {
     auditors_group = "example-auditors@example.com"
     project = {
@@ -80,7 +79,6 @@ template "audit" {
 
 template "monitor" {
   recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./live"
   data = {
     project = {
       project_id = "example-monitor"

@@ -204,20 +204,10 @@ template "bootstrap" {
   output_path    = "./bootstrap"
 }
 
-
-# At least one trigger is specified.
-{{if and (has . "cicd") (or (has .cicd "validate_trigger") (has .cicd "plan_trigger") (has .cicd "apply_trigger"))}}
-template "cicd_manual" {
-  component_path = "../components/cicd/manual"
+{{if has . "cicd"}}
+template "cicd" {
+  component_path = "../components/cicd"
   output_path    = "./cicd"
-  flatten {
-    key = "cicd"
-  }
-}
-
-template "cicd_auto" {
-  component_path = "../components/cicd/auto"
-  output_path    = "./live/cicd"
   flatten {
     key = "cicd"
   }

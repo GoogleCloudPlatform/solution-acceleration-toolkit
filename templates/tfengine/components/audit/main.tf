@@ -1,26 +1,16 @@
-# Copyright 2020 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+{{- /* Copyright 2020 Google LLC
 
-# This folder contains Terraform resources related to audit, which includes:
-# - Organization IAM Audit log configs (https://cloud.google.com/logging/docs/audit),
-# - BigQuery log sink creation and configuration for short term log storage,
-# - Cloud Storage log sink creation and configuration for long term log storage,
-# - IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-terraform {
-  backend "gcs" {}
-}
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */ -}}
 
 {{- $parent_field := "org_id"}}
 {{- $parent_var := "var.org_id"}}
