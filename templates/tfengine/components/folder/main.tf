@@ -13,6 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 resource "google_folder" "folder" {
-  display_name = var.display_name
-  parent       = var.parent
+  display_name = "{{.display_name}}"
+  {{hclField . "parent"}}
 }

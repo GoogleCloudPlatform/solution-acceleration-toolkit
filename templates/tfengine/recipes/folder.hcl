@@ -50,15 +50,13 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "./folder"
   data = {
-    state_path_prefix = "folder_{{.display_name}}"
+    state_path_prefix = "folders"
   }
 }
 
 template "folder" {
   component_path = "../components/folder"
-  output_path    = "./folder"
   data = {
     display_name = "{{.display_name}}"
     {{if eq .parent_type "organization"}}

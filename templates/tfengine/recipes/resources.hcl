@@ -720,10 +720,6 @@ schema = {
   }
 }
 
-template "deployment" {
-  recipe_path = "./deployment.hcl"
-}
-
 {{if has . "bastion_hosts"}}
 template "bastion_hosts" {
   component_path = "../components/resources/bastion_hosts"

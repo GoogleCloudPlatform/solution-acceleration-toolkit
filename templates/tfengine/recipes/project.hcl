@@ -123,18 +123,16 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "./project"
   flatten {
     key = "project"
   }
   data = {
-    state_path_prefix = "{{.project.project_id}}"
+    state_path_prefix = "{{get . "state_path_prefix" .project.project_id}}"
   }
 }
 
 template "project" {
   component_path = "../components/project"
-  output_path    = "./project"
   flatten {
     key = "project"
   }
@@ -144,13 +142,8 @@ template "project" {
 {{range $name, $_ := get . "deployments"}}
 template "deployment_{{$name}}" {
   recipe_path = "./resources.hcl"
-  output_path = "{{$name}}"
   flatten {
     key = "deployments.{{$name}}"
-  }
-  # TODO(umairidris): once deployments are merged remove this.
-  data = {
-    state_path_prefix = "resources_{{$project_id}}"
   }
 }
 {{end}}

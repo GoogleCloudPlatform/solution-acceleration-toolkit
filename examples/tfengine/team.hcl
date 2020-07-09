@@ -33,6 +33,7 @@ data = {
 
 template "devops" {
   recipe_path = "{{$recipes}}/devops.hcl"
+  output_path = "./bootstrap"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
@@ -46,29 +47,35 @@ template "devops" {
         "group:example-devops-owners@example.com",
       ]
     }
-    cicd = {
-      github = {
-        owner = "GoogleCloudPlatform"
-        name  = "example"
-      }
-      branch_regex   = "^master$"
-      terraform_root = "terraform"
+  }
+}
 
-      # Prepare and enable default triggers.
-      validate_trigger = {}
-      plan_trigger     = {}
-      apply_trigger    = {}
-      build_viewers = [
-        "group:example-cicd-viewers@example.com",
-      ]
-      managed_services = [
-        "container.googleapis.com",
-        "firebase.googleapis.com",
-        "healthcare.googleapis.com",
-        "iap.googleapis.com",
-        "secretmanager.googleapis.com",
-      ]
+template "cicd" {
+  recipe_path = "{{$recipes}}/cicd.hcl"
+  output_path = "./cicd"
+  data = {
+    project_id = "example-devops"
+    github = {
+      owner = "GoogleCloudPlatform"
+      name  = "example"
     }
+    branch_regex   = "^master$"
+    terraform_root = "terraform"
+
+    # Prepare and enable default triggers.
+    validate_trigger = {}
+    plan_trigger     = {}
+    apply_trigger    = {}
+    build_viewers = [
+      "group:example-cicd-viewers@example.com",
+    ]
+    managed_services = [
+      "container.googleapis.com",
+      "firebase.googleapis.com",
+      "healthcare.googleapis.com",
+      "iap.googleapis.com",
+      "secretmanager.googleapis.com",
+    ]
   }
 }
 
@@ -78,7 +85,7 @@ template "devops" {
 # any deployment can access its value.
 template "project_secrets" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-secrets"
+  output_path = "./example-prod-secrets"
   data = {
     project = {
       project_id = "example-prod-secrets"
@@ -113,7 +120,7 @@ EOF
 # Prod central networks project for team 1.
 template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-networks"
+  output_path = "./example-prod-networks"
   data = {
     project = {
       project_id         = "example-prod-networks"
@@ -194,7 +201,7 @@ EOF
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-data"
+  output_path = "./example-prod-data"
   data = {
     project = {
       project_id = "example-prod-data"
@@ -315,7 +322,7 @@ EOF
 # Prod central apps project for team 1.
 template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-apps"
+  output_path = "./example-prod-apps"
   data = {
     project = {
       project_id = "example-prod-apps"
@@ -363,7 +370,7 @@ template "project_apps" {
 # Prod firebase project for team 1.
 template "project_firebase" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-firebase"
+  output_path = "./example-prod-firebase"
   data = {
     project = {
       project_id = "example-prod-firebase"

@@ -24,5 +24,4 @@ template "deployment" {
 
 template "org_policies" {
   component_path = "../../policygen/org_policies"
-  output_path    = "./org_policies"
 }

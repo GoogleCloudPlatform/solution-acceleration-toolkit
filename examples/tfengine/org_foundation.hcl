@@ -29,6 +29,7 @@ data = {
 
 template "devops" {
   recipe_path = "{{$recipes}}/devops.hcl"
+  output_path = "./bootstrap"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
@@ -42,27 +43,34 @@ template "devops" {
         "group:example-devops-owners@example.com",
       ]
     }
-    cicd = {
-      github = {
-        owner = "GoogleCloudPlatform"
-        name  = "example"
-      }
-      branch_regex = "^master$"
+  }
+}
 
-      # Prepare and enable default triggers.
-      validate_trigger = {}
-      plan_trigger     = {}
-      apply_trigger    = {}
-      build_viewers = [
-        "group:example-cicd-viewers@example.com",
-      ]
+template "cicd" {
+  recipe_path = "{{$recipes}}/cicd.hcl"
+  output_path = "./cicd"
+  data = {
+    project_id = "example-devops"
+    github = {
+      owner = "GoogleCloudPlatform"
+      name  = "example"
     }
+    branch_regex   = "^master$"
+    terraform_root = "terraform"
+
+    # Prepare and enable default triggers.
+    validate_trigger = {}
+    plan_trigger     = {}
+    apply_trigger    = {}
+    build_viewers = [
+      "group:example-cicd-viewers@example.com",
+    ]
   }
 }
 
 template "audit" {
   recipe_path = "{{$recipes}}/audit.hcl"
-  output_path = "./live"
+  output_path = "./audit"
   data = {
     auditors_group = "example-auditors@example.com"
     project = {
@@ -79,7 +87,7 @@ template "audit" {
 
 template "monitor" {
   recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./live"
+  output_path = "./monitor"
   data = {
     project = {
       project_id = "example-monitor"
@@ -92,7 +100,7 @@ template "monitor" {
 
 template "org_policies" {
   recipe_path = "{{$recipes}}/org_policies.hcl"
-  output_path = "./live"
+  output_path = "./org_policies"
   data = {
     allowed_policy_member_customer_ids = [
       "example_customer_id",
@@ -103,7 +111,7 @@ template "org_policies" {
 # Top level prod folder.
 template "folder_prod" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod"
+  output_path = "./folders"
   data = {
     display_name = "prod"
   }
@@ -112,10 +120,9 @@ template "folder_prod" {
 # Prod folder for team 1.
 template "folder_team1" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./folders"
   data = {
     parent_type                  = "folder"
-    add_parent_folder_dependency = true
     display_name                 = "team1"
   }
 }
