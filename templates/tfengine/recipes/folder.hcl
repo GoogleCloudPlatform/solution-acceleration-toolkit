@@ -52,21 +52,7 @@ template "deployment" {
   recipe_path = "./deployment.hcl"
   output_path = "./folder"
   data = {
-    enable_terragrunt = true
-    {{if and (eq .parent_type "folder") (get . "add_parent_folder_dependency" false)}}
-    terraform_addons = {
-      deps = [{
-        name = "parent_folder"
-        path = "../../folder"
-        mock_outputs = {
-          name = "mock-folder"
-        }
-      }]
-      inputs = {
-        parent = "$${dependency.parent_folder.outputs.name}"
-      }
-    }
-    {{end}}
+    state_path_prefix = "folder_{{.display_name}}"
   }
 }
 

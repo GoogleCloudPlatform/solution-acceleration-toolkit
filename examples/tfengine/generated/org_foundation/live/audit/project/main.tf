@@ -19,6 +19,8 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
+    bucket = "example-terraform-state"
+    prefix = "example-audit"
   }
 }
 

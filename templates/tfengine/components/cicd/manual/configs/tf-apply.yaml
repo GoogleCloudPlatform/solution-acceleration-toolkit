@@ -38,26 +38,6 @@ steps:
     args: ["apply", "-auto-approve"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Deployment (CICD)
-{{if get . "enable_terragrunt" true}}
-  # live/
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terragrunt
-    args: ["init"]
-    dir: "${_TERRAFORM_ROOT}/live"
-    id: Init (live)
-
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: bash
-    args: ["../cicd/configs/terragrunt.sh", "plan-all"]
-    dir: "${_TERRAFORM_ROOT}/live"
-    id: Speculative plan (live)
-
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: bash
-    args: ["../cicd/configs/terragrunt.sh", "apply-all"]
-    dir: "${_TERRAFORM_ROOT}/live"
-    id: Deployment (live)
-{{else}}
   # live/deployment
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
     entrypoint: terraform
@@ -76,6 +56,5 @@ steps:
     args: ["apply", "-auto-approve"]
     dir: "${_TERRAFORM_ROOT}/live/deployment"
     id: Deployment (deployment)
-{{end}}
 substitutions:
     _TERRAFORM_ROOT: "."

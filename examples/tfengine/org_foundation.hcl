@@ -18,6 +18,7 @@ data = {
   parent_type     = "organization" # One of `organization` or `folder`.
   parent_id       = "12345678"
   billing_account = "000-000-000"
+  state_bucket    = "example-terraform-state"
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
@@ -34,7 +35,6 @@ template "devops" {
     # enable_bootstrap_gcs_backend = true
 
     admins_group = "example-org-admins@example.com"
-    state_bucket = "example-terraform-state"
 
     project = {
       project_id = "example-devops"

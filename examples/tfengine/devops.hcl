@@ -30,7 +30,6 @@ template "devops" {
 
     admins_group      = "example-org-admins@example.com"
     state_bucket      = "example-terraform-state"
-    enable_terragrunt = false
 
     project = {
       project_id = "example-devops"

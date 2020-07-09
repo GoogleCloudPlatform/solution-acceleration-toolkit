@@ -24,10 +24,7 @@ This tool helps you follow:
 - Google Cloud best practices through the use of modules from the
 [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
 
-- [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
-    through the use of the
-    [Terragrunt](https://terragrunt.gruntwork.io/) open source tool to define
-    smaller and more modular configs.
+- [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo).
 
 Use our [example](../../examples/tfengine) configs to quickly get started.
 
@@ -37,19 +34,15 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 
     - [gcloud](https://cloud.google.com/sdk/gcloud)
     - [Terraform 0.12](https://www.terraform.io/)
-    - [Terragrunt](https://terragrunt.gruntwork.io/)
     - [Go 1.14+](https://golang.org/dl/)
 
 1. Familiarize yourself with the tools you'll use:
 
     - [Google Cloud](https://cloud.google.com/docs/overview)
     - [Terraform](https://www.terraform.io/intro/index.html)
-    - [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8)
 
     The infrastructure is deployed using Terraform, which is an industry
-    standard for defining infrastructure-as-code. Terragrunt is used as a
-    wrapper around Terraform to manage multiple Terraform deployments and reduce
-    duplication.
+    standard for defining infrastructure-as-code.
 
 1. Set up your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
@@ -121,7 +114,7 @@ The engine takes a path to an input config and a path to output the generated
 Terraform configs. For details on fields for the input schema, see the
 [schema](../../internal/tfengine/schema.go). After the output has been generated,
 there is no longer a dependency on the engine and the user can directly use
-the `terraform` and `terragrunt` binaries to deploy the infrastructure.
+the `terraform` binary to deploy the infrastructure.
 
 1. To clone the repo, run the following commands:
 
@@ -182,13 +175,6 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
    `TODO(user)` in the config to deploy the changes. Remove the comment once done.
 
 ## Tips
-
-- Before running `terragrunt apply-all`, always run `terragrunt plan-all` and
-  carefully review the output. The CICD creates a trigger to generate the
-  plan. Look for the values of the known fields to ensure they are what you
-  expect. You may see some values with the word "mock" in them. These values
-  are coming from other deployments and will be filled with the real value
-  after Terragrunt runs the dependent deployment.
 
 - If you plan on using the engine again, do not manually modify any generated
   file as it will be overwritten the next time the engine runs. Instead,

@@ -17,9 +17,6 @@ schema = {
   description          = "This recipe should be used to setup a new Terraform deployment directory."
   # Additional properties allowed as this template is usually passed extra fields that are used by other templates.
   properties = {
-    enable_terragrunt = {
-      description = "Whether to convert to a Terragrunt deployment. Adds a terragrunt.hcl file in the deployment."
-    }
     state_bucket = {
       description = "State bucket to use for GCS backend. Does nothing if 'enable_terragrunt' is true."
       type        = "string"
@@ -64,9 +61,6 @@ schema = {
               }
               default = {
                 description = "Default value of variable."
-              }
-              terragrunt_input = {
-                description = "Input value to set in terragrunt.hcl for this var."
               }
             }
           }
@@ -151,17 +145,6 @@ template "vars" {
 {{if has . "terraform_addons.outputs"}}
 template "outputs" {
   component_path = "../components/terraform/outputs"
-  {{if has . "terraform_addons"}}
-  flatten {
-    key = "terraform_addons"
-  }
-  {{end}}
-}
-{{end}}
-
-{{if get . "enable_terragrunt"}}
-template "terragrunt" {
-  component_path = "../components/terragrunt/leaf"
   {{if has . "terraform_addons"}}
   flatten {
     key = "terraform_addons"
