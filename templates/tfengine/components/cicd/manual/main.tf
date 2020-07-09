@@ -51,6 +51,9 @@ locals {
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
     "sqladmin.googleapis.com",
+{{- if has . "cloud_source_repository"}}
+    "sourcerepo.googleapis.com",
+{{- end}}
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
@@ -157,6 +160,16 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   ]
 }
 
+{{if has . "cloud_source_repository" -}}
+resource "google_sourcerepo_repository" "configs" {
+  project  = var.project_id
+  name     = "{{.cloud_source_repository.name}}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+{{- end}}
+
 {{if has . "validate_trigger" -}}
 resource "google_cloudbuild_trigger" "validate" {
   {{- if (get  .validate_trigger "disable" false)}}
@@ -170,7 +183,7 @@ resource "google_cloudbuild_trigger" "validate" {
     "${local.terraform_root_prefix}**",
   ]
 
-  {{if index . "github" -}}
+  {{if has . "github" -}}
   github {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
@@ -178,7 +191,7 @@ resource "google_cloudbuild_trigger" "validate" {
       branch = "{{.branch_regex}}"
     }
   }
-  {{- else if index . "cloud_source_repository" -}}
+  {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
     branch_name = "{{.branch_regex}}"
@@ -193,6 +206,9 @@ resource "google_cloudbuild_trigger" "validate" {
 
   depends_on = [
     google_project_service.services,
+{{- if has . "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+{{- end}}
   ]
 }
 {{- end}}
@@ -211,7 +227,7 @@ resource "google_cloudbuild_trigger" "plan" {
     "${local.terraform_root_prefix}cicd/configs/**"
   ]
 
-  {{if index . "github" -}}
+  {{if has . "github" -}}
   github {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
@@ -219,7 +235,7 @@ resource "google_cloudbuild_trigger" "plan" {
       branch = "{{.branch_regex}}"
     }
   }
-  {{- else if index . "cloud_source_repository" -}}
+  {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
     branch_name = "{{.branch_regex}}"
@@ -234,6 +250,9 @@ resource "google_cloudbuild_trigger" "plan" {
 
   depends_on = [
     google_project_service.services,
+{{- if has . "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+{{- end}}
   ]
 }
 {{- end}}
@@ -252,7 +271,7 @@ resource "google_cloudbuild_trigger" "apply" {
     "${local.terraform_root_prefix}cicd/configs/**"
   ]
 
-  {{if index . "github" -}}
+  {{if has . "github" -}}
   github {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
@@ -260,7 +279,7 @@ resource "google_cloudbuild_trigger" "apply" {
       branch = "{{.branch_regex}}"
     }
   }
-  {{- else if index . "cloud_source_repository" -}}
+  {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
     branch_name = "{{.branch_regex}}"
@@ -275,6 +294,9 @@ resource "google_cloudbuild_trigger" "apply" {
 
   depends_on = [
     google_project_service.services,
+{{- if has . "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+{{- end}}
   ]
 }
 {{- end}}
