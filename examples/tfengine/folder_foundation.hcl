@@ -92,7 +92,7 @@ template "monitor" {
 # Top level prod folder.
 template "folder_prod" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod"
+  output_path = "./folders"
   data = {
     display_name = "prod"
   }
@@ -101,7 +101,7 @@ template "folder_prod" {
 # Prod folder for team 1.
 template "folder_team1" {
   recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod/team1"
+  output_path = "./folders"
   data = {
     parent_type                  = "folder"
     add_parent_folder_dependency = true
