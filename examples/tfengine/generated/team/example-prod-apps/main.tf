@@ -52,7 +52,7 @@ module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"
 
-  projects = [var.project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {
@@ -64,6 +64,6 @@ module "project_iam_members" {
 
 resource "google_service_account" "example_sa" {
   account_id = "example-sa"
-  project    = var.project_id
+  project    = module.project.project_id
 }
 

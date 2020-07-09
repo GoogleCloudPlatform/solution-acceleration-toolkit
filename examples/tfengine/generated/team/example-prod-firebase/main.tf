@@ -24,6 +24,27 @@ terraform {
   }
 }
 
+resource "google_firebase_project" "firebase" {
+  provider = google-beta
+  project  = module.project.project_id
+}
+
+resource "google_firestore_index" "index" {
+  project    = module.project.project_id
+  collection = "example-collection"
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "example-field"
+    order      = "ASCENDING"
+  }
+  fields {
+    field_path = "createdTimestamp"
+    order      = "ASCENDING"
+  }
+}
 
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {

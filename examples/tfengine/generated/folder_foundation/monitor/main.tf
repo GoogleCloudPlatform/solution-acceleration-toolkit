@@ -55,7 +55,7 @@ module "network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.1"
 
-  project_id   = var.project_id
+  project_id   = module.project.project_id
   network_name = local.forseti_vpc_name
   subnets = [{
     subnet_name   = local.forseti_subnet_name
@@ -69,7 +69,7 @@ module "router" {
   version = "~> 0.2.0"
 
   name    = "forseti-router"
-  project = var.project_id
+  project = module.project.project_id
   region  = "us-central1"
   network = module.network.network_name
 
@@ -89,7 +89,7 @@ module "forseti" {
   version = "~> 5.2.1"
 
   domain     = "example.com"
-  project_id = var.project_id
+  project_id = module.project.project_id
   folder_id  = "12345678"
   network    = module.network.network_name
   subnetwork = module.network.subnets[local.forseti_subnet_key].name

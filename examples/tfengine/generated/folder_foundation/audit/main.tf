@@ -68,7 +68,7 @@ resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
   folder           = var.folder
   include_children = true
   filter           = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination      = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+  destination      = "bigquery.googleapis.com/projects/${module.project.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
 module "bigquery_destination" {
@@ -76,7 +76,7 @@ module "bigquery_destination" {
   version = "~> 4.2.0"
 
   dataset_id                  = "1yr_org_audit_logs"
-  project_id                  = var.project_id
+  project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
   access = [
@@ -111,7 +111,7 @@ module "storage_destination" {
   version = "~> 1.6.0"
 
   name          = "7yr-org-audit-logs"
-  project_id    = var.project_id
+  project_id    = module.project.project_id
   location      = "us-central1"
   storage_class = "COLDLINE"
 

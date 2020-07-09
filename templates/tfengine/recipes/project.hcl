@@ -102,12 +102,6 @@ schema = {
             }
           }
         }
-        terraform_addons = {
-          description = <<EOF
-            Additional Terraform configuration for the project deployment.
-            For schema see ./deployment.hcl.
-          EOF
-        }
       }
     }
     deployments = {
@@ -117,6 +111,12 @@ schema = {
         For resource schema see ./resources.hcl.
       EOF
       type        = "object"
+    }
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the project deployment.
+        For schema see ./deployment.hcl.
+      EOF
     }
   }
 }

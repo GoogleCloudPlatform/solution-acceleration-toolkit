@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 0.1.0"
 
   name         = "{{.name}}"
-  project      = var.project_id
+  project      = module.project.project_id
   region       = "{{get . "compute_region" $.compute_region}}"
   network      = "{{.network}}"
 

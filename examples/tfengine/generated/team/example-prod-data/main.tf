@@ -54,7 +54,7 @@ module "one_billion_ms_example_dataset" {
   version = "~> 4.2.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
-  project_id                  = var.project_id
+  project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
 
@@ -77,7 +77,7 @@ module "example_mysql_instance" {
   version = "~> 3.2.0"
 
   name              = "example-mysql-instance"
-  project_id        = var.project_id
+  project_id        = module.project.project_id
   region            = "us-central1"
   zone              = "a"
   availability_type = "REGIONAL"
@@ -90,7 +90,7 @@ module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"
 
-  projects = [var.project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {
@@ -105,7 +105,7 @@ module "example_prod_bucket" {
   version = "~> 1.4"
 
   name       = "example-prod-bucket"
-  project_id = var.project_id
+  project_id = module.project.project_id
   location   = "us-central1"
   iam_members = [
     {
@@ -121,7 +121,7 @@ module "example_healthcare_dataset" {
   version = "~> 1.0.0"
 
   name     = "example-healthcare-dataset"
-  project  = var.project_id
+  project  = module.project.project_id
   location = "us-central1"
 
   iam_members = [
