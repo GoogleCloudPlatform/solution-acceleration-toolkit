@@ -71,13 +71,12 @@ schema = {
 template "project" {
   recipe_path = "./project.hcl"
   data = {
-    output_dir        = "monitor"
+    state_path_prefix = "monitor"
   }
 }
 
 template "forseti" {
   component_path = "../components/monitor/forseti"
-  output_path    = "./monitor"
   flatten {
     key = "forseti"
   }

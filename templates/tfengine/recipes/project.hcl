@@ -118,29 +118,21 @@ schema = {
       EOF
       type        = "object"
     }
-    output_dir = {
-      description = "Name of directory for the project. If not set defaults to the project id."
-      type        = "string"
-    }
   }
 }
 
-{{$output_dir := get . "output_dir" .project.project_id}}
-
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "{{$output_dir}}"
   flatten {
     key = "project"
   }
   data = {
-    state_path_prefix = "{{$output_dir}}"
+    state_path_prefix = "{{get . "state_path_prefix" .project.project_id}}"
   }
 }
 
 template "project" {
   component_path = "../components/project"
-  output_path    = "{{$output_dir}}"
   flatten {
     key = "project"
   }
@@ -150,7 +142,6 @@ template "project" {
 {{range $name, $_ := get . "deployments"}}
 template "deployment_{{$name}}" {
   recipe_path = "./resources.hcl"
-  output_path = "{{$output_dir}}"
   flatten {
     key = "deployments.{{$name}}"
   }

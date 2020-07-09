@@ -13,7 +13,7 @@
 # limitations under the License.
 
 billing_account               = "{{.billing_account}}"
-project_id                    = "{{.project.project_id}}"
+project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"
 {{- if has . "terraform_root"}}
 terraform_root                = "{{.terraform_root}}"
