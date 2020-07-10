@@ -93,6 +93,14 @@ template "project_secrets" {
         "secretmanager.googleapis.com"
       ]
     }
+    terraform_addons = {
+      raw_config = <<EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
+    }
     deployments = {
       resources = {
         secrets = [
@@ -104,14 +112,6 @@ template "project_secrets" {
             secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
           },
         ]
-        terraform_addons = {
-          raw_config = <<EOF
-resource "random_password" "db" {
-  length = 16
-  special = true
-}
-EOF
-        }
       }
     }
   }
@@ -187,13 +187,13 @@ EOF
 
           }]
         }]
-        terraform_addons = {
-          outputs = [{
-            name  = "bastion_service_account"
-            value = "$${module.bastion_vm.service_account}"
-          }]
-        }
       }
+    }
+    terraform_addons = {
+      outputs = [{
+        name  = "bastion_service_account"
+        value = "$${module.bastion_vm.service_account}"
+      }]
     }
   }
 }
@@ -214,13 +214,6 @@ template "project_data" {
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
-      }
-      # Add dependency on network deployment.
-      terraform_addons = {
-        deps = [{
-          name = "networks"
-          path = "../../example-prod-networks/resources"
-        }]
       }
     }
     deployments = {
@@ -283,21 +276,15 @@ template "project_data" {
             member = "group:example-readers@example.com"
           }]
         }]
-        terraform_addons = {
-          deps = [{
-            name = "networks"
-            path = "../../example-prod-networks/resources"
-            mock_outputs = {
-              bastion_service_account = "mock-sa"
-            }
-          }]
-          vars = [{
-            name             = "bastion_service_account"
-            type             = "string"
-            terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
-          }]
-          /* TODO(user): Uncomment and re-run the engine after deploying secrets.
-          raw_config = <<EOF
+      }
+    }
+    terraform_addons = {
+      vars = [{
+        name             = "bastion_service_account"
+        type             = "string"
+      }]
+      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
+      raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta
 
@@ -313,8 +300,6 @@ data "google_secret_manager_secret_version" "db_password" {
 }
 EOF
 */
-        }
-      }
     }
   }
 }
@@ -334,13 +319,6 @@ template "project_apps" {
         host_project_id = "example-prod-networks"
         subnets = [{
           name = "example-gke-subnet"
-        }]
-      }
-      # Add dependency on network deployment.
-      terraform_addons = {
-        deps = [{
-          name = "networks"
-          path = "../../example-prod-networks/resources"
         }]
       }
     }
@@ -378,17 +356,15 @@ template "project_firebase" {
         "firebase.googleapis.com",
       ]
     }
-    deployments = {
-      resources = {
-        terraform_addons = {
+    terraform_addons = {
           raw_config = <<EOF
 resource "google_firebase_project" "firebase" {
   provider = google-beta
-  project  = var.project_id
+  project  = module.project.project_id
 }
 
 resource "google_firestore_index" "index" {
-  project    = var.project_id
+  project    = module.project.project_id
   collection = "example-collection"
   fields {
     field_path = "__name__"
@@ -404,8 +380,6 @@ resource "google_firestore_index" "index" {
   }
 }
 EOF
-        }
-      }
     }
   }
 }

@@ -54,9 +54,9 @@ module "bastion_vm" {
   version = "~> 2.6.0"
 
   name         = "bastion-vm"
-  project      = var.project_id
+  project      = module.project.project_id
   zone         = "us-central1-a"
-  host_project = var.project_id
+  host_project = module.project.project_id
   network      = "${module.example_network.network.network.self_link}"
   subnet       = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
   members      = ["group:bastion-accessors@example.com"]
@@ -81,7 +81,7 @@ module "example_network" {
   version = "~> 2.4.0"
 
   network_name = "example-network"
-  project_id   = var.project_id
+  project_id   = module.project.project_id
   subnets = [
     {
       subnet_name           = "example-bastion-subnet"
@@ -116,7 +116,7 @@ module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 3.2.0"
 
-  project_id  = var.project_id
+  project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
 }
 module "example_router" {
@@ -124,7 +124,7 @@ module "example_router" {
   version = "~> 0.1.0"
 
   name    = "example-router"
-  project = var.project_id
+  project = module.project.project_id
   region  = "us-central1"
   network = "${module.example_network.network.network.self_link}"
 

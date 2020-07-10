@@ -36,7 +36,7 @@ terraform {
 }
 
 data "google_project" "devops" {
-  project_id = var.project_id
+  project_id = module.project.project_id
 }
 
 locals {
@@ -85,7 +85,7 @@ locals {
 # Cloud Build - API
 resource "google_project_service" "services" {
   for_each           = toset(local.services)
-  project            = var.project_id
+  project            = module.project.project_id
   service            = each.value
   disable_on_destroy = false
 }
@@ -93,7 +93,7 @@ resource "google_project_service" "services" {
 # IAM permissions to allow approvers and contributors to view the build results.
 resource "google_project_iam_member" "cloudbuild_viewers" {
   for_each = toset(var.build_viewers)
-  project  = var.project_id
+  project  = module.project.project_id
   role     = "roles/cloudbuild.builds.viewer"
   member   = each.value
   depends_on = [
@@ -149,7 +149,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
 # Grant Cloud Build Service Account access to the devops project.
 resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
-  project  = var.project_id
+  project  = module.project.project_id
   role     = each.key
   member   = local.cloud_build_sa
   depends_on = [
@@ -163,7 +163,7 @@ resource "google_cloudbuild_trigger" "validate" {
   disabled = true
   {{- end}}
   provider = google-beta
-  project  = var.project_id
+  project  = module.project.project_id
   name     = "tf-validate"
 
   included_files = [
@@ -203,7 +203,7 @@ resource "google_cloudbuild_trigger" "plan" {
   disabled = true
   {{- end}}
   provider = google-beta
-  project  = var.project_id
+  project  = module.project.project_id
   name     = "tf-plan"
 
   included_files = [
@@ -244,7 +244,7 @@ resource "google_cloudbuild_trigger" "apply" {
   disabled = true
   {{- end}}
   provider = google-beta
-  project  = var.project_id
+  project  = module.project.project_id
   name     = "tf-apply"
 
   included_files = [

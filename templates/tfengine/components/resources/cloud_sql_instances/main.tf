@@ -25,7 +25,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 3.2.0"
 
   name              = "{{.name}}"
-  project_id        = var.project_id
+  project_id        = module.project.project_id
   region            = "{{get . "cloud_sql_region" $.cloud_sql_region}}"
   zone              = "{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
   availability_type = "REGIONAL"

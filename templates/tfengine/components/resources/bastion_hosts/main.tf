@@ -18,12 +18,12 @@ module "{{resourceName . "name"}}" {
   version = "~> 2.6.0"
 
   name         = "{{.name}}"
-  project      = var.project_id
+  project      = module.project.project_id
   zone         = "{{get . "region" $.compute_region}}-{{get . "zone" $.compute_zone}}"
   {{- if has . "network_project_id"}}
   host_project = "{{.network_project_id}}"
   {{- else}}
-  host_project = var.project_id
+  host_project = module.project.project_id
   {{- end}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"

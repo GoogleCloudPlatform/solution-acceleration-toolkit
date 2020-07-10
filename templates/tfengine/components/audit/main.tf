@@ -41,7 +41,7 @@ resource "google_logging_{{.parent_type}}_sink" "bigquery_audit_logs_sink" {
   {{$parent_field}}    = {{$parent_var}}
   include_children     = true
   filter               = "logName:\"logs/cloudaudit.googleapis.com\""
-  destination          = "bigquery.googleapis.com/projects/${var.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+  destination          = "bigquery.googleapis.com/projects/${module.project.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
 module "bigquery_destination" {
@@ -49,7 +49,7 @@ module "bigquery_destination" {
   version = "~> 4.2.0"
 
   dataset_id                  = "{{.logs_bigquery_dataset.dataset_id}}"
-  project_id                  = var.project_id
+  project_id                  = module.project.project_id
   location                    = "{{.bigquery_location}}"
   default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
   access = [
@@ -84,7 +84,7 @@ module "storage_destination" {
   version = "~> 1.6.0"
 
   name          = "{{.logs_storage_bucket.name}}"
-  project_id    = var.project_id
+  project_id    = module.project.project_id
   location      = "{{.storage_location}}"
   storage_class = "COLDLINE"
 

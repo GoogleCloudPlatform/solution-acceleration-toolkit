@@ -20,7 +20,7 @@ resource "google_secret_manager_secret" "{{$resource_name}}" {
   provider = google-beta
 
   secret_id = "{{.secret_id}}"
-  project   = var.project_id
+  project   = module.project.project_id
 
   replication {
     {{- if has . "locations"}}

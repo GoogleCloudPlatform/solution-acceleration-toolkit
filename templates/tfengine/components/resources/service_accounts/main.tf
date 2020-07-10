@@ -15,6 +15,6 @@ limitations under the License. */ -}}
 {{range get . "service_accounts"}}
 resource "google_service_account" "{{resourceName . "account_id"}}" {
   account_id = "{{.account_id}}"
-  project    = var.project_id
+  project    = module.project.project_id
 }
 {{end}}
