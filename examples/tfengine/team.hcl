@@ -378,6 +378,19 @@ template "project_apps" {
         iam_members = {
           "roles/container.viewer" = ["group:example-viewers@example.com"]
         }
+        dns_zones = [{
+          name   = "example-domain"
+          domain = "example-domain.com."
+          type   = "public"
+          record_sets = [{
+            name = "example"
+            type = "A"
+            ttl  = 30
+            records = [
+              "142.0.0.0",
+            ]
+          }]
+        }]
       }
     }
   }

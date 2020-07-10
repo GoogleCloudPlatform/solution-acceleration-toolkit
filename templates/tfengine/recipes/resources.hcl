@@ -223,6 +223,13 @@ schema = {
             description = "Name prefix of the instance template."
             type        = "string"
           }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name_prefix.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
           network_project_id = {
             description = "Name of network project. If unset, will use the current project."
             type        = "string"
@@ -271,6 +278,13 @@ schema = {
               properties = {
                 name = {
                   description = "Name of instance."
+                  type        = "string"
+                }
+                resource_name = {
+                  description = <<EOF
+                    Override for Terraform resource name. If unset, defaults to normalized name.
+                    Normalization will make all characters alphanumeric with underscores.
+                  EOF
                   type        = "string"
                 }
               }
@@ -426,6 +440,74 @@ schema = {
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    dns_zones = {
+      description = "https://github.com/terraform-google-modules/terraform-google-cloud-dns"
+      type        = "array"
+      items = {
+        type = "object"
+        additionalProperties = false
+        required = [
+          "name",
+          "domain",
+          "type",
+        ]
+        properties = {
+          name = {
+            description = "Name of DNS zone."
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
+          domain = {
+            description = "Domain of DNS zone. Must end with period."
+            type        = "string"
+          }
+          type = {
+            description = "Type of DNS zone."
+            type        = "string"
+            enum = [
+              "public",
+              "private",
+              "forwarding",
+              "peering",
+            ]
+          }
+          record_sets = {
+            description = "Records managed by the DNS zone."
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                name = {
+                  description = "Name of record set."
+                  type        = "string"
+                }
+                type = {
+                  description = "Type of record set."
+                  type        = "string"
+                }
+                ttl = {
+                  description = "Time to live of this record set, in seconds."
+                  type        = "integer"
+                }
+                records = {
+                  description = "Data of the record set."
+                  type        = "array"
+                  items = {
+                    type = "string"
                   }
                 }
               }
@@ -901,6 +983,12 @@ template "compute_networks" {
 {{if has . "compute_routers"}}
 template "compute_routers" {
   component_path = "../components/resources/compute_routers"
+}
+{{end}}
+
+{{if has . "dns_zones"}}
+template "compute_routers" {
+  component_path = "../components/resources/dns_zones"
 }
 {{end}}
 
