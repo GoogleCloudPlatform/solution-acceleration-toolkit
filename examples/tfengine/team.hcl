@@ -271,6 +271,16 @@ template "project_data" {
         }
         storage_buckets = [{
           name = "example-prod-bucket"
+          # TTL 7 days.
+          lifecycle_rules = [{
+            action = {
+              type = "Delete"
+            }
+            condition = {
+              age        = 7
+              with_state = "ANY"
+            }
+          }]
           iam_members = [{
             role   = "roles/storage.objectViewer"
             member = "group:example-readers@example.com"

@@ -21,15 +21,26 @@ module "{{resourceName . "name"}}" {
   project_id = var.project_id
   location   = "{{get . "storage_location" $.storage_location}}"
 
-  {{- if index . "iam_members"}}
-  iam_members = [
-    {{- range .iam_members}}
+  {{- if has . "lifecycle_rules"}}
+  lifecycle_rules = [
+    {{- range .lifecycle_rules}}
     {
-      role   = "{{.role}}"
-      member = "{{.member}}"
-    },
+      action = {
+        type = "{{.action.type}}"
+        {{hclField .action "storage_class" -}}
+      }
+      condition = {
+        {{hclField .condition "age" -}}
+        {{hclField .condition "created_before" -}}
+        {{hclField .condition "with_state" -}}
+        {{hclField .condition "matches_storage_class" -}}
+        {{hclField .condition "num_newer_versions" -}}
+      }
+    }
     {{- end}}
   ]
   {{- end}}
+
+  {{hclField . "iam_members"}}
 }
 {{end}}

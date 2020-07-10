@@ -684,6 +684,56 @@ schema = {
             description = "Location to create the storage bucket. Can be defined in global data block."
             type        = "string"
           }
+          lifecycle_rules = {
+            description = "Lifecycle rules configuration for the bucket."
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                action = {
+                  type                 = "object"
+                  additionalProperties = false
+                  properties = {
+                    type = {
+                      description = "Type of action. Supported values: Delete and SetStorageClass."
+                      type        = "string"
+                    }
+                    storage_class = {
+                      description = "(Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule."
+                      type        = "string"
+                    }
+                  }
+                }
+                condition = {
+                  type                 = "object"
+                  additionalProperties = false
+                  properties = {
+                    age = {
+                      description = "Minimum age of an object in days to satisfy this condition."
+                      type        = "integer"
+                    }
+                    created_before = {
+                      description = "Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition."
+                      type        = "string"
+                    }
+                    with_state = {
+                      description = "Match to live and/or archived objects. Supported values include: 'LIVE', 'ARCHIVED', 'ANY'."
+                      type        = "string"
+                    }
+                    matches_storage_class = {
+                      description = "Storage Class of objects to satisfy this condition. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, STANDARD, DURABLE_REDUCED_AVAILABILITY."
+                      type        = "string"
+                    }
+                    num_newer_versions = {
+                      description = "Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition."
+                      type        = "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
           iam_members = {
             description = "IAM member to grant access for."
             type        = "array"
