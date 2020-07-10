@@ -82,12 +82,25 @@ module "example_prod_bucket" {
   name       = "example-prod-bucket"
   project_id = var.project_id
   location   = "us-central1"
+  lifecycle_rules = [
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 7
+        with_state = "ANY"
+      }
+    }
+  ]
+
   iam_members = [
     {
-      role   = "roles/storage.objectViewer"
       member = "group:example-readers@example.com"
+      role   = "roles/storage.objectViewer"
     },
   ]
+
 }
 
 
