@@ -23,6 +23,38 @@ terraform {
 }
 
 
+
+module "example_instance_template" {
+  source  = "terraform-google-modules/vm/google//modules/instance_template"
+  version = "~> 3.0.0"
+
+  name_prefix        = "example-instance-template"
+  project_id         = var.project_id
+  region             = "us-central1"
+  subnetwork_project = "example-prod-networks"
+  subnetwork         = "example-instance-subnet"
+
+  service_account = {
+    email  = "${google_service_account.example_sa.email}"
+    scopes = ["cloud-platform"]
+  }
+  enable_shielded_vm = true
+  shielded_instance_config = {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+}
+module "instance" {
+  source  = "terraform-google-modules/vm/google//modules/compute_instance"
+  version = "~> 3.0.0"
+
+  hostname           = "instance"
+  instance_template  = module.example_instance_template.self_link
+  region             = "us-central1"
+  subnetwork_project = "example-prod-networks"
+  subnetwork         = "example-instance-subnet"
+}
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"
