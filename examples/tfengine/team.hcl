@@ -150,7 +150,7 @@ template "project_networks" {
               ]
             },
             {
-              name      = "example-instance-subnet"
+              name     = "example-instance-subnet"
               ip_range = "10.3.0.0/16"
             }
           ]
