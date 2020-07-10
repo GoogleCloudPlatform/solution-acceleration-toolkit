@@ -38,7 +38,6 @@ module "example_instance_template" {
     email  = "${google_service_account.example_sa.email}"
     scopes = ["cloud-platform"]
   }
-
   enable_shielded_vm = true
   shielded_instance_config = {
     enable_secure_boot          = true
