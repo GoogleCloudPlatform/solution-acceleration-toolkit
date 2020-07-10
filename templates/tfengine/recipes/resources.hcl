@@ -209,6 +209,51 @@ schema = {
     }
     compute_instance_templates = {
       description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/instance_template"
+      type        = "array"
+      items = {
+        type                 = "object"
+        additionalProperties = false
+        required = [
+          "name_prefix",
+          "subnet",
+          "service_account",
+        ]
+        properties = {
+          name_prefix = {
+            description = "Name prefix of the instance template."
+            type        = "string"
+          }
+          network_project_id = {
+            description = "Name of network project. If unset, will use the current project."
+            type        = "string"
+          }
+          subnet = {
+            description = "Name of the the instance template's subnet."
+            type        = "string"
+          }
+          service_account = {
+            description = "Email of service account to attach to this instance template."
+            type        = "string"
+          }
+          instances = {
+            description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance"
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of instance."
+                  type        = "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
     compute_networks = {
       description = "https://github.com/terraform-google-modules/terraform-google-network"
