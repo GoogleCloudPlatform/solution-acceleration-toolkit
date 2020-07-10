@@ -149,6 +149,10 @@ template "project_networks" {
                 }
               ]
             },
+            {
+              name     = "example-instance-subnet"
+              ip_range = "10.3.0.0/16"
+            }
           ]
           cloud_sql_private_service_access = {} # Enable SQL private service access.
         }]
@@ -361,6 +365,15 @@ template "project_apps" {
         # }]
         service_accounts = [{
           account_id = "example-sa"
+        }]
+        compute_instance_templates = [{
+          name_prefix = "example-instance-template"
+          network_project_id     = "example-prod-networks"
+          subnet                 = "example-instance-subnet"
+          service_account        = "$${google_service_account.example_sa.email}"
+          instances = [{
+            name = "instance"
+          }]
         }]
         iam_members = {
           "roles/container.viewer" = ["group:example-viewers@example.com"]
