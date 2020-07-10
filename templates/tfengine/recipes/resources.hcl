@@ -790,12 +790,25 @@ schema = {
                       type        = "string"
                     }
                     with_state = {
-                      description = "Match to live and/or archived objects. Supported values include: 'LIVE', 'ARCHIVED', 'ANY'."
+                      description = "Match to live and/or archived objects.
                       type        = "string"
+                      enum = [
+                        "LIVE",
+                        "ARCHIVED",
+                        "ANY",
+                      ]
                     }
                     matches_storage_class = {
-                      description = "Storage Class of objects to satisfy this condition. Supported values include: MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, STANDARD, DURABLE_REDUCED_AVAILABILITY."
+                      description = "Storage Class of objects to satisfy this condition."
                       type        = "string"
+                      enum = [
+                        "STANDARD",
+                        "MULTI_REGIONAL",
+                        "REGIONAL",
+                        "NEARLINE",
+                        "COLDLINE",
+                        "DURABLE_REDUCED_AVAILABILITY",
+                      ]
                     }
                     num_newer_versions = {
                       description = "Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition."
