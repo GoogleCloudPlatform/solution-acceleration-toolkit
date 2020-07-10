@@ -100,7 +100,6 @@ module "example_prod_bucket" {
       role   = "roles/storage.objectViewer"
     },
   ]
-
 }
 
 
