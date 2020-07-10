@@ -207,6 +207,9 @@ schema = {
         }
       }
     }
+    compute_instance_templates = {
+      description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/instance_template"
+    }
     compute_networks = {
       description = "https://github.com/terraform-google-modules/terraform-google-network"
       type        = "array"
@@ -748,6 +751,12 @@ template "bigquery_datasets" {
 {{if has . "cloud_sql_instances"}}
 template "cloud_sql_instances" {
   component_path = "../components/resources/cloud_sql_instances"
+}
+{{end}}
+
+{{if has . "compute_instance_templates"}}
+template "compute_instance_templates" {
+  component_path = "../components/resources/compute_instance_templates"
 }
 {{end}}
 
