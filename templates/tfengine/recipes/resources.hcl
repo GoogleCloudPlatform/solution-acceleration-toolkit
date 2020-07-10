@@ -235,6 +235,30 @@ schema = {
             description = "Email of service account to attach to this instance template."
             type        = "string"
           }
+          image_project = {
+            description = "Project of compute image to use."
+            type        = "string"
+          }
+          image_family = {
+            description = "Family of compute image to use."
+            type        = "string"
+          }
+          disk_type = {
+            description = "Type of disk to use for the instance template."
+            type        = "string"
+          }
+          disk_size_gb = {
+            description = "Disk space to set for the instance template."
+            type        = "integer"
+          }
+          preemptible = {
+            description = "Whether the instance template can be preempted. Defaults to false."
+            type        = "boolean"
+          }
+          enable_shielded_vm = {
+            description = "Whether to enable shielded VM. Defaults to true."
+            type        = "boolean"
+          }
           instances = {
             description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance"
             type        = "array"

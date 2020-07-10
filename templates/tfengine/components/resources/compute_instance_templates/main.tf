@@ -38,12 +38,14 @@ module "{{$template_resource_name}}" {
     scopes = ["cloud-platform"]
   }
 
+  {{- if get . "enable_shielded_vm" true}}
   enable_shielded_vm = true
   shielded_instance_config = {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
+  {{- end}}
 
   {{- if has . "startup_script"}}
   startup_script = <<EOF
