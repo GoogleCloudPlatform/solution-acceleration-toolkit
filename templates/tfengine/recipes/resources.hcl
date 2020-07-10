@@ -790,7 +790,7 @@ schema = {
                       type        = "string"
                     }
                     with_state = {
-                      description = "Match to live and/or archived objects.
+                      description = "Match to live and/or archived objects."
                       type        = "string"
                       enum = [
                         "LIVE",
