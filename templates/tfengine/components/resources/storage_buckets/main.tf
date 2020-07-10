@@ -41,6 +41,6 @@ module "{{resourceName . "name"}}" {
   ]
   {{- end}}
 
-  {{hclField . "iam_members"}}
+  {{hclField . "iam_members" -}}
 }
 {{end}}
