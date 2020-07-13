@@ -17,7 +17,7 @@
 # Helper to build release artifacts - binaries, and templates and policies bundles.
 #
 # Usage (from repo root):
-# ./scripts/build.sh -o . -v v0.1.0
+# ./build/build-release.sh -o . -v v0.1.0
 
 set -e
 
@@ -41,7 +41,7 @@ fi
 
 version_regex="^v[0-9]+\.[0-9]+\.[0-9]+$"
 if ! [[ ${VERSION} =~ ${version_regex} ]]; then
-  "Version \"${VERSION}\" does not match regex ${version_regex}"
+  echo "Version \"${VERSION}\" does not match regex ${version_regex}"
   exit 1
 fi
 
