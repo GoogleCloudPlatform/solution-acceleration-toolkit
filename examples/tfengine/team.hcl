@@ -363,6 +363,11 @@ template "project_apps" {
         #   ip_range_services_name = "example-services-range"
         #   master_ipv4_cidr_block = "192.168.0.0/28"
         # }]
+        binary_authorization = {
+          admission_whitelist_patterns = [{
+            name_pattern = "gcr.io/cloudsql-docker/*"
+          }]
+        }
         service_accounts = [{
           account_id = "example-sa"
         }]

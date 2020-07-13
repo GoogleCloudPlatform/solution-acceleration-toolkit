@@ -154,6 +154,30 @@ schema = {
         }
       }
     }
+    binary_authorization = {
+      description          = "A policy for container image binary authorization."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        admission_whitelist_patterns = {
+          description = "A whitelist of image patterns to exclude from admission rules."
+          type        = "array"
+          items = {
+            type                 = "object"
+            additionalProperties = false
+            properties = {
+              name_pattern = {
+                description = <<EOF
+                  An image name pattern to whitelist, in the form registry/path/to/image.
+                  This supports a trailing * as a wildcard, but this is allowed only in text after the registry/ part."
+                EOF
+                type        = "string"
+              }
+            }
+          }
+        }
+      }
+    }
     cloud_sql_instances = {
       description = "https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql"
       type        = "array"
@@ -961,6 +985,12 @@ template "bastion_hosts" {
 {{if has . "bigquery_datasets"}}
 template "bigquery_datasets" {
   component_path = "../components/resources/bigquery_datasets"
+}
+{{end}}
+
+{{if has . "binary_authorization"}}
+template "binary_authorization" {
+  component_path = "../components/resources/binary_authorization"
 }
 {{end}}
 
