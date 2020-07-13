@@ -108,6 +108,25 @@ module "instance" {
   subnetwork_project = "example-prod-networks"
   subnetwork         = "example-instance-subnet"
 }
+
+module "example_domain" {
+  source  = "terraform-google-modules/cloud-dns/google"
+  version = "~> 3.0.0"
+
+  name       = "example-domain"
+  project_id = var.project_id
+  domain     = "example-domain.com."
+  type       = "public"
+
+  recordsets = [
+    {
+      name    = "example"
+      records = ["142.0.0.0"]
+      ttl     = 30
+      type    = "A"
+    },
+  ]
+}
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"
