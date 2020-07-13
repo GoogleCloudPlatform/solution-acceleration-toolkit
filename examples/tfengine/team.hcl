@@ -410,7 +410,7 @@ template "project_apps" {
           ]
           pull_subscriptions = [
             {
-              name                 = "pull"
+              name                 = "pull-subscription"
             }
           ]
         }]

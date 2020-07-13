@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 1.3.0"
 
   topic        = "{{.name}}"
-  project      = var.project_id
+  project_id   = var.project_id
 
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}

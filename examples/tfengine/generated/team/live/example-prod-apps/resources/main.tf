@@ -144,18 +144,18 @@ module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 1.3.0"
 
-  topic   = "foo-topic"
-  project = var.project_id
+  topic      = "foo-topic"
+  project_id = var.project_id
 
+  pull_subscriptions = [
+    {
+      name = "pull-subscription"
+    },
+  ]
   push_subscriptions = [
     {
       name          = "push-subscription"
       push_endpoint = "https://example.com"
-    },
-  ]
-  pull_subscriptions = [
-    {
-      name = "pull"
     },
   ]
 }
