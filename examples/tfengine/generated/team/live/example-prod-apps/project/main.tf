@@ -41,7 +41,9 @@ module "project" {
   ]
   activate_apis = [
     "compute.googleapis.com",
+    "dns.googleapis.com",
     "container.googleapis.com",
+    "pubsub.googleapis.com",
   ]
 }
 

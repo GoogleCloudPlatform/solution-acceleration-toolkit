@@ -786,6 +786,66 @@ schema = {
       description = "Map of IAM role to list of members to grant access to the role."
       type        = "object"
     }
+    pubsub_topics = {
+      description = "https://github.com/terraform-google-modules/terraform-google-pubsub"
+      type        = "array"
+      items = {
+        required = [
+          "name",
+        ]
+        properties = {
+          name = {
+            description = "Name of the topic."
+            type        = "string"
+          }
+          pull_subscriptions = {
+            description = "Pull subscriptions on the topic."
+            type        = "array"
+            items = {
+              type = "object"
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of subscription."
+                  type        = "string"
+                }
+                ack_deadline_seconds = {
+                  description = "Deadline to wait for acknowledgement."
+                  type        = "integer"
+                }
+              }
+            }
+          }
+          push_subscriptions = {
+            description = "Push subscriptions on the topic."
+            type        = "array"
+            items = {
+              type = "object"
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of subscription."
+                  type        = "string"
+                }
+                push_endpoint = {
+                  description = "Name of endpoint to push to."
+                  type        = "string"
+                }
+                ack_deadline_seconds = {
+                  description = "Deadline to wait for acknowledgement."
+                  type        = "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
     secrets = {
       description = "https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html"
       type        = "array"
@@ -1024,18 +1084,6 @@ template "dns_zones" {
 }
 {{end}}
 
-{{if has . "iam_members"}}
-template "iam_members" {
-  component_path = "../components/resources/iam_members"
-}
-{{end}}
-
-{{if has . "storage_buckets"}}
-template "storage_buckets" {
-  component_path = "../components/resources/storage_buckets"
-}
-{{end}}
-
 {{if has . "gke_clusters"}}
 template "gke_clusters" {
   component_path = "../components/resources/gke_clusters"
@@ -1048,14 +1096,32 @@ template "healthcare_datasets" {
 }
 {{end}}
 
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../components/resources/iam_members"
+}
+{{end}}
+
 {{if has . "secrets"}}
 template "secrets" {
   component_path = "../components/resources/secrets"
 }
 {{end}}
 
+{{if has . "pubsub_topics"}}
+template "pubsub_topics" {
+  component_path = "../components/resources/pubsub_topics"
+}
+{{end}}
+
 {{if has . "service_accounts"}}
 template "service_accounts" {
   component_path = "../components/resources/service_accounts"
+}
+{{end}}
+
+{{if has . "storage_buckets"}}
+template "storage_buckets" {
+  component_path = "../components/resources/storage_buckets"
 }
 {{end}}

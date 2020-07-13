@@ -63,9 +63,11 @@ template "devops" {
       ]
       managed_services = [
         "container.googleapis.com",
+        "dns.googleapis.com",
         "firebase.googleapis.com",
         "healthcare.googleapis.com",
         "iap.googleapis.com",
+        "pubsub.googleapis.com",
         "secretmanager.googleapis.com",
       ]
     }
@@ -335,7 +337,9 @@ template "project_apps" {
       project_id = "example-prod-apps"
       apis = [
         "compute.googleapis.com",
+        "dns.googleapis.com",
         "container.googleapis.com",
+        "pubsub.googleapis.com",
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
@@ -395,6 +399,20 @@ template "project_apps" {
               "142.0.0.0",
             ]
           }]
+        }]
+        pubsub_topics = [{
+          name = "foo-topic"
+          push_subscriptions = [
+            {
+              name                 = "push-subscription"
+              push_endpoint        = "https://example.com" // required
+            }
+          ]
+          pull_subscriptions = [
+            {
+              name                 = "pull-subscription"
+            }
+          ]
         }]
       }
     }
