@@ -458,6 +458,7 @@ schema = {
           "name",
           "domain",
           "type",
+          "record_sets",
         ]
         properties = {
           name = {
@@ -473,6 +474,7 @@ schema = {
           domain = {
             description = "Domain of DNS zone. Must end with period."
             type        = "string"
+            pattern     = "^.+\\.$"
           }
           type = {
             description = "Type of DNS zone."
@@ -987,7 +989,7 @@ template "compute_routers" {
 {{end}}
 
 {{if has . "dns_zones"}}
-template "compute_routers" {
+template "dns_zones" {
   component_path = "../components/resources/dns_zones"
 }
 {{end}}
