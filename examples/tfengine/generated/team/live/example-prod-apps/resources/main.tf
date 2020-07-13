@@ -111,7 +111,7 @@ module "instance" {
 
 module "example_domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.0.0"
+  version = "~> 3.0.1"
 
   name       = "example-domain"
   project_id = var.project_id
