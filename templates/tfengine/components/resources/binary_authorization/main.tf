@@ -58,7 +58,7 @@ resource "google_binary_authorization_policy" "policy" {
   }
   # Whitelist images from this project.
   admission_whitelist_patterns {
-    name_pattern = "gcr.io/$${var.project_id}/*"
+    name_pattern = "gcr.io/${var.project_id}/*"
   }
 
   {{range get . "binary_authorization.admission_whitelist_patterns" -}}
