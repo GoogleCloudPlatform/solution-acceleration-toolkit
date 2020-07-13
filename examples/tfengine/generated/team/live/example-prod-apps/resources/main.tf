@@ -140,6 +140,25 @@ module "project_iam_members" {
     ],
   }
 }
+module "foo_topic" {
+  source  = "terraform-google-modules/pubsub/google"
+  version = "~> 1.3.0"
+
+  topic   = "foo-topic"
+  project = var.project_id
+
+  push_subscriptions = [
+    {
+      name          = "push-subscription"
+      push_endpoint = "https://example.com"
+    },
+  ]
+  pull_subscriptions = [
+    {
+      name = "pull"
+    },
+  ]
+}
 
 resource "google_service_account" "example_sa" {
   account_id = "example-sa"

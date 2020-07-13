@@ -61,47 +61,6 @@ module "example_mysql_instance" {
 
 
 }
-module "project_iam_members" {
-  source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.1.0"
-
-  projects = [var.project_id]
-  mode     = "additive"
-
-  bindings = {
-    "roles/cloudsql.client" = [
-      "serviceAccount:${var.bastion_service_account}",
-    ],
-  }
-}
-
-module "example_prod_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
-
-  name       = "example-prod-bucket"
-  project_id = var.project_id
-  location   = "us-central1"
-  lifecycle_rules = [
-    {
-      action = {
-        type = "Delete"
-      }
-      condition = {
-        age        = 7
-        with_state = "ANY"
-      }
-    }
-  ]
-
-  iam_members = [
-    {
-      member = "group:example-readers@example.com"
-      role   = "roles/storage.objectViewer"
-    },
-  ]
-}
-
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
@@ -145,3 +104,44 @@ module "example_healthcare_dataset" {
     }
   ]
 }
+module "project_iam_members" {
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 6.1.0"
+
+  projects = [var.project_id]
+  mode     = "additive"
+
+  bindings = {
+    "roles/cloudsql.client" = [
+      "serviceAccount:${var.bastion_service_account}",
+    ],
+  }
+}
+
+module "example_prod_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 1.4"
+
+  name       = "example-prod-bucket"
+  project_id = var.project_id
+  location   = "us-central1"
+  lifecycle_rules = [
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 7
+        with_state = "ANY"
+      }
+    }
+  ]
+
+  iam_members = [
+    {
+      member = "group:example-readers@example.com"
+      role   = "roles/storage.objectViewer"
+    },
+  ]
+}
+
