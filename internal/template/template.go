@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/imdario/mergo"
@@ -87,11 +88,8 @@ func WriteFile(in, out string, data map[string]interface{}) error {
 		return fmt.Errorf("parse template %q: %v", in, err)
 	}
 
-	// Rewrite if the file name has a template extension.
-	ext := filepath.Ext(out)
-	if ext == tmplExt {
-		out = out[:len(out)-len(ext)]
-	}
+	// Remove the template extension if present
+	out = strings.TrimSuffix(out, tmplExt)
 
 	outFile, err := os.OpenFile(out, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
