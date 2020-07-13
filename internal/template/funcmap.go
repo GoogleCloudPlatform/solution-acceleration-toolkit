@@ -17,6 +17,7 @@ package template
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/rodaine/hclencoder"
 )
@@ -28,6 +29,7 @@ var funcMap = map[string]interface{}{
 	"hclField":     hclField,
 	"replace":      replace,
 	"resourceName": resourceName,
+	"now":          time.Now,
 }
 
 // get allows a template to optionally lookup a value from a dict.
