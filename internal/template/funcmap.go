@@ -17,6 +17,7 @@ package template
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/rodaine/hclencoder"
 )
@@ -28,6 +29,8 @@ var funcMap = map[string]interface{}{
 	"hclField":     hclField,
 	"replace":      replace,
 	"resourceName": resourceName,
+	"now":          time.Now,
+	"add":          add,
 }
 
 // get allows a template to optionally lookup a value from a dict.
@@ -110,4 +113,13 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 // alias for strings.Replace with the number of characters fixed to -1 (all).
 func replace(s, old, new string) string {
 	return strings.Replace(s, old, new, -1)
+}
+
+// add adds a list of integers together
+func add(nums ...int) int {
+	total := 0
+	for _, num := range nums {
+		total += num
+	}
+	return total
 }
