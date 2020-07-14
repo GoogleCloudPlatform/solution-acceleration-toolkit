@@ -85,7 +85,7 @@ Steps:
 1. Build the artifacts:
 
    ```bash
-   ./build/build-release.sh
+   ./build/build-release.sh -v "${version}"
    ```
 
    This will create binaries for each tool for each supported OS and ARCH,
