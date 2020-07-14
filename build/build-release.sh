@@ -59,7 +59,7 @@ for OS in "${SUPPORTED_OS[@]}"; do
 done
 
 echo 'Bundling Engine templates'
-tar -czf "templates_${VERSION}.tar.gz" "templates/tfengine"
+tar -czf "${OUTPUT_DIR}/templates_${VERSION}.tar.gz" "templates/tfengine"
 
 echo 'Bundling Policygen policies'
-tar -czf "policies_${VERSION}.tar.gz" "templates/policygen"
+tar -czf "${OUTPUT_DIR}/policies_${VERSION}.tar.gz" "templates/policygen"
