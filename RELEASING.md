@@ -70,7 +70,7 @@ Steps:
 1. Create the Git tags:
 
    ```bash
-   version="<fill>"
+   version="fill"
    git tag -a "${version}" -m "Binaries release version ${version}"
    git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
    git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
