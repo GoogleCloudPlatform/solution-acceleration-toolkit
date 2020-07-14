@@ -93,6 +93,8 @@ Steps:
 
 1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
 
+1. (Optional) Use the [hub](https://github.com/github/hub) command instead of the GitHub UI.
+
 1. Create a release from the `${version}` tag and upload all the `tfengine_*`,
    `policygen_*` and `tfimport_*` binaries as assets.
 
