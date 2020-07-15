@@ -29,10 +29,6 @@ properties = {
     type = "object"
   }
 
-  source = {
-
-  }
-
   template = {
     description = <<EOF
       Templates the engine will parse and fill in with values from data.

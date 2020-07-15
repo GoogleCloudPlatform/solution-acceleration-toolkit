@@ -21,6 +21,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
@@ -58,16 +59,7 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	pwd, err := filepath.Abs(filepath.Dir(confPath))
-	if err != nil {
-		return err
-	}
-
-	if err := fetchSources(c, pwd, opts.CacheDir); err != nil {
-		return err
-	}
-
-	if err := dump(c, pwd, tmpDir); err != nil {
+	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir); err != nil {
 		return err
 	}
 
@@ -84,41 +76,21 @@ func Run(confPath, outPath string, opts *Options) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
-func fetchSources(conf *Config, pwd, outputDir string) error {
-	for _, src := range conf.Sources {
-		c := getter.Client{
-			Dst:  filepath.Join(outputDir, src.Name),
-			Src:  src.Path,
-			Pwd:  pwd,
-			Mode: getter.ClientModeDir,
-		}
-		if err := c.Get(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func dump(conf *Config, root, outputPath string) error {
-	var err error
-	root, err = filepath.Abs(root)
-	if err != nil {
-		return err
-	}
-
+func dump(conf *Config, pwd, cacheDir, outputPath string) error {
 	for _, ti := range conf.Templates {
 		if ti.Data == nil {
 			ti.Data = make(map[string]interface{})
 		}
-		if err := dumpTemplate(conf, root, outputPath, ti); err != nil {
+		if err := dumpTemplate(conf, pwd, cacheDir, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
 	}
 	return nil
 }
 
-func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error {
+func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateInfo) error {
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
+	cacheDir = filepath.Join(cacheDir, ti.Name)
 
 	data := make(map[string]interface{})
 	if err := template.MergeData(data, conf.Data); err != nil {
@@ -138,12 +110,30 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 
 	switch {
 	case ti.RecipePath != "":
-		rp, err := pathutil.Expand(ti.RecipePath)
-		if err != nil {
-			return err
+		var rp string
+
+		if strings.HasPrefix(ti.RecipePath, ".") { // Is local path.
+			rp, err = pathutil.Expand(ti.RecipePath)
+			if err != nil {
+				return err
+			}
+		} else {
+			dst := filepath.Join(cacheDir, "templates")
+			root, subdir := getter.SourceDirSubdir(ti.RecipePath)
+			c := getter.Client{
+				Dst:  dst,
+				Src:  root,
+				Pwd:  pwd,
+				Mode: getter.ClientModeDir,
+			}
+			if err := c.Get(); err != nil {
+				return err
+			}
+			rp = filepath.Join(dst, subdir)
 		}
+
 		if !filepath.IsAbs(rp) {
-			rp = filepath.Join(root, rp)
+			rp = filepath.Join(pwd, rp)
 		}
 		rc, err := loadConfig(rp, data)
 		if err != nil {
@@ -172,7 +162,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			return err
 		}
 
-		if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
+		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath); err != nil {
 			return fmt.Errorf("recipe %q: %v", rp, err)
 		}
 
@@ -182,7 +172,7 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			return err
 		}
 		if !filepath.IsAbs(cp) {
-			cp = filepath.Join(root, cp)
+			cp = filepath.Join(pwd, cp)
 		}
 		if err := template.WriteDir(cp, outputPath, data); err != nil {
 			return fmt.Errorf("component %q: %v", cp, err)
