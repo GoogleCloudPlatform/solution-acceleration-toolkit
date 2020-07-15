@@ -64,7 +64,6 @@ template "devops" {
       managed_services = [
         "container.googleapis.com",
         "dns.googleapis.com",
-        "firebase.googleapis.com",
         "healthcare.googleapis.com",
         "iap.googleapis.com",
         "pubsub.googleapis.com",
@@ -414,49 +413,6 @@ template "project_apps" {
             }
           ]
         }]
-      }
-    }
-  }
-}
-
-# Prod firebase project for team 1.
-template "project_firebase" {
-  recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-firebase"
-  data = {
-    project = {
-      project_id = "example-prod-firebase"
-      apis = [
-        "firebase.googleapis.com",
-      ]
-    }
-    deployments = {
-      resources = {
-        terraform_addons = {
-          raw_config = <<EOF
-resource "google_firebase_project" "firebase" {
-  provider = google-beta
-  project  = var.project_id
-}
-
-resource "google_firestore_index" "index" {
-  project    = var.project_id
-  collection = "example-collection"
-  fields {
-    field_path = "__name__"
-    order      = "ASCENDING"
-  }
-  fields {
-    field_path = "example-field"
-    order      = "ASCENDING"
-  }
-  fields {
-    field_path = "createdTimestamp"
-    order      = "ASCENDING"
-  }
-}
-EOF
-        }
       }
     }
   }
