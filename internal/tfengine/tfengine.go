@@ -110,30 +110,9 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 
 	switch {
 	case ti.RecipePath != "":
-		var rp string
-
-		if strings.HasPrefix(ti.RecipePath, ".") { // Is local path.
-			rp, err = pathutil.Expand(ti.RecipePath)
-			if err != nil {
-				return err
-			}
-		} else {
-			dst := filepath.Join(cacheDir, "templates")
-			root, subdir := getter.SourceDirSubdir(ti.RecipePath)
-			c := getter.Client{
-				Dst:  dst,
-				Src:  root,
-				Pwd:  pwd,
-				Mode: getter.ClientModeDir,
-			}
-			if err := c.Get(); err != nil {
-				return err
-			}
-			rp = filepath.Join(dst, subdir)
-		}
-
-		if !filepath.IsAbs(rp) {
-			rp = filepath.Join(pwd, rp)
+		rp, err := fetchPath(ti.RecipePath, pwd, cacheDir)
+		if err != nil {
+			return err
 		}
 		rc, err := loadConfig(rp, data)
 		if err != nil {
@@ -167,18 +146,45 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 
 	case ti.ComponentPath != "":
-		cp, err := pathutil.Expand(ti.ComponentPath)
+		cp, err := fetchPath(ti.ComponentPath, pwd, cacheDir)
 		if err != nil {
 			return err
-		}
-		if !filepath.IsAbs(cp) {
-			cp = filepath.Join(pwd, cp)
 		}
 		if err := template.WriteDir(cp, outputPath, data); err != nil {
 			return fmt.Errorf("component %q: %v", cp, err)
 		}
 	}
 	return nil
+}
+
+// fetchPath handles fetching remote paths.
+// If the path is local then it will simply expand it and return.
+// Remote paths are fetched to the cache dir.
+// Relative paths are handled from pwd.
+func fetchPath(path, pwd, cacheDir string) (string, error) {
+	if strings.HasPrefix(path, ".") { // Is local path.
+		path, err := pathutil.Expand(path)
+		if err != nil {
+			return "", err
+		}
+		if !filepath.IsAbs(path) {
+			path = filepath.Join(pwd, path)
+		}
+		return path, nil
+
+	}
+	dst := filepath.Join(cacheDir, "templates")
+	root, subdir := getter.SourceDirSubdir(path)
+	c := getter.Client{
+		Dst:  dst,
+		Src:  root,
+		Pwd:  pwd,
+		Mode: getter.ClientModeDir,
+	}
+	if err := c.Get(); err != nil {
+		return "", err
+	}
+	return filepath.Join(dst, subdir), nil
 }
 
 // backendRE is a regex to capture GCS backend blocks in configs.

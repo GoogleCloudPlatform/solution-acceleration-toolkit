@@ -44,7 +44,7 @@ func TestExamples(t *testing.T) {
 			}
 			defer os.RemoveAll(tmp)
 
-			if err := Run(ex, tmp, true); err != nil {
+			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
