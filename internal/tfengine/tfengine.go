@@ -28,10 +28,16 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/hashicorp/go-getter"
 	"github.com/otiai10/copy"
 )
 
-func Run(confPath, outPath string, format bool) error {
+type Options struct {
+	Format   bool
+	CacheDir string
+}
+
+func Run(confPath, outPath string, opts *Options) error {
 	var err error
 	confPath, err = pathutil.Expand(confPath)
 	if err != nil {
@@ -52,11 +58,20 @@ func Run(confPath, outPath string, format bool) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := dump(c, filepath.Dir(confPath), tmpDir); err != nil {
+	pwd, err := filepath.Abs(filepath.Dir(confPath))
+	if err != nil {
 		return err
 	}
 
-	if format {
+	if err := fetchSources(c, pwd, opts.CacheDir); err != nil {
+		return err
+	}
+
+	if err := dump(c, pwd, tmpDir); err != nil {
+		return err
+	}
+
+	if opts.Format {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			return err
 		}
@@ -69,7 +84,28 @@ func Run(confPath, outPath string, format bool) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
+func fetchSources(conf *Config, pwd, outputDir string) error {
+	for _, src := range conf.Sources {
+		c := getter.Client{
+			Dst:  filepath.Join(outputDir, src.Name),
+			Src:  src.Path,
+			Pwd:  pwd,
+			Mode: getter.ClientModeDir,
+		}
+		if err := c.Get(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func dump(conf *Config, root, outputPath string) error {
+	var err error
+	root, err = filepath.Abs(root)
+	if err != nil {
+		return err
+	}
+
 	for _, ti := range conf.Templates {
 		if ti.Data == nil {
 			ti.Data = make(map[string]interface{})

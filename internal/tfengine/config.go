@@ -40,11 +40,18 @@ type Config struct {
 	SchemaCty *cty.Value             `hcl:"schema,optional" json:"-"`
 	Schema    map[string]interface{} `json:"schema,omitempty"`
 
+	Sources   []*source       `hcl:"source,block" json:"source,omitempty"`
 	Templates []*templateInfo `hcl:"template,block" json:"template,omitempty"`
+}
+
+type source struct {
+	Name string `hcl:",label" json:"name"`
+	Path string `hcl:"path" json:"path"`
 }
 
 type templateInfo struct {
 	Name          string                  `hcl:",label" json:"name"`
+	Source        string                  `hcl:"source,optional" json:"source,omitempty"`
 	ComponentPath string                  `hcl:"component_path,optional" json:"component_path,omitempty"`
 	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
 	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`

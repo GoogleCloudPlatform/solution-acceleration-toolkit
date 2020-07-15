@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+source "local" {
+  path = "../../templates/tfengine/recipes"
+}
+
+source "git" {
+  path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite"
+}
+
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
