@@ -21,7 +21,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
@@ -29,7 +28,6 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
-	"github.com/hashicorp/go-getter"
 	"github.com/otiai10/copy"
 )
 
@@ -90,7 +88,6 @@ func dump(conf *Config, pwd, cacheDir, outputPath string) error {
 
 func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateInfo) error {
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
-	cacheDir = filepath.Join(cacheDir, ti.Name)
 
 	data := make(map[string]interface{})
 	if err := template.MergeData(data, conf.Data); err != nil {
@@ -110,7 +107,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 
 	switch {
 	case ti.RecipePath != "":
-		rp, err := fetchPath(ti.RecipePath, pwd, cacheDir)
+		rp, err := pathutil.Fetch(ti.RecipePath, pwd, cacheDir)
 		if err != nil {
 			return err
 		}
@@ -146,7 +143,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 
 	case ti.ComponentPath != "":
-		cp, err := fetchPath(ti.ComponentPath, pwd, cacheDir)
+		cp, err := pathutil.Fetch(ti.ComponentPath, pwd, cacheDir)
 		if err != nil {
 			return err
 		}
@@ -155,36 +152,6 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 	}
 	return nil
-}
-
-// fetchPath handles fetching remote paths.
-// If the path is local then it will simply expand it and return.
-// Remote paths are fetched to the cache dir.
-// Relative paths are handled from pwd.
-func fetchPath(path, pwd, cacheDir string) (string, error) {
-	if strings.HasPrefix(path, ".") { // Is local path.
-		path, err := pathutil.Expand(path)
-		if err != nil {
-			return "", err
-		}
-		if !filepath.IsAbs(path) {
-			path = filepath.Join(pwd, path)
-		}
-		return path, nil
-
-	}
-	dst := filepath.Join(cacheDir, "templates")
-	root, subdir := getter.SourceDirSubdir(path)
-	c := getter.Client{
-		Dst:  dst,
-		Src:  root,
-		Pwd:  pwd,
-		Mode: getter.ClientModeDir,
-	}
-	if err := c.Get(); err != nil {
-		return "", err
-	}
-	return filepath.Join(dst, subdir), nil
 }
 
 // backendRE is a regex to capture GCS backend blocks in configs.
