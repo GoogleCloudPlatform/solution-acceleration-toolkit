@@ -58,48 +58,81 @@ WIP
 
 ## Manual releases
 
-If automation is not available, releases can be made manually. The steps below
-assume you're releasing binaries, templates and policies at once. If you're
-only releasing some of those, adjust the steps as necessary.
+If automation is not available, releases can be made manually.
 
-Steps:
+Optionally, consider using the [hub](https://github.com/github/hub) command instead of the GitHub UI for creating
+releases.
+
+### Version
 
 1. Choose a version. It should match the regex `^v[0-9]+\.[0-9]+\.[0-9]+$`.
    That is, a leading "v", followed by three period-separated numbers.
 
-1. Create the Git tags:
-
    ```bash
    version="fill"
-   git tag -a "${version}" -m "Binaries release version ${version}"
-   git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
-   git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
    ```
 
-1. Push the tags:
+### Binaries
+
+1. Create the Git tag:
 
    ```bash
+   git tag -a "${version}" -m "Binaries release version ${version}"
    git push origin --tags
    ```
 
-1. Build the artifacts:
+1. Build the binaries:
 
    ```bash
-   ./build/build-release.sh -v "${version}"
+   ./build/build-binaries.sh -v "${version}"
    ```
 
-   This will create binaries for each tool for each supported OS and ARCH,
-   and will bundle templates and policies into .tar.gz files.
+   This will create binaries for each tool for each supported OS and ARCH.
 
 1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
-
-1. (Optional) Use the [hub](https://github.com/github/hub) command instead of the GitHub UI.
 
 1. Create a release from the `${version}` tag and upload all the `tfengine_*`,
    `policygen_*` and `tfimport_*` binaries as assets.
 
+### Templates
+
+1. Create the Git tag:
+
+   ```bash
+   git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
+   git push origin --tags
+   ```
+
+1. Bundle the templates:
+
+   ```bash
+   ./build/build-templates.sh -v "${version}"
+   ```
+
+   This will create a .tar.gz bundle for the Terraform Engine templates.
+
+1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
+
 1. Create a release from the `templates-${version}` tag and upload the
    `templates_${version}.tar.gz` file as an asset.
 
-1. Create a release from the `policies-${version}` tag and upload the
-   `policies_${version}.tar.gz` file as an asset.
+### Policies
+
+1. Create the Git tags:
+
+   ```bash
+   git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
+   git push origin --tags
+   ```
+
+1. Bundle the policies:
+
+   ```bash
+   ./build/build-policies.sh -v "${version}"
+   ```
+
+   This will create a .tar.gz bundle for the Policy Generator policies.
+
+1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
+
+1. Create a release from the `policies-${version}` tag and upload the `policies_${version}.tar.gz` file as an asset.
