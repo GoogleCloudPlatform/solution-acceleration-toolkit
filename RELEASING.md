@@ -5,7 +5,7 @@
 
 This repo contains three types of release artifacts:
 
-* **Go Binaries** for Terraform Engine, Policy Generator, and Terraform Importer.
+* **Go Binaries** for [Terraform Engine](./docs/tfengine), [Policy Generator](./docs/policygen), and [Terraform Importer](./docs/tfimport).
 * **Templates** for the Terraform Engine ("templates" for short).
 * **Policy templates** for the Policy Generator ("policies" for short).
 
