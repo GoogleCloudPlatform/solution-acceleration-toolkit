@@ -29,10 +29,7 @@ jobs:
         set -x
 
         # Install the latest version of hub
-        # From https://github.com/github/hub/blob/master/script/get
-        latest="$(curl -fsi https://github.com/github/hub/releases/latest | awk -F/ 'tolower($1) ~ /^location:/ {print $(NF)}' | tr -d '\r')"
-        latest="${latest#v}"
-        curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
+        ./build/install-hub.sh
 
         # Create the release with the templates bundle
         version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
