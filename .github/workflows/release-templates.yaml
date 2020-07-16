@@ -1,10 +1,10 @@
 on:
   push:
     tags:
-      # Push events to matching vX.X.X, i.e. v0.1.0
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      # Push events to matching templates-vX.X.X, i.e. templates-v0.1.0
+      - 'templates-v[0-9]+.[0-9]+.[0-9]+'
 
-name: Create Binaries Release
+name: Create Templates Release
 
 # Note: According to https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables,
 # the value of {{ github.ref }} is "refs/tags/<tag>", so we have to remove that prefix everywhere.
@@ -16,15 +16,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '^1.14'
-    - run: go version
-
-    - name: Build Go binaries
+    - name: Bundle Templates
       shell: bash
-      run: ./build/build-binaries.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
+      run: ./build/build-templates.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
 
     # From https://github.com/github/hub#github-actions
     - name: Create GitHub Release
@@ -40,6 +34,6 @@ jobs:
         latest="${latest#v}"
         curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
 
-        # Create the release with all binaries
+        # Create the release with the templates bundle
         version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
-        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" "${version}"
+        bin/hub release create $(printf -- ' --attach=%s' ./templates*.tar.gz) -m "Terraform Engine templates release version ${version}" "${version}"
