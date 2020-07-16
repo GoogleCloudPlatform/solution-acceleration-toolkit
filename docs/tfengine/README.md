@@ -136,7 +136,8 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 1. Replace the values in a suitable
    [example](../../examples/tfengine) with values for your infrastructure.
 
-   TIP: Prefer to remotely fetch templates from a release which can be more stable than using the HEAD templates.
+   TIP: Prefer to remotely fetch templates from a release which can be more
+   stable than using the HEAD templates.
 
    ```hcl
    template "devops" {
