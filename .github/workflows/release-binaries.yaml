@@ -1,0 +1,40 @@
+on:
+  push:
+    tags:
+      # Push events to matching vX.X.X, i.e. v0.1.0
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+name: Create Binaries Release
+
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+		- name: Checkout code
+			uses: actions/checkout@v2
+
+		- name: Setup Go
+      uses: actions/setup-go@v2
+			with:
+				go-version: '^1.14'
+		- run: go version
+
+    - name: Build Go binaries
+      shell: bash
+      run: ./build/build-binaries.sh -v {{ github.ref }}
+
+    # From https://github.com/github/hub#github-actions
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        # Install the latest version of hub
+        # From https://github.com/github/hub/blob/master/script/get
+        latest="$(curl -fsi https://github.com/github/hub/releases/latest | awk -F/ 'tolower($1) ~ /^location:/ {print $(NF)}')"
+        latest="${latest#v}"
+        curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
+
+        # Create the release with all binaries
+        bin/hub release create $(printf -- '--attach=%s' ./*-amd64) -m "Binaries ${{ github.ref }}" ${{ github.ref }}
