@@ -12,6 +12,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+schema = {
+  title                = "Recipe for creating GCP folders."
+  additionalProperties = false
+  required = [
+    "folders",
+  ]
+  properties = {
+    parent_type = {
+      description = "Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'."
+      type    = "string"
+      pattern = "^organization|folder$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of parent GCP resource to apply the policy: can be one of the organization ID or folder ID according to parent_type.
+      EOF
+      type    = "string"
+      pattern = "^[0-9]{8,25}$"
+    }
+    folders = {
+      description = "Folders to create."
+      type        = "array"
+      items = {
+        type                 = "object"
+        additionalProperties = false
+        required = [
+          "display_name"
+        ]
+        properties = {
+          display_name = {
+            description = "Name of folder."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized display_name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
+          parent = {
+            description = "Parent of folder."
+            type        = "string"
+          }
+        }
+      }
+    }
+  }
+}
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
