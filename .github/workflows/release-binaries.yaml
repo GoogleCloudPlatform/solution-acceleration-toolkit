@@ -22,7 +22,7 @@ jobs:
 
     - name: Build Go binaries
       shell: bash
-      run: ./build/build-binaries.sh -v {{ github.ref }}
+      run: ./build/build-binaries.sh -v ${{ github.ref }}
 
     # From https://github.com/github/hub#github-actions
     - name: Create GitHub Release
