@@ -1,4 +1,4 @@
-<!-- markdownlint-configure-file { "MD013": { "line_length": 120 } } -->
+<!-- markdownlint-configure-file { "MD013": { "line_length": 200 } } -->
 # Releasing
 
 ## Overview
@@ -60,16 +60,10 @@ periodically check for correctness and consider updating to use the latest versi
 
 ## Automated releases
 
-WIP
+Automated releases are configured to trigger on tag pushes, via
+[GitHub Actions](https://github.com/features/actions). See the [workflows](./.github/workflows).
 
-## Manual releases
-
-If automation is not available, releases can be made manually.
-
-Optionally, consider using the [hub](https://github.com/github/hub) command instead of the GitHub UI for creating
-releases.
-
-### Version
+To trigger an automated release:
 
 1. Choose a version. It should match the regex `^v[0-9]+\.[0-9]+\.[0-9]+$`.
    That is, a leading "v", followed by three period-separated numbers.
@@ -78,14 +72,41 @@ releases.
    version="fill"
    ```
 
-### Binaries
+1. Create the Git tag.
 
-1. Create the Git tag:
+   For binaries:
 
    ```bash
    git tag -a "${version}" -m "Binaries release version ${version}"
+   ```
+
+   For templates:
+
+   ```bash
+   git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
+   ```
+
+   For policies:
+
+   ```bash
+   git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
+   ```
+
+1. Push the tag:
+
+   ```bash
    git push origin --tags
    ```
+
+1. Follow the workflow on the
+   [Actions page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/actions).
+
+## Manual releases
+
+If automation is not available, releases can be made manually. Follow the steps above to create and push a tag,
+then manually build and upload the release artifacts as described below.
+
+### Binaries
 
 1. Build the binaries:
 
@@ -102,13 +123,6 @@ releases.
 
 ### Templates
 
-1. Create the Git tag:
-
-   ```bash
-   git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
-   git push origin --tags
-   ```
-
 1. Bundle the templates:
 
    ```bash
@@ -119,17 +133,9 @@ releases.
 
 1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
 
-1. Create a release from the `templates-${version}` tag and upload the
-   `templates_${version}.tar.gz` file as an asset.
+1. Create a release from the `templates-${version}` tag and upload the `templates_${version}.tar.gz` file as an asset.
 
 ### Policies
-
-1. Create the Git tags:
-
-   ```bash
-   git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
-   git push origin --tags
-   ```
 
 1. Bundle the policies:
 
@@ -142,3 +148,26 @@ releases.
 1. Go to the [releases page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/).
 
 1. Create a release from the `policies-${version}` tag and upload the `policies_${version}.tar.gz` file as an asset.
+
+### Using [Hub](https://github.com/github/hub) to create a release instead of the GitHub UI
+
+You can use the [hub](https://github.com/github/hub) command instead of the GitHub UI for creating releases.
+Follow instructions to install it, then run one of the following commands:
+
+1. For binaries:
+
+   ```bash
+   hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" "${version}"
+   ```
+
+1. For templates:
+
+   ```bash
+   hub release create $(printf -- ' --attach=%s' ./templates*.tar.gz) -m "Terraform Engine templates release version ${version}" "${version}"
+   ```
+
+1. For policies:
+
+   ```bash
+   hub release create $(printf -- ' --attach=%s' ./policies*.tar.gz) -m "Policy Generator policies release version ${version}" "${version}"
+   ```
