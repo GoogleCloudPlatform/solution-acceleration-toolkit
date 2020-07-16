@@ -98,22 +98,29 @@ template "monitor" {
   }
 }
 
-# Top level prod folder.
-template "folder_prod" {
-  recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./folders"
-  data = {
-    display_name = "prod"
-  }
-}
 
-# Prod folder for team 1.
-template "folder_team1" {
-  recipe_path = "{{$recipes}}/folder.hcl"
+# Subfolders.
+template "folders" {
+  recipe_path = "{{$recipes}}/folders.hcl"
   output_path = "./folders"
   data = {
-    parent_type                  = "folder"
-    add_parent_folder_dependency = true
-    display_name                 = "team1"
+    folders = [
+      {
+        display_name = "prod"
+      },
+      {
+        display_name  = "team1"
+        resource_name = "prod_team1" // Prevent name conflict with dev/team1.
+        parent        = "$${google_folder.prod.name}"
+      },
+      {
+        display_name  = "dev"
+      },
+      {
+        display_name  = "team1"
+        resource_name = "dev_team1" // Prevent name conflict with prod/team1.
+        parent        = "$${google_folder.dev.name}"
+      }
+    ]
   }
 }
