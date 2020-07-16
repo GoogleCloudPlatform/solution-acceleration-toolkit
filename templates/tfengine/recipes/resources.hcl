@@ -162,6 +162,30 @@ schema = {
         }
       }
     }
+    binary_authorization = {
+      description          = "A policy for container image binary authorization."
+      type                 = "object"
+      additionalProperties = false
+      properties = {
+        admission_whitelist_patterns = {
+          description = "A whitelist of image patterns to exclude from admission rules."
+          type        = "array"
+          items = {
+            type                 = "object"
+            additionalProperties = false
+            properties = {
+              name_pattern = {
+                description = <<EOF
+                  An image name pattern to whitelist, in the form registry/path/to/image.
+                  This supports a trailing * as a wildcard, but this is allowed only in text after the registry/ part."
+                EOF
+                type        = "string"
+              }
+            }
+          }
+        }
+      }
+    }
     cloud_sql_instances = {
       description = "https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql"
       type        = "array"
@@ -211,6 +235,92 @@ schema = {
           user_password = {
             description = "Default user password."
             type        = "string"
+          }
+        }
+      }
+    }
+    compute_instance_templates = {
+      description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/instance_template"
+      type        = "array"
+      items = {
+        type                 = "object"
+        additionalProperties = false
+        required = [
+          "name_prefix",
+          "subnet",
+          "service_account",
+        ]
+        properties = {
+          name_prefix = {
+            description = "Name prefix of the instance template."
+            type        = "string"
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name_prefix.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
+          network_project_id = {
+            description = "Name of network project. If unset, will use the current project."
+            type        = "string"
+          }
+          subnet = {
+            description = "Name of the the instance template's subnet."
+            type        = "string"
+          }
+          service_account = {
+            description = "Email of service account to attach to this instance template."
+            type        = "string"
+          }
+          image_project = {
+            description = "Project of compute image to use."
+            type        = "string"
+          }
+          image_family = {
+            description = "Family of compute image to use."
+            type        = "string"
+          }
+          disk_type = {
+            description = "Type of disk to use for the instance template."
+            type        = "string"
+          }
+          disk_size_gb = {
+            description = "Disk space to set for the instance template."
+            type        = "integer"
+          }
+          preemptible = {
+            description = "Whether the instance template can be preempted. Defaults to false."
+            type        = "boolean"
+          }
+          enable_shielded_vm = {
+            description = "Whether to enable shielded VM. Defaults to true."
+            type        = "boolean"
+          }
+          instances = {
+            description = "https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance"
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of instance."
+                  type        = "string"
+                }
+                resource_name = {
+                  description = <<EOF
+                    Override for Terraform resource name. If unset, defaults to normalized name.
+                    Normalization will make all characters alphanumeric with underscores.
+                  EOF
+                  type        = "string"
+                }
+              }
+            }
           }
         }
       }
@@ -362,6 +472,76 @@ schema = {
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    dns_zones = {
+      description = "https://github.com/terraform-google-modules/terraform-google-cloud-dns"
+      type        = "array"
+      items = {
+        type = "object"
+        additionalProperties = false
+        required = [
+          "name",
+          "domain",
+          "type",
+          "record_sets",
+        ]
+        properties = {
+          name = {
+            description = "Name of DNS zone."
+          }
+          resource_name = {
+            description = <<EOF
+              Override for Terraform resource name. If unset, defaults to normalized name.
+              Normalization will make all characters alphanumeric with underscores.
+            EOF
+            type        = "string"
+          }
+          domain = {
+            description = "Domain of DNS zone. Must end with period."
+            type        = "string"
+            pattern     = "^.+\\.$"
+          }
+          type = {
+            description = "Type of DNS zone."
+            type        = "string"
+            enum = [
+              "public",
+              "private",
+              "forwarding",
+              "peering",
+            ]
+          }
+          record_sets = {
+            description = "Records managed by the DNS zone."
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                name = {
+                  description = "Name of record set."
+                  type        = "string"
+                }
+                type = {
+                  description = "Type of record set."
+                  type        = "string"
+                }
+                ttl = {
+                  description = "Time to live of this record set, in seconds."
+                  type        = "integer"
+                }
+                records = {
+                  description = "Data of the record set."
+                  type        = "array"
+                  items = {
+                    type = "string"
                   }
                 }
               }
@@ -614,6 +794,66 @@ schema = {
       description = "Map of IAM role to list of members to grant access to the role."
       type        = "object"
     }
+    pubsub_topics = {
+      description = "https://github.com/terraform-google-modules/terraform-google-pubsub"
+      type        = "array"
+      items = {
+        required = [
+          "name",
+        ]
+        properties = {
+          name = {
+            description = "Name of the topic."
+            type        = "string"
+          }
+          pull_subscriptions = {
+            description = "Pull subscriptions on the topic."
+            type        = "array"
+            items = {
+              type = "object"
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of subscription."
+                  type        = "string"
+                }
+                ack_deadline_seconds = {
+                  description = "Deadline to wait for acknowledgement."
+                  type        = "integer"
+                }
+              }
+            }
+          }
+          push_subscriptions = {
+            description = "Push subscriptions on the topic."
+            type        = "array"
+            items = {
+              type = "object"
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of subscription."
+                  type        = "string"
+                }
+                push_endpoint = {
+                  description = "Name of endpoint to push to."
+                  type        = "string"
+                }
+                ack_deadline_seconds = {
+                  description = "Deadline to wait for acknowledgement."
+                  type        = "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
     secrets = {
       description = "https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html"
       type        = "array"
@@ -692,6 +932,69 @@ schema = {
             description = "Location to create the storage bucket. Can be defined in global data block."
             type        = "string"
           }
+          lifecycle_rules = {
+            description = "Lifecycle rules configuration for the bucket."
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                action = {
+                  type                 = "object"
+                  additionalProperties = false
+                  properties = {
+                    type = {
+                      description = "Type of action. Supported values: Delete and SetStorageClass."
+                      type        = "string"
+                    }
+                    storage_class = {
+                      description = "(Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule."
+                      type        = "string"
+                    }
+                  }
+                }
+                condition = {
+                  type                 = "object"
+                  additionalProperties = false
+                  properties = {
+                    age = {
+                      description = "Minimum age of an object in days to satisfy this condition."
+                      type        = "integer"
+                    }
+                    created_before = {
+                      description = "Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition."
+                      type        = "string"
+                    }
+                    with_state = {
+                      description = "Match to live and/or archived objects."
+                      type        = "string"
+                      enum = [
+                        "LIVE",
+                        "ARCHIVED",
+                        "ANY",
+                      ]
+                    }
+                    matches_storage_class = {
+                      description = "Storage Class of objects to satisfy this condition."
+                      type        = "string"
+                      enum = [
+                        "STANDARD",
+                        "MULTI_REGIONAL",
+                        "REGIONAL",
+                        "NEARLINE",
+                        "COLDLINE",
+                        "DURABLE_REDUCED_AVAILABILITY",
+                      ]
+                    }
+                    num_newer_versions = {
+                      description = "Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition."
+                      type        = "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
           iam_members = {
             description = "IAM member to grant access for."
             type        = "array"
@@ -732,9 +1035,21 @@ template "bigquery_datasets" {
 }
 {{end}}
 
+{{if has . "binary_authorization"}}
+template "binary_authorization" {
+  component_path = "../components/resources/binary_authorization"
+}
+{{end}}
+
 {{if has . "cloud_sql_instances"}}
 template "cloud_sql_instances" {
   component_path = "../components/resources/cloud_sql_instances"
+}
+{{end}}
+
+{{if has . "compute_instance_templates"}}
+template "compute_instance_templates" {
+  component_path = "../components/resources/compute_instance_templates"
 }
 {{end}}
 
@@ -750,15 +1065,9 @@ template "compute_routers" {
 }
 {{end}}
 
-{{if has . "iam_members"}}
-template "iam_members" {
-  component_path = "../components/resources/iam_members"
-}
-{{end}}
-
-{{if has . "storage_buckets"}}
-template "storage_buckets" {
-  component_path = "../components/resources/storage_buckets"
+{{if has . "dns_zones"}}
+template "dns_zones" {
+  component_path = "../components/resources/dns_zones"
 }
 {{end}}
 
@@ -774,14 +1083,32 @@ template "healthcare_datasets" {
 }
 {{end}}
 
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../components/resources/iam_members"
+}
+{{end}}
+
 {{if has . "secrets"}}
 template "secrets" {
   component_path = "../components/resources/secrets"
 }
 {{end}}
 
+{{if has . "pubsub_topics"}}
+template "pubsub_topics" {
+  component_path = "../components/resources/pubsub_topics"
+}
+{{end}}
+
 {{if has . "service_accounts"}}
 template "service_accounts" {
   component_path = "../components/resources/service_accounts"
+}
+{{end}}
+
+{{if has . "storage_buckets"}}
+template "storage_buckets" {
+  component_path = "../components/resources/storage_buckets"
 }
 {{end}}

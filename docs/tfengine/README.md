@@ -184,3 +184,6 @@ the `terraform` binary to deploy the infrastructure.
 
 - Always back up any engine configs as well as the generated Terraform configs
   and any modifications to the Terraform configs to version control.
+
+- Any component file with the extension `.tmpl` will have it removed when
+  generated.

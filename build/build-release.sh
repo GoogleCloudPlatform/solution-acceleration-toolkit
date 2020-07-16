@@ -1,0 +1,34 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<<<<<<< HEAD:examples/tfengine/generated/team/example-prod-data/variables.tf
+variable "bastion_service_account" {
+  type = string
+}
+=======
+
+#!/usr/bin/env bash
+
+# Helper to build release artifacts - binaries, and templates and policies bundles.
+#
+# Usage (from repo root):
+# ./build/build-release.sh -o . -v v0.1.0
+
+# Collects args and defines build functions.
+source "$(dirname "${0}")/build-include.sh"
+
+# Build binaries only.
+build_binaries
+build_templates
+build_policies
+>>>>>>> a7399992aa02a92d237cb4002a92bfbd349b1501:build/build-release.sh

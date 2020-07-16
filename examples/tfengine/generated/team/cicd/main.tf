@@ -140,6 +140,8 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   ]
 }
 
+
+
 resource "google_cloudbuild_trigger" "validate" {
   provider = google-beta
   project  = module.project.project_id

@@ -71,9 +71,10 @@ template "cicd" {
     ]
     managed_services = [
       "container.googleapis.com",
-      "firebase.googleapis.com",
+      "dns.googleapis.com",
       "healthcare.googleapis.com",
       "iap.googleapis.com",
+      "pubsub.googleapis.com",
       "secretmanager.googleapis.com",
     ]
   }
@@ -156,6 +157,10 @@ template "project_networks" {
                 }
               ]
             },
+            {
+              name     = "example-instance-subnet"
+              ip_range = "10.3.0.0/16"
+            }
           ]
           cloud_sql_private_service_access = {} # Enable SQL private service access.
         }]
@@ -271,6 +276,16 @@ template "project_data" {
         }
         storage_buckets = [{
           name = "example-prod-bucket"
+          # TTL 7 days.
+          lifecycle_rules = [{
+            action = {
+              type = "Delete"
+            }
+            condition = {
+              age        = 7
+              with_state = "ANY"
+            }
+          }]
           iam_members = [{
             role   = "roles/storage.objectViewer"
             member = "group:example-readers@example.com"
@@ -313,7 +328,9 @@ template "project_apps" {
       project_id = "example-prod-apps"
       apis = [
         "compute.googleapis.com",
+        "dns.googleapis.com",
         "container.googleapis.com",
+        "pubsub.googleapis.com",
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
@@ -334,52 +351,54 @@ template "project_apps" {
         #   ip_range_services_name = "example-services-range"
         #   master_ipv4_cidr_block = "192.168.0.0/28"
         # }]
+        binary_authorization = {
+          admission_whitelist_patterns = [{
+            name_pattern = "gcr.io/cloudsql-docker/*"
+          }]
+        }
         service_accounts = [{
           account_id = "example-sa"
+        }]
+        compute_instance_templates = [{
+          name_prefix = "example-instance-template"
+          network_project_id     = "example-prod-networks"
+          subnet                 = "example-instance-subnet"
+          service_account        = "$${google_service_account.example_sa.email}"
+          instances = [{
+            name = "instance"
+          }]
         }]
         iam_members = {
           "roles/container.viewer" = ["group:example-viewers@example.com"]
         }
+        dns_zones = [{
+          name   = "example-domain"
+          domain = "example-domain.com."
+          type   = "public"
+          record_sets = [{
+            name = "example"
+            type = "A"
+            ttl  = 30
+            records = [
+              "142.0.0.0",
+            ]
+          }]
+        }]
+        pubsub_topics = [{
+          name = "foo-topic"
+          push_subscriptions = [
+            {
+              name                 = "push-subscription"
+              push_endpoint        = "https://example.com" // required
+            }
+          ]
+          pull_subscriptions = [
+            {
+              name                 = "pull-subscription"
+            }
+          ]
+        }]
       }
-    }
-  }
-}
-
-# Prod firebase project for team 1.
-template "project_firebase" {
-  recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./example-prod-firebase"
-  data = {
-    project = {
-      project_id = "example-prod-firebase"
-      apis = [
-        "firebase.googleapis.com",
-      ]
-    }
-    terraform_addons = {
-          raw_config = <<EOF
-resource "google_firebase_project" "firebase" {
-  provider = google-beta
-  project  = module.project.project_id
-}
-
-resource "google_firestore_index" "index" {
-  project    = module.project.project_id
-  collection = "example-collection"
-  fields {
-    field_path = "__name__"
-    order      = "ASCENDING"
-  }
-  fields {
-    field_path = "example-field"
-    order      = "ASCENDING"
-  }
-  fields {
-    field_path = "createdTimestamp"
-    order      = "ASCENDING"
-  }
-}
-EOF
     }
   }
 }

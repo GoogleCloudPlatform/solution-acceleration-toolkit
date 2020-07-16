@@ -22,6 +22,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/imdario/mergo"
@@ -68,6 +69,9 @@ func WriteDir(inputDir, outputDir string, data map[string]interface{}) error {
 	return nil
 }
 
+// Any files with this extension will have it removed before being written out.
+const tmplExt = ".tmpl"
+
 // WriteFile generates `out` based on the `in` template and `data`.
 func WriteFile(in, out string, data map[string]interface{}) error {
 	if err := os.MkdirAll(filepath.Dir(out), 0755); err != nil {
@@ -83,6 +87,9 @@ func WriteFile(in, out string, data map[string]interface{}) error {
 	if err != nil {
 		return fmt.Errorf("parse template %q: %v", in, err)
 	}
+
+	// Remove the template extension if present
+	out = strings.TrimSuffix(out, tmplExt)
 
 	outFile, err := os.OpenFile(out, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
