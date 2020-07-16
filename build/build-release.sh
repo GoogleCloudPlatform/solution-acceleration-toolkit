@@ -11,11 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD:examples/tfengine/generated/team/example-prod-data/variables.tf
-variable "bastion_service_account" {
-  type = string
-}
-=======
 
 #!/usr/bin/env bash
 
@@ -31,4 +26,3 @@ source "$(dirname "${0}")/build-include.sh"
 build_binaries
 build_templates
 build_policies
->>>>>>> a7399992aa02a92d237cb4002a92bfbd349b1501:build/build-release.sh
