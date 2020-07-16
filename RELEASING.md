@@ -23,11 +23,17 @@ versioning](https://semver.org/) (semver):
 The only exception to the above is the `0.x.x` version. As described in semver, this version is for initial development;
 anything may change at any time, and the public API should not be considered stable.
 
-We have the following release tags:
+We use the release tags `vX.X.X` for binaries, `templates-vX.X.X` for templates, and `policies-vX.X.X` for policies.
+All templates are versioned together as one unit, and so are all policies.
 
-* Ex. `v0.1.2` for binaries
-* Ex. `templates-v0.1.2` for templates.
-* Ex. `policies-v0.1.2` for policies.
+Examples:
+
+* [`v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/v0.1.0)
+  for a binaries release
+* [`templates-v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/templates-v0.1.0)
+  for a templates release
+* [`policies-v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/policies-v0.1.0)
+  for a policies release.
 
 ### Release Branching
 
