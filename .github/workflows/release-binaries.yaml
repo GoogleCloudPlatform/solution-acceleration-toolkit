@@ -6,6 +6,8 @@ on:
 
 name: Create Binaries Release
 
+# Note: According to https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables,
+# the value of {{ github.ref }} is "refs/tags/<tag>", so we have to remove that prefix everywhere.
 jobs:
   build-and-release:
     name: Build and Release
@@ -22,7 +24,7 @@ jobs:
 
     - name: Build Go binaries
       shell: bash
-      run: ./build/build-binaries.sh -v ${{ github.ref }}
+      run: ./build/build-binaries.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
 
     # From https://github.com/github/hub#github-actions
     - name: Create GitHub Release
@@ -37,4 +39,5 @@ jobs:
         curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
 
         # Create the release with all binaries
-        bin/hub release create $(printf -- '--attach=%s' ./*-amd64) -m "Binaries ${{ github.ref }}" ${{ github.ref }}
+        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
+        bin/hub release create $(printf -- '--attach=%s' ./*-amd64) -m "Binaries ${version}" "${version}"
