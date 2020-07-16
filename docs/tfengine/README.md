@@ -128,6 +128,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     ```shell
     git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
     cd healthcare-data-protection-suite
+    go install ./cmd/tfengine
     ```
 
 1. Replace the values in a suitable
@@ -149,12 +150,6 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     ```shell
     CONFIG_PATH=examples/tfengine/org_foundation.hcl
     OUTPUT_PATH=/tmp/engine
-    ```
-
-1. To install the engine, run the following command from the repo root:
-
-    ```shell
-    go install ./cmd/tfengine
     ```
 
 1. Run the engine to generate your Terraform configs:
