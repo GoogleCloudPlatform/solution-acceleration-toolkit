@@ -68,8 +68,8 @@ func TestExamples(t *testing.T) {
 func TestRunRemotePath(t *testing.T) {
 	conf := `
 data = {
-	parent_type = "folder"
-	parent_id   = "123"
+  parent_type = "folder"
+  parent_id   = "123"
 }
 
 template "recipe" {
