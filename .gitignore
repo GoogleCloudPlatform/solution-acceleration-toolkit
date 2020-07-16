@@ -1,12 +1,15 @@
 # Ignore built binaries for the DPT tools, but not similarly-named directories.
-**/policygen
+**/policygen*
 !**/policygen/
 
-**/tfengine
+**/tfengine*
 !**/tfengine/
 
-**/tfimport
+**/tfimport*
 !**/tfimport/
 
 # Default engine cache dir.
 .tfengine/
+
+# Ignore bundled templates.
+*.tar.gz

@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include {
-  path = find_in_parent_folders()
-}
+#!/usr/bin/env bash
+
+# Helper to build release artifacts - policies bundle.
+#
+# Usage (from repo root):
+# ./build/build-policies.sh -o . -v v0.1.0
+
+# Collects args and defines build functions.
+source "$(dirname "${0}")/build-include.sh"
+
+# Build binaries only.
+build_policies

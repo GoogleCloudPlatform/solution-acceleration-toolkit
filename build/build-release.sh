@@ -12,19 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include {
-  path = find_in_parent_folders()
-}
+#!/usr/bin/env bash
 
-dependency "project" {
-  config_path = "../project"
-  mock_outputs = {
-    project_id = "mock-project"
+# Helper to build release artifacts - binaries, and templates and policies bundles.
+#
+# Usage (from repo root):
+# ./build/build-release.sh -o . -v v0.1.0
 
-  }
-}
+# Collects args and defines build functions.
+source "$(dirname "${0}")/build-include.sh"
 
-inputs = {
-  project_id = "${dependency.project.outputs.project_id}"
-
-}
+# Build binaries only.
+build_binaries
+build_templates
+build_policies

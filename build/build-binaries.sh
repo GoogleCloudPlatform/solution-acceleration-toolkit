@@ -12,10 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "project_id" {
-  value = module.project.project_id
-}
+#!/usr/bin/env bash
 
-output "project_number" {
-  value = module.project.project_number
-}
+# Helper to build release artifacts - binaries only.
+#
+# Usage (from repo root):
+# ./build/build-binaries.sh -o . -v v0.1.0
+
+# Collects args and defines build functions.
+source "$(dirname "${0}")/build-include.sh"
+
+# Build binaries only.
+build_binaries
