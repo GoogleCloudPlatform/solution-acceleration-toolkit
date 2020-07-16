@@ -14,15 +14,13 @@
 
 #!/usr/bin/env bash
 
-# Helper to build release artifacts - binaries, and templates and policies bundles.
+# Helper to build release artifacts - policies bundle.
 #
 # Usage (from repo root):
-# ./build/build-release.sh -o . -v v0.1.0
+# ./build/build-policies.sh -o . -v v0.1.0
 
 # Collects args and defines build functions.
 source "$(dirname "${0}")/build-include.sh"
 
 # Build binaries only.
-build_binaries
-build_templates
 build_policies
