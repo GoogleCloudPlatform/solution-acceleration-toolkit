@@ -7,3 +7,6 @@
 
 **/tfimport
 !**/tfimport/
+
+# Default engine cache dir.
+.tfengine/

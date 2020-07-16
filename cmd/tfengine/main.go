@@ -29,7 +29,7 @@ var (
 	configPath = flag.String("config_path", "", "Path to config file")
 	outputPath = flag.String("output_path", "", "Path to directory dump output")
 	format     = flag.Bool("format", true, "Whether to format generated files.")
-	cacheDir   = flag.String("cache_dir", "/tmp/tfengine_cache", "Path to directory to fetch templates.")
+	cacheDir   = flag.String("cache_dir", ".tfengine", "Path to directory to fetch templates.")
 )
 
 func main() {
