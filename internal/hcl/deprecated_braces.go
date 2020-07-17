@@ -27,6 +27,8 @@ import (
 )
 
 // Based on https://github.com/apparentlymart/terraform-clean-syntax.
+// It is not importable due to being a binary and is not actively maintained:
+// https://github.com/apparentlymart/terraform-clean-syntax/issues/12.
 func removeDeprecatedBracesFromDir(path string) error {
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
