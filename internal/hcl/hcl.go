@@ -32,14 +32,18 @@ func FormatDir(rn runner.Runner, dir string) error {
 	tfFmt.Dir = dir
 	// Silence stdout.
 	if _, err := rn.CmdOutput(tfFmt); err != nil {
-		return fmt.Errorf("failed to format terraform files: %v", err)
+		return fmt.Errorf("format terraform files: %v", err)
 	}
 
 	tgFmt := exec.Command("terragrunt", "hclfmt")
 	tgFmt.Dir = dir
 	// Silence stdout.
 	if _, err := rn.CmdOutput(tgFmt); err != nil {
-		return fmt.Errorf("failed to format terragrunt and hcl files: %v", err)
+		return fmt.Errorf("format terragrunt and hcl files: %v", err)
+	}
+
+	if err := removeDeprecatedBracesFromDir(dir); err != nil {
+		return fmt.Errorf("remove deprecated braces: %v", err)
 	}
 
 	return nil

@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 output "bastion_service_account" {
-  value = "${module.bastion_vm.service_account}"
+  value = module.bastion_vm.service_account
 
 }
