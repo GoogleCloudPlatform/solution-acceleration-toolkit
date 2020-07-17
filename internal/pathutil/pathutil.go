@@ -16,6 +16,7 @@ package pathutil
 
 import (
 	"crypto/sha256"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -53,7 +54,7 @@ func Fetch(path, pwd, cacheDir string) (string, error) {
 
 	root, subdir := getter.SourceDirSubdir(path)
 	hash := sha256.Sum256([]byte(root))
-	dst := filepath.Join(cacheDir, string(hash[:]))
+	dst := filepath.Join(cacheDir, fmt.Sprintf("%x", hash))
 	c := getter.Client{
 		Dst:  dst,
 		Src:  root,
