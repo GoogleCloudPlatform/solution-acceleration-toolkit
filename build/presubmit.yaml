@@ -29,7 +29,7 @@ steps:
   waitFor: ["-"]
   id: Markdownlint check
 
-- me: "gcr.io/cloud-builders/npm:current"
+- name: "gcr.io/cloud-builders/npm:current"
   entrypoint: "bash"
   args: ["build/links_check.sh"]
   waitFor: ["-"]
