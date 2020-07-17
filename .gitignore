@@ -1,4 +1,4 @@
-# Ignore built binaries for the DPT tools, but not similarly-named directories.
+# Binaries for the DPT tools, but not similarly-named directories.
 **/policygen*
 !**/policygen/
 
@@ -8,5 +8,8 @@
 **/tfimport*
 !**/tfimport/
 
-# Ignore bundled templates.
+# Default engine cache dir.
+.tfengine/
+
+# Bundled templates.
 *.tar.gz

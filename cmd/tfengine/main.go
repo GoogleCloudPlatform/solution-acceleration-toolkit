@@ -29,6 +29,7 @@ var (
 	configPath = flag.String("config_path", "", "Path to config file")
 	outputPath = flag.String("output_path", "", "Path to directory dump output")
 	format     = flag.Bool("format", true, "Whether to format generated files.")
+	cacheDir   = flag.String("cache_dir", ".tfengine", "Path to directory to fetch remote templates.")
 )
 
 func main() {
@@ -41,7 +42,8 @@ func main() {
 		log.Fatal("--output_path must be set")
 	}
 
-	if err := tfengine.Run(*configPath, *outputPath, *format); err != nil {
+	opts := &tfengine.Options{Format: *format, CacheDir: *cacheDir}
+	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
 		log.Fatal(err)
 	}
 }
