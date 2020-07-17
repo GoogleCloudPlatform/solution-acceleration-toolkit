@@ -57,5 +57,5 @@ resource "google_secret_manager_secret_version" "auto_sql_db_password_data" {
   provider = google-beta
 
   secret      = google_secret_manager_secret.auto_sql_db_password.id
-  secret_data = "${random_password.db.result}"
+  secret_data = random_password.db.result
 }
