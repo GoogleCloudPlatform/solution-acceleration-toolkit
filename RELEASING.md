@@ -20,9 +20,15 @@ versioning](https://semver.org/) (semver):
 * `v1.2.x` - MINOR version, increments on backwards-compatible new features.
 * `v1.2.3` - PATCH version, increments on backwards-compatible bug fixes.
 
-The only exception to the above is the `0.x.x` version. As described in semver, this version is for initial development;
-anything may change at any time, and the public API should not be considered stable. During this time, we will bump
-the 0.MINOR version for breakign changes, and the 0.x.PATCH version for all other changes.
+Examples of potential breaking changes:
+
+* The Engine drops support for .yaml config files.
+* A [CFT module](https://cloud.google.com/foundation-toolkit) module MAJOR version bump
+  (i.e. [terraform-google-kubernetes-engine](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine)).
+* A Terraform provider MAJOR version bump.
+* Terraform itself has a major version update and drops a feature we relied on, causing us to heavily modify the templates.
+
+### Release Tags
 
 We use the release tags `vX.X.X` for binaries, `templates-vX.X.X` for templates, and `policies-vX.X.X` for policies.
 All templates are versioned together as one unit, and so are all policies.
@@ -35,6 +41,12 @@ Examples:
   for a templates release
 * [`policies-v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/policies-v0.1.0)
   for a policies release.
+
+### The 0 Version
+
+The only exception to the above is the `0.x.x` version. As described in semver, this version is for initial development;
+anything may change at any time, and the public API should not be considered stable. During this time, we will bump
+the 0.MINOR version for breaking changes, and the 0.x.PATCH version for all other changes.
 
 ### Release Branching
 
