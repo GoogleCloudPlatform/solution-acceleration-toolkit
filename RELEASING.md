@@ -5,16 +5,18 @@
 
 This repo contains three types of release artifacts:
 
-* **Go Binaries** for [Terraform Engine](./docs/tfengine), [Policy Generator](./docs/policygen), and [Terraform Importer](./docs/tfimport).
-* **Templates** for the Terraform Engine ("templates" for short).
-* **Policy templates** for the Policy Generator ("policies" for short).
+* **Go Binaries** for [Terraform Engine](./docs/tfengine), [Policy Generator](./docs/policygen), and [Terraform Importer](./docs/tfimport) (tag: `vX.Y.Z`).
+* **Templates** for the Terraform Engine ("templates" for short) (tag: `templates-vX.Y.Z`)
+* **Policy templates** for the Policy Generator ("policies" for short) (tag: `policies-vX.Y.Z`).
 
 These three groups of artifacts are not coupled with each other, so they are **released separately**.
 
 ### Versioning
 
-Releases are tagged with [Git Annotated Tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging) following [semantic
-versioning](https://semver.org/) (semver):
+Releases are tagged with [Git Annotated Tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging) following [semantic versioning](https://semver.org/) (semver).
+All binaries are versioned together as one unit, and so are all templates and all policies.
+
+Rules:
 
 * `v1.x.x` - MAJOR version, increments on breaking changes.
 * `v1.2.x` - MINOR version, increments on backwards-compatible new features.
@@ -27,20 +29,6 @@ Examples of potential breaking changes:
   (i.e. [terraform-google-kubernetes-engine](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine)).
 * A Terraform provider MAJOR version bump.
 * Terraform itself has a major version update and drops a feature we relied on, causing us to heavily modify the templates.
-
-### Release Tags
-
-We use the release tags `vX.X.X` for binaries, `templates-vX.X.X` for templates, and `policies-vX.X.X` for policies.
-All templates are versioned together as one unit, and so are all policies.
-
-Examples:
-
-* [`v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/v0.1.0)
-  for a binaries release
-* [`templates-v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/templates-v0.1.0)
-  for a templates release
-* [`policies-v0.1.0`](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/tag/policies-v0.1.0)
-  for a policies release.
 
 ### The 0 Version
 
