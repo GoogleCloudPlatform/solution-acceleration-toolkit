@@ -123,27 +123,36 @@ Terraform configs. For details on fields for the input schema, see the
 there is no longer a dependency on the engine and the user can directly use
 the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
-1. To clone the repo, run the following commands:
+1. Download the latest
+   [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases)
+   or build one yourself:
 
     ```shell
     git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
     cd healthcare-data-protection-suite
+    go install ./cmd/tfengine
     ```
 
 1. Replace the values in a suitable
    [example](../../examples/tfengine) with values for your infrastructure.
+
+   TIP: Prefer to remotely fetch templates from a release which can be more
+   stable than using the HEAD templates.
+
+   ```hcl
+   template "devops" {
+     recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
+     data = {
+       ...
+     }
+   }
+   ```
 
 1. To set up helper environment vars, run the following commands:
 
     ```shell
     CONFIG_PATH=examples/tfengine/org_foundation.hcl
     OUTPUT_PATH=/tmp/engine
-    ```
-
-1. To install the engine, run the following command from the repo root:
-
-    ```shell
-    go install ./cmd/tfengine
     ```
 
 1. Run the engine to generate your Terraform configs:

@@ -44,7 +44,7 @@ func TestExamples(t *testing.T) {
 			}
 			defer os.RemoveAll(tmp)
 
-			if err := Run(ex, tmp, true); err != nil {
+			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
@@ -62,5 +62,50 @@ func TestExamples(t *testing.T) {
 				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
 			}
 		})
+	}
+}
+
+func TestRunRemotePath(t *testing.T) {
+	conf := `
+data = {
+  parent_type = "folder"
+  parent_id   = "123"
+}
+
+template "recipe" {
+  recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/org_policies.hcl?ref=templates-v0.1.0"
+  data = {
+    allowed_policy_member_customer_ids = [
+      "example_customer_id",
+    ]
+  }
+}
+
+template "component" {
+  component_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies?ref=templates-v0.1.0"
+  data = {
+    allowed_policy_member_customer_ids = [
+      "example_customer_id",
+    ]
+  }
+}`
+	confFile, err := ioutil.TempFile("", "*.hcl")
+	if err != nil {
+		t.Fatalf("ioutil.TempFile = %v", err)
+	}
+	defer os.Remove(confFile.Name())
+
+	if _, err := confFile.Write([]byte(conf)); err != nil {
+		t.Fatalf("confFile.Write = %v", err)
+	}
+
+	outputDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatalf("ioutil.TempDir = %v", err)
+	}
+	defer os.RemoveAll(outputDir)
+
+	if err := Run(confFile.Name(), outputDir, &Options{Format: true, CacheDir: outputDir}); err != nil {
+		t.Fatalf("tfengine.Run(%q, %q) = %v", confFile.Name(), outputDir, err)
 	}
 }

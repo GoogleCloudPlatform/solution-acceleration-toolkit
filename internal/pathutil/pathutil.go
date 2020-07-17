@@ -15,8 +15,12 @@
 package pathutil
 
 import (
+	"crypto/sha256"
 	"os"
+	"path/filepath"
+	"strings"
 
+	"github.com/hashicorp/go-getter"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -27,4 +31,37 @@ func Expand(path string) (string, error) {
 		return "", err
 	}
 	return os.ExpandEnv(path), nil
+}
+
+// Fetch handles fetching remote paths.
+// If the path is local then it will simply expand it and return.
+// Remote paths are fetched to the cache dir.
+// Relative paths are handled from pwd.
+// TODO(umairidris): support absolute paths.
+func Fetch(path, pwd, cacheDir string) (string, error) {
+	if strings.HasPrefix(path, ".") { // Is local path.
+		path, err := Expand(path)
+		if err != nil {
+			return "", err
+		}
+		if !filepath.IsAbs(path) {
+			path = filepath.Join(pwd, path)
+		}
+		return path, nil
+
+	}
+
+	root, subdir := getter.SourceDirSubdir(path)
+	hash := sha256.Sum256([]byte(root))
+	dst := filepath.Join(cacheDir, string(hash[:]))
+	c := getter.Client{
+		Dst:  dst,
+		Src:  root,
+		Pwd:  pwd,
+		Mode: getter.ClientModeDir,
+	}
+	if err := c.Get(); err != nil {
+		return "", err
+	}
+	return filepath.Join(dst, subdir), nil
 }

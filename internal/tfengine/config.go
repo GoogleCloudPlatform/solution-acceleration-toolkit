@@ -45,6 +45,7 @@ type Config struct {
 
 type templateInfo struct {
 	Name          string                  `hcl:",label" json:"name"`
+	Source        string                  `hcl:"source,optional" json:"source,omitempty"`
 	ComponentPath string                  `hcl:"component_path,optional" json:"component_path,omitempty"`
 	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
 	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`
