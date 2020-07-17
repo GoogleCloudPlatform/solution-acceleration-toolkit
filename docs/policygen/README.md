@@ -32,23 +32,38 @@ Currently supported Policy Libraries:
 
 ### Generate policies
 
-```shell
-# Step 1: Clone repo
-git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
-cd healthcare-data-protection-suite
+1. Download the latest
+    [policygen binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases)
+    or build one yourself:
 
-# Step 2: Setup helper env vars
-CONFIG_PATH=examples/policygen/config.hcl
-STATE_PATH=/path/to/your/tfstate
-OUTPUT_PATH=/tmp/policygen
+    ```shell
+    git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
+    cd healthcare-data-protection-suite
+    go install ./cmd/policygen
+    ```
 
-# Step 3: Install the policygen from the repo root
-go install ./cmd/policygen
+1. Set up helper environment variables:
 
-# Step 4: Generate policies. Edit config with values of your infra.
-# nano $CONFIG_PATH
-policygen --config_path=$CONFIG_PATH --state_path=$STATE_PATH --output_path=$OUTPUT_PATH
-```
+    ```shell
+    CONFIG_PATH=examples/policygen/config.hcl
+    STATE_PATH=/path/to/your/tfstate
+    OUTPUT_PATH=/tmp/policygen
+    ```
+
+1. Edit config with values of your infra:
+
+    TIP: Prefer to remotely fetch templates from a release which can be more
+    stable than using the HEAD templates. In your config:
+
+    ```hcl
+    template_dir = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen?ref=policies-v0.1.0"
+    ```
+
+1. Generate policies:
+
+    ```shell
+    policygen --config_path=$CONFIG_PATH --state_path=$STATE_PATH --output_path=$OUTPUT_PATH
+    ```
 
 `--state_path` supports a single local file, a local directory or a Google Cloud
 Storage bucket (indicated by `gs://` prefix).
