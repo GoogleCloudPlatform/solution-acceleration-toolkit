@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# {{$recipes := "../../templates/tfengine/recipes"}}
-
 data = {
   parent_type      = "organization" # One of `organization` or `folder`.
   parent_id        = "12345678"
@@ -22,7 +20,7 @@ data = {
 }
 
 template "devops" {
-  recipe_path = "{{$recipes}}/devops.hcl"
+  recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.

@@ -69,9 +69,6 @@ func loadConfig(path string) (*config, error) {
 		return nil, fmt.Errorf("read config %q: %v", path, err)
 	}
 
-	// Save unmodified path to use in init().
-	originalPath := path
-
 	// Convert yaml to json so hcl decoder can parse it.
 	if filepath.Ext(path) == ".yaml" {
 		b, err = yaml.YAMLToJSON(b)
@@ -89,14 +86,14 @@ func loadConfig(path string) (*config, error) {
 		return nil, err
 	}
 
-	if err := c.init(originalPath); err != nil {
+	if err := c.init(); err != nil {
 		return nil, err
 	}
 
 	return c, nil
 }
 
-func (c *config) init(path string) error {
+func (c *config) init() error {
 	var err error
 	if c.ForsetiPoliciesCty != nil {
 		c.ForsetiPolicies, err = hcl.CtyValueToMap(c.ForsetiPoliciesCty)
@@ -130,10 +127,6 @@ func (c *config) init(path string) error {
 		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies); err != nil {
 			return err
 		}
-	}
-
-	if !filepath.IsAbs(c.TemplateDir) {
-		c.TemplateDir = filepath.Join(filepath.Dir(path), c.TemplateDir)
 	}
 
 	return nil

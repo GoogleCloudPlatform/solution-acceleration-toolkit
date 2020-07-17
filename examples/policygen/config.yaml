@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-template_dir: ../../templates/policygen
+template_dir: "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen?ref=policies-v0.1.0"
 
 gcp_org_policies:
   parent_type: organization # One of `organization`, `folder` or `project`
