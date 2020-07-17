@@ -21,7 +21,8 @@ versioning](https://semver.org/) (semver):
 * `v1.2.3` - PATCH version, increments on backwards-compatible bug fixes.
 
 The only exception to the above is the `0.x.x` version. As described in semver, this version is for initial development;
-anything may change at any time, and the public API should not be considered stable.
+anything may change at any time, and the public API should not be considered stable. During this time, we will bump
+the 0.MINOR version for breakign changes, and the 0.x.PATCH version for all other changes.
 
 We use the release tags `vX.X.X` for binaries, `templates-vX.X.X` for templates, and `policies-vX.X.X` for policies.
 All templates are versioned together as one unit, and so are all policies.
