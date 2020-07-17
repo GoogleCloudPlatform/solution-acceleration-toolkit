@@ -51,7 +51,7 @@ module "project" {
 
 
 resource "google_binary_authorization_policy" "policy" {
-  project = var.project_id
+  project = module.project.project_id
 
   # Allow Google-built images.
   # See https://cloud.google.com/binary-authorization/docs/policy-yaml-reference#globalpolicyevaluationmode
@@ -96,7 +96,7 @@ resource "google_binary_authorization_policy" "policy" {
   }
   # Whitelist images from this project.
   admission_whitelist_patterns {
-    name_pattern = "gcr.io/${var.project_id}/*"
+    name_pattern = "gcr.io/${module.project.project_id}/*"
   }
 
   admission_whitelist_patterns {
@@ -109,7 +109,7 @@ module "example_instance_template" {
   version = "~> 3.0.0"
 
   name_prefix        = "example-instance-template"
-  project_id         = var.project_id
+  project_id         = module.project.project_id
   region             = "us-central1"
   subnetwork_project = "example-prod-networks"
   subnetwork         = "example-instance-subnet"
@@ -141,7 +141,7 @@ module "example_domain" {
   version = "~> 3.0.0"
 
   name       = "example-domain"
-  project_id = var.project_id
+  project_id = module.project.project_id
   domain     = "example-domain.com."
   type       = "public"
 
@@ -153,6 +153,28 @@ module "example_domain" {
       type    = "A"
     },
   ]
+}
+
+module "example_gke_cluster" {
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
+  version = "~> 9.2.0"
+
+  # Required.
+  name               = "example-gke-cluster"
+  project_id         = module.project.project_id
+  region             = "us-central1"
+  regional           = true
+  network_project_id = "example-prod-networks"
+
+  network                 = "example-network"
+  subnetwork              = "example-gke-subnet"
+  ip_range_pods           = "example-pods-range"
+  ip_range_services       = "example-services-range"
+  master_ipv4_cidr_block  = "192.168.0.0/28"
+  istio                   = true
+  skip_provisioners       = true
+  enable_private_endpoint = false
+  release_channel         = "STABLE"
 }
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
@@ -172,7 +194,7 @@ module "foo_topic" {
   version = "~> 1.3.0"
 
   topic      = "foo-topic"
-  project_id = var.project_id
+  project_id = module.project.project_id
 
   pull_subscriptions = [
     {
