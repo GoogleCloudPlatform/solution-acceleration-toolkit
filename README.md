@@ -17,3 +17,7 @@ of your Google Cloud organization.
 
 - [Terraform Importer](./docs/tfimport): Automatically detect and import
     existing resources defined by your Terraform configs.
+
+## Releases
+
+Please see [RELEASING.md](./RELEASING.md) for our release strategy.
