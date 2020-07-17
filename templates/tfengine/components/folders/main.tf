@@ -12,7 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-resource "google_folder" "folder" {
+{{range .folders -}}
+resource "google_folder" "{{resourceName . "display_name"}}" {
   display_name = "{{.display_name}}"
-  {{hclField . "parent"}}
+  parent       = "{{get . "parent" $.parent}}"
 }
+{{end -}}
