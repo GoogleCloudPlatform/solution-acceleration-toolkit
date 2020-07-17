@@ -337,7 +337,7 @@ template "project_apps" {
           network                = "example-network"
           subnet                 = "example-gke-subnet"
           ip_range_pods_name     = "example-pods-range"
-           ip_range_services_name = "example-services-range"
+          ip_range_services_name = "example-services-range"
           master_ipv4_cidr_block = "192.168.0.0/28"
         }]
         binary_authorization = {
