@@ -7,9 +7,9 @@ undefined#/properties/logs_bigquery_dataset
 Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity.
 
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                                                  |
-| :------------------ | ---------- | -------------- | ------------ | :---------------- | --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [audit.schema.json\*](../../../../../../../../../../tmp/182028425/audit.schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                      |
+| :------------------ | ---------- | -------------- | ------------ | :---------------- | --------------------- | ------------------- | --------------------------------------------------------------- |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [audit.schema.json\*](audit.schema.json "open original schema") |
 
 ## logs_bigquery_dataset Type
 

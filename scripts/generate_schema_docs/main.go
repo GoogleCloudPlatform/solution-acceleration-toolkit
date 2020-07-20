@@ -95,7 +95,7 @@ func run(recipesDir, outputDir string) error {
 		"jsonschema2md",
 		"-d", tmp,
 		"-o", outputDir,
-		"-x", "-", // skip 'out' dir which stores the original schema
+		"-x", outputDir,
 	)
 	return rn.CmdRun(cmd)
 }
