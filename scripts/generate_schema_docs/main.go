@@ -53,6 +53,19 @@ func run(recipesDir, outputDir string) error {
 	}
 	defer os.RemoveAll(tmp)
 
+	// Remove any existing output.
+	_, err = os.Stat(outputDir)
+	switch {
+	case err == nil:
+		if err := os.RemoveAll(outputDir); err != nil {
+			return err
+		}
+	case os.IsNotExist(err):
+		// Nothing to do.
+	default:
+		return err
+	}
+
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
