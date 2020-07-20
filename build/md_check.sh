@@ -19,6 +19,8 @@ set -e
 npm version
 
 # Check format
-# Note: Requires Node 10+ (see https://github.com/igorshubovych/markdownlint-cli/issues/90)
+# Note:
+#  - Requires Node 10+ (see https://github.com/igorshubovych/markdownlint-cli/issues/90)
+#  - Skip recipes md files as they are auto generated and not conformant.
 npm install -g markdownlint-cli
-markdownlint **/*.md
+for f in $(find . -name '*.md' -not -path "*/docs/tfengine/recipes/*"); do markdownlint $f; done
