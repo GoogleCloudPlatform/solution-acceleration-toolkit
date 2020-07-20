@@ -2,57 +2,6 @@
 
 ## Properties
 
-### access.group_by_email
-
-An email address of a Google Group to grant access to.
-
-
-Type: string
-
-### access.role
-
-Role to grant.
-
-
-Type: string
-
-### access.special_group
-
-A special group to grant access to.
-
-
-Type: string
-
-### access.user_by_email
-
-An email address of a user to grant access to.
-
-
-Type: string
-
-### action.storage_class
-
-(Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule.
-
-
-Type: string
-
-### action.type
-
-Type of action. Supported values: Delete and SetStorageClass.
-
-
-Type: string
-
-### admission_whitelist_patterns.name_pattern
-
-An image name pattern to whitelist, in the form registry/path/to/image.
-This supports a trailing * as a wildcard, but this is allowed only in text after the registry/ part."
-
-
-
-Type: string
-
 ### bastion_hosts
 
 https://github.com/terraform-google-modules/terraform-google-bastion-host
@@ -156,6 +105,34 @@ Each object should contain exactly one of the following keys:
 
 Type: array(object)
 
+### bigquery_datasets.access.group_by_email
+
+An email address of a Google Group to grant access to.
+
+
+Type: string
+
+### bigquery_datasets.access.role
+
+Role to grant.
+
+
+Type: string
+
+### bigquery_datasets.access.special_group
+
+A special group to grant access to.
+
+
+Type: string
+
+### bigquery_datasets.access.user_by_email
+
+An email address of a user to grant access to.
+
+
+Type: string
+
 ### bigquery_datasets.bigquery_location
 
 Location to create the bigquery dataset. Can be defined in global data block.
@@ -199,6 +176,15 @@ A whitelist of image patterns to exclude from admission rules.
 
 
 Type: array(object)
+
+### binary_authorization.admission_whitelist_patterns.name_pattern
+
+An image name pattern to whitelist, in the form registry/path/to/image.
+This supports a trailing * as a wildcard, but this is allowed only in text after the registry/ part."
+
+
+
+Type: string
 
 ### cloud_sql_instances
 
@@ -321,6 +307,22 @@ https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modu
 
 Type: array(object)
 
+### compute_instance_templates.instances.name
+
+Name of instance.
+
+
+Type: string
+
+### compute_instance_templates.instances.resource_name
+
+Override for Terraform resource name. If unset, defaults to normalized name.
+Normalization will make all characters alphanumeric with underscores.
+
+
+
+Type: string
+
 ### compute_instance_templates.name_prefix
 
 Name prefix of the instance template.
@@ -395,6 +397,55 @@ Subnetworks within the network.
 
 Type: array(object)
 
+### compute_networks.subnets.cloud_sql_private_service_access
+
+Whether to enable Cloud SQL private service access. Defaults to false.
+
+
+Type: boolean
+
+### compute_networks.subnets.compute_region
+
+Region to create subnet in. Can be defined in global data block.
+
+
+Type: string
+
+### compute_networks.subnets.ip_range
+
+IP range of the subnet.
+
+
+Type: string
+
+### compute_networks.subnets.name
+
+Name of subnet.
+
+
+Type: string
+
+### compute_networks.subnets.secondary_ranges
+
+Secondary ranges of the subnet.
+
+
+Type: array(object)
+
+### compute_networks.subnets.secondary_ranges.ip_range
+
+IP range for the secondary range.
+
+
+Type: string
+
+### compute_networks.subnets.secondary_ranges.name
+
+Name of secondary range.
+
+
+Type: string
+
 ### compute_routers
 
 https://github.com/terraform-google-modules/terraform-google-cloud-router
@@ -423,6 +474,48 @@ NATs to attach to the router.
 
 Type: array(object)
 
+### compute_routers.nats.name
+
+Name of NAT.
+
+
+Type: string
+
+### compute_routers.nats.source_subnetwork_ip_ranges_to_nat
+
+How NAT should be configured per Subnetwork.
+
+
+Type: string
+
+### compute_routers.nats.subnetworks
+
+Subnet NAT configurations. Only applicable if 'source_subnetwork_ip_ranges_to_nat' is 'LIST_OF_SUBNETWORKS'.
+
+
+Type: array(object)
+
+### compute_routers.nats.subnetworks.name
+
+Name of subnet.
+
+
+Type: string
+
+### compute_routers.nats.subnetworks.secondary_ip_range_names
+
+List of the secondary ranges of the subnetwork that are allowed to use NAT. Only applicable if one of the values in 'source_ip_ranges_to_nat' is 'LIST_OF_SECONDARY_IP_RANGES'.
+
+
+Type: array(string)
+
+### compute_routers.nats.subnetworks.source_ip_ranges_to_nat
+
+List of options for which source IPs in the subnetwork should have NAT enabled.
+
+
+Type: array(string)
+
 ### compute_routers.network
 
 Name of network the router belongs to.
@@ -435,55 +528,6 @@ Type: string
 Override for Terraform resource name. If unset, defaults to normalized name.
 Normalization will make all characters alphanumeric with underscores.
 
-
-
-Type: string
-
-### condition.age
-
-Minimum age of an object in days to satisfy this condition.
-
-
-Type: integer
-
-### condition.created_before
-
-Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.
-
-
-Type: string
-
-### condition.matches_storage_class
-
-Storage Class of objects to satisfy this condition.
-
-
-Type: string
-
-### condition.num_newer_versions
-
-Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition.
-
-
-Type: integer
-
-### condition.with_state
-
-Match to live and/or archived objects.
-
-
-Type: string
-
-### dicom_stores.iam_members
-
-IAM member to grant access for.
-
-
-Type: array(object)
-
-### dicom_stores.name
-
-Name of dicom store.
 
 
 Type: string
@@ -516,6 +560,34 @@ Records managed by the DNS zone.
 
 Type: array(object)
 
+### dns_zones.record_sets.name
+
+Name of record set.
+
+
+Type: string
+
+### dns_zones.record_sets.records
+
+Data of the record set.
+
+
+Type: array(string)
+
+### dns_zones.record_sets.ttl
+
+Time to live of this record set, in seconds.
+
+
+Type: integer
+
+### dns_zones.record_sets.type
+
+Type of record set.
+
+
+Type: string
+
 ### dns_zones.resource_name
 
 Override for Terraform resource name. If unset, defaults to normalized name.
@@ -528,27 +600,6 @@ Type: string
 ### dns_zones.type
 
 Type of DNS zone.
-
-
-Type: string
-
-### fhir_stores.iam_members
-
-IAM member to grant access for.
-
-
-Type: array(object)
-
-### fhir_stores.name
-
-Name of FHIR store.
-
-
-Type: string
-
-### fhir_stores.version
-
-Version of FHIR store.
 
 
 Type: string
@@ -589,6 +640,20 @@ access (except the cluster node IPs, which GKE automatically allows).
 
 
 Type: array(object)
+
+### gke_clusters.master_authorized_networks.cidr_block
+
+CIDR block of the master authorized network.
+
+
+Type: string
+
+### gke_clusters.master_authorized_networks.display_name
+
+Display name of the master authorized network.
+
+
+Type: string
 
 ### gke_clusters.master_ipv4_cidr_block
 
@@ -648,12 +713,75 @@ Dicom stores to create.
 
 Type: array(object)
 
+### healthcare_datasets.dicom_stores.iam_members
+
+IAM member to grant access for.
+
+
+Type: array(object)
+
+### healthcare_datasets.dicom_stores.iam_members.member
+
+Member to grant acess to role.
+
+
+Type: string
+
+### healthcare_datasets.dicom_stores.iam_members.role
+
+IAM role to grant.
+
+
+Type: string
+
+### healthcare_datasets.dicom_stores.name
+
+Name of dicom store.
+
+
+Type: string
+
 ### healthcare_datasets.fhir_stores
 
 FHIR stores to create.
 
 
 Type: array(object)
+
+### healthcare_datasets.fhir_stores.iam_members
+
+IAM member to grant access for.
+
+
+Type: array(object)
+
+### healthcare_datasets.fhir_stores.iam_members.member
+
+Member to grant acess to role.
+
+
+Type: string
+
+### healthcare_datasets.fhir_stores.iam_members.role
+
+IAM role to grant.
+
+
+Type: string
+
+### healthcare_datasets.fhir_stores.name
+
+Name of FHIR store.
+
+
+Type: string
+
+### healthcare_datasets.fhir_stores.version
+
+Version of FHIR store.
+
+
+Type: string
 
 ### healthcare_datasets.healthcare_region
 
@@ -669,6 +797,34 @@ HL7 V2 stores to create.
 
 Type: array(object)
 
+### healthcare_datasets.hl7_v2_stores.iam_members
+
+IAM member to grant access for.
+
+
+Type: array(object)
+
+### healthcare_datasets.hl7_v2_stores.iam_members.member
+
+Member to grant acess to role.
+
+
+Type: string
+
+### healthcare_datasets.hl7_v2_stores.iam_members.role
+
+IAM role to grant.
+
+
+Type: string
+
+### healthcare_datasets.hl7_v2_stores.name
+
+Name of Hl7 V2 store.
+
+
+Type: string
+
 ### healthcare_datasets.iam_members
 
 IAM member to grant access for.
@@ -676,23 +832,23 @@ IAM member to grant access for.
 
 Type: array(object)
 
-### healthcare_datasets.name
+### healthcare_datasets.iam_members.member
 
-Name of healthcare dataset.
+Member to grant acess to role.
 
 
 Type: string
 
-### hl7_v2_stores.iam_members
+### healthcare_datasets.iam_members.role
 
-IAM member to grant access for.
+IAM role to grant.
 
 
-Type: array(object)
+Type: string
 
-### hl7_v2_stores.name
+### healthcare_datasets.name
 
-Name of Hl7 V2 store.
+Name of healthcare dataset.
 
 
 Type: string
@@ -703,85 +859,6 @@ Map of IAM role to list of members to grant access to the role.
 
 
 Type: object
-
-### iam_members.member
-
-Member to grant acess to role.
-
-
-Type: string
-
-### iam_members.role
-
-IAM role to grant.
-
-
-Type: string
-
-### instances.name
-
-Name of instance.
-
-
-Type: string
-
-### instances.resource_name
-
-Override for Terraform resource name. If unset, defaults to normalized name.
-Normalization will make all characters alphanumeric with underscores.
-
-
-
-Type: string
-
-### lifecycle_rules.action
-
-
-
-
-Type: object
-
-### lifecycle_rules.condition
-
-
-
-
-Type: object
-
-### master_authorized_networks.cidr_block
-
-CIDR block of the master authorized network.
-
-
-Type: string
-
-### master_authorized_networks.display_name
-
-Display name of the master authorized network.
-
-
-Type: string
-
-### nats.name
-
-Name of NAT.
-
-
-Type: string
-
-### nats.source_subnetwork_ip_ranges_to_nat
-
-How NAT should be configured per Subnetwork.
-
-
-Type: string
-
-### nats.subnetworks
-
-Subnet NAT configurations. Only applicable if 'source_subnetwork_ip_ranges_to_nat' is 'LIST_OF_SUBNETWORKS'.
-
-
-Type: array(object)
 
 ### pubsub_topics
 
@@ -804,6 +881,20 @@ Pull subscriptions on the topic.
 
 Type: array(object)
 
+### pubsub_topics.pull_subscriptions.ack_deadline_seconds
+
+Deadline to wait for acknowledgement.
+
+
+Type: integer
+
+### pubsub_topics.pull_subscriptions.name
+
+Name of subscription.
+
+
+Type: string
+
 ### pubsub_topics.push_subscriptions
 
 Push subscriptions on the topic.
@@ -811,79 +902,23 @@ Push subscriptions on the topic.
 
 Type: array(object)
 
-### pull_subscriptions.ack_deadline_seconds
+### pubsub_topics.push_subscriptions.ack_deadline_seconds
 
 Deadline to wait for acknowledgement.
 
 
 Type: integer
 
-### pull_subscriptions.name
+### pubsub_topics.push_subscriptions.name
 
 Name of subscription.
 
 
 Type: string
 
-### push_subscriptions.ack_deadline_seconds
-
-Deadline to wait for acknowledgement.
-
-
-Type: integer
-
-### push_subscriptions.name
-
-Name of subscription.
-
-
-Type: string
-
-### push_subscriptions.push_endpoint
+### pubsub_topics.push_subscriptions.push_endpoint
 
 Name of endpoint to push to.
-
-
-Type: string
-
-### record_sets.name
-
-Name of record set.
-
-
-Type: string
-
-### record_sets.records
-
-Data of the record set.
-
-
-Type: array(string)
-
-### record_sets.ttl
-
-Time to live of this record set, in seconds.
-
-
-Type: integer
-
-### record_sets.type
-
-Type of record set.
-
-
-Type: string
-
-### secondary_ranges.ip_range
-
-IP range for the secondary range.
-
-
-Type: string
-
-### secondary_ranges.name
-
-Name of secondary range.
 
 
 Type: string
@@ -962,12 +997,89 @@ IAM member to grant access for.
 
 Type: array(object)
 
+### storage_buckets.iam_members.member
+
+Member to grant acess to role.
+
+
+Type: string
+
+### storage_buckets.iam_members.role
+
+IAM role to grant.
+
+
+Type: string
+
 ### storage_buckets.lifecycle_rules
 
 Lifecycle rules configuration for the bucket.
 
 
 Type: array(object)
+
+### storage_buckets.lifecycle_rules.action
+
+
+
+
+Type: object
+
+### storage_buckets.lifecycle_rules.action.storage_class
+
+(Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule.
+
+
+Type: string
+
+### storage_buckets.lifecycle_rules.action.type
+
+Type of action. Supported values: Delete and SetStorageClass.
+
+
+Type: string
+
+### storage_buckets.lifecycle_rules.condition
+
+
+
+
+Type: object
+
+### storage_buckets.lifecycle_rules.condition.age
+
+Minimum age of an object in days to satisfy this condition.
+
+
+Type: integer
+
+### storage_buckets.lifecycle_rules.condition.created_before
+
+Creation date of an object in RFC 3339 (e.g. 2017-06-13) to satisfy this condition.
+
+
+Type: string
+
+### storage_buckets.lifecycle_rules.condition.matches_storage_class
+
+Storage Class of objects to satisfy this condition.
+
+
+Type: string
+
+### storage_buckets.lifecycle_rules.condition.num_newer_versions
+
+Relevant only for versioned objects. The number of newer versions of an object to satisfy this condition.
+
+
+Type: integer
+
+### storage_buckets.lifecycle_rules.condition.with_state
+
+Match to live and/or archived objects.
+
+
+Type: string
 
 ### storage_buckets.name
 
@@ -991,62 +1103,6 @@ Location to create the storage bucket. Can be defined in global data block.
 
 
 Type: string
-
-### subnets.cloud_sql_private_service_access
-
-Whether to enable Cloud SQL private service access. Defaults to false.
-
-
-Type: boolean
-
-### subnets.compute_region
-
-Region to create subnet in. Can be defined in global data block.
-
-
-Type: string
-
-### subnets.ip_range
-
-IP range of the subnet.
-
-
-Type: string
-
-### subnets.name
-
-Name of subnet.
-
-
-Type: string
-
-### subnets.secondary_ranges
-
-Secondary ranges of the subnet.
-
-
-Type: array(object)
-
-### subnetworks.name
-
-Name of subnet.
-
-
-Type: string
-
-### subnetworks.secondary_ip_range_names
-
-List of the secondary ranges of the subnetwork that are allowed to use NAT. Only applicable if one of the values in 'source_ip_ranges_to_nat' is 'LIST_OF_SECONDARY_IP_RANGES'.
-
-
-Type: array(string)
-
-### subnetworks.source_ip_ranges_to_nat
-
-List of options for which source IPs in the subnetwork should have NAT enabled.
-
-
-Type: array(string)
 
 ### terraform_addons
 

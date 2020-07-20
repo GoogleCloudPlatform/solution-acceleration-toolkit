@@ -9,15 +9,6 @@ Group who will be given org admin access.
 
 Type: string
 
-### apply_trigger.disable
-
-Whether or not to disable automatic triggering from a PR/push to branch. Default
-to false.
-
-
-
-Type: boolean
-
 ### billing_account
 
 ID of billing account to attach to this project.
@@ -42,6 +33,15 @@ to perform the build.
 
 Type: object
 
+### cicd.apply_trigger.disable
+
+Whether or not to disable automatic triggering from a PR/push to branch. Default
+to false.
+
+
+
+Type: boolean
+
 ### cicd.branch_regex
 
 Regex of the branches to set the Cloud Build Triggers to monitor.
@@ -63,12 +63,35 @@ Config for Google Cloud Source Repository Cloud Build triggers.
 
 Type: object
 
+### cicd.cloud_source_repository.name
+
+Cloud Source Repository repo name.
+The Cloud Source Repository should be hosted under the devops project.
+
+
+
+Type: string
+
 ### cicd.github
 
 Config for GitHub Cloud Build triggers.
 
 
 Type: object
+
+### cicd.github.name
+
+GitHub repo name.
+
+
+Type: string
+
+### cicd.github.owner
+
+GitHub repo owner.
+
+
+Type: string
 
 ### cicd.managed_services
 
@@ -89,6 +112,15 @@ the build.
 
 Type: object
 
+### cicd.plan_trigger.disable
+
+Whether or not to disable automatic triggering from a PR/push to branch. Default
+to false.
+
+
+
+Type: boolean
+
 ### cicd.terraform_root
 
 Path of the directory relative to the repo root containing the Terraform configs.
@@ -106,14 +138,14 @@ the build.
 
 Type: object
 
-### cloud_source_repository.name
+### cicd.validate_trigger.disable
 
-Cloud Source Repository repo name.
-The Cloud Source Repository should be hosted under the devops project.
+Whether or not to disable automatic triggering from a PR/push to branch. Default
+to false.
 
 
 
-Type: string
+Type: boolean
 
 ### enable_bootstrap_gcs_backend
 
@@ -136,20 +168,6 @@ configs and the CICD pipelines will only use Terraform. Default to "true".
 
 Type: boolean
 
-### github.name
-
-GitHub repo name.
-
-
-Type: string
-
-### github.owner
-
-GitHub repo owner.
-
-
-Type: string
-
 ### parent_id
 
 ID of parent GCP resource to apply the policy: can be one of the organization ID,
@@ -165,15 +183,6 @@ Type of parent GCP resource to apply the policy. Must be one of 'organization' o
 
 
 Type: string
-
-### plan_trigger.disable
-
-Whether or not to disable automatic triggering from a PR/push to branch. Default
-to false.
-
-
-
-Type: boolean
 
 ### project
 
@@ -213,13 +222,4 @@ Location of state bucket.
 
 
 Type: string
-
-### validate_trigger.disable
-
-Whether or not to disable automatic triggering from a PR/push to branch. Default
-to false.
-
-
-
-Type: boolean
 

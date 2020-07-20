@@ -112,10 +112,10 @@ func flattenObjects(s *schema, props map[string]*property, prefix string) {
 		s.Properties[prefix+name] = prop
 		switch prop.Type {
 		case "object":
-			flattenObjects(s, prop.Properties, name+".")
+			flattenObjects(s, prop.Properties, prefix+name+".")
 		case "array":
 			prop.Type = fmt.Sprintf("array(%s)", prop.Items.Type)
-			flattenObjects(s, prop.Items.Properties, name+".")
+			flattenObjects(s, prop.Items.Properties, prefix+name+".")
 		}
 	}
 }

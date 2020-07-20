@@ -74,6 +74,34 @@ If set, treats this project as a shared VPC service project.
 
 Type: object
 
+### project.shared_vpc_attachment.host_project_id
+
+ID of host project to connect this project to.
+
+
+Type: string
+
+### project.shared_vpc_attachment.subnets
+
+Subnets within the host project to grant this project access to.
+
+
+Type: array(object)
+
+### project.shared_vpc_attachment.subnets.compute_region
+
+Region of subnet.
+
+
+Type: string
+
+### project.shared_vpc_attachment.subnets.name
+
+Name of subnet.
+
+
+Type: string
+
 ### project.terraform_addons
 
 Additional Terraform configuration for the project deployment.
@@ -82,32 +110,4 @@ For schema see ./deployment.hcl.
 
 
 
-
-### shared_vpc_attachment.host_project_id
-
-ID of host project to connect this project to.
-
-
-Type: string
-
-### shared_vpc_attachment.subnets
-
-Subnets within the host project to grant this project access to.
-
-
-Type: array(object)
-
-### subnets.compute_region
-
-Region of subnet.
-
-
-Type: string
-
-### subnets.name
-
-Name of subnet.
-
-
-Type: string
 
