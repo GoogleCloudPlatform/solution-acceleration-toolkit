@@ -19,15 +19,15 @@ import (
 	"text/template"
 )
 
-var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstrip}).Parse(`
-# {{.Title}}
+var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstrip}).Parse(`# {{.Title}}
 
 ## Properties
-{{range $name, $prop := .Properties}}
+{{range $name, $_ := .Properties}}
 ### {{$name}}
 
-{{lstrip $prop.Description}}
+{{lstrip .Description}}
 
+Type: {{.Type}}
 {{end}}
 `))
 

@@ -15,14 +15,14 @@
 package main
 
 type schema struct {
-	Title                string              `json:"title"`
-	AdditionalProperties bool                `json:"additionalProperties"`
-	Properties           map[string]property `json:"properties"`
+	Title                string               `json:"title"`
+	AdditionalProperties bool                 `json:"additionalProperties"`
+	Properties           map[string]*property `json:"properties"`
 }
 
 type property struct {
-	Description          string              `json:"description"`
-	Type                 string              `json:"type"`
-	AdditionalProperties bool                `json:"additionalProperties"`
-	Properties           map[string]property `json:"properties"`
+	Description          string               `json:"description"`
+	Type                 string               `json:"type"`
+	AdditionalProperties bool                 `json:"additionalProperties"`
+	Properties           map[string]*property `json:"properties"`
 }

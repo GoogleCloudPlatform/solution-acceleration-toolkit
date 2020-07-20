@@ -84,6 +84,10 @@ func run(recipesDir, outputDir string) error {
 			return err
 		}
 
+		props := s.Properties
+		s.Properties = make(map[string]*property, len(props))
+		flattenObjects(s, props, "")
+
 		buf := new(bytes.Buffer)
 		if err := tmpl.Execute(buf, s); err != nil {
 			return err
@@ -100,4 +104,14 @@ func run(recipesDir, outputDir string) error {
 		return err
 	}
 	return nil
+}
+
+// flattenObjects will add the properties of all objects to the top level schema.
+func flattenObjects(s *schema, props map[string]*property, prefix string) {
+	for name, prop := range props {
+		s.Properties[prefix+name] = prop
+		if prop.Type == "object" {
+			flattenObjects(s, prop.Properties, name+".")
+		}
+	}
 }

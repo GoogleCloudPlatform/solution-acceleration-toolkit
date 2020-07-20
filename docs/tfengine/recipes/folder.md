@@ -1,4 +1,3 @@
-
 # Recipe for creating GCP folders.
 
 ## Properties
@@ -13,12 +12,14 @@ folder id once it has been created.
 
 
 
+Type: boolean
 
 ### display_name
 
 Name of folder.
 
 
+Type: string
 
 ### parent_id
 
@@ -26,10 +27,12 @@ ID of parent GCP resource to apply the policy: can be one of the organization ID
 
 
 
+Type: string
 
 ### parent_type
 
 Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'.
 
 
+Type: string
 
