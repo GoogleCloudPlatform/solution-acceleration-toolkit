@@ -78,19 +78,19 @@ To trigger an automated release:
    For binaries:
 
    ```bash
-   git tag -a "${version}" -m "Binaries release version ${version}"
+   git tag -a "${version}" -m "Binaries ${version}"
    ```
 
    For templates:
 
    ```bash
-   git tag -a "templates-${version}" -m "Terraform Engine templates release version ${version}"
+   git tag -a "templates-${version}" -m "Templates ${version}"
    ```
 
    For policies:
 
    ```bash
-   git tag -a "policies-${version}" -m "Policygen policies release version ${version}"
+   git tag -a "policies-${version}" -m "Policies ${version}"
    ```
 
 1. Push the tag:
