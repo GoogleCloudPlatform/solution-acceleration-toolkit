@@ -194,12 +194,6 @@ EOF
         }]
       }
     }
-    terraform_addons = {
-      outputs = [{
-        name  = "bastion_service_account"
-        value = "$${module.bastion_vm.service_account}"
-      }]
-    }
   }
 }
 
@@ -271,7 +265,7 @@ template "project_data" {
         }]
         iam_members = {
           "roles/cloudsql.client" = [
-            "serviceAccount:$${var.bastion_service_account}",
+            "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
           ]
         }
         storage_buckets = [{
@@ -294,10 +288,6 @@ template "project_data" {
       }
     }
     terraform_addons = {
-      vars = [{
-        name             = "bastion_service_account"
-        type             = "string"
-      }]
       /* TODO(user): Uncomment and re-run the engine after deploying secrets.
       raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
@@ -341,16 +331,15 @@ template "project_apps" {
     }
     deployments = {
       resources = {
-        # TODO(user): Uncomment and re-run the engine after the apps project has been deployed.
-        # gke_clusters = [{
-        #   name                   = "example-gke-cluster"
-        #   network_project_id     = "example-prod-networks"
-        #   network                = "example-network"
-        #   subnet                 = "example-gke-subnet"
-        #   ip_range_pods_name     = "example-pods-range"
-        #   ip_range_services_name = "example-services-range"
-        #   master_ipv4_cidr_block = "192.168.0.0/28"
-        # }]
+        gke_clusters = [{
+          name                   = "example-gke-cluster"
+          network_project_id     = "example-prod-networks"
+          network                = "example-network"
+          subnet                 = "example-gke-subnet"
+          ip_range_pods_name     = "example-pods-range"
+          ip_range_services_name = "example-services-range"
+          master_ipv4_cidr_block = "192.168.0.0/28"
+        }]
         binary_authorization = {
           admission_whitelist_patterns = [{
             name_pattern = "gcr.io/cloudsql-docker/*"

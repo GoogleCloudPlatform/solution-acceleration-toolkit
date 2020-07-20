@@ -138,7 +138,7 @@ module "project_iam_members" {
 
   bindings = {
     "roles/cloudsql.client" = [
-      "serviceAccount:${var.bastion_service_account}",
+      "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
     ],
   }
 }
