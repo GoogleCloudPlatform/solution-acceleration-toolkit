@@ -6,29 +6,29 @@
 
 Location of cloud sql instances.
 
-
 Type: string
+
 
 ### compute_region
 
 Location of compute instances.
 
-
 Type: string
+
 
 ### forseti
 
 Config for the Forseti instance.
 
-
 Type: object
+
 
 ### forseti.domain
 
 Domain for the Forseti instance.
 
-
 Type: string
+
 
 ### forseti.security_command_center_source_id
 
@@ -43,27 +43,27 @@ and obtain the SCC source ID;
 deploy Forseti again.
 
 
-
 Type: string
+
 
 ### project
 
 Config of project to host monitoring resources
 
-
 Type: object
+
 
 ### project.project_id
 
 ID of project.
 
-
 Type: string
+
 
 ### storage_location
 
 Location of storage buckets.
 
-
 Type: string
+
 
