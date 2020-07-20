@@ -54,7 +54,7 @@ Type: string
 IAM members to grant `cloudbuild.builds.viewer` role in the devops project to see CICD results.
 
 
-Type: array
+Type: array(string)
 
 ### cicd.cloud_source_repository
 
@@ -77,7 +77,7 @@ those services in other projects.
 
 
 
-Type: array
+Type: array(string)
 
 ### cicd.plan_trigger
 
@@ -191,7 +191,7 @@ so a group owns the project going forward.
 
 
 
-Type: array
+Type: array(string)
 
 ### project.project_id
 

@@ -110,8 +110,12 @@ func run(recipesDir, outputDir string) error {
 func flattenObjects(s *schema, props map[string]*property, prefix string) {
 	for name, prop := range props {
 		s.Properties[prefix+name] = prop
-		if prop.Type == "object" {
+		switch prop.Type {
+		case "object":
 			flattenObjects(s, prop.Properties, name+".")
+		case "array":
+			prop.Type = fmt.Sprintf("array(%s)", prop.Items.Type)
+			flattenObjects(s, prop.Items.Properties, name+".")
 		}
 	}
 }

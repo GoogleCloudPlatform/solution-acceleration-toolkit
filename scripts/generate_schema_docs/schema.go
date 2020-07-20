@@ -14,6 +14,7 @@
 
 package main
 
+// schema is a subset of json schema.
 type schema struct {
 	Title                string               `json:"title"`
 	AdditionalProperties bool                 `json:"additionalProperties"`
@@ -25,4 +26,5 @@ type property struct {
 	Type                 string               `json:"type"`
 	AdditionalProperties bool                 `json:"additionalProperties"`
 	Properties           map[string]*property `json:"properties"`
+	Items                *property            `json:"items"`
 }

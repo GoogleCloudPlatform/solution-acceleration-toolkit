@@ -27,7 +27,9 @@ var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstri
 
 {{lstrip .Description}}
 
+{{if .Type -}}
 Type: {{.Type}}
+{{- end}}
 {{end}}
 `))
 

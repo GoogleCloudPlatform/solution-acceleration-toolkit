@@ -51,7 +51,7 @@ Type: object
 APIs to enable in the project.
 
 
-Type: array
+Type: array(string)
 
 ### project.is_shared_vpc_host
 
@@ -81,7 +81,7 @@ For schema see ./deployment.hcl.
 
 
 
-Type: 
+
 
 ### shared_vpc_attachment.host_project_id
 
@@ -95,5 +95,19 @@ Type: string
 Subnets within the host project to grant this project access to.
 
 
-Type: array
+Type: array(object)
+
+### subnets.compute_region
+
+Region of subnet.
+
+
+Type: string
+
+### subnets.name
+
+Name of subnet.
+
+
+Type: string
 

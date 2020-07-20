@@ -2,12 +2,47 @@
 
 ## Properties
 
+### deps.mock_outputs
+
+Mock outputs for the deployment to add.
+
+
+Type: object
+
+### deps.name
+
+Name of dependency.
+
+
+Type: string
+
+### deps.path
+
+Path to deployment.
+
+
+Type: string
+
 ### enable_terragrunt
 
 Whether to convert to a Terragrunt deployment. Adds a terragrunt.hcl file in the deployment.
 
 
-Type: boolean
+
+
+### outputs.name
+
+Name of output.
+
+
+Type: string
+
+### outputs.value
+
+Value of output.
+
+
+Type: string
 
 ### state_bucket
 
@@ -35,7 +70,7 @@ Type: object
 Additional dependencies on other deployments.
 
 
-Type: array
+Type: array(object)
 
 ### terraform_addons.inputs
 
@@ -49,7 +84,7 @@ Type: object
 Additional outputs to set in outputs.tf.
 
 
-Type: array
+Type: array(object)
 
 ### terraform_addons.raw_config
 
@@ -65,5 +100,40 @@ Type: string
 Additional vars to set in the deployment in variables.tf.
 
 
-Type: array
+Type: array(object)
+
+### vars.default
+
+Default value of variable.
+
+
+
+
+### vars.name
+
+Name of the variable.
+
+
+Type: string
+
+### vars.terragrunt_input
+
+Input value to set in terragrunt.hcl for this var.
+
+
+
+
+### vars.type
+
+Type of variable.
+
+
+Type: string
+
+### vars.value
+
+Value of variable to set in terraform.tfvars.
+
+
+
 
