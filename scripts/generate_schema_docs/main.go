@@ -14,23 +14,23 @@
 
 // Generates configs from the full example, inits all modules, and checks if any resources are not supported by the importer.
 // Meant to be run from the repo root like so:
-// go run ./scripts/check_importer_supports_engine
+// go run ./scripts/generate_schema_docs
 
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 )
 
 var (
@@ -52,19 +52,6 @@ func run(recipesDir, outputDir string) error {
 		return err
 	}
 	defer os.RemoveAll(tmp)
-
-	// Remove any existing output.
-	_, err = os.Stat(outputDir)
-	switch {
-	case err == nil:
-		if err := os.RemoveAll(outputDir); err != nil {
-			return err
-		}
-	case os.IsNotExist(err):
-		// Nothing to do.
-	default:
-		return err
-	}
 
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -92,9 +79,19 @@ func run(recipesDir, outputDir string) error {
 			return err
 		}
 
-		outputPath := strings.Replace(filepath.Join(tmp, filepath.Base(path)), ".hcl", ".schema.json", 1)
-		if err := ioutil.WriteFile(outputPath, sj, 0755); err != nil {
+		s := new(schema)
+		if err := json.Unmarshal(sj, s); err != nil {
 			return err
+		}
+
+		buf := new(bytes.Buffer)
+		if err := tmpl.Execute(buf, s); err != nil {
+			return err
+		}
+
+		outPath := filepath.Join(outputDir, strings.Replace(info.Name(), ".hcl", ".md", 1))
+		if err := ioutil.WriteFile(outPath, buf.Bytes(), 0755); err != nil {
+			return fmt.Errorf("write %q: %v", outPath, err)
 		}
 
 		return nil
@@ -102,13 +99,5 @@ func run(recipesDir, outputDir string) error {
 	if err := filepath.Walk(recipesDir, fn); err != nil {
 		return err
 	}
-
-	rn := &runner.Default{}
-	cmd := exec.Command(
-		"jsonschema2md",
-		"-d", tmp,
-		"-o", outputDir,
-		"-x", outputDir,
-	)
-	return rn.CmdRun(cmd)
+	return nil
 }
