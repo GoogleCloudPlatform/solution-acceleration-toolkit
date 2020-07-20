@@ -52,7 +52,6 @@ schema = {
         }
       }
     }
-
     cloud_sql_region = {
       description = "Location of cloud sql instances."
       type        = "string"

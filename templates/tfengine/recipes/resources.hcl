@@ -844,7 +844,6 @@ schema = {
           }
         }
       }
-
     }
     secrets = {
       description = "https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html"
