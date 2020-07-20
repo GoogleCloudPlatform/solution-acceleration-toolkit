@@ -8,9 +8,11 @@
 Location of cloud sql instances.
 
 
+
 ## compute_region
 
 Location of compute instances.
+
 
 
 ## forseti
@@ -18,13 +20,16 @@ Location of compute instances.
 Config for the Forseti instance.
 
 
+
 ## project
 
 Config of project to host monitoring resources
 
 
+
 ## storage_location
 
 Location of storage buckets.
+
 
 

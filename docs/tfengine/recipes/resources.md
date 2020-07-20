@@ -8,9 +8,11 @@
 https://github.com/terraform-google-modules/terraform-google-bastion-host
 
 
+
 ## bigquery_datasets
 
 https://github.com/terraform-google-modules/terraform-google-bigquery
+
 
 
 ## binary_authorization
@@ -18,9 +20,11 @@ https://github.com/terraform-google-modules/terraform-google-bigquery
 A policy for container image binary authorization.
 
 
+
 ## cloud_sql_instances
 
 https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql
+
 
 
 ## compute_instance_templates
@@ -28,9 +32,11 @@ https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/
 https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/instance_template
 
 
+
 ## compute_networks
 
 https://github.com/terraform-google-modules/terraform-google-network
+
 
 
 ## compute_routers
@@ -38,9 +44,11 @@ https://github.com/terraform-google-modules/terraform-google-network
 https://github.com/terraform-google-modules/terraform-google-cloud-router
 
 
+
 ## dns_zones
 
 https://github.com/terraform-google-modules/terraform-google-cloud-dns
+
 
 
 ## gke_clusters
@@ -48,9 +56,11 @@ https://github.com/terraform-google-modules/terraform-google-cloud-dns
 https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant
 
 
+
 ## healthcare_datasets
 
 https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql
+
 
 
 ## iam_members
@@ -58,9 +68,11 @@ https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/
 Map of IAM role to list of members to grant access to the role.
 
 
+
 ## pubsub_topics
 
 https://github.com/terraform-google-modules/terraform-google-pubsub
+
 
 
 ## secrets
@@ -68,9 +80,11 @@ https://github.com/terraform-google-modules/terraform-google-pubsub
 https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html
 
 
+
 ## service_accounts
 
 https://www.terraform.io/docs/providers/google/r/google_service_account.html
+
 
 
 ## storage_buckets
@@ -78,11 +92,13 @@ https://www.terraform.io/docs/providers/google/r/google_service_account.html
 https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql
 
 
+
 ## terraform_addons
 
-        Additional Terraform configuration for the project deployment.
-        Can be used to support arbitrary resources not supported in the following list.
-        For schema see ./deployment.hcl.
+Additional Terraform configuration for the project deployment.
+Can be used to support arbitrary resources not supported in the following list.
+For schema see ./deployment.hcl.
+
 
 
 
