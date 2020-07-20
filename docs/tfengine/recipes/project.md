@@ -3,7 +3,7 @@
 
 ## Properties
 
-## add_parent_folder_dependency
+### add_parent_folder_dependency
 
 Whether to automatically add dependency on parent folder.
 Only applicable if 'parent_type' is folder. Defaults to false.
@@ -14,7 +14,7 @@ folder id once it has been created.
 
 
 
-## deployments
+### deployments
 
 Map of deployment name to resources config.
 Each key will be a directory in the output path.
@@ -23,20 +23,20 @@ For resource schema see ./resources.hcl.
 
 
 
-## parent_id
+### parent_id
 
 ID of parent GCP resource to apply the policy: can be one of the organization ID or folder ID according to parent_type.
 
 
 
 
-## parent_type
+### parent_type
 
 Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'.
 
 
 
-## project
+### project
 
 Config for the project.
 

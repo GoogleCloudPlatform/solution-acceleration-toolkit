@@ -24,7 +24,7 @@ var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstri
 
 ## Properties
 {{range $name, $prop := .Properties}}
-## {{$name}}
+### {{$name}}
 
 {{lstrip $prop.Description}}
 

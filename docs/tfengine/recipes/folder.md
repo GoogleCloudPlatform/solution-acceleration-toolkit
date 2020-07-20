@@ -3,7 +3,7 @@
 
 ## Properties
 
-## add_parent_folder_dependency
+### add_parent_folder_dependency
 
 Whether to automatically add dependency on parent folder.
 Only applicable if 'parent_type' is folder. Defaults to false.
@@ -14,20 +14,20 @@ folder id once it has been created.
 
 
 
-## display_name
+### display_name
 
 Name of folder.
 
 
 
-## parent_id
+### parent_id
 
 ID of parent GCP resource to apply the policy: can be one of the organization ID or folder ID according to parent_type.
 
 
 
 
-## parent_type
+### parent_type
 
 Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'.
 
