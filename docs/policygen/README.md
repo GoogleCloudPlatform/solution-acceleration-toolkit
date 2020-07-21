@@ -94,12 +94,37 @@ terraform apply
 
 #### Policy Library Constraints
 
-* To use Policy Library Constraints with **Forseti**, follow
-    [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
-    Forseti Terraform module version >= 5.2.1 is needed.
+##### With Forseti
 
-* To use Policy Library Constraints with **Terraform Validator**, follow
-    [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+To use Policy Library Constraints with **Forseti**, follow
+[How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
+Forseti Terraform module version >= 5.2.1 is needed.
+
+You can use [package_policies.sh](../../scripts/package_policies.sh) to package
+your generated policies with other necessary templates and utils and upload to
+the Forseti server bucket.
+
+```shell
+scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d gs://forseti-server-{suffix}
+```
+
+##### With Terraform Validator
+
+To use Policy Library Constraints with **Terraform Validator**, follow
+[How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+
+You can use [package_policies.sh](../../scripts/package_policies.sh) to package
+your generated policies with other necessary templates and utils and save to a
+local directory to be used by the Terraform Validator.
+
+```shell
+scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d {DST}
+```
+
+where `${DST}` is the path that Terraform Validator looks for policies and
+templates.
+
+##### Policy match targets
 
 The `target` value under the `match` block in the generated policies based on
 Terraform state might need to be adjusted manually to include the ancestor paths
