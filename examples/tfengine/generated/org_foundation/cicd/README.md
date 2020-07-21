@@ -118,7 +118,7 @@ network
 google_sql_user.db_users\["user-creds"\]
 ```
 
-Each line allowlists, respectively:
+Each line allows, respectively:
 
 1. Any resource whose address contains the string "network".
 2. A specific resource within a module.
