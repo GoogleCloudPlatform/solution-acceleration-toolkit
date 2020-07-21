@@ -57,21 +57,12 @@ func run(recipesDir, outputDir string) error {
 		if err != nil {
 			return err
 		}
-		if filepath.Ext(path) != ".hcl" {
-			return nil
-		}
-
-		b, err := ioutil.ReadFile(path)
+		matches, err := findMatches(path)
 		if err != nil {
 			return err
 		}
-
-		matches := schemaRE.FindSubmatch(b)
 		if len(matches) == 0 {
 			return nil
-		}
-		if len(matches) != 2 { // There is only one group in the regex.
-			return fmt.Errorf("unexpected number of matches: got %q, want 2", len(matches))
 		}
 
 		s, err := schemaFromHCL(matches[1])
@@ -95,6 +86,25 @@ func run(recipesDir, outputDir string) error {
 		return err
 	}
 	return nil
+}
+
+// findMatches extracts the schema from an HCL recipe.
+// Matches will be empty if there is no schema or the file is not HCL.
+func findMatches(path string) ([][]byte, error) {
+	if filepath.Ext(path) != ".hcl" {
+		return nil, nil
+	}
+
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	matches := schemaRE.FindSubmatch(b)
+	if l := len(matches); l != 0 && l != 2 {
+		return nil, fmt.Errorf("unexpected number of matches: got %q, want 0 or 2", len(matches))
+	}
+	return matches, nil
 }
 
 func schemaFromHCL(b []byte) (*schema, error) {
