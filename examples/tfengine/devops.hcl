@@ -20,7 +20,7 @@ data = {
 }
 
 template "devops" {
-  recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
+  recipe_path = "../../templates/tfengine/recipes/devops.hcl"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
