@@ -24,21 +24,21 @@
 #  * terraform or terragrunt
 #  * jq
 #
-# Can optionally pass in a path to a whitelist file. It will be passed as an
+# Can optionally pass in a path to an allowlist file. It will be passed as an
 # argument to `grep -Evf` to ignore certain resources for deletion. The
 # patterns will be matched against the resource address.
 # See https://en.wikipedia.org/wiki/Regular_expression#POSIX_extended
 
 set -e
 
-# Look for a whitelist of which resources are allowed to be deleted.
+# Look for an allowlist of which resources are allowed to be deleted.
 # Make sure it exists, is readable, and isn't empty.
-whitelist="${1}"
-if [[ -s "${whitelist}" && -r "${whitelist}" ]]; then
-  whitelist_path="$(pwd)/${whitelist}"
+allowlist="${1}"
+if [[ -s "${allowlist}" && -r "${allowlist}" ]]; then
+  allowlist_path="$(pwd)/${allowlist}"
   cat <<EOF
-Using whitelist from ${whitelist_path}:
-$(cat "${whitelist_path}")
+Using allowlist from ${allowlist_path}:
+$(cat "${allowlist_path}")
 
 EOF
 fi
@@ -53,10 +53,10 @@ for planfile in $(find "$(pwd)" -name 'plan.tfplan'); do
 
   delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[]? | select(.change.actions | index("delete")) | .address')"
 
-  # Filter through the whitelist, if configured.
+  # Filter through the allowlist, if configured.
   # Removes any matching resources, so they are no longer considered.
-  if [[ -n "${whitelist_path}" ]]; then
-    delchanges="$(echo "${delchanges}" | grep -Evf "${whitelist_path}")"
+  if [[ -n "${allowlist_path}" ]]; then
+    delchanges="$(echo "${delchanges}" | grep -Evf "${allowlist_path}")"
   fi
 
   if ! [[ -z "${delchanges}" ]]; then
