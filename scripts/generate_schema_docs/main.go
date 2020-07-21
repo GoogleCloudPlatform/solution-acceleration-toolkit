@@ -61,6 +61,10 @@ func run(recipesDir, outputDir string) error {
 			return nil
 		}
 
+		if filepath.Ext(path) != ".hcl" {
+			return nil
+		}
+
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
@@ -70,21 +74,14 @@ func run(recipesDir, outputDir string) error {
 		if len(matches) == 0 {
 			return nil
 		}
-		if len(matches) != 2 {
+		if len(matches) != 2 { // There is only one group in the regex.
 			return fmt.Errorf("unexpected number of matches: got %q, want 2", len(matches))
 		}
 
-		sj, err := hcl.ToJSON(matches[1])
+		s, err := schemaFromHCL(matches[1])
 		if err != nil {
 			return err
 		}
-
-		s := new(schema)
-		if err := json.Unmarshal(sj, s); err != nil {
-			return err
-		}
-
-		massageSchema(s)
 
 		buf := new(bytes.Buffer)
 		if err := tmpl.Execute(buf, s); err != nil {
@@ -102,6 +99,20 @@ func run(recipesDir, outputDir string) error {
 		return err
 	}
 	return nil
+}
+
+func schemaFromHCL(b []byte) (*schema, error) {
+	sj, err := hcl.ToJSON(b)
+	if err != nil {
+		return nil, err
+	}
+
+	s := new(schema)
+	if err := json.Unmarshal(sj, s); err != nil {
+		return nil, err
+	}
+	massageSchema(s)
+	return s, nil
 }
 
 // massageSchema prepares the schema for templating.

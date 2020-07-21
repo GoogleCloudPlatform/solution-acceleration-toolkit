@@ -1,5 +1,7 @@
 # Folder Recipe
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### add_parent_folder_dependency

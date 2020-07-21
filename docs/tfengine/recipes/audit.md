@@ -1,5 +1,7 @@
 # Audit Recipe
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### auditors_group

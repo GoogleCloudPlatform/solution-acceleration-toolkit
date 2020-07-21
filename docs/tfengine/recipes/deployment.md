@@ -1,5 +1,7 @@
 # Terraform Deployment Recipe
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### enable_terragrunt

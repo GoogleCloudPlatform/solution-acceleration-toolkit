@@ -1,5 +1,7 @@
 # Monitor Recipe
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### cloud_sql_region

@@ -1,5 +1,7 @@
 # Devops Recipe
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### admins_group

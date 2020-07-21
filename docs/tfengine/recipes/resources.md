@@ -1,5 +1,7 @@
 # Recipe for resources within projects
 
+<!-- These files are auto generated -->
+
 ## Properties
 
 ### bastion_hosts

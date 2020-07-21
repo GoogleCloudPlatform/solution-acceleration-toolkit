@@ -21,6 +21,8 @@ import (
 // tmpl is a Template to convert one schema file to markdown.
 var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 
+<!-- These files are auto generated -->
+
 ## Properties
 {{- range $name, $_ := .Properties}}
 
