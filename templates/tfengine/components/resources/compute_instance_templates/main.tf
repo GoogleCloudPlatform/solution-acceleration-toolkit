@@ -21,7 +21,7 @@ module "{{$template_resource_name}}" {
   version = "~> 3.0.0"
 
   name_prefix        = "{{.name_prefix}}"
-  project_id         = var.project_id
+  project_id         = module.project.project_id
   region             = "{{get . "compute_region" $.compute_region}}"
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"

@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 3.0.0"
 
   name       = "{{.name}}"
-  project_id = var.project_id
+  project_id = module.project.project_id
   domain     = "{{.domain}}"
   type       = "{{.type}}"
 
