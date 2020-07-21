@@ -17,14 +17,17 @@ schema = {
   additionalProperties = false
   properties = {
     parent_type = {
-      description = "Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'."
+      description = <<EOF
+        Type of parent GCP resource to apply the policy.
+        Must be one of 'organization' or 'folder'.
+      EOF
       type        = "string"
       pattern     = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF
-        ID of parent GCP resource to apply the policy: can be one of the organization ID,
-        folder ID according to parent_type.
+        ID of parent GCP resource to apply the policy.
+        Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
@@ -34,7 +37,7 @@ schema = {
       type        = "string"
     }
     project = {
-      description          = "Config for the project to host devops related resources such as state bucket and CICD."
+      description          = "Config for the project to host devops resources such as remote state and CICD."
       type                 = "object"
       additionalProperties = false
       properties = {
@@ -73,8 +76,9 @@ schema = {
         Whether to enable GCS backend for the bootstrap deployment. Defaults to false.
         Since the bootstrap deployment creates the state bucket, it cannot back the state
         to the GCS bucket on the first deployment. Thus, this field should be set to true
-        after the bootstrap deployment has been applied. Then the user can run `terraform init`
-        in the bootstrapd deployment to transfer the state from local to GCS.
+        after the bootstrap deployment has been applied. Then the user can run
+        `terraform init` in the bootstrapd deployment to transfer the state
+        from local to GCS.
       EOF
       type       = "boolean"
     }

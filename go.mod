@@ -8,12 +8,13 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.0
+	github.com/hashicorp/go-getter v1.4.2-0.20200106182914-9813cbd4eb02
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.6.0
 	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
 	github.com/hashicorp/terraform v0.12.28
 	github.com/hashicorp/terraform-svchost v0.0.0-20191119180714-d2e4933b9136 // indirect
-	github.com/imdario/mergo v0.3.9
+	github.com/imdario/mergo v0.3.10
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
 	github.com/otiai10/copy v1.2.0
@@ -26,5 +27,4 @@ require (
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 	google.golang.org/api v0.29.0
-	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

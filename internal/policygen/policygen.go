@@ -60,16 +60,28 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("normalize path %q: %v", args.OutputPath, err)
 	}
 
+	c, err := loadConfig(configPath)
+	if err != nil {
+		return fmt.Errorf("load config: %v", err)
+	}
+
+	cacheDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(cacheDir)
+
+	pp, err := pathutil.Fetch(c.TemplateDir, filepath.Dir(args.ConfigPath), cacheDir)
+	if err != nil {
+		return fmt.Errorf("resolve policy template path: %v", err)
+	}
+	c.TemplateDir = pp
+
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		return err
 	}
 	defer os.RemoveAll(tmpDir)
-
-	c, err := loadConfig(configPath)
-	if err != nil {
-		return fmt.Errorf("load config: %v", err)
-	}
 
 	if err := generateGCPOrgPolicies(tmpDir, c); err != nil {
 		return fmt.Errorf("generate GCP organization policies: %v", err)

@@ -1,0 +1,50 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+on:
+  push:
+    tags:
+      # Push events to matching policies-vX.X.X, i.e. policies-v0.1.0
+      - 'policies-v[0-9]+.[0-9]+.[0-9]+'
+
+name: Create Policies Release
+
+# Note: According to https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables,
+# the value of {{ github.ref }} is "refs/tags/<tag>", so we have to remove that prefix everywhere.
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Bundle Policies
+      shell: bash
+      run: ./build/build-policies.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
+
+    # From https://github.com/github/hub#github-actions
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        set -x
+
+        # Install the latest version of hub
+        ./build/install-hub.sh
+
+        # Create the release with the policies bundle
+        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
+        bin/hub release create $(printf -- ' --attach=%s' ./policies*.tar.gz) -m "Policy Generator policies release version ${version}" "${version}"

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Org Monitor Recipe"
+  title                = "Monitor Recipe"
   additionalProperties = false
   properties = {
     project = {
@@ -40,11 +40,15 @@ schema = {
           description = <<EOF
             Security Command Center (SCC) Source ID used for Forseti notification.
             To enable viewing Forseti violations in SCC:
+
               1) Omit this field initially, generate the Terraform configs and do a
                 full deployment of Forseti;
-              2) Follow https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification
+
+              2) Follow
+              [the guide](https://forsetisecurity.org/docs/v2.23/configure/notifier/#cloud-scc-notification)
                 to enable Forseti in SCC (you need a valid Forseti instance to do so)
                 and obtain the SCC source ID;
+
               3) Add the ID through this field, generate the Terraform configs and
                 deploy Forseti again.
           EOF
@@ -52,7 +56,6 @@ schema = {
         }
       }
     }
-
     cloud_sql_region = {
       description = "Location of cloud sql instances."
       type        = "string"

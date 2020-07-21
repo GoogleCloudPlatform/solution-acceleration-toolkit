@@ -31,7 +31,12 @@ import (
 	"github.com/otiai10/copy"
 )
 
-func Run(confPath, outPath string, format bool) error {
+type Options struct {
+	Format   bool
+	CacheDir string
+}
+
+func Run(confPath, outPath string, opts *Options) error {
 	var err error
 	confPath, err = pathutil.Expand(confPath)
 	if err != nil {
@@ -52,11 +57,11 @@ func Run(confPath, outPath string, format bool) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := dump(c, filepath.Dir(confPath), tmpDir); err != nil {
+	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir); err != nil {
 		return err
 	}
 
-	if format {
+	if opts.Format {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			return err
 		}
@@ -69,19 +74,19 @@ func Run(confPath, outPath string, format bool) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
-func dump(conf *Config, root, outputPath string) error {
+func dump(conf *Config, pwd, cacheDir, outputPath string) error {
 	for _, ti := range conf.Templates {
 		if ti.Data == nil {
 			ti.Data = make(map[string]interface{})
 		}
-		if err := dumpTemplate(conf, root, outputPath, ti); err != nil {
+		if err := dumpTemplate(conf, pwd, cacheDir, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
 	}
 	return nil
 }
 
-func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error {
+func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateInfo) error {
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
 
 	data := make(map[string]interface{})
@@ -102,12 +107,9 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 
 	switch {
 	case ti.RecipePath != "":
-		rp, err := pathutil.Expand(ti.RecipePath)
+		rp, err := pathutil.Fetch(ti.RecipePath, pwd, cacheDir)
 		if err != nil {
 			return err
-		}
-		if !filepath.IsAbs(rp) {
-			rp = filepath.Join(root, rp)
 		}
 		rc, err := loadConfig(rp, data)
 		if err != nil {
@@ -136,17 +138,14 @@ func dumpTemplate(conf *Config, root, outputPath string, ti *templateInfo) error
 			return err
 		}
 
-		if err := dump(rc, filepath.Dir(rp), outputPath); err != nil {
+		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath); err != nil {
 			return fmt.Errorf("recipe %q: %v", rp, err)
 		}
 
 	case ti.ComponentPath != "":
-		cp, err := pathutil.Expand(ti.ComponentPath)
+		cp, err := pathutil.Fetch(ti.ComponentPath, pwd, cacheDir)
 		if err != nil {
 			return err
-		}
-		if !filepath.IsAbs(cp) {
-			cp = filepath.Join(root, cp)
 		}
 		if err := template.WriteDir(cp, outputPath, data); err != nil {
 			return fmt.Errorf("component %q: %v", cp, err)

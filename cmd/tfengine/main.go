@@ -20,7 +20,9 @@ package main
 
 import (
 	"flag"
+	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
@@ -41,7 +43,14 @@ func main() {
 		log.Fatal("--output_path must be set")
 	}
 
-	if err := tfengine.Run(*configPath, *outputPath, *format); err != nil {
+	cacheDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(cacheDir)
+
+	opts := &tfengine.Options{Format: *format, CacheDir: cacheDir}
+	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Terraform Deployment Recipe."
+  title                = "Terraform Deployment Recipe"
   description          = "This recipe should be used to setup a new Terraform deployment directory."
   # Additional properties allowed as this template is usually passed extra fields that are used by other templates.
   properties = {
