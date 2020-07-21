@@ -15,30 +15,21 @@
 package main
 
 import (
-	"strings"
 	"text/template"
 )
 
 var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstrip}).Parse(`# {{.Title}}
 
 ## Properties
-{{range $name, $_ := .Properties}}
+{{- range $name, $_ := .Properties}}
+
 ### {{$name}}
 
-{{lstrip .Description}}
+{{.Description}}
 
 {{- if .Type}}
+
 Type: {{.Type}}
 {{- end}}
-
-{{end}}
+{{- end}}
 `))
-
-func lstrip(s string) string {
-	var b strings.Builder
-	for _, line := range strings.Split(s, "\n") {
-		b.WriteString(strings.TrimLeft(line, " "))
-		b.WriteRune('\n')
-	}
-	return b.String()
-}

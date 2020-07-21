@@ -14,17 +14,21 @@
 
 # TODO(umairidris): fill in resources and detailed project object schema.
 schema = {
-  title                = "Recipe for creating GCP projects."
+  title                = "Recipe for creating GCP projects"
   additionalProperties = false
   properties = {
     parent_type = {
-      description = "Type of parent GCP resource to apply the policy: can be one of 'organization' or 'folder'."
+      description = <<EOF
+        Type of parent GCP resource to apply the policy
+        Can be one of 'organization' or 'folder'.
+      EOF
       type    = "string"
       pattern = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF
-        ID of parent GCP resource to apply the policy: can be one of the organization ID or folder ID according to parent_type.
+        ID of parent GCP resource to apply the policy
+        Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type    = "string"
       pattern = "^[0-9]{8,25}$"

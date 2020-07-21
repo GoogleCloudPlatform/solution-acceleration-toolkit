@@ -84,9 +84,7 @@ func run(recipesDir, outputDir string) error {
 			return err
 		}
 
-		props := s.Properties
-		s.Properties = make(map[string]*property, len(props))
-		flattenObjects(s, props, "")
+		massageSchema(s)
 
 		buf := new(bytes.Buffer)
 		if err := tmpl.Execute(buf, s); err != nil {
@@ -106,6 +104,17 @@ func run(recipesDir, outputDir string) error {
 	return nil
 }
 
+// massageSchema prepares the schema for templating.
+func massageSchema(s *schema) {
+	props := s.Properties
+	s.Properties = make(map[string]*property, len(props))
+	flattenObjects(s, props, "")
+
+	for _, prop := range s.Properties {
+		prop.Description = strings.TrimSpace(lstrip(prop.Description))
+	}
+}
+
 // flattenObjects will add the properties of all objects to the top level schema.
 func flattenObjects(s *schema, props map[string]*property, prefix string) {
 	for name, prop := range props {
@@ -118,4 +127,14 @@ func flattenObjects(s *schema, props map[string]*property, prefix string) {
 			flattenObjects(s, prop.Items.Properties, prefix+name+".")
 		}
 	}
+}
+
+// lstrip trims left space from all lines.
+func lstrip(s string) string {
+	var b strings.Builder
+	for _, line := range strings.Split(s, "\n") {
+		b.WriteString(strings.TrimLeft(line, " "))
+		b.WriteRune('\n')
+	}
+	return b.String()
 }
