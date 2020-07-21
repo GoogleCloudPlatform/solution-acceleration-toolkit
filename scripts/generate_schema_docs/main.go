@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generates configs from the full example, inits all modules, and checks if any resources are not supported by the importer.
+// Generates markdown files for Terraform engine recipes.
 // Meant to be run from the repo root like so:
 // go run ./scripts/generate_schema_docs
 
@@ -118,13 +118,14 @@ func massageSchema(s *schema) {
 // flattenObjects will add the properties of all objects to the top level schema.
 func flattenObjects(s *schema, props map[string]*property, prefix string) {
 	for name, prop := range props {
-		s.Properties[prefix+name] = prop
+		name = prefix + name
+		s.Properties[name] = prop
 		switch prop.Type {
 		case "object":
-			flattenObjects(s, prop.Properties, prefix+name+".")
+			flattenObjects(s, prop.Properties, name+".")
 		case "array":
 			prop.Type = fmt.Sprintf("array(%s)", prop.Items.Type)
-			flattenObjects(s, prop.Items.Properties, prefix+name+".")
+			flattenObjects(s, prop.Items.Properties, name+".")
 		}
 	}
 }

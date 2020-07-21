@@ -18,7 +18,8 @@ import (
 	"text/template"
 )
 
-var tmpl = template.Must(template.New("").Funcs(template.FuncMap{"lstrip": lstrip}).Parse(`# {{.Title}}
+// tmpl is a Template to convert one schema file to markdown.
+var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 
 ## Properties
 {{- range $name, $_ := .Properties}}
