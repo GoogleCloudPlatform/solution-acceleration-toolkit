@@ -61,10 +61,6 @@ func run(recipesDir, outputDir string) error {
 			return nil
 		}
 
-		if filepath.Ext(path) != ".hcl" {
-			return nil
-		}
-
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
