@@ -25,6 +25,9 @@ trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
 curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/v0.3.4/cft-linux-amd64
 chmod +x ${tmp}/cft
 
+# Regenerate policies.
+scripts/regen.sh
+
 # Package policies.
 scripts/package_policies.sh -s examples/policygen/generated/forseti_policies -d ${tmp}
 

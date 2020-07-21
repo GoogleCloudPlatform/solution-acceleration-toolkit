@@ -13,7 +13,7 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedBindingsConstraintV1
+kind: GCPIAMAllowedBindingsConstraintV3
 metadata:
   name: iam_allowed_bindings_orgpolicy_policyviewer
 spec:
@@ -22,7 +22,7 @@ spec:
     target:
     - "organization/12345678"
   parameters:
-    mode: whitelist
+    mode: allowlist
     role: roles/orgpolicy.policyViewer
     members:
     - serviceAccount:forseti-server-gcp-suffix@example-project.iam.gserviceaccount.com
