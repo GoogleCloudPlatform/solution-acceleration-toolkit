@@ -13,7 +13,7 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedBindingsConstraintV1
+kind: GCPIAMAllowedBindingsConstraintV3
 metadata:
   name: iam_allowed_bindings_cloudasset_viewer
 spec:
@@ -22,7 +22,7 @@ spec:
     target:
     - "organization/12345678"
   parameters:
-    mode: whitelist
+    mode: allowlist
     role: roles/cloudasset.viewer
     members:
     - serviceAccount:forseti-server-gcp-suffix@example-project.iam.gserviceaccount.com
