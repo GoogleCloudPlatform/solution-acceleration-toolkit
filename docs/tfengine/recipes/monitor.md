@@ -1,4 +1,4 @@
-# Org Monitor Recipe
+# Monitor Recipe
 
 ## Properties
 

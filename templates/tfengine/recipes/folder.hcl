@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Recipe for creating GCP folders"
+  title                = "Folder Recipe"
   additionalProperties = false
   required = [
     "display_name",

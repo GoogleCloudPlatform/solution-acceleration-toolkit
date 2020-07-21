@@ -1,4 +1,4 @@
-# Org Audit Recipe
+# Audit Recipe
 
 ## Properties
 

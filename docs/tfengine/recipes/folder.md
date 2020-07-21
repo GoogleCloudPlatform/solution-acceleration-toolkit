@@ -1,4 +1,4 @@
-# Recipe for creating GCP folders
+# Folder Recipe
 
 ## Properties
 

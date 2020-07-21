@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Org Monitor Recipe"
+  title                = "Monitor Recipe"
   additionalProperties = false
   properties = {
     project = {

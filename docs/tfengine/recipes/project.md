@@ -1,4 +1,4 @@
-# Recipe for creating GCP projects
+# Project Recipe
 
 ## Properties
 

@@ -14,7 +14,7 @@
 
 # TODO(umairidris): fill in resources and detailed project object schema.
 schema = {
-  title                = "Recipe for creating GCP projects"
+  title                = "Project Recipe"
   additionalProperties = false
   properties = {
     parent_type = {

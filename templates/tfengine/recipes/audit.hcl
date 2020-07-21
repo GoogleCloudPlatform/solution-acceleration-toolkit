@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Org Audit Recipe"
+  title                = "Audit Recipe"
   additionalProperties = false
   properties = {
     parent_type = {
