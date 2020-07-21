@@ -121,7 +121,8 @@ local directory to be used by the Terraform Validator.
 scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d {DST}
 ```
 
-where `${DST}` is the path that Terraform Validator looks for policies and templates.
+where `${DST}` is the path that Terraform Validator looks for policies and
+templates.
 
 ##### Policy match targets
 
