@@ -68,7 +68,7 @@ func TestExamples(t *testing.T) {
 			"testdata/state",
 			[]wantDir{
 				{
-					filepath.Join("forseti_policies", "organization_12345678"),
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
 					2,
 					[]string{
 						"iam_allow_roles.yaml",
@@ -82,7 +82,7 @@ func TestExamples(t *testing.T) {
 			"testdata/org.tfstate",
 			[]wantDir{
 				{
-					filepath.Join("forseti_policies", "organization_12345678"),
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
 					11,
 					[]string{
 						"iam_allow_roles.yaml",
@@ -96,7 +96,7 @@ func TestExamples(t *testing.T) {
 			"testdata/subfolder/project.tfstate",
 			[]wantDir{
 				{
-					filepath.Join("forseti_policies", "project_123"),
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
 					7,
 					[]string{
 						"iam_allow_roles.yaml",
@@ -111,7 +111,7 @@ func TestExamples(t *testing.T) {
 			"testdata",
 			[]wantDir{
 				{
-					filepath.Join("forseti_policies", "organization_12345678"),
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
 					11,
 					[]string{
 						"iam_allow_roles.yaml",
@@ -119,7 +119,7 @@ func TestExamples(t *testing.T) {
 					},
 				},
 				{
-					filepath.Join("forseti_policies", "project_123"),
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
 					7,
 					[]string{
 						"iam_allow_roles.yaml",
@@ -133,7 +133,7 @@ func TestExamples(t *testing.T) {
 
 	common := []wantDir{
 		{
-			filepath.Join("forseti_policies", "overall"),
+			filepath.Join(forsetiOutputRoot, "policies", "constraints", "overall"),
 			11,
 			[]string{
 				"bigquery_allow_locations.yaml",
