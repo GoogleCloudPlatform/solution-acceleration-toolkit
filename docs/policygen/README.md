@@ -100,12 +100,13 @@ To use Policy Library Constraints with **Forseti**, follow
 [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
 Forseti Terraform module version >= 5.2.1 is needed.
 
-You can use [package_policies.sh](../../scripts/package_policies.sh) to package
-your generated policies with other necessary templates and utils and upload to
-the Forseti server bucket.
+The generated policies are structured in a format that can be read by Forseti
+Config Validator Scanner.
+
+To upload policies to the Forseti server bucket:
 
 ```shell
-scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d gs://forseti-server-{suffix}
+gsutil -m rsync -d -r $OUTPUT_PATH/forseti_policies gs://forseti-server-{suffix}/policy-library
 ```
 
 ##### With Terraform Validator
@@ -113,16 +114,16 @@ scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d gs://forseti-ser
 To use Policy Library Constraints with **Terraform Validator**, follow
 [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
 
-You can use [package_policies.sh](../../scripts/package_policies.sh) to package
-your generated policies with other necessary templates and utils and save to a
-local directory to be used by the Terraform Validator.
+The generated policies are structured in a format that can be read by Terraform
+Validator.
 
-```shell
-scripts/package_policies.sh -s $OUTPUT_PATH/forseti_policies -d {DST}
-```
+##### With CFT Scorecard
 
-where `${DST}` is the path that Terraform Validator looks for policies and
-templates.
+To use Policy Library Constraints with **CFT Scorecard**, follow
+[Scorecard User Guide](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/blob/master/cli/docs/scorecard.md#scorecard-user-guide).
+
+The generated policies are structured in a format that can be read by CFT
+Scorecard.
 
 ##### Policy match targets
 
