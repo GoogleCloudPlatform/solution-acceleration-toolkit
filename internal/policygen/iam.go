@@ -47,6 +47,8 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 		data := map[string]interface{}{
 			"target": fmt.Sprintf("%s/%s", root.Type, root.ID),
 			"roles":  rbs,
+			// Also prepend type and id in the policy name to make it unique across multiple policies for the same role.
+			"suffix": fmt.Sprintf("%s_%s", root.Type, root.ID),
 		}
 		in := filepath.Join(templateDir, "forseti", "tf_based", "iam_allow_roles.yaml")
 		out := filepath.Join(outputPath, outputFolder, "iam_allow_roles.yaml")
@@ -72,8 +74,9 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 			suffix = strings.ToLower(strings.Replace(suffix, ".", "_", -1))
 
 			data := map[string]interface{}{
-				"target":  fmt.Sprintf("%s/%s", root.Type, root.ID),
-				"suffix":  suffix,
+				"target": fmt.Sprintf("%s/%s", root.Type, root.ID),
+				// Also prepend type and id in the policy name to make it unique across multiple policies for the same role.
+				"suffix":  fmt.Sprintf("%s_%s_%s", root.Type, root.ID, suffix),
 				"role":    role,
 				"members": members,
 			}
