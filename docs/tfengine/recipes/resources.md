@@ -844,6 +844,18 @@ Normalization will make all characters alphanumeric with underscores.
 
 Type: string
 
+### state_bucket
+
+Bucket to store remote state.
+
+Type: string
+
+### state_path_prefix
+
+Path within bucket to store state.
+
+Type: string
+
 ### storage_buckets
 
 [Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)

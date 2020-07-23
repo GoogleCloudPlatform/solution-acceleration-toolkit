@@ -90,7 +90,19 @@ Name of subnet.
 
 Type: string
 
-### project.terraform_addons
+### state_bucket
+
+Bucket to store remote state.
+
+Type: string
+
+### state_path_prefix
+
+Path within bucket to store state.
+
+Type: string
+
+### terraform_addons
 
 Additional Terraform configuration for the project deployment.
 For schema see ./deployment.hcl.

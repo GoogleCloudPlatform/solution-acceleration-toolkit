@@ -60,5 +60,7 @@ template "cicd" {
     build_viewers = [
       "group:example-cicd-viewers@example.com",
     ]
+
+    managed_modules = []
   }
 }
