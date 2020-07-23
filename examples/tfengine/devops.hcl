@@ -61,6 +61,6 @@ template "cicd" {
       "group:example-cicd-viewers@example.com",
     ]
 
-    managed_directories = []
+    managed_modules = []
   }
 }

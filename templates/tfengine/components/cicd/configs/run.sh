@@ -17,7 +17,7 @@ set -e
 set -x
 
 DIRS=(
-  {{- range .managed_directories}}
+  {{- range .managed_modules}}
   {{.}}
   {{- end}}
 )

@@ -71,7 +71,7 @@ template "cicd" {
     ]
 
     # Kubernetes intentionally left out as it cannot be deployed by CICD.
-    managed_directories = [
+    managed_modules = [
       "example-prod-secrets",
       "example-prod-networks",
       "example-prod-data",

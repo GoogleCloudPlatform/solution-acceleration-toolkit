@@ -53,7 +53,7 @@ schema = {
         type = "string"
       }
     }
-    managed_directories = {
+    managed_modules = {
       description = "List of directories managed by the CICD relative to terraform_root."
       type        = "array"
       items = {
