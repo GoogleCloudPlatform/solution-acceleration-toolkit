@@ -88,11 +88,23 @@ resource "google_project_service" "services" {
   disable_on_destroy = false
 }
 
-# IAM permissions to allow approvers and contributors to view the build results.
-resource "google_project_iam_member" "cloudbuild_viewers" {
+# IAM permissions to allow approvers and contributors to view the cloud build jobs.
+resource "google_project_iam_member" "cloudbuild_builds_viewers" {
   for_each = toset(var.build_viewers)
   project  = var.project_id
   role     = "roles/cloudbuild.builds.viewer"
+  member   = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permissions to allow approvers and contributors to view the cloud build logs.
+# https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
+resource "google_project_iam_member" "cloudbuild_logs_viewers" {
+  for_each = toset(var.build_viewers)
+  project  = var.project_id
+  role     = "roles/viewer"
   member   = each.value
   depends_on = [
     google_project_service.services,
