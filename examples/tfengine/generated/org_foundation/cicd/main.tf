@@ -100,10 +100,11 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
 }
 
 # IAM permissions to allow approvers and contributors to view the cloud build logs.
+# https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
 resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   for_each = toset(var.build_viewers)
   project  = var.project_id
-  role     = "roles/storage.objectViewer"
+  role     = "roles/viewer"
   member   = each.value
   depends_on = [
     google_project_service.services,
