@@ -43,6 +43,7 @@ type RunArgs struct {
 	OutputPath string
 }
 
+// Run executes main policygen logic.
 func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	var err error
 	configPath, err := pathutil.Expand(args.ConfigPath)
