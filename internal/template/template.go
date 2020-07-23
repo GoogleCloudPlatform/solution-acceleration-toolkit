@@ -48,7 +48,11 @@ func WriteDir(inputDir, outputDir string, data map[string]interface{}) error {
 		return fmt.Errorf("read dir %q: %v", inputDir, err)
 	}
 	if len(fs) == 0 {
-		return fmt.Errorf("found no files in %q to write", inputDir)
+		// Just create the output directory with no files.
+		if err := os.MkdirAll(outputDir, 0755); err != nil {
+			return fmt.Errorf("create dir %q: %v", outputDir, err)
+		}
+		return nil
 	}
 
 	for _, f := range fs {
