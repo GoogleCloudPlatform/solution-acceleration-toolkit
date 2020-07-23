@@ -22,11 +22,11 @@ tmp="$(mktemp -d "/tmp/tmp-gen_check.XXXXXX")"
 trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
 cp -ar './examples/' "${tmp}"
 
-# Regenerate examples
-./scripts/regen.sh
+# Regenerate examples into the tmp dir
+./scripts/regen.sh "${tmp}/examples"
 
 # Check for diffs
-changed="$(diff -qr examples/ ${tmp}/examples/ | grep -v ': README.md')" || true
+changed="$(diff -qr "${tmp}/examples" "./examples" | grep -v ': README.md')" || true
 if [[ -n "${changed}" ]]; then
   cat <<EOF
 ${changed}

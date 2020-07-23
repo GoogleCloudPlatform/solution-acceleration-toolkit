@@ -14,14 +14,19 @@
 
 #!/usr/bin/env bash
 
+gendir='./examples'
+if [[ -n "${1}" ]]; then
+  gendir="${1}"
+fi
+
 # Helper to regenerate generated files.
-rm -rf examples/*/generated/*
+rm -rf ${gendir}/*/generated/*
 
 # Policygen
-go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path examples/policygen/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${gendir}/policygen/generated --state_path examples/policygen/example.tfstate
 
 # TF Engine
 for example in examples/tfengine/*.hcl; do
-  gendir="examples/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
-  go run ./cmd/tfengine --config_path ${example} --output_path ${gendir}
+  example_gendir="${gendir}/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
+  go run ./cmd/tfengine --config_path ${example} --output_path ${example_gendir}
 done
