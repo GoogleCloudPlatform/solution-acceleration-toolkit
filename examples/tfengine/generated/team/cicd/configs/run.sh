@@ -12,19 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-timeout: 21600s
+#!/bin/bash
+set -e
 
-steps:
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terraform
-    args: ["version"]
-    id: Terraform version
+DIRS=(
+  live/*
+)
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-a", "apply -auto-approve"]
-    dir: "${_TERRAFORM_ROOT}"
-    id: Apply
+ACTION="plan"
+ROOT="../../"
 
-substitutions:
-    _TERRAFORM_ROOT: "."
+while getopts 'a:p:' c
+do
+  case $c in
+    a) ACTION=${OPTARG} ;;
+    p) ROOT=${OPTARG} ;;
+    *)
+      echo "Invalid flag ${OPTARG}"
+      exit 1
+      ;;
+  esac
+done
+
+for d in ${DIRS[@]}
+do
+    cd $ROOT/$d
+    terraform init
+    terraform ${ACTION}
+done

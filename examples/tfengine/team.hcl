@@ -69,6 +69,14 @@ template "cicd" {
     build_viewers = [
       "group:example-cicd-viewers@example.com",
     ]
+
+    # Kubernetes intentionally left out as it cannot be deployed by CICD.
+    managed_directories = [
+      "example-prod-secrets",
+      "example-prod-networks",
+      "example-prod-data",
+      "example-prod-apps",
+    ]
     managed_services = [
       "container.googleapis.com",
       "dns.googleapis.com",

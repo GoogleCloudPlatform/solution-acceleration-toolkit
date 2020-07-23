@@ -53,6 +53,13 @@ schema = {
         type = "string"
       }
     }
+    managed_directories = {
+      description = "List of directories managed by the CICD relative to terraform_root."
+      type        = "array"
+      items = {
+        type = "string"
+      }
+    }
     managed_services = {
       description = <<EOF
         APIs to enable in the devops project so the Cloud Build service account

@@ -20,30 +20,11 @@ steps:
     args: ["version"]
     id: Terraform version
 
-  # live/cicd
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terraform
-    args: ["init"]
-    dir: "${_TERRAFORM_ROOT}/live/cicd"
-    id: Init (CICD)
+    entrypoint: bash
+    args: ['../cicd/configs/run.sh', '-a', 'plan']
+    id: 'Speculative plan'
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terraform
-    args: ["plan", "--lock=false", "-out=plan.tfplan"]
-    dir: "${_TERRAFORM_ROOT}/live/cicd"
-    id: Speculative plan (CICD)
-  # live/deployment
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terraform
-    args: ["init"]
-    dir: "${_TERRAFORM_ROOT}/live/deployment"
-    id: Init (deployment)
-
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: terraform
-    args: ["plan", "--lock=false", "-out=plan.tfplan"]
-    dir: "${_TERRAFORM_ROOT}/live/deployment"
-    id: Speculative plan (deployment)
   # Check for delete operations as an FYI, it won't fail the build.
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
     entrypoint: bash
