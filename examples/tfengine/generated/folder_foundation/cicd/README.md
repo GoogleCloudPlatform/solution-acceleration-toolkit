@@ -99,15 +99,15 @@ Every new push to the Pull Request at the configured branches automatically
 triggers presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in
 the Pull Ruquest.
 
-### Deletion Check Whitelist
+### Deletion Check Allowlist
 
-The deletion check optionally accepts a whitelist of resources to ignore, using
+The deletion check optionally accepts an allowlist of resources to ignore, using
 [grep extended regex patterns](https://en.wikipedia.org/wiki/Regular_expression#POSIX_extended)
 matched against the Terraform resource **address** from the plan.
 
-To configure a whitelist:
+To configure an allowlist:
 
-1. Create a file `tf-deletion-whitelist.txt` in the `cicd/configs/` directory.
+1. Create a file `tf-deletion-allowlist.txt` in the `cicd/configs/` directory.
 2. Add patterns to it, one per line.
 
 Example:
@@ -118,7 +118,7 @@ network
 google_sql_user.db_users\["user-creds"\]
 ```
 
-Each line whitelists, respectively:
+Each line allows, respectively:
 
 1. Any resource whose address contains the string "network".
 2. A specific resource within a module.
