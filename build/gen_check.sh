@@ -17,40 +17,22 @@
 #!/usr/bin/env bash
 set -e
 
-function test_gen() {
-  local cmd="${1}"
-  local reference_dir="${2}"
-  shift 2
+# Copy the current examples dir
+tmp="$(mktemp -d "/tmp/tmp-gen_check.XXXXXX")"
+trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
+cp -ar './examples/' "${tmp}"
 
-  # Generate in a tmp dir, then diff with examples.
-  # Give the tmpdir a more meaningful name
-  suffix="$(echo "${reference_dir}" | cut -d'/' -f2,4 --output-delimiter='-')"
-  tmp="$(mktemp -d "/tmp/tmp-${suffix}.XXXXXX")"
-  trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
+# Regenerate examples
+./scripts/regen.sh
 
-  ${cmd} "${tmp}"
-
-  # Don't use diff -x because that matches basenames in any directory.
-  # We specifically want to exclude only the top-level README.md.
-  changed="$(diff -qr ./${reference_dir} ${tmp} | grep -v ': README.md')" || true
-  if [[ -n "${changed}" ]]; then
-    cat <<EOF
-The following generated files have changes:
+# Check for diffs
+changed="$(diff -qr examples/ ${tmp}/examples/ | grep -v ': README.md')" || true
+if [[ -n "${changed}" ]]; then
+  cat <<EOF
 ${changed}
 
 Please run the following command from the repo root and check in the changes:
 ./scripts/regen.sh
 EOF
-    exit 1
-  fi
-}
-
-# Run the tests
-# Policygen
-test_gen 'go run ./cmd/policygen --config_path=examples/policygen/config.hcl --state_path examples/policygen/example.tfstate --output_path' 'examples/policygen/generated'
-
-# TF Engine
-for example in examples/tfengine/*.hcl; do
-  gendir="examples/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
-  test_gen "go run ./cmd/tfengine --config_path=${example} --output_path" "${gendir}"
-done
+  exit 1
+fi
