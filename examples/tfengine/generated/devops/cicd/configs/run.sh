@@ -43,7 +43,7 @@ do
     terraform init
     for action in "${ACTIONS[@]}"
     do
-      IFS=', ' read -r -a args <<< "${action}"
+      IFS=' ' read -r -a args <<< "${action}"
       terraform "${args[@]}"
     done
 done
