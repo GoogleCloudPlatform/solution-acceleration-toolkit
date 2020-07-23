@@ -94,12 +94,38 @@ terraform apply
 
 #### Policy Library Constraints
 
-* To use Policy Library Constraints with **Forseti**, follow
-    [How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
-    Forseti Terraform module version >= 5.2.1 is needed.
+##### With Forseti
 
-* To use Policy Library Constraints with **Terraform Validator**, follow
-    [How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+To use Policy Library Constraints with **Forseti**, follow
+[How to use Forseti Config Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-forseti-config-validator).
+Forseti Terraform module version >= 5.2.1 is needed.
+
+The generated policies are structured in a format that can be read by Forseti
+Config Validator Scanner.
+
+To upload policies to the Forseti server bucket:
+
+```shell
+gsutil -m rsync -d -r $OUTPUT_PATH/forseti_policies gs://forseti-server-{suffix}/policy-library
+```
+
+##### With Terraform Validator
+
+To use Policy Library Constraints with **Terraform Validator**, follow
+[How to use Terraform Validator](https://github.com/forseti-security/policy-library/blob/master/docs/user_guide.md#how-to-use-terraform-validator).
+
+The generated policies are structured in a format that can be read by Terraform
+Validator.
+
+##### With CFT Scorecard
+
+To use Policy Library Constraints with **CFT Scorecard**, follow
+[Scorecard User Guide](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/blob/master/cli/docs/scorecard.md#scorecard-user-guide).
+
+The generated policies are structured in a format that can be read by CFT
+Scorecard.
+
+##### Policy match targets
 
 The `target` value under the `match` block in the generated policies based on
 Terraform state might need to be adjusted manually to include the ancestor paths

@@ -49,7 +49,7 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 			"roles":  rbs,
 		}
 		in := filepath.Join(templateDir, "forseti", "tf_based", "iam_allow_roles.yaml")
-		out := filepath.Join(outputPath, forsetiOutputRoot, outputFolder, "iam_allow_roles.yaml")
+		out := filepath.Join(outputPath, outputFolder, "iam_allow_roles.yaml")
 		if err := template.WriteFile(in, out, data); err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 				"members": members,
 			}
 			in := filepath.Join(templateDir, "forseti", "tf_based", "iam_allow_bindings.yaml")
-			out := filepath.Join(outputPath, forsetiOutputRoot, outputFolder, fmt.Sprintf("iam_allow_bindings_%s.yaml", suffix))
+			out := filepath.Join(outputPath, outputFolder, fmt.Sprintf("iam_allow_bindings_%s.yaml", suffix))
 			if err := template.WriteFile(in, out, data); err != nil {
 				return err
 			}

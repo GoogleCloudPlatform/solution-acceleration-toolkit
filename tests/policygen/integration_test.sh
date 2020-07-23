@@ -28,13 +28,10 @@ chmod +x ${tmp}/cft
 # Regenerate policies.
 scripts/regen.sh
 
-# Package policies.
-scripts/package_policies.sh -s examples/policygen/generated/forseti_policies -d ${tmp}
-
 # Run CFT Scorecard. scorecard.csv is hardcoded in CFT Scorecard as the output file name.
 output_file="${tmp}/scorecard.csv"
 touch ${output_file}
-${tmp}/cft scorecard --policy-path ${tmp} --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
+${tmp}/cft scorecard --policy-path examples/policygen/generated/forseti_policies --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
 
 # Sort the output file without the CSV header line.
 LC_ALL=C sort -o ${output_file} <(tail -n+2 ${output_file})
