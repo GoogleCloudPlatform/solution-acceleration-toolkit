@@ -14,13 +14,13 @@
 
 #!/bin/bash
 set -e
+set -x
 
 DIRS=(
-  ./bootstrap
 )
 
 ACTION="plan"
-ROOT="../../"
+ROOT=""
 
 while getopts 'a:p:' c
 do
@@ -36,7 +36,11 @@ done
 
 for d in ${DIRS[@]}
 do
-    cd $ROOT/$d
+    if [ -z "${ROOT}"]; then
+      cd $d
+    else
+      cd $ROOT/$d
+    fi
     terraform init
     terraform ${ACTION}
 done
