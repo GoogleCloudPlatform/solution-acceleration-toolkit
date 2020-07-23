@@ -22,6 +22,10 @@ go version
 # See https://golangci-lint.run/usage/install/#ci-installation
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.27.0
 
+# Install golint.
+# Switch directories to avoid changing go.mod and go.sum files (see https://stackoverflow.com/a/57313319).
+(cd / && go get -u golang.org/x/lint/golint)
+
 # Check format
 f=$(gofmt -l .)
 if [[ "${f}" ]]; then
@@ -34,4 +38,5 @@ go mod tidy
 go build ./...
 go vet ./...
 golangci-lint run
+golint -set_exit_status ./...
 go test ./...
