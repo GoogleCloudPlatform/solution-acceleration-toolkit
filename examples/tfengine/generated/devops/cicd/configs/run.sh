@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#!/bin/bash
 set -e
 set -x
 
@@ -22,11 +23,11 @@ DIRS=(
 ACTION="plan"
 ROOT="."
 
-while getopts 'a:r:' c
+while getopts "a:d:" c
 do
   case $c in
     a) ACTION=${OPTARG} ;;
-    r) ROOT=${OPTARG} ;;
+    d) ROOT=${OPTARG} ;;
     *)
       echo "Invalid flag ${OPTARG}"
       exit 1
@@ -34,11 +35,12 @@ do
   esac
 done
 
-ROOT=$(realpath ${ROOT})
+ROOT=$(realpath "${ROOT}")
+IFS=', ' read -r -a args <<< "${ACTION}"
 
-for d in ${DIRS[@]}
+for d in "${DIRS[@]}"
 do
-    cd ${ROOT}/${d}
+    cd "${ROOT}"/"${d}"
     terraform init
-    terraform ${ACTION}
+    terraform "${args[@]}"
 done
