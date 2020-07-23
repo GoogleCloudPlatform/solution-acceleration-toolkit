@@ -24,7 +24,7 @@ DIRS=(
 )
 
 ACTION="plan"
-ROOT=""
+ROOT="."
 
 while getopts 'a:r:' c
 do
@@ -38,13 +38,11 @@ do
   esac
 done
 
+ROOT=$(realpath ${ROOT})
+
 for d in ${DIRS[@]}
 do
-    if [ -z "${ROOT}"]; then
-      cd $d
-    else
-      cd $ROOT/$d
-    fi
+    cd ${ROOT}/${d}
     terraform init
     terraform ${ACTION}
 done
