@@ -53,6 +53,17 @@ schema = {
         type = "string"
       }
     }
+    managed_modules = {
+      description = <<EOF
+        List of directories managed by the CICD relative to terraform_root.
+        NOTE: The modules will be deployed in the given order. If a module
+        depends on another module, it should show up after it in this list.
+      EOF
+      type        = "array"
+      items = {
+        type = "string"
+      }
+    }
     managed_services = {
       description = <<EOF
         APIs to enable in the devops project so the Cloud Build service account

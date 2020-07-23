@@ -13,3 +13,6 @@
 
 # Bundled templates.
 *.tar.gz
+
+# Terraform cache.
+.terraform/
