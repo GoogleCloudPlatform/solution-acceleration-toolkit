@@ -50,6 +50,7 @@ type config struct {
 	GCPOrgPolicies    map[string]interface{} `json:"gcp_org_policies"`
 }
 
+// ValidateOrgPoliciesConfig validates org policy configs against schema.
 func ValidateOrgPoliciesConfig(conf map[string]interface{}) error {
 	sj, err := hcl.ToJSON(orgPoliciesSchema)
 	if err != nil {
