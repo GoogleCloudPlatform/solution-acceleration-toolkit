@@ -14,23 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
-set -x
+set -ex
 
-DIRS=(
+MODULES=(
   {{- range .managed_modules}}
   {{.}}
   {{- end}}
 )
 
-ACTION="plan"
+ACTIONS=()
 ROOT="."
 
 while getopts "a:d:" c
 do
   case $c in
-    a) ACTION=${OPTARG} ;;
-    d) ROOT=${OPTARG} ;;
+    a) ACTIONS+=("${OPTARG}") ;;
+    d) ROOT="${OPTARG}" ;;
     *)
       echo "Invalid flag ${OPTARG}"
       exit 1
@@ -39,11 +38,15 @@ do
 done
 
 ROOT=$(realpath "${ROOT}")
-IFS=', ' read -r -a args <<< "${ACTION}"
 
-for d in "${DIRS[@]}"
+for mod in "${MODULES[@]}"
 do
-    cd "${ROOT}"/"${d}"
+    cd "${ROOT}"/"${mod}"
     terraform init
-    terraform "${args[@]}"
+    for action in "${ACTIONS[@]}"
+    do
+      # Convert action string to array as it can have multiple arguments.
+      IFS=' ' read -r -a args <<< "${action}"
+      terraform "${args[@]}"
+    done
 done
