@@ -54,7 +54,11 @@ schema = {
       }
     }
     managed_modules = {
-      description = "List of directories managed by the CICD relative to terraform_root."
+      description = <<EOF
+        List of directories managed by the CICD relative to terraform_root.
+        NOTE: The modules will be deployed in the given order. If a module
+        depends on another module, it should show up after it in this list.
+      EOF
       type        = "array"
       items = {
         type = "string"
