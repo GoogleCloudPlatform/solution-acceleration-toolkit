@@ -117,6 +117,9 @@ func allBindings(rn runner.Runner, resources []*states.Resource) (map[root]roleB
 				if id, err = projectNumber(rn, id); err != nil {
 					return nil, err
 				}
+			} else if t == "folder" {
+				// For folders, the ID can be either {folder_id} or folders/{folder_id}. Remove the 'folders/' prefix if exists.
+				id = strings.TrimPrefix(id, "folders/")
 			}
 
 			key := root{Type: t, ID: id}
