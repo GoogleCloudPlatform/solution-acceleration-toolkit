@@ -42,6 +42,13 @@ func (e *InsufficientInfoErr) Error() string {
 	return err
 }
 
+// SkipErr indicates that the user manually skipped the import.
+type SkipErr struct{}
+
+func (e *SkipErr) Error() string {
+	return "Skipped resource"
+}
+
 // fromConfigValues returns the first matching config value for key, from the given config value maps cvs.
 func fromConfigValues(key string, cvs ...ConfigMap) (interface{}, error) {
 	for _, cv := range cvs {
@@ -57,13 +64,9 @@ func showPrompt(fieldName, prompt string) {
 	log.Printf("Could not determine %q automatically\n", fieldName)
 	log.Println(prompt)
 }
-func parseUserVal(fieldName, val string, err error) (string, error) {
+func parseUserVal(val string, err error) (string, error) {
 	if val == "" {
-		ie := &InsufficientInfoErr{MissingFields: []string{fieldName}}
-		if err != nil {
-			ie.Msg = err.Error()
-		}
-		return "", ie
+		return "", &SkipErr{}
 	}
 	return val, err
 }
@@ -72,7 +75,7 @@ func parseUserVal(fieldName, val string, err error) (string, error) {
 func fromUser(in io.Reader, fieldName string, prompt string) (val string, err error) {
 	showPrompt(fieldName, prompt)
 	val, err = userValue(in)
-	return parseUserVal(fieldName, val, err)
+	return parseUserVal(val, err)
 }
 
 // userValue asks the user to fill in a value that the importer can't figure out.
