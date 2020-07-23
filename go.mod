@@ -7,12 +7,12 @@ require (
 	cloud.google.com/go/storage v1.10.0
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
-	github.com/google/go-cmp v0.5.0
+	github.com/google/go-cmp v0.5.1
 	github.com/hashicorp/go-getter v1.4.2-0.20200106182914-9813cbd4eb02
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.6.0
 	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
-	github.com/hashicorp/terraform v0.12.28
+	github.com/hashicorp/terraform v0.12.29
 	github.com/hashicorp/terraform-svchost v0.0.0-20191119180714-d2e4933b9136 // indirect
 	github.com/imdario/mergo v0.3.10
 	github.com/mitchellh/go-homedir v1.1.0

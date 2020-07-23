@@ -43,6 +43,7 @@ type RunArgs struct {
 	OutputPath string
 }
 
+// Run executes main policygen logic.
 func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	var err error
 	configPath, err := pathutil.Expand(args.ConfigPath)
@@ -83,11 +84,26 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := generateGCPOrgPolicies(tmpDir, c); err != nil {
+	if err := generateGCPOrgPolicies(filepath.Join(tmpDir, orgPoliciesOutputRoot), c); err != nil {
 		return fmt.Errorf("generate GCP organization policies: %v", err)
 	}
 
-	if err := generateForsetiPolicies(ctx, rn, statePath, tmpDir, c); err != nil {
+	// Policy Library templates are released in a backwards compatible way, and old templates will be
+	// kept in the repository as well, so it's relatively safe to pull from 'master' branch all the time.
+	tp, err := pathutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
+	if err != nil {
+		return fmt.Errorf("fetch policy templates and utils: %v", err)
+	}
+
+	if err := copy.Copy(filepath.Join(tp, "policies"), filepath.Join(tmpDir, forsetiOutputRoot, "policies")); err != nil {
+		return err
+	}
+
+	if err := copy.Copy(filepath.Join(tp, "lib"), filepath.Join(tmpDir, forsetiOutputRoot, "lib")); err != nil {
+		return err
+	}
+
+	if err := generateForsetiPolicies(ctx, rn, statePath, filepath.Join(tmpDir, forsetiOutputRoot, "policies", "constraints"), c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
@@ -112,8 +128,7 @@ func generateGCPOrgPolicies(outputPath string, c *config) error {
 	}
 
 	in := filepath.Join(c.TemplateDir, "org_policies")
-	out := filepath.Join(outputPath, orgPoliciesOutputRoot)
-	return template.WriteDir(in, out, c.GCPOrgPolicies)
+	return template.WriteDir(in, outputPath, c.GCPOrgPolicies)
 }
 
 func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath string, c *config) error {
@@ -134,7 +149,7 @@ func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, o
 
 func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 	in := filepath.Join(c.TemplateDir, "forseti", "overall")
-	out := filepath.Join(outputPath, forsetiOutputRoot, "overall")
+	out := filepath.Join(outputPath, "overall")
 	return template.WriteDir(in, out, c.ForsetiPolicies)
 }
 

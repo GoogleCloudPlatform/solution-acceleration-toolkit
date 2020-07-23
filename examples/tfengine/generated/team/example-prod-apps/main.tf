@@ -28,7 +28,7 @@ terraform {
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 8.0.0"
+  version = "~> 8.1.0"
 
   name                    = "example-prod-apps"
   org_id                  = ""
@@ -106,7 +106,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "example_instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 3.0.0"
+  version = "~> 4.0.0"
 
   name_prefix        = "example-instance-template"
   project_id         = module.project.project_id
