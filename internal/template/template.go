@@ -50,7 +50,7 @@ func WriteDir(inputDir, outputDir string, data map[string]interface{}) error {
 	if len(fs) == 0 {
 		// Just create the output directory with no files.
 		if err := os.MkdirAll(outputDir, 0755); err != nil {
-			return fmt.Errorf("mkdir %q: %v", outputDir, err)
+			return fmt.Errorf("create dir %q: %v", outputDir, err)
 		}
 		return nil
 	}
