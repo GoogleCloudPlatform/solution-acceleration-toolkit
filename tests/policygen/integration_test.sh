@@ -25,13 +25,13 @@ trap "rm -rf '${tmp}'" EXIT INT TERM RETURN ERR
 curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/v0.3.4/cft-linux-amd64
 chmod +x ${tmp}/cft
 
-# Regenerate policies.
-scripts/regen.sh
+# Regenerate policies to a tmp location.
+go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${tmp}/generated --state_path examples/policygen/example.tfstate
 
 # Run CFT Scorecard. scorecard.csv is hardcoded in CFT Scorecard as the output file name.
 output_file="${tmp}/scorecard.csv"
 touch ${output_file}
-${tmp}/cft scorecard --policy-path examples/policygen/generated/forseti_policies --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
+${tmp}/cft scorecard --policy-path ${tmp}/generated/forseti_policies --dir-path tests/policygen/assets --output-format csv --output-path ${tmp}
 
 # Sort the output file without the CSV header line.
 LC_ALL=C sort -o ${output_file} <(tail -n+2 ${output_file})
