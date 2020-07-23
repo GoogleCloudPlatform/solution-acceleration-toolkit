@@ -75,15 +75,18 @@ func (d *Default) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 // Dry is the Runner that only prints commands and does not execute them.
 type Dry struct{}
 
+// CmdRun prints the command.
 func (*Dry) CmdRun(cmd *exec.Cmd) error {
 	log.Printf("%v", cmd.String())
 	return nil
 }
 
+// CmdOutput prints the command.
 func (d *Dry) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 	return []byte(cmd.String()), d.CmdRun(cmd)
 }
 
+// CmdCombinedOutput prints the command.
 func (d *Dry) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 	return []byte(cmd.String()), d.CmdRun(cmd)
 }
