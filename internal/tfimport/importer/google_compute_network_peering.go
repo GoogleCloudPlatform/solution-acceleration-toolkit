@@ -37,13 +37,13 @@ func (b *ComputeNetworkPeering) ImportID(rc terraform.ResourceChange, pcv Config
 	// Extract the project and network name.
 	parts := strings.Split(fmt.Sprintf("%s", network), "/")
 	project := parts[1]
-	network_name := parts[4]
+	networkName := parts[4]
 
 	name, err := fromConfigValues("name", rc.Change.After, nil)
 	if err != nil {
 		return "", err
 	}
 
-	return fmt.Sprintf("%v/%v/%v", project, network_name, name), nil
+	return fmt.Sprintf("%v/%v/%v", project, networkName, name), nil
 
 }

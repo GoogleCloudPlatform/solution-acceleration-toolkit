@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 // Package tfimport provides utilities to import resources from a Terraform config.
 package tfimport
 
@@ -45,7 +46,7 @@ var kubernetesAlphaImporter = &importer.SimpleImporter{
 	Tmpl:   "{{or (index .manifest.metadata \"namespace\") \"default\"}}/{{.manifest.metadata.name}}",
 }
 
-// Defines all supported resource importers
+// Importers defines all supported resource importers.
 // These can be sorted in Vim using ":SortRangesByHeader" from https://github.com/jrhouston/tfk8s
 var Importers = map[string]resourceImporter{
 	// Google provider
@@ -427,7 +428,7 @@ var Importers = map[string]resourceImporter{
 	"random_integer": &importer.RandomInteger{},
 }
 
-// The following are explicitly not supported by their provider.
+// Unimportable defines resources that are explicitly not supported by their provider.
 var Unimportable = map[string]bool{
 	"google_bigquery_dataset_access": true,
 	"google_service_account_key":     true,
@@ -501,6 +502,7 @@ func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
 }
 
+// RunArgs are the supported tfimport run arguments.
 type RunArgs struct {
 	InputDir      string
 	TerraformPath string
@@ -508,6 +510,7 @@ type RunArgs struct {
 	Interactive   bool
 }
 
+// Run executes the main tfimport logic.
 func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	// Expand the config path (ex. expand ~).
 	inputDir, err := pathutil.Expand(runArgs.InputDir)

@@ -31,11 +31,13 @@ import (
 	"github.com/otiai10/copy"
 )
 
+// Options is the options for tfengine execution.
 type Options struct {
 	Format   bool
 	CacheDir string
 }
 
+// Run executes the main tfengine logic.
 func Run(confPath, outPath string, opts *Options) error {
 	var err error
 	confPath, err = pathutil.Expand(confPath)

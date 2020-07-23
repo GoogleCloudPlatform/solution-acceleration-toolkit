@@ -30,6 +30,7 @@ import (
 // StateFileExtension is the default extension of Terraform state file.
 const StateFileExtension string = ".tfstate"
 
+// ResourcesFromStateFile reads Terraform resources from the input file at path.
 func ResourcesFromStateFile(path string) ([]*states.Resource, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -40,6 +41,7 @@ func ResourcesFromStateFile(path string) ([]*states.Resource, error) {
 	return ResourcesFromState(f)
 }
 
+// ResourcesFromState reads Terraform resources from the input reader.
 func ResourcesFromState(r io.Reader) ([]*states.Resource, error) {
 	stateFile, err := statefile.Read(r)
 	if err != nil {
@@ -56,6 +58,7 @@ func ResourcesFromState(r io.Reader) ([]*states.Resource, error) {
 	return resources, nil
 }
 
+// GetInstancesForType returns the list of objects for type from given resources list.
 func GetInstancesForType(resources []*states.Resource, kind string) ([]map[string]interface{}, error) {
 	var instances []map[string]interface{}
 	for _, r := range resources {
