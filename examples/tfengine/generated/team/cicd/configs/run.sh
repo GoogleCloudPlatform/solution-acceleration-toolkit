@@ -26,11 +26,11 @@ DIRS=(
 ACTION="plan"
 ROOT=""
 
-while getopts 'a:p:' c
+while getopts 'a:r:' c
 do
   case $c in
     a) ACTION=${OPTARG} ;;
-    p) ROOT=${OPTARG} ;;
+    r) ROOT=${OPTARG} ;;
     *)
       echo "Invalid flag ${OPTARG}"
       exit 1
