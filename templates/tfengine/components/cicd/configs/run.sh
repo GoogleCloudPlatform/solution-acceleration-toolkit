@@ -46,6 +46,7 @@ do
     terraform init
     for action in "${ACTIONS[@]}"
     do
+      # Convert action string to array as it can have multiple arguments.
       IFS=' ' read -r -a args <<< "${action}"
       terraform "${args[@]}"
     done
