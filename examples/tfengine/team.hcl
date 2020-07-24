@@ -46,6 +46,14 @@ template "devops" {
       owners = [
         "group:example-devops-owners@example.com",
       ]
+      apis = [
+        "container.googleapis.com",
+        "dns.googleapis.com",
+        "healthcare.googleapis.com",
+        "iap.googleapis.com",
+        "pubsub.googleapis.com",
+        "secretmanager.googleapis.com",
+      ]
     }
   }
 }
@@ -76,14 +84,6 @@ template "cicd" {
       "example-prod-networks",
       "example-prod-data",
       "example-prod-apps",
-    ]
-    managed_services = [
-      "container.googleapis.com",
-      "dns.googleapis.com",
-      "healthcare.googleapis.com",
-      "iap.googleapis.com",
-      "pubsub.googleapis.com",
-      "secretmanager.googleapis.com",
     ]
   }
 }

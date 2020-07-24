@@ -43,6 +43,12 @@ module "project" {
   skip_gcloud_download    = true
   activate_apis = [
     "cloudbuild.googleapis.com",
+    "container.googleapis.com",
+    "dns.googleapis.com",
+    "healthcare.googleapis.com",
+    "iap.googleapis.com",
+    "pubsub.googleapis.com",
+    "secretmanager.googleapis.com",
   ]
 }
 

@@ -57,6 +57,14 @@ schema = {
             type = "string"
           }
         }
+        apis = {
+          description = <<EOF
+            List of APIs enabled in the devops project.
+            NOTE: If a CICD is deployed within this project, then the APIs of
+            all resources managed by the CICD must be listed here
+            (even if the resources themselves are in different projects).
+          EOF
+        }
       }
     }
     state_bucket = {
