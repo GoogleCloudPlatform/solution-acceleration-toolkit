@@ -136,7 +136,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
     ```
 
 1. Replace the values in a suitable
-   [example](../../examples/tfengine) with values for your infrastructure.  
+   [example](../../examples/tfengine) with values for your infrastructure.
 
    Project and Bucket names are globally unique and must be changed from defaults.  You will get a 409 error if you have chosen a name that is already taken.
    
