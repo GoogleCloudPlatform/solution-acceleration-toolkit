@@ -140,8 +140,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
    [example](../../examples/tfengine) with values for your infrastructure.
 
    Project and Bucket names are globally unique and must be changed from defaults.
-   You will get a 409 "already exists" error if you have chosen a name that
-   is already taken.
+   You will get an error if you have chosen a name that is already taken.
 
    TIP: Prefer to remotely fetch templates from a release which can be more
    stable than using the HEAD templates.
