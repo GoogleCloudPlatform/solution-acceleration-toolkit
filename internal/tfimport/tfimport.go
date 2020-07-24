@@ -524,12 +524,12 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 			return err
 		}
 
-		// Break if fully succeeded, or failed to import anything.
+		// If all imports succeeded, or none did, stop trying to import things, since we aren't making progress anymore.
 		if !retry {
 			break
 		}
 
-		log.Println("Some imports succeeded but others failed. Retrying the import, in case dependent values have now been populated.")
+		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 	}
 
 	return nil
@@ -575,6 +575,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
+	var skipped []string
 	var importCmds []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
@@ -616,6 +617,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 		// Handle the different outcomes of the import attempt.
 		var ie *importer.InsufficientInfoErr
+		var se *importer.SkipErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
@@ -624,6 +626,10 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			// Use fmt over log for the TF output because it prints colors and looks better when using it.
 			fmt.Println(output)
 			importedSomething = true
+
+		// Check if the user manually skipped the import.
+		case errors.As(err, &se):
+			skipped = append(skipped, cc.Address)
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
@@ -650,6 +656,16 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		fmt.Printf("cd %v\n", runArgs.InputDir)
 		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
 
+		return false, nil
+	}
+
+	if len(skipped) > 0 {
+		if importedSomething {
+			// Time to retry. Some resources imported successfully, but others didn't.
+			return true, nil
+		}
+		// Don't treat manual skips as errors.
+		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
 		return false, nil
 	}
 
