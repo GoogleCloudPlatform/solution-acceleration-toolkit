@@ -71,9 +71,6 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
         (metadata viewer) access to the entire org and viewer access to
         the audit logs BigQuery and Cloud Storage resources.
 
-    - {PREFIX}-approvers@{DOMAIN}: Members of this group get access to view
-        Terraform plans. Members of this group approve PRs in the GitHub repo.
-
     - {PREFIX}-cicd-viewers@{DOMAIN}: Memberso of this group can view CICD
         results such as presubmit speculative plan and postsubmit deployment results.
 
