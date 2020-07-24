@@ -53,11 +53,10 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 
 1. Set up your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
-    for Google Cloud resources and either
-    [G Suite Domain](https://gsuite.google.com/) or IAM for groups.
+    for Google Cloud resources.
 
-1. [Create the following administrative groups](https://support.google.com/a/answer/33343?hl=en)
-    in the G Suite Domain or IAM:
+1. [Create](https://support.google.com/a/answer/33343?hl=en) the following administrative
+   [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity) groups:
 
     - {PREFIX}-org-admins@{DOMAIN}: Members of this group get administrative access
         to the entire org. This group can be used in break-glass situations to
