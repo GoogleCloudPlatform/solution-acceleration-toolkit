@@ -14,9 +14,9 @@
 
 on:
   push:
-    tags:
-    # Updates to the "latest" tag
-    - 'latest'
+    branches:
+    # Push events on master branch
+    - master
 
 name: Create Latest Binaries Release
 
@@ -27,6 +27,14 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    # Taken from https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+    - name: Update latest tag
+      run: |
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
+        git tag -f -a 'latest' -m 'Latest binaries release'
+        git push -f --tags
 
     - name: Setup Go
       uses: actions/setup-go@v2
