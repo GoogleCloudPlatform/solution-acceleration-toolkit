@@ -57,11 +57,11 @@ jobs:
         # Install the latest version of hub
         ./build/install-hub.sh
 
-        # If the release exists already, edit it
-        cmd='create'
+        # If the release exists already, delete it
+        # For some reason, `hub edit` doesn't seem to update assets as expected
         if hub release | grep -q 'latest'; then
-          cmd='edit'
+          bin/hub release delete 'latest'
         fi
 
         # Create the release with all binaries
-        bin/hub release ${cmd} $(printf -- ' --attach=%s' ./*-amd64) -m 'Binaries latest release' 'latest' --prerelease
+        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m 'Binaries latest release' 'latest' --prerelease
