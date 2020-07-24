@@ -57,7 +57,7 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     groups.
 
 1. [Create the following administrative groups](https://support.google.com/a/answer/33343?hl=en)
-    in the G Suite Domain:
+    in the G Suite Domain or IAM:
 
     - {PREFIX}-org-admins@{DOMAIN}: Members of this group get administrative access
         to the entire org. This group can be used in break-glass situations to
