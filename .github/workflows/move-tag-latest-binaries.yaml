@@ -29,10 +29,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Move the latest tag
+      uses: EndBug/latest-tag@latest
+      with:
+        description: 'Latest binaries release'
+        tag-name: 'latest'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: bash
-      run: |
-        set -x
-        git tag -f -a 'latest' -m 'Latest binaries release'
-        git push -f --tags
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
