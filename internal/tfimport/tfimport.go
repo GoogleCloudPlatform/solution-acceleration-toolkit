@@ -642,7 +642,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		case NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
 		case DoesNotExist(output):
-			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
+			log.Printf("Resource %q does not exist; not importing\n", ir.Change.Address)
 
 		// Important to handle this last.
 		default:
