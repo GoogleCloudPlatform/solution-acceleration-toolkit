@@ -33,13 +33,8 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 1. Install the following dependencies and add them to your PATH:
 
     - [gcloud](https://cloud.google.com/sdk/gcloud)
-<<<<<<< HEAD
-    - [Terraform 0.12](https://www.terraform.io/)
-=======
     - [Terraform 0.12.29](https://releases.hashicorp.com/terraform/) (consistent
         with the version of Terraform used by CICD)
-    - [Terragrunt](https://terragrunt.gruntwork.io/)
->>>>>>> 7f23c258dc74660d5ac5d81ea21e2a83c751c586
     - [Go 1.14+](https://golang.org/dl/)
 
 1. Familiarize yourself with the tools you'll use:
