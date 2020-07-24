@@ -15,7 +15,7 @@
 # Note: Terraform version used in the automation is 0.12.29.
 {{- $cft := "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"}}
 
-timeout: 600s
+timeout: 1200s
 
 steps:
   - name: "{{$cft}}"
@@ -23,43 +23,51 @@ steps:
     args: ["version"]
     id: Terraform version
 
+  # live/cicd
   - name: "{{$cft}}"
     entrypoint: terraform
-    args: ["fmt", "-recursive", "-check"]
-    dir: "${_TERRAFORM_ROOT}"
-    id: Terraform configs format check
-<<<<<<< HEAD:templates/tfengine/components/cicd/configs/tf-validate.yaml
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
-    entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-a", "validate"]
-    dir: "${_TERRAFORM_ROOT}"
-    id: Validate
-=======
-{{if get . "enable_terragrunt" true}}
-  - name: "{{$cft}}"
-    entrypoint: terragrunt
-    args: ["hclfmt", "--terragrunt-check"]
-    dir: "${_TERRAFORM_ROOT}"
-    id: Terragrunt configs format check
+    args: ["init"]
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
+    id: Init (CICD)
 
   - name: "{{$cft}}"
+    entrypoint: terraform
+    args: ["plan", "--lock=false", "-out=plan.tfplan"]
+    dir: "${_TERRAFORM_ROOT}/live/cicd"
+    id: Speculative plan (CICD)
+{{if get . "enable_terragrunt" true}}
+  # live
+  - name: "{{$cft}}"
     entrypoint: terragrunt
-    args: ["validate-all"]
+    args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live"
-    id: Terraform configs validation
+    id: Init (live)
+
+  - name: "{{$cft}}"
+    entrypoint: bash
+    args: ["../cicd/configs/terragrunt.sh", "plan-all"]
+    dir: "${_TERRAFORM_ROOT}/live"
+    id: Speculative plan (live)
 {{else}}
+  # live/deployment
   - name: "{{$cft}}"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live/deployment"
-    id: Init
+    id: Init (deployment)
 
   - name: "{{$cft}}"
     entrypoint: terraform
-    args: ["validate"]
+    args: ["plan", "--lock=false", "-out=plan.tfplan"]
     dir: "${_TERRAFORM_ROOT}/live/deployment"
-    id: Terraform configs validation
+    id: Speculative plan (deployment)
 {{end}}
->>>>>>> 7f23c258dc74660d5ac5d81ea21e2a83c751c586:templates/tfengine/components/cicd/manual/configs/tf-validate.yaml
+  # Check for delete operations as an FYI, it won't fail the build.
+  - name: "{{$cft}}"
+    entrypoint: bash
+    args: ["../cicd/configs/tf-deletion-check.sh", "../cicd/configs/tf-deletion-allowlist.txt"]
+    dir: "${_TERRAFORM_ROOT}/live"
+    id: Resource deletion check
+
 substitutions:
     _TERRAFORM_ROOT: "."
