@@ -53,11 +53,10 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
 
 1. Set up your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
-    for Google Cloud resources and [G Suite Domain](https://gsuite.google.com/) for
-    groups.
+    for Google Cloud resources.
 
-1. [Create the following administrative groups](https://support.google.com/a/answer/33343?hl=en)
-    in the G Suite Domain:
+1. [Create](https://support.google.com/a/answer/33343?hl=en) the following administrative
+   [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity) groups:
 
     - {PREFIX}-org-admins@{DOMAIN}: Members of this group get administrative access
         to the entire org. This group can be used in break-glass situations to
@@ -71,8 +70,8 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
         (metadata viewer) access to the entire org and viewer access to
         the audit logs BigQuery and Cloud Storage resources.
 
-    - {PREFIX}-approvers@{DOMAIN}: Members of this group get access to view
-        Terraform plans. Members of this group approve PRs in the GitHub repo.
+    - {PREFIX}-cicd-viewers@{DOMAIN}: Memberso of this group can view CICD
+        results such as presubmit speculative plan and postsubmit deployment results.
 
     For example, with sample prefix "gcp" and domain "example.com", the admin group
     "gcp-org-admins@example.com" would be created.
@@ -135,6 +134,9 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
 
 1. Replace the values in a suitable
    [example](../../examples/tfengine) with values for your infrastructure.
+
+   Project and Bucket names are globally unique and must be changed from defaults.
+   You will get an error if you have chosen a name that is already taken.
 
    TIP: Prefer to remotely fetch templates from a release which can be more
    stable than using the HEAD templates.
