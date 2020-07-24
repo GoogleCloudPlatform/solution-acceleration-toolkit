@@ -70,7 +70,7 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
         (metadata viewer) access to the entire org and viewer access to
         the audit logs BigQuery and Cloud Storage resources.
 
-    - {PREFIX}-cicd-viewers@{DOMAIN}: Memberso of this group can view CICD
+    - {PREFIX}-cicd-viewers@{DOMAIN}: Members of this group can view CICD
         results such as presubmit speculative plan and postsubmit deployment results.
 
     For example, with sample prefix "gcp" and domain "example.com", the admin group
