@@ -65,12 +65,14 @@ Type: string
 
 ### managed_modules
 
-List of directories managed by the CICD relative to terraform_root.
+List of root modules managed by the CICD relative to `terraform_root`.
+
 NOTE: The modules will be deployed in the given order. If a module
 depends on another module, it should show up after it in this list.
-The CICD has permission to update APIs within its own project. Thus,
-you can list the devops module as one of the managed modules. Other
-changes to the devops project or CICD pipelines must be deployed
+
+NOTE: The CICD has permission to update APIs within its own project.
+Thus, you can list the devops module as one of the managed modules.
+Other changes to the devops project or CICD pipelines must be deployed
 manually.
 
 Type: array(string)
