@@ -61,6 +61,8 @@ template "cicd" {
       "group:example-cicd-viewers@example.com",
     ]
 
-    managed_modules = []
+    managed_modules = [
+      "bootstrap", // CICD service account can only update APIs on the devops project.
+    ]
   }
 }

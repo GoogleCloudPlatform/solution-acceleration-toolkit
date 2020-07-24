@@ -17,6 +17,7 @@
 set -ex
 
 MODULES=(
+  bootstrap
   example-prod-secrets
   example-prod-networks
   example-prod-data
