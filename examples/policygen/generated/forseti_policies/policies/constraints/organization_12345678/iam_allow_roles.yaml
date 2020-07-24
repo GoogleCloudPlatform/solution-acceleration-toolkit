@@ -15,7 +15,7 @@
 apiVersion: constraints.gatekeeper.sh/v1alpha1
 kind: GCPIAMAllowBanRolesConstraintV1
 metadata:
-  name: iam_allow_roles
+  name: iam_allow_roles_organization_12345678
 spec:
   severity: high
   match:

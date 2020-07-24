@@ -20,7 +20,8 @@ Currently supported Policy Libraries:
 1. Install the following dependencies and add them to your PATH:
 
     * [gcloud](https://cloud.google.com/sdk/gcloud)
-    * [Terraform 0.12](https://www.terraform.io/)
+    * [Terraform 0.12.29](https://releases.hashicorp.com/terraform/)
+        (consistent with the version of Terraform used by CICD)
     * [Go 1.14+](https://golang.org/dl/)
 
 1. Get familiar with

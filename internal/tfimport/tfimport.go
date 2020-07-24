@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 // Package tfimport provides utilities to import resources from a Terraform config.
 package tfimport
 
@@ -45,7 +46,7 @@ var kubernetesAlphaImporter = &importer.SimpleImporter{
 	Tmpl:   "{{or (index .manifest.metadata \"namespace\") \"default\"}}/{{.manifest.metadata.name}}",
 }
 
-// Defines all supported resource importers
+// Importers defines all supported resource importers.
 // These can be sorted in Vim using ":SortRangesByHeader" from https://github.com/jrhouston/tfk8s
 var Importers = map[string]resourceImporter{
 	// Google provider
@@ -427,7 +428,7 @@ var Importers = map[string]resourceImporter{
 	"random_integer": &importer.RandomInteger{},
 }
 
-// The following are explicitly not supported by their provider.
+// Unimportable defines resources that are explicitly not supported by their provider.
 var Unimportable = map[string]bool{
 	"google_bigquery_dataset_access": true,
 	"google_service_account_key":     true,
@@ -501,6 +502,7 @@ func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
 }
 
+// RunArgs are the supported tfimport run arguments.
 type RunArgs struct {
 	InputDir      string
 	TerraformPath string
@@ -508,6 +510,7 @@ type RunArgs struct {
 	Interactive   bool
 }
 
+// Run executes the main tfimport logic.
 func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	// Expand the config path (ex. expand ~).
 	inputDir, err := pathutil.Expand(runArgs.InputDir)
@@ -521,12 +524,12 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 			return err
 		}
 
-		// Break if fully succeeded, or failed to import anything.
+		// If all imports succeeded, or none did, stop trying to import things, since we aren't making progress anymore.
 		if !retry {
 			break
 		}
 
-		log.Println("Some imports succeeded but others failed. Retrying the import, in case dependent values have now been populated.")
+		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 	}
 
 	return nil
@@ -572,6 +575,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
+	var skipped []string
 	var importCmds []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
@@ -613,6 +617,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 		// Handle the different outcomes of the import attempt.
 		var ie *importer.InsufficientInfoErr
+		var se *importer.SkipErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
@@ -621,6 +626,10 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			// Use fmt over log for the TF output because it prints colors and looks better when using it.
 			fmt.Println(output)
 			importedSomething = true
+
+		// Check if the user manually skipped the import.
+		case errors.As(err, &se):
+			skipped = append(skipped, cc.Address)
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
@@ -647,6 +656,16 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		fmt.Printf("cd %v\n", runArgs.InputDir)
 		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
 
+		return false, nil
+	}
+
+	if len(skipped) > 0 {
+		if importedSomething {
+			// Time to retry. Some resources imported successfully, but others didn't.
+			return true, nil
+		}
+		// Don't treat manual skips as errors.
+		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
 		return false, nil
 	}
 
