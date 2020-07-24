@@ -15,7 +15,7 @@
 apiVersion: constraints.gatekeeper.sh/v1alpha1
 kind: GCPIAMAllowedBindingsConstraintV3
 metadata:
-  name: iam_allowed_bindings_appengine_appviewer
+  name: iam_allowed_bindings_organization_12345678_appengine_appviewer
 spec:
   severity: high
   match:
