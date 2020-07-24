@@ -74,7 +74,8 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - {PREFIX}-approvers@{DOMAIN}: Members of this group get access to view
         Terraform plans. Members of this group approve PRs in the GitHub repo.
 
-    - {PREFIX}-cicd-viewers@{DOMAIN}: Members of this group get access to view cicd
+    - {PREFIX}-cicd-viewers@{DOMAIN}: Memberso of this group can view CICD
+        results such as presubmit speculative plan and postsubmit deployment results.
 
     For example, with sample prefix "gcp" and domain "example.com", the admin group
     "gcp-org-admins@example.com" would be created.
