@@ -34,8 +34,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Clearly define your
   [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
   in infra-as-code through focussed Terraform Engine config files
-  (e.g. [org_foundation.hcl](../../examples/org_foundation.hcl) and
-  [team.hcl]((../../examples/team.hcl)).
+  (e.g. [org_foundation.hcl](../../examples/tfengine/org_foundation.hcl) and
+  [team.hcl]((../../examples/tfengine/team.hcl)).
 
 - Break up Terraform state files into
   [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
