@@ -80,7 +80,7 @@ template "cicd" {
 
     # Kubernetes intentionally left out as it cannot be deployed by CICD.
     managed_modules = [
-      "bootstrap", // CICD service account can only update APIs on the devops project.
+      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
       "example-prod-secrets",
       "example-prod-networks",
       "example-prod-data",
