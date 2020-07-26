@@ -50,7 +50,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
     `folders`, etc.
 
 - Work towards alignment with HIPAA and compliance requirements for
-  [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations)
+  [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
 
   - The [audit](./recipes/audit.md) creates a dedicated project to host
     audit logs and creates logs routers to export all audit logs to BigQuery
