@@ -33,7 +33,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 
 - Clearly define your
   [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
-  in infra-as-code through focussed Terraform Engine config files
+  in infra-as-code.
 
   - The [org foundation example](../../examples/tfengine/org_foundation.hcl)
     can be used to define org level components and folders. Then,
