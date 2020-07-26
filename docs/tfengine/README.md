@@ -6,9 +6,18 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates". Templates can be used to generate
-multiple Terraform modules and configuration specific to your Google Cloud
-organization and structure.
+Use our [example](../../examples/tfengine) configs to quickly get started.
+
+## Terminology
+
+The Terraform engine introduces the concept of "templates". Templates can be
+used to generate
+[Terraform root modules](https://www.terraform.io/docs/glossary.html#root-module)
+specific to your Google Cloud organization and structure.
+
+End users typically pick from a set of
+[recipes](../../templates/tfengine/recipes). See the [recipe docs](./recipes)
+for individual recipe schemas.
 
 ## Why
 
@@ -19,14 +28,38 @@ that implement these steps for you, you can quickly set up a secure and complian
 environment and focus on the parts of the infrastructure that drive your
 business.
 
-This tool helps you follow:
+This tool helps you follow Google Cloud and Terraform best practices:
 
-- Google Cloud best practices through the use of modules from the
-[Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+- Clearly define your
+  [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
+  in infra-as-code through focussed Terraform Engine config files
+  (e.g. [org_foundation.hcl](../examples/org_foundation.hcl) and
+  [team.hcl]((../../examples/team.hcl)).
 
-- [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo).
+- Break up Terraform state files into
+  [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
+  with remote state enabled.
 
-Use our [example](../../examples/tfengine) configs to quickly get started.
+- Work towards alignment with HIPAA and compliance requirements for
+  [auditing](./recipes/audit.md) and [monitoring](./recipes/monitor.md).
+
+- Reduce human access to the org infrastructure through use of automated
+  [CICD pipelines](./recipes/cicd.md) run by service accounts.
+
+- Allow logical folders within your hierarchy to be managed by independent
+  [devops units](./recipes/devops.md), reducing org-wide broad access to a
+  single service account and chances of cascading errors.
+
+- Define many security sensitive resources within
+  [projects](./recipes/project.hcl) such as
+  [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
+  and storage resources.
+
+- Benefit from per-GCP service best practices through use of the
+  [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+  Our templates further tighten the knobs on the toolkit's modules to reduce
+  [external access](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#limit-access)
+  where possible and more.
 
 ## Prerequisites
 
