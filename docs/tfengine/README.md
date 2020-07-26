@@ -45,7 +45,9 @@ This tool helps you follow Google Cloud and Terraform best practices:
   [auditing](./recipes/audit.md) and [monitoring](./recipes/monitor.md).
 
 - Reduce human access to the org infrastructure through use of automated
-  [CICD pipelines](./recipes/cicd.md) run by service accounts.
+  [CICD pipelines](./recipes/cicd.md) run by service accounts. Promote coding
+  best practices through code review systems via Github pull requests and
+  automatically deploy changes to infra on submit.
 
 - Allow logical folders within your hierarchy to be managed by independent
   [devops units](./recipes/devops.md), reducing org-wide broad access to a
