@@ -37,7 +37,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 
   - The [org_foundation.hcl](../../examples/tfengine/org_foundation.hcl)
     can be used to define org level components and folders. Then,
-    [team.hcl]((../../examples/tfengine/team.hcl) defines projects within one
+    [team.hcl](../../examples/tfengine/team.hcl) defines projects within one
     of the folders.
 
 - Break up Terraform state files into
@@ -72,7 +72,9 @@ This tool helps you follow Google Cloud and Terraform best practices:
   cascading errors.
 
   - The [devops recipe](./recipes/devops.md) can be used on different folders
-    to setup a separate CICD pipeline and service account to manage that folder.
+    to setup a separate CICD pipeline and service account to manage projects
+    and resources within the folder. The service accounts of other CICD
+    pipelines cannot access these projects.
 
 - Define many security sensitive such as
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
