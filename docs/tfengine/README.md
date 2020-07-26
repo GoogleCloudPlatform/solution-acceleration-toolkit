@@ -34,7 +34,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Clearly define your
   [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
   in infra-as-code through focussed Terraform Engine config files
-  (e.g. [org_foundation.hcl](../examples/org_foundation.hcl) and
+  (e.g. [org_foundation.hcl](../../examples/org_foundation.hcl) and
   [team.hcl]((../../examples/team.hcl)).
 
 - Break up Terraform state files into
