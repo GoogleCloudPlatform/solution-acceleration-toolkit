@@ -45,7 +45,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   with remote state enabled.
 
   - The
-    [org foundation examplel](../../examples/tfengine/org_foundation.hcl)
+    [org foundation example](../../examples/tfengine/org_foundation.hcl)
     creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
     `folders`, etc.
 
