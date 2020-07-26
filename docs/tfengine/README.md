@@ -34,35 +34,61 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Clearly define your
   [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
   in infra-as-code through focussed Terraform Engine config files
-  (e.g. [org_foundation.hcl](../../examples/tfengine/org_foundation.hcl) and
-  [team.hcl]((../../examples/tfengine/team.hcl)).
+
+  - The [org_foundation.hcl](../../examples/tfengine/org_foundation.hcl)
+    can be used to define org level components and folders. Then,
+    [team.hcl]((../../examples/tfengine/team.hcl) defines projects within one
+    of the folders.
 
 - Break up Terraform state files into
   [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
   with remote state enabled.
 
+  - The
+    [org_foundation.hcl](../../examples/tfengine/org_foundation.hcl)
+    creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
+    `folders`, etc.
+
 - Work towards alignment with HIPAA and compliance requirements for
-  [auditing](./recipes/audit.md) and [monitoring](./recipes/monitor.md).
+  [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations)
 
-- Reduce human access to the org infrastructure through use of automated
-  [CICD pipelines](./recipes/cicd.md) run by service accounts. Promote coding
-  best practices through code review systems via Github pull requests and
-  automatically deploy changes to infra on submit.
+  - The [audit](./recipes/audit.md) creates a dedicated project to host
+    audit logs and creates logs routers to export all audit logs to BigQuery
+    (for 1 year) and to GCS (for 7 years). These configurations help align with
+    [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
+    requirements.
 
-- Allow logical folders within your hierarchy to be managed by independent
-  [devops units](./recipes/devops.md), reducing org-wide broad access to a
-  single service account and chances of cascading errors.
+- Reduce human access to the org infrastructure and promote Promote coding and
+  version control best practices.
 
-- Define many security sensitive resources within
-  [projects](./recipes/project.hcl) such as
+  - The [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
+    run by service accounts. Through integration with Github, changes to infra
+    can be via pull requests. The hooks we setup will automatically show the
+    latest Terraform plan so users are confident in the changes being made.
+    The changes are then automatically applied on merging of the pull request.
+
+- Allow logical folders within your hierarchy to be managed by independently,
+  thus reducing org-wide broad access to single service account and chances of
+  cascading errors.
+
+  - The [devops recipe](./recipes/devops.md) can be used on different folders
+    to setup a separate CICD pipeline and service account to manage that folder.
+
+- Define many security sensitive such as
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
   and storage resources.
 
+  - The [project recipe](./recipes/project.md) can be used to create projects
+    and resources within projects.
+
 - Benefit from per-GCP service best practices through use of the
   [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
-  Our templates further tighten the knobs on the toolkit's modules to reduce
-  [external access](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#limit-access)
-  where possible and more.
+
+  - Our recipes use Cloud Foundation Toolkit modules wherever they make sense.
+    When there are multiple options, we choose the most secure option. For
+    example, creating a GKE cluster through our
+    [project recipe](./recipes/project.md) will utilize the
+    [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant) module from Cloud Foundation Toolkit.
 
 ## Prerequisites
 
