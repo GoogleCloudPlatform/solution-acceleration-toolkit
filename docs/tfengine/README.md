@@ -15,8 +15,9 @@ used to generate
 [Terraform root modules](https://www.terraform.io/docs/glossary.html#root-module)
 specific to your Google Cloud organization and structure.
 
-End users typically pick from a set of
-[recipes](../../templates/tfengine/recipes). See the [recipe docs](./recipes)
+Users typically pick from a set of
+[recipes](../../templates/tfengine/recipes) which implement a template for one
+core piece of GCP infrastructure. See the [recipe docs](./recipes)
 for individual recipe schemas.
 
 ## Why
