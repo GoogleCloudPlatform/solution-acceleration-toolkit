@@ -203,6 +203,7 @@ the `terraform` binary to deploy the infrastructure.
    ```hcl
    template "devops" {
      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
+     output_path = "./devops"
      data = {
        ...
      }
