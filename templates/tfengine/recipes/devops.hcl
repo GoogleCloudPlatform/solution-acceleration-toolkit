@@ -238,6 +238,8 @@ template "root" {
 {{end}}
 
 # At least one trigger is specified.
+# TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/485): replace
+# with a hasOne function.
 {{if and (has . "cicd") (or (has .cicd.triggers "validate") (has .cicd.triggers "plan") (has .cicd.triggers "apply"))}}
 template "cicd_manual" {
   component_path = "../components/cicd/manual"
