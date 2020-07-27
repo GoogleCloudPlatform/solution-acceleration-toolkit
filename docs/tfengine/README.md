@@ -45,7 +45,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
   with remote state enabled.
 
-  - The
+  - For example, the
     [org foundation example](../../examples/tfengine/org_foundation.hcl)
     creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
     `folders`, etc.
@@ -53,16 +53,17 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Work towards alignment with HIPAA and compliance requirements for
   [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
 
-  - The [audit](./recipes/audit.md) creates a dedicated project to host
-    audit logs and creates logs routers to export all audit logs to BigQuery
-    (for 1 year) and to GCS (for 7 years). These configurations help align with
+  - For example, the [audit recipe](./recipes/audit.md) creates a dedicated
+    project to host audit logs and creates logs routers to export all audit logs
+    to BigQuery (for 1 year) and to GCS (for 7 years). These configurations help
+    align with
     [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
     requirements.
 
 - Reduce human access to the org infrastructure. Promote coding and version
   control best practices.
 
-  - The [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
+  - For example, the [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
     run by Cloud Build service accounts. Through integration with Github,
     changes to infrastructure can be made via pull requests. The hooks we set up
     will automatically display the latest Terraform plan so users can be
@@ -73,16 +74,16 @@ This tool helps you follow Google Cloud and Terraform best practices:
   thus reducing org-wide broad access to single service account and chances of
   cascading errors.
 
-  - The [devops recipe](./recipes/devops.md) can be used on different folders
-    to setup a separate CICD pipeline and service account to manage projects
-    and resources within the folder. The service accounts of other CICD
-    pipelines cannot access these projects.
+  - For example, the [devops recipe](./recipes/devops.md) can be used on
+    different folders to setup a separate CICD pipeline and service account to
+    manage projects and resources within the folder. The service accounts of
+    other CICD pipelines cannot access these projects.
 
 - Define many security sensitive resources such as
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
   and storage resources.
 
-  - The [project recipe](./recipes/project.md) can be used to create projects
+  - For example, the [project recipe](./recipes/project.md) can be used to create projects
     and resources within projects.
 
 - Benefit from per-service best practices through use of the
