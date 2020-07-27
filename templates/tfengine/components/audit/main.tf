@@ -56,7 +56,7 @@ resource "google_logging_{{.parent_type}}_sink" "bigquery_audit_logs_sink" {
 
 module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.2.0"
+  version = "~> 4.3.0"
 
   dataset_id                  = "{{.logs_bigquery_dataset.dataset_id}}"
   project_id                  = var.project_id
