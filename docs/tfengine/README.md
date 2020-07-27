@@ -63,7 +63,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 
   - The [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
     run by Cloud Build service accounts. Through integration with Github,
-    changes to infrastructure can be made via pull requests. The hooks we set up\
+    changes to infrastructure can be made via pull requests. The hooks we set up
     will automatically display the latest Terraform plan so users can be
     confident their changes. The changes can be automatically applied when
     the pull request gets merged.
@@ -77,7 +77,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
     and resources within the folder. The service accounts of other CICD
     pipelines cannot access these projects.
 
-- Define many security sensitive such as
+- Define many security sensitive resources such as
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
   and storage resources.
 
