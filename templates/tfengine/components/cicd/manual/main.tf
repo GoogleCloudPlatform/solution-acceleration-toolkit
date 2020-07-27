@@ -115,7 +115,7 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
     google_project_service.services,
   ]
 }
-{{if has . "apply_trigger"}}
+{{if has .triggers "apply"}}
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
@@ -131,7 +131,7 @@ resource "google_billing_account_iam_member" "binding" {
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
-  {{- if has . "apply_trigger"}}
+  {{- if has .triggers "apply"}}
   role   = "roles/storage.admin"
   {{- else}}
   role   = "roles/storage.objectViewer"
@@ -144,7 +144,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 
 # Grant Cloud Build Service Account access to the {{.parent_type}}.
 resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_iam" {
-  {{- if has . "apply_trigger"}}
+  {{- if has .triggers "apply"}}
   for_each = toset(local.cloudbuild_sa_editor_roles)
   {{- else}}
   for_each = toset(local.cloudbuild_sa_viewer_roles)
@@ -182,9 +182,9 @@ resource "google_sourcerepo_repository" "configs" {
 }
 {{- end}}
 
-{{if has . "validate_trigger" -}}
+{{if has .triggers "validate" -}}
 resource "google_cloudbuild_trigger" "validate" {
-  {{- if (get  .validate_trigger "disable" false)}}
+  {{- if not (get .triggers.validate "run_on_push" true)}}
   disabled = true
   {{- end}}
   provider = google-beta
@@ -225,9 +225,9 @@ resource "google_cloudbuild_trigger" "validate" {
 }
 {{- end}}
 
-{{if has . "plan_trigger" -}}
+{{if has .triggers "plan" -}}
 resource "google_cloudbuild_trigger" "plan" {
-  {{- if (get  .plan_trigger "disable" false)}}
+  {{- if not (get .triggers.plan "run_on_push" true)}}
   disabled = true
   {{- end}}
   provider = google-beta
@@ -269,9 +269,9 @@ resource "google_cloudbuild_trigger" "plan" {
 }
 {{- end}}
 
-{{if has . "apply_trigger" -}}
+{{if has .triggers "apply" -}}
 resource "google_cloudbuild_trigger" "apply" {
-  {{- if (get  .apply_trigger "disable" false)}}
+  {{- if not (get .triggers.apply "run_on_push" true)}}
   disabled = true
   {{- end}}
   provider = google-beta

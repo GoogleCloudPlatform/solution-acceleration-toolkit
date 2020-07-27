@@ -51,9 +51,11 @@ template "devops" {
       terraform_root = "terraform"
 
       # Prepare and enable default triggers.
-      validate_trigger = {}
-      plan_trigger     = {}
-      apply_trigger    = {}
+      triggers = {
+        validate = {}
+        plan     = {}
+        apply    = {}
+      }
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]

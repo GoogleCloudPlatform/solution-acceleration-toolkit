@@ -55,9 +55,11 @@ template "devops" {
       terraform_root = "terraform"
 
       # Prepare and enable default triggers.
-      validate_trigger = {}
-      plan_trigger     = {}
-      apply_trigger    = {}
+      triggers = {
+        validate = {}
+        plan     = {}
+        apply    = {}
+      }
       build_viewers = [
         "group:example-cicd-viewers@example.com",
       ]
@@ -375,10 +377,10 @@ template "project_apps" {
           account_id = "example-sa"
         }]
         compute_instance_templates = [{
-          name_prefix = "example-instance-template"
-          network_project_id     = "example-prod-networks"
-          subnet                 = "example-instance-subnet"
-          service_account        = "$${google_service_account.example_sa.email}"
+          name_prefix        = "example-instance-template"
+          network_project_id = "example-prod-networks"
+          subnet             = "example-instance-subnet"
+          service_account    = "$${google_service_account.example_sa.email}"
           instances = [{
             name = "instance"
           }]
@@ -403,13 +405,13 @@ template "project_apps" {
           name = "foo-topic"
           push_subscriptions = [
             {
-              name                 = "push-subscription"
-              push_endpoint        = "https://example.com" // required
+              name          = "push-subscription"
+              push_endpoint = "https://example.com" // required
             }
           ]
           pull_subscriptions = [
             {
-              name                 = "pull-subscription"
+              name = "pull-subscription"
             }
           ]
         }]
