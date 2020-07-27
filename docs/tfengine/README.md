@@ -62,10 +62,11 @@ This tool helps you follow Google Cloud and Terraform best practices:
   version control best practices.
 
   - The [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
-    run by service accounts. Through integration with Github, changes to infra
-    can be via pull requests. The hooks we setup will automatically show the
-    latest Terraform plan so users are confident in the changes being made.
-    The changes are then automatically applied on merging of the pull request.
+    run by Cloud Build service accounts. Through integration with Github,
+    changes to infrastructure can be made via pull requests. The hooks we set up\
+    will automatically display the latest Terraform plan so users can be
+    confident their changes. The changes can be automatically applied when
+    the pull request gets merged.
 
 - Allow logical folders within your hierarchy to be managed by independently,
   thus reducing org-wide broad access to single service account and chances of
