@@ -84,7 +84,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   - The [project recipe](./recipes/project.md) can be used to create projects
     and resources within projects.
 
-- Benefit from per-GCP service best practices through use of the
+- Benefit from per-service best practices through use of the
   [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
 
   - Our recipes use Cloud Foundation Toolkit modules wherever they make sense.
