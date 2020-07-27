@@ -35,10 +35,11 @@ This tool helps you follow Google Cloud and Terraform best practices:
   [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
   in infra-as-code.
 
-  - The [org foundation example](../../examples/tfengine/org_foundation.hcl)
+  - For example, the
+    [org foundation example](../../examples/tfengine/org_foundation.hcl)
     can be used to define org level components and folders. Then,
-    [sample team example](../../examples/tfengine/team.hcl) defines projects
-    within one of the folders.
+    the [sample team example](../../examples/tfengine/team.hcl) can be used
+    to define projects and resources within one of the folders.
 
 - Break up Terraform state files into
   [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
