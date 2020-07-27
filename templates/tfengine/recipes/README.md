@@ -1,6 +1,6 @@
 # Terraform Engine Recipes
 
-See markdown schemas for recipes [here](../../docs/tfengine/recipes).
+See markdown schemas for recipes [here](../../../docs/tfengine/recipes).
 
 Recipes put the building blocks defined by [components](../components) into
 usable, end to end deployments.
