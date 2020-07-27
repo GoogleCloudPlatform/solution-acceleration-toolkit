@@ -58,8 +58,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
     [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
     requirements.
 
-- Reduce human access to the org infrastructure and promote Promote coding and
-  version control best practices.
+- Reduce human access to the org infrastructure. Promote coding and version
+  control best practices.
 
   - The [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
     run by Cloud Build service accounts. Through integration with Github,
