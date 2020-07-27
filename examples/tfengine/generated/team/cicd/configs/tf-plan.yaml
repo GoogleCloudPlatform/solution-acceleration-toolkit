@@ -12,42 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Note: Terraform version used in the automation is 0.12.29.
+
 timeout: 1200s
 
 steps:
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: terraform
     args: ["version"]
     id: Terraform version
 
   # live/cicd
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: terraform
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Init (CICD)
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: terraform
     args: ["plan", "--lock=false", "-out=plan.tfplan"]
     dir: "${_TERRAFORM_ROOT}/live/cicd"
     id: Speculative plan (CICD)
 
   # live
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: terragrunt
     args: ["init"]
     dir: "${_TERRAFORM_ROOT}/live"
     id: Init (live)
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: bash
     args: ["../cicd/configs/terragrunt.sh", "plan-all"]
     dir: "${_TERRAFORM_ROOT}/live"
     id: Speculative plan (live)
 
   # Check for delete operations as an FYI, it won't fail the build.
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:02b06198f1da423183937b60493bdaa20dedf36b1a852a1d7fbb5a537fd943fd"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: bash
     args: ["../cicd/configs/tf-deletion-check.sh", "../cicd/configs/tf-deletion-allowlist.txt"]
     dir: "${_TERRAFORM_ROOT}/live"
