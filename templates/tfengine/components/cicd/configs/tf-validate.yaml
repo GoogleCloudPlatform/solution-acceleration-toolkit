@@ -28,10 +28,12 @@ steps:
     args: ["fmt", "-recursive", "-check"]
     dir: "${_TERRAFORM_ROOT}"
     id: Terraform configs format check
+
   - name: "{{$cft}}"
-    entrypoint: terraform
-    args: ["validate"]
-    dir: "${_TERRAFORM_ROOT}/live/deployment"
-    id: Terraform configs validation
+    entrypoint: bash
+    args: ["./cicd/configs/run.sh", "-a", "validate"]
+    dir: "${_TERRAFORM_ROOT}"
+    id: Validate
+
 substitutions:
     _TERRAFORM_ROOT: "."

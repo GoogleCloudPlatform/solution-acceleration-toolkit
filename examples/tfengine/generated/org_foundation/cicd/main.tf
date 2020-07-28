@@ -69,6 +69,7 @@ locals {
   cloudbuild_devops_roles = [
     # Enable Cloud Build SA to list and enable APIs in the devops project.
     "roles/serviceusage.serviceUsageAdmin",
+    "roles/viewer",
   ]
 }
 

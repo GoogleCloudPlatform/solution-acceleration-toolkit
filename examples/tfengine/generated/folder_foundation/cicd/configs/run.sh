@@ -17,6 +17,7 @@
 set -ex
 
 MODULES=(
+  bootstrap
   audit
   monitor
   org_policies

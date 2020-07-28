@@ -37,8 +37,6 @@ to detect changes in the repo, trigger builds, and run the workloads.
         containing the Terraform configs.
     * `build_viewers`: IAM members to grant `cloudbuild.builds.viewer` role in
         the devops project to see CICD results.
-    * `managed_services`: APIs to enable in the devops project so the Cloud
-        Build service account can manage those services in other projects.
 
 1. Generate the CICD Terraform configs and Cloud Build configs using the
     Terraform Engine. Only the Terraform resources in the current directory,

@@ -46,6 +46,14 @@ template "devops" {
       owners = [
         "group:example-devops-owners@example.com",
       ]
+      apis = [
+        "container.googleapis.com",
+        "dns.googleapis.com",
+        "healthcare.googleapis.com",
+        "iap.googleapis.com",
+        "pubsub.googleapis.com",
+        "secretmanager.googleapis.com",
+      ]
     }
   }
 }
@@ -72,18 +80,11 @@ template "cicd" {
 
     # Kubernetes intentionally left out as it cannot be deployed by CICD.
     managed_modules = [
+      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
       "example-prod-secrets",
       "example-prod-networks",
       "example-prod-data",
       "example-prod-apps",
-    ]
-    managed_services = [
-      "container.googleapis.com",
-      "dns.googleapis.com",
-      "healthcare.googleapis.com",
-      "iap.googleapis.com",
-      "pubsub.googleapis.com",
-      "secretmanager.googleapis.com",
     ]
   }
 }

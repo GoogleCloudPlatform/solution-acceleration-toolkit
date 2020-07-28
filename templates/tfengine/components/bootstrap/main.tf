@@ -30,7 +30,7 @@ terraform {
 {{- if get . "enable_bootstrap_gcs_backend"}}
   backend "gcs" {
     bucket = "{{.state_bucket}}"
-    prefix = "bootstrap"
+    prefix = "devops"
   }
 {{- end}}
 }
@@ -53,6 +53,9 @@ module "project" {
   skip_gcloud_download    = true
   activate_apis = [
     "cloudbuild.googleapis.com",
+    {{range get . "project.apis" -}}
+    "{{.}}",
+    {{end -}}
   ]
 }
 

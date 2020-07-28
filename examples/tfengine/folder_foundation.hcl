@@ -67,6 +67,7 @@ template "cicd" {
     ]
 
     managed_modules = [
+      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
       "audit",
       "monitor",
       "org_policies",
