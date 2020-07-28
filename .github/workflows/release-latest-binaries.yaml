@@ -33,7 +33,7 @@ jobs:
       run: |
         git config user.name 'github-actions'
         git config user.email 'github-actions@github.com'
-        git tag -f -a 'latest' -m 'Latest binaries release'
+        git tag -f -a 'latest' -m 'Latest binaries build'
         git push -f --tags
 
     - name: Setup Go
@@ -65,4 +65,4 @@ jobs:
 
         # Create the release with all binaries
         # Set the pre-release flag to indicate that it is not ready for production and may be unstable
-        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m 'Binaries latest release' 'latest' --prerelease
+        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m 'Binaries latest build (unstable)' 'latest' --prerelease
