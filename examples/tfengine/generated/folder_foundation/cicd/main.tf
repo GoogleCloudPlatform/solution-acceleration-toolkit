@@ -216,7 +216,6 @@ resource "google_cloudbuild_trigger" "plan" {
 }
 
 resource "google_cloudbuild_trigger" "apply" {
-  disabled = true
   provider = google-beta
   project  = var.project_id
   name     = "tf-apply"

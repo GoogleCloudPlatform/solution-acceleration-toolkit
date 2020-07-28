@@ -58,8 +58,6 @@ func TestExamples(t *testing.T) {
 			skipDirs := map[string]bool{
 				"cicd":       true,
 				"kubernetes": true,
-				// TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/397): remove this as live folder shouldn't exist.
-				"live": true,
 			}
 			for _, f := range fs {
 				if !f.IsDir() || skipDirs[f.Name()] {

@@ -62,7 +62,7 @@ template "cicd" {
     triggers = {
       validate = {}
       plan     = {}
-      apply    = { run_on_push = false } # Do not auto run on push to branch
+      apply    = {}
     }
 
     build_viewers = [
