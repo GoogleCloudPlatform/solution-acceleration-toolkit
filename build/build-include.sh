@@ -38,7 +38,7 @@ if [[ -z ${VERSION} ]]; then
   exit 1
 fi
 
-version_regex="^v[0-9]+\.[0-9]+\.[0-9]+|latest$"
+version_regex="^latest|(((templates|policies)-)?v[0-9]+\.[0-9]+\.[0-9]+)$"
 if ! [[ ${VERSION} =~ ${version_regex} ]]; then
   echo "Version \"${VERSION}\" does not match regex ${version_regex}"
   exit 1
