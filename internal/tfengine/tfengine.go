@@ -24,6 +24,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -67,6 +68,10 @@ func Run(confPath, outPath string, opts *Options) error {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			return err
 		}
+	}
+
+	if err := licenseutil.AddLicense(tmpDir); err != nil {
+		return fmt.Errorf("add license header: %v", err)
 	}
 
 	if err := os.MkdirAll(outPath, 0755); err != nil {
