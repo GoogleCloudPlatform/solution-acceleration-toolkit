@@ -52,7 +52,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: bash
       run: |
-        set -x
+        set -ex
 
         # Install the latest version of hub
         ./build/install-hub.sh
