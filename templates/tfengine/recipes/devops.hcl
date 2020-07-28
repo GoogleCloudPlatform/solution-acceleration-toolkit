@@ -95,6 +95,7 @@ schema = {
       additionalProperties = false
       required = [
         "branch_regex",
+        "triggers",
       ]
       properties = {
         github = {
@@ -154,57 +155,63 @@ schema = {
             type = "string"
           }
         }
-        validate_trigger = {
+        triggers = {
           description = <<EOF
-            Config block for the presubmit validation Cloud Build trigger. If specified, create
-            the trigger and grant the Cloud Build Service Account necessary permissions to perform
-            the build.
+            Config block for the CICD Cloud Build triggers.
           EOF
           type                 = "object"
           additionalProperties = false
           properties = {
-            disable = {
+            validate = {
               description = <<EOF
-                Whether or not to disable automatic triggering from a PR/push to branch. Default
-                to false.
+                Config block for the presubmit validation Cloud Build trigger. If specified, create
+                the trigger and grant the Cloud Build Service Account necessary permissions to
+                perform the build.
               EOF
-              type        = "boolean"
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                run_on_push = {
+                  description = <<EOF
+                    Whether or not automatic triggering from a PR/push to branch. Default to true.
+                  EOF
+                  type        = "boolean"
+                }
+              }
             }
-          }
-        }
-        plan_trigger = {
-          description = <<EOF
-            Config block for the presubmit plan Cloud Build trigger.
-            If specified, create the trigger and grant the Cloud Build Service Account
-            necessary permissions to perform the build.
-          EOF
-          type                 = "object"
-          additionalProperties = false
-          properties = {
-            disable = {
+            plan = {
               description = <<EOF
-                Whether or not to disable automatic triggering from a PR/push to branch.
-                Defaults to false.
+                Config block for the presubmit plan Cloud Build trigger.
+                If specified, create the trigger and grant the Cloud Build Service Account
+                necessary permissions to perform the build.
               EOF
-              type        = "boolean"
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                run_on_push = {
+                  description = <<EOF
+                    Whether or not automatic triggering from a PR/push to branch. Default to true.
+                  EOF
+                  type        = "boolean"
+                }
+              }
             }
-          }
-        }
-        apply_trigger = {
-          description = <<EOF
-            Config block for the postsubmit apply/deployyemt Cloud Build trigger.
-            If specified,create the trigger and grant the Cloud Build Service Account
-            necessary permissions to perform the build.
-          EOF
-          type                 = "object"
-          additionalProperties = false
-          properties = {
-            disable = {
+            apply = {
               description = <<EOF
-                Whether or not to disable automatic triggering from a PR/push to branch. Default
-                to false.
+                Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+                If specified,create the trigger and grant the Cloud Build Service Account
+                necessary permissions to perform the build.
               EOF
-              type        = "boolean"
+              type                 = "object"
+              additionalProperties = false
+              properties = {
+                run_on_push = {
+                  description = <<EOF
+                    Whether or not automatic triggering from a PR/push to branch. Default to true.
+                  EOF
+                  type        = "boolean"
+                }
+              }
             }
           }
         }
@@ -231,7 +238,9 @@ template "root" {
 {{end}}
 
 # At least one trigger is specified.
-{{if and (has . "cicd") (or (has .cicd "validate_trigger") (has .cicd "plan_trigger") (has .cicd "apply_trigger"))}}
+# TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/485): replace
+# with a hasOne function.
+{{if and (has . "cicd") (or (has .cicd.triggers "validate") (has .cicd.triggers "plan") (has .cicd.triggers "apply"))}}
 template "cicd_manual" {
   component_path = "../components/cicd/manual"
   output_path    = "./cicd"
