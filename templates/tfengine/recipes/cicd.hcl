@@ -70,57 +70,63 @@ schema = {
         type = "string"
       }
     }
-    validate_trigger = {
+    triggers = {
       description = <<EOF
-        Config block for the presubmit validation Cloud Build trigger. If specified, create
-        the trigger and grant the Cloud Build Service Account necessary permissions to perform
-        the build.
+        Config block for the CICD Cloud Build triggers.
       EOF
       type                 = "object"
       additionalProperties = false
       properties = {
-        disable = {
+        validate = {
           description = <<EOF
-            Whether or not to disable automatic triggering from a PR/push to branch. Default
-            to false.
+            Config block for the presubmit validation Cloud Build trigger. If specified, create
+            the trigger and grant the Cloud Build Service Account necessary permissions to
+            perform the build.
           EOF
-          type        = "boolean"
+          type                 = "object"
+          additionalProperties = false
+          properties = {
+            run_on_push = {
+              description = <<EOF
+                Whether or not automatic triggering from a PR/push to branch. Default to true.
+              EOF
+              type        = "boolean"
+            }
+          }
         }
-      }
-    }
-    plan_trigger = {
-      description = <<EOF
-        Config block for the presubmit plan Cloud Build trigger.
-        If specified, create the trigger and grant the Cloud Build Service Account
-        necessary permissions to perform the build.
-      EOF
-      type                 = "object"
-      additionalProperties = false
-      properties = {
-        disable = {
+        plan = {
           description = <<EOF
-            Whether or not to disable automatic triggering from a PR/push to branch.
-            Defaults to false.
+            Config block for the presubmit plan Cloud Build trigger.
+            If specified, create the trigger and grant the Cloud Build Service Account
+            necessary permissions to perform the build.
           EOF
-          type        = "boolean"
+          type                 = "object"
+          additionalProperties = false
+          properties = {
+            run_on_push = {
+              description = <<EOF
+                Whether or not automatic triggering from a PR/push to branch. Default to true.
+              EOF
+              type        = "boolean"
+            }
+          }
         }
-      }
-    }
-    apply_trigger = {
-      description = <<EOF
-        Config block for the postsubmit apply/deployyemt Cloud Build trigger.
-        If specified,create the trigger and grant the Cloud Build Service Account
-        necessary permissions to perform the build.
-      EOF
-      type                 = "object"
-      additionalProperties = false
-      properties = {
-        disable = {
+        apply = {
           description = <<EOF
-            Whether or not to disable automatic triggering from a PR/push to branch. Default
-            to false.
+            Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+            If specified,create the trigger and grant the Cloud Build Service Account
+            necessary permissions to perform the build.
           EOF
-          type        = "boolean"
+          type                 = "object"
+          additionalProperties = false
+          properties = {
+            run_on_push = {
+              description = <<EOF
+                Whether or not automatic triggering from a PR/push to branch. Default to true.
+              EOF
+              type        = "boolean"
+            }
+          }
         }
       }
     }
