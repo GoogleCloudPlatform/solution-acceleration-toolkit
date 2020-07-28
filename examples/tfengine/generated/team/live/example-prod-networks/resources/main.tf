@@ -25,7 +25,7 @@ terraform {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 2.6.0"
+  version = "~> 2.7.0"
 
   name         = "bastion-vm"
   project      = var.project_id
@@ -102,7 +102,7 @@ module "cloud_sql_private_service_access_example_network" {
 }
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.1.0"
+  version = "~> 0.2.0"
 
   name    = "example-router"
   project = var.project_id
