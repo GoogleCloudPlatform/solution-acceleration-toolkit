@@ -4,21 +4,6 @@
 
 ## Properties
 
-### apply_trigger
-
-Config block for the postsubmit apply/deployyemt Cloud Build trigger.
-If specified,create the trigger and grant the Cloud Build Service Account
-necessary permissions to perform the build.
-
-Type: object
-
-### apply_trigger.disable
-
-Whether or not to disable automatic triggering from a PR/push to branch. Default
-to false.
-
-Type: boolean
-
 ### branch_regex
 
 Regex of the branches to set the Cloud Build Triggers to monitor.
@@ -77,21 +62,6 @@ manually.
 
 Type: array(string)
 
-### plan_trigger
-
-Config block for the presubmit plan Cloud Build trigger.
-If specified, create the trigger and grant the Cloud Build Service Account
-necessary permissions to perform the build.
-
-Type: object
-
-### plan_trigger.disable
-
-Whether or not to disable automatic triggering from a PR/push to branch.
-Defaults to false.
-
-Type: boolean
-
 ### project_id
 
 ID of project to deploy CICD in.
@@ -104,17 +74,50 @@ Path of the directory relative to the repo root containing the Terraform configs
 
 Type: string
 
-### validate_trigger
+### triggers
 
-Config block for the presubmit validation Cloud Build trigger. If specified, create
-the trigger and grant the Cloud Build Service Account necessary permissions to perform
-the build.
+Config block for the CICD Cloud Build triggers.
 
 Type: object
 
-### validate_trigger.disable
+### triggers.apply
 
-Whether or not to disable automatic triggering from a PR/push to branch. Default
-to false.
+Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+If specified,create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+
+Type: object
+
+### triggers.apply.run_on_push
+
+Whether or not automatic triggering from a PR/push to branch. Default to true.
+
+Type: boolean
+
+### triggers.plan
+
+Config block for the presubmit plan Cloud Build trigger.
+If specified, create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+
+Type: object
+
+### triggers.plan.run_on_push
+
+Whether or not automatic triggering from a PR/push to branch. Default to true.
+
+Type: boolean
+
+### triggers.validate
+
+Config block for the presubmit validation Cloud Build trigger. If specified, create
+the trigger and grant the Cloud Build Service Account necessary permissions to
+perform the build.
+
+Type: object
+
+### triggers.validate.run_on_push
+
+Whether or not automatic triggering from a PR/push to branch. Default to true.
 
 Type: boolean
