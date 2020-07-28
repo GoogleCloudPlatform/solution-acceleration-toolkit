@@ -83,8 +83,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
   and storage resources.
 
-  - For example, the [project recipe](./recipes/project.md) can be used to create projects
-    and resources within projects.
+  - For example, the [project recipe](./recipes/project.md) can be used to
+    create projects and resources within projects.
 
 - Benefit from per-service best practices through use of the
   [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
@@ -93,7 +93,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
     When there are multiple options, we choose the most secure option. For
     example, creating a GKE cluster through our
     [project recipe](./recipes/project.md) will utilize the
-    [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant) module from Cloud Foundation Toolkit.
+    [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)
+    module from Cloud Foundation Toolkit.
 
 ## Prerequisites
 
