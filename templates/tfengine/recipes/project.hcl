@@ -108,13 +108,11 @@ schema = {
         }
       }
     }
-    deployments = {
+    resources = {
       description = <<EOF
-        Map of deployment name to resources config.
-        Each key will be a directory in the output path.
-        For resource schema see ./resources.hcl.
+        Resources in this project.
+        See [resources.hcl](./resources.hcl) for schema.
       EOF
-      type        = "object"
     }
     terraform_addons = {
       description = <<EOF
@@ -142,12 +140,11 @@ template "project" {
   }
 }
 
-{{$project_id := .project.project_id}}
-{{range $name, $_ := get . "deployments"}}
-template "deployment_{{$name}}" {
+{{if has . "resources"}}
+template "resources" {
   recipe_path = "./resources.hcl"
   flatten {
-    key = "deployments.{{$name}}"
+    key = "resources"
   }
 }
 {{end}}
