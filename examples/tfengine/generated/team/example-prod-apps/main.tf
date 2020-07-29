@@ -127,7 +127,7 @@ module "example_instance_template" {
 }
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 3.0.0"
+  version = "~> 4.0.0"
 
   hostname           = "instance"
   instance_template  = module.example_instance_template.self_link
@@ -191,7 +191,7 @@ module "project_iam_members" {
 }
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.3.0"
+  version = "~> 1.4.0"
 
   topic      = "foo-topic"
   project_id = module.project.project_id

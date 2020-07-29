@@ -57,7 +57,7 @@ EOF
 {{- range get . "instances"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 3.0.0"
+  version = "~> 4.0.0"
 
   hostname           = "{{.name}}"
   instance_template  = module.{{$template_resource_name}}.self_link
