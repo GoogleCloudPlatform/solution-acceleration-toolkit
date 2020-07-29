@@ -134,12 +134,5 @@ properties = {
       type = "string"
     }
   }
-
-  disable_sa_key_creation = {
-    description = <<EOF
-      Whether or not to disable the creation of service account external keys. If not specified, default to true.
-    EOF
-    type = "boolean"
-  }
 }
 `)
