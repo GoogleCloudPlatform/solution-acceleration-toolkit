@@ -12,7 +12,7 @@ to detect changes in the repo, trigger builds, and run the workloads.
 
 1. Generate the CICD Terraform configs and Cloud Build configs using the
     Terraform Engine. Only the Terraform resources in the current directory,
-    that is, the `cicd/` directory under root, needs to be deployed manually.
+    that is, the `cicd/` directory under root, need to be deployed manually.
 
 1. Before deploying CICD Terraform resources, install the Cloud Build app and
     connect your GitHub repository to your Cloud project by following the steps
@@ -33,7 +33,8 @@ to detect changes in the repo, trigger builds, and run the workloads.
 
     Two presubmit triggers are created by default. Build/test status and results
     are posted in the Pull Request. Failures of these presubmits should be
-    configured to block Pull Request submissions.
+    configured to block Pull Request submissions. The `build_viewers` members
+    can view detailed log output.
 
     * `tf-validate`: Perform Terraform format and syntax check.
     * `tf-plan`: Generate speculative plans to show a set of potential changes

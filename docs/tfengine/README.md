@@ -67,10 +67,10 @@ This tool helps you follow Google Cloud and Terraform best practices:
     run by Cloud Build service accounts. Through integration with Github,
     changes to infrastructure can be made via pull requests. The hooks we set up
     will automatically display the latest Terraform plan so users can be
-    confident their changes. The changes can be automatically applied when
+    confident in their changes. The changes can be automatically applied when
     the pull request gets merged.
 
-- Allow logical folders within your hierarchy to be managed by independently,
+- Allow logical folders within your hierarchy to be managed independently,
   thus reducing org-wide broad access to single service account and chances of
   cascading errors.
 
