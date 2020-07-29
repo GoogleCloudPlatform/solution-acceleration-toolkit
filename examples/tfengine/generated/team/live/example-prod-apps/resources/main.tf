@@ -100,7 +100,7 @@ module "example_instance_template" {
 }
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 3.0.0"
+  version = "~> 4.0.0"
 
   hostname           = "instance"
   instance_template  = module.example_instance_template.self_link
