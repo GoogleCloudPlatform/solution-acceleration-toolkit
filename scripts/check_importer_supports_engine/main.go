@@ -102,10 +102,10 @@ func resourcesFromConfig(configPath string, unsupported map[string]bool) error {
 		init := exec.Command("terraform", "init")
 		init.Dir = dir
 		if b, err := init.CombinedOutput(); err != nil {
-			return fmt.Errorf("command %v in %q: %v\n%v", init.Args, fn, err, string(b))
+			return fmt.Errorf("command %v in %q: %v\n%v", init.Args, fname, err, string(b))
 		}
 		if err := addResources(dir, unsupported); err != nil {
-			return fmt.Errorf("add resources from %q: %v", fn, err)
+			return fmt.Errorf("add resources from %q: %v", fname, err)
 		}
 	}
 	return nil
