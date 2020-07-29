@@ -93,18 +93,18 @@ func resourcesFromConfig(configPath string, unsupported map[string]bool) error {
 		if !f.IsDir() {
 			continue
 		}
-		fn := filepath.Join(tmp, f.Name())
+		dir := filepath.Join(tmp, f.Name())
 
 		// Convert the configs not reference a GCS backend as the state bucket does not exist.
-		if err := tfengine.ConvertToLocalBackend(fn); err != nil {
-			return fmt.Errorf("ConvertToLocalBackend(%v): %v", fn, err)
+		if err := tfengine.ConvertToLocalBackend(dir); err != nil {
+			return fmt.Errorf("ConvertToLocalBackend(%v): %v", dir, err)
 		}
 		init := exec.Command("terraform", "init")
-		init.Dir = fn
+		init.Dir = dir
 		if b, err := init.CombinedOutput(); err != nil {
 			return fmt.Errorf("command %v in %q: %v\n%v", init.Args, fn, err, string(b))
 		}
-		if err := addResources(fn, unsupported); err != nil {
+		if err := addResources(dir, unsupported); err != nil {
 			return fmt.Errorf("add resources from %q: %v", fn, err)
 		}
 	}

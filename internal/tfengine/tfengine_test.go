@@ -63,22 +63,22 @@ func TestExamples(t *testing.T) {
 				if !f.IsDir() || skipDirs[f.Name()] {
 					continue
 				}
-				fn := filepath.Join(tmp, f.Name())
+				dir := filepath.Join(tmp, f.Name())
 
 				// Convert the configs not reference a GCS backend as the state bucket does not exist.
-				if err := ConvertToLocalBackend(fn); err != nil {
-					t.Fatalf("ConvertToLocalBackend(%v): %v", fn, err)
+				if err := ConvertToLocalBackend(dir); err != nil {
+					t.Fatalf("ConvertToLocalBackend(%v): %v", dir, err)
 				}
 				init := exec.Command("terraform", "init")
-				init.Dir = fn
+				init.Dir = dir
 				if b, err := init.CombinedOutput(); err != nil {
-					t.Errorf("command %v in %q: %v\n%v", init.Args, fn, err, string(b))
+					t.Errorf("command %v in %q: %v\n%v", init.Args, dir, err, string(b))
 				}
 
 				plan := exec.Command("terraform", "plan")
-				plan.Dir = fn
+				plan.Dir = dir
 				if b, err := plan.CombinedOutput(); err != nil {
-					t.Errorf("command %v in %q: %v\n%v", plan.Args, fn, err, string(b))
+					t.Errorf("command %v in %q: %v\n%v", plan.Args, dir, err, string(b))
 				}
 			}
 		})
