@@ -17,7 +17,7 @@
 set -ex
 
 MODULES=(
-  bootstrap
+  devops
   example-prod-secrets
   example-prod-networks
   example-prod-data

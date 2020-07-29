@@ -17,7 +17,7 @@
 set -ex
 
 MODULES=(
-  bootstrap
+  devops
 )
 
 ACTIONS=()
