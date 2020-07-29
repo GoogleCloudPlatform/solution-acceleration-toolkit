@@ -111,7 +111,7 @@ schema = {
     resources = {
       description = <<EOF
         Resources in this project.
-        See [resources.hcl](./resources.hcl) for schema.
+        See [resources.hcl](./resources.md) for schema.
       EOF
     }
     terraform_addons = {
