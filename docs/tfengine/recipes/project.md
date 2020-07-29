@@ -85,7 +85,7 @@ Type: string
 ### resources
 
 Resources in this project.
-See [resources.hcl](./resources.md) for schema.
+See [resources.md](./resources.md) for schema.
 
 ### state_bucket
 
