@@ -142,6 +142,8 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
   allow             = var.allowed_policy_member_customer_ids
   allow_list_length = length(var.allowed_policy_member_customer_ids)
 }
+
+# https://medium.com/@jryancanty/stop-downloading-google-cloud-service-account-keys-1811d44a97d9
 module "orgpolicy_disable_service_account_key_creation" {
   source  = "terraform-google-modules/org-policy/google"
   version = "~> 3.0.2"
@@ -150,6 +152,30 @@ module "orgpolicy_disable_service_account_key_creation" {
   organization_id = "12345678"
 
   constraint  = "constraints/iam.disableServiceAccountKeyCreation"
+  policy_type = "boolean"
+  enforce     = true
+}
+
+module "orgpolicy_disable_service_account_key_upload" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for      = "organization"
+  organization_id = "12345678"
+
+  constraint  = "constraints/iam.disableServiceAccountKeyUpload"
+  policy_type = "boolean"
+  enforce     = true
+}
+
+module "orgpolicy_disable_automatic_iam_grants_for_default_service_accounts" {
+  source  = "terraform-google-modules/org-policy/google"
+  version = "~> 3.0.2"
+
+  policy_for      = "organization"
+  organization_id = "12345678"
+
+  constraint  = "constraints/iam.automaticIamGrantsForDefaultServiceAccounts"
   policy_type = "boolean"
   enforce     = true
 }
