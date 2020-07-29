@@ -1,12 +1,5 @@
 {
   "extends": [
     "config:base"
-  ],
-  "ignorePaths": [],
-  "packageRules": [
-    {
-      "paths": ["*.tf"],
-      "groupName": "terraform"
-    }
   ]
 }
