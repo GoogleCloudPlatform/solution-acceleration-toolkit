@@ -1,5 +1,12 @@
 {
   "extends": [
     "config:base"
+  ],
+  "ignorePaths": [],
+  "packageRules": [
+    {
+      "managers": ["terraform"],
+      "groupName": "terraform"
+    }
   ]
 }
