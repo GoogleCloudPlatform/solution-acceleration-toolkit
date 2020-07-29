@@ -5,7 +5,7 @@
   "ignorePaths": [],
   "packageRules": [
     {
-      "managers": ["terraform"],
+      "paths": ["*.tf"],
       "groupName": "terraform"
     }
   ]
