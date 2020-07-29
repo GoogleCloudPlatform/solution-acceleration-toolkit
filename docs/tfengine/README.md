@@ -6,9 +6,19 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-It introduces the concept of "templates". Templates can be used to generate
-multiple Terraform modules and configuration specific to your Google Cloud
-organization and structure.
+Use our [example](../../examples/tfengine) configs to quickly get started.
+
+## Terminology
+
+The Terraform engine introduces the concept of "templates". Templates can be
+used to generate
+[Terraform root modules](https://www.terraform.io/docs/glossary.html#root-module)
+specific to your Google Cloud organization and structure.
+
+Users typically pick from a set of
+[recipes](../../templates/tfengine/recipes) which implement a template for one
+core piece of GCP infrastructure. See the [recipe docs](./recipes)
+for individual recipe schemas.
 
 ## Why
 
@@ -19,17 +29,72 @@ that implement these steps for you, you can quickly set up a secure and complian
 environment and focus on the parts of the infrastructure that drive your
 business.
 
-This tool helps you follow:
+This tool helps you follow Google Cloud and Terraform best practices:
 
-- Google Cloud best practices through the use of modules from the
-[Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+- Clearly define your
+  [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
+  in infra-as-code.
 
-- [Terraform best practices](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo)
-    through the use of the
-    [Terragrunt](https://terragrunt.gruntwork.io/) open source tool to define
-    smaller and more modular configs.
+  - For example, the
+    [org foundation example](../../examples/tfengine/org_foundation.hcl)
+    can be used to define org level components and folders. Then,
+    the [sample team example](../../examples/tfengine/team.hcl) can be used
+    to define projects and resources within one of the folders.
 
-Use our [example](../../examples/tfengine) configs to quickly get started.
+- Break up Terraform state files into
+  [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
+  with remote state enabled.
+
+  - For example, the
+    [org foundation example](../../examples/tfengine/org_foundation.hcl)
+    creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
+    `folders`, etc.
+
+- Work towards alignment with HIPAA and compliance requirements for
+  [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
+
+  - For example, the [audit recipe](./recipes/audit.md) creates a dedicated
+    project to host audit logs and creates logs routers to export all audit logs
+    to BigQuery (for 1 year) and to GCS (for 7 years). These configurations help
+    align with
+    [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
+    requirements.
+
+- Reduce human access to the org infrastructure. Promote coding and version
+  control best practices.
+
+  - For example, the [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
+    run by Cloud Build service accounts. Through integration with Github,
+    changes to infrastructure can be made via pull requests. The hooks we set up
+    will automatically display the latest Terraform plan so users can be
+    confident in their changes. The changes can be automatically applied when
+    the pull request gets merged.
+
+- Allow logical folders within your hierarchy to be managed independently,
+  thus reducing org-wide broad access to single service account and chances of
+  cascading errors.
+
+  - For example, the [devops recipe](./recipes/devops.md) can be used on
+    different folders to setup a separate CICD pipeline and service account to
+    manage projects and resources within the folder. The service accounts of
+    other CICD pipelines cannot access these projects.
+
+- Define many security sensitive resources such as
+  [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
+  and storage resources.
+
+  - For example, the [project recipe](./recipes/project.md) can be used to
+    create projects and resources within projects.
+
+- Benefit from per-service best practices through use of the
+  [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+
+  - Our recipes use Cloud Foundation Toolkit modules wherever they make sense.
+    When there are multiple options, we choose the most secure option. For
+    example, creating a GKE cluster through our
+    [project recipe](./recipes/project.md) will utilize the
+    [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)
+    module from Cloud Foundation Toolkit.
 
 ## Prerequisites
 
@@ -38,19 +103,15 @@ Use our [example](../../examples/tfengine) configs to quickly get started.
     - [gcloud](https://cloud.google.com/sdk/gcloud)
     - [Terraform 0.12.29](https://releases.hashicorp.com/terraform/) (consistent
         with the version of Terraform used by CICD)
-    - [Terragrunt](https://terragrunt.gruntwork.io/)
     - [Go 1.14+](https://golang.org/dl/)
 
 1. Familiarize yourself with the tools you'll use:
 
     - [Google Cloud](https://cloud.google.com/docs/overview)
     - [Terraform](https://www.terraform.io/intro/index.html)
-    - [Terragrunt](https://blog.gruntwork.io/terragrunt-how-to-keep-your-terraform-code-dry-and-maintainable-f61ae06959d8)
 
     The infrastructure is deployed using Terraform, which is an industry
-    standard for defining infrastructure-as-code. Terragrunt is used as a
-    wrapper around Terraform to manage multiple Terraform deployments and reduce
-    duplication.
+    standard for defining infrastructure-as-code.
 
 1. Set up your
     [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization)
@@ -121,7 +182,7 @@ The engine takes a path to an input config and a path to output the generated
 Terraform configs. For details on fields for the input schema, see the
 [schema](../../internal/tfengine/schema.go). After the output has been generated,
 there is no longer a dependency on the engine and the user can directly use
-the `terraform` and `terragrunt` binaries to deploy the infrastructure.
+the `terraform` binary to deploy the infrastructure.
 
 1. Download the latest
    [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases)
@@ -145,6 +206,7 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
    ```hcl
    template "devops" {
      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
+     output_path = "./devops"
      data = {
        ...
      }
@@ -194,13 +256,6 @@ the `terraform` and `terragrunt` binaries to deploy the infrastructure.
    `TODO(user)` in the config to deploy the changes. Remove the comment once done.
 
 ## Tips
-
-- Before running `terragrunt apply-all`, always run `terragrunt plan-all` and
-  carefully review the output. The CICD creates a trigger to generate the
-  plan. Look for the values of the known fields to ensure they are what you
-  expect. You may see some values with the word "mock" in them. These values
-  are coming from other deployments and will be filled with the real value
-  after Terragrunt runs the dependent deployment.
 
 - If you plan on using the engine again, do not manually modify any generated
   file as it will be overwritten the next time the engine runs. Instead,

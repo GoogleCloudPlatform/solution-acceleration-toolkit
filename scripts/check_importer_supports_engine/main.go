@@ -83,24 +83,32 @@ func resourcesFromConfig(configPath string, unsupported map[string]bool) error {
 		return fmt.Errorf("tfengine.Run(%q, %q) = %v", configPath, tmp, err)
 	}
 
-	// Convert all Terraform backend blocks to local
-	path := filepath.Join(tmp, "live")
-	if err := tfengine.ConvertToLocalBackend(path); err != nil {
-		return fmt.Errorf("ConvertToLocalBackend(%v): %v", path, err)
+	// Run plan to verify configs.
+	fs, err := ioutil.ReadDir(tmp)
+	if err != nil {
+		return fmt.Errorf("ioutil.ReadDir = %v", err)
 	}
 
-	// Initialize all modules in order to create and fill the .terraform/ dirs
-	// Use plan-all because init-all tries to init an empty directory and fails
-	// plan-all still ends up calling init recursively, but doesn't fail
-	// Use CombinedOutput because err is just "exit status 1" without details
-	plan := exec.Command("terragrunt", "plan-all")
-	plan.Dir = path
-	if out, err := plan.CombinedOutput(); err != nil {
-		return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, plan.Dir, err, string(out))
-	}
+	for _, f := range fs {
+		if !f.IsDir() {
+			continue
+		}
+		dir := filepath.Join(tmp, f.Name())
 
-	// Find all resources
-	return addResources(path, unsupported)
+		// Convert the configs not reference a GCS backend as the state bucket does not exist.
+		if err := tfengine.ConvertToLocalBackend(dir); err != nil {
+			return fmt.Errorf("ConvertToLocalBackend(%v): %v", dir, err)
+		}
+		init := exec.Command("terraform", "init")
+		init.Dir = dir
+		if b, err := init.CombinedOutput(); err != nil {
+			return fmt.Errorf("command %v in %q: %v\n%v", init.Args, dir, err, string(b))
+		}
+		if err := addResources(dir, unsupported); err != nil {
+			return fmt.Errorf("add resources from %q: %v", dir, err)
+		}
+	}
+	return nil
 }
 
 var resourceRE = regexp.MustCompile(`(?s)resource "(.*?)"`)

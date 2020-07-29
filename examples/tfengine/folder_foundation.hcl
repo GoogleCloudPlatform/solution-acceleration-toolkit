@@ -18,6 +18,7 @@ data = {
   parent_type     = "folder"
   parent_id       = "12345678"
   billing_account = "000-000-000"
+  state_bucket    = "example-terraform-state"
 
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location = "us-east1"
@@ -28,13 +29,13 @@ data = {
 
 template "devops" {
   recipe_path = "{{$recipes}}/devops.hcl"
+  output_path = "./bootstrap"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
     # enable_bootstrap_gcs_backend = true
 
     admins_group = "example-folder-admins@example.com"
-    state_bucket = "example-terraform-state"
 
     project = {
       project_id = "example-devops"
@@ -42,30 +43,45 @@ template "devops" {
         "group:example-devops-owners@example.com",
       ]
     }
-    cicd = {
-      github = {
-        owner = "GoogleCloudPlatform"
-        name  = "example"
-      }
-      branch_regex   = "^master$"
-      terraform_root = "terraform"
+  }
+}
 
-      # Prepare and enable default triggers.
-      triggers = {
-        validate = {}
-        plan     = {}
-        apply    = {}
-      }
-      build_viewers = [
-        "group:example-cicd-viewers@example.com",
-      ]
+template "cicd" {
+  recipe_path = "{{$recipes}}/cicd.hcl"
+  output_path = "./cicd"
+  data = {
+    project_id = "example-devops"
+    github = {
+      owner = "GoogleCloudPlatform"
+      name  = "example"
     }
+    branch_regex   = "^master$"
+    terraform_root = "terraform"
+
+    # Prepare and enable default triggers.
+    triggers = {
+      validate = {}
+      plan     = {}
+      apply    = {}
+    }
+
+    build_viewers = [
+      "group:example-cicd-viewers@example.com",
+    ]
+
+    managed_modules = [
+      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
+      "audit",
+      "monitor",
+      "org_policies",
+      "folders",
+    ]
   }
 }
 
 template "audit" {
   recipe_path = "{{$recipes}}/audit.hcl"
-  output_path = "./live"
+  output_path = "./audit"
   data = {
     auditors_group = "example-auditors@example.com"
     project = {
@@ -82,7 +98,7 @@ template "audit" {
 
 template "monitor" {
   recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./live"
+  output_path = "./monitor"
   data = {
     project = {
       project_id = "example-monitor"
@@ -93,22 +109,29 @@ template "monitor" {
   }
 }
 
-# Top level prod folder.
-template "folder_prod" {
-  recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod"
-  data = {
-    display_name = "prod"
-  }
-}
 
-# Prod folder for team 1.
-template "folder_team1" {
-  recipe_path = "{{$recipes}}/folder.hcl"
-  output_path = "./live/prod/team1"
+# Subfolders.
+template "folders" {
+  recipe_path = "{{$recipes}}/folders.hcl"
+  output_path = "./folders"
   data = {
-    parent_type                  = "folder"
-    add_parent_folder_dependency = true
-    display_name                 = "team1"
+    folders = [
+      {
+        display_name = "prod"
+      },
+      {
+        display_name  = "team1"
+        resource_name = "prod_team1" // Prevent name conflict with dev/team1.
+        parent        = "$${google_folder.prod.name}"
+      },
+      {
+        display_name  = "dev"
+      },
+      {
+        display_name  = "team1"
+        resource_name = "dev_team1" // Prevent name conflict with prod/team1.
+        parent        = "$${google_folder.dev.name}"
+      }
+    ]
   }
 }

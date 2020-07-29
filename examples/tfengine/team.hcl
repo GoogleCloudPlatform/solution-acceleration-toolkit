@@ -33,6 +33,7 @@ data = {
 
 template "devops" {
   recipe_path = "{{$recipes}}/devops.hcl"
+  output_path = "./bootstrap"
   data = {
     # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
     # Run `terraform init` in the bootstrap module to backup its state to GCS.
@@ -45,25 +46,7 @@ template "devops" {
       owners = [
         "group:example-devops-owners@example.com",
       ]
-    }
-    cicd = {
-      github = {
-        owner = "GoogleCloudPlatform"
-        name  = "example"
-      }
-      branch_regex   = "^master$"
-      terraform_root = "terraform"
-
-      # Prepare and enable default triggers.
-      triggers = {
-        validate = {}
-        plan     = {}
-        apply    = {}
-      }
-      build_viewers = [
-        "group:example-cicd-viewers@example.com",
-      ]
-      managed_services = [
+      apis = [
         "container.googleapis.com",
         "dns.googleapis.com",
         "healthcare.googleapis.com",
@@ -75,19 +58,61 @@ template "devops" {
   }
 }
 
+template "cicd" {
+  recipe_path = "{{$recipes}}/cicd.hcl"
+  output_path = "./cicd"
+  data = {
+    project_id = "example-devops"
+    github = {
+      owner = "GoogleCloudPlatform"
+      name  = "example"
+    }
+    branch_regex   = "^master$"
+    terraform_root = "terraform"
+
+    # Prepare and enable default triggers.
+    triggers = {
+      validate = {}
+      plan     = {}
+      apply    = { run_on_push = false } # Do not auto run on push to branch
+    }
+
+    build_viewers = [
+      "group:example-cicd-viewers@example.com",
+    ]
+
+    # Kubernetes intentionally left out as it cannot be deployed by CICD.
+    managed_modules = [
+      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
+      "example-prod-secrets",
+      "example-prod-networks",
+      "example-prod-data",
+      "example-prod-apps",
+    ]
+  }
+}
+
 # Central secrets project and deployment.
 # NOTE: Any secret in this deployment that is not automatically filled in with
 # a value must be filled manually in the GCP console secret manager page before
 # any deployment can access its value.
 template "project_secrets" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-secrets"
+  output_path = "./example-prod-secrets"
   data = {
     project = {
       project_id = "example-prod-secrets"
       apis = [
         "secretmanager.googleapis.com"
       ]
+    }
+    terraform_addons = {
+      raw_config = <<EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
     }
     deployments = {
       resources = {
@@ -100,14 +125,6 @@ template "project_secrets" {
             secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
           },
         ]
-        terraform_addons = {
-          raw_config = <<EOF
-resource "random_password" "db" {
-  length = 16
-  special = true
-}
-EOF
-        }
       }
     }
   }
@@ -116,7 +133,7 @@ EOF
 # Prod central networks project for team 1.
 template "project_networks" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-networks"
+  output_path = "./example-prod-networks"
   data = {
     project = {
       project_id         = "example-prod-networks"
@@ -187,12 +204,6 @@ EOF
 
           }]
         }]
-        terraform_addons = {
-          outputs = [{
-            name  = "bastion_service_account"
-            value = "$${module.bastion_vm.service_account}"
-          }]
-        }
       }
     }
   }
@@ -201,7 +212,7 @@ EOF
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-data"
+  output_path = "./example-prod-data"
   data = {
     project = {
       project_id = "example-prod-data"
@@ -214,13 +225,6 @@ template "project_data" {
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
-      }
-      # Add dependency on network deployment.
-      terraform_addons = {
-        deps = [{
-          name = "networks"
-          path = "../../example-prod-networks/resources"
-        }]
       }
     }
     deployments = {
@@ -273,7 +277,7 @@ template "project_data" {
         }]
         iam_members = {
           "roles/cloudsql.client" = [
-            "serviceAccount:$${var.bastion_service_account}",
+            "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
           ]
         }
         storage_buckets = [{
@@ -293,21 +297,11 @@ template "project_data" {
             member = "group:example-readers@example.com"
           }]
         }]
-        terraform_addons = {
-          deps = [{
-            name = "networks"
-            path = "../../example-prod-networks/resources"
-            mock_outputs = {
-              bastion_service_account = "mock-sa"
-            }
-          }]
-          vars = [{
-            name             = "bastion_service_account"
-            type             = "string"
-            terragrunt_input = "$${dependency.networks.outputs.bastion_service_account}"
-          }]
-          /* TODO(user): Uncomment and re-run the engine after deploying secrets.
-          raw_config = <<EOF
+      }
+    }
+    terraform_addons = {
+      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
+      raw_config = <<EOF
 data "google_secret_manager_secret_version" "db_user" {
   provider = google-beta
 
@@ -323,8 +317,6 @@ data "google_secret_manager_secret_version" "db_password" {
 }
 EOF
 */
-        }
-      }
     }
   }
 }
@@ -332,7 +324,7 @@ EOF
 # Prod central apps project for team 1.
 template "project_apps" {
   recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./live/example-prod-apps"
+  output_path = "./example-prod-apps"
   data = {
     project = {
       project_id = "example-prod-apps"
@@ -348,26 +340,18 @@ template "project_apps" {
           name = "example-gke-subnet"
         }]
       }
-      # Add dependency on network deployment.
-      terraform_addons = {
-        deps = [{
-          name = "networks"
-          path = "../../example-prod-networks/resources"
-        }]
-      }
     }
     deployments = {
       resources = {
-        # TODO(user): Uncomment and re-run the engine after the apps project has been deployed.
-        # gke_clusters = [{
-        #   name                   = "example-gke-cluster"
-        #   network_project_id     = "example-prod-networks"
-        #   network                = "example-network"
-        #   subnet                 = "example-gke-subnet"
-        #   ip_range_pods_name     = "example-pods-range"
-        #   ip_range_services_name = "example-services-range"
-        #   master_ipv4_cidr_block = "192.168.0.0/28"
-        # }]
+        gke_clusters = [{
+          name                   = "example-gke-cluster"
+          network_project_id     = "example-prod-networks"
+          network                = "example-network"
+          subnet                 = "example-gke-subnet"
+          ip_range_pods_name     = "example-pods-range"
+          ip_range_services_name = "example-services-range"
+          master_ipv4_cidr_block = "192.168.0.0/28"
+        }]
         binary_authorization = {
           admission_whitelist_patterns = [{
             name_pattern = "gcr.io/cloudsql-docker/*"

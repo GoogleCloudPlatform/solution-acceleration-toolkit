@@ -19,7 +19,7 @@ module "{{resourceName . "name"}}" {
 
   # Required.
   name                   = "{{.name}}"
-  project_id             = var.project_id
+  project_id             = module.project.project_id
   region                 = "{{get . "gke_region" $.gke_region}}"
   regional               = true
   {{hclField . "network_project_id"}}

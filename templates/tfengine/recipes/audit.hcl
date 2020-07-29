@@ -86,8 +86,8 @@ schema = {
 
 template "project" {
   recipe_path = "./project.hcl"
-  output_path = "./audit"
   data = {
+    state_path_prefix = "audit"
     project = {
       apis = [
         "bigquery.googleapis.com",
@@ -99,5 +99,4 @@ template "project" {
 
 template "audit" {
   component_path = "../components/audit"
-  output_path    = "./audit/resources"
 }

@@ -55,9 +55,7 @@ Usage:
      Interactively ask for user input when import information cannot be
      automatically determined. (default true)
   -terraform_path string
-     Name or path to the terraform binary to use.
-     This could be i.e. 'terragrunt' or a path to
-     a different version of terraform. (default "terraform")
+     Name or path to the terraform binary to use (default "terraform").
 ```
 
 ## Limitations

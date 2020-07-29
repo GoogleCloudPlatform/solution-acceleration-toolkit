@@ -4,22 +4,15 @@
 
 ## Properties
 
-### enable_terragrunt
-
-Whether to convert to a Terragrunt deployment.
-Adds a terragrunt.hcl file in the deployment.
-
-Type: boolean
-
 ### state_bucket
 
-State bucket to use for GCS backend. Does nothing if 'enable_terragrunt' is true.
+State bucket to use for GCS backend.
 
 Type: string
 
 ### state_path_prefix
 
-Object path prefix for GCS backend. Does nothing if 'enable_terragrunt' is true.
+Object path prefix for GCS backend.
 
 Type: string
 
@@ -99,10 +92,6 @@ Default value of variable.
 Name of the variable.
 
 Type: string
-
-### terraform_addons.vars.terragrunt_input
-
-Input value to set in terragrunt.hcl for this var.
 
 ### terraform_addons.vars.type
 

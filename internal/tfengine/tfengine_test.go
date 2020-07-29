@@ -48,18 +48,38 @@ func TestExamples(t *testing.T) {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
 
-			// Run plan on live dir to verify configs.
-			path := filepath.Join(tmp, "live")
-
-			// Convert the configs not reference a GCS backend as the state bucket does not exist.
-			if err := ConvertToLocalBackend(path); err != nil {
-				t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+			// Run plan to verify configs.
+			fs, err := ioutil.ReadDir(tmp)
+			if err != nil {
+				t.Fatalf("ioutil.ReadDir = %v", err)
 			}
 
-			plan := exec.Command("terragrunt", "plan-all")
-			plan.Dir = path
-			if b, err := plan.CombinedOutput(); err != nil {
-				t.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
+			// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
+			skipDirs := map[string]bool{
+				"cicd":       true,
+				"kubernetes": true,
+			}
+			for _, f := range fs {
+				if !f.IsDir() || skipDirs[f.Name()] {
+					continue
+				}
+				dir := filepath.Join(tmp, f.Name())
+
+				// Convert the configs not reference a GCS backend as the state bucket does not exist.
+				if err := ConvertToLocalBackend(dir); err != nil {
+					t.Fatalf("ConvertToLocalBackend(%v): %v", dir, err)
+				}
+				init := exec.Command("terraform", "init")
+				init.Dir = dir
+				if b, err := init.CombinedOutput(); err != nil {
+					t.Errorf("command %v in %q: %v\n%v", init.Args, dir, err, string(b))
+				}
+
+				plan := exec.Command("terraform", "plan")
+				plan.Dir = dir
+				if b, err := plan.CombinedOutput(); err != nil {
+					t.Errorf("command %v in %q: %v\n%v", plan.Args, dir, err, string(b))
+				}
 			}
 		})
 	}

@@ -22,10 +22,6 @@ variable "folder" {
 }
 {{- end}}
 
-variable "project_id" {
-  type = string
-}
-
 variable "auditors_group" {
   type = string
 }

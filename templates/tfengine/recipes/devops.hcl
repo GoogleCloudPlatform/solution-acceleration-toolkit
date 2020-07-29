@@ -57,6 +57,15 @@ schema = {
             type = "string"
           }
         }
+        apis = {
+          description = <<EOF
+            List of APIs enabled in the devops project.
+
+            NOTE: If a CICD is deployed within this project, then the APIs of
+            all resources managed by the CICD must be listed here
+            (even if the resources themselves are in different projects).
+          EOF
+        }
       }
     }
     state_bucket = {
@@ -82,185 +91,9 @@ schema = {
       EOF
       type       = "boolean"
     }
-    enable_terragrunt = {
-      description = <<EOF
-        Whether to convert to a Terragrunt deployment. If set to "false", generate Terraform-only
-        configs and the CICD pipelines will only use Terraform. Default to "true".
-    EOF
-      type        = "boolean"
-    }
-    cicd = {
-      description          = "Config for CICD. If unset there will be no CICD."
-      type                 = "object"
-      additionalProperties = false
-      required = [
-        "branch_regex",
-        "triggers",
-      ]
-      properties = {
-        github = {
-          description          = "Config for GitHub Cloud Build triggers."
-          type                 = "object"
-          additionalProperties = false
-          properties = {
-            owner = {
-              description = "GitHub repo owner."
-              type        = "string"
-            }
-            name = {
-              description = "GitHub repo name."
-              type        = "string"
-            }
-          }
-        }
-        cloud_source_repository = {
-          description          = "Config for Google Cloud Source Repository Cloud Build triggers."
-          type                 = "object"
-          additionalProperties = false
-          properties = {
-            name = {
-              description = <<EOF
-                Cloud Source Repository repo name.
-                The Cloud Source Repository should be hosted under the devops project.
-              EOF
-              type        = "string"
-            }
-          }
-        }
-        branch_regex = {
-          description = "Regex of the branches to set the Cloud Build Triggers to monitor."
-          type        = "string"
-        }
-        terraform_root = {
-          description = "Path of the directory relative to the repo root containing the Terraform configs."
-          type        = "string"
-        }
-        build_viewers = {
-          description = <<EOF
-            IAM members to grant `cloudbuild.builds.viewer` role in the devops project
-            to see CICD results.
-          EOF
-          type        = "array"
-          items = {
-            type = "string"
-          }
-        }
-        managed_services = {
-          description = <<EOF
-            APIs to enable in the devops project so the Cloud Build service account
-            can manage those services in other projects.
-          EOF
-          type        = "array"
-          items = {
-            type = "string"
-          }
-        }
-        triggers = {
-          description = <<EOF
-            Config block for the CICD Cloud Build triggers.
-          EOF
-          type                 = "object"
-          additionalProperties = false
-          properties = {
-            validate = {
-              description = <<EOF
-                Config block for the presubmit validation Cloud Build trigger. If specified, create
-                the trigger and grant the Cloud Build Service Account necessary permissions to
-                perform the build.
-              EOF
-              type                 = "object"
-              additionalProperties = false
-              properties = {
-                run_on_push = {
-                  description = <<EOF
-                    Whether or not automatic triggering from a PR/push to branch. Default to true.
-                  EOF
-                  type        = "boolean"
-                }
-              }
-            }
-            plan = {
-              description = <<EOF
-                Config block for the presubmit plan Cloud Build trigger.
-                If specified, create the trigger and grant the Cloud Build Service Account
-                necessary permissions to perform the build.
-              EOF
-              type                 = "object"
-              additionalProperties = false
-              properties = {
-                run_on_push = {
-                  description = <<EOF
-                    Whether or not automatic triggering from a PR/push to branch. Default to true.
-                  EOF
-                  type        = "boolean"
-                }
-              }
-            }
-            apply = {
-              description = <<EOF
-                Config block for the postsubmit apply/deployyemt Cloud Build trigger.
-                If specified,create the trigger and grant the Cloud Build Service Account
-                necessary permissions to perform the build.
-              EOF
-              type                 = "object"
-              additionalProperties = false
-              properties = {
-                run_on_push = {
-                  description = <<EOF
-                    Whether or not automatic triggering from a PR/push to branch. Default to true.
-                  EOF
-                  type        = "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }
 
 template "bootstrap" {
   component_path = "../components/bootstrap"
-  output_path    = "./bootstrap"
 }
-
-{{if get . "enable_terragrunt" true}}
-template "root" {
-  component_path = "../components/terragrunt/root"
-  output_path    = "./live"
-}
-{{else}}
-template "root" {
-  component_path = "../components/terraform/root"
-  output_path    = "./live"
-}
-{{end}}
-
-# At least one trigger is specified.
-# TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/485): replace
-# with a hasOne function.
-{{if and (has . "cicd") (or (has .cicd.triggers "validate") (has .cicd.triggers "plan") (has .cicd.triggers "apply"))}}
-template "cicd_manual" {
-  component_path = "../components/cicd/manual"
-  output_path    = "./cicd"
-  flatten {
-    key = "cicd"
-  }
-}
-
-{{if get . "enable_terragrunt" true}}
-template "root" {
-  component_path = "../components/cicd/terragrunt"
-  output_path    = "./cicd"
-}
-{{end}}
-
-template "cicd_auto" {
-  component_path = "../components/cicd/auto"
-  output_path    = "./live/cicd"
-  flatten {
-    key = "cicd"
-  }
-}
-{{end}}

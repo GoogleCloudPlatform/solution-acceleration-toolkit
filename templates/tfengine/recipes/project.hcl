@@ -17,6 +17,14 @@ schema = {
   title                = "Project Recipe"
   additionalProperties = false
   properties = {
+    state_bucket = {
+      description = "Bucket to store remote state."
+      type        = "string"
+    }
+    state_path_prefix = {
+      description = "Path within bucket to store state."
+      type        = "string"
+    }
     parent_type = {
       description = <<EOF
         Type of parent GCP resource to apply the policy
@@ -98,12 +106,6 @@ schema = {
             }
           }
         }
-        terraform_addons = {
-          description = <<EOF
-            Additional Terraform configuration for the project deployment.
-            For schema see ./deployment.hcl.
-          EOF
-        }
       }
     }
     deployments = {
@@ -114,46 +116,36 @@ schema = {
       EOF
       type        = "object"
     }
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the project deployment.
+        For schema see ./deployment.hcl.
+      EOF
+    }
   }
 }
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "./project"
   flatten {
     key = "project"
   }
   data = {
-    enable_terragrunt = true
-    {{if and (eq .parent_type "folder") (get . "add_parent_folder_dependency" false)}}
-    terraform_addons = {
-      deps = [{
-        name = "parent_folder"
-        path = "../../folder"
-        mock_outputs = {
-          name = "mock-folder"
-        }
-      }]
-      inputs = {
-        folder_id = "$${dependency.parent_folder.outputs.name}"
-      }
-    }
-    {{end}}
+    state_path_prefix = "{{get . "state_path_prefix" .project.project_id}}"
   }
 }
 
 template "project" {
   component_path = "../components/project"
-  output_path    = "./project"
   flatten {
     key = "project"
   }
 }
 
+{{$project_id := .project.project_id}}
 {{range $name, $_ := get . "deployments"}}
-template "resources_{{$name}}" {
+template "deployment_{{$name}}" {
   recipe_path = "./resources.hcl"
-  output_path = "{{$name}}"
   flatten {
     key = "deployments.{{$name}}"
   }

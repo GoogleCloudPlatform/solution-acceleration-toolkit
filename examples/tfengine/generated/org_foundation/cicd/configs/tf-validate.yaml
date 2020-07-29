@@ -16,6 +16,9 @@
 
 timeout: 600s
 
+substitutions:
+    _TERRAFORM_ROOT: "."
+
 steps:
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
     entrypoint: terraform
@@ -29,16 +32,7 @@ steps:
     id: Terraform configs format check
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
-    entrypoint: terragrunt
-    args: ["hclfmt", "--terragrunt-check"]
+    entrypoint: bash
+    args: ["./cicd/configs/run.sh", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
-    id: Terragrunt configs format check
-
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
-    entrypoint: terragrunt
-    args: ["validate-all"]
-    dir: "${_TERRAFORM_ROOT}/live"
-    id: Terraform configs validation
-
-substitutions:
-    _TERRAFORM_ROOT: "."
+    id: Validate

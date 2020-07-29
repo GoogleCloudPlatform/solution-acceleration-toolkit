@@ -26,20 +26,13 @@ import (
 )
 
 // FormatDir formats the hcl files in the given directory.
-// The user must have terraform and terragrunt binaries in their PATH.
+// The user must have the terraform binary in their PATH.
 func FormatDir(rn runner.Runner, dir string) error {
 	tfFmt := exec.Command("terraform", "fmt", "-recursive")
 	tfFmt.Dir = dir
 	// Silence stdout.
 	if _, err := rn.CmdOutput(tfFmt); err != nil {
 		return fmt.Errorf("format terraform files: %v", err)
-	}
-
-	tgFmt := exec.Command("terragrunt", "hclfmt")
-	tgFmt.Dir = dir
-	// Silence stdout.
-	if _, err := rn.CmdOutput(tgFmt); err != nil {
-		return fmt.Errorf("format terragrunt and hcl files: %v", err)
 	}
 
 	if err := removeDeprecatedBracesFromDir(dir); err != nil {

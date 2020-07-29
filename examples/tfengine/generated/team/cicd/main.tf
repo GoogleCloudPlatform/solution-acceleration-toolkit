@@ -65,6 +65,10 @@ locals {
     "roles/resourcemanager.folderAdmin",
   ]
   cloudbuild_devops_roles = [
+    # Allow CICD to view all resources within the devops project so it can run terraform plans against them.
+    # It won't be able to actually apply any changes unless granted the permission in this list.
+    "roles/viewer",
+
     # Enable Cloud Build SA to list and enable APIs in the devops project.
     "roles/serviceusage.serviceUsageAdmin",
   ]
@@ -212,6 +216,7 @@ resource "google_cloudbuild_trigger" "plan" {
 }
 
 resource "google_cloudbuild_trigger" "apply" {
+  disabled = true
   provider = google-beta
   project  = var.project_id
   name     = "tf-apply"

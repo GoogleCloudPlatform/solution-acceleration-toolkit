@@ -16,13 +16,11 @@
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  output_path = "./org_policies"
   data = {
-    enable_terragrunt = true
+    state_path_prefix = "org_policies"
   }
 }
 
 template "org_policies" {
   component_path = "../../policygen/org_policies"
-  output_path    = "./org_policies"
 }

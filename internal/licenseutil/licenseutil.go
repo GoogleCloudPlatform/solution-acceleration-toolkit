@@ -81,10 +81,6 @@ func writeLicense(path string, fmode os.FileMode) error {
 
 func isTerraformFile(name string) bool {
 	name = strings.ToLower(filepath.Base(name))
-	if name == "terragrunt.hcl" {
-		return true
-	}
-
 	ext := filepath.Ext(name)
 	return ext == ".tf" || ext == ".tfvars"
 }
