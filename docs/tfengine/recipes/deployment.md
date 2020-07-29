@@ -6,13 +6,13 @@
 
 ### state_bucket
 
-State bucket to use for GCS backend. Does nothing if 'enable_terragrunt' is true.
+State bucket to use for GCS backend.
 
 Type: string
 
 ### state_path_prefix
 
-Object path prefix for GCS backend. Does nothing if 'enable_terragrunt' is true.
+Object path prefix for GCS backend.
 
 Type: string
 

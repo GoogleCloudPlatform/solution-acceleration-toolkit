@@ -17,6 +17,9 @@
 
 timeout: 600s
 
+substitutions:
+    _TERRAFORM_ROOT: "."
+
 steps:
   - name: "{{$cft}}"
     entrypoint: terraform
@@ -34,6 +37,3 @@ steps:
     args: ["./cicd/configs/run.sh", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate
-
-substitutions:
-    _TERRAFORM_ROOT: "."

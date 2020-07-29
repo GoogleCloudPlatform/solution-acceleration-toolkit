@@ -8,9 +8,11 @@ The CI and CD pipelines use
 [Cloud Build triggers](https://cloud.google.com/cloud-build/docs/automating-builds/create-manage-triggers)
 to detect changes in the repo, trigger builds, and run the workloads.
 
+## Setup
+
 1. Generate the CICD Terraform configs and Cloud Build configs using the
     Terraform Engine. Only the Terraform resources in the current directory,
-    that is, the `cicd/` directory under root, needs to be deplopyed manually.
+    that is, the `cicd/` directory under root, needs to be deployed manually.
 
 1. Before deploying CICD Terraform resources, install the Cloud Build app and
     connect your GitHub repository to your Cloud project by following the steps
@@ -66,6 +68,13 @@ Request. They should be configured to block Pull Request submissions.
 Every new push to the Pull Request at the configured branches automatically
 triggers presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in
 the Pull Ruquest.
+
+### Continuous deployment (postsubmit)
+
+The postsubmit Cloud Build job automatically starts after a Pull Ruquest is
+submitted to a configured branch. To view the result of the Cloud Build run, go
+to [Build history](https://console.cloud.google.com/cloud-build/builds) and look
+for your commit to view the Cloud Build job triggered by your merged commit.
 
 ### Deletion Check Allowlist
 

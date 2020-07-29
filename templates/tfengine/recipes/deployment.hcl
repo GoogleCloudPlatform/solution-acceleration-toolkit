@@ -18,11 +18,11 @@ schema = {
   # Additional properties allowed as this template is usually passed extra fields that are used by other templates.
   properties = {
     state_bucket = {
-      description = "State bucket to use for GCS backend. Does nothing if 'enable_terragrunt' is true."
+      description = "State bucket to use for GCS backend."
       type        = "string"
     }
     state_path_prefix = {
-      description = "Object path prefix for GCS backend. Does nothing if 'enable_terragrunt' is true."
+      description = "Object path prefix for GCS backend."
       type        = "string"
     }
     terraform_addons = {

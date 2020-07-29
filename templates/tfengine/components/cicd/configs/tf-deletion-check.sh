@@ -17,11 +17,9 @@
 # Helper script that checks for delete changes in terraform plans.
 # Expects that the following command was previously run:
 # $ terraform plan -out=plan.tfplan
-# or
-# $ terragrunt plan-all --terragrunt-non-interactive -out=plan.tfplan
 #
 # Requirements:
-#  * terraform or terragrunt
+#  * terraform
 #  * jq
 #
 # Can optionally pass in a path to an allowlist file. It will be passed as an

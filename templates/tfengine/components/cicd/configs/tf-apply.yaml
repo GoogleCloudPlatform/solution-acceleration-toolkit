@@ -17,6 +17,9 @@
 
 timeout: 21600s
 
+substitutions:
+    _TERRAFORM_ROOT: "."
+
 steps:
   - name: "{{$cft}}"
     entrypoint: terraform
@@ -28,6 +31,3 @@ steps:
     args: ["./cicd/configs/run.sh", "-a", "plan", "-a", "apply -auto-approve"]
     dir: "${_TERRAFORM_ROOT}"
     id: Apply
-
-substitutions:
-    _TERRAFORM_ROOT: "."
