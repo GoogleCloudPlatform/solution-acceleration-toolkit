@@ -21,9 +21,9 @@ module "{{resourceName . "name"}}" {
   project_id = module.project.project_id
   location   = "{{get . "storage_location" $.storage_location}}"
 
-  {{- if has . "lifecycle_rules"}}
+  {{if has . "lifecycle_rules" -}}
   lifecycle_rules = [
-    {{- range .lifecycle_rules}}
+    {{range .lifecycle_rules -}}
     {
       action = {
         type = "{{.action.type}}"
@@ -37,10 +37,10 @@ module "{{resourceName . "name"}}" {
         {{hclField .condition "num_newer_versions" -}}
       }
     }
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
+  {{end -}}
 
   {{hclField . "iam_members" -}}
 }
-{{end}}
+{{end -}}

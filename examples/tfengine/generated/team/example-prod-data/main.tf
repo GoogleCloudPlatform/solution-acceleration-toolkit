@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -47,8 +46,6 @@ module "project" {
   ]
 }
 
-
-
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.3.0"
@@ -57,8 +54,6 @@ module "one_billion_ms_example_dataset" {
   project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
-
-
   access = [
     {
       role          = "roles/bigquery.dataOwner"
@@ -69,7 +64,6 @@ module "one_billion_ms_example_dataset" {
       role           = "roles/bigquery.dataViewer"
     },
   ]
-
 }
 
 module "example_mysql_instance" {
@@ -83,8 +77,6 @@ module "example_mysql_instance" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
-
-
 }
 
 module "example_healthcare_dataset" {
@@ -101,19 +93,15 @@ module "example_healthcare_dataset" {
       role   = "roles/healthcare.datasetViewer"
     },
   ]
-
-
   dicom_stores = [
     {
       name = "example-dicom-store"
-
     }
   ]
   fhir_stores = [
     {
       name    = "example-fhir-store"
       version = "R4"
-
       iam_members = [
         {
           member = "group:example-fhir-viewers@example.com"
@@ -125,10 +113,10 @@ module "example_healthcare_dataset" {
   hl7_v2_stores = [
     {
       name = "example-hl7-store"
-
     }
   ]
 }
+
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"
@@ -150,6 +138,7 @@ module "example_prod_bucket" {
   name       = "example-prod-bucket"
   project_id = module.project.project_id
   location   = "us-central1"
+
   lifecycle_rules = [
     {
       action = {
@@ -161,7 +150,6 @@ module "example_prod_bucket" {
       }
     }
   ]
-
   iam_members = [
     {
       member = "group:example-readers@example.com"
@@ -169,4 +157,3 @@ module "example_prod_bucket" {
     },
   ]
 }
-

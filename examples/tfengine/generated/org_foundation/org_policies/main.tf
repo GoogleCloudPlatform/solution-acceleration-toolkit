@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # This folder contains Terraform resources to configure GCP Organization Policies.
 # (https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
 # See the following resources for the details of policies enforced.

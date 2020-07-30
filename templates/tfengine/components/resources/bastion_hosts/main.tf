@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .bastion_hosts -}}
+{{range .bastion_hosts}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/bastion-host/google"
   version = "~> 2.7.0"
@@ -20,11 +20,11 @@ module "{{resourceName . "name"}}" {
   name         = "{{.name}}"
   project      = module.project.project_id
   zone         = "{{get . "compute_region" $.compute_region}}-{{get . "compute_zone" $.compute_zone}}"
-  {{- if has . "network_project_id"}}
+  {{if has . "network_project_id" -}}
   host_project = "{{.network_project_id}}"
-  {{- else}}
+  {{else -}}
   host_project = module.project.project_id
-  {{- end}}
+  {{end -}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"
   members      = {{hcl .members}}
@@ -36,6 +36,6 @@ module "{{resourceName . "name"}}" {
   startup_script = <<EOF
 {{.startup_script}}
 EOF
-  {{- end}}
+  {{end -}}
 }
-{{- end}}
+{{end -}}

@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -49,6 +48,7 @@ module "project" {
 resource "google_compute_shared_vpc_host_project" "host" {
   project = module.project.project_id
 }
+
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
   version = "~> 2.7.0"
@@ -75,13 +75,13 @@ sudo chmod +x /usr/local/bin/cloud_sql_proxy
 EOF
 }
 
-
 module "example_network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.4.0"
 
   network_name = "example-network"
   project_id   = module.project.project_id
+
   subnets = [
     {
       subnet_name           = "example-bastion-subnet"
@@ -90,6 +90,7 @@ module "example_network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
+
     {
       subnet_name           = "example-gke-subnet"
       subnet_ip             = "10.2.0.0/16"
@@ -105,6 +106,7 @@ module "example_network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
+
   ]
   secondary_ranges = {
     "example-gke-subnet" = [
@@ -119,6 +121,7 @@ module "example_network" {
     ],
   }
 }
+
 module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 3.2.0"
@@ -126,6 +129,7 @@ module "cloud_sql_private_service_access_example_network" {
   project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
 }
+
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.2.0"

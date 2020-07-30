@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .compute_routers -}}
+{{range .compute_routers}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.2.0"
@@ -24,24 +24,24 @@ module "{{resourceName . "name"}}" {
 
   {{if has . "nats" -}}
   nats = [
-    {{- range .nats}}
+    {{range .nats -}}
     {
       name = "{{.name}}"
       {{hclField . "source_subnetwork_ip_ranges_to_nat"}}
-      {{- if has . "subnetworks"}}
+      {{if has . "subnetworks" -}}
       subnetworks = [
-        {{- range .subnetworks}}
+        {{range .subnetworks -}}
         {
           name = "{{.name}}"
           source_ip_ranges_to_nat  = {{hcl .source_ip_ranges_to_nat}}
           secondary_ip_range_names = []
         },
-        {{- end}}
+        {{end -}}
       ]
-      {{- end}}
+      {{end -}}
     },
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
+  {{end -}}
 }
-{{- end}}
+{{end -}}
