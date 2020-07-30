@@ -396,7 +396,8 @@ schema = {
           }
           cloud_sql_private_service_access = {
             description = "Whether to enable Cloud SQL private service access. Defaults to false."
-            type        = "boolean"
+            type        = "object"
+            additionalProperties = false
           }
         }
       }

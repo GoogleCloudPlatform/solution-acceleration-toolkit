@@ -59,7 +59,7 @@ module "{{$resource_name}}" {
   {{- end}}
 }
 
-{{- if get . "cloud_sql_private_service_access" false}}
+{{- if has . "cloud_sql_private_service_access"}}
 module "cloud_sql_private_service_access_{{$resource_name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 3.2.0"
