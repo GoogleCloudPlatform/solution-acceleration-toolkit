@@ -53,7 +53,14 @@ resource "google_secret_manager_secret" "manual_sql_db_user" {
   project   = module.project.project_id
 
   replication {
-    automatic = true
+    user_managed {
+      replicas {
+        location = "us-central1"
+      }
+      replicas {
+        location = "us-east1"
+      }
+    }
   }
 }
 

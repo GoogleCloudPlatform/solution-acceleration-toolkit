@@ -321,6 +321,12 @@ Type: string
 
 Type: array()
 
+### compute_networks.cloud_sql_private_service_access
+
+Whether to enable Cloud SQL private service access. Defaults to false.
+
+Type: object
+
 ### compute_networks.name
 
 Name of network.
@@ -340,12 +346,6 @@ Type: string
 Subnetworks within the network.
 
 Type: array(object)
-
-### compute_networks.subnets.cloud_sql_private_service_access
-
-Whether to enable Cloud SQL private service access. Defaults to false.
-
-Type: boolean
 
 ### compute_networks.subnets.compute_region
 
@@ -798,12 +798,6 @@ Type: string
 
 Type: array()
 
-### secrets.locations
-
-Locations to replicate secret. If unset, will automatically replicate.
-
-Type: array(string)
-
 ### secrets.resource_name
 
 Override for Terraform resource name.
@@ -823,6 +817,12 @@ Type: string
 ID of secret.
 
 Type: string
+
+### secrets.secret_locations
+
+Locations to replicate secret. If unset, will automatically replicate.
+
+Type: array(string)
 
 ### service_accounts
 
