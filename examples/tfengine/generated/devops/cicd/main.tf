@@ -194,8 +194,7 @@ resource "google_cloudbuild_trigger" "plan" {
   name     = "tf-plan"
 
   included_files = [
-    "${local.terraform_root_prefix}live/**",
-    "${local.terraform_root_prefix}cicd/configs/**"
+    "${local.terraform_root_prefix}**",
   ]
 
   github {
@@ -224,8 +223,7 @@ resource "google_cloudbuild_trigger" "apply" {
   name     = "tf-apply"
 
   included_files = [
-    "${local.terraform_root_prefix}live/**",
-    "${local.terraform_root_prefix}cicd/configs/**"
+    "${local.terraform_root_prefix}**",
   ]
 
   github {
