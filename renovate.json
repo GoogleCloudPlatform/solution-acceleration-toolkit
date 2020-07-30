@@ -1,5 +1,20 @@
 {
   "extends": [
     "config:base"
+  ],
+  "ignorePaths": [],
+  "packageRules": [
+    {
+      "managers": ["terraform"],
+      "groupName": "terraform",
+      "fileMatch": [
+        "\\.tf$"
+      ],
+      "matchStrings": [
+        "source\\s+=\\s+\"(?<depName>.+?)\"\\s+version\\s+=\\s+\"(?<currentValue>.+?)\""
+      ],
+      "datasourceTemplate": "terraform-module",
+      "versioningTemplate": "hashicorp"
+    }
   ]
 }
