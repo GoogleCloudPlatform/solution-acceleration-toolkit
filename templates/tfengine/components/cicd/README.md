@@ -52,12 +52,19 @@ to detect changes in the repo, trigger builds, and run the workloads.
     managed (relative to the `terraform_root` var) by the triggers and the order
     they are run.
 
-    NOTE: The CICD service account can manage a subset of resources (e.g. APIs)
-    within its own project. This allows users to have changes deployed for the
-    CICD through the standard Cloud Build pipeline, without needing to apply it
-    manually. To do so, add the `devops` root module (that hosts the devops
-    project) in the `managed_modules` list in the CICD Terraform Engine config.
-    Changes outside the approved set will still need to be made manually.
+    **NOTE**: The CICD service account can manage a subset of resources (e.g.
+    APIs) within its own project (`devop` project). This allows users to have
+    low risk changes made in the `devops` project deployed through the standard
+    Cloud Build pipeline, without needing to apply it manually. To do so, add
+    the `devops` module (that hosts the devops project) in the `managed_modules`
+    list in the CICD Terraform Engine config block. It is useful when you want
+    CICD to start managing a new API/service in other projects. (For the CICD
+    service account to manage services and resources, APIs of all resources
+    managed by it must also be enabled in the `devops` project itself, even if
+    the resources themselves are hosted in different projects.)
+
+    Other changes in the `devops` project outside the approved set (APIs) will
+    still need to be made manually.
 
 ## Operation
 
