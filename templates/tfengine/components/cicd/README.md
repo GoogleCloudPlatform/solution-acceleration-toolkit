@@ -61,13 +61,10 @@ to detect changes in the repo, trigger builds, and run the workloads.
     `devops` project outside the approved set (APIs) will still need to be made
     manually.
 
-    A common use case for this is when enabling a new API in the projects that
-    are managed by CICD. For the CICD service account to manage those services
-    and resources, APIs of all resources managed by it must also be enabled in
-    the `devops` project itself, even if the resources themselves are hosted in
-    different projects. With the above feature, you can add the same API in both
-    the `devops` project and the project that will host the resources, then CICD
-    can deploy both changes for you.
+    A common use case for this is when adding a new resource in a project that
+    requires a new API to be enabled. You must add the API in both the
+    resource's project as well as the `devops` project. With the feature above,
+    the CICD can deploy both changes for you.
 
 ## Operation
 
