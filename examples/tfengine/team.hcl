@@ -118,6 +118,10 @@ EOF
       secrets = [
         {
           secret_id = "manual-sql-db-user"
+          locations = [
+            "us-central1",
+            "us-east1",
+          ]
         },
         {
           secret_id   = "auto-sql-db-password"
