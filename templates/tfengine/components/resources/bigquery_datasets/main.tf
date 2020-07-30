@@ -20,8 +20,8 @@ module "{{resourceName . "dataset_id"}}" {
   dataset_id = "{{.dataset_id}}"
   project_id = module.project.project_id
   location   = "{{get . "bigquery_location" $.bigquery_location}}"
-  {{hclField . "default_table_expiration_ms"}}
+  {{hclField . "default_table_expiration_ms" -}}
 
-  {{hclField . "access"}}
+  {{hclField . "access" -}}
 }
-{{- end}}
+{{end -}}

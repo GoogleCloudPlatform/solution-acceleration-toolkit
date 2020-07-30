@@ -34,4 +34,4 @@ module "{{resourceName . "name"}}" {
   enable_private_endpoint    = false
   release_channel            = "STABLE"
 }
-{{- end}}
+{{end -}}

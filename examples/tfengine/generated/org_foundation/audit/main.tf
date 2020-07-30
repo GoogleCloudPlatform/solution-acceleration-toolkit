@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -41,8 +40,6 @@ module "project" {
     "logging.googleapis.com",
   ]
 }
-
-
 
 
 # IAM Audit log configs to enable collection of all possible audit logs.

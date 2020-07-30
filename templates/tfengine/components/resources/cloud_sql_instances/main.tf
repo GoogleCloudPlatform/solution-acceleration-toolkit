@@ -13,13 +13,12 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "cloud_sql_instances"}}
+{{$network := .network -}}
+{{if has . "network_project_id" -}}
+{{$network = printf "projects/%s/global/networks/%s" .network_project_id .network -}}
+{{end -}}
 
-{{- $network := .network}}
-{{- if has . "network_project_id"}}
-{{- $network = printf "projects/%s/global/networks/%s" .network_project_id .network}}
-{{- end}}
-
-{{- if eq .type "mysql"}}
+{{if eq .type "mysql" -}}
 module "{{resourceName . "name"}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 3.2.0"
@@ -31,8 +30,8 @@ module "{{resourceName . "name"}}" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "{{$network}}"
-  {{hclField . "user_name"}}
-  {{hclField . "user_password"}}
+  {{hclField . "user_name" -}}
+  {{hclField . "user_password" -}}
 }
-{{- end}}
-{{- end}}
+{{end -}}
+{{end -}}

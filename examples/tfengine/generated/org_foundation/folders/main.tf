@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 resource "google_folder" "prod" {
   display_name = "prod"
   parent       = "organizations/12345678"
