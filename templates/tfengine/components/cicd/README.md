@@ -53,7 +53,7 @@ to detect changes in the repo, trigger builds, and run the workloads.
     they are run.
 
     **NOTE**: The CICD service account can manage a subset of resources (e.g.
-    APIs) within its own project (`devop` project). This allows users to have
+    APIs) within its own project (`devops` project). This allows users to have
     low risk changes made in the `devops` project deployed through the standard
     Cloud Build pipelines, without needing to apply it manually. To do so, add
     the `devops` module (that hosts the devops project) in the `managed_modules`
