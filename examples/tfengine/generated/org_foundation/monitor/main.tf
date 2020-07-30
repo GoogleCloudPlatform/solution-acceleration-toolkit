@@ -38,6 +38,7 @@ module "project" {
   activate_apis = [
   ]
 }
+
 locals {
   forseti_vpc_name    = "forseti-vpc"
   forseti_subnet_name = "forseti-subnet"
