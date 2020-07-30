@@ -80,20 +80,26 @@ schema = {
       description = "Group who will be given org admin access."
       type        = "string"
     }
-    enable_bootstrap_gcs_backend = {
+    enable_gcs_backend = {
       description = <<EOF
-        Whether to enable GCS backend for the bootstrap deployment. Defaults to false.
-        Since the bootstrap deployment creates the state bucket, it cannot back the state
-        to the GCS bucket on the first deployment. Thus, this field should be set to true
-        after the bootstrap deployment has been applied. Then the user can run
-        `terraform init` in the bootstrapd deployment to transfer the state
-        from local to GCS.
+        Whether to enable GCS backend for the devops module.
+        Defaults to false.
+
+        Since the devops module creates the state bucket, it cannot back up
+        the state to the GCS bucket on the first module. Thus, this field
+        should be set to false initially.
+
+        After the devops module has been applied once and the state bucket
+        exists, the user should set this to true and regenerate the configs.
+
+        To migrate the state from local to GCS, run `terraform init` on the
+        module.
       EOF
       type       = "boolean"
     }
   }
 }
 
-template "bootstrap" {
-  component_path = "../components/bootstrap"
+template "devops" {
+  component_path = "../components/devops"
 }

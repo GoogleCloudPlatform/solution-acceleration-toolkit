@@ -27,7 +27,7 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-{{- if get . "enable_bootstrap_gcs_backend"}}
+{{- if get . "enable_gcs_backend"}}
   backend "gcs" {
     bucket = "{{.state_bucket}}"
     prefix = "devops"

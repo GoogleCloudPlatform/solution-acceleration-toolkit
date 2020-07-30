@@ -17,7 +17,7 @@
 set -ex
 
 MODULES=(
-  bootstrap
+  devops
   audit
   monitor
   org_policies

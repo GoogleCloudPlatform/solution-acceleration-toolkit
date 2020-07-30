@@ -14,14 +14,6 @@ folder id once it has been created.
 
 Type: boolean
 
-### deployments
-
-Map of deployment name to resources config.
-Each key will be a directory in the output path.
-For resource schema see ./resources.hcl.
-
-Type: object
-
 ### parent_id
 
 ID of parent GCP resource to apply the policy
@@ -89,6 +81,11 @@ Type: string
 Name of subnet.
 
 Type: string
+
+### resources
+
+Resources in this project.
+See [resources.md](./resources.md) for schema.
 
 ### state_bucket
 

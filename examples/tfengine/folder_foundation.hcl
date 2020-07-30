@@ -29,11 +29,11 @@ data = {
 
 template "devops" {
   recipe_path = "{{$recipes}}/devops.hcl"
-  output_path = "./bootstrap"
+  output_path = "./devops"
   data = {
-    # TODO(user): Uncomment and re-run the engine after generated bootstrap module has been deployed.
-    # Run `terraform init` in the bootstrap module to backup its state to GCS.
-    # enable_bootstrap_gcs_backend = true
+    # TODO(user): Uncomment and re-run the engine after generated devops module has been deployed.
+    # Run `terraform init` in the devops module to backup its state to GCS.
+    # enable_gcs_backend = true
 
     admins_group = "example-folder-admins@example.com"
 
@@ -70,7 +70,7 @@ template "cicd" {
     ]
 
     managed_modules = [
-      "bootstrap", // NOTE: CICD service account can only update APIs on the devops project.
+      "devops", // NOTE: CICD service account can only update APIs on the devops project.
       "audit",
       "monitor",
       "org_policies",

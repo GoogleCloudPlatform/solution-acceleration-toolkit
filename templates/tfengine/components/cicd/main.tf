@@ -31,7 +31,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "{{.state_bucket}}"
-    prefix = "cicd/manual"
+    prefix = "cicd"
   }
 }
 

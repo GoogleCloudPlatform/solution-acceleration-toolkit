@@ -226,11 +226,10 @@ the `terraform` binary to deploy the infrastructure.
     tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
     ```
 
-1. To run the one-time bootstrap to set up the devops project to host the Terraform
-   state, run the following commands:
+1. Set up the devops project to host the Terraform state and CICD, by running:
 
    ```shell
-    cd $OUTPUT_PATH/bootstrap
+    cd $OUTPUT_PATH/devops
     terraform init
     terraform plan
     terraform apply
