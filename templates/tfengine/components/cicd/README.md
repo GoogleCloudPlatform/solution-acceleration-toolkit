@@ -15,8 +15,8 @@ to detect changes in the repo, trigger builds, and run the workloads.
     that is, the `cicd/` directory under root, need to be deployed manually.
 
 1. Before deploying CICD Terraform resources, install the Cloud Build app and
-    connect your GitHub repository to your Cloud project by following the steps
-    in
+    [connect your GitHub repository](https://console.cloud.google.com/cloud-build/triggers/connect)
+    to your Cloud project by following the steps in
     [Installing the Cloud Build app](https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app).
     To perform this operation, you need Admin permission in that GitHub
     repository. This can't be done through automation.
