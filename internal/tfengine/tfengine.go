@@ -156,11 +156,16 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return err
 		}
 
+		write := template.WriteDir
+
 		// If the component path is a single file,
 		// treat the output_path as a file name and only write that out.
 		// Otherwise, treat as directory path
-		write := template.WriteDir
-		if pathutil.IsFile(cp) {
+		info, err := os.Stat(cp)
+		if err != nil {
+			return fmt.Errorf("stat %q: %v", cp, err)
+		}
+		if info.Mode().IsRegular() {
 			write = template.WriteFile
 		}
 

@@ -67,12 +67,3 @@ func Fetch(path, pwd, cacheDir string) (string, error) {
 	}
 	return filepath.Join(dst, subdir), nil
 }
-
-// IsFile wraps a call to os.Stat() to check if path is a regular file.
-func IsFile(path string) bool {
-	info, err := os.Stat(path)
-	if err != nil {
-		return false
-	}
-	return info.Mode().IsRegular()
-}
