@@ -108,6 +108,16 @@ template "component" {
       "example_customer_id",
     ]
   }
+}
+
+template "component" {
+  component_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies/main.tf?ref=templates-v0.1.0"
+  output_path = "policies.tf"
+  data = {
+    allowed_policy_member_customer_ids = [
+      "example_customer_id",
+    ]
+  }
 }`
 	confFile, err := ioutil.TempFile("", "*.hcl")
 	if err != nil {

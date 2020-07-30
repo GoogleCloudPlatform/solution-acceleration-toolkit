@@ -150,11 +150,21 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 
 	case ti.ComponentPath != "":
+		// Fetch the component, which could be remote.
 		cp, err := pathutil.Fetch(ti.ComponentPath, pwd, cacheDir)
 		if err != nil {
 			return err
 		}
-		if err := template.WriteDir(cp, outputPath, data); err != nil {
+
+		// If the component path is a single file,
+		// treat the output_path as a file name and only write that out.
+		// Otherwise, treat as directory path
+		write := template.WriteDir
+		if pathutil.IsFile(cp) {
+			write = template.WriteFile
+		}
+
+		if err := write(cp, outputPath, data); err != nil {
 			return fmt.Errorf("component %q: %v", cp, err)
 		}
 	}
