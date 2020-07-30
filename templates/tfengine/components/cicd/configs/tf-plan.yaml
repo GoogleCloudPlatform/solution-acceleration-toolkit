@@ -35,6 +35,6 @@ steps:
   # Check for delete operations as an FYI, it won't fail the build.
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["../cicd/configs/tf-deletion-check.sh", "../cicd/configs/tf-deletion-allowlist.txt"]
-    dir: "${_TERRAFORM_ROOT}/live"
+    args: ["./cicd/configs/tf-deletion-check.sh", "./cicd/configs/tf-deletion-allowlist.txt"]
+    dir: "${_TERRAFORM_ROOT}"
     id: Resource deletion check
