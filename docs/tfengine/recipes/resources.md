@@ -325,7 +325,7 @@ Type: array()
 
 Whether to enable Cloud SQL private service access. Defaults to false.
 
-Type: boolean
+Type: object
 
 ### compute_networks.name
 
