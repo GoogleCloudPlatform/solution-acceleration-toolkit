@@ -63,6 +63,11 @@ jobs:
         # For some reason, `hub edit` fails to update assets and crashes with various network errors
         if hub release | grep -q 'latest'; then
           bin/hub release delete 'latest'
+
+          # Give a bit of time for the release to actually be deleted.
+          # Otherwise, occasionally creating the release will fail with
+          # "Duplicate value for tag_name" when GitHub isn't fast enough.
+          sleep 5
         fi
 
         # Create the release with all binaries
