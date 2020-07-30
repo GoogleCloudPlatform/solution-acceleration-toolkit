@@ -15,8 +15,8 @@ to detect changes in the repo, trigger builds, and run the workloads.
     that is, the `cicd/` directory under root, need to be deployed manually.
 
 1. Before deploying CICD Terraform resources, install the Cloud Build app and
-    connect your GitHub repository to your Cloud project by following the steps
-    in
+    [connect your GitHub repository](https://console.cloud.google.com/cloud-build/triggers/connect)
+    to your Cloud project by following the steps in
     [Installing the Cloud Build app](https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app).
     To perform this operation, you need Admin permission in that GitHub
     repository. This can't be done through automation.
@@ -52,12 +52,22 @@ to detect changes in the repo, trigger builds, and run the workloads.
     managed (relative to the `terraform_root` var) by the triggers and the order
     they are run.
 
-    NOTE: The CICD service account can manage a subset of resources (e.g. APIs)
-    within its own project. This allows users to have changes deployed for the
-    CICD through the standard Cloud Build pipeline, without needing to apply it
-    manually. To do so, add the `devops` root module (that hosts the devops
-    project) in the `managed_modules` list in the CICD Terraform Engine config.
-    Changes outside the approved set will still need to be made manually.
+    **NOTE**: The CICD service account can manage a subset of resources (e.g.
+    APIs) within its own project (`devop` project). This allows users to have
+    low risk changes made in the `devops` project deployed through the standard
+    Cloud Build pipelines, without needing to apply it manually. To do so, add
+    the `devops` module (that hosts the devops project) in the `managed_modules`
+    list in the CICD Terraform Engine config block. Other changes in the
+    `devops` project outside the approved set (APIs) will still need to be made
+    manually.
+
+    A common use case for this is when enabling a new API in the projects that
+    are managed by CICD. For the CICD service account to manage those services
+    and resources, APIs of all resources managed by it must also be enabled in
+    the `devops` project itself, even if the resources themselves are hosted in
+    different projects. With the above feature, you can add the same API in both
+    the `devops` project and the project that will host the resources, then CICD
+    can deploy both changes for you.
 
 ## Operation
 
