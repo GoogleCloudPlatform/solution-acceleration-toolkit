@@ -21,38 +21,37 @@ module "{{resourceName . "name"}}" {
   project  = module.project.project_id
   location = "{{get . "healthcare_location" $.healthcare_location}}"
 
-  {{hclField . "iam_members"}}
+  {{hclField . "iam_members" -}}
 
-  {{if has . "dicom_stores"}}
+  {{if has . "dicom_stores" -}}
   dicom_stores = [
     {{range .dicom_stores -}}
     {
       name = "{{.name}}"
-      {{hclField . "iam_members"}}
-    }
-    {{end -}}
-  ]
-  {{end -}}
-
-  {{if has . "fhir_stores"}}
-  fhir_stores = [
-    {{range .fhir_stores -}}
-    {
-      name    = "{{.name}}"
-      version = "{{.version}}"
-
       {{hclField . "iam_members" -}}
     }
     {{end -}}
   ]
   {{end -}}
 
-  {{if has . "hl7_v2_stores"}}
+  {{- if has . "fhir_stores" -}}
+  fhir_stores = [
+    {{range .fhir_stores -}}
+    {
+      name    = "{{.name}}"
+      version = "{{.version}}"
+      {{hclField . "iam_members" -}}
+    }
+    {{end -}}
+  ]
+  {{end -}}
+
+  {{if has . "hl7_v2_stores" -}}
   hl7_v2_stores = [
     {{range .hl7_v2_stores -}}
     {
       name = "{{.name}}"
-      {{hclField . "iam_members"}}
+      {{hclField . "iam_members" -}}
     }
     {{end -}}
   ]

@@ -47,7 +47,6 @@ module "project" {
     "pubsub.googleapis.com",
   ]
 }
-
 resource "google_binary_authorization_policy" "policy" {
   project = module.project.project_id
 
@@ -176,6 +175,7 @@ module "example_gke_cluster" {
   enable_private_endpoint = false
   release_channel         = "STABLE"
 }
+
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.1.0"

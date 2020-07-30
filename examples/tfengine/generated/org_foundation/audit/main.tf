@@ -42,7 +42,6 @@ module "project" {
 }
 
 
-
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
   org_id  = var.org_id

@@ -44,7 +44,6 @@ module "project" {
     "sqladmin.googleapis.com",
   ]
 }
-
 resource "google_compute_shared_vpc_host_project" "host" {
   project = module.project.project_id
 }

@@ -46,7 +46,6 @@ module "project" {
   ]
 }
 
-
 resource "google_secret_manager_secret" "manual_sql_db_user" {
   provider = google-beta
 

@@ -43,7 +43,6 @@ module "project" {
 }
 
 
-
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_folder_iam_audit_config" "config" {
   folder  = var.folder
