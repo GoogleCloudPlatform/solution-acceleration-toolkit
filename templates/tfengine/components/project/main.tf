@@ -15,32 +15,32 @@ module "project" {
   version = "~> 8.1.0"
 
   name                    = "{{.project_id}}"
-  {{- if eq .parent_type "organization"}}
+  {{if eq .parent_type "organization" -}}
   org_id                  = "{{.parent_id}}"
-  {{- else }}
+  {{else -}}
   org_id                  = ""
   folder_id               = "{{.parent_id}}"
-  {{- end}}
+  {{end -}}
   billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
-  {{- if has . "shared_vpc_attachment"}}
-  {{- $host := .shared_vpc_attachment.host_project_id}}
+  {{if has . "shared_vpc_attachment" -}}
+  {{$host := .shared_vpc_attachment.host_project_id -}}
   shared_vpc              = "{{$host}}"
-  {{- if has . "shared_vpc_attachment.subnets"}}
+  {{if has . "shared_vpc_attachment.subnets" -}}
   shared_vpc_subnets = [
-    {{- range get . "shared_vpc_attachment.subnets"}}
-    {{- $region := get . "compute_region" $.compute_region}}
+    {{range get . "shared_vpc_attachment.subnets" -}}
+    {{$region := get . "compute_region" $.compute_region -}}
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
-  {{- end}}
+  {{end -}}
+  {{end -}}
   activate_apis = [
-    {{- range get . "apis"}}
+    {{range get . "apis" -}}
     "{{.}}",
-    {{- end}}
+    {{end -}}
   ]
 }
 
@@ -48,4 +48,4 @@ module "project" {
 resource "google_compute_shared_vpc_host_project" "host" {
   project = module.project.project_id
 }
-{{- end}}
+{{end -}}

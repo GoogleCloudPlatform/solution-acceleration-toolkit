@@ -12,10 +12,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .compute_instance_templates -}}
-{{- $template_resource_name := resourceName . "name_prefix" }}
-{{- $network_project_id := get . "network_project_id" "${var.project_id}"}}
-{{- $subnet := .subnet}}
+{{range .compute_instance_templates}}
+{{$template_resource_name := resourceName . "name_prefix" -}}
+{{$network_project_id := get . "network_project_id" "${var.project_id}" -}}
+{{$subnet := .subnet -}}
 module "{{$template_resource_name}}" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
   version = "~> 4.0.0"
@@ -26,35 +26,35 @@ module "{{$template_resource_name}}" {
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"
 
-  {{- hclField . "machine_type"}}
-  {{- hclField . "image_family"}}
-  {{- hclField . "image_project"}}
-  {{- hclField . "disk_size_gb"}}
-  {{- hclField . "disk_type"}}
-  {{- hclField . "preemptible"}}
+  {{hclField . "machine_type" -}}
+  {{hclField . "image_family" -}}
+  {{hclField . "image_project" -}}
+  {{hclField . "disk_size_gb" -}}
+  {{hclField . "disk_type" -}}
+  {{hclField . "preemptible" -}}
 
   service_account = {
     email = "{{.service_account}}"
     scopes = ["cloud-platform"]
   }
 
-  {{- if get . "enable_shielded_vm" true}}
+  {{if get . "enable_shielded_vm" true -}}
   enable_shielded_vm = true
   shielded_instance_config = {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
-  {{- end}}
+  {{end -}}
 
-  {{- if has . "startup_script"}}
+  {{if has . "startup_script" -}}
   startup_script = <<EOF
 {{.startup_script}}
 EOF
-  {{- end}}
+  {{end -}}
 }
 
-{{- range get . "instances"}}
+{{range get . "instances" -}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
   version = "~> 4.0.0"
@@ -65,5 +65,5 @@ module "{{resourceName . "name"}}" {
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"
 }
-{{- end}}
-{{- end}}
+{{end -}}
+{{end -}}

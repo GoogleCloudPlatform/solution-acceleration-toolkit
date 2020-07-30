@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -46,7 +45,6 @@ module "project" {
     "sqladmin.googleapis.com",
   ]
 }
-
 
 
 module "one_billion_ms_example_dataset" {
@@ -71,6 +69,7 @@ module "one_billion_ms_example_dataset" {
   ]
 
 }
+
 
 module "example_mysql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
@@ -103,12 +102,14 @@ module "example_healthcare_dataset" {
   ]
 
 
+
   dicom_stores = [
     {
       name = "example-dicom-store"
 
     }
   ]
+
   fhir_stores = [
     {
       name    = "example-fhir-store"
@@ -122,6 +123,7 @@ module "example_healthcare_dataset" {
       ]
     }
   ]
+
   hl7_v2_stores = [
     {
       name = "example-hl7-store"
@@ -150,6 +152,7 @@ module "example_prod_bucket" {
   name       = "example-prod-bucket"
   project_id = module.project.project_id
   location   = "us-central1"
+
   lifecycle_rules = [
     {
       action = {
@@ -161,7 +164,6 @@ module "example_prod_bucket" {
       }
     }
   ]
-
   iam_members = [
     {
       member = "group:example-readers@example.com"
@@ -169,4 +171,3 @@ module "example_prod_bucket" {
     },
   ]
 }
-

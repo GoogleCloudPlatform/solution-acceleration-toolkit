@@ -23,18 +23,18 @@ module "{{resourceName . "name"}}" {
 
   {{hclField . "iam_members"}}
 
-  {{if has . "dicom_stores" -}}
+  {{if has . "dicom_stores"}}
   dicom_stores = [
     {{range .dicom_stores -}}
     {
       name = "{{.name}}"
       {{hclField . "iam_members"}}
     }
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
+  {{end -}}
 
-  {{- if has . "fhir_stores"}}
+  {{if has . "fhir_stores"}}
   fhir_stores = [
     {{range .fhir_stores -}}
     {
@@ -43,19 +43,19 @@ module "{{resourceName . "name"}}" {
 
       {{hclField . "iam_members" -}}
     }
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
+  {{end -}}
 
-  {{- if has . "hl7_v2_stores"}}
+  {{if has . "hl7_v2_stores"}}
   hl7_v2_stores = [
     {{range .hl7_v2_stores -}}
     {
       name = "{{.name}}"
       {{hclField . "iam_members"}}
     }
-    {{- end}}
+    {{end -}}
   ]
-  {{- end}}
+  {{end -}}
 }
-{{- end}}
+{{end -}}

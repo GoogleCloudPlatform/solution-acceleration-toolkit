@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -48,7 +47,6 @@ module "project" {
     "pubsub.googleapis.com",
   ]
 }
-
 
 resource "google_binary_authorization_policy" "policy" {
   project = module.project.project_id
@@ -118,6 +116,7 @@ module "example_instance_template" {
     email  = "${google_service_account.example_sa.email}"
     scopes = ["cloud-platform"]
   }
+
   enable_shielded_vm = true
   shielded_instance_config = {
     enable_secure_boot          = true
@@ -125,6 +124,7 @@ module "example_instance_template" {
     enable_integrity_monitoring = true
   }
 }
+
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
   version = "~> 4.0.0"
@@ -189,6 +189,7 @@ module "project_iam_members" {
     ],
   }
 }
+
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 1.4.0"
@@ -213,4 +214,3 @@ resource "google_service_account" "example_sa" {
   account_id = "example-sa"
   project    = module.project.project_id
 }
-

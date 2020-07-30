@@ -24,7 +24,6 @@ terraform {
   }
 }
 
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -40,7 +39,6 @@ module "project" {
   activate_apis = [
   ]
 }
-
 
 locals {
   forseti_vpc_name    = "forseti-vpc"

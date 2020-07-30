@@ -24,4 +24,4 @@ module "{{resourceName . "dataset_id"}}" {
 
   {{hclField . "access"}}
 }
-{{- end}}
+{{end -}}

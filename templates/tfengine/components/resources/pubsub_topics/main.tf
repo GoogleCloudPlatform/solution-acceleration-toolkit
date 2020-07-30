@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range .pubsub_topics -}}
+{{range .pubsub_topics}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 1.4.0"
@@ -23,4 +23,4 @@ module "{{resourceName . "name"}}" {
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}
 }
-{{- end}}
+{{end -}}

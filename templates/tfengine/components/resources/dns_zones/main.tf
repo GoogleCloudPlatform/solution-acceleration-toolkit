@@ -24,4 +24,4 @@ module "{{resourceName . "name"}}" {
 
   recordsets = {{hcl .record_sets -}}
 }
-{{- end}}
+{{end -}}

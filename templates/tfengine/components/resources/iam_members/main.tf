@@ -20,12 +20,12 @@ module "project_iam_members" {
   mode     = "additive"
 
   bindings = {
-    {{- range $role, $members := .iam_members}}
+    {{range $role, $members := .iam_members -}}
     "{{$role}}" = [
-      {{- range $members}}
+      {{range $members -}}
       "{{.}}",
-      {{- end}}
+      {{end -}}
     ],
-    {{- end}}
+    {{end -}}
   }
 }

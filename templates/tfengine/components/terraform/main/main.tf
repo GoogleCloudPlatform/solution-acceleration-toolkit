@@ -26,4 +26,4 @@ terraform {
 
 {{if has . "raw_config" -}}
 {{.raw_config}}
-{{- end}}
+{{end -}}
