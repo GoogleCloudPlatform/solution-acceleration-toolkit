@@ -118,7 +118,7 @@ EOF
       secrets = [
         {
           secret_id = "manual-sql-db-user"
-          locations = [
+          secret_locations = [
             "us-central1",
             "us-east1",
           ]
@@ -175,7 +175,7 @@ template "project_networks" {
             ip_range = "10.3.0.0/16"
           }
         ]
-        cloud_sql_private_service_access = {} # Enable SQL private service access.
+        cloud_sql_private_service_access = true # Enable SQL private service access.
       }]
       bastion_hosts = [{
         name           = "bastion-vm"

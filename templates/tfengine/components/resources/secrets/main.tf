@@ -23,9 +23,9 @@ resource "google_secret_manager_secret" "{{$resource_name}}" {
   project   = module.project.project_id
 
   replication {
-    {{- if has . "locations"}}
+    {{- if has . "secret_locations"}}
     user_managed {
-      {{- range .locations}}
+      {{- range .secret_locations}}
       replicas {
         location = "{{.}}"
       }

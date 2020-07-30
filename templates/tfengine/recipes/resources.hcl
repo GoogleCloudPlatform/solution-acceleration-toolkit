@@ -331,6 +331,7 @@ schema = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-network)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -369,10 +370,6 @@ schema = {
                   description = "Region to create subnet in. Can be defined in global data block."
                   type        = "string"
                 }
-                cloud_sql_private_service_access = {
-                  description = "Whether to enable Cloud SQL private service access. Defaults to false."
-                  type        = "boolean"
-                }
                 secondary_ranges = {
                   description = "Secondary ranges of the subnet."
                   type        = "array"
@@ -397,6 +394,10 @@ schema = {
               }
             }
           }
+          cloud_sql_private_service_access = {
+            description = "Whether to enable Cloud SQL private service access. Defaults to false."
+            type        = "boolean"
+          }
         }
       }
     }
@@ -404,6 +405,7 @@ schema = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-cloud-router)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -643,6 +645,7 @@ schema = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -810,6 +813,7 @@ schema = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-pubsub)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "name",
         ]
@@ -843,6 +847,7 @@ schema = {
             type        = "array"
             items = {
               type = "object"
+              additionalProperties = false
               required = [
                 "name",
               ]
@@ -869,6 +874,7 @@ schema = {
       description = "[Module](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "secret_id",
         ]
@@ -885,7 +891,7 @@ schema = {
             EOF
             type        = "string"
           }
-          locations = {
+          secret_locations = {
             description = "Locations to replicate secret. If unset, will automatically replicate."
             type        = "array"
             items = {
@@ -903,6 +909,7 @@ schema = {
       description = "[Module](https://www.terraform.io/docs/providers/google/r/google_service_account.html)"
       type        = "array"
       items = {
+        additionalProperties = false
         required = [
           "account_id",
         ]
@@ -925,6 +932,7 @@ schema = {
     storage_buckets = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)"
       type        = "array"
+      additionalProperties = false
       items = {
         required = [
           "name"
