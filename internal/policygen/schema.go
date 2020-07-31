@@ -38,8 +38,8 @@ properties = {
     properties = {
       targets = {
         description = <<EOF
-          List of targets to apply the policies, e.g. organization/*,
-          organization/123/folder/456.
+          List of targets to apply the policies, e.g. organizations/**,
+          organizations/123/folders/456.
         EOF
         type = "array"
         items = {

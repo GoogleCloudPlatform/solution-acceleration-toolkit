@@ -146,7 +146,7 @@ spec:
   severity: high
   match:
     target:
-    - "project/789"
+    - "projects/789"
   parameters:
     mode: "allow"
     roles:

@@ -20,8 +20,8 @@ spec:
   severity: high
   match:
     target:
-    - "organization/12345678/*"
-    - "folder/4567/*"
+    - "organizations/12345678/**"
+    - "folders/4567/**"
 # TODO(xingao): reenable once the following issues are addressed.
 # https://github.com/forseti-security/policy-library/issues/367
 # https://github.com/forseti-security/config-validator/issues/145
