@@ -20,7 +20,7 @@ spec:
   severity: high
   match:
     target:
-    - "organization/12345678"
+    - "organizations/12345678"
   parameters:
     mode: allowlist
     role: roles/servicemanagement.quotaViewer

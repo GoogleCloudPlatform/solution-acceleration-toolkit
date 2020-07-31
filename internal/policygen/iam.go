@@ -45,7 +45,8 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 		outputFolder := fmt.Sprintf("%s_%s", root.Type, root.ID)
 		// Generate policies for allowed roles.
 		data := map[string]interface{}{
-			"target": fmt.Sprintf("%s/%s", root.Type, root.ID),
+			// organizations/1234, folders/1234, projects/1234
+			"target": fmt.Sprintf("%ss/%s", root.Type, root.ID),
 			"roles":  rbs,
 			// Also prepend type and id in the policy name to make it unique across multiple policies for the same role.
 			"suffix": fmt.Sprintf("%s_%s", root.Type, root.ID),
@@ -74,7 +75,8 @@ func generateIAMPolicies(rn runner.Runner, resources []*states.Resource, outputP
 			suffix = strings.ToLower(strings.Replace(suffix, ".", "_", -1))
 
 			data := map[string]interface{}{
-				"target": fmt.Sprintf("%s/%s", root.Type, root.ID),
+				// organizations/1234, folders/1234, projects/1234
+				"target": fmt.Sprintf("%ss/%s", root.Type, root.ID),
 				// Also prepend type and id in the policy name to make it unique across multiple policies for the same role.
 				"suffix":  fmt.Sprintf("%s_%s_%s", root.Type, root.ID, suffix),
 				"role":    role,
