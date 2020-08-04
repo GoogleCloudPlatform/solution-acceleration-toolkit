@@ -22,7 +22,7 @@ schema = {
       type        = "string"
     }
     state_path_prefix = {
-      description = "Object path prefix for GCS backend."
+      description = "Object path prefix for GCS backend. Defaults to the template's output_path."
       type        = "string"
     }
     terraform_addons = {

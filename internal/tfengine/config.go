@@ -65,11 +65,18 @@ func (c *Config) Init() error {
 		}
 	}
 
+	if c.Data == nil {
+		c.Data = make(map[string]interface{})
+	}
+
 	if c.SchemaCty != nil {
 		c.Schema, err = hcl.CtyValueToMap(c.SchemaCty)
 		if err != nil {
 			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
 		}
+		// Add output_path to be a valid field in schema. It is set for each template below.
+		props := c.Schema["properties"].(map[string]interface{})
+		props["output_path"] = make(map[string]interface{})
 	}
 
 	for _, t := range c.Templates {
@@ -78,6 +85,12 @@ func (c *Config) Init() error {
 			if err != nil {
 				return fmt.Errorf("failed to convert data %v to map: %v", t.DataCty, err)
 			}
+		}
+		if t.Data == nil {
+			t.Data = make(map[string]interface{})
+		}
+		if t.OutputPath != "" {
+			t.Data["output_path"] = filepath.Clean(t.OutputPath)
 		}
 	}
 	return c.validate()

@@ -21,7 +21,7 @@ schema = {
       type        = "string"
     }
     state_path_prefix = {
-      description = "Path within bucket to store state."
+      description = "Path within bucket to store state. Defaults to the template's output_path."
       type        = "string"
     }
     terraform_addons = {

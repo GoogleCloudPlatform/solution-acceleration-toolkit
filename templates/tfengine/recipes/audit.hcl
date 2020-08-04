@@ -87,7 +87,6 @@ schema = {
 template "project" {
   recipe_path = "./project.hcl"
   data = {
-    state_path_prefix = "audit"
     project = {
       apis = [
         "bigquery.googleapis.com",

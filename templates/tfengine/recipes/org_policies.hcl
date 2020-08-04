@@ -16,9 +16,6 @@
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  data = {
-    state_path_prefix = "org_policies"
-  }
 }
 
 template "org_policies" {

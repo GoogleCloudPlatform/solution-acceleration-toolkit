@@ -134,5 +134,10 @@ properties = {
       type = "string"
     }
   }
+
+  output_path = {
+    description = "For internal use. Default state path prefix for Terraform Engine deployments."
+    type        = "string"
+  }
 }
 `)

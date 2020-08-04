@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "{{.state_bucket}}"
-    prefix = "{{.state_path_prefix}}"
+    prefix = "{{get . "state_path_prefix" .output_path}}"
   }
 }
 
