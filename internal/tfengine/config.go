@@ -74,6 +74,7 @@ func (c *Config) Init() error {
 		if err != nil {
 			return fmt.Errorf("failed to convert schema %v to map: %v", c.SchemaCty, err)
 		}
+		// Add output_path to be a valid field in schema. It is set for each template below.
 		props := c.Schema["properties"].(map[string]interface{})
 		props["output_path"] = make(map[string]interface{})
 	}
