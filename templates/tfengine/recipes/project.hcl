@@ -41,16 +41,6 @@ schema = {
       type    = "string"
       pattern = "^[0-9]{8,25}$"
     }
-    add_parent_folder_dependency = {
-      description = <<EOF
-        Whether to automatically add dependency on parent folder.
-        Only applicable if 'parent_type' is folder. Defaults to false.
-        If the parent folder is created in the same config as this project then
-        this field should be set to true to create a dependency and pass the
-        folder id once it has been created.
-      EOF
-      type = "boolean"
-    }
     project = {
       description          = "Config for the project."
       type                 = "object"

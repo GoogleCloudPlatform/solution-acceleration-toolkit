@@ -20,8 +20,8 @@ spec:
   severity: high
   match:
     target:
-    - "organization/12345678/*"
-    - "folder/4567/*"
+    - "organizations/12345678/**"
+    - "folders/4567/**"
   parameters:
     mode: allowlist
     # https://cloud.google.com/sql/docs/mysql/locations and https://cloud.google.com/sql/docs/postgres/locations
