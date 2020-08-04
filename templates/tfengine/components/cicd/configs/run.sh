@@ -17,7 +17,7 @@
 set -ex
 
 MODULES=(
-  {{- range .managed_modules}}
+  {{- range .managed_dirs}}
   {{.}}
   {{- end}}
 )
