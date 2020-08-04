@@ -22,7 +22,7 @@ schema = {
       type        = "string"
     }
     state_path_prefix = {
-      description = "Path within bucket to store state."
+      description = "Path within bucket to store state. Defaults to the template's output_path."
       type        = "string"
     }
     parent_type = {
@@ -127,9 +127,6 @@ template "deployment" {
   recipe_path = "./deployment.hcl"
   flatten {
     key = "project"
-  }
-  data = {
-    state_path_prefix = "{{get . "state_path_prefix" .project.project_id}}"
   }
 }
 

@@ -409,7 +409,6 @@ template "kubernetes" {
   output_path = "./kubernetes"
 
   data = {
-    state_path_prefix = "kubernetes"
     terraform_addons = {
       raw_config = <<EOF
 data "google_client_config" "default" {}

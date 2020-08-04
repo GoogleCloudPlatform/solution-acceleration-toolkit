@@ -83,9 +83,6 @@ func Run(confPath, outPath string, opts *Options) error {
 
 func dump(conf *Config, pwd, cacheDir, outputPath string) error {
 	for _, ti := range conf.Templates {
-		if ti.Data == nil {
-			ti.Data = make(map[string]interface{})
-		}
 		if err := dumpTemplate(conf, pwd, cacheDir, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
@@ -137,10 +134,6 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 
 		// Each recipe could have a top-level data block. Keep it and merge, instead of overrwriting.
-		if rc.Data == nil {
-			rc.Data = make(map[string]interface{})
-		}
-
 		if err := template.MergeData(rc.Data, data); err != nil {
 			return err
 		}

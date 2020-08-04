@@ -68,9 +68,6 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  data = {
-    state_path_prefix = "folders"
-  }
 }
 
 template "folder" {
