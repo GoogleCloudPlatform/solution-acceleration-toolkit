@@ -71,7 +71,7 @@ schema = {
         type = "string"
       }
     }
-    managed_modules = {
+    managed_dirs = {
       description = <<EOF
         List of root modules managed by the CICD relative to `terraform_root`.
 
