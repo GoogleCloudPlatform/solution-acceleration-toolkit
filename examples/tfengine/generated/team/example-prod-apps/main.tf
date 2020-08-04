@@ -178,7 +178,7 @@ module "example_gke_cluster" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.1.0"
+  version = "~> 6.2.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
