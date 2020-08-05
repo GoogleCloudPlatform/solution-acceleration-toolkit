@@ -23,10 +23,6 @@ organizations/123/folders/456.
 
 Type: array(string)
 
-### gcp_org_policies
-
-Placeholder. Will be removed shortly.
-
 ### template_dir
 
 Absolute or relative path to the template directory. If relative, this path

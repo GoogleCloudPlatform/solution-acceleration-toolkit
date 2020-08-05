@@ -45,23 +45,6 @@ type config struct {
 	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for ForsetiPoliciesCty and GCPOrgPoliciesCty.
 	ForsetiPoliciesCty *cty.Value             `hcl:"forseti_policies,optional" json:"-"`
 	ForsetiPolicies    map[string]interface{} `json:"forseti_policies"`
-
-	GCPOrgPoliciesCty *cty.Value             `hcl:"gcp_org_policies,optional" json:"-"`
-	GCPOrgPolicies    map[string]interface{} `json:"gcp_org_policies"`
-}
-
-// ValidateOrgPoliciesConfig validates org policy configs against schema.
-func ValidateOrgPoliciesConfig(conf map[string]interface{}) error {
-	sj, err := hcl.ToJSON(OrgPoliciesSchema)
-	if err != nil {
-		return err
-	}
-	cj, err := json.Marshal(conf)
-	if err != nil {
-		return err
-	}
-
-	return jsonschema.ValidateJSONBytes(sj, cj)
 }
 
 func loadConfig(path string) (*config, error) {
@@ -103,13 +86,6 @@ func (c *config) init() error {
 		}
 	}
 
-	if c.GCPOrgPoliciesCty != nil {
-		c.GCPOrgPolicies, err = hcl.CtyValueToMap(c.GCPOrgPoliciesCty)
-		if err != nil {
-			return fmt.Errorf("failed to convert %v to map: %v", c.GCPOrgPoliciesCty, err)
-		}
-	}
-
 	sj, err := hcl.ToJSON(Schema)
 	if err != nil {
 		return fmt.Errorf("convert schema to JSON: %v", err)
@@ -120,17 +96,7 @@ func (c *config) init() error {
 		return err
 	}
 
-	if err := jsonschema.ValidateJSONBytes(sj, cj); err != nil {
-		return err
-	}
-
-	if c.GCPOrgPolicies != nil {
-		if err := ValidateOrgPoliciesConfig(c.GCPOrgPolicies); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return jsonschema.ValidateJSONBytes(sj, cj)
 }
 
 // loadResources loads Terraform state resources from the given path.

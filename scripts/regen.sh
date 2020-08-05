@@ -32,4 +32,5 @@ for example in examples/tfengine/*.hcl; do
 done
 
 # Schema docs
+rm -rf ./docs/*/schemas/*
 go run ./scripts/generate_schema_docs

@@ -14,26 +14,6 @@
 
 template_dir = "../../templates/policygen"
 
-gcp_org_policies = {
-  parent_type = "organization" # One of `organization`, `folder` or `project`
-  parent_id   = "12345678"
-  allowed_policy_member_customer_ids = [
-    "example_customer_id"
-  ]
-  allowed_shared_vpc_host_projects = [
-    "under:folders/12345678"
-  ]
-  allowed_trusted_image_projects = [
-    "projects/example-image-project"
-  ]
-  allowed_public_vms = [
-    "projects/example-project/zones/us-central1-a/instances/example-public-instance"
-  ]
-  allowed_ip_forwarding_vms = [
-    "projects/example-project/zones/us-central1-a/instances/example-routing-instance"
-  ]
-}
-
 forseti_policies = {
   targets = [
     "organizations/12345678/**",

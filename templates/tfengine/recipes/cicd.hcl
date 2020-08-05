@@ -89,14 +89,14 @@ schema = {
       }
     }
     triggers = {
-      description = <<EOF
+      description          = <<EOF
         Config block for the CICD Cloud Build triggers.
       EOF
       type                 = "object"
       additionalProperties = false
       properties = {
         validate = {
-          description = <<EOF
+          description          = <<EOF
             Config block for the presubmit validation Cloud Build trigger. If specified, create
             the trigger and grant the Cloud Build Service Account necessary permissions to
             perform the build.
@@ -113,7 +113,7 @@ schema = {
           }
         }
         plan = {
-          description = <<EOF
+          description          = <<EOF
             Config block for the presubmit plan Cloud Build trigger.
             If specified, create the trigger and grant the Cloud Build Service Account
             necessary permissions to perform the build.
@@ -130,7 +130,7 @@ schema = {
           }
         }
         apply = {
-          description = <<EOF
+          description          = <<EOF
             Config block for the postsubmit apply/deployyemt Cloud Build trigger.
             If specified,create the trigger and grant the Cloud Build Service Account
             necessary permissions to perform the build.

@@ -139,15 +139,6 @@ func TestExamples(t *testing.T) {
 				"bigquery_allow_locations.yaml",
 			},
 		},
-		{
-			filepath.Join("gcp_org_policies"),
-			3,
-			[]string{
-				"main.tf",
-				"variables.tf",
-				"terraform.tfvars",
-			},
-		},
 	}
 
 	for _, tc := range tests {

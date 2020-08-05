@@ -21,16 +21,16 @@ schema = {
         Type of parent GCP resource to apply the policy.
         Must be one of 'organization' or 'folder'."
       EOF
-      type = "string"
-      pattern = "^organization|folder$"
+      type        = "string"
+      pattern     = "^organization|folder$"
     }
     parent_id = {
       description = <<EOF
         ID of parent GCP resource to apply the policy.
         Can be one of the organization ID or folder ID according to parent_type.
       EOF
-      type = "string"
-      pattern = "^[0-9]{8,25}$"
+      type        = "string"
+      pattern     = "^[0-9]{8,25}$"
     }
     project = {
       description          = "Config of project to host auditing resources"

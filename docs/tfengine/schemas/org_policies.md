@@ -1,4 +1,4 @@
-# Google Cloud Organization Policies Config Schema
+# Google Cloud Organization Policy Recipe
 
 <!-- These files are auto generated -->
 
@@ -13,12 +13,9 @@ Type: array(string)
 
 ### allowed_policy_member_customer_ids
 
-See templates/policygen/org_policies/variables.tf.
-
-Must be specified to restrict domain members that can be assigned IAM roles.
-
-See
-[guide](https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id).
+See templates/policygen/org_policies/variables.tf. Must be specified to restrict
+domain members that can be assigned IAM roles. Obtain the ID by following
+<https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>.
 
 Type: array(string)
 
@@ -51,14 +48,14 @@ Type: string
 
 ### parent_id
 
-ID of parent GCP resource to apply the policy.
-Can be one of the organization ID or folder ID according to parent_type.
+ID of parent GCP resource to apply the policy: can be one of the organization ID,
+folder ID, or project ID according to parent_type.
 
 Type: string
 
 ### parent_type
 
-Type of parent GCP resource to apply the policy.
-Must be one of 'organization' or 'folder'."
+Type of parent GCP resource to apply the policy: can be one of "organization",
+"folder", or "project".
 
 Type: string

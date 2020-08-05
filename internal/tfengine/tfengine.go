@@ -26,7 +26,6 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/otiai10/copy"
@@ -125,11 +124,6 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			// Only check against unmerged template data so we can disallow additional properties in the schema.
 			if err := jsonschema.ValidateMap(rc.Schema, ti.Data); err != nil {
 				return fmt.Errorf("recipe %q: %v", rp, err)
-			}
-		} else if ti.Name == "org_policies" {
-			// Only check against unmerged template data so we can disallow additional properties in the schema.
-			if err := policygen.ValidateOrgPoliciesConfig(ti.Data); err != nil {
-				return err
 			}
 		}
 

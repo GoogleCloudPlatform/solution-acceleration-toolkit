@@ -14,8 +14,8 @@ used to generate
 specific to your Google Cloud organization and structure.
 
 Users typically pick from a set of
-[recipes](../../templates/tfengine/schemas) which implement a template for one
-core piece of GCP infrastructure. See the [recipe docs](./recipes)
+[recipes](../../templates/tfengine/recipes) which implement a template for one
+core piece of GCP infrastructure. See the [recipe docs](./schemas)
 for individual recipe schemas.
 
 ## Why
@@ -48,10 +48,18 @@ This tool helps you follow Google Cloud and Terraform best practices:
     creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
     `folders`, etc.
 
+- Set up GCP Organization Policy Constraints for security best practices.
+
+  - For example, the
+    [org policy recipe](./schemas/org_policies.md) can be used to configure
+    and generate best practice
+    [GCP Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
+    to help align your GCP infrastructure with HIPAA requirements.
+
 - Work towards alignment with HIPAA and compliance requirements for
   [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
 
-  - For example, the [audit recipe](./recipes/audit.md) creates a dedicated
+  - For example, the [audit recipe](./schemas/audit.md) creates a dedicated
     project to host audit logs and creates logs routers to export all audit logs
     to BigQuery (for 1 year) and to GCS (for 7 years). These configurations help
     align with
@@ -61,7 +69,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Reduce human access to the org infrastructure. Promote coding and version
   control best practices.
 
-  - For example, the [CICD recipe](./recipes/cicd.md) sets up a pipeline that is
+  - For example, the [CICD recipe](./schemas/cicd.md) sets up a pipeline that is
     run by Cloud Build service accounts. Through integration with Github,
     changes to infrastructure can be made via pull requests. The hooks we set up
     will automatically display the latest Terraform plan so users can be
@@ -72,7 +80,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   thus reducing org-wide broad access to single service account and chances of
   cascading errors.
 
-  - For example, the [devops recipe](./recipes/devops.md) can be used on
+  - For example, the [devops recipe](./schemas/devops.md) can be used on
     different folders to setup a separate CICD pipeline and service account to
     manage projects and resources within the folder. The service accounts of
     other CICD pipelines cannot access these projects.
@@ -81,7 +89,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
   and storage resources.
 
-  - For example, the [project recipe](./recipes/project.md) can be used to
+  - For example, the [project recipe](./schemas/project.md) can be used to
     create projects and resources within projects.
 
 - Benefit from per-service best practices through use of the
@@ -90,7 +98,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
   - Our recipes use Cloud Foundation Toolkit modules wherever they make sense.
     When there are multiple options, we choose the most secure option. For
     example, creating a GKE cluster through our
-    [project recipe](./recipes/project.md) will utilize the
+    [project recipe](./schemas/project.md) will utilize the
     [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)
     module from Cloud Foundation Toolkit.
 

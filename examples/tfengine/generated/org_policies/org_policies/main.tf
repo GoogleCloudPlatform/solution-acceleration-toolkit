@@ -12,6 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
+    bucket = "example-terraform-state"
+    prefix = "org_policies"
+  }
+}
+
 # This folder contains Terraform resources to configure GCP Organization Policies.
 # (https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
 # See the following resources for the details of policies enforced.
