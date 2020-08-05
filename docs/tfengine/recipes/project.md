@@ -4,16 +4,6 @@
 
 ## Properties
 
-### add_parent_folder_dependency
-
-Whether to automatically add dependency on parent folder.
-Only applicable if 'parent_type' is folder. Defaults to false.
-If the parent folder is created in the same config as this project then
-this field should be set to true to create a dependency and pass the
-folder id once it has been created.
-
-Type: boolean
-
 ### parent_id
 
 ID of parent GCP resource to apply the policy

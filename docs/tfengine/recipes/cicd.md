@@ -48,7 +48,7 @@ GitHub repo owner.
 
 Type: string
 
-### managed_modules
+### managed_dirs
 
 List of root modules managed by the CICD relative to `terraform_root`.
 

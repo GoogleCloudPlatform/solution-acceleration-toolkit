@@ -36,8 +36,8 @@ gcp_org_policies = {
 
 forseti_policies = {
   targets = [
-    "organization/12345678/*",
-    "folder/4567/*",
+    "organizations/12345678/**",
+    "folders/4567/**",
   ]
   allowed_policy_member_domains = [
     "example.com"
