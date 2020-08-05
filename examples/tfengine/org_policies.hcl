@@ -15,8 +15,6 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type  = "organization" # One of `organization` or `folder`.
-  parent_id    = "12345678"
   state_bucket = "example-terraform-state"
 }
 
@@ -24,6 +22,8 @@ template "org_policies" {
   recipe_path = "{{$recipes}}/org_policies.hcl"
   output_path = "./org_policies"
   data = {
+    parent_type = "organization" # One of `organization`, `folder` or `project`.
+    parent_id   = "12345678"
     allowed_policy_member_customer_ids = [
       "example_customer_id",
     ]
