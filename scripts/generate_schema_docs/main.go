@@ -21,7 +21,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -31,28 +30,38 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
 
-var (
-	recipesDir = flag.String("recipes_dir", "templates/tfengine/recipes", "Directory hosting Terraform engine recipes.")
-	outputDir  = flag.String("output_dir", "docs/tfengine/recipes", "Directory to output markdown files.")
+const (
+	recipesDir = "./templates/tfengine/recipes"
+	docsDir    = "./docs"
 )
 
 var schemaRE = regexp.MustCompile(`(?s)(?:schema = {)(.+?)(?:}\n\n)`)
 
 func main() {
-	if err := run(*recipesDir, *outputDir); err != nil {
+	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run(recipesDir, outputDir string) error {
-	tmp, err := ioutil.TempDir("", "")
-	if err != nil {
+func run() error {
+	if err := writeSchema([]byte(tfengine.Schema), filepath.Join(docsDir, "tfengine/config.md")); err != nil {
 		return err
 	}
-	defer os.RemoveAll(tmp)
+	if err := writeSchema([]byte(policygen.Schema), filepath.Join(docsDir, "policygen/config.md")); err != nil {
+		return err
+	}
+	if err := generateRecipeSchemaDocs(); err != nil {
+		return err
+	}
+	return nil
+}
 
+func generateRecipeSchemaDocs() error {
+	outputDir := filepath.Join(docsDir, "tfengine/recipes")
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -65,27 +74,14 @@ func run(recipesDir, outputDir string) error {
 			return nil
 		}
 
-		s, err := schemaFromHCL(matches[1])
-		if err != nil {
-			return err
-		}
-
-		buf := new(bytes.Buffer)
-		if err := tmpl.Execute(buf, s); err != nil {
-			return err
-		}
-
 		outPath := filepath.Join(outputDir, strings.Replace(info.Name(), ".hcl", ".md", 1))
-		if err := ioutil.WriteFile(outPath, buf.Bytes(), 0755); err != nil {
-			return fmt.Errorf("write %q: %v", outPath, err)
-		}
 
-		return nil
+		return writeSchema(matches[1], outPath)
 	}
 	if err := filepath.Walk(recipesDir, fn); err != nil {
 		return err
 	}
-	return nil
+	return writeSchema(policygen.OrgPoliciesSchema, filepath.Join(outputDir, "org_policies.md"))
 }
 
 // findMatches extracts the schema from an HCL recipe.
@@ -155,4 +151,21 @@ func lstrip(s string) string {
 		b.WriteRune('\n')
 	}
 	return b.String()
+}
+
+func writeSchema(b []byte, outPath string) error {
+	s, err := schemaFromHCL(b)
+	if err != nil {
+		return err
+	}
+
+	buf := new(bytes.Buffer)
+	if err := tmpl.Execute(buf, s); err != nil {
+		return err
+	}
+
+	if err := ioutil.WriteFile(outPath, buf.Bytes(), 0755); err != nil {
+		return fmt.Errorf("write %q: %v", outPath, err)
+	}
+	return nil
 }

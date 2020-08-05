@@ -14,9 +14,9 @@
 
 package policygen
 
+// Schema is the policygen input schema.
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
-
-var schema = []byte(`
+var Schema = []byte(`
 title = "Policy Generator Config Schema"
 additionalProperties = false
 required = ["template_dir"]
@@ -61,7 +61,8 @@ properties = {
 }
 `)
 
-var orgPoliciesSchema = []byte(`
+// OrgPoliciesSchema is the sorg policies schena.
+var OrgPoliciesSchema = []byte(`
 title                = "Google Cloud Organization Policies Config Schema"
 additionalProperties = false
 required = [

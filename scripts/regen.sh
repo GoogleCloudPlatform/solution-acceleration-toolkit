@@ -30,3 +30,6 @@ for example in examples/tfengine/*.hcl; do
   example_gendir="${gendir}/tfengine/generated/$(basename "${example}" | cut -d. -f1)"
   go run ./cmd/tfengine --config_path ${example} --output_path ${example_gendir}
 done
+
+# Schema docs
+go run ./scripts/generate_schema_docs

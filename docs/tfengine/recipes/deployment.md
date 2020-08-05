@@ -12,7 +12,7 @@ Type: string
 
 ### state_path_prefix
 
-Object path prefix for GCS backend.
+Object path prefix for GCS backend. Defaults to the template's output_path.
 
 Type: string
 

@@ -14,8 +14,9 @@
 
 package tfengine
 
+// Schema is the Terraform engine input schema.
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
-const schema = `
+const Schema = `
 title = "Terraform Engine Config Schema"
 
 additionalProperties = false

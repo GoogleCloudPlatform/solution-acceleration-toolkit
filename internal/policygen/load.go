@@ -52,7 +52,7 @@ type config struct {
 
 // ValidateOrgPoliciesConfig validates org policy configs against schema.
 func ValidateOrgPoliciesConfig(conf map[string]interface{}) error {
-	sj, err := hcl.ToJSON(orgPoliciesSchema)
+	sj, err := hcl.ToJSON(OrgPoliciesSchema)
 	if err != nil {
 		return err
 	}
@@ -110,7 +110,7 @@ func (c *config) init() error {
 		}
 	}
 
-	sj, err := hcl.ToJSON(schema)
+	sj, err := hcl.ToJSON(Schema)
 	if err != nil {
 		return fmt.Errorf("convert schema to JSON: %v", err)
 	}
