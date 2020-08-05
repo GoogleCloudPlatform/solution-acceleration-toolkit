@@ -78,10 +78,7 @@ func generateRecipeSchemaDocs() error {
 
 		return writeSchema(matches[1], outPath)
 	}
-	if err := filepath.Walk(recipesDir, fn); err != nil {
-		return err
-	}
-	return writeSchema(policygen.OrgPoliciesSchema, filepath.Join(outputDir, "org_policies.md"))
+	return filepath.Walk(recipesDir, fn)
 }
 
 // findMatches extracts the schema from an HCL recipe.

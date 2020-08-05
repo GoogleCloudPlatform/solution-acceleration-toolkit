@@ -52,7 +52,7 @@ schema = {
             Thus, there should be a group in this list and you must be part of that group,
             so a group owns the project going forward.
           EOF
-          type = "array"
+          type        = "array"
           items = {
             type = "string"
           }
@@ -95,7 +95,7 @@ schema = {
         To migrate the state from local to GCS, run `terraform init` on the
         module.
       EOF
-      type       = "boolean"
+      type        = "boolean"
     }
   }
 }

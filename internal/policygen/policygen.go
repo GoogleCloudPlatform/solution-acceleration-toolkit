@@ -32,8 +32,7 @@ import (
 )
 
 const (
-	forsetiOutputRoot     = "forseti_policies"
-	orgPoliciesOutputRoot = "gcp_org_policies"
+	forsetiOutputRoot = "forseti_policies"
 )
 
 // RunArgs is the struct representing the arguments passed to Run().
@@ -84,10 +83,6 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := generateGCPOrgPolicies(filepath.Join(tmpDir, orgPoliciesOutputRoot), c); err != nil {
-		return fmt.Errorf("generate GCP organization policies: %v", err)
-	}
-
 	// Policy Library templates are released in a backwards compatible way, and old templates will be
 	// kept in the repository as well, so it's relatively safe to pull from 'master' branch all the time.
 	tp, err := pathutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
@@ -120,15 +115,6 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 
 	return copy.Copy(tmpDir, outputPath)
-}
-
-func generateGCPOrgPolicies(outputPath string, c *config) error {
-	if c.GCPOrgPolicies == nil {
-		return nil
-	}
-
-	in := filepath.Join(c.TemplateDir, "org_policies")
-	return template.WriteDir(in, outputPath, c.GCPOrgPolicies)
 }
 
 func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath string, c *config) error {

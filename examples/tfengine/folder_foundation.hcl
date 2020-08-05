@@ -125,7 +125,7 @@ template "folders" {
         parent        = "$${google_folder.prod.name}"
       },
       {
-        display_name  = "dev"
+        display_name = "dev"
       },
       {
         display_name  = "team1"
