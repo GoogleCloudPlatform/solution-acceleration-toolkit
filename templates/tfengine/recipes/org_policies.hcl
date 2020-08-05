@@ -91,5 +91,5 @@ template "deployment" {
 }
 
 template "org_policies" {
-  component_path = "../components/security/org_policies"
+  component_path = "../components/org_policies"
 }
