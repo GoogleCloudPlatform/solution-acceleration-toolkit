@@ -1,7 +1,5 @@
 # Policy Generator
 
-Status: Alpha
-
 A security policy generator which generates policies for two purposes:
 
 1. Typical policies enforced in a HIPAA aligned GCP environment.

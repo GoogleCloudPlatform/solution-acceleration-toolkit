@@ -1,7 +1,5 @@
 # Terraform Importer
 
-Status: Alpha
-
 Terraform Importer is a standalone utility to import existing infrastructure
 into a Terraform state, based on existing Terraform configs. Its target use-case
 is to facilitate migration between other infrastructure-as-code tools (such as
