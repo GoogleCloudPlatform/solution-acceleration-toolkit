@@ -33,8 +33,11 @@ properties = {
   template = {
     description = <<EOF
       Templates the engine will parse and fill in with values from data.
-      Templates use the Go templating engine: https://golang.org/pkg/text/template/
-      [See](../../template/funcmap.go) the helper template funcs.
+
+      Templates use the [Go templating engine](https://golang.org/pkg/text/template/).
+
+      Template maintainers can use several
+      [helper template funcs](../../template/funcmap.go).
     EOF
     type = "array"
     items = {

@@ -57,7 +57,9 @@ properties = {
     }
   }
 
-  gcp_org_policies = {}
+  gcp_org_policies = {
+    description = "Placeholder. Will be removed shortly."
+  }
 }
 `)
 
@@ -70,15 +72,18 @@ required = [
 ]
 properties = {
   parent_type = {
-    description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
+    description = <<EOF
+      Type of parent GCP resource to apply the policy.
+      Must be one of 'organization' or 'folder'."
+    EOF
     type = "string"
     pattern = "^organization|folder|project$"
   }
 
   parent_id = {
     description = <<EOF
-      ID of parent GCP resource to apply the policy: can be one of the organization ID,
-      folder ID, or project ID according to parent_type.
+      ID of parent GCP resource to apply the policy.
+      Can be one of the organization ID or folder ID according to parent_type.
     EOF
     type = "string"
     pattern = "^[0-9]{8,25}$"
@@ -86,9 +91,12 @@ properties = {
 
   allowed_policy_member_customer_ids = {
     description = <<EOF
-      See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-      members that can be assigned IAM roles. Obtain the ID by following
-      https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+      See templates/policygen/org_policies/variables.tf.
+
+      Must be specified to restrict domain members that can be assigned IAM roles.
+
+      See
+      [guide](https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id).
     EOF
     type = "array"
     items = {
@@ -98,7 +106,8 @@ properties = {
 
   allowed_shared_vpc_host_projects = {
     description = <<EOF
-      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+      See templates/policygen/org_policies/variables.tf.
+      If not specified, default to allow all.
     EOF
     type = "array"
     items = {
@@ -108,7 +117,8 @@ properties = {
 
   allowed_trusted_image_projects = {
     description = <<EOF
-      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+      See templates/policygen/org_policies/variables.tf.
+      If not specified, default to allow all.
     EOF
     type = "array"
     items = {
@@ -118,7 +128,8 @@ properties = {
 
   allowed_public_vms = {
     description = <<EOF
-      See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
+      See templates/policygen/org_policies/variables.tf.
+      If not specified, default to deny all.
     EOF
     type = "array"
     items = {
@@ -128,7 +139,8 @@ properties = {
 
   allowed_ip_forwarding_vms = {
     description = <<EOF
-      See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+      See templates/policygen/org_policies/variables.tf.
+      If not specified, default to allow all.
     EOF
     type = "array"
     items = {

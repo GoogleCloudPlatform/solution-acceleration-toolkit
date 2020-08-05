@@ -25,7 +25,7 @@ Type: array(string)
 
 ### gcp_org_policies
 
-
+Placeholder. Will be removed shortly.
 
 ### template_dir
 
