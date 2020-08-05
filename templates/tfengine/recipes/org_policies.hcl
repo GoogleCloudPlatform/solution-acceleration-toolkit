@@ -20,7 +20,10 @@ schema = {
   ]
   properties = {
     parent_type = {
-      description = "Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'."
+      description = <<EOF
+        Type of parent GCP resource to apply the policy: can be one of "organization",
+        "folder", or "project".
+      EOF
       type        = "string"
       pattern     = "^organization|folder|project$"
     }
@@ -34,9 +37,9 @@ schema = {
     }
     allowed_policy_member_customer_ids = {
       description = <<EOF
-        See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-        members that can be assigned IAM roles. Obtain the ID by following
-        https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+        See templates/policygen/org_policies/variables.tf. Must be specified to restrict
+        domain members that can be assigned IAM roles. Obtain the ID by following
+        <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>.
       EOF
       type        = "array"
       items = {
@@ -45,7 +48,8 @@ schema = {
     }
     allowed_shared_vpc_host_projects = {
       description = <<EOF
-        See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        See templates/policygen/org_policies/variables.tf.
+        If not specified, default to allow all.
       EOF
       type        = "array"
       items = {
@@ -54,7 +58,8 @@ schema = {
     }
     allowed_trusted_image_projects = {
       description = <<EOF
-        See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        See templates/policygen/org_policies/variables.tf.
+        If not specified, default to allow all.
       EOF
       type        = "array"
       items = {
@@ -63,7 +68,8 @@ schema = {
     }
     allowed_public_vms = {
       description = <<EOF
-        See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
+        See templates/policygen/org_policies/variables.tf.
+        If not specified, default to deny all.
       EOF
       type        = "array"
       items = {
@@ -72,7 +78,8 @@ schema = {
     }
     allowed_ip_forwarding_vms = {
       description = <<EOF
-        See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+        See templates/policygen/org_policies/variables.tf.
+        If not specified, default to allow all.
       EOF
       type        = "array"
       items = {
@@ -80,7 +87,9 @@ schema = {
       }
     }
     output_path = {
-      description = "For internal use. Default state path prefix for Terraform Engine deployments."
+      description = <<EOF
+        For internal use. Default state path prefix for Terraform Engine deployments.
+      EOF
       type        = "string"
     }
   }

@@ -51,8 +51,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
 - Set up GCP Organization Policy Constraints for security best practices.
 
   - For example, the
-    [org policy recipe](./schemas/org_policies.md) can be used to configure and generate best
-    practice
+    [org policy recipe](./schemas/org_policies.md) can be used to configure
+    and generate best practice
     [GCP Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
     to help align your GCP infrastructure with HIPAA requirements.
 

@@ -6,33 +6,37 @@
 
 ### allowed_ip_forwarding_vms
 
-See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+See templates/policygen/org_policies/variables.tf.
+If not specified, default to allow all.
 
 Type: array(string)
 
 ### allowed_policy_member_customer_ids
 
-See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
-members that can be assigned IAM roles. Obtain the ID by following
-https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id.
+See templates/policygen/org_policies/variables.tf. Must be specified to restrict
+domain members that can be assigned IAM roles. Obtain the ID by following
+<https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>.
 
 Type: array(string)
 
 ### allowed_public_vms
 
-See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
+See templates/policygen/org_policies/variables.tf.
+If not specified, default to deny all.
 
 Type: array(string)
 
 ### allowed_shared_vpc_host_projects
 
-See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+See templates/policygen/org_policies/variables.tf.
+If not specified, default to allow all.
 
 Type: array(string)
 
 ### allowed_trusted_image_projects
 
-See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
+See templates/policygen/org_policies/variables.tf.
+If not specified, default to allow all.
 
 Type: array(string)
 
@@ -51,6 +55,7 @@ Type: string
 
 ### parent_type
 
-Type of parent GCP resource to apply the policy: can be one of 'organization', 'folder', or 'project'.
+Type of parent GCP resource to apply the policy: can be one of "organization",
+"folder", or "project".
 
 Type: string
