@@ -14,8 +14,9 @@
 
 package tfengine
 
+// Schema is the Terraform engine input schema.
 // TODO(https://github.com/golang/go/issues/35950): Move this to its own file.
-const schema = `
+const Schema = `
 title = "Terraform Engine Config Schema"
 
 additionalProperties = false
@@ -32,8 +33,11 @@ properties = {
   template = {
     description = <<EOF
       Templates the engine will parse and fill in with values from data.
-      Templates use the Go templating engine: https://golang.org/pkg/text/template/
-      Helper template funcs are also defined in ../template/funcmap.go.
+
+      Templates use the [Go templating engine](https://golang.org/pkg/text/template/).
+
+      Template maintainers can use several
+      [helper template funcs](../../template/funcmap.go).
     EOF
     type = "array"
     items = {

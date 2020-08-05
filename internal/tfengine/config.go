@@ -97,7 +97,7 @@ func (c *Config) Init() error {
 }
 
 func (c *Config) validate() error {
-	sj, err := hcl.ToJSON([]byte(schema))
+	sj, err := hcl.ToJSON([]byte(Schema))
 	if err != nil {
 		return err
 	}

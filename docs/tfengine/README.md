@@ -14,7 +14,7 @@ used to generate
 specific to your Google Cloud organization and structure.
 
 Users typically pick from a set of
-[recipes](../../templates/tfengine/recipes) which implement a template for one
+[recipes](../../templates/tfengine/schemas) which implement a template for one
 core piece of GCP infrastructure. See the [recipe docs](./recipes)
 for individual recipe schemas.
 

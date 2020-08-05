@@ -852,7 +852,7 @@ Type: string
 
 ### state_path_prefix
 
-Path within bucket to store state.
+Path within bucket to store state. Defaults to the template's output_path.
 
 Type: string
 
