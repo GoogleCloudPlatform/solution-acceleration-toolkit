@@ -10,6 +10,10 @@ infrastructure.
   a good starting point to understand the generated configs and CICD
   pipelines.
 
+- [./org_policies.hcl](./org_policies.hcl): This example configures and sets up
+  best practices GCP Organization Policy Constraints to help align your
+  infrastructure with compliance requirements.
+
 - [./org_foundation.hcl](./org_foundation.hcl): This example expands upon the
   [./devops.hcl](./devops.hcl) example to setup an org with additional security
   and compliance (e.g. long term and short term audit log retention, Forseti
