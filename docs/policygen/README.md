@@ -1,6 +1,6 @@
 # Policy Generator
 
-Status: Early Access Program
+Status: Alpha
 
 A security policy generator which generates policies for two purposes:
 

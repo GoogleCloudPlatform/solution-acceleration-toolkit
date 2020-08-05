@@ -1,6 +1,6 @@
 # Terraform Importer
 
-Status: Early Access Program
+Status: Alpha
 
 Terraform Importer is a standalone utility to import existing infrastructure
 into a Terraform state, based on existing Terraform configs. Its target use-case

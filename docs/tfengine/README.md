@@ -1,6 +1,6 @@
 # Terraform Engine
 
-Status: Early Access Program
+Status: Alpha
 
 The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
