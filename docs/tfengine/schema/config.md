@@ -21,7 +21,7 @@ Type: object
 
 Templates the engine will parse and fill in with values from data.
 Templates use the Go templating engine: https://golang.org/pkg/text/template/
-Helper template funcs are also defined in ../template/funcmap.go.
+[See](../../template/funcmap.go) the helper template funcs.
 
 Type: array(object)
 

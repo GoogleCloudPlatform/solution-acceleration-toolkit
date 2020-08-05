@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Generates markdown files for Terraform engine recipes.
+// Generates markdown files for schemas.
 // Meant to be run from the repo root like so:
 // go run ./scripts/generate_schema_docs
 
@@ -48,10 +48,10 @@ func main() {
 }
 
 func run() error {
-	if err := writeSchema([]byte(tfengine.Schema), filepath.Join(docsDir, "tfengine/config.md")); err != nil {
+	if err := writeSchema([]byte(tfengine.Schema), filepath.Join(docsDir, "tfengine/schema/config.md")); err != nil {
 		return err
 	}
-	if err := writeSchema([]byte(policygen.Schema), filepath.Join(docsDir, "policygen/config.md")); err != nil {
+	if err := writeSchema([]byte(policygen.Schema), filepath.Join(docsDir, "policygen/schema/config.md")); err != nil {
 		return err
 	}
 	if err := generateRecipeSchemaDocs(); err != nil {
@@ -61,7 +61,7 @@ func run() error {
 }
 
 func generateRecipeSchemaDocs() error {
-	outputDir := filepath.Join(docsDir, "tfengine/recipes")
+	outputDir := filepath.Join(docsDir, "tfengine/schema")
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
