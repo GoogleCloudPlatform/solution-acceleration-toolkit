@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Google Cloud Organization Policies Config Schema"
+  title                = "Google Cloud Organization Policy Recipe"
   additionalProperties = false
   required = [
     "allowed_policy_member_customer_ids",
@@ -24,7 +24,6 @@ schema = {
       type        = "string"
       pattern     = "^organization|folder|project$"
     }
-
     parent_id = {
       description = <<EOF
         ID of parent GCP resource to apply the policy: can be one of the organization ID,
@@ -33,7 +32,6 @@ schema = {
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
     }
-
     allowed_policy_member_customer_ids = {
       description = <<EOF
         See templates/policygen/org_policies/variables.tf. Must be specified to restrict domain
@@ -45,7 +43,6 @@ schema = {
         type = "string"
       }
     }
-
     allowed_shared_vpc_host_projects = {
       description = <<EOF
         See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
@@ -55,7 +52,6 @@ schema = {
         type = "string"
       }
     }
-
     allowed_trusted_image_projects = {
       description = <<EOF
         See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
@@ -65,7 +61,6 @@ schema = {
         type = "string"
       }
     }
-
     allowed_public_vms = {
       description = <<EOF
         See templates/policygen/org_policies/variables.tf. If not specified, default to deny all.
@@ -75,7 +70,6 @@ schema = {
         type = "string"
       }
     }
-
     allowed_ip_forwarding_vms = {
       description = <<EOF
         See templates/policygen/org_policies/variables.tf. If not specified, default to allow all.
@@ -85,7 +79,6 @@ schema = {
         type = "string"
       }
     }
-
     output_path = {
       description = "For internal use. Default state path prefix for Terraform Engine deployments."
       type        = "string"
