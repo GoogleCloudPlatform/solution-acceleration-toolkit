@@ -61,7 +61,7 @@ properties = {
 }
 `)
 
-// OrgPoliciesSchema is the sorg policies schena.
+// OrgPoliciesSchema is the org policies schema.
 var OrgPoliciesSchema = []byte(`
 title                = "Google Cloud Organization Policies Config Schema"
 additionalProperties = false

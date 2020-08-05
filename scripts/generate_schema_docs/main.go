@@ -48,10 +48,10 @@ func main() {
 }
 
 func run() error {
-	if err := writeSchema([]byte(tfengine.Schema), filepath.Join(docsDir, "tfengine/schema/config.md")); err != nil {
+	if err := writeSchema([]byte(tfengine.Schema), filepath.Join(docsDir, "tfengine/schemas/config.md")); err != nil {
 		return err
 	}
-	if err := writeSchema([]byte(policygen.Schema), filepath.Join(docsDir, "policygen/schema/config.md")); err != nil {
+	if err := writeSchema([]byte(policygen.Schema), filepath.Join(docsDir, "policygen/schemas/config.md")); err != nil {
 		return err
 	}
 	if err := generateRecipeSchemaDocs(); err != nil {
@@ -61,7 +61,7 @@ func run() error {
 }
 
 func generateRecipeSchemaDocs() error {
-	outputDir := filepath.Join(docsDir, "tfengine/schema")
+	outputDir := filepath.Join(docsDir, "tfengine/schemas")
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
