@@ -32,7 +32,7 @@ jobs:
 
     - name: Bundle Templates
       shell: bash
-      run: ./build/build-templates.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
+      run: ./build/build-templates.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/templates-||')"
 
     # From https://github.com/github/hub#github-actions
     - name: Create GitHub Release
@@ -46,5 +46,5 @@ jobs:
         ./build/install-hub.sh
 
         # Create the release with the templates bundle
-        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
+        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/templates-||')"
         bin/hub release create $(printf -- ' --attach=%s' ./templates*.tar.gz) -m "Templates ${version}" "${version}"
