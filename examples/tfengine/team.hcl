@@ -29,6 +29,7 @@ data = {
   gke_region          = "us-central1"
   healthcare_location = "us-central1"
   storage_location    = "us-central1"
+  secret_locations    = ["us-central1"]
 }
 
 template "devops" {
