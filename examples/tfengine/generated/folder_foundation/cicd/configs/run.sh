@@ -20,7 +20,6 @@ MODULES=(
   devops
   audit
   monitor
-  org_policies
   folders
 )
 
