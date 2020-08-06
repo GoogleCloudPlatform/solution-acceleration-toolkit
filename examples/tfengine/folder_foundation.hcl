@@ -73,7 +73,6 @@ template "cicd" {
       "devops", // NOTE: CICD service account can only update APIs on the devops project.
       "audit",
       "monitor",
-      "org_policies",
       "folders",
     ]
   }
@@ -88,10 +87,10 @@ template "audit" {
       project_id = "example-audit"
     }
     logs_bigquery_dataset = {
-      dataset_id = "1yr_org_audit_logs"
+      dataset_id = "1yr_folder_audit_logs"
     }
     logs_storage_bucket = {
-      name = "7yr-org-audit-logs"
+      name = "7yr-folder-audit-logs"
     }
   }
 }
