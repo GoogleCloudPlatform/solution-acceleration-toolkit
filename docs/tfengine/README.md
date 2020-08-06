@@ -182,6 +182,18 @@ GitHub you can share a single repo but with different paths within the repo.
 For Cloud Source Repository, you must use a repo within each individual
 devops project.
 
+## Installation
+
+Download a pre-built
+[tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/)
+or build it yourself:
+
+```shell
+git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
+cd healthcare-data-protection-suite
+go install ./cmd/tfengine
+```
+
 ## Usage
 
 The engine takes a path to an input config and a path to output the generated
@@ -189,16 +201,6 @@ Terraform configs. For details on fields for the input schema, see the
 [schema](../../internal/tfengine/schema.go). After the output has been generated,
 there is no longer a dependency on the engine and the user can directly use
 the `terraform` binary to deploy the infrastructure.
-
-1. Download the latest
-   [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases)
-   or build one yourself:
-
-    ```shell
-    git clone https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite
-    cd healthcare-data-protection-suite
-    go install ./cmd/tfengine
-    ```
 
 1. Replace the values in a suitable
    [example](../../examples/tfengine) with values for your infrastructure.
