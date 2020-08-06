@@ -31,7 +31,6 @@ import (
 var mergoOpts = []func(*mergo.Config){
 	mergo.WithOverride,
 	mergo.WithOverwriteWithEmptyValue,
-	mergo.WithAppendSlice,
 }
 
 // FlattenInfo describes keys to flatten. If index is not a nil pointer then it is assumed the
