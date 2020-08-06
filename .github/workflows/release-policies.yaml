@@ -32,7 +32,7 @@ jobs:
 
     - name: Bundle Policies
       shell: bash
-      run: ./build/build-policies.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/||')"
+      run: ./build/build-policies.sh -v "$(echo '${{ github.ref }}' | sed -e 's|^refs/tags/policies-||')"
 
     # From https://github.com/github/hub#github-actions
     - name: Create GitHub Release
@@ -46,5 +46,5 @@ jobs:
         ./build/install-hub.sh
 
         # Create the release with the policies bundle
-        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
+        version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/policies-||')"
         bin/hub release create $(printf -- ' --attach=%s' ./policies*.tar.gz) -m "Policies ${version}" "${version}"
