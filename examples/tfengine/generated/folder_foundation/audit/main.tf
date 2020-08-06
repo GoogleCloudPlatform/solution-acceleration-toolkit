@@ -72,7 +72,7 @@ module "bigquery_destination" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.3.0"
 
-  dataset_id                  = "1yr_org_audit_logs"
+  dataset_id                  = "1yr_folder_audit_logs"
   project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
@@ -107,7 +107,7 @@ module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.6.0"
 
-  name          = "7yr-org-audit-logs"
+  name          = "7yr-folder-audit-logs"
   project_id    = module.project.project_id
   location      = "us-central1"
   storage_class = "COLDLINE"
