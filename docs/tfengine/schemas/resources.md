@@ -820,7 +820,7 @@ Type: string
 
 ### secrets.secret_locations
 
-Locations to replicate secret. If unset, will automatically replicate.
+Locations to replicate secret. Can be defined in global data block.
 
 Type: array(string)
 

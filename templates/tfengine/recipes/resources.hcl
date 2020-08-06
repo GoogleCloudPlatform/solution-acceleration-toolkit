@@ -893,7 +893,7 @@ schema = {
             type        = "string"
           }
           secret_locations = {
-            description = "Locations to replicate secret. If unset, will automatically replicate."
+            description = "Locations to replicate secret. Can be defined in global data block."
             type        = "array"
             items = {
               type = "string"
