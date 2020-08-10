@@ -111,6 +111,8 @@ module "example_instance_template" {
   subnetwork_project = "example-prod-networks"
   subnetwork         = "example-instance-subnet"
 
+  source_image_family  = "ubuntu-2004-lts"
+  source_image_project = "ubuntu-os-cloud"
   service_account = {
     email  = "${google_service_account.example_sa.email}"
     scopes = ["cloud-platform"]

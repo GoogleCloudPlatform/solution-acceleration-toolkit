@@ -364,6 +364,8 @@ template "project_apps" {
         network_project_id = "example-prod-networks"
         subnet             = "example-instance-subnet"
         service_account    = "$${google_service_account.example_sa.email}"
+        image_family       = "ubuntu-2004-lts"
+        image_project      = "ubuntu-os-cloud"
         instances = [{
           name = "instance"
         }]
