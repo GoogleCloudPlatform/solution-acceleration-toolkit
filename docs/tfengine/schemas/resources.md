@@ -333,10 +333,6 @@ Whether to enable Cloud SQL private service access. Defaults to false.
 
 Type: object
 
-### compute_networks.firewall_rules
-
-
-
 ### compute_networks.name
 
 Name of network.
