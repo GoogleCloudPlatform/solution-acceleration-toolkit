@@ -104,16 +104,16 @@ func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[st
 
 	// Report on any templates that were supposed to be generated but weren't.
 	// This most likely indicates a misspelling.
-	var wrongTemplates []string
+	var missingTemplates []string
 	for t, missed := range wantedTemplates {
 		if missed {
-			wrongTemplates = append(wrongTemplates, t)
+			missingTemplates = append(missingTemplates, t)
 		}
 		// Unmark.
 		wantedTemplates[t] = true
 	}
-	if len(wrongTemplates) > 0 {
-		return fmt.Errorf("templates not found in engine config: %v", strings.Join(wrongTemplates, ","))
+	if len(missingTemplates) > 0 {
+		return fmt.Errorf("templates not found in engine config: %v", strings.Join(missingTemplates, ","))
 	}
 
 	return nil
