@@ -62,7 +62,7 @@ func ResourcesFromState(r io.Reader) ([]*states.Resource, error) {
 func GetInstancesForType(resources []*states.Resource, kind string) ([]map[string]interface{}, error) {
 	var instances []map[string]interface{}
 	for _, r := range resources {
-		if r.Addr.Type == kind {
+		if r.Addr.Resource.Type == kind {
 			for _, i := range r.Instances {
 				var instance map[string]interface{}
 				if err := json.Unmarshal(i.Current.AttrsJSON, &instance); err != nil {
