@@ -23,6 +23,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
@@ -31,6 +32,7 @@ var (
 	configPath = flag.String("config_path", "", "Path to config file")
 	outputPath = flag.String("output_path", "", "Path to directory dump output")
 	format     = flag.Bool("format", true, "Whether to format generated files.")
+	templates  = flag.String("templates", "", "Comma-separated list of templates to generate. Leave empty for all.")
 )
 
 func main() {
@@ -49,7 +51,19 @@ func main() {
 	}
 	defer os.RemoveAll(cacheDir)
 
-	opts := &tfengine.Options{Format: *format, CacheDir: cacheDir}
+	templatesMap := make(map[string]bool)
+	for _, t := range strings.Split(*templates, ",") {
+		t = strings.TrimSpace(t)
+		if len(t) > 0 {
+			templatesMap[t] = true
+		}
+	}
+
+	opts := &tfengine.Options{
+		Format:    *format,
+		CacheDir:  cacheDir,
+		Templates: templatesMap,
+	}
 	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
 		log.Fatal(err)
 	}

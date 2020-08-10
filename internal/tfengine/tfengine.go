@@ -33,8 +33,9 @@ import (
 
 // Options is the options for tfengine execution.
 type Options struct {
-	Format   bool
-	CacheDir string
+	Format    bool
+	CacheDir  string
+	Templates map[string]bool
 }
 
 // Run executes the main tfengine logic.
@@ -59,7 +60,7 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir); err != nil {
+	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir, opts.Templates); err != nil {
 		return err
 	}
 
@@ -80,8 +81,13 @@ func Run(confPath, outPath string, opts *Options) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
-func dump(conf *Config, pwd, cacheDir, outputPath string) error {
+func dump(conf *Config, pwd, cacheDir, outputPath string, templates map[string]bool) error {
 	for _, ti := range conf.Templates {
+		// If a templates filter was provided, check against it.
+		if _, ok := templates[ti.Name]; len(templates) > 0 && !ok {
+			continue
+		}
+
 		if err := dumpTemplate(conf, pwd, cacheDir, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
@@ -132,7 +138,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return err
 		}
 
-		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath); err != nil {
+		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath, nil); err != nil {
 			return fmt.Errorf("recipe %q: %v", rp, err)
 		}
 
