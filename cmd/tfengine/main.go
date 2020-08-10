@@ -51,18 +51,18 @@ func main() {
 	}
 	defer os.RemoveAll(cacheDir)
 
-	templatesMap := make(map[string]bool)
+	wantedTemplates := make(map[string]bool)
 	for _, t := range strings.Split(*templates, ",") {
 		t = strings.TrimSpace(t)
 		if len(t) > 0 {
-			templatesMap[t] = true
+			wantedTemplates[t] = true
 		}
 	}
 
 	opts := &tfengine.Options{
-		Format:    *format,
-		CacheDir:  cacheDir,
-		Templates: templatesMap,
+		Format:          *format,
+		CacheDir:        cacheDir,
+		WantedTemplates: wantedTemplates,
 	}
 	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
 		log.Fatal(err)
