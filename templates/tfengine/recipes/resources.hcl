@@ -299,6 +299,10 @@ schema = {
             description = "Whether to enable shielded VM. Defaults to true."
             type        = "boolean"
           }
+          startup_script = {
+            description = "Script to run on startup. Can be multi-line."
+            type        = "string"
+          }
           instances = {
             description = "[Module](https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance)"
             type        = "array"

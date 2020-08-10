@@ -27,11 +27,16 @@ module "{{$template_resource_name}}" {
   subnetwork         = "{{$subnet}}"
 
   {{hclField . "machine_type" -}}
-  {{hclField . "image_family" -}}
-  {{hclField . "image_project" -}}
   {{hclField . "disk_size_gb" -}}
   {{hclField . "disk_type" -}}
   {{hclField . "preemptible" -}}
+
+  {{if has . "image_family" -}}
+  source_image_family = "{{.image_family}}"
+  {{end -}}
+  {{if has . "image_project" -}}
+  source_image_project = "{{.image_project}}"
+  {{end -}}
 
   service_account = {
     email = "{{.service_account}}"

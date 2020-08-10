@@ -309,6 +309,12 @@ Email of service account to attach to this instance template.
 
 Type: string
 
+### compute_instance_templates.startup_script
+
+Script to run on startup. Can be multi-line.
+
+Type: string
+
 ### compute_instance_templates.subnet
 
 Name of the the instance template's subnet.
