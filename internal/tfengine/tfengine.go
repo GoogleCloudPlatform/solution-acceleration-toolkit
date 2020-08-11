@@ -21,6 +21,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
@@ -35,6 +36,9 @@ import (
 type Options struct {
 	Format   bool
 	CacheDir string
+
+	// Leave empty to generate all templates.
+	WantedTemplates map[string]bool
 }
 
 // Run executes the main tfengine logic.
@@ -59,7 +63,7 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir); err != nil {
+	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir, opts.WantedTemplates); err != nil {
 		return err
 	}
 
@@ -80,12 +84,38 @@ func Run(confPath, outPath string, opts *Options) error {
 	return copy.Copy(tmpDir, outPath)
 }
 
-func dump(conf *Config, pwd, cacheDir, outputPath string) error {
+func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[string]bool) error {
 	for _, ti := range conf.Templates {
+		// If a templates filter was provided, check against it.
+		if len(wantedTemplates) > 0 {
+			if _, ok := wantedTemplates[ti.Name]; !ok {
+				continue
+			}
+
+			// Mark it so we can report on wrong template values at the end.
+			// Don't delete, to avoid modifying the underlying data structure.
+			wantedTemplates[ti.Name] = false
+		}
+
 		if err := dumpTemplate(conf, pwd, cacheDir, outputPath, ti); err != nil {
 			return fmt.Errorf("template %q: %v", ti.Name, err)
 		}
 	}
+
+	// Report on any templates that were supposed to be generated but weren't.
+	// This most likely indicates a misspelling.
+	var missingTemplates []string
+	for t, missed := range wantedTemplates {
+		if missed {
+			missingTemplates = append(missingTemplates, t)
+		}
+		// Unmark.
+		wantedTemplates[t] = true
+	}
+	if len(missingTemplates) > 0 {
+		return fmt.Errorf("templates not found in engine config: %v", strings.Join(missingTemplates, ","))
+	}
+
 	return nil
 }
 
@@ -132,7 +162,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return err
 		}
 
-		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath); err != nil {
+		if err := dump(rc, filepath.Dir(rp), cacheDir, outputPath, nil); err != nil {
 			return fmt.Errorf("recipe %q: %v", rp, err)
 		}
 
