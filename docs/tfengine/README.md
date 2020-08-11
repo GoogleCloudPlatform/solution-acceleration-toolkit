@@ -193,8 +193,8 @@ Download a pre-built
 
 ```shell
 VERSION=v0.2.0
-wget https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64 -O tfengine
-chmod +x tfengine
+wget https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64 -O /usr/local/bin/tfengine
+chmod +x /usr/local/bin/tfengine
 ```
 
 or build it yourself:
