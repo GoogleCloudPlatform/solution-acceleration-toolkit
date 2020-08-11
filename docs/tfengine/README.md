@@ -273,10 +273,10 @@ directly use the `terraform` binary to deploy the infrastructure.
         ```
 
     1. Backup the state of the `devops` project to the newly created state
-        bucket by running the following commands and answer `yes` when prompted.
+        bucket by running the following command.
 
         ```shell
-        terraform init
+        terraform init -force-copy
         ```
 
 1. (Optional) To deploy Continuous Integration (CI) and Continuous Deployment
