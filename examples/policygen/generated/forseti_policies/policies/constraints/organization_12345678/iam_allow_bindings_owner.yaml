@@ -13,26 +13,17 @@
 # limitations under the License.
 
 apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowBanRolesConstraintV1
+kind: GCPIAMAllowedBindingsConstraintV3
 metadata:
-  name: iam_allow_roles_organization_12345678
+  name: iam_allowed_bindings_organization_12345678_owner
 spec:
   severity: high
   match:
     target:
     - "organizations/12345678"
   parameters:
-    mode: "allow"
-    roles:
-    - projects/example-project/roles/osLoginProjectGet_6afd
-    - roles/appengine.appViewer
-    - roles/bigquery.metadataViewer
-    - roles/browser
-    - roles/cloudasset.viewer
-    - roles/cloudsql.viewer
-    - roles/compute.networkViewer
-    - roles/iam.securityReviewer
-    - roles/orgpolicy.policyViewer
-    - roles/owner
-    - roles/servicemanagement.quotaViewer
-    - roles/serviceusage.serviceUsageConsumer
+    mode: allowlist
+    role: roles/owner
+    members:
+    - group:real_owners_1@example.com
+    - group:real_owners_2@example.com

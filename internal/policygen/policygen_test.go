@@ -16,6 +16,7 @@ package policygen
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -24,6 +25,8 @@ import (
 	"testing"
 )
 
+const fakeProjectNumber = "123"
+
 type Fake struct{}
 
 func (*Fake) CmdRun(*exec.Cmd) error { return nil }
@@ -31,7 +34,7 @@ func (*Fake) CmdRun(*exec.Cmd) error { return nil }
 func (*Fake) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 	cmdStr := strings.Join(cmd.Args, " ")
 	if contains(cmdStr, "gcloud projects describe", "--format json") {
-		return []byte("{\"projectNumber\": \"123\"}"), nil
+		return []byte(fmt.Sprintf("{\"projectNumber\": \"%s\"}", fakeProjectNumber)), nil
 	}
 
 	return nil, nil
@@ -97,9 +100,11 @@ func TestExamples(t *testing.T) {
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
-					7,
+					9,
 					[]string{
 						"iam_allow_roles.yaml",
+						"iam_allow_bindings_editor.yaml",
+						"iam_allow_bindings_owner.yaml",
 						"iam_allow_bindings_cloudsql_client.yaml",
 						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
 					},
@@ -120,9 +125,11 @@ func TestExamples(t *testing.T) {
 				},
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
-					7,
+					9,
 					[]string{
 						"iam_allow_roles.yaml",
+						"iam_allow_bindings_editor.yaml",
+						"iam_allow_bindings_owner.yaml",
 						"iam_allow_bindings_cloudsql_client.yaml",
 						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
 					},
