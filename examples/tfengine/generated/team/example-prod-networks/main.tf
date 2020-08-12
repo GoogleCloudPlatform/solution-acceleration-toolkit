@@ -77,7 +77,7 @@ EOF
 
 module "example_network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 2.4.0"
+  version = "~> 2.5.0"
 
   network_name = "example-network"
   project_id   = module.project.project_id
