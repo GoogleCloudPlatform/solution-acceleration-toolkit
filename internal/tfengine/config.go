@@ -112,11 +112,11 @@ func (c *Config) validate() error {
 func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("read file %v: %v", path, err)
 	}
 	buf, err := template.WriteBuffer(string(b), data)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parsing template %v: %v", string(b), err)
 	}
 
 	// Convert yaml to json so hcl decoder can parse it.
@@ -124,7 +124,7 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 	if filepath.Ext(path) == ".yaml" {
 		cj, err = yaml.YAMLToJSON(cj)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("converting yaml to json %v: %v", string(cj), err)
 		}
 		// hclsimple.Decode doesn't actually use the path for anything other
 		// than its extension, so just pass in any file name ending with json so
@@ -134,10 +134,10 @@ func loadConfig(path string, data map[string]interface{}) (*Config, error) {
 
 	c := new(Config)
 	if err := hclsimple.Decode(path, cj, nil, c); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("decode as hcl %v: %v", string(cj), err)
 	}
 	if err := c.Init(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("init config %v: %v", c, err)
 	}
 	return c, nil
 }
