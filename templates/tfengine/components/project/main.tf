@@ -11,8 +11,8 @@ limitations under the License. */ -}}
 
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 8.1.0"
+  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
+  version = "~> 9.0.0"
 
   name                    = "{{.project_id}}"
   {{if eq .parent_type "organization" -}}
