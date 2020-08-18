@@ -26,7 +26,7 @@ terraform {
 
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
+  source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.0.0"
 
   name                    = "example-audit"
