@@ -16,6 +16,7 @@ package template
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 	"time"
 
@@ -23,6 +24,7 @@ import (
 )
 
 var funcMap = map[string]interface{}{
+	"concat":       concat,
 	"get":          get,
 	"has":          has,
 	"hcl":          hcl,
@@ -30,6 +32,22 @@ var funcMap = map[string]interface{}{
 	"replace":      replace,
 	"resourceName": resourceName,
 	"now":          time.Now,
+}
+
+// concat appends multiple lists together.
+func concat(lists ...interface{}) (interface{}, error) {
+	var res []interface{}
+	for _, list := range lists {
+		tp := reflect.TypeOf(list).Kind()
+		if tp != reflect.Slice && tp != reflect.Array {
+			return nil, fmt.Errorf("invalid type: got  %s, want list", tp)
+		}
+		l2 := reflect.ValueOf(list)
+		for i := 0; i < l2.Len(); i++ {
+			res = append(res, l2.Index(i).Interface())
+		}
+	}
+	return res, nil
 }
 
 // get allows a template to optionally lookup a value from a dict.

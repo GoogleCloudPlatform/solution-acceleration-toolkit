@@ -139,6 +139,11 @@ module "example_prod_bucket" {
   project_id = module.project.project_id
   location   = "us-central1"
 
+  labels = [
+    "top",
+    "foo",
+  ]
+
   lifecycle_rules = [
     {
       action = {
