@@ -34,9 +34,9 @@ import (
 
 // Options is the options for tfengine execution.
 type Options struct {
-	Format   bool
-	Licenses bool
-	CacheDir string
+	Format      bool
+	AddLicenses bool
+	CacheDir    string
 
 	// Leave empty to generate all templates.
 	WantedTemplates map[string]bool
@@ -74,7 +74,7 @@ func Run(confPath, outPath string, opts *Options) error {
 		}
 	}
 
-	if opts.Licenses {
+	if opts.AddLicenses {
 		if err := licenseutil.AddLicense(tmpDir); err != nil {
 			return fmt.Errorf("add license header: %v", err)
 		}

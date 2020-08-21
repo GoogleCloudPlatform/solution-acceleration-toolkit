@@ -29,11 +29,11 @@ import (
 )
 
 var (
-	configPath = flag.String("config_path", "", "Path to config file")
-	outputPath = flag.String("output_path", "", "Path to directory dump output")
-	format     = flag.Bool("format", true, "Whether to format generated files.")
-	templates  = flag.String("templates", "", "Comma-separated list of templates to generate. Leave empty for all.")
-	licenses   = flag.Bool("add_licenses", true, "Whether to add license headers to generated Terraform files.")
+	configPath  = flag.String("config_path", "", "Path to config file")
+	outputPath  = flag.String("output_path", "", "Path to directory dump output")
+	format      = flag.Bool("format", true, "Whether to format generated files.")
+	templates   = flag.String("templates", "", "Comma-separated list of templates to generate. Leave empty for all.")
+	addLicenses = flag.Bool("add_licenses", true, "Whether to add license headers to generated Terraform files.")
 )
 
 func main() {
@@ -62,7 +62,7 @@ func main() {
 
 	opts := &tfengine.Options{
 		Format:          *format,
-		Licenses:        *licenses,
+		AddLicenses:     *addLicenses,
 		CacheDir:        cacheDir,
 		WantedTemplates: wantedTemplates,
 	}
