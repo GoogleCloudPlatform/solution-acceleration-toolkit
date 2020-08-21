@@ -42,9 +42,9 @@ func concat(lists ...interface{}) (interface{}, error) {
 		if tp != reflect.Slice && tp != reflect.Array {
 			return nil, fmt.Errorf("invalid type: got  %s, want list", tp)
 		}
-		l2 := reflect.ValueOf(list)
-		for i := 0; i < l2.Len(); i++ {
-			res = append(res, l2.Index(i).Interface())
+		lv := reflect.ValueOf(list)
+		for i := 0; i < lv.Len(); i++ {
+			res = append(res, lv.Index(i).Interface())
 		}
 	}
 	return res, nil

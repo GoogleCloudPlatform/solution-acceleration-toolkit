@@ -140,8 +140,8 @@ module "example_prod_bucket" {
   location   = "us-central1"
 
   labels = [
-    "top",
-    "foo",
+    "team1",
+    "example-label",
   ]
 
   lifecycle_rules = [
