@@ -18,7 +18,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
 	github.com/otiai10/copy v1.2.0
 	github.com/rodaine/hclencoder v0.0.0-20200711024249-063a90d8fab0
-	github.com/ryanuber/columnize v2.1.1+incompatible
+	github.com/ryanuber/columnize v2.1.2+incompatible
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
