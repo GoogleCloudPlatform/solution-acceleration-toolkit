@@ -27,6 +27,7 @@ var funcMap = map[string]interface{}{
 	"has":          has,
 	"hcl":          hcl,
 	"hclField":     hclField,
+	"merge":        merge,
 	"replace":      replace,
 	"resourceName": resourceName,
 	"now":          time.Now,
@@ -86,6 +87,16 @@ func hclField(m map[string]interface{}, key string) (string, error) {
 		return "", err
 	}
 	return fmt.Sprintf("%s = %s", key, string(b)), nil
+}
+
+func merge(srcs ...map[string]interface{}) (interface{}, error) {
+	dst := make(map[string]interface{})
+	for _, src := range srcs {
+		if err := MergeData(dst, src); err != nil {
+			return nil, err
+		}
+	}
+	return dst, nil
 }
 
 // resourceName builds a Terraform resource name.

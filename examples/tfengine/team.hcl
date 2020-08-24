@@ -30,6 +30,10 @@ data = {
   healthcare_location = "us-central1"
   storage_location    = "us-central1"
   secret_locations    = ["us-central1"]
+
+  labels = {
+    "env" = "prod"
+  }
 }
 
 template "devops" {
@@ -283,6 +287,9 @@ template "project_data" {
       }
       storage_buckets = [{
         name = "example-prod-bucket"
+        labels = {
+          type = "images"
+        }
         # TTL 7 days.
         lifecycle_rules = [{
           action = {

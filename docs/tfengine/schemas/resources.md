@@ -886,6 +886,12 @@ IAM role to grant.
 
 Type: string
 
+### storage_buckets.labels
+
+Labels to set on the bucket.
+
+Type: object
+
 ### storage_buckets.lifecycle_rules
 
 Lifecycle rules configuration for the bucket.
