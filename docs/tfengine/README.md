@@ -156,7 +156,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 1. The running user will need to be a super admin or have the following roles:
 
     - `roles/resourcemanager.organizationAdmin` on the org for org deployment
-    - `roles/resourcemanager.organizationAdmin` on the folder for folder
+    - `roles/resourcemanager.folderAdmin` on the folder for folder
         deployment
     - `roles/resourcemanager.projectCreator` on the org or folder
     - `roles/billing.user` on the billing account
