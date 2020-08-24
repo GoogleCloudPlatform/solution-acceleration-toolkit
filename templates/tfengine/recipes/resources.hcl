@@ -962,6 +962,9 @@ schema = {
           labels = {
             description = "Labels to set on the bucket."
             type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
           }
           lifecycle_rules = {
             description = "Lifecycle rules configuration for the bucket."
