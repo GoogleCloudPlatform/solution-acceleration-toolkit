@@ -16,6 +16,7 @@ package policygen
 
 import (
 	"context"
+	"sort"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -55,6 +56,7 @@ func TestAllBindings(t *testing.T) {
 		if !ok {
 			t.Errorf("wanted role %q missing", wantRole)
 		}
+		sort.Strings(gotMembers)
 		if diff := cmp.Diff(wantMembers, gotMembers); diff != "" {
 			t.Errorf("role %q has unexpected members (-want +got):\n%s", wantRole, diff)
 		}
