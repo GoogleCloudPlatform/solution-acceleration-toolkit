@@ -1,0 +1,32 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Note: Terraform version used in the automation is 0.12.29.
+
+timeout: 21600s
+
+substitutions:
+    _TERRAFORM_ROOT: "."
+
+steps:
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
+    entrypoint: terraform
+    args: ["version"]
+    id: Terraform version
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"
+    entrypoint: bash
+    args: ["./cicd/configs/run.sh", "-a", "plan", "-a", "apply -auto-approve"]
+    dir: "${_TERRAFORM_ROOT}"
+    id: Apply
