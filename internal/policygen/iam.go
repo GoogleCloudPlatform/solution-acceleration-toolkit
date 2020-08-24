@@ -148,7 +148,7 @@ func members(rn runner.Runner, resources []*states.Resource, rootType, idField s
 
 		id, err := normalizeID(rn, rootType, ins[idField].(string)) // Type checked in validate function.
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("normalize root resource ID: %v", err)
 		}
 
 		key := root{Type: rootType, ID: id}
@@ -183,7 +183,7 @@ func bindings(rn runner.Runner, resources []*states.Resource, rootType, idField 
 
 		id, err := normalizeID(rn, rootType, ins[idField].(string)) // Type checked in validate function.
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("normalize root resource ID: %v", err)
 		}
 
 		key := root{Type: rootType, ID: id}
@@ -210,11 +210,12 @@ func bindings(rn runner.Runner, resources []*states.Resource, rootType, idField 
 // validateMandatoryStringFields checks the presence of mandatory fields and assert string type.
 func validateMandatoryStringFields(instance map[string]interface{}, mandatoryFields []string) error {
 	for _, k := range mandatoryFields {
-		if _, ok := instance[k]; !ok {
+		field, ok := instance[k]
+		if !ok {
 			return fmt.Errorf("mandatory field %q missing from instance: %v", k, instance)
 		}
-		if _, ok := instance[k].(string); !ok {
-			return fmt.Errorf("value for %q should be a string, got %T", k, instance[k])
+		if _, ok := field.(string); !ok {
+			return fmt.Errorf("value for %q should be a string, got %T", k, field)
 		}
 	}
 	return nil
@@ -223,13 +224,15 @@ func validateMandatoryStringFields(instance map[string]interface{}, mandatoryFie
 // validateMandatoryLists checks the presence of mandatory fields and assert []interface{} type.
 func validateMandatoryStringLists(instance map[string]interface{}, mandatoryFields []string) error {
 	for _, k := range mandatoryFields {
-		if _, ok := instance[k]; !ok {
+		field, ok := instance[k]
+		if !ok {
 			return fmt.Errorf("mandatory field %q missing from instance: %v", k, instance)
 		}
-		if _, ok := instance[k].([]interface{}); !ok {
-			return fmt.Errorf("value for %q should be a []interface{}, got %T", k, instance[k])
+		lst, ok := field.([]interface{})
+		if !ok {
+			return fmt.Errorf("value for %q should be a []interface{}, got %T", k, field)
 		}
-		for _, s := range instance[k].([]interface{}) {
+		for _, s := range lst {
 			if _, ok := s.(string); !ok {
 				return fmt.Errorf("%q should be a string, got %T", s, s)
 			}
@@ -241,16 +244,17 @@ func validateMandatoryStringLists(instance map[string]interface{}, mandatoryFiel
 
 func normalizeID(rn runner.Runner, t, id string) (string, error) {
 	var err error
+	nid := id
 	// For projects, the ID in the state is the project ID, but we need project number in policies.
 	if t == "project" {
-		if id, err = projectNumber(rn, id); err != nil {
+		if nid, err = projectNumber(rn, id); err != nil {
 			return "", err
 		}
 	} else if t == "folder" {
 		// For folders, the ID can be either {folder_id} or folders/{folder_id}. Remove the 'folders/' prefix if exists.
-		id = strings.TrimPrefix(id, "folders/")
+		nid = strings.TrimPrefix(id, "folders/")
 	}
-	return id, nil
+	return nid, nil
 }
 
 func projectNumber(rn runner.Runner, id string) (string, error) {
