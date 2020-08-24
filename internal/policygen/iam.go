@@ -104,28 +104,28 @@ func allBindings(rn runner.Runner, resources []*states.Resource) (map[root]roleB
 	}
 
 	for rootType, idField := range typeToIDField {
-		IAMMembers, err := members(rn, resources, rootType, idField)
+		iamMembers, err := members(rn, resources, rootType, idField)
 		if err != nil {
 			return nil, err
 		}
 
-		IAMBindings, err := bindings(rn, resources, rootType, idField)
+		iamBindings, err := bindings(rn, resources, rootType, idField)
 		if err != nil {
 			return nil, err
 		}
 
-		// Add IAMBindings to IAMMembers.
-		// If IAMMembers have members for the same root and role, replace it with the value from IAMBindings.
-		for root, bindings := range IAMBindings {
+		// Add iamBindings to iamMembers.
+		// If iamMembers have members for the same root and role, replace it with the value from iamBindings.
+		for root, bindings := range iamBindings {
 			for role, members := range bindings {
 				// Init the roleBindings map if it didn't exist.
-				if _, ok := IAMMembers[root]; !ok {
-					IAMMembers[root] = make(roleBindings)
+				if _, ok := iamMembers[root]; !ok {
+					iamMembers[root] = make(roleBindings)
 				}
-				IAMMembers[root][role] = members
+				iamMembers[root][role] = members
 			}
 		}
-		for root, bindings := range IAMMembers {
+		for root, bindings := range iamMembers {
 			allBindings[root] = bindings
 		}
 	}
