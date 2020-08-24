@@ -21,8 +21,12 @@ module "{{resourceName . "name"}}" {
   project_id = module.project.project_id
   location   = "{{get . "storage_location" $.storage_location}}"
 
-  {{if $labels := concat (get $ "labels") (get . "labels") -}}
-  labels = {{hcl $labels}}
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
   {{end -}}
 
   {{if has . "lifecycle_rules" -}}

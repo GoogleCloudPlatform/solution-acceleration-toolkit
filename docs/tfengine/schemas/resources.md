@@ -890,7 +890,7 @@ Type: string
 
 Labels to set on the bucket.
 
-Type: array(string)
+Type: object
 
 ### storage_buckets.lifecycle_rules
 

@@ -16,7 +16,6 @@ package template
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 
@@ -24,30 +23,14 @@ import (
 )
 
 var funcMap = map[string]interface{}{
-	"concat":       concat,
 	"get":          get,
 	"has":          has,
 	"hcl":          hcl,
 	"hclField":     hclField,
+	"merge":        merge,
 	"replace":      replace,
 	"resourceName": resourceName,
 	"now":          time.Now,
-}
-
-// concat appends multiple lists together.
-func concat(lists ...interface{}) (interface{}, error) {
-	var res []interface{}
-	for _, list := range lists {
-		tp := reflect.TypeOf(list).Kind()
-		if tp != reflect.Slice && tp != reflect.Array {
-			return nil, fmt.Errorf("invalid type: got  %s, want list", tp)
-		}
-		lv := reflect.ValueOf(list)
-		for i := 0; i < lv.Len(); i++ {
-			res = append(res, lv.Index(i).Interface())
-		}
-	}
-	return res, nil
 }
 
 // get allows a template to optionally lookup a value from a dict.
@@ -104,6 +87,16 @@ func hclField(m map[string]interface{}, key string) (string, error) {
 		return "", err
 	}
 	return fmt.Sprintf("%s = %s", key, string(b)), nil
+}
+
+func merge(srcs ...map[string]interface{}) (interface{}, error) {
+	dst := make(map[string]interface{})
+	for _, src := range srcs {
+		if err := MergeData(dst, src); err != nil {
+			return nil, err
+		}
+	}
+	return dst, nil
 }
 
 // resourceName builds a Terraform resource name.

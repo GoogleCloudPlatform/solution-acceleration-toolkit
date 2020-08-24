@@ -139,11 +139,10 @@ module "example_prod_bucket" {
   project_id = module.project.project_id
   location   = "us-central1"
 
-  labels = [
-    "team1",
-    "example-label",
-  ]
-
+  labels = {
+    env  = "prod"
+    type = "images"
+  }
   lifecycle_rules = [
     {
       action = {
