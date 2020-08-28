@@ -70,7 +70,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_mysql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 3.2.0"
+  version = "~> 4.0.0"
 
   name              = "example-mysql-instance"
   project_id        = module.project.project_id
