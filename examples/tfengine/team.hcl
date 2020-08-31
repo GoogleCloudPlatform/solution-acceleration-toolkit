@@ -32,7 +32,7 @@ data = {
   secret_locations    = ["us-central1"]
 
   labels = {
-    "env" = "prod"
+    env = "prod"
   }
 }
 

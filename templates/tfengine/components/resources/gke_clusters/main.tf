@@ -33,5 +33,13 @@ module "{{resourceName . "name"}}" {
   skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"
+
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  cluster_resource_labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 {{end -}}

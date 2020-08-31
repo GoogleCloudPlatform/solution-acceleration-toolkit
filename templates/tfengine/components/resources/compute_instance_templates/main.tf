@@ -57,6 +57,14 @@ module "{{$template_resource_name}}" {
 {{.startup_script}}
 EOF
   {{end -}}
+
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 
 {{range get . "instances" -}}

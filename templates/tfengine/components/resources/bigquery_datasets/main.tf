@@ -23,5 +23,13 @@ module "{{resourceName . "dataset_id"}}" {
   {{hclField . "default_table_expiration_ms" -}}
 
   {{hclField . "access" -}}
+
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  dataset_labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 {{end -}}

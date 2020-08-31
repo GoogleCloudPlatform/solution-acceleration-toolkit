@@ -20,6 +20,14 @@ module "{{resourceName . "name"}}" {
   topic        = "{{.name}}"
   project_id   = module.project.project_id
 
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  topic_labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
+
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}
 }

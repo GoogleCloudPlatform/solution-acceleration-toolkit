@@ -68,6 +68,11 @@ module "bastion_vm" {
   image_project = "ubuntu-os-cloud"
 
 
+
+  labels = {
+    env = "prod"
+  }
+
   startup_script = <<EOF
 sudo apt-get -y update
 sudo apt-get -y install mysql-client

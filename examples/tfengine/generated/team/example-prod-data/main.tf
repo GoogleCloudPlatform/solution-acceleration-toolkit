@@ -66,6 +66,10 @@ module "one_billion_ms_example_dataset" {
       role           = "roles/bigquery.dataViewer"
     },
   ]
+  labels = {
+    env = "prod"
+
+  }
 }
 
 module "example_mysql_instance" {
