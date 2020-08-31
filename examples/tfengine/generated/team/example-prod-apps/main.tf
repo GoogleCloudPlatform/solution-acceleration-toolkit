@@ -126,6 +126,9 @@ module "example_instance_template" {
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
+  labels = {
+    env = "prod"
+  }
 }
 
 module "instance" {
@@ -178,6 +181,10 @@ module "example_gke_cluster" {
   skip_provisioners       = true
   enable_private_endpoint = false
   release_channel         = "STABLE"
+
+  cluster_resource_labels = {
+    env = "prod"
+  }
 }
 
 module "project_iam_members" {
@@ -201,6 +208,9 @@ module "foo_topic" {
   topic      = "foo-topic"
   project_id = module.project.project_id
 
+  topic_labels = {
+    env = "prod"
+  }
   pull_subscriptions = [
     {
       name = "pull-subscription"
