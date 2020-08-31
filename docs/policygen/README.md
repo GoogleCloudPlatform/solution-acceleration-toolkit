@@ -55,7 +55,7 @@ go install ./cmd/policygen
 
     ```shell
     CONFIG_PATH=examples/policygen/config.hcl
-    STATE_PATH=/path/to/your/tfstate
+    STATE_PATHS=/path/to/your/tfstate
     OUTPUT_PATH=/tmp/policygen
     ```
 
@@ -71,18 +71,20 @@ go install ./cmd/policygen
 1. Generate policies:
 
     ```shell
-    policygen --config_path=$CONFIG_PATH --state_path=$STATE_PATH --output_path=$OUTPUT_PATH
+    policygen --config_path=$CONFIG_PATH --state_paths=$STATE_PATHS --output_path=$OUTPUT_PATH
     ```
 
-`--state_path` supports a single local file, a local directory or a Google Cloud
+`--state_paths` supports a comma-separated list of paths to Terraform states,
+and each entry can be a single local file, a local directory or a Google Cloud
 Storage bucket (indicated by `gs://` prefix).
 
-* If the path is a single local file, it loads Terraform states from it.
+* If the path is a single local file, it loads Terraform states from it,
+    regardless of the file name.
 * If the path is a local directory, it walks the directory recursively and
     loads Terraform states from each `.tfstate` file.
 * If the path is a Cloud Storage bucket, it walks the bucket recursively and
     loads Terraform states from each `.tfstate` file. It only reads the bucket
-    name from the `--state_path` and ignores the file/dir, if specified. All
+    name from the `--state_paths` and ignores the file/dir, if specified. All
     `.tfstate` file from the bucket will be read. The program uses
     [Application Default Credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
     to authenticate with GCP. Make sure you have at least

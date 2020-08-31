@@ -100,7 +100,7 @@ func (c *config) init() error {
 }
 
 // loadResources loads Terraform state resources from the given path.
-// - If the path is a single local file, it loads resouces from it.
+// - If the path is a single local file, it loads resouces from it, regardless of the file name.
 // - If the path is a local directory, it walks the directory recursively and loads resources from each .tfstate file.
 // - If the path is a Cloud Storage bucket (indicated by 'gs://' prefix), it walks the bucket recursively and loads resources from each .tfstate file.
 //   It only reads the bucket name from the path and ignores the file/dir, if specified. All .tfstate file from the bucket will be read.

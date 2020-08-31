@@ -22,12 +22,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/hashicorp/terraform/states"
 	"github.com/otiai10/copy"
 )
 
@@ -38,7 +40,7 @@ const (
 // RunArgs is the struct representing the arguments passed to Run().
 type RunArgs struct {
 	ConfigPath string
-	StatePath  string
+	StatePaths string
 	OutputPath string
 }
 
@@ -50,9 +52,17 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("normalize path %q: %v", args.ConfigPath, err)
 	}
 
-	statePath, err := pathutil.Expand(args.StatePath)
-	if err != nil {
-		return fmt.Errorf("normalize path %q: %v", args.StatePath, err)
+	var statePaths []string
+	for _, p := range strings.Split(args.StatePaths, ",") {
+		p = strings.TrimSpace(p)
+		if len(p) == 0 {
+			break
+		}
+		p, err = pathutil.Expand(p)
+		if err != nil {
+			return fmt.Errorf("normalize path %q: %v", p, err)
+		}
+		statePaths = append(statePaths, p)
 	}
 
 	outputPath, err := pathutil.Expand(args.OutputPath)
@@ -98,7 +108,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return err
 	}
 
-	if err := generateForsetiPolicies(ctx, rn, statePath, filepath.Join(tmpDir, forsetiOutputRoot, "policies", "constraints"), c); err != nil {
+	if err := generateForsetiPolicies(ctx, rn, statePaths, filepath.Join(tmpDir, forsetiOutputRoot, "policies", "constraints"), c); err != nil {
 		return fmt.Errorf("generate Forseti policies: %v", err)
 	}
 
@@ -117,7 +127,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	return copy.Copy(tmpDir, outputPath)
 }
 
-func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath string, c *config) error {
+func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePaths []string, outputPath string, c *config) error {
 	if c.ForsetiPolicies == nil {
 		return nil
 	}
@@ -126,7 +136,7 @@ func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, o
 		return err
 	}
 
-	if err := generateTerraformBasedForsetiPolicies(ctx, rn, statePath, outputPath, c.TemplateDir); err != nil {
+	if err := generateTerraformBasedForsetiPolicies(ctx, rn, statePaths, outputPath, c.TemplateDir); err != nil {
 		return err
 	}
 
@@ -139,15 +149,19 @@ func generateGeneralForsetiPolicies(outputPath string, c *config) error {
 	return template.WriteDir(in, out, c.ForsetiPolicies)
 }
 
-func generateTerraformBasedForsetiPolicies(ctx context.Context, rn runner.Runner, statePath, outputPath, templateDir string) error {
-	if statePath == "" {
+func generateTerraformBasedForsetiPolicies(ctx context.Context, rn runner.Runner, statePaths []string, outputPath, templateDir string) error {
+	if len(statePaths) == 0 {
 		log.Println("No Terraform state given, only generating Terraform-agnostic security policies")
 		return nil
 	}
 
-	resources, err := loadResources(ctx, statePath)
-	if err != nil {
-		return err
+	var resources []*states.Resource
+	for _, p := range statePaths {
+		rs, err := loadResources(ctx, p)
+		if err != nil {
+			return err
+		}
+		resources = append(resources, rs...)
 	}
 
 	return generateIAMPolicies(rn, resources, outputPath, templateDir)

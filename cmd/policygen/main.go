@@ -15,7 +15,7 @@
 // policygen automates generation of Google-recommended Policy Library constraints based on your Terraform configs.
 //
 // Usage:
-// $ policygen --config_path=examples/policygen/config.hcl --state_path=/path/to/default.tfstate --output_path=/tmp/policies
+// $ policygen --config_path=examples/policygen/config.hcl --state_paths=/path/to/default.tfstate --output_path=/tmp/policies
 package main
 
 import (
@@ -29,7 +29,7 @@ import (
 
 var (
 	configPath = flag.String("config_path", "", "Path to the Policy Generator config.")
-	statePath  = flag.String("state_path", "", "Path to Terraform states. Can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
+	statePaths = flag.String("state_paths", "", "A comma-separated list of paths to Terraform states. Each entry can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
 	outputPath = flag.String("output_path", "", "Path to output directory to write generated policies")
 )
 
@@ -46,7 +46,7 @@ func main() {
 
 	args := &policygen.RunArgs{
 		ConfigPath: *configPath,
-		StatePath:  *statePath,
+		StatePaths: *statePaths,
 		OutputPath: *outputPath,
 	}
 
