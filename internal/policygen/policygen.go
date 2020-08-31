@@ -22,7 +22,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
@@ -40,7 +39,7 @@ const (
 // RunArgs is the struct representing the arguments passed to Run().
 type RunArgs struct {
 	ConfigPath string
-	StatePaths string
+	StatePaths []string
 	OutputPath string
 }
 
@@ -53,11 +52,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 
 	var statePaths []string
-	for _, p := range strings.Split(args.StatePaths, ",") {
-		p = strings.TrimSpace(p)
-		if len(p) == 0 {
-			break
-		}
+	for _, p := range args.StatePaths {
 		p, err = pathutil.Expand(p)
 		if err != nil {
 			return fmt.Errorf("normalize path %q: %v", p, err)

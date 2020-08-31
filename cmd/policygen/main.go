@@ -22,6 +22,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -44,9 +45,18 @@ func main() {
 		log.Fatal("--output_path must be set")
 	}
 
+	var statePathsList []string
+	for _, p := range strings.Split(*statePaths, ",") {
+		p = strings.TrimSpace(p)
+		if len(p) == 0 {
+			break
+		}
+		statePathsList = append(statePathsList, p)
+	}
+
 	args := &policygen.RunArgs{
 		ConfigPath: *configPath,
-		StatePaths: *statePaths,
+		StatePaths: statePathsList,
 		OutputPath: *outputPath,
 	}
 

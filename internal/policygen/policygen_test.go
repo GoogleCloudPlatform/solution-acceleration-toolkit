@@ -62,13 +62,13 @@ func TestExamples(t *testing.T) {
 
 	tests := []struct {
 		configPath string
-		statePaths string
+		statePaths []string
 		wantDirs   []wantDir
 	}{
 		{
 			"../../examples/policygen/config.hcl",
 			// A single state file that does not have the .tfstate extension should still work.
-			"testdata/state",
+			[]string{"testdata/state"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -82,7 +82,7 @@ func TestExamples(t *testing.T) {
 		},
 		{
 			"../../examples/policygen/config.hcl",
-			"testdata/org.tfstate",
+			[]string{"testdata/org.tfstate"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -96,7 +96,7 @@ func TestExamples(t *testing.T) {
 		},
 		{
 			"../../examples/policygen/config.yaml",
-			"testdata/subfolder/project.tfstate",
+			[]string{"testdata/subfolder/project.tfstate"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
@@ -114,7 +114,7 @@ func TestExamples(t *testing.T) {
 		{
 			"../../examples/policygen/config.hcl",
 			// Multiple state files.
-			"testdata/state,testdata/subfolder/project.tfstate",
+			[]string{"testdata/state", "testdata/subfolder/project.tfstate"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -140,7 +140,7 @@ func TestExamples(t *testing.T) {
 		{
 			"../../examples/policygen/config.hcl",
 			// One state file, one directory.
-			"testdata/state,testdata/subfolder",
+			[]string{"testdata/state", "testdata/subfolder"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -165,7 +165,7 @@ func TestExamples(t *testing.T) {
 		},
 		{
 			"../../examples/policygen/config.yaml",
-			"testdata",
+			[]string{"testdata"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
