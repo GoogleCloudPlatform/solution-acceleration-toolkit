@@ -34,6 +34,12 @@ Project of compute image to use.
 
 Type: string
 
+### bastion_hosts.labels
+
+Labels to set on the host.
+
+Type: object
+
 ### bastion_hosts.members
 
 Members who can access the bastion host.
@@ -131,6 +137,12 @@ Expiration in milliseconds.
 
 Type: integer
 
+### bigquery_datasets.labels
+
+Labels to set on the dataset.
+
+Type: object
+
 ### bigquery_datasets.resource_name
 
 Override for Terraform resource name.
@@ -176,6 +188,12 @@ Type: string
 Zone to reate cloud sql instance in. Can be defined in global data block.
 
 Type: string
+
+### cloud_sql_instances.labels
+
+Labels to set on the instance.
+
+Type: object
 
 ### cloud_sql_instances.name
 
@@ -276,6 +294,12 @@ If unset, defaults to normalized name.
 Normalization will make all characters alphanumeric with underscores.
 
 Type: string
+
+### compute_instance_templates.labels
+
+Labels to set on the instance template.
+
+Type: object
 
 ### compute_instance_templates.name_prefix
 
@@ -549,6 +573,12 @@ Name of the secondary subnet range to use for services.
 
 Type: string
 
+### gke_clusters.labels
+
+Labels to set on the cluster.
+
+Type: object
+
 ### gke_clusters.master_authorized_networks
 
 List of master authorized networks. If none are provided, disallow external
@@ -636,6 +666,12 @@ IAM role to grant.
 
 Type: string
 
+### healthcare_datasets.dicom_stores.labels
+
+Labels to set on the DICOM store.
+
+Type: object
+
 ### healthcare_datasets.dicom_stores.name
 
 Name of dicom store.
@@ -665,6 +701,12 @@ Type: string
 IAM role to grant.
 
 Type: string
+
+### healthcare_datasets.fhir_stores.labels
+
+Labels to set on the FHIR store.
+
+Type: object
 
 ### healthcare_datasets.fhir_stores.name
 
@@ -708,6 +750,12 @@ IAM role to grant.
 
 Type: string
 
+### healthcare_datasets.hl7_v2_stores.labels
+
+Labels to set on the HL7 V2 store.
+
+Type: object
+
 ### healthcare_datasets.hl7_v2_stores.name
 
 Name of Hl7 V2 store.
@@ -749,6 +797,12 @@ Type: object
 [Module](https://github.com/terraform-google-modules/terraform-google-pubsub)
 
 Type: array()
+
+### pubsub_topics.labels
+
+Labels to set on the topic.
+
+Type: object
 
 ### pubsub_topics.name
 
