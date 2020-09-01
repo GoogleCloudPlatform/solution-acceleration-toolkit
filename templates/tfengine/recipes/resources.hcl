@@ -77,6 +77,13 @@ schema = {
             description = "Family of compute image to use."
             type        = "string"
           }
+          labels = {
+            description = "Labels to set on the host."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
           members = {
             description = "Members who can access the bastion host."
             type        = "array"
@@ -127,6 +134,13 @@ schema = {
           default_table_expiration_ms = {
             description = "Expiration in milliseconds."
             type        = "integer"
+          }
+          labels = {
+            description = "Labels to set on the dataset."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
           }
           access = {
             description = <<EOF
@@ -236,6 +250,13 @@ schema = {
             description = "Default user password."
             type        = "string"
           }
+          labels = {
+            description = "Labels to set on the instance."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
         }
       }
     }
@@ -302,6 +323,13 @@ schema = {
           startup_script = {
             description = "Script to run on startup. Can be multi-line."
             type        = "string"
+          }
+          labels = {
+            description = "Labels to set on the instance template."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
           }
           instances = {
             description = "[Module](https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance)"
@@ -606,6 +634,13 @@ schema = {
             description = "Name of the GKE cluster's subnet."
             type        = "string"
           }
+          labels = {
+            description = "Labels to set on the cluster."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
           ip_range_pods_name = {
             description = "Name of the secondary subnet ip range to use for pods."
             type        = "string"
@@ -699,6 +734,13 @@ schema = {
                   description = "Name of dicom store."
                   type        = "string"
                 }
+                labels = {
+                  description = "Labels to set on the DICOM store."
+                  type        = "object"
+                  patternProperties = {
+                    ".+" = { type = "string" }
+                  }
+                }
                 iam_members = {
                   description = "IAM member to grant access for."
                   type        = "array"
@@ -743,6 +785,13 @@ schema = {
                   description = "Version of FHIR store."
                   type        = "string"
                 }
+                labels = {
+                  description = "Labels to set on the FHIR store."
+                  type        = "object"
+                  patternProperties = {
+                    ".+" = { type = "string" }
+                  }
+                }
                 iam_members = {
                   description = "IAM member to grant access for."
                   type        = "array"
@@ -781,6 +830,13 @@ schema = {
                 name = {
                   description = "Name of Hl7 V2 store."
                   type        = "string"
+                }
+                labels = {
+                  description = "Labels to set on the HL7 V2 store."
+                  type        = "object"
+                  patternProperties = {
+                    ".+" = { type = "string" }
+                  }
                 }
                 iam_members = {
                   description = "IAM member to grant access for."
@@ -826,6 +882,13 @@ schema = {
           name = {
             description = "Name of the topic."
             type        = "string"
+          }
+          labels = {
+            description = "Labels to set on the topic."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
           }
           pull_subscriptions = {
             description = "Pull subscriptions on the topic."
