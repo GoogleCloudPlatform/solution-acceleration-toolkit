@@ -239,6 +239,9 @@ template "project_data" {
         resource_name               = "one_billion_ms_example_dataset"
         dataset_id                  = "1billion_ms_example_dataset"
         default_table_expiration_ms = 1e+9
+        labels = {
+          type = "phi"
+        }
         access = [
           {
             role          = "roles/bigquery.dataOwner"
@@ -255,6 +258,9 @@ template "project_data" {
         type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
+        labels = {
+          type = "no-phi"
+        }
         # TODO(user): Uncomment and re-run the engine after deploying secrets.
         # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
         # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"

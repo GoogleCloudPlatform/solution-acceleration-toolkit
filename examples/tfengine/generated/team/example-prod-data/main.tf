@@ -67,7 +67,8 @@ module "one_billion_ms_example_dataset" {
     },
   ]
   dataset_labels = {
-    env = "prod"
+    env  = "prod"
+    type = "phi"
   }
 }
 
@@ -83,7 +84,8 @@ module "example_mysql_instance" {
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
   user_labels = {
-    env = "prod"
+    env  = "prod"
+    type = "no-phi"
   }
 }
 
