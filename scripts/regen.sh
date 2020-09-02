@@ -23,7 +23,7 @@ fi
 rm -rf ${gendir}/*/generated/*
 
 # Policygen
-go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${gendir}/policygen/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${gendir}/policygen/generated --state_paths examples/policygen/example.tfstate
 
 # TF Engine
 for example in examples/tfengine/*.hcl; do

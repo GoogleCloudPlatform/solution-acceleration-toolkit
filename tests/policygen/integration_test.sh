@@ -26,7 +26,7 @@ curl -s -o ${tmp}/cft https://storage.googleapis.com/cft-cli/v0.3.4/cft-linux-am
 chmod +x ${tmp}/cft
 
 # Regenerate policies to a tmp location.
-go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${tmp}/generated --state_path examples/policygen/example.tfstate
+go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${tmp}/generated --state_paths examples/policygen/example.tfstate
 
 # Run CFT Scorecard. scorecard.csv is hardcoded in CFT Scorecard as the output file name.
 output_file="${tmp}/scorecard.csv"
