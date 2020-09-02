@@ -11,6 +11,6 @@ To regenerate the policies, run the following commands:
 # To be run at the git repository root.
 go install ./cmd/policygen
 policygen --config_path=examples/policygen/config.hcl \
-  --state_path=examples/policygen/example.tfstate \
+  --state_paths=examples/policygen/example.tfstate \
   --output_path=examples/policygen/generated
 ```
