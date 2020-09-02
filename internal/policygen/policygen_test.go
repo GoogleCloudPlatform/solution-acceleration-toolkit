@@ -62,13 +62,13 @@ func TestExamples(t *testing.T) {
 
 	tests := []struct {
 		configPath string
-		statePath  string
+		statePaths []string
 		wantDirs   []wantDir
 	}{
 		{
 			"../../examples/policygen/config.hcl",
 			// A single state file that does not have the .tfstate extension should still work.
-			"testdata/state",
+			[]string{"testdata/state"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -82,7 +82,7 @@ func TestExamples(t *testing.T) {
 		},
 		{
 			"../../examples/policygen/config.hcl",
-			"testdata/org.tfstate",
+			[]string{"testdata/org.tfstate"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -96,7 +96,7 @@ func TestExamples(t *testing.T) {
 		},
 		{
 			"../../examples/policygen/config.yaml",
-			"testdata/subfolder/project.tfstate",
+			[]string{"testdata/subfolder/project.tfstate"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
@@ -112,8 +112,60 @@ func TestExamples(t *testing.T) {
 			},
 		},
 		{
+			"../../examples/policygen/config.hcl",
+			// Multiple state files.
+			[]string{"testdata/state", "testdata/subfolder/project.tfstate"},
+			[]wantDir{
+				{
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
+					2,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudbuild_builds_editor.yaml",
+					},
+				},
+				{
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
+					9,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_editor.yaml",
+						"iam_allow_bindings_owner.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
+					},
+				},
+			},
+		},
+		{
+			"../../examples/policygen/config.hcl",
+			// One state file, one directory.
+			[]string{"testdata/state", "testdata/subfolder"},
+			[]wantDir{
+				{
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
+					2,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_cloudbuild_builds_editor.yaml",
+					},
+				},
+				{
+					filepath.Join(forsetiOutputRoot, "policies", "constraints", "project_123"),
+					9,
+					[]string{
+						"iam_allow_roles.yaml",
+						"iam_allow_bindings_editor.yaml",
+						"iam_allow_bindings_owner.yaml",
+						"iam_allow_bindings_cloudsql_client.yaml",
+						"iam_allow_bindings_custom_osloginprojectget_6afd.yaml",
+					},
+				},
+			},
+		},
+		{
 			"../../examples/policygen/config.yaml",
-			"testdata",
+			[]string{"testdata"},
 			[]wantDir{
 				{
 					filepath.Join(forsetiOutputRoot, "policies", "constraints", "organization_12345678"),
@@ -157,7 +209,7 @@ func TestExamples(t *testing.T) {
 
 		args := &RunArgs{
 			ConfigPath: tc.configPath,
-			StatePath:  tc.statePath,
+			StatePaths: tc.statePaths,
 			OutputPath: tmp,
 		}
 
@@ -181,7 +233,7 @@ func TestExamples(t *testing.T) {
 			}
 
 			if len(fs) != d.wantFilesCount {
-				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, tc.configPath, tc.statePath, len(fs), d.wantFilesCount)
+				t.Errorf("retrieved number of files differ for dir %q from config %q and state %q: got %d, want %d", dirPath, tc.configPath, tc.statePaths, len(fs), d.wantFilesCount)
 			}
 
 			for _, f := range d.wantFiles {

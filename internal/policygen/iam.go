@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
@@ -126,10 +127,27 @@ func allBindings(rn runner.Runner, resources []*states.Resource) (map[root]roleB
 			}
 		}
 		for root, bindings := range iamMembers {
+			for role, members := range bindings {
+				// Remove duplicated members for the same role.
+				bindings[role] = unique(members)
+			}
 			allBindings[root] = bindings
 		}
 	}
 	return allBindings, nil
+}
+
+func unique(in []string) []string {
+	keys := make(map[string]bool)
+	var out []string
+	for _, s := range in {
+		if _, exists := keys[s]; !exists {
+			keys[s] = true
+			out = append(out, s)
+		}
+	}
+	sort.Strings(out)
+	return out
 }
 
 // members returns role bindings map for google_%s_iam_member (non-authoritative).
