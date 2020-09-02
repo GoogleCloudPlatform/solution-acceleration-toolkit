@@ -105,7 +105,8 @@ module "example_healthcare_dataset" {
     {
       name = "example-dicom-store"
       labels = {
-        env = "prod"
+        env  = "prod"
+        type = "phi"
       }
     }
   ]
@@ -120,7 +121,8 @@ module "example_healthcare_dataset" {
         },
       ]
       labels = {
-        env = "prod"
+        env  = "prod"
+        type = "phi"
       }
     }
   ]
@@ -128,7 +130,8 @@ module "example_healthcare_dataset" {
     {
       name = "example-hl7-store"
       labels = {
-        env = "prod"
+        env  = "prod"
+        type = "phi"
       }
     }
   ]
@@ -158,7 +161,7 @@ module "example_prod_bucket" {
 
   labels = {
     env  = "prod"
-    type = "images"
+    type = "phi"
   }
   lifecycle_rules = [
     {

@@ -127,7 +127,8 @@ module "example_instance_template" {
     enable_integrity_monitoring = true
   }
   labels = {
-    env = "prod"
+    env  = "prod"
+    type = "no-phi"
   }
 }
 
@@ -183,7 +184,8 @@ module "example_gke_cluster" {
   release_channel         = "STABLE"
 
   cluster_resource_labels = {
-    env = "prod"
+    env  = "prod"
+    type = "no-phi"
   }
 }
 
@@ -209,7 +211,8 @@ module "foo_topic" {
   project_id = module.project.project_id
 
   topic_labels = {
-    env = "prod"
+    env  = "prod"
+    type = "no-phi"
   }
   pull_subscriptions = [
     {
