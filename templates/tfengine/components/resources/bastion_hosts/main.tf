@@ -32,6 +32,14 @@ module "{{resourceName . "name"}}" {
   {{hclField . "image_project"}}
   {{hclField . "scopes"}}
 
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
+
   {{- if has . "startup_script"}}
   startup_script = <<EOF
 {{.startup_script}}

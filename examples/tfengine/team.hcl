@@ -32,7 +32,7 @@ data = {
   secret_locations    = ["us-central1"]
 
   labels = {
-    "env" = "prod"
+    env = "prod"
   }
 }
 
@@ -239,6 +239,9 @@ template "project_data" {
         resource_name               = "one_billion_ms_example_dataset"
         dataset_id                  = "1billion_ms_example_dataset"
         default_table_expiration_ms = 1e+9
+        labels = {
+          type = "phi"
+        }
         access = [
           {
             role          = "roles/bigquery.dataOwner"
@@ -255,6 +258,9 @@ template "project_data" {
         type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
+        labels = {
+          type = "no-phi"
+        }
         # TODO(user): Uncomment and re-run the engine after deploying secrets.
         # user_name        = "$${data.google_secret_manager_version.db_user.secret_data}"
         # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
@@ -267,10 +273,16 @@ template "project_data" {
         }]
         dicom_stores = [{
           name = "example-dicom-store"
+          labels = {
+            type = "phi"
+          }
         }]
         fhir_stores = [{
           name    = "example-fhir-store"
           version = "R4"
+          labels = {
+            type = "phi"
+          }
           iam_members = [{
             role   = "roles/healthcare.fhirStoreViewer"
             member = "group:example-fhir-viewers@example.com",
@@ -278,6 +290,9 @@ template "project_data" {
         }]
         hl7_v2_stores = [{
           name = "example-hl7-store"
+          labels = {
+            type = "phi"
+          }
         }]
       }]
       iam_members = {
@@ -288,7 +303,7 @@ template "project_data" {
       storage_buckets = [{
         name = "example-prod-bucket"
         labels = {
-          type = "images"
+          type = "phi"
         }
         # TTL 7 days.
         lifecycle_rules = [{
@@ -357,6 +372,9 @@ template "project_apps" {
         ip_range_pods_name     = "example-pods-range"
         ip_range_services_name = "example-services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
+        labels = {
+          type = "no-phi"
+        }
       }]
       binary_authorization = {
         admission_whitelist_patterns = [{
@@ -376,6 +394,9 @@ template "project_apps" {
         instances = [{
           name = "instance"
         }]
+        labels = {
+          type = "no-phi"
+        }
       }]
       iam_members = {
         "roles/container.viewer" = ["group:example-viewers@example.com"]
@@ -395,6 +416,9 @@ template "project_apps" {
       }]
       pubsub_topics = [{
         name = "foo-topic"
+        labels = {
+          type = "no-phi"
+        }
         push_subscriptions = [
           {
             name          = "push-subscription"

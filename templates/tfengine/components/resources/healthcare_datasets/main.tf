@@ -29,6 +29,14 @@ module "{{resourceName . "name"}}" {
     {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
+
+      {{if $labels := merge (get $ "labels") (get . "labels") -}}
+      labels = {
+        {{range $k, $v := $labels -}}
+        {{$k}} = "{{$v}}"
+        {{end -}}
+      }
+      {{end -}}
     }
     {{end -}}
   ]
@@ -41,6 +49,14 @@ module "{{resourceName . "name"}}" {
       name    = "{{.name}}"
       version = "{{.version}}"
       {{hclField . "iam_members" -}}
+
+      {{if $labels := merge (get $ "labels") (get . "labels") -}}
+      labels = {
+        {{range $k, $v := $labels -}}
+        {{$k}} = "{{$v}}"
+        {{end -}}
+      }
+      {{end -}}
     }
     {{end -}}
   ]
@@ -52,6 +68,14 @@ module "{{resourceName . "name"}}" {
     {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
+
+      {{if $labels := merge (get $ "labels") (get . "labels") -}}
+      labels = {
+        {{range $k, $v := $labels -}}
+        {{$k}} = "{{$v}}"
+        {{end -}}
+      }
+      {{end -}}
     }
     {{end -}}
   ]

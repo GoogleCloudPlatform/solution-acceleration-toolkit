@@ -66,6 +66,10 @@ module "one_billion_ms_example_dataset" {
       role           = "roles/bigquery.dataViewer"
     },
   ]
+  dataset_labels = {
+    env  = "prod"
+    type = "phi"
+  }
 }
 
 module "example_mysql_instance" {
@@ -79,6 +83,10 @@ module "example_mysql_instance" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
+  user_labels = {
+    env  = "prod"
+    type = "no-phi"
+  }
 }
 
 module "example_healthcare_dataset" {
@@ -98,6 +106,10 @@ module "example_healthcare_dataset" {
   dicom_stores = [
     {
       name = "example-dicom-store"
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
     }
   ]
   fhir_stores = [
@@ -110,11 +122,19 @@ module "example_healthcare_dataset" {
           role   = "roles/healthcare.fhirStoreViewer"
         },
       ]
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
     }
   ]
   hl7_v2_stores = [
     {
       name = "example-hl7-store"
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
     }
   ]
 }
@@ -143,7 +163,7 @@ module "example_prod_bucket" {
 
   labels = {
     env  = "prod"
-    type = "images"
+    type = "phi"
   }
   lifecycle_rules = [
     {

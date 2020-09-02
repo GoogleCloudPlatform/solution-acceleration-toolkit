@@ -32,6 +32,14 @@ module "{{resourceName . "name"}}" {
   vpc_network       = "{{$network}}"
   {{hclField . "user_name" -}}
   {{hclField . "user_password" -}}
+
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  user_labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 {{end -}}
 {{end -}}
