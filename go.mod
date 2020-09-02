@@ -22,6 +22,6 @@ require (
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zclconf/go-cty v1.6.0
+	github.com/zclconf/go-cty v1.6.1
 	google.golang.org/api v0.31.0
 )
