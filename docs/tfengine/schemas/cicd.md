@@ -4,9 +4,11 @@
 
 ## Properties
 
-### branch_regex
+### branch_name
 
-Regex of the branches to set the Cloud Build Triggers to monitor.
+Name of the branch to set the Cloud Build Triggers to monitor.
+Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
+environment.
 
 Type: string
 
@@ -68,6 +70,14 @@ ID of project to deploy CICD in.
 
 Type: string
 
+### scheduler_region
+
+Region (https://cloud.google.com/appengine/docs/locations) where the scheduler
+job (or the App Engine App behind the sceneces) resides. Must be specified if
+any triggers are configured to be run on schedule.
+
+Type: string
+
 ### terraform_root
 
 Path of the directory relative to the repo root containing the Terraform configs.
@@ -94,6 +104,15 @@ Whether or not automatic triggering from a PR/push to branch. Default to true.
 
 Type: boolean
 
+### triggers.apply.run_on_schedule
+
+Whether or not automatic triggering according a specified schedule.
+The schedule is specified using unix-cron string format
+(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
+Standard Time (EST). Default to none.
+
+Type: string
+
 ### triggers.plan
 
 Config block for the presubmit plan Cloud Build trigger.
@@ -108,6 +127,15 @@ Whether or not automatic triggering from a PR/push to branch. Default to true.
 
 Type: boolean
 
+### triggers.plan.run_on_schedule
+
+Whether or not automatic triggering according a specified schedule.
+The schedule is specified using unix-cron string format
+(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
+Standard Time (EST). Default to none.
+
+Type: string
+
 ### triggers.validate
 
 Config block for the presubmit validation Cloud Build trigger. If specified, create
@@ -121,3 +149,12 @@ Type: object
 Whether or not automatic triggering from a PR/push to branch. Default to true.
 
 Type: boolean
+
+### triggers.validate.run_on_schedule
+
+Whether or not automatic triggering according a specified schedule.
+The schedule is specified using unix-cron string format
+(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
+Standard Time (EST). Default to none.
+
+Type: string

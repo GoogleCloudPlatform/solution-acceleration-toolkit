@@ -54,6 +54,10 @@ locals {
 {{- if has . "cloud_source_repository"}}
     "sourcerepo.googleapis.com",
 {{- end}}
+{{- if or (has .triggers.validate "run_on_schedule") (has .triggers.plan "run_on_schedule") (has .triggers.apply "run_on_schedule")}}
+    "appengine.googleapis.com",
+    "cloudscheduler.googleapis.com",
+{{- end}}
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
@@ -86,7 +90,7 @@ locals {
   terraform_root = trim((var.terraform_root == "" || var.terraform_root == "/") ? "." : var.terraform_root, "/")
   # ./ to indicate root is not recognized by Cloud Build Trigger.
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
-  cloud_build_sa        = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  cloudbuild_sa        = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Cloud Build - API
@@ -124,7 +128,7 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
-  member             = local.cloud_build_sa
+  member             = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -140,7 +144,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   {{- else}}
   role   = "roles/storage.objectViewer"
   {{- end}}
-  member = local.cloud_build_sa
+  member = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -159,7 +163,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
   folder   = {{.parent_id}}
   {{- end}}
   role     = each.value
-  member   = local.cloud_build_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -170,7 +174,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
   project  = var.project_id
   role     = each.key
-  member   = local.cloud_build_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -186,14 +190,45 @@ resource "google_sourcerepo_repository" "configs" {
 }
 {{- end}}
 
+{{- if or (has .triggers.validate "run_on_schedule") (has .triggers.plan "run_on_schedule") (has .triggers.apply "run_on_schedule")}}
+# Cloud Scheduler requires an App Engine app created in the project.
+resource "google_app_engine_application" "cloudbuild_scheduler_app" {
+  project     = var.project_id
+  location_id = "{{.scheduler_region}}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
+resource "google_service_account" "cloudbuild_scheduler_sa" {
+  project      = var.project_id
+  account_id   = "cloudbuild-scheduler-sa"
+  display_name = "Cloud Build scheduler service account"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.editor"
+  member  = "serviceAccount:${google_service_account.cloudbuild_scheduler_sa.email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+{{- end}}
+
 {{if has .triggers "validate" -}}
 resource "google_cloudbuild_trigger" "validate" {
   {{- if not (get .triggers.validate "run_on_push" true)}}
-  disabled = true
+  disabled    = true
   {{- end}}
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-validate"
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-validate"
+  description = "Terraform validate job triggered on push event."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -204,13 +239,13 @@ resource "google_cloudbuild_trigger" "validate" {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
     pull_request {
-      branch = "{{.branch_regex}}"
+      branch = "^{{.branch_name}}$"
     }
   }
   {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
-    branch_name = "{{.branch_regex}}"
+    branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
 
@@ -227,16 +262,83 @@ resource "google_cloudbuild_trigger" "validate" {
 {{- end}}
   ]
 }
+
+{{- if has .triggers.validate "run_on_schedule"}}
+# Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
+resource "google_cloudbuild_trigger" "validate_scheduled" {
+  # Always disabled on push to branch.
+  disabled    = true
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-validate-scheduled"
+  description = "Terraform validate job triggered on schedule."
+
+  included_files = [
+    "${local.terraform_root_prefix}**",
+  ]
+
+  {{if has . "github" -}}
+  github {
+    owner = "{{.github.owner}}"
+    name  = "{{.github.name}}"
+    push {
+      branch = "^{{.branch_name}}$"
+    }
+  }
+  {{- else if has . "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = "{{.cloud_source_repository.name}}"
+    branch_name = "^{{.branch_name}}$"
+  }
+  {{- end}}
+
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+
+  substitutions = {
+    _TERRAFORM_ROOT = local.terraform_root
+  }
+
+  depends_on = [
+    google_project_service.services,
+{{- if has . "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+{{- end}}
+  ]
+}
+
+resource "google_cloud_scheduler_job" "validate_scheduler" {
+  project   = var.project_id
+  name      = "validate-scheduler"
+  region    = "{{.scheduler_region}}"
+  schedule  = "{{.triggers.validate.run_on_schedule}}"
+  time_zone = "America/New_York" # Eastern Standard Time (EST)
+  attempt_deadline = "60s"
+  http_target {
+    http_method = "POST"
+    oauth_token {
+      scope = "https://www.googleapis.com/auth/cloud-platform"
+      service_account_email = "${google_service_account.cloudbuild_scheduler_sa.email}"
+    }
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled.id}:run"
+    body = base64encode("{\"branchName\":\"{{.branch_name}}\"}")
+  }
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+  ]
+}
+{{- end}}
 {{- end}}
 
 {{if has .triggers "plan" -}}
 resource "google_cloudbuild_trigger" "plan" {
   {{- if not (get .triggers.plan "run_on_push" true)}}
-  disabled = true
+  disabled    = true
   {{- end}}
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-plan"
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-plan"
+  description = "Terraform plan job triggered on push event."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -247,13 +349,13 @@ resource "google_cloudbuild_trigger" "plan" {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
     pull_request {
-      branch = "{{.branch_regex}}"
+      branch = "^{{.branch_name}}$"
     }
   }
   {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
-    branch_name = "{{.branch_regex}}"
+    branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
 
@@ -270,16 +372,16 @@ resource "google_cloudbuild_trigger" "plan" {
 {{- end}}
   ]
 }
-{{- end}}
 
-{{if has .triggers "apply" -}}
-resource "google_cloudbuild_trigger" "apply" {
-  {{- if not (get .triggers.apply "run_on_push" true)}}
-  disabled = true
-  {{- end}}
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-apply"
+{{- if has .triggers.plan "run_on_schedule"}}
+# Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
+resource "google_cloudbuild_trigger" "plan_scheduled" {
+  # Always disabled on push to branch.
+  disabled    = true
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-plan-scheduled"
+  description = "Terraform plan job triggered on schedule."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -290,13 +392,80 @@ resource "google_cloudbuild_trigger" "apply" {
     owner = "{{.github.owner}}"
     name  = "{{.github.name}}"
     push {
-      branch = "{{.branch_regex}}"
+      branch = "^{{.branch_name}}$"
     }
   }
   {{- else if has . "cloud_source_repository" -}}
   trigger_template {
     repo_name   = "{{.cloud_source_repository.name}}"
-    branch_name = "{{.branch_regex}}"
+    branch_name = "^{{.branch_name}}$"
+  }
+  {{- end}}
+
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-plan.yaml"
+
+  substitutions = {
+    _TERRAFORM_ROOT = local.terraform_root
+  }
+
+  depends_on = [
+    google_project_service.services,
+{{- if has . "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+{{- end}}
+  ]
+}
+
+resource "google_cloud_scheduler_job" "plan_scheduler" {
+  project   = var.project_id
+  name      = "plan-scheduler"
+  region    = "{{.scheduler_region}}"
+  schedule  = "{{.triggers.plan.run_on_schedule}}"
+  time_zone = "America/New_York" # Eastern Standard Time (EST)
+  attempt_deadline = "60s"
+  http_target {
+    http_method = "POST"
+    oauth_token {
+      scope = "https://www.googleapis.com/auth/cloud-platform"
+      service_account_email = "${google_service_account.cloudbuild_scheduler_sa.email}"
+    }
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.plan_scheduled.id}:run"
+    body = base64encode("{\"branchName\":\"{{.branch_name}}\"}")
+  }
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+  ]
+}
+{{- end}}
+{{- end}}
+
+{{if has .triggers "apply" -}}
+resource "google_cloudbuild_trigger" "apply" {
+  {{- if not (get .triggers.apply "run_on_push" true)}}
+  disabled    = true
+  {{- end}}
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-apply"
+  description = "Terraform apply job triggered on push event and/or schedule."
+
+  included_files = [
+    "${local.terraform_root_prefix}**",
+  ]
+
+  {{if has . "github" -}}
+  github {
+    owner = "{{.github.owner}}"
+    name  = "{{.github.name}}"
+    push {
+      branch = "^{{.branch_name}}$"
+    }
+  }
+  {{- else if has . "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = "{{.cloud_source_repository.name}}"
+    branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
 
@@ -313,4 +482,28 @@ resource "google_cloudbuild_trigger" "apply" {
 {{- end}}
   ]
 }
+
+{{- if has .triggers.apply "run_on_schedule"}}
+resource "google_cloud_scheduler_job" "apply_scheduler" {
+  project   = var.project_id
+  name      = "apply-scheduler"
+  region    = "{{.scheduler_region}}"
+  schedule  = "{{.triggers.apply.run_on_schedule}}"
+  time_zone = "America/New_York" # Eastern Standard Time (EST)
+  attempt_deadline = "60s"
+  http_target {
+    http_method = "POST"
+    oauth_token {
+      scope = "https://www.googleapis.com/auth/cloud-platform"
+      service_account_email = "${google_service_account.cloudbuild_scheduler_sa.email}"
+    }
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply.id}:run"
+    body = base64encode("{\"branchName\":\"{{.branch_name}}\"}")
+  }
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+  ]
+}
+{{- end}}
 {{- end}}
