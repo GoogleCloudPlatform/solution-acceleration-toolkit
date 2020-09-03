@@ -47,4 +47,4 @@ jobs:
 
         # Create the release with the policies bundle
         version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/policies-||')"
-        bin/hub release create $(printf -- ' --attach=%s' ./policies*.tar.gz) -m "Policies ${version}" "${version}"
+        bin/hub release create $(printf -- ' --attach=%s' ./policies*.tar.gz) -m "Policies ${version}" "policies-${version}"

@@ -47,4 +47,4 @@ jobs:
 
         # Create the release with the templates bundle
         version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/templates-||')"
-        bin/hub release create $(printf -- ' --attach=%s' ./templates*.tar.gz) -m "Templates ${version}" "${version}"
+        bin/hub release create $(printf -- ' --attach=%s' ./templates*.tar.gz) -m "Templates ${version}" "templates-${version}"
