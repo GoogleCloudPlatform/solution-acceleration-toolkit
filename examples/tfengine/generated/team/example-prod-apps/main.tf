@@ -164,7 +164,7 @@ module "example_domain" {
 
 module "example_gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 11.0.0"
+  version = "~> 11.1.0"
 
   # Required.
   name               = "example-gke-cluster"
