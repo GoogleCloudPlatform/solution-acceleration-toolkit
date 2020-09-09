@@ -94,7 +94,7 @@ schema = {
     }
     scheduler_region = {
       description = <<EOF
-        Region (https://cloud.google.com/appengine/docs/locations) where the scheduler
+        [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
         job (or the App Engine App behind the sceneces) resides. Must be specified if
         any triggers are configured to be run on schedule.
       EOF
@@ -125,9 +125,8 @@ schema = {
             run_on_schedule = {
               description = <<EOF
                 Whether or not automatic triggering according a specified schedule.
-                The schedule is specified using unix-cron string format
-                (https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-                Standard Time (EST). Default to none.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
               EOF
               type        = "string"
             }
@@ -151,9 +150,8 @@ schema = {
             run_on_schedule = {
               description = <<EOF
                 Whether or not automatic triggering according a specified schedule.
-                The schedule is specified using unix-cron string format
-                (https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-                Standard Time (EST). Default to none.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
               EOF
               type        = "string"
             }
@@ -177,9 +175,8 @@ schema = {
             run_on_schedule = {
               description = <<EOF
                 Whether or not automatic triggering according a specified schedule.
-                The schedule is specified using unix-cron string format
-                (https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-                Standard Time (EST). Default to none.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
               EOF
               type        = "string"
             }

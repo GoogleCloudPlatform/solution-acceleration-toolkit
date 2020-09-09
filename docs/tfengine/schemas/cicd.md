@@ -72,7 +72,7 @@ Type: string
 
 ### scheduler_region
 
-Region (https://cloud.google.com/appengine/docs/locations) where the scheduler
+[Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
 job (or the App Engine App behind the sceneces) resides. Must be specified if
 any triggers are configured to be run on schedule.
 
@@ -107,9 +107,8 @@ Type: boolean
 ### triggers.apply.run_on_schedule
 
 Whether or not automatic triggering according a specified schedule.
-The schedule is specified using unix-cron string format
-(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-Standard Time (EST). Default to none.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
 
 Type: string
 
@@ -130,9 +129,8 @@ Type: boolean
 ### triggers.plan.run_on_schedule
 
 Whether or not automatic triggering according a specified schedule.
-The schedule is specified using unix-cron string format
-(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-Standard Time (EST). Default to none.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
 
 Type: string
 
@@ -153,8 +151,7 @@ Type: boolean
 ### triggers.validate.run_on_schedule
 
 Whether or not automatic triggering according a specified schedule.
-The schedule is specified using unix-cron string format
-(https://man7.org/linux/man-pages/man5/crontab.5.html) at Eastern
-Standard Time (EST). Default to none.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
 
 Type: string
