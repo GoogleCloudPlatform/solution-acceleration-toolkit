@@ -38,9 +38,10 @@ const (
 
 // RunArgs is the struct representing the arguments passed to Run().
 type RunArgs struct {
-	ConfigPath string
-	StatePaths []string
-	OutputPath string
+	ConfigPath  string
+	StatePaths  []string
+	OutputPath  string
+	ForsetiPath string
 }
 
 // Run executes main policygen logic.
@@ -90,7 +91,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 
 	// Policy Library templates are released in a backwards compatible way, and old templates will be
 	// kept in the repository as well, so it's relatively safe to pull from 'master' branch all the time.
-	tp, err := pathutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
+	tp, err := pathutil.Fetch(args.ForsetiPath, "", cacheDir)
 	if err != nil {
 		return fmt.Errorf("fetch policy templates and utils: %v", err)
 	}

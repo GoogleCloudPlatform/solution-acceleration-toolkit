@@ -208,9 +208,10 @@ func TestExamples(t *testing.T) {
 		defer os.RemoveAll(tmp)
 
 		args := &RunArgs{
-			ConfigPath: tc.configPath,
-			StatePaths: tc.statePaths,
-			OutputPath: tmp,
+			ConfigPath:  tc.configPath,
+			StatePaths:  tc.statePaths,
+			OutputPath:  tmp,
+			ForsetiPath: "./testdata/policy-library",
 		}
 
 		if err := Run(context.Background(), &Fake{}, args); err != nil {

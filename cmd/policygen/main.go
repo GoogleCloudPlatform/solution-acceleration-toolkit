@@ -55,9 +55,10 @@ func main() {
 	}
 
 	args := &policygen.RunArgs{
-		ConfigPath: *configPath,
-		StatePaths: statePathsList,
-		OutputPath: *outputPath,
+		ConfigPath:  *configPath,
+		StatePaths:  statePathsList,
+		OutputPath:  *outputPath,
+		ForsetiPath: "git://github.com/forseti-security/policy-library?ref=master",
 	}
 
 	rn := &runner.Default{Quiet: true}
