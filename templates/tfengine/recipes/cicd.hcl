@@ -118,13 +118,14 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
             }
             run_on_schedule = {
               description = <<EOF
-                Whether or not automatic triggering according a specified schedule.
+                Whether or not to be automatically triggered according a specified schedule.
                 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                 at Eastern Standard Time (EST). Default to none.
               EOF
@@ -143,13 +144,14 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
             }
             run_on_schedule = {
               description = <<EOF
-                Whether or not automatic triggering according a specified schedule.
+                Whether or not to be automatically triggered according a specified schedule.
                 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                 at Eastern Standard Time (EST). Default to none.
               EOF
@@ -168,13 +170,14 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
             }
             run_on_schedule = {
               description = <<EOF
-                Whether or not automatic triggering according a specified schedule.
+                Whether or not to be automatically triggered according a specified schedule.
                 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                 at Eastern Standard Time (EST). Default to none.
               EOF
