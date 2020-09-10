@@ -16,7 +16,7 @@ schema = {
   title                = "CICD Recipe"
   additionalProperties = false
   required = [
-    "branch_regex",
+    "branch_name",
     "triggers",
   ]
   properties = {
@@ -53,8 +53,12 @@ schema = {
         }
       }
     }
-    branch_regex = {
-      description = "Regex of the branches to set the Cloud Build Triggers to monitor."
+    branch_name = {
+      description = <<EOF
+        Name of the branch to set the Cloud Build Triggers to monitor.
+        Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
+        environment.
+      EOF
       type        = "string"
     }
     terraform_root = {
@@ -88,6 +92,14 @@ schema = {
         type = "string"
       }
     }
+    scheduler_region = {
+      description = <<EOF
+        [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
+        job (or the App Engine App behind the sceneces) resides. Must be specified if
+        any triggers are configured to be run on schedule.
+      EOF
+      type        = "string"
+    }
     triggers = {
       description          = <<EOF
         Config block for the CICD Cloud Build triggers.
@@ -106,9 +118,18 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
+            }
+            run_on_schedule = {
+              description = <<EOF
+                Whether or not to be automatically triggered according a specified schedule.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
+              EOF
+              type        = "string"
             }
           }
         }
@@ -123,9 +144,18 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
+            }
+            run_on_schedule = {
+              description = <<EOF
+                Whether or not to be automatically triggered according a specified schedule.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
+              EOF
+              type        = "string"
             }
           }
         }
@@ -140,9 +170,18 @@ schema = {
           properties = {
             run_on_push = {
               description = <<EOF
-                Whether or not automatic triggering from a PR/push to branch. Default to true.
+                Whether or not to be automatically triggered from a PR/push to branch.
+                Default to true.
               EOF
               type        = "boolean"
+            }
+            run_on_schedule = {
+              description = <<EOF
+                Whether or not to be automatically triggered according a specified schedule.
+                The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+                at Eastern Standard Time (EST). Default to none.
+              EOF
+              type        = "string"
             }
           }
         }

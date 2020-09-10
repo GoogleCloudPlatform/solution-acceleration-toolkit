@@ -31,62 +31,71 @@ to detect changes in the repo, trigger builds, and run the workloads.
     terraform apply
     ```
 
-    Two presubmit triggers are created by default. Build/test status and results
-    are posted in the Pull Request. Failures of these presubmits should be
-    configured to block Pull Request submissions. The `build_viewers` members
-    can view detailed log output.
+## Features
 
-    * `tf-validate`: Perform Terraform format and syntax check.
-    * `tf-plan`: Generate speculative plans to show a set of potential changes
-        if the pending config changes are deployed.
-        * This also performs a non-blocking check for resource deletions.
-            These are worth reviewing, as deletions are potentially destructive.
-    * `tf-apply`: Apply the terraform configs that are checked into the Github
-        repo. This trigger is only applicable post-submit. When this trigger is
-        set in the Terraform engine config, the Cloud Build service account is
-        given broader permissions to be able to make changes to the
-        infrastructure.
+### Event-triggered builds
 
-    The triggers all use a [helper runner script](./configs/run.sh) to perform
-    actions. The `MODULES` var within the script lists the modules that are
-    managed (relative to the `terraform_root` var) by the triggers and the order
-    they are run.
+Two presubmit and one postsubmit triggers are created by default.
 
-    **NOTE**: The CICD service account can manage a subset of resources (e.g.
-    APIs) within its own project (`devops` project). This allows users to have
-    low risk changes made in the `devops` project deployed through the standard
-    Cloud Build pipelines, without needing to apply it manually. To do so, add
-    the `devops` module (that hosts the devops project) in the `managed_modules`
-    list in the CICD Terraform Engine config block. Other changes in the
-    `devops` project outside the approved set (APIs) will still need to be made
-    manually.
-
-    A common use case for this is when adding a new resource in a project that
-    requires a new API to be enabled. You must add the API in both the
-    resource's project as well as the `devops` project. With the feature above,
-    the CICD can deploy both changes for you.
-
-## Operation
-
-### Continuous integration (presubmit)
-
-Presubmit Cloud Build results are posted as a Cloud Build job link in the Pull
-Request. They should be configured to block Pull Request submissions.
+* \[Presubmit\] `tf-validate`: Perform Terraform format and syntax check.
+* \[Presubmit\] `tf-plan`: Generate speculative plans to show a set of
+    potential changes if the pending config changes are deployed.
+  * This also performs a non-blocking check for resource deletions. These
+        are worth reviewing, as deletions are potentially destructive.
+* \[Postsubmit\] `tf-apply`: Apply the terraform configs that are checked into
+    the Github repo. This trigger is only applicable post-submit. When this
+    trigger is set in the Terraform engine config, the Cloud Build service
+    account is given broader permissions to be able to make changes to the
+    infrastructure.
 
 Every new push to the Pull Request at the configured branches automatically
 triggers presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in
-the Pull Ruquest.
-
-### Continuous deployment (postsubmit)
+the Pull Ruquest. Presubmit Cloud Build results are posted as a Cloud Build job
+link in the Pull Request. Failures of these presubmits should be configured to
+block Pull Request submissions.
 
 The postsubmit Cloud Build job automatically starts after a Pull Ruquest is
 submitted to a configured branch. To view the result of the Cloud Build run, go
 to [Build history](https://console.cloud.google.com/cloud-build/builds) and look
 for your commit to view the Cloud Build job triggered by your merged commit.
 
-### Deletion Check Allowlist
+The `build_viewers` members can view detailed log output.
 
-The deletion check optionally accepts an allowlist of resources to ignore, using
+The triggers all use a [helper runner script](./configs/run.sh) to perform
+actions. The `MODULES` var within the script lists the modules that are managed
+(relative to the `terraform_root` var) by the triggers and the order they are
+run.
+
+### Scheduled builds
+
+You can configure the triggers to be run at a specified schedule via the
+`run_on_schedule` attribute in each trigger block. The schedule is defined using
+the
+[unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule).
+Note that to use the scheduling feature, additional attribute `scheduler_region`
+must be specified under the `cicd` template. An App Engine application will be
+enabled and created behind the scenes, and supported regions can be found
+[here](https://cloud.google.com/appengine/docs/locations).
+
+### CICD for `devops` project itself
+
+The CICD service account can manage a subset of resources (e.g. APIs) within its
+own project (`devops` project). This allows users to have low risk changes made
+in the `devops` project deployed through the standard Cloud Build pipelines,
+without needing to apply it manually. To do so, add the `devops` module (that
+hosts the devops project) in the `managed_modules` list in the CICD Terraform
+Engine config block. Other changes in the `devops` project outside the approved
+set (APIs) will still need to be made manually.
+
+A common use case for this is when adding a new resource in a project that
+requires a new API to be enabled. You must add the API in both the resource's
+project as well as the `devops` project. With the feature above, the CICD can
+deploy both changes for you.
+
+### Deletion check allowlist
+
+The deletion check run as part of the `tf-plan` trigger optionally accepts an
+allowlist of resources to ignore, using
 [grep extended regex patterns](https://en.wikipedia.org/wiki/Regular_expression#POSIX_extended)
 matched against the Terraform resource **address** from the plan.
 
