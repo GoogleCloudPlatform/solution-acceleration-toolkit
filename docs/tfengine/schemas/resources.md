@@ -281,6 +281,26 @@ Type: string
 
 Type: array(object)
 
+### compute_instance_templates.instances.access_configs
+
+Access configurations, i.e. IPs via which this instance can
+be accessed via the Internet. Omit to ensure that the
+instance is not accessible from the Internet.
+
+Type: array(object)
+
+### compute_instance_templates.instances.access_configs.nat_ip
+
+The IP address that will be 1:1 mapped to the instance's network ip.
+
+Type: string
+
+### compute_instance_templates.instances.access_configs.network_tier
+
+The networking tier used for configuring this instance.
+
+Type: string
+
 ### compute_instance_templates.instances.name
 
 Name of instance.

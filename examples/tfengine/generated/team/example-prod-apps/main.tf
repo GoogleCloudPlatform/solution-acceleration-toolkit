@@ -24,6 +24,10 @@ terraform {
   }
 }
 
+resource "google_compute_address" "static" {
+  name = "static-ipv4-address"
+}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -141,6 +145,15 @@ module "instance" {
   region             = "us-central1"
   subnetwork_project = "example-prod-networks"
   subnetwork         = "example-instance-subnet"
+
+  access_config = [
+    {
+      nat_ip       = "${google_compute_address.static.address}"
+      network_tier = "PREMIUM"
+    },
+  ]
+
+
 }
 
 module "example_domain" {

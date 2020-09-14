@@ -393,6 +393,10 @@ template "project_apps" {
         image_project      = "ubuntu-os-cloud"
         instances = [{
           name = "instance"
+          access_configs = [{
+            nat_ip = "$${google_compute_address.static.address}"
+            network_tier = "PREMIUM"
+          }]
         }]
         labels = {
           type = "no-phi"
@@ -431,6 +435,13 @@ template "project_apps" {
           }
         ]
       }]
+    }
+    terraform_addons = {
+      raw_config = <<EOF
+resource "google_compute_address" "static" {
+  name = "static-ipv4-address"
+}
+EOF
     }
   }
 }

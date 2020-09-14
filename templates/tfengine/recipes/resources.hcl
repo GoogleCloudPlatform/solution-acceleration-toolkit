@@ -353,6 +353,31 @@ schema = {
                   EOF
                   type        = "string"
                 }
+                access_configs = {
+                  description = <<EOF
+                    Access configurations, i.e. IPs via which this instance can
+                    be accessed via the Internet. Omit to ensure that the
+                    instance is not accessible from the Internet.
+                  EOF
+                  type        = "array"
+                  items = {
+                    type        = "object"
+                    additionalProperties = false
+                    required = [
+                      "nat_ip"
+                    ]
+                    properties = {
+                      nat_ip = {
+                        type = "string"
+                        description = "The IP address that will be 1:1 mapped to the instance's network ip."
+                      }
+                      network_tier = {
+                        description = "The networking tier used for configuring this instance."
+                        type        = "string"
+                      }
+                    }
+                  }
+                }
               }
             }
           }

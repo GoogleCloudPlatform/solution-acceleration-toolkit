@@ -77,6 +77,10 @@ module "{{resourceName . "name"}}" {
   region             = "{{get . "compute_region" $.compute_region}}"
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"
+
+  {{if has . "access_configs" -}}
+  access_config = {{hcl .access_configs}}
+  {{end}}
 }
 {{end -}}
 {{end -}}
