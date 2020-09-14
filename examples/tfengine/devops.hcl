@@ -54,7 +54,7 @@ template "cicd" {
     terraform_root = "terraform"
 
     # Required to create Cloud Scheduler jobs.
-    scheduler_region = "us-central1"
+    scheduler_region = "us-east1"
 
     # Prepare and enable default triggers.
     triggers = {

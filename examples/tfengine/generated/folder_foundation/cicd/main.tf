@@ -162,7 +162,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 # Cloud Scheduler requires an App Engine app created in the project.
 resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   project     = var.project_id
-  location_id = "us-central1"
+  location_id = "us-east1"
   depends_on = [
     google_project_service.services,
   ]
@@ -279,7 +279,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled" {
 resource "google_cloud_scheduler_job" "plan_scheduler" {
   project          = var.project_id
   name             = "plan-scheduler"
-  region           = "us-central1"
+  region           = "us-east1"
   schedule         = "0 12 * * *"
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"
@@ -329,7 +329,7 @@ resource "google_cloudbuild_trigger" "apply" {
 resource "google_cloud_scheduler_job" "apply_scheduler" {
   project          = var.project_id
   name             = "apply-scheduler"
-  region           = "us-central1"
+  region           = "us-east1"
   schedule         = "0 13 * * *"
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"
