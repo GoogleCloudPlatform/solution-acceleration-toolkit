@@ -24,6 +24,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 )
@@ -36,6 +37,10 @@ var (
 
 func main() {
 	flag.Parse()
+
+	if *cmd.FlagVersion {
+		cmd.ShowVersion()
+	}
 
 	if *configPath == "" {
 		log.Fatal("--config_path must be set")

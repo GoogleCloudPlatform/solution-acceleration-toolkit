@@ -23,6 +23,7 @@ import (
 	"flag"
 	"log"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
@@ -36,6 +37,10 @@ var (
 
 func main() {
 	flag.Parse()
+
+	if *cmd.FlagVersion {
+		cmd.ShowVersion()
+	}
 
 	if *inputDir == "" {
 		log.Fatalf("--input_dir must be set and not be empty")

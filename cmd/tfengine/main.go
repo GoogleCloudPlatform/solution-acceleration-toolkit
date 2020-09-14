@@ -25,6 +25,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
 
@@ -38,6 +39,10 @@ var (
 
 func main() {
 	flag.Parse()
+
+	if *cmd.FlagVersion {
+		cmd.ShowVersion()
+	}
 
 	if *configPath == "" {
 		log.Fatal("--config_path must be set")
