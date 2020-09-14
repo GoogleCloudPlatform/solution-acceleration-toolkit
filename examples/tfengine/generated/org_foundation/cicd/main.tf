@@ -81,7 +81,7 @@ locals {
   terraform_root = trim((var.terraform_root == "" || var.terraform_root == "/") ? "." : var.terraform_root, "/")
   # ./ to indicate root is not recognized by Cloud Build Trigger.
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
-  cloud_build_sa        = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  cloudbuild_sa         = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Cloud Build - API
@@ -119,7 +119,7 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
-  member             = local.cloud_build_sa
+  member             = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -130,7 +130,7 @@ resource "google_billing_account_iam_member" "binding" {
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
   role   = "roles/storage.admin"
-  member = local.cloud_build_sa
+  member = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -141,7 +141,7 @@ resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
   for_each = toset(local.cloudbuild_sa_editor_roles)
   org_id   = 12345678
   role     = each.value
-  member   = local.cloud_build_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -152,7 +152,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
   project  = var.project_id
   role     = each.key
-  member   = local.cloud_build_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -161,9 +161,10 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 
 
 resource "google_cloudbuild_trigger" "validate" {
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-validate"
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-validate"
+  description = "Terraform validate job triggered on push event."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -189,9 +190,10 @@ resource "google_cloudbuild_trigger" "validate" {
 }
 
 resource "google_cloudbuild_trigger" "plan" {
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-plan"
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-plan"
+  description = "Terraform plan job triggered on push event."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -217,10 +219,11 @@ resource "google_cloudbuild_trigger" "plan" {
 }
 
 resource "google_cloudbuild_trigger" "apply" {
-  disabled = true
-  provider = google-beta
-  project  = var.project_id
-  name     = "tf-apply"
+  disabled    = true
+  provider    = google-beta
+  project     = var.project_id
+  name        = "tf-apply"
+  description = "Terraform apply job triggered on push event and/or schedule."
 
   included_files = [
     "${local.terraform_root_prefix}**",

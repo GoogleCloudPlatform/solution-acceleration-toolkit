@@ -72,7 +72,7 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    branch_regex   = "^master$"
+    branch_name    = "master"
     terraform_root = "terraform"
 
     # Prepare and enable default triggers.

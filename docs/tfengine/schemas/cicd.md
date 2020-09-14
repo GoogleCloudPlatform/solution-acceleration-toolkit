@@ -4,9 +4,11 @@
 
 ## Properties
 
-### branch_regex
+### branch_name
 
-Regex of the branches to set the Cloud Build Triggers to monitor.
+Name of the branch to set the Cloud Build Triggers to monitor.
+Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
+environment.
 
 Type: string
 
@@ -68,6 +70,14 @@ ID of project to deploy CICD in.
 
 Type: string
 
+### scheduler_region
+
+[Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
+job (or the App Engine App behind the sceneces) resides. Must be specified if
+any triggers are configured to be run on schedule.
+
+Type: string
+
 ### terraform_root
 
 Path of the directory relative to the repo root containing the Terraform configs.
@@ -90,9 +100,18 @@ Type: object
 
 ### triggers.apply.run_on_push
 
-Whether or not automatic triggering from a PR/push to branch. Default to true.
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
 
 Type: boolean
+
+### triggers.apply.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+
+Type: string
 
 ### triggers.plan
 
@@ -104,9 +123,18 @@ Type: object
 
 ### triggers.plan.run_on_push
 
-Whether or not automatic triggering from a PR/push to branch. Default to true.
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
 
 Type: boolean
+
+### triggers.plan.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+
+Type: string
 
 ### triggers.validate
 
@@ -118,6 +146,15 @@ Type: object
 
 ### triggers.validate.run_on_push
 
-Whether or not automatic triggering from a PR/push to branch. Default to true.
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
 
 Type: boolean
+
+### triggers.validate.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+
+Type: string

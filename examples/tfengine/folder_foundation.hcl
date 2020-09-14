@@ -55,14 +55,21 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    branch_regex   = "^master$"
+    branch_name    = "master"
     terraform_root = "terraform"
+
+    # Required to create Cloud Scheduler jobs.
+    scheduler_region = "us-east1"
 
     # Prepare and enable default triggers.
     triggers = {
       validate = {}
-      plan     = {}
-      apply    = {}
+      plan     = {
+        run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
+      }
+      apply    = {
+        run_on_schedule = "0 13 * * *" # Run at 13 PM EST everyday
+      }
     }
 
     build_viewers = [
