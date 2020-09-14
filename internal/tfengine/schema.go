@@ -22,6 +22,11 @@ title = "Terraform Engine Config Schema"
 additionalProperties = false
 
 properties = {
+  compatible_version = {
+    description = "Minimum version of the binary required by this config."
+    type        = "string"
+  }
+
   data = {
     description = <<EOF
       Global set of key-value pairs to pass to all templates.

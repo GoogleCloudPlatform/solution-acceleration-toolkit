@@ -9,6 +9,7 @@ require (
 	github.com/google/go-cmp v0.5.2
 	github.com/hashicorp/go-getter v1.4.2-0.20200106182914-9813cbd4eb02
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
+	github.com/hashicorp/go-version v1.2.0
 	github.com/hashicorp/hcl/v2 v2.6.0
 	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
 	github.com/hashicorp/terraform v0.13.2

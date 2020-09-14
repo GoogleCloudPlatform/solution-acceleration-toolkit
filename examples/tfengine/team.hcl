@@ -14,6 +14,8 @@
 
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
+compatible_version = "1.2.3"
+
 data = {
   parent_type     = "folder"
   parent_id       = "12345678"

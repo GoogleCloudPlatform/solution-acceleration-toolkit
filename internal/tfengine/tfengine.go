@@ -23,12 +23,14 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/version"
 	"github.com/otiai10/copy"
 )
 
@@ -58,6 +60,15 @@ func Run(confPath, outPath string, opts *Options) error {
 	if err != nil {
 		return err
 	}
+
+	if c.CompatibleVersion != "" {
+		compat, err := version.Compatible(c.CompatibleVersion, cmd.Version)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("Martin version: %v <= %v = %v\n", c.CompatibleVersion, cmd.Version, compat)
+	}
+
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		return err
@@ -150,6 +161,14 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		rc, err := loadConfig(rp, data)
 		if err != nil {
 			return fmt.Errorf("load recipe %q: %v", rp, err)
+		}
+
+		if rc.CompatibleVersion != "" {
+			compat, err := version.Compatible(rc.CompatibleVersion, cmd.Version)
+			if err != nil {
+				return err
+			}
+			fmt.Printf("Martin version: %v <= %v = %v\n", rc.CompatibleVersion, cmd.Version, compat)
 		}
 
 		// Validate the schema, if present.
