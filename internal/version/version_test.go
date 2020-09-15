@@ -46,7 +46,7 @@ func TestCompatible(t *testing.T) {
 
 		// Equal.
 		{
-			binVersion:      "1.2.3",
+			binVersion:      "v1.2.3",
 			templateVersion: "1.2.3",
 			want:            true,
 		},

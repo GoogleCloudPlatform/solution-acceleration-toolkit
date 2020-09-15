@@ -23,11 +23,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/version"
 	"github.com/hashicorp/terraform/states"
 	"github.com/otiai10/copy"
 )
@@ -51,6 +53,19 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("normalize path %q: %v", args.ConfigPath, err)
 	}
 
+	c, err := loadConfig(configPath)
+	if err != nil {
+		return fmt.Errorf("load config: %v", err)
+	}
+
+	compat, err := version.Compatible(c.CompatibleVersion)
+	if err != nil {
+		return err
+	}
+	if !compat {
+		return fmt.Errorf("binary version %v incompatible with template version %v in %v", cmd.Version, c.CompatibleVersion, configPath)
+	}
+
 	var statePaths []string
 	for _, p := range args.StatePaths {
 		p, err = pathutil.Expand(p)
@@ -63,11 +78,6 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	outputPath, err := pathutil.Expand(args.OutputPath)
 	if err != nil {
 		return fmt.Errorf("normalize path %q: %v", args.OutputPath, err)
-	}
-
-	c, err := loadConfig(configPath)
-	if err != nil {
-		return fmt.Errorf("load config: %v", err)
 	}
 
 	cacheDir, err := ioutil.TempDir("", "")

@@ -22,6 +22,11 @@ additionalProperties = false
 required = ["template_dir"]
 
 properties = {
+  compatible_version = {
+    description = "Minimum version of the binary required by this config."
+    type        = "string"
+  }
+
   template_dir = {
     description = <<EOF
       Absolute or relative path to the template directory. If relative, this path

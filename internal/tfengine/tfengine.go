@@ -23,6 +23,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
@@ -64,7 +65,9 @@ func Run(confPath, outPath string, opts *Options) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Martin version: Compatible(%q) = %v\n", c.CompatibleVersion, compat)
+	if !compat {
+		return fmt.Errorf("Binary version %v incompatible with template version %v in %v", cmd.Version, c.CompatibleVersion, confPath)
+	}
 
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
@@ -164,7 +167,9 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Martin version: Compatible(%q) = %v\n", rc.CompatibleVersion, compat)
+		if !compat {
+			return fmt.Errorf("Binary version %v incompatible with template version %v in %v", cmd.Version, rc.CompatibleVersion, rp)
+		}
 
 		// Validate the schema, if present.
 		if len(rc.Schema) > 0 {
