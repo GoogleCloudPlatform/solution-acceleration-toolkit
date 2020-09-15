@@ -14,8 +14,6 @@
 
 template_dir = "../../templates/policygen"
 
-compatible_version = "1.2.4"
-
 forseti_policies = {
   targets = [
     "organizations/12345678/**",

@@ -22,8 +22,8 @@ additionalProperties = false
 required = ["template_dir"]
 
 properties = {
-  compatible_version = {
-    description = "Minimum version of the binary required by this config."
+  min_version = {
+    description = "Optional constraint on the minimum binary version required for this config."
     type        = "string"
   }
 

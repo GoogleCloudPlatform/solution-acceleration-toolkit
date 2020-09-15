@@ -38,7 +38,8 @@ import (
 
 // config is the struct representing the Policy Generator configuration.
 type config struct {
-	CompatibleVersion string `hcl:"compatible_version,optional" json:"compatible_version,omitempty"`
+	// Optional constraint on the minimum binary version required for this config.
+	MinVersion string `hcl:"min_version,optional" json:"min_version,omitempty"`
 
 	TemplateDir string `hcl:"template_dir" json:"template_dir"`
 

@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-compatible_version = "1.2.4"
-
 schema = {
   title                = "Terraform Deployment Recipe"
   description          = "This recipe should be used to setup a new Terraform deployment directory."
