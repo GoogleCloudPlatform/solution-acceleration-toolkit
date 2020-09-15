@@ -62,6 +62,6 @@ func main() {
 
 	rn := &runner.Default{Quiet: true}
 	if err := policygen.Run(context.Background(), rn, args); err != nil {
-		log.Fatalf("Failed to generate policies: %v", err)
+		log.Fatalf("Failed to generate policies: %v\n", err)
 	}
 }
