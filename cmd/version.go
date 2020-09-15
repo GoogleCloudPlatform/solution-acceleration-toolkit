@@ -16,21 +16,9 @@
 // Taken from https://github.com/AgentZombie/go-embed-version.
 package cmd
 
-import (
-	"fmt"
-	"os"
-)
-
 var (
 	// Version is set at compile time with -ldflags "-X <package>/cmd.Version=x.y.z"
 	// Example:
 	//   go run -ldflags "-X github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=1.2.3" ./cmd/tfengine -version
 	Version = ""
 )
-
-// ShowVersion shows the embedded version and exits. Blank if unset at build time.
-func ShowVersion() {
-	fmt.Println("version:", Version)
-	os.Exit(0)
-
-}

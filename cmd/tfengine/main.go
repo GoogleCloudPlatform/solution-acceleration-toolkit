@@ -20,6 +20,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -39,22 +40,29 @@ var (
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	flag.Parse()
 
 	if *showVersion {
-		cmd.ShowVersion()
+		fmt.Println(cmd.Version)
+		return nil
 	}
 
 	if *configPath == "" {
-		log.Fatal("--config_path must be set")
+		return fmt.Errorf("--config_path must be set")
 	}
 	if *outputPath == "" {
-		log.Fatal("--output_path must be set")
+		return fmt.Errorf("--output_path must be set")
 	}
 
 	cacheDir, err := ioutil.TempDir("", "")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("create temp dir: %v", err)
 	}
 	defer os.RemoveAll(cacheDir)
 
@@ -72,7 +80,6 @@ func main() {
 		CacheDir:        cacheDir,
 		WantedTemplates: wantedTemplates,
 	}
-	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
-		log.Fatal(err)
-	}
+
+	return tfengine.Run(*configPath, *outputPath, opts)
 }

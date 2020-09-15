@@ -21,6 +21,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"strings"
 
@@ -37,18 +38,25 @@ var (
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	flag.Parse()
 
 	if *showVersion {
-		cmd.ShowVersion()
+		fmt.Println(cmd.Version)
+		return nil
 	}
 
 	if *configPath == "" {
-		log.Fatal("--config_path must be set")
+		return fmt.Errorf("--config_path must be set")
 	}
 
 	if *outputPath == "" {
-		log.Fatal("--output_path must be set")
+		return fmt.Errorf("--output_path must be set")
 	}
 
 	var statePathsList []string
@@ -68,6 +76,8 @@ func main() {
 
 	rn := &runner.Default{Quiet: true}
 	if err := policygen.Run(context.Background(), rn, args); err != nil {
-		log.Fatalf("Failed to generate policies: %v", err)
+		return fmt.Errorf("Failed to generate policies: %v", err)
 	}
+
+	return nil
 }
