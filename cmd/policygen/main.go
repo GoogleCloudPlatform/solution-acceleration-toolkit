@@ -76,7 +76,7 @@ func run() error {
 
 	rn := &runner.Default{Quiet: true}
 	if err := policygen.Run(context.Background(), rn, args); err != nil {
-		return fmt.Errorf("Failed to generate policies: %v", err)
+		return fmt.Errorf("failed to generate policies: %v", err)
 	}
 
 	return nil

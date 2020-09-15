@@ -122,7 +122,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 
 	if err := hcl.FormatDir(rn, tmpDir); err != nil {
-		return err
+		return fmt.Errorf("hcl format: %v", err)
 	}
 
 	if err := os.MkdirAll(outputPath, 0755); err != nil {
@@ -138,11 +138,11 @@ func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePaths [
 	}
 
 	if err := generateGeneralForsetiPolicies(outputPath, c); err != nil {
-		return err
+		return fmt.Errorf("generate general forseti policies: %v", err)
 	}
 
 	if err := generateTerraformBasedForsetiPolicies(ctx, rn, statePaths, outputPath, c.TemplateDir); err != nil {
-		return err
+		return fmt.Errorf("generate forseti policies from terraform state: %v", err)
 	}
 
 	return nil

@@ -72,7 +72,7 @@ func run() error {
 	}
 
 	if err := tfimport.Run(rn, importRn, args); err != nil {
-		return fmt.Errorf("Failed to import resources: %v", err)
+		return fmt.Errorf("failed to import resources: %v", err)
 	}
 
 	return nil
