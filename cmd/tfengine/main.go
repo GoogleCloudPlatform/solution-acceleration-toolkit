@@ -35,12 +35,13 @@ var (
 	format      = flag.Bool("format", true, "Whether to format generated files.")
 	templates   = flag.String("templates", "", "Comma-separated list of templates to generate. Leave empty for all.")
 	addLicenses = flag.Bool("add_licenses", true, "Whether to add license headers to generated Terraform files.")
+	showVersion = flag.Bool("version", false, "show version and exit")
 )
 
 func main() {
 	flag.Parse()
 
-	if *cmd.FlagVersion {
+	if *showVersion {
 		cmd.ShowVersion()
 	}
 

@@ -22,10 +22,10 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-// Compatible returns whether the given string version constraint is compatible with the binary version.
+// IsCompatible returns whether the given string version constraint is compatible with the binary version.
 // Compatibility is determined by github.com/hashicorp/go-version.
 // It returns an error if the constraint string or binary version cannot be interpreted.
-func Compatible(constraint string) (bool, error) {
+func IsCompatible(constraint string) (bool, error) {
 	// If either version is unspecified, it's compatible with all.
 	// Think of it as not setting a compatibility restriction at all.
 	if constraint == "" || cmd.Version == "" {

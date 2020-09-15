@@ -61,7 +61,7 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	compat, err := version.Compatible(c.Version)
+	compat, err := version.IsCompatible(c.Version)
 	if err != nil {
 		return err
 	}
@@ -163,7 +163,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return fmt.Errorf("load recipe %q: %v", rp, err)
 		}
 
-		compat, err := version.Compatible(rc.Version)
+		compat, err := version.IsCompatible(rc.Version)
 		if err != nil {
 			return err
 		}

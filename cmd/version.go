@@ -17,7 +17,6 @@
 package cmd
 
 import (
-	"flag"
 	"fmt"
 	"os"
 )
@@ -27,9 +26,6 @@ var (
 	// Example:
 	//   go run -ldflags "-X github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=1.2.3" ./cmd/tfengine -version
 	Version = ""
-
-	// FlagVersion indicates a binary should just show the version and exit.
-	FlagVersion = flag.Bool("version", false, "show version and exit")
 )
 
 // ShowVersion shows the embedded version and exits. Blank if unset at build time.

@@ -30,15 +30,16 @@ import (
 )
 
 var (
-	configPath = flag.String("config_path", "", "Path to the Policy Generator config.")
-	statePaths = flag.String("state_paths", "", "A comma-separated list of paths to Terraform states. Each entry can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
-	outputPath = flag.String("output_path", "", "Path to output directory to write generated policies")
+	configPath  = flag.String("config_path", "", "Path to the Policy Generator config.")
+	statePaths  = flag.String("state_paths", "", "A comma-separated list of paths to Terraform states. Each entry can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
+	outputPath  = flag.String("output_path", "", "Path to output directory to write generated policies")
+	showVersion = flag.Bool("version", false, "show version and exit")
 )
 
 func main() {
 	flag.Parse()
 
-	if *cmd.FlagVersion {
+	if *showVersion {
 		cmd.ShowVersion()
 	}
 

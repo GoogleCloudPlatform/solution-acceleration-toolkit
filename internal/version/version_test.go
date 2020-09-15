@@ -21,7 +21,7 @@ import (
 )
 
 // Minimal testing here, since it's almost entirely leveraging github.com/hashicorp/go-version, which has its own tests.
-func TestCompatible(t *testing.T) {
+func TestIsCompatible(t *testing.T) {
 	cases := []struct {
 		binVersion         string
 		templateConstraint string
@@ -85,18 +85,18 @@ func TestCompatible(t *testing.T) {
 
 	for _, tc := range cases {
 		cmd.Version = tc.binVersion
-		got, err := Compatible(tc.templateConstraint)
+		got, err := IsCompatible(tc.templateConstraint)
 		if err != nil {
-			t.Errorf("TestCompatible(%v) with binary version %v unexpectedly failed: %v", tc.templateConstraint, tc.binVersion, err)
+			t.Errorf("TestIsCompatible(%v) with binary version %v unexpectedly failed: %v", tc.templateConstraint, tc.binVersion, err)
 		}
 
 		if got != tc.want {
-			t.Errorf("TestCompatible(%v) with binary version %v = %v; want %v", tc.templateConstraint, tc.binVersion, got, tc.want)
+			t.Errorf("TestIsCompatible(%v) with binary version %v = %v; want %v", tc.templateConstraint, tc.binVersion, got, tc.want)
 		}
 	}
 }
 
-func TestCompatibleMalformed(t *testing.T) {
+func TestIsCompatibleMalformed(t *testing.T) {
 	cases := []struct {
 		version string
 	}{
@@ -108,9 +108,9 @@ func TestCompatibleMalformed(t *testing.T) {
 
 	for _, tc := range cases {
 		cmd.Version = tc.version
-		_, err := Compatible(tc.version)
+		_, err := IsCompatible(tc.version)
 		if err == nil {
-			t.Errorf("TestCompatible(%v) succeeded for malformed input, want error", tc.version)
+			t.Errorf("TestIsCompatible(%v) succeeded for malformed input, want error", tc.version)
 		}
 	}
 }

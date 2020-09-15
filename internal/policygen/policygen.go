@@ -58,7 +58,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("load config: %v", err)
 	}
 
-	compat, err := version.Compatible(c.Version)
+	compat, err := version.IsCompatible(c.Version)
 	if err != nil {
 		return err
 	}
