@@ -58,12 +58,12 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 		return fmt.Errorf("load config: %v", err)
 	}
 
-	compat, err := version.Compatible(c.MinVersion)
+	compat, err := version.Compatible(c.Version)
 	if err != nil {
 		return err
 	}
 	if !compat {
-		return fmt.Errorf("binary version %v incompatible with template version %v in %v", cmd.Version, c.MinVersion, configPath)
+		return fmt.Errorf("binary version %v incompatible with template version constraint %v in %v", cmd.Version, c.Version, configPath)
 	}
 
 	var statePaths []string

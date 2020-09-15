@@ -22,8 +22,8 @@ title = "Terraform Engine Config Schema"
 additionalProperties = false
 
 properties = {
-  min_version = {
-    description = "Optional constraint on the minimum binary version required for this config."
+  version = {
+    description = "Optional constraint on the binary version required for this config."
     type        = "string"
   }
 

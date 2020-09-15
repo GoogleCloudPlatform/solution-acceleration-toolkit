@@ -23,75 +23,75 @@ import (
 // Minimal testing here, since it's almost entirely leveraging github.com/hashicorp/go-version, which has its own tests.
 func TestCompatible(t *testing.T) {
 	cases := []struct {
-		binVersion      string
-		templateVersion string
-		want            bool
+		binVersion         string
+		templateConstraint string
+		want               bool
 	}{
 		// Empty versions.
 		{
-			binVersion:      "",
-			templateVersion: "",
-			want:            true,
+			binVersion:         "",
+			templateConstraint: "",
+			want:               true,
 		},
 		{
-			binVersion:      "1.2.3",
-			templateVersion: "",
-			want:            true,
+			binVersion:         "1.2.3",
+			templateConstraint: "",
+			want:               true,
 		},
 		{
-			binVersion:      "",
-			templateVersion: "1.2.3",
-			want:            true,
+			binVersion:         "",
+			templateConstraint: "1.2.3",
+			want:               true,
 		},
 
 		// Equal.
 		{
-			binVersion:      "v1.2.3",
-			templateVersion: "1.2.3",
-			want:            true,
+			binVersion:         "v1.2.3",
+			templateConstraint: "1.2.3",
+			want:               true,
 		},
 
 		// Different.
 		{
-			binVersion:      "1.2.4",
-			templateVersion: "1.2.3",
-			want:            true,
+			binVersion:         "1.2.4",
+			templateConstraint: ">=1.2.3",
+			want:               true,
 		},
 		{
-			binVersion:      "1.2.3",
-			templateVersion: "1.2.4",
-			want:            false,
+			binVersion:         "1.2.3",
+			templateConstraint: "1.2.4",
+			want:               false,
 		},
 
 		// Same patch, no minor.
 		{
-			binVersion:      "1.2",
-			templateVersion: "1.2.3",
-			want:            false,
+			binVersion:         "1.2",
+			templateConstraint: "1.2.3",
+			want:               false,
 		},
 		{
-			binVersion:      "1.2.3",
-			templateVersion: "1.2",
-			want:            true,
+			binVersion:         "1.2.3",
+			templateConstraint: "~>1.2",
+			want:               true,
 		},
 
 		// Latest
 		{
-			binVersion:      "latest",
-			templateVersion: "99.99.99",
-			want:            true,
+			binVersion:         "latest",
+			templateConstraint: "99.99.99",
+			want:               true,
 		},
 	}
 
 	for _, tc := range cases {
 		cmd.Version = tc.binVersion
-		got, err := Compatible(tc.templateVersion)
+		got, err := Compatible(tc.templateConstraint)
 		if err != nil {
-			t.Errorf("TestCompatible(%v) with %v unexpectedly failed: %v", tc.templateVersion, tc.binVersion, err)
+			t.Errorf("TestCompatible(%v) with binary version %v unexpectedly failed: %v", tc.templateConstraint, tc.binVersion, err)
 		}
 
 		if got != tc.want {
-			t.Errorf("TestCompatible(%v) with %v = %v; want %v", tc.templateVersion, tc.binVersion, got, tc.want)
+			t.Errorf("TestCompatible(%v) with binary version %v = %v; want %v", tc.templateConstraint, tc.binVersion, got, tc.want)
 		}
 	}
 }

@@ -22,13 +22,13 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-// Compatible returns whether the given string version is compatible with the binary version.
-// Versions are compatible if v1 <= v2 as determined by github.com/hashicorp/go-version.
-// It returns an error if the version string or binary version cannot be interpreted as versions.
-func Compatible(vs string) (bool, error) {
+// Compatible returns whether the given string version constraint is compatible with the binary version.
+// Compatibility is determined by github.com/hashicorp/go-version.
+// It returns an error if the constraint string or binary version cannot be interpreted.
+func Compatible(constraint string) (bool, error) {
 	// If either version is unspecified, it's compatible with all.
 	// Think of it as not setting a compatibility restriction at all.
-	if vs == "" || cmd.Version == "" {
+	if constraint == "" || cmd.Version == "" {
 		return true, nil
 	}
 
@@ -38,15 +38,15 @@ func Compatible(vs string) (bool, error) {
 		return true, nil
 	}
 
-	binV, err := version.NewVersion(cmd.Version)
+	binVersion, err := version.NewVersion(cmd.Version)
 	if err != nil {
-		return false, fmt.Errorf("converting binary version %q to version: %v", cmd.Version, err)
+		return false, fmt.Errorf("interpreting binary version %q: %v", cmd.Version, err)
 	}
 
-	templateV, err := version.NewVersion(vs)
+	templateConstraint, err := version.NewConstraint(constraint)
 	if err != nil {
-		return false, fmt.Errorf("converting template version %q to version: %v", vs, err)
+		return false, fmt.Errorf("interpreting template version constraint %q: %v", templateConstraint, err)
 	}
 
-	return binV.GreaterThanOrEqual(templateV), nil
+	return templateConstraint.Check(binVersion), nil
 }

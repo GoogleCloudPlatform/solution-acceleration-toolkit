@@ -61,12 +61,12 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	compat, err := version.Compatible(c.MinVersion)
+	compat, err := version.Compatible(c.Version)
 	if err != nil {
 		return err
 	}
 	if !compat {
-		return fmt.Errorf("Binary version %v incompatible with template version %v in %v", cmd.Version, c.MinVersion, confPath)
+		return fmt.Errorf("Binary version %v incompatible with template version constraint %v in %v", cmd.Version, c.Version, confPath)
 	}
 
 	tmpDir, err := ioutil.TempDir("", "")
@@ -163,12 +163,12 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return fmt.Errorf("load recipe %q: %v", rp, err)
 		}
 
-		compat, err := version.Compatible(rc.MinVersion)
+		compat, err := version.Compatible(rc.Version)
 		if err != nil {
 			return err
 		}
 		if !compat {
-			return fmt.Errorf("Binary version %v incompatible with template version %v in %v", cmd.Version, rc.MinVersion, rp)
+			return fmt.Errorf("Binary version %v incompatible with template version constraint %v in %v", cmd.Version, rc.Version, rp)
 		}
 
 		// Validate the schema, if present.

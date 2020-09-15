@@ -31,7 +31,8 @@ import (
 // Config is the user supplied config for the engine.
 // HCL struct tags are documented at https://pkg.go.dev/github.com/hashicorp/hcl2/gohcl.
 type Config struct {
-	MinVersion string `hcl:"min_version,optional" json:"min_version,omitempty"`
+	// Optional constraint on the binary version required for this config.
+	Version string `hcl:"version,optional" json:"version,omitempty"`
 
 	// HCL decoder can't unmarshal into map[string]interface{},
 	// so make it unmarshal to a cty.Value and manually convert to map.
