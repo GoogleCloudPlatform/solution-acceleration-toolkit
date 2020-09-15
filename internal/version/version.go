@@ -18,22 +18,35 @@ package version
 import (
 	"fmt"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/hashicorp/go-version"
 )
 
-// Compatible returns whether v1 and v2 are not compatible.
+// Compatible returns whether the given string version is compatible with the binary version.
 // Versions are compatible if v1 <= v2 as determined by github.com/hashicorp/go-version.
-// It returns an error if the version strings cannot be interpreted as versions.
-func Compatible(v1s, v2s string) (bool, error) {
-	v1, err := version.NewVersion(v1s)
-	if err != nil {
-		return false, fmt.Errorf("converting %v to version: %v", v1s, err)
+// It returns an error if the version string or binary version cannot be interpreted as versions.
+func Compatible(vs string) (bool, error) {
+	// If either version is unspecified, it's compatible with all.
+	// Think of it as not setting a compatibility restriction at all.
+	if vs == "" || cmd.Version == "" {
+		return true, nil
 	}
 
-	v2, err := version.NewVersion(v2s)
-	if err != nil {
-		return false, fmt.Errorf("converting %v to version: %v", v2s, err)
+	// If the bin version is the special "latest", it always succeeds.
+	// By definition there isn't a newer version.
+	if cmd.Version == "latest" {
+		return true, nil
 	}
 
-	return v1.LessThanOrEqual(v2), nil
+	binV, err := version.NewVersion(cmd.Version)
+	if err != nil {
+		return false, fmt.Errorf("converting binary version %q to version: %v", cmd.Version, err)
+	}
+
+	templateV, err := version.NewVersion(vs)
+	if err != nil {
+		return false, fmt.Errorf("converting template version %q to version: %v", vs, err)
+	}
+
+	return binV.GreaterThanOrEqual(templateV), nil
 }
