@@ -23,12 +23,14 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/version"
 	"github.com/otiai10/copy"
 )
 
@@ -58,6 +60,15 @@ func Run(confPath, outPath string, opts *Options) error {
 	if err != nil {
 		return err
 	}
+
+	compat, err := version.IsCompatible(c.Version)
+	if err != nil {
+		return err
+	}
+	if !compat {
+		return fmt.Errorf("Binary version %v incompatible with template version constraint %v in %v", cmd.Version, c.Version, confPath)
+	}
+
 	tmpDir, err := ioutil.TempDir("", "")
 	if err != nil {
 		return err
@@ -150,6 +161,14 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		rc, err := loadConfig(rp, data)
 		if err != nil {
 			return fmt.Errorf("load recipe %q: %v", rp, err)
+		}
+
+		compat, err := version.IsCompatible(rc.Version)
+		if err != nil {
+			return err
+		}
+		if !compat {
+			return fmt.Errorf("Binary version %v incompatible with template version constraint %v in %v", cmd.Version, rc.Version, rp)
 		}
 
 		// Validate the schema, if present.

@@ -21,8 +21,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
@@ -32,13 +34,25 @@ var (
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.")
 	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
 	interactive   = flag.Bool("interactive", true, "Interactively ask for user input when import information cannot be\nautomatically determined.")
+	showVersion   = flag.Bool("version", false, "show version and exit")
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	flag.Parse()
 
+	if *showVersion {
+		fmt.Println(cmd.Version)
+		return nil
+	}
+
 	if *inputDir == "" {
-		log.Fatalf("--input_dir must be set and not be empty")
+		return fmt.Errorf("--input_dir must be set and not be empty")
 	}
 	// Determine the runners to use.
 	rn := &runner.Default{}
@@ -58,6 +72,8 @@ func main() {
 	}
 
 	if err := tfimport.Run(rn, importRn, args); err != nil {
-		log.Fatalf("Failed to import resources: %v", err)
+		return fmt.Errorf("failed to import resources: %v", err)
 	}
+
+	return nil
 }

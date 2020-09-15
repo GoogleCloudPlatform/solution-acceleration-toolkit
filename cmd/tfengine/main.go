@@ -20,11 +20,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
 
@@ -34,21 +36,33 @@ var (
 	format      = flag.Bool("format", true, "Whether to format generated files.")
 	templates   = flag.String("templates", "", "Comma-separated list of templates to generate. Leave empty for all.")
 	addLicenses = flag.Bool("add_licenses", true, "Whether to add license headers to generated Terraform files.")
+	showVersion = flag.Bool("version", false, "show version and exit")
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	flag.Parse()
 
+	if *showVersion {
+		fmt.Println(cmd.Version)
+		return nil
+	}
+
 	if *configPath == "" {
-		log.Fatal("--config_path must be set")
+		return fmt.Errorf("--config_path must be set")
 	}
 	if *outputPath == "" {
-		log.Fatal("--output_path must be set")
+		return fmt.Errorf("--output_path must be set")
 	}
 
 	cacheDir, err := ioutil.TempDir("", "")
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("create temp dir: %v", err)
 	}
 	defer os.RemoveAll(cacheDir)
 
@@ -66,7 +80,6 @@ func main() {
 		CacheDir:        cacheDir,
 		WantedTemplates: wantedTemplates,
 	}
-	if err := tfengine.Run(*configPath, *outputPath, opts); err != nil {
-		log.Fatal(err)
-	}
+
+	return tfengine.Run(*configPath, *outputPath, opts)
 }

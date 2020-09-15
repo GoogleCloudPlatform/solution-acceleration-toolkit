@@ -51,7 +51,7 @@ function build_binaries() {
       for build_dir in $(find './cmd' -mindepth 1 -maxdepth 1 -type d); do
         bin="$(basename ${build_dir})_${VERSION}_${OS}-${ARCH}"
         echo "Building ${OUTPUT_DIR}/${bin}"
-        env GOOS="${OS}" GOARCH="${ARCH}" go build -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
+        env GOOS="${OS}" GOARCH="${ARCH}" go build -ldflags "-X github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=${VERSION}" -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
       done
     done
   done

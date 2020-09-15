@@ -22,6 +22,14 @@ title = "Terraform Engine Config Schema"
 additionalProperties = false
 
 properties = {
+  version = {
+    description = <<EOF
+      Optional constraint on the binary version required for this config.
+      Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+    EOF
+    type        = "string"
+  }
+
   data = {
     description = <<EOF
       Global set of key-value pairs to pass to all templates.

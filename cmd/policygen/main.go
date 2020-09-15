@@ -21,28 +21,42 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"strings"
 
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/policygen"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 )
 
 var (
-	configPath = flag.String("config_path", "", "Path to the Policy Generator config.")
-	statePaths = flag.String("state_paths", "", "A comma-separated list of paths to Terraform states. Each entry can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
-	outputPath = flag.String("output_path", "", "Path to output directory to write generated policies")
+	configPath  = flag.String("config_path", "", "Path to the Policy Generator config.")
+	statePaths  = flag.String("state_paths", "", "A comma-separated list of paths to Terraform states. Each entry can be a single local file, a local directory or a Google Cloud Storage bucket (gs://my-state-bucket). If a local directory or a bucket is given, then all .tfstate files will be read recursively.")
+	outputPath  = flag.String("output_path", "", "Path to output directory to write generated policies")
+	showVersion = flag.Bool("version", false, "show version and exit")
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	flag.Parse()
 
+	if *showVersion {
+		fmt.Println(cmd.Version)
+		return nil
+	}
+
 	if *configPath == "" {
-		log.Fatal("--config_path must be set")
+		return fmt.Errorf("--config_path must be set")
 	}
 
 	if *outputPath == "" {
-		log.Fatal("--output_path must be set")
+		return fmt.Errorf("--output_path must be set")
 	}
 
 	var statePathsList []string
@@ -62,6 +76,8 @@ func main() {
 
 	rn := &runner.Default{Quiet: true}
 	if err := policygen.Run(context.Background(), rn, args); err != nil {
-		log.Fatalf("Failed to generate policies: %v\n", err)
+		return fmt.Errorf("failed to generate policies: %v", err)
 	}
+
+	return nil
 }

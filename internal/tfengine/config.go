@@ -31,6 +31,10 @@ import (
 // Config is the user supplied config for the engine.
 // HCL struct tags are documented at https://pkg.go.dev/github.com/hashicorp/hcl2/gohcl.
 type Config struct {
+	// Optional constraint on the binary version required for this config.
+	// Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+	Version string `hcl:"version,optional" json:"version,omitempty"`
+
 	// HCL decoder can't unmarshal into map[string]interface{},
 	// so make it unmarshal to a cty.Value and manually convert to map.
 	// TODO(https://github.com/hashicorp/hcl/issues/291): Remove the need for DataCty.

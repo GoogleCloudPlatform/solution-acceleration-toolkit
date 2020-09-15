@@ -22,6 +22,14 @@ additionalProperties = false
 required = ["template_dir"]
 
 properties = {
+  version = {
+    description = <<EOF
+      Optional constraint on the binary version required for this config.
+      Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+    EOF
+    type        = "string"
+  }
+
   template_dir = {
     description = <<EOF
       Absolute or relative path to the template directory. If relative, this path
