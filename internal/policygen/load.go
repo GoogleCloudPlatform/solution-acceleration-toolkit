@@ -39,6 +39,7 @@ import (
 // config is the struct representing the Policy Generator configuration.
 type config struct {
 	// Optional constraint on the binary version required for this config.
+	// Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
 	Version string `hcl:"version,optional" json:"version,omitempty"`
 
 	TemplateDir string `hcl:"template_dir" json:"template_dir"`

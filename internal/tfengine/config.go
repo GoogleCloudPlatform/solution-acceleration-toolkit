@@ -32,6 +32,7 @@ import (
 // HCL struct tags are documented at https://pkg.go.dev/github.com/hashicorp/hcl2/gohcl.
 type Config struct {
 	// Optional constraint on the binary version required for this config.
+	// Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
 	Version string `hcl:"version,optional" json:"version,omitempty"`
 
 	// HCL decoder can't unmarshal into map[string]interface{},

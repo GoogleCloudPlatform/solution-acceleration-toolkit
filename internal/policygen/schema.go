@@ -23,7 +23,10 @@ required = ["template_dir"]
 
 properties = {
   version = {
-    description = "Optional constraint on the binary version required for this config."
+    description = <<EOF
+      Optional constraint on the binary version required for this config.
+      Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+    EOF
     type        = "string"
   }
 
