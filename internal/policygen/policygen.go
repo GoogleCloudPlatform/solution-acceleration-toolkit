@@ -132,7 +132,7 @@ func generateForsetiPolicies(ctx context.Context, rn runner.Runner, statePaths [
 	}
 
 	if err := generateTerraformBasedForsetiPolicies(ctx, rn, statePaths, outputPath, c.TemplateDir); err != nil {
-		return fmt.Errorf("generate terraform forseti policies: %v", err)
+		return fmt.Errorf("generate forseti policies from terraform state: %v", err)
 	}
 
 	return nil
