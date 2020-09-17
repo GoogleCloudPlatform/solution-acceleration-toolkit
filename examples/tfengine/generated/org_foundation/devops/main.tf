@@ -60,7 +60,6 @@ resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
   members = ["group:example-devops-owners@example.com"]
-
 }
 
 # Org level IAM permissions for org admins.

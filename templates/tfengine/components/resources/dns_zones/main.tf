@@ -22,6 +22,6 @@ module "{{resourceName . "name"}}" {
   domain     = "{{.domain}}"
   type       = "{{.type}}"
 
-  recordsets = {{hcl .record_sets -}}
+  recordsets = {{hcl .record_sets}}
 }
 {{end -}}
