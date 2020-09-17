@@ -106,7 +106,7 @@ resource "google_logging_organization_sink" "storage_audit_logs_sink" {
 
 module "storage_destination" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.6.0"
+  version = "~> 1.7.0"
 
   name          = "7yr-org-audit-logs"
   project_id    = module.project.project_id
