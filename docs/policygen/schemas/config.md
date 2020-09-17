@@ -33,6 +33,6 @@ Type: string
 ### version
 
 Optional constraint on the binary version required for this config.
-Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+See [syntax](https://www.terraform.io/docs/configuration/version-constraints.html).
 
 Type: string
