@@ -7,12 +7,12 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.2
-	github.com/hashicorp/go-getter v1.4.2-0.20200106182914-9813cbd4eb02
+	github.com/hashicorp/go-getter v1.4.2
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl/v2 v2.6.0
 	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
-	github.com/hashicorp/terraform v0.13.2
+	github.com/hashicorp/terraform v0.13.3
 	github.com/hashicorp/terraform-svchost v0.0.0-20191119180714-d2e4933b9136 // indirect
 	github.com/imdario/mergo v0.3.11
 	github.com/mitchellh/go-homedir v1.1.0
