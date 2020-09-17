@@ -153,7 +153,6 @@ module "instance" {
     },
   ]
 
-
 }
 
 module "example_domain" {

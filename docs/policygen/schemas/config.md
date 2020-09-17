@@ -29,3 +29,10 @@ Absolute or relative path to the template directory. If relative, this path
 is relative to the directory where the config file lives.
 
 Type: string
+
+### version
+
+Optional constraint on the binary version required for this config.
+Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+
+Type: string

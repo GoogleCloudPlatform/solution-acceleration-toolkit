@@ -85,3 +85,10 @@ Type: string
 Path to a recipe YAML config. Mutually exclusive with 'component_path'.
 
 Type: string
+
+### version
+
+Optional constraint on the binary version required for this config.
+Syntax: https://www.terraform.io/docs/configuration/version-constraints.html
+
+Type: string
