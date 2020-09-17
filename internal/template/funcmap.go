@@ -72,7 +72,7 @@ func hcl(v interface{}) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(b), nil
+	return strings.TrimSpace(string(b)), nil
 }
 
 // hclField returns a hcl marshaled field e.g. `name = "foo"`, if present.
