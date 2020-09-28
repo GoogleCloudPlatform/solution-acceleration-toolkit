@@ -34,7 +34,7 @@ resource "random_password" "db" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.0.0"
+  version = "~> 9.1.0"
 
   name                    = "example-prod-secrets"
   org_id                  = ""
