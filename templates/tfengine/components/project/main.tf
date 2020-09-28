@@ -9,18 +9,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{$source := "terraform-google-modules/project-factory/google" -}}
-{{if has . "shared_vpc_attachment" -}}
-{{$source = "terraform-google-modules/project-factory/google//modules/shared_vpc" -}}
-{{end -}}
-
 
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "{{$source}}"
+	{{if has . "shared_vpc_attachment" -}}
+  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
   version = "~> 9.0.0"
+	{{else}}
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 9.0.0"
+	{{end}}
 
   name                    = "{{.project_id}}"
   {{if eq .parent_type "organization" -}}
