@@ -14,13 +14,13 @@ limitations under the License. */ -}}
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-	{{if has . "shared_vpc_attachment" -}}
+  {{- if has . "shared_vpc_attachment"}}
   source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
   version = "~> 9.0.0"
-	{{else}}
+  {{- else}}
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.0.0"
-	{{end}}
+  {{- end}}
 
   name                    = "{{.project_id}}"
   {{if eq .parent_type "organization" -}}
