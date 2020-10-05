@@ -9,6 +9,7 @@ Other,iam_allowed_bindings_organization_12345678_owner,//cloudresourcemanager.go
 Other,iam_deny_public_access,//storage.googleapis.com/test-bucket-public,IAM policy for //storage.googleapis.com/test-bucket-public grants roles/storage.objectViewer to allAuthenticatedUsers
 Other,network_enable_firewall_logs,//compute.googleapis.com/projects/test-project/global/firewalls/bad,Firewall logs are disabled in firewall //compute.googleapis.com/projects/test-project/global/firewalls/bad.
 Other,network_enable_flow_logs,//compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad,Flow logs are disabled in subnetwork //compute.googleapis.com/projects/test-project/regions/us-west1/subnetworks/bad.
+Other,service_allow_apis,//serviceusage.googleapis.com/projects/123/services/bad.googleapis.com,//serviceusage.googleapis.com/projects/123/services/bad.googleapis.com violates a service constraint
 Other,sql_allow_locations,//cloudsql.googleapis.com/projects/test-project/instances/bad-mysql,//cloudsql.googleapis.com/projects/test-project/instances/bad-mysql is in a disallowed location (australia-southeast1).
 Other,sql_allow_locations,//cloudsql.googleapis.com/projects/test-project/instances/bad-postgres,//cloudsql.googleapis.com/projects/test-project/instances/bad-postgres is in a disallowed location (asia-southeast1).
 Other,sql_deny_public_access,//cloudsql.googleapis.com/projects/test-project/instances/public-sql,//cloudsql.googleapis.com/projects/test-project/instances/public-sql is not allowed to have a Public IP.

@@ -13,6 +13,8 @@
 # limitations under the License.
 
 template_dir = "../../templates/policygen"
+# To use a remote version of templates:
+# template_dir = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen?ref=policies-v0.2.0"
 
 forseti_policies = {
   targets = [

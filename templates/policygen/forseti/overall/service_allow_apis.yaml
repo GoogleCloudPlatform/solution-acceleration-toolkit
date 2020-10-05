@@ -1,0 +1,141 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPServiceUsageConstraintV1
+metadata:
+  name: service_allow_apis
+  annotations:
+    description: Allow APIs
+spec:
+  severity: high
+  match:
+    target:
+    {{- range get . "targets"}}
+    - "{{.}}"
+    {{- end}}
+  parameters:
+    mode: allow
+    services:
+    # HIPAA compliant APIs.
+    #
+    # This list could be incomplete or out-of-date. Please refer to
+    # https://cloud.google.com/security/compliance/hipaa-compliance for the complete
+    # list of HIPAA compliant Google Cloud services.
+    #
+    # The list is sorted in the same order as the one in
+    # https://cloud.google.com/security/compliance/hipaa-compliance.
+    #
+    # If an API associated with a HIPAA compliant Google Cloud service is not listed below,
+    # feel free to propose a Pull Request to add it.
+    #
+    # App Engine
+    - appengine.googleapis.com              # App Engine Admin API
+    - appenginestandard.googleapis.com      # App Engine Standard Environment
+    - appengineflex.googleapis.com          # App Engine Flexible Environment
+    - managedvms.googleapis.com             # App Engine Managed VMs
+    # Cloud Asset Inventory
+    - cloudasset.googleapis.com             # Cloud Asset Inventory API
+    # Cloud AutoML
+    - automl.googleapis.com                 # Cloud AutoML API
+    # BigQuery
+    - bigquery.googleapis.com               # BigQuery API
+    # Cloud Bigtable
+    - bigtable.googleapis.com               # Cloud Bigtable API
+    - bigtableadmin.googleapis.com          # Cloud Bigtable Admin API
+    # Cloud Build
+    - cloudbuild.googleapis.com             # Cloud Build API
+    # Cloud Data Fusion
+    - datafusion.googleapis.com             # Cloud Data Fusion API
+    # Cloud Data Loss Prevention API
+    - dlp.googleapis.com                    # Cloud Data Loss Prevention API
+    # Cloud Dataflow
+    - dataflow.googleapis.com               # Dataflow API
+    # Cloud Datalab
+    - datalab.googleapis.com                # Cloud Datalab API
+    # Cloud Dataproc
+    - dataproc.googleapis.com               # Cloud Dataproc API
+    # Cloud Datastore
+    - datastore.googleapis.com              # Cloud Datastore API
+    # Cloud Deployment Manager
+    - deploymentmanager.googleapis.com      # Cloud Deployment Manager API
+    # Cloud DNS
+    - dns.googleapis.com                    # Cloud DNS API
+    # Cloud Endpoints
+    - endpoints.googleapis.com	            # Cloud Endpoints API
+    # Cloud Functions
+    - cloudfunctions.googleapis.com         # Cloud Functions API
+    # Cloud Healthcare
+    - healthcare.googleapis.com             # Cloud Healthcare API
+    # Cloud Identity-Aware Proxy
+    - iap.googleapis.com                    # Cloud Identity-Aware Proxy API
+    # Cloud Life Sciences (formerly Genomics)
+    - lifesciences.googleapis.com           # Cloud Life Sciences API
+    # Cloud Natural Language
+    - language.googleapis.com               # Cloud Natural Language API
+    # Cloud Pub/Sub
+    - pubsub.googleapis.com                 # Cloud Pub/Sub API
+    # Cloud Run
+    - run.googleapis.com                    # Clour Run API
+    # Cloud Scheduler
+    - cloudscheduler.googleapis.com         # Cloud Scheduler API
+    # Cloud Source Repositories
+    - sourcerepo.googleapis.com             # Cloud Source Repositories API
+    # Cloud Spanner
+    - spanner.googleapis.com                # Cloud Spanner API
+    # Cloud Speech API
+    - speech.googleapis.com                 # Cloud Speech API
+    # Cloud SQL
+    - sqladmin.googleapis.com               # Cloud SQL Admin API
+    # Cloud Storage
+    - storage-component.googleapis.com      # Cloud Storage API
+    - storage-api.googleapis.com            # Cloud Storage JSON API
+    - storage.googleapis.com
+    # Cloud Translation API
+    - translate.googleapis.com              # Cloud Translation API
+    # Cloud Vision
+    - vision.googleapis.com                 # Cloud Vision API
+    # Compute Engine
+    - compute.googleapis.com                # GCE API
+    - resourceviews.googleapis.com          # GCE Instance Groups API
+    - replicapool.googleapis.com            # GCE Instance Group Manager API
+    - replicapoolupdater.googleapis.com     # GCE Instance Group Updater API
+    - oslogin.googleapis.com                # OS Login API (Required by GCE)
+    # Container Registry
+    - containerregistry.googleapis.com      # Container Registry API
+    # Google Service Management
+    - servicemanagement.googleapis.com      # Service Management API
+    # Kubernetes Engine
+    - container.googleapis.com              # Kubernetes Engine API
+    # Stackdriver Debugger
+    - clouddebugger.googleapis.com          # Stackdriver Debugger API
+    # Stackdriver Error Reporting
+    - clouderrorreporting.googleapis.com    # Stackdriver Error Reporting API
+    # Stackdriver Logging
+    - logging.googleapis.com                # Stackdriver Logging API
+    # Stackdriver Profiler
+    - cloudprofiler.googleapis.com          # Stackdriver Profiler API
+    # Stackdriver Trace
+    - cloudtrace.googleapis.com             # Stackdriver Trace API
+    #
+    # APIs without HIPAA compliance that are considered HIPAA safe since they
+    # are not used for storage or processing of PHI.
+    - admin.googleapis.com                  # Admin SDK
+    - iam.googleapis.com                    # Identity and Access Management (IAM) API
+    - cloudapis.googleapis.com              # Google Cloud APIs
+    - cloudbilling.googleapis.com           # Cloud Billing API
+    - cloudresourcemanager.googleapis.com   # Cloud Resource Manager API
+    - servicenetworking.googleapis.com      # Service Networking API
+    - serviceusage.googleapis.com           # Service Usage API
+    - monitoring.googleapis.com             # Stackdriver Monitoring API
