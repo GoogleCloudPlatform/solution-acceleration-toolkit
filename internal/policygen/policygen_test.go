@@ -193,7 +193,7 @@ func TestExamples(t *testing.T) {
 	common := []wantDir{
 		{
 			filepath.Join(forsetiOutputRoot, "policies", "constraints", "overall"),
-			11,
+			12,
 			[]string{
 				"bigquery_allow_locations.yaml",
 			},
