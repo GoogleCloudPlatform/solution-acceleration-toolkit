@@ -73,7 +73,7 @@ spec:
     # Cloud DNS
     - dns.googleapis.com                    # Cloud DNS API
     # Cloud Endpoints
-    - endpoints.googleapis.com	            # Cloud Endpoints API
+    - endpoints.googleapis.com              # Cloud Endpoints API
     # Cloud Functions
     - cloudfunctions.googleapis.com         # Cloud Functions API
     # Cloud Healthcare
