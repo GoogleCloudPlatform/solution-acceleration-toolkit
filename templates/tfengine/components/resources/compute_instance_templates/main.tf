@@ -18,7 +18,7 @@ limitations under the License. */ -}}
 {{$subnet := .subnet -}}
 module "{{$template_resource_name}}" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   name_prefix        = "{{.name_prefix}}"
   project_id         = module.project.project_id
@@ -70,7 +70,7 @@ EOF
 {{range get . "instances" -}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   hostname           = "{{.name}}"
   instance_template  = module.{{$template_resource_name}}.self_link
