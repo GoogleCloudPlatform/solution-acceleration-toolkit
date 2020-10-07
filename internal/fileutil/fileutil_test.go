@@ -71,6 +71,7 @@ func TestDiffDirs(t *testing.T) {
 }
 
 func writeDir(t *testing.T, paths []string) string {
+	t.Helper()
 	tmp, err := ioutil.TempDir("", "")
 	if err != nil {
 		t.Fatalf("ioutil.TempDir = %v", err)
