@@ -81,14 +81,14 @@ func writeDir(t *testing.T, paths []string) string {
 	})
 
 	for _, p := range paths {
-		dn, fn := filepath.Split(p)
-		if dn != "" {
-			d := filepath.Join(tmp, dn)
+		d, f := filepath.Split(p)
+		if d != "" {
+			d := filepath.Join(tmp, d)
 			if err := os.MkdirAll(d, 0755); err != nil {
-				t.Fatalf("os.MkdirAll(%q) = %v", dn, err)
+				t.Fatalf("os.MkdirAll(%q) = %v", d, err)
 			}
 		}
-		if fn != "" {
+		if f != "" {
 			p := filepath.Join(tmp, p)
 			if err := ioutil.WriteFile(p, nil, 0755); err != nil {
 				t.Fatalf("ioutil.WriteFile(%q) = %v", p, err)
