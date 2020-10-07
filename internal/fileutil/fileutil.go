@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package pathutil provides utility functions around file system paths.
-package pathutil
+// Package fileutil provides utility functions around files.
+package fileutil
 
 import (
 	"crypto/sha256"
@@ -66,4 +66,45 @@ func Fetch(path, pwd, cacheDir string) (string, error) {
 		return "", err
 	}
 	return filepath.Join(dst, subdir), nil
+}
+
+// DiffDirs returns the difference between the given dirs.
+// Note: It will only return files in d1 that are not in d2.
+// Files in d2 not present in d1 are not returned.
+func DiffDirs(d1, d2 string) ([]string, error) {
+	d1Files, err := listDir(d1)
+	if err != nil {
+		return nil, err
+	}
+	d2Files, err := listDir(d2)
+	if err != nil {
+		return nil, err
+	}
+
+	var diff []string
+	for f := range d1Files {
+		if !d2Files[f] {
+			diff = append(diff, f)
+		}
+	}
+	return diff, nil
+}
+
+// listDir lists all files (recursively) in the given dir and returns them as a set.
+// The file names will be relative to the given dir.
+func listDir(d string) (map[string]bool, error) {
+	fs := make(map[string]bool)
+	fn := func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		// Trim the dir and separator so that the return value can be compared to other directories (e.g. in diff).
+		p := strings.TrimPrefix(strings.TrimPrefix(path, d), string(filepath.Separator))
+		fs[p] = true
+		return nil
+	}
+	if err := filepath.Walk(d, fn); err != nil {
+		return nil, err
+	}
+	return fs, nil
 }
