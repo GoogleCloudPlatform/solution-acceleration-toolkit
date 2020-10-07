@@ -89,9 +89,9 @@ func writeDir(t *testing.T, paths []string) string {
 			}
 		}
 		if f != "" {
-			p := filepath.Join(tmp, p)
-			if err := ioutil.WriteFile(p, nil, 0755); err != nil {
-				t.Fatalf("ioutil.WriteFile(%q) = %v", p, err)
+			f := filepath.Join(tmp, p)
+			if err := ioutil.WriteFile(f, nil, 0755); err != nil {
+				t.Fatalf("ioutil.WriteFile(%q) = %v", f, err)
 			}
 		}
 	}
