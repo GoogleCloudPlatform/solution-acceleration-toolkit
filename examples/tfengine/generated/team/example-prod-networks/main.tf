@@ -53,7 +53,7 @@ resource "google_compute_shared_vpc_host_project" "host" {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 2.9.0"
+  version = "~> 2.10.0"
 
   name         = "bastion-vm"
   project      = module.project.project_id
