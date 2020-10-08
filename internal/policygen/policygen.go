@@ -24,9 +24,9 @@ import (
 	"path/filepath"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/fileutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/version"
@@ -48,7 +48,7 @@ type RunArgs struct {
 // Run executes main policygen logic.
 func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	var err error
-	configPath, err := pathutil.Expand(args.ConfigPath)
+	configPath, err := fileutil.Expand(args.ConfigPath)
 	if err != nil {
 		return fmt.Errorf("normalize path %q: %v", args.ConfigPath, err)
 	}
@@ -68,14 +68,14 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 
 	var statePaths []string
 	for _, p := range args.StatePaths {
-		p, err = pathutil.Expand(p)
+		p, err = fileutil.Expand(p)
 		if err != nil {
 			return fmt.Errorf("normalize path %q: %v", p, err)
 		}
 		statePaths = append(statePaths, p)
 	}
 
-	outputPath, err := pathutil.Expand(args.OutputPath)
+	outputPath, err := fileutil.Expand(args.OutputPath)
 	if err != nil {
 		return fmt.Errorf("normalize path %q: %v", args.OutputPath, err)
 	}
@@ -86,7 +86,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 	}
 	defer os.RemoveAll(cacheDir)
 
-	pp, err := pathutil.Fetch(c.TemplateDir, filepath.Dir(args.ConfigPath), cacheDir)
+	pp, err := fileutil.Fetch(c.TemplateDir, filepath.Dir(args.ConfigPath), cacheDir)
 	if err != nil {
 		return fmt.Errorf("resolve policy template path: %v", err)
 	}
@@ -100,7 +100,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 
 	// Policy Library templates are released in a backwards compatible way, and old templates will be
 	// kept in the repository as well, so it's relatively safe to pull from 'master' branch all the time.
-	tp, err := pathutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
+	tp, err := fileutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
 	if err != nil {
 		return fmt.Errorf("fetch policy templates and utils: %v", err)
 	}
