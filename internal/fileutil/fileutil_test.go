@@ -31,25 +31,25 @@ func TestDiffDirs(t *testing.T) {
 		want    []string
 	}{
 		{
-			name:    "d1 only returns diff",
+			name:    "d1 only, returns diff",
 			d1Paths: []string{"a"},
 			d2Paths: nil,
 			want:    []string{"a"},
 		},
 		{
-			name:    "d2 only does not return diff",
+			name:    "d2 only, no diff",
 			d1Paths: nil,
 			d2Paths: []string{"a"},
 			want:    nil,
 		},
 		{
-			name:    "d1 and d1 and no diff",
+			name:    "d1 and d1, no diff",
 			d1Paths: []string{"a"},
 			d2Paths: []string{"a"},
 			want:    nil,
 		},
 		{
-			name:    "d1 and d2 and diff",
+			name:    "d1 and d2, diff",
 			d1Paths: []string{"a"},
 			d2Paths: []string{"b"},
 			want:    []string{"a"},
