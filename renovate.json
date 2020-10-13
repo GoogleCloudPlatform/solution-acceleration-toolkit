@@ -9,7 +9,9 @@
       "groupName": "terraform"
     }
   ],
-  "fileMatch": ["\\.tf$"],
+  "terraform": {
+    "fileMatch": ["\\.tf$"]
+  },
   "regexManagers": [
     {
       "matchStrings": [
