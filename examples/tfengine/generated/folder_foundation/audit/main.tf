@@ -66,7 +66,7 @@ resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
   name             = "bigquery-audit-logs-sink"
   folder           = var.folder
   include_children = true
-  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
   destination      = "bigquery.googleapis.com/projects/${module.project.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
@@ -101,7 +101,7 @@ resource "google_logging_folder_sink" "storage_audit_logs_sink" {
   name             = "storage-audit-logs-sink"
   folder           = var.folder
   include_children = true
-  filter           = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter           = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
   destination      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
