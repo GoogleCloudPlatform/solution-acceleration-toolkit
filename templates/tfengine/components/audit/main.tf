@@ -19,6 +19,11 @@ limitations under the License. */ -}}
   {{- $parent_var = "var.folder"}}
 {{- end}}
 
+{{- $filter := `logName:\"logs/cloudaudit.googleapis.com\"`}}
+{{- range get . "additional_filters"}}
+{{- $filter = printf "%s OR %s" $filter .}}
+{{- end}}
+
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_{{.parent_type}}_iam_audit_config" "config" {
   {{$parent_field}} = {{$parent_var}}
@@ -40,7 +45,7 @@ resource "google_logging_{{.parent_type}}_sink" "bigquery_audit_logs_sink" {
   name                 = "bigquery-audit-logs-sink"
   {{$parent_field}}    = {{$parent_var}}
   include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter               = "{{$filter}}"
   destination          = "bigquery.googleapis.com/projects/${module.project.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
 }
 
@@ -75,7 +80,7 @@ resource "google_logging_{{.parent_type}}_sink" "storage_audit_logs_sink" {
   name                 = "storage-audit-logs-sink"
   {{$parent_field}}    = {{$parent_var}}
   include_children     = true
-  filter               = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter               = "{{$filter}}"
   destination          = "storage.googleapis.com/${module.storage_destination.bucket.name}"
 }
 
