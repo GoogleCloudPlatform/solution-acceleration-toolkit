@@ -61,84 +61,65 @@ resource "google_folder_iam_audit_config" "config" {
   }
 }
 
-# BigQuery log sink.
-resource "google_logging_folder_sink" "bigquery_audit_logs_sink" {
-  name             = "bigquery-audit-logs-sink"
-  folder           = var.folder
-  include_children = true
-  filter           = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
-  destination      = "bigquery.googleapis.com/projects/${module.project.project_id}/datasets/${module.bigquery_destination.bigquery_dataset.dataset_id}"
+module "bigquery_export" {
+  source  = "terraform-google-modules/log-export/google"
+  version = "~> 5.0.0"
+
+  destination_uri        = module.bigquery_destination.destination_uri
+  filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
+  log_sink_name          = "bigquery-audit-logs-sink"
+  parent_resource_type   = "folder"
+  parent_resource_id     = var.folder
+  unique_writer_identity = true
+  include_children       = true
 }
 
 module "bigquery_destination" {
-  source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.3.0"
+  source  = "terraform-google-modules/log-export/google//modules/bigquery"
+  version = "~> 5.0.0"
 
-  dataset_id                  = "1yr_folder_audit_logs"
-  project_id                  = module.project.project_id
-  location                    = "us-east1"
-  default_table_expiration_ms = 365 * 8.64 * pow(10, 7) # 365 days
-  access = [
-    {
-      role          = "roles/bigquery.dataOwner",
-      special_group = "projectOwners"
-    },
-    {
-      role           = "roles/bigquery.dataViewer",
-      group_by_email = var.auditors_group
-    },
-  ]
+  dataset_name             = "1yr_folder_audit_logs"
+  project_id               = module.project.project_id
+  log_sink_writer_identity = module.bigquery_export.writer_identity
+  expiration_days          = 365
 }
 
-resource "google_project_iam_member" "bigquery_sink_member" {
-  project = module.bigquery_destination.bigquery_dataset.project
-  role    = "roles/bigquery.dataEditor"
-  member  = google_logging_folder_sink.bigquery_audit_logs_sink.writer_identity
-}
+module "storage_export" {
+  source  = "terraform-google-modules/log-export/google"
+  version = "~> 5.0.0"
 
-# Cloud Storage log sink.
-resource "google_logging_folder_sink" "storage_audit_logs_sink" {
-  name             = "storage-audit-logs-sink"
-  folder           = var.folder
-  include_children = true
-  filter           = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
-  destination      = "storage.googleapis.com/${module.storage_destination.bucket.name}"
+  destination_uri        = module.storage_destination.destination_uri
+  filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
+  log_sink_name          = "storage-audit-logs-sink"
+  parent_resource_type   = "folder"
+  parent_resource_id     = var.folder
+  unique_writer_identity = true
+  include_children       = true
 }
 
 module "storage_destination" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.7.0"
+  source  = "terraform-google-modules/log-export/google//modules/storage"
+  version = "~> 5.0.0"
 
-  name          = "7yr-folder-audit-logs"
-  project_id    = module.project.project_id
-  location      = "us-central1"
-  storage_class = "COLDLINE"
-
-  lifecycle_rules = [{
-    action = {
-      type = "Delete"
-    }
-    condition = {
-      age        = 7 * 365 # 7 years
-      with_state = "ANY"
-    }
-  }]
-
-  iam_members = [
-    {
-      role   = "roles/storage.objectViewer"
-      member = "group:${var.auditors_group}"
-    },
-  ]
+  storage_bucket_name      = "7yr-folder-audit-logs"
+  project_id               = module.project.project_id
+  log_sink_writer_identity = module.storage_export.writer_identity
+  storage_class            = "COLDLINE"
+  expiration_days          = 7 * 365
+  retention_policy = {
+    is_locked             = true
+    retention_period_days = 6 * 365
+  }
 }
 
-# Deploy sink member as separate resource otherwise Terraform will return error:
-# `The "for_each" value depends on resource attributes that cannot be determined
-# until apply, so Terraform cannot predict how many instances will be created.`
-resource "google_storage_bucket_iam_member" "storage_sink_member" {
-  bucket = module.storage_destination.bucket.name
-  role   = "roles/storage.objectCreator"
-  member = google_logging_folder_sink.storage_audit_logs_sink.writer_identity
+resource "google_project_iam_member" "logs_viewers_auditors" {
+  for_each = toset([
+    "roles/bigquery.user",
+    "roles/storage.objectViewer",
+  ])
+  project = module.project.project_id
+  role    = each.key
+  member  = "group:${var.auditors_group}"
 }
 
 # IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
