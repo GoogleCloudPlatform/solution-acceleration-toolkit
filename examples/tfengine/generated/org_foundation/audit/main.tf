@@ -64,9 +64,9 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
+  log_sink_name          = "bigquery-audit-logs-sink"
   destination_uri        = module.bigquery_destination.destination_uri
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
-  log_sink_name          = "bigquery-audit-logs-sink"
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
   unique_writer_identity = true
@@ -79,6 +79,7 @@ module "bigquery_destination" {
 
   dataset_name             = "1yr_org_audit_logs"
   project_id               = module.project.project_id
+  location                 = "us-east1"
   log_sink_writer_identity = module.bigquery_export.writer_identity
   expiration_days          = 365
 }
@@ -102,6 +103,7 @@ module "storage_destination" {
 
   storage_bucket_name      = "7yr-org-audit-logs"
   project_id               = module.project.project_id
+  location                 = "us-central1"
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
   expiration_days          = 7 * 365

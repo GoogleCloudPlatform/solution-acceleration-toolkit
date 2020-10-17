@@ -59,6 +59,7 @@ module "bigquery_destination" {
 
   dataset_name             = "{{.logs_bigquery_dataset.dataset_id}}"
   project_id               = module.project.project_id
+  location                 = "{{.bigquery_location}}"
   log_sink_writer_identity = "${module.bigquery_export.writer_identity}"
   expiration_days          = 365
 }
@@ -82,6 +83,7 @@ module "storage_destination" {
 
   storage_bucket_name      = "{{.logs_storage_bucket.name}}"
   project_id               = module.project.project_id
+  location                 = "{{.storage_location}}"
   log_sink_writer_identity = "${module.storage_export.writer_identity}"
   storage_class            = "COLDLINE"
   expiration_days          = 7*365
