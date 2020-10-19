@@ -650,6 +650,13 @@ Normalization will make all characters alphanumeric with underscores.
 
 Type: string
 
+### gke_clusters.service_account
+
+Use the given service account for nodes rather than creating a
+new dedicated service account.
+
+Type: string
+
 ### gke_clusters.subnet
 
 Name of the GKE cluster's subnet.

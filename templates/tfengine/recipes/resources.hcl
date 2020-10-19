@@ -703,6 +703,13 @@ schema = {
               }
             }
           }
+          service_account = {
+            description = <<EOF
+              Use the given service account for nodes rather than creating a
+              new dedicated service account.
+            EOF
+            type        = "string"
+          }
         }
       }
     }
