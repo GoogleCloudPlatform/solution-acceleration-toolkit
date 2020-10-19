@@ -9,11 +9,9 @@
       "groupName": "terraform"
     }
   ],
-  "terraform": {
-    "fileMatch": ["\\.tf$"]
-  },
   "regexManagers": [
     {
+      "fileMatch": ["\\.tf$"],
       "matchStrings": [
         "source\\s+=\\s+\"(?<depName>.+?)(//.+|\")\\s+version\\s+=\\s+\"(?<currentValue>.+?)\""
       ],
