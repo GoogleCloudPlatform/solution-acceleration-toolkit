@@ -240,6 +240,10 @@ module "foo_topic" {
 }
 
 resource "google_service_account" "example_sa" {
-  account_id = "example-sa"
-  project    = module.project.project_id
+  account_id   = "example-sa"
+  display_name = "Example Service Account"
+
+  description = "Example Service Account"
+
+  project = module.project.project_id
 }

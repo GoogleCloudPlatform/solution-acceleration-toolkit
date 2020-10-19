@@ -923,6 +923,18 @@ ID of service account.
 
 Type: string
 
+### service_accounts.description
+
+Description of service account.
+
+Type: string
+
+### service_accounts.display_name
+
+Display name of service account.
+
+Type: string
+
 ### service_accounts.resource_name
 
 Override for Terraform resource name.

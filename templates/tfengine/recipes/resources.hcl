@@ -1018,6 +1018,14 @@ schema = {
             description = "ID of service account."
             type        = "string"
           }
+          display_name = {
+            description = "Display name of service account."
+            type        = "string"
+          }
+          description = {
+            description = "Description of service account."
+            type        = "string"
+          }
           resource_name = {
             description = <<EOF
               Override for Terraform resource name.
