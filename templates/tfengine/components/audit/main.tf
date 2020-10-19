@@ -86,7 +86,7 @@ module "storage_destination" {
   location                 = "{{.storage_location}}"
   log_sink_writer_identity = "${module.storage_export.writer_identity}"
   storage_class            = "COLDLINE"
-  expiration_days          = 7*365
+  expiration_days          = 7 * 365
   retention_policy = {
     is_locked             = true
     retention_period_days = 6 * 365
