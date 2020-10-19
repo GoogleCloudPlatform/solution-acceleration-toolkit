@@ -33,6 +33,9 @@ module "{{resourceName . "name"}}" {
   skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"
+  {{if has . "service_account" -}}
+  compute_engine_service_account = "{{.service_account}}"
+  {{end -}}
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   cluster_resource_labels = {
