@@ -33,7 +33,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
 
   name                    = "example-prod-apps"
   org_id                  = ""

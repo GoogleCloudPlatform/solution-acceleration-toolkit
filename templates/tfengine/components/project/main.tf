@@ -16,10 +16,10 @@ limitations under the License. */ -}}
 module "project" {
   {{- if has . "shared_vpc_attachment"}}
   source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
   {{- else}}
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
   {{- end}}
 
   name                    = "{{.project_id}}"
