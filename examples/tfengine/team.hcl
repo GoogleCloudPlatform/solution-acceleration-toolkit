@@ -383,7 +383,9 @@ template "project_apps" {
         }]
       }
       service_accounts = [{
-        account_id = "example-sa"
+        account_id   = "example-sa"
+        description  = "Example Service Account"
+        display_name = "Example Service Account"
       }]
       compute_instance_templates = [{
         name_prefix        = "example-instance-template"
