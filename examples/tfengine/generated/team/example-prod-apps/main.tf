@@ -185,16 +185,16 @@ module "example_gke_cluster" {
   regional           = true
   network_project_id = "example-prod-networks"
 
-  network                 = "example-network"
-  subnetwork              = "example-gke-subnet"
-  ip_range_pods           = "example-pods-range"
-  ip_range_services       = "example-services-range"
-  master_ipv4_cidr_block  = "192.168.0.0/28"
-  istio                   = true
-  skip_provisioners       = true
-  enable_private_endpoint = false
-  release_channel         = "STABLE"
-
+  network                        = "example-network"
+  subnetwork                     = "example-gke-subnet"
+  ip_range_pods                  = "example-pods-range"
+  ip_range_services              = "example-services-range"
+  master_ipv4_cidr_block         = "192.168.0.0/28"
+  istio                          = true
+  skip_provisioners              = true
+  enable_private_endpoint        = false
+  release_channel                = "STABLE"
+  compute_engine_service_account = "gke@example-prod-apps.iam.gserviceaccount.com"
   cluster_resource_labels = {
     env  = "prod"
     type = "no-phi"
