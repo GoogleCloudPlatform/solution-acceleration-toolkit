@@ -77,6 +77,9 @@ module "storage_export" {
   include_children       = true
 }
 
+// 6 years minimum audit log retention is required for HIPAA alignment.
+// Thus, we lock retention policy to be at least 6 years
+// and set the actual expiry to be greater than this amount (7 years).
 module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
   version = "~> 5.0.0"
