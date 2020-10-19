@@ -31,13 +31,14 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.2.0"
 
-  name                    = "example-prod-networks"
-  org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
-  default_service_account = "keep"
-  skip_gcloud_download    = true
+  name                           = "example-prod-networks"
+  org_id                         = ""
+  folder_id                      = "12345678"
+  billing_account                = "000-000-000"
+  lien                           = true
+  default_service_account        = "keep"
+  skip_gcloud_download           = true
+  enable_shared_vpc_host_project = true
   activate_apis = [
     "compute.googleapis.com",
     "container.googleapis.com",
@@ -45,10 +46,6 @@ module "project" {
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
   ]
-}
-
-resource "google_compute_shared_vpc_host_project" "host" {
-  project = module.project.project_id
 }
 
 module "bastion_vm" {
