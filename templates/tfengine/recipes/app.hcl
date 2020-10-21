@@ -27,6 +27,8 @@ template "cicd_configs" {
   output_path    = "./cicd/configs"
   data = {
     managed_dirs = [
+      "devops",
+      "cicd",
       {{range $deployment := .deployments}}
       {{range $env, $_ := $.constants}}
       {{if not (eq $env "shared")}}
