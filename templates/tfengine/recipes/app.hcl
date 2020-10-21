@@ -15,6 +15,9 @@
 template "devops" {
   component_path = "../components/app/devops"
   output_path = "./devops"
+  flatten {
+    key = "devops"
+  }
 }
 
 template "cicd" {

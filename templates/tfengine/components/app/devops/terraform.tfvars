@@ -12,16 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-variable "admins_group" {
-  description = "Group who will be given admin access on the parent resource (org/folder)."
-  type        = string
-}
-
-variable "devops_owners" {
-  description = <<EOF
-    List of members to transfer ownership of the devops project to.
-    NOTE: By default the creating user will be the owner of the project.
-    Thus, there should be a group in this list and you must be part of that group, so a group owns the project going forward.
-  EOF
-  type = list(string)
-}
+admins_group = "{{.admins_group}}"
+devops_owners = [
+  {{- range .devops_owners}}
+  "{{.}}",
+  {{- end}}
+]

@@ -32,6 +32,10 @@ template "app" {
         folder_id = "456"
       }
     }
+    devops = {
+      admins_group = "admins@example.com"
+      devops_owners = ["devops-owners-group@example.com"]
+    }
     deployments = [
      {
        name = "project_networks",
