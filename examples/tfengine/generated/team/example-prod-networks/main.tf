@@ -135,7 +135,7 @@ module "cloud_sql_private_service_access_example_network" {
 
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.2.0"
+  version = "~> 0.3.0"
 
   name    = "example-router"
   project = module.project.project_id
