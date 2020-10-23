@@ -11,3 +11,20 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
+
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
+    bucket = "{{.constants.shared.state_bucket}}"
+    prefix = "{{.deployment}}/{{.env}}"
+  }
+}
+
+module "main" {
+  source = "../../modules/main"
+  env    = "{{.env}}"
+}

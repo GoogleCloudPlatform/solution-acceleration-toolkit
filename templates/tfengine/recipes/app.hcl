@@ -56,7 +56,7 @@ template "env" {
   output_path    = "{{$deployment.name}}/envs/{{$env}}"
   data = {
     env        = "{{$env}}"
-    deployment = "{{$deployment}}"
+    deployment = "{{$deployment.name}}"
   }
 }
 {{end}}
