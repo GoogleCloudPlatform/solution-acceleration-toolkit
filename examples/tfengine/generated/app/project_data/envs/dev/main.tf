@@ -12,3 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
+  }
+  backend "gcs" {
+    bucket = "example-state"
+    prefix = "project_data/dev"
+  }
+}
+
+module "main" {
+  source = "../../modules/main"
+  env    = "dev"
+}

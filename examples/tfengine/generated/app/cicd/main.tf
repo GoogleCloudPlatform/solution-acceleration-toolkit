@@ -103,11 +103,23 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   member = local.cloudbuild_sa
 }
 
+locals {
+  folder_ids = [for env in module.constants.values : env.folder_id]
+  folder_roles = flatten([
+    for f in local.folder_ids : [
+      for r in local.cloudbuild_sa_editor_roles : {
+        folder = f
+        role   = r
+      }
+    ]
+  ])
+}
+
 # Grant Cloud Build Service Account access to the folder.
 resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
-  for_each = toset(local.cloudbuild_sa_editor_roles)
-  folder   = local.constants.folder_id
-  role     = each.value
+  for_each = { for fr in local.folder_roles : "${fr.folder} ${fr.role}" => fr }
+  folder   = each.value.folder
+  role     = each.value.role
   member   = local.cloudbuild_sa
 }
 

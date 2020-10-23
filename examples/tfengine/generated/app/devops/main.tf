@@ -26,12 +26,6 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-  /* TODO(user): uncomment after the state bucket has been created from this deployment and run `terraform init`.
-  backend "gcs" {
-    bucket = "example-state"
-    prefix = "devops"
-  }
-  */
 }
 
 module "constants" {
