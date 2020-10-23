@@ -26,12 +26,12 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-  /* TODO(user): uncomment after the state bucket has been created from this deployment and run `terraform init`.
+  {{- if get . "enable_gcs_backend"}}
   backend "gcs" {
     bucket = "{{.constants.shared.state_bucket}}"
     prefix = "devops"
   }
-  */
+  {{- end}}
 }
 
 module "constants" {
