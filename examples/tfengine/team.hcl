@@ -372,6 +372,7 @@ template "project_apps" {
         ip_range_pods_name     = "example-pods-range"
         ip_range_services_name = "example-services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
+        service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
         labels = {
           type = "no-phi"
         }
@@ -382,7 +383,9 @@ template "project_apps" {
         }]
       }
       service_accounts = [{
-        account_id = "example-sa"
+        account_id   = "example-sa"
+        description  = "Example Service Account"
+        display_name = "Example Service Account"
       }]
       compute_instance_templates = [{
         name_prefix        = "example-instance-template"

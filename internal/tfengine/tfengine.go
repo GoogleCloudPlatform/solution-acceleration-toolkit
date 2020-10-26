@@ -216,7 +216,6 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		}
 		if info.Mode().IsRegular() {
 			write = template.WriteFile
-			outputPath = filepath.Join(outputPath, info.Name())
 		}
 
 		if err := write(cp, outputPath, data); err != nil {

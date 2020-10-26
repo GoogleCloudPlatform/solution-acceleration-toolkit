@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "gke_clusters"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 11.1.0"
+  version = "~> 12.0.0"
 
   # Required.
   name                   = "{{.name}}"
@@ -33,6 +33,9 @@ module "{{resourceName . "name"}}" {
   skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"
+  {{if has . "service_account" -}}
+  compute_engine_service_account = "{{.service_account}}"
+  {{end -}}
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   cluster_resource_labels = {

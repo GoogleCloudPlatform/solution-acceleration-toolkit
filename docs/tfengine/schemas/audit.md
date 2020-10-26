@@ -4,6 +4,17 @@
 
 ## Properties
 
+### additional_filters
+
+Additional filters for log collection and export. List entries will be
+concatenated by "OR" operator. Refer to
+<https://cloud.google.com/logging/docs/view/query-library> for query syntax.
+Need to escape \ and " to preserve them in the final filter strings.
+See example usages under "examples/tfengine/".
+Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
+
+Type: array(string)
+
 ### auditors_group
 
 This group will be granted viewer access to the audit log dataset and

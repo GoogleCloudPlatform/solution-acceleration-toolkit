@@ -38,7 +38,7 @@ terraform {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
 
   name                    = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
