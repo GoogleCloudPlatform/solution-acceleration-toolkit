@@ -19,7 +19,7 @@ variable "branch_name" {
 }
 
 variable "source_repo_name" {
-  description = "Name of source repo."
+  description = "Name of source repo that will be created in the devops project."
   type        = string
   default     = "configs"
 }
