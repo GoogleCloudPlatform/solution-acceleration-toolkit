@@ -44,6 +44,8 @@ func TestExamples(t *testing.T) {
 			}
 			defer os.RemoveAll(tmp)
 
+			runPlanOnDeployments(t, tmp)
+
 			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
