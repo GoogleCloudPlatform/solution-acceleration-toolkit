@@ -29,19 +29,19 @@ steps:
   waitFor: ["-"]
   id: Markdownlint check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:c10e9cce75ed608142bc370920f211cd4c2c2db1eccc03b725b0fabf1993660b"
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:03df4a8f4754848efdd4b827d55ab99e86bde431580da0f8c8b65722ff36ab2e"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
   waitFor: ["-"]
   id: Go code check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:c10e9cce75ed608142bc370920f211cd4c2c2db1eccc03b725b0fabf1993660b"
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:03df4a8f4754848efdd4b827d55ab99e86bde431580da0f8c8b65722ff36ab2e"
   entrypoint: "bash"
   args: ["build/gen_check.sh"]
   waitFor: ["-"]
   id: Generated files check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:c10e9cce75ed608142bc370920f211cd4c2c2db1eccc03b725b0fabf1993660b"
+- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:03df4a8f4754848efdd4b827d55ab99e86bde431580da0f8c8b65722ff36ab2e"
   entrypoint: "bash"
   args: ["tests/policygen/integration_test.sh"]
   waitFor: ["-"]
