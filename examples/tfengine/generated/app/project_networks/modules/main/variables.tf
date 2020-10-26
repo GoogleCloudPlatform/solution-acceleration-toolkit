@@ -13,5 +13,6 @@
 # limitations under the License.
 
 variable "env" {
-  type = string
+  description = "Name of environment being deployed."
+  type        = string
 }

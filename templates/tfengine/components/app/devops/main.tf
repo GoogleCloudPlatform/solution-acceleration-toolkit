@@ -72,7 +72,7 @@ module "project" {
 
 # Terraform state bucket, hosted in the devops project.
 module "state_bucket" {
-source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
   name       = local.constants.state_bucket
