@@ -29,7 +29,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
 
   name                    = "example-prod-data"
   org_id                  = ""
@@ -74,7 +74,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_mysql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.0.0"
+  version = "~> 4.1.0"
 
   name              = "example-mysql-instance"
   project_id        = module.project.project_id

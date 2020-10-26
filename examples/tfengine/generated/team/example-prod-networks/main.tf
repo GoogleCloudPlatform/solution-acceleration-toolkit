@@ -29,15 +29,16 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
 
-  name                    = "example-prod-networks"
-  org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
-  default_service_account = "keep"
-  skip_gcloud_download    = true
+  name                           = "example-prod-networks"
+  org_id                         = ""
+  folder_id                      = "12345678"
+  billing_account                = "000-000-000"
+  lien                           = true
+  default_service_account        = "keep"
+  skip_gcloud_download           = true
+  enable_shared_vpc_host_project = true
   activate_apis = [
     "compute.googleapis.com",
     "container.googleapis.com",
@@ -45,10 +46,6 @@ module "project" {
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
   ]
-}
-
-resource "google_compute_shared_vpc_host_project" "host" {
-  project = module.project.project_id
 }
 
 module "bastion_vm" {
@@ -130,7 +127,7 @@ module "example_network" {
 
 module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.0.0"
+  version = "~> 4.1.0"
 
   project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
@@ -138,7 +135,7 @@ module "cloud_sql_private_service_access_example_network" {
 
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.2.0"
+  version = "~> 0.3.0"
 
   name    = "example-router"
   project = module.project.project_id

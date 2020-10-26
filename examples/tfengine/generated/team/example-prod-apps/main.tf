@@ -33,7 +33,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.1.0"
+  version = "~> 9.2.0"
 
   name                    = "example-prod-apps"
   org_id                  = ""
@@ -176,7 +176,7 @@ module "example_domain" {
 
 module "example_gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 11.1.0"
+  version = "~> 12.0.0"
 
   # Required.
   name               = "example-gke-cluster"
@@ -185,16 +185,16 @@ module "example_gke_cluster" {
   regional           = true
   network_project_id = "example-prod-networks"
 
-  network                 = "example-network"
-  subnetwork              = "example-gke-subnet"
-  ip_range_pods           = "example-pods-range"
-  ip_range_services       = "example-services-range"
-  master_ipv4_cidr_block  = "192.168.0.0/28"
-  istio                   = true
-  skip_provisioners       = true
-  enable_private_endpoint = false
-  release_channel         = "STABLE"
-
+  network                        = "example-network"
+  subnetwork                     = "example-gke-subnet"
+  ip_range_pods                  = "example-pods-range"
+  ip_range_services              = "example-services-range"
+  master_ipv4_cidr_block         = "192.168.0.0/28"
+  istio                          = true
+  skip_provisioners              = true
+  enable_private_endpoint        = false
+  release_channel                = "STABLE"
+  compute_engine_service_account = "gke@example-prod-apps.iam.gserviceaccount.com"
   cluster_resource_labels = {
     env  = "prod"
     type = "no-phi"
@@ -240,6 +240,10 @@ module "foo_topic" {
 }
 
 resource "google_service_account" "example_sa" {
-  account_id = "example-sa"
-  project    = module.project.project_id
+  account_id   = "example-sa"
+  display_name = "Example Service Account"
+
+  description = "Example Service Account"
+
+  project = module.project.project_id
 }

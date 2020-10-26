@@ -99,6 +99,11 @@ template "audit" {
     logs_storage_bucket = {
       name = "7yr-folder-audit-logs"
     }
+    additional_filters = [
+      # Need to escape \ and " to preserve them in the final filter strings.
+      "logName=\\\"logs/forseti\\\"",
+      "logName=\\\"logs/application\\\"",
+    ]
   }
 }
 

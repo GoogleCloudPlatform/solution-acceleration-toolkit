@@ -703,6 +703,13 @@ schema = {
               }
             }
           }
+          service_account = {
+            description = <<EOF
+              Use the given service account for nodes rather than creating a
+              new dedicated service account.
+            EOF
+            type        = "string"
+          }
         }
       }
     }
@@ -1009,6 +1016,14 @@ schema = {
         properties = {
           account_id = {
             description = "ID of service account."
+            type        = "string"
+          }
+          display_name = {
+            description = "Display name of service account."
+            type        = "string"
+          }
+          description = {
+            description = "Description of service account."
             type        = "string"
           }
           resource_name = {
