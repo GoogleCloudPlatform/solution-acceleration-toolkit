@@ -74,7 +74,6 @@ template "project" {
   data = {
     use_constants = true
     parent_type   = "folder"
-    state_bucket  = "{{$.constants.shared.state_bucket}}"
   }
   flatten {
     key   = "deployments"
