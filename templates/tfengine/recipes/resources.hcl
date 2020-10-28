@@ -14,7 +14,6 @@
 
 schema = {
   title                = "Recipe for resources within projects"
-  additionalProperties = false
   properties = {
     state_bucket = {
       description = "Bucket to store remote state."

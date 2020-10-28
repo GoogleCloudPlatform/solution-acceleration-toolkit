@@ -48,7 +48,7 @@ template "constants" {
   output_path    = "./constants"
 }
 
-{{range $deployment := .deployments}}
+{{range $i, $deployment := .deployments}}
 {{range $env, $_ := $.constants}}
 {{if not (eq $env "shared")}}
 template "env" {
@@ -66,4 +66,38 @@ template "main_module" {
   component_path = "../components/app/main_module"
   output_path    = "{{$deployment.name}}/modules/main"
 }
+
+{{if has $deployment "resources"}}
+template "project" {
+  component_path = "../components/project"
+  output_path    = "{{$deployment.name}}/modules/main"
+  data = {
+    use_constants = true
+    parent_type   = "folder"
+    state_bucket  = "{{$.constants.shared.state_bucket}}"
+  }
+  flatten {
+    key   = "deployments"
+    index = {{$i}}
+  }
+  flatten {
+    key = "resources"
+  }
+  flatten {
+    key = "project"
+  }
+}
+
+template "resources" {
+  recipe_path = "./resources.hcl"
+  output_path = "{{$deployment.name}}/modules/main"
+  flatten {
+    key   = "deployments"
+    index = {{$i}}
+  }
+  flatten {
+    key = "resources"
+  }
+}
+{{end}}
 {{end}}

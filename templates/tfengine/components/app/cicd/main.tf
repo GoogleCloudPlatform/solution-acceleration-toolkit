@@ -68,7 +68,7 @@ locals {
 }
 
 data "google_project" "devops" {
-  project_id = "${local.constants.project_prefix}-devops-${local.constants.env_code}"
+  project_id = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
 }
 
 # IAM permissions to allow approvers and contributors to view the cloud build jobs.

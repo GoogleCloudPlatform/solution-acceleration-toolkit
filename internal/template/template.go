@@ -134,7 +134,10 @@ func FlattenData(src map[string]interface{}, fis []*FlattenInfo) (map[string]int
 	for _, fi := range fis {
 		v := get(src, fi.Key)
 		if v == nil {
-			return nil, fmt.Errorf("flatten key %q not found in data: %v", fi.Key, src)
+			v = get(res, fi.Key) // This allows you to flatten inner keys
+			if v == nil {
+				return nil, fmt.Errorf("flatten key %q not found in data: %v", fi.Key, src)
+			}
 		}
 		// TODO(umairidris): Support deleting multi level key
 		delete(src, fi.Key)

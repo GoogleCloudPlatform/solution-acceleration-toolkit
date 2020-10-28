@@ -19,3 +19,18 @@ module "constants" {
 locals {
   constants = merge(module.constants.values.shared, module.constants.values[var.env])
 }
+# Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
+# Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
+# Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
+module "project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 9.2.0"
+
+  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  folder_id               = local.constants.folder_id
+  billing_account         = local.constants.billing_account
+  lien                    = true
+  default_service_account = "keep"
+  skip_gcloud_download    = true
+  activate_apis           = ["compute.googleapis.com"]
+}

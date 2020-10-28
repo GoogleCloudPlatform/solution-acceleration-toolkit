@@ -39,6 +39,12 @@ template "app" {
     deployments = [
      {
        name = "project_networks",
+       resources = {
+        project = {
+          name_suffix = "networks"
+          apis = ["compute.googleapis.com"]
+        }
+       }
      },
      {
        name = "project_data",
