@@ -44,12 +44,10 @@ func TestExamples(t *testing.T) {
 			}
 			defer os.RemoveAll(tmp)
 
-			runPlanOnDeployments(t, tmp)
-
 			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
-
+			runPlanOnDeployments(t, tmp)
 		})
 	}
 }
@@ -59,6 +57,10 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 	fs, err := ioutil.ReadDir(dir)
 	if err != nil {
 		t.Fatalf("ioutil.ReadDir = %v", err)
+	}
+
+	if len(fs) == 0 {
+		t.Fatalf("found no files in %q", dir)
 	}
 
 	// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
@@ -75,6 +77,7 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 		envsDir := filepath.Join(dir, "envs")
 		if _, err := os.Stat(envsDir); err == nil {
 			runPlanOnDeployments(t, envsDir)
+			continue
 		} else if !os.IsNotExist(err) {
 			t.Fatalf("os.Stat(%q) = %v", envsDir, err)
 		}
