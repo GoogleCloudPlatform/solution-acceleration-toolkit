@@ -46,6 +46,12 @@ template "app" {
         }
         compute_networks = [{
           name = "example-network"
+          subnets = [
+            {
+              name     = "example-gke-subnet"
+              ip_range = "10.1.0.0/16"
+            },
+          ]
         }]
        }
      },

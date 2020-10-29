@@ -42,5 +42,13 @@ module "example_network" {
   network_name = "example-network"
   project_id   = module.project.project_id
 
+  subnets = [
+    {
+      subnet_name           = "example-gke-subnet"
+      subnet_ip             = "10.1.0.0/16"
+      subnet_region         = "<no value>"
+      subnet_flow_logs      = true
+      subnet_private_access = true
+    },
+  ]
 }
-

@@ -90,6 +90,9 @@ template "project" {
 template "resources" {
   recipe_path = "./resources.hcl"
   output_path = "{{$deployment.name}}/modules/main"
+  data = {
+    use_constants = true
+  }
   flatten {
     key   = "deployments"
     index = {{$i}}
