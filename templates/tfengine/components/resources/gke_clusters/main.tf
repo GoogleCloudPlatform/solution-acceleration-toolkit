@@ -20,7 +20,7 @@ module "{{resourceName . "name"}}" {
   # Required.
   name                   = "{{.name}}"
   project_id             = module.project.project_id
-  {{- if get . "use_constants"}}
+  {{- if get $ "use_constants"}}
   region                 = local.constants.gke_region
   {{- else}}
   region                 = "{{get . "gke_region" (get $ "gke_region")}}"

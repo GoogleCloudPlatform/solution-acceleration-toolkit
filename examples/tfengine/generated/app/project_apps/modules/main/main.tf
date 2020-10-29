@@ -98,7 +98,7 @@ module "example_gke_cluster" {
   # Required.
   name               = "example-gke-cluster"
   project_id         = module.project.project_id
-  region             = "<no value>"
+  region             = local.constants.gke_region
   regional           = true
   network_project_id = "example-prod-networks"
 
