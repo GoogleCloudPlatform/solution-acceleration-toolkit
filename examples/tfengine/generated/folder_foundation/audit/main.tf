@@ -24,25 +24,6 @@ terraform {
   }
 }
 
-# Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
-# Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
-# Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
-module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2.0"
-
-  name                    = "example-audit"
-  org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
-  default_service_account = "keep"
-  skip_gcloud_download    = true
-  activate_apis = [
-    "bigquery.googleapis.com",
-    "logging.googleapis.com",
-  ]
-}
 
 
 # IAM Audit log configs to enable collection of all possible audit logs.

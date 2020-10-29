@@ -44,6 +44,9 @@ template "app" {
           name_suffix = "networks"
           apis = ["compute.googleapis.com"]
         }
+        compute_networks = [{
+          name = "example-network"
+        }]
        }
      },
      {

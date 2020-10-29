@@ -120,13 +120,6 @@ template "deployment" {
   }
 }
 
-template "project" {
-  component_path = "../components/project"
-  flatten {
-    key = "project"
-  }
-}
-
 {{if has . "resources"}}
 template "resources" {
   recipe_path = "./resources.hcl"

@@ -819,6 +819,66 @@ Map of IAM role to list of members to grant access to the role.
 
 Type: object
 
+### project
+
+Config for the project.
+
+Type: object
+
+### project.apis
+
+APIs to enable in the project.
+
+Type: array(string)
+
+### project.is_shared_vpc_host
+
+Whether this project is a shared VPC host. Defaults to 'false'.
+
+Type: boolean
+
+### project.name_suffix
+
+Suffix to add to project ID. Only used when `use_constants` is true.
+
+Type: string
+
+### project.project_id
+
+ID of project to create. Only used when `use_constants` is false.
+
+Type: string
+
+### project.shared_vpc_attachment
+
+If set, treats this project as a shared VPC service project.
+
+Type: object
+
+### project.shared_vpc_attachment.host_project_id
+
+ID of host project to connect this project to.
+
+Type: string
+
+### project.shared_vpc_attachment.subnets
+
+Subnets within the host project to grant this project access to.
+
+Type: array(object)
+
+### project.shared_vpc_attachment.subnets.compute_region
+
+Region of subnet.
+
+Type: string
+
+### project.shared_vpc_attachment.subnets.name
+
+Name of subnet.
+
+Type: string
+
 ### pubsub_topics
 
 [Module](https://github.com/terraform-google-modules/terraform-google-pubsub)

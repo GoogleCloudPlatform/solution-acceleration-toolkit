@@ -68,28 +68,13 @@ template "main_module" {
 }
 
 {{if has $deployment "resources"}}
-template "project" {
-  component_path = "../components/project"
-  output_path    = "{{$deployment.name}}/modules/main"
+template "resources" {
+  recipe_path = "./resources.hcl"
+  output_path = "{{$deployment.name}}/modules/main"
   data = {
     use_constants = true
     parent_type   = "folder"
   }
-  flatten {
-    key   = "deployments"
-    index = {{$i}}
-  }
-  flatten {
-    key = "resources"
-  }
-  flatten {
-    key = "project"
-  }
-}
-
-template "resources" {
-  recipe_path = "./resources.hcl"
-  output_path = "{{$deployment.name}}/modules/main"
   flatten {
     key   = "deployments"
     index = {{$i}}
