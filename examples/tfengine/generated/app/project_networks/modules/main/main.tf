@@ -27,6 +27,7 @@ module "project" {
   version = "~> 9.2.0"
 
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  org_id                  = ""
   folder_id               = local.constants.folder_id
   billing_account         = local.constants.billing_account
   lien                    = true

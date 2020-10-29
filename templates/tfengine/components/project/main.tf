@@ -25,6 +25,7 @@ module "project" {
   {{- if get . "use_constants"}}
 
   name            = "${local.constants.project_prefix}-${local.constants.env_code}-{{.name_suffix}}"
+  org_id          = ""
   folder_id       = local.constants.folder_id
   billing_account = local.constants.billing_account
   {{- else}}
