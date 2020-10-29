@@ -42,11 +42,24 @@ module "project" {
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
+
   {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true
   {{- end}}
+
   {{- if has . "shared_vpc_attachment"}}
-  {{$host := .shared_vpc_attachment.host_project_id}}
+  {{- if get . "use_constants"}}
+  {{$host := "${local.constants.project_prefix}-${local.constants.env_code}-(get .shared_vpc_attachment.host_name_suffix)"}}
+  shared_vpc              = "{{$host}}"
+  {{- if has . "shared_vpc_attachment.subnets"}}
+  shared_vpc_subnets = [
+    {{- range get . "shared_vpc_attachment.subnets"}}
+    "projects/{{$host}}/regions/${local.constants.compute_region}/subnetworks/{{.name}}",
+    {{- end}}
+  ]
+  {{- end}}
+  {{- else}}
+  {{$host := get .shared_vpc_attachment "host_project_id"}}
   shared_vpc              = "{{$host}}"
   {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [
@@ -55,6 +68,7 @@ module "project" {
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
   ]
+  {{- end}}
   {{- end}}
   {{- end}}
   activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}

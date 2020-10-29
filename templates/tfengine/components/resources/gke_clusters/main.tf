@@ -20,7 +20,11 @@ module "{{resourceName . "name"}}" {
   # Required.
   name                   = "{{.name}}"
   project_id             = module.project.project_id
-  region                 = "{{get . "gke_region" $.gke_region}}"
+  {{- if get . "use_constants"}}
+  region                 = local.constants.gke_region
+  {{- else}}
+  region                 = "{{get . "gke_region" (get $ "gke_region")}}"
+  {{- end}}
   regional               = true
   {{hclField . "network_project_id"}}
   network                = "{{.network}}"

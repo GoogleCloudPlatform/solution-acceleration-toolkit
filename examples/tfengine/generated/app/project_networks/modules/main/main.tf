@@ -26,14 +26,15 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.2.0"
 
-  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
-  org_id                  = ""
-  folder_id               = local.constants.folder_id
-  billing_account         = local.constants.billing_account
-  lien                    = true
-  default_service_account = "keep"
-  skip_gcloud_download    = true
-  activate_apis           = ["compute.googleapis.com"]
+  name                           = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  org_id                         = ""
+  folder_id                      = local.constants.folder_id
+  billing_account                = local.constants.billing_account
+  lien                           = true
+  default_service_account        = "keep"
+  skip_gcloud_download           = true
+  enable_shared_vpc_host_project = true
+  activate_apis                  = ["compute.googleapis.com"]
 }
 
 module "example_network" {

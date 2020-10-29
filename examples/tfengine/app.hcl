@@ -25,7 +25,9 @@ template "app" {
         billing_account = "000"
         project_prefix  = "example-prefix"
         state_bucket    = "example-state"
-        region          = "us-central1"
+        compute_region  = "us-central1"
+        gke_region      = "us-central1"
+        storage_region  = "us-central1"
       }
       dev = {
         env_code  = "d"
@@ -41,7 +43,8 @@ template "app" {
         name = "project_networks",
         resources = {
           project = {
-            name_suffix = "networks"
+            name_suffix        = "networks"
+            is_shared_vpc_host = true
             apis = ["compute.googleapis.com"]
           }
           compute_networks = [{
@@ -60,6 +63,33 @@ template "app" {
       },
       {
         name = "project_apps",
+        resources = {
+          project = {
+            name_suffix        = "apps"
+            shared_vpc_attachment = {
+              host_name_suffix = "networks"
+            }
+            apis = ["compute.googleapis.com"]
+          }
+          gke_clusters = [{
+            name                   = "example-gke-cluster"
+            network_project_id     = "example-prod-networks"
+            network                = "example-network"
+            subnet                 = "example-gke-subnet"
+            ip_range_pods_name     = "example-pods-range"
+            ip_range_services_name = "example-services-range"
+            master_ipv4_cidr_block = "192.168.0.0/28"
+            service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
+            labels = {
+              type = "no-phi"
+            }
+          }]
+          binary_authorization = {
+            admission_whitelist_patterns = [{
+              name_pattern = "gcr.io/cloudsql-docker/*"
+            }]
+          }
+        }
       },
     ]
   }

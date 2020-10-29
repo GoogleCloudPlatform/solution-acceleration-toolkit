@@ -77,7 +77,7 @@ module "state_bucket" {
 
   name       = local.constants.state_bucket
   project_id = module.project.project_id
-  location   = local.constants.region
+  location   = local.constants.storage_region
 }
 
 # Project level IAM permissions for devops project owners.
