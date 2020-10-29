@@ -46,7 +46,7 @@ locals {
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.1.0"
-  name                    = "${local.constants.project_prefix}-devops-${local.constants.env_code}"
+  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
   org_id                  = ""
   folder_id               = local.constants.folder_id
   billing_account         = local.constants.billing_account

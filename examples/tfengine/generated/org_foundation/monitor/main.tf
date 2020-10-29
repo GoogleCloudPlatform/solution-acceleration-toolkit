@@ -37,8 +37,7 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  activate_apis = [
-  ]
+  activate_apis           = []
 }
 
 locals {

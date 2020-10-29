@@ -93,7 +93,6 @@ module "example_network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
-
     {
       subnet_name           = "example-gke-subnet"
       subnet_ip             = "10.2.0.0/16"
@@ -101,7 +100,6 @@ module "example_network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
-
     {
       subnet_name           = "example-instance-subnet"
       subnet_ip             = "10.3.0.0/16"
@@ -109,7 +107,6 @@ module "example_network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
-
   ]
   secondary_ranges = {
     "example-gke-subnet" = [
@@ -124,7 +121,6 @@ module "example_network" {
     ],
   }
 }
-
 module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 4.1.0"
