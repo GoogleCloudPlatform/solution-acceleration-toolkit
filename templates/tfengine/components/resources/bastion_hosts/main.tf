@@ -19,7 +19,11 @@ module "{{resourceName . "name"}}" {
 
   name         = "{{.name}}"
   project      = module.project.project_id
+  {{- if get . "use_constants"}}
+  zone         = local.constants.compute_region
+  {{- else}}
   zone         = "{{get . "compute_region" $.compute_region}}-{{get . "compute_zone" $.compute_zone}}"
+  {{- end}}
   {{if has . "network_project_id" -}}
   host_project = "{{.network_project_id}}"
   {{else -}}

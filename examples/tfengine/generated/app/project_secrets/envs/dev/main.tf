@@ -12,23 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The constants module contains shared values across multiple Terraform deployments.
-output "values" {
-  value = {
-    dev = {
-      env_code  = "d"
-      folder_id = "456"
-    }
-    shared = {
-      billing_account  = "000"
-      compute_region   = "us-central1"
-      env_code         = "s"
-      folder_id        = "123"
-      gke_region       = "us-central1"
-      project_prefix   = "example-prefix"
-      secret_locations = ["us-central1"]
-      state_bucket     = "example-state"
-      storage_location = "us-central1"
-    }
+terraform {
+  required_version = "~> 0.12.0"
+  required_providers {
+    google      = "~> 3.0"
+    google-beta = "~> 3.0"
   }
+  backend "gcs" {
+    bucket = "example-state"
+    prefix = "project_secrets/dev"
+  }
+}
+
+module "main" {
+  source = "../../modules/main"
+  env    = "dev"
 }

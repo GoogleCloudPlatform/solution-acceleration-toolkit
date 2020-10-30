@@ -25,8 +25,14 @@ module "{{resourceName . "name"}}" {
 
   name              = "{{.name}}"
   project_id        = module.project.project_id
+  {{- if get . "use_constants"}}
+  region            = local.constants.cloud_sql_region
+  zone              = local.constants.cloud_sql_zone
+  zone              = "{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
+  {{- else}}
   region            = "{{get . "cloud_sql_region" $.cloud_sql_region}}"
   zone              = "{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
+  {{- end}}
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "{{$network}}"

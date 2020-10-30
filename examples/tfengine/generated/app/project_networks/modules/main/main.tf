@@ -19,6 +19,7 @@ module "constants" {
 locals {
   constants = merge(module.constants.values.shared, module.constants.values[var.env])
 }
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control

@@ -19,7 +19,11 @@ module "{{resourceName . "name"}}" {
 
   name       = "{{.name}}"
   project_id = module.project.project_id
+  {{- if get . "use_constants"}}
+  location            = local.constants.storage_location
+  {{- else}}
   location   = "{{get . "storage_location" $.storage_location}}"
+  {{- end}}
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   labels = {

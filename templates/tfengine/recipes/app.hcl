@@ -65,6 +65,10 @@ template "env" {
 template "main_module" {
   component_path = "../components/app/main_module"
   output_path    = "{{$deployment.name}}/modules/main"
+  flatten {
+    key   = "deployments"
+    index = {{$i}}
+  }
 }
 
 {{if has $deployment "resources"}}

@@ -20,14 +20,15 @@ template "app" {
   data = {
     constants = {
       shared = {
-        env_code        = "s"
-        folder_id       = "123"
-        billing_account = "000"
-        project_prefix  = "example-prefix"
-        state_bucket    = "example-state"
-        compute_region  = "us-central1"
-        gke_region      = "us-central1"
-        storage_region  = "us-central1"
+        env_code          = "s"
+        folder_id         = "123"
+        billing_account   = "000"
+        project_prefix    = "example-prefix"
+        state_bucket      = "example-state"
+        compute_region    = "us-central1"
+        gke_region        = "us-central1"
+        storage_location  = "us-central1"
+        secret_locations  = ["us-central1"]
       }
       dev = {
         env_code  = "d"
@@ -39,6 +40,32 @@ template "app" {
       devops_owners = ["devops-owners-group@example.com"]
     }
     deployments = [
+      {
+        name = "project_secrets",
+        resources = {
+          project = {
+            name_suffix = "secrets"
+            apis = ["secretmanager.googleapis.com"]
+          }
+          secrets = [
+            {
+              secret_id = "manual-sql-db-user"
+            },
+            {
+              secret_id   = "auto-sql-db-password"
+              secret_data = "$${random_password.db.result}" // Use $$ to escape reference.
+            },
+          ]
+        }
+        terraform_addons = {
+      raw_config = <<EOF
+resource "random_password" "db" {
+  length = 16
+  special = true
+}
+EOF
+        }
+      },
       {
         name = "project_networks",
         resources = {
