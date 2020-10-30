@@ -37,15 +37,30 @@ template "app" {
       devops_owners = ["devops-owners-group@example.com"]
     }
     deployments = [
-     {
-       name = "project_networks",
-     },
-     {
-       name = "project_data",
-     },
-     {
-       name = "project_apps",
-     },
+      {
+        name = "project_networks",
+        resources = {
+          project = {
+            name_suffix = "networks"
+            apis = ["compute.googleapis.com"]
+          }
+          compute_networks = [{
+            name = "example-network"
+            subnets = [
+              {
+                name     = "example-gke-subnet"
+                ip_range = "10.1.0.0/16"
+              },
+            ]
+          }]
+        }
+      },
+      {
+        name = "project_data",
+      },
+      {
+        name = "project_apps",
+      },
     ]
   }
 }

@@ -43,9 +43,7 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  activate_apis = [
-    "secretmanager.googleapis.com",
-  ]
+  activate_apis           = ["secretmanager.googleapis.com"]
 }
 
 resource "google_secret_manager_secret" "manual_sql_db_user" {
