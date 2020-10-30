@@ -123,7 +123,7 @@ module "example_network" {
 }
 module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
