@@ -28,10 +28,10 @@ module "{{$resource_name}}" {
     {
       subnet_name           = "{{.name}}"
       subnet_ip             = "{{.ip_range}}"
-      {{- if get . "use_constants"}}
+      {{- if get $ "use_constants"}}
       subnet_region         = local.constants.compute_region
       {{- else}}
-      subnet_region         = "{{get . "compute_region" (get $ "compute_region")}}"
+      subnet_region         = "{{get . "compute_region" $.compute_region}}"
       {{- end}}
       subnet_flow_logs      = true
       subnet_private_access = true

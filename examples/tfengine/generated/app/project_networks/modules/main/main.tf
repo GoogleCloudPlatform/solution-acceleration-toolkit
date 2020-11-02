@@ -38,6 +38,33 @@ module "project" {
   activate_apis                  = ["compute.googleapis.com"]
 }
 
+module "bastion_vm" {
+  source  = "terraform-google-modules/bastion-host/google"
+  version = "~> 2.10.0"
+
+  name         = "bastion-vm"
+  project      = module.project.project_id
+  zone         = local.constants.compute_region
+  host_project = module.project.project_id
+  network      = module.example_network.network.network.self_link
+  subnet       = module.example_network.subnets["us-central1/example-bastion-subnet"].self_link
+  members      = ["group:bastion-accessors@example.com"]
+  image_family = "ubuntu-2004-lts"
+
+  image_project = "ubuntu-os-cloud"
+
+
+
+
+  startup_script = <<EOF
+    sudo apt-get -y update
+    sudo apt-get -y install mysql-client
+    sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+    sudo chmod +x /usr/local/bin/cloud_sql_proxy
+
+EOF
+}
+
 module "example_network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.5.0"
@@ -47,11 +74,69 @@ module "example_network" {
 
   subnets = [
     {
-      subnet_name           = "example-gke-subnet"
+      subnet_name           = "example-bastion-subnet"
       subnet_ip             = "10.1.0.0/16"
-      subnet_region         = "<no value>"
+      subnet_region         = local.constants.compute_region
       subnet_flow_logs      = true
       subnet_private_access = true
+    },
+    {
+      subnet_name           = "example-gke-subnet"
+      subnet_ip             = "10.2.0.0/16"
+      subnet_region         = local.constants.compute_region
+      subnet_flow_logs      = true
+      subnet_private_access = true
+    },
+    {
+      subnet_name           = "example-instance-subnet"
+      subnet_ip             = "10.3.0.0/16"
+      subnet_region         = local.constants.compute_region
+      subnet_flow_logs      = true
+      subnet_private_access = true
+    },
+  ]
+  secondary_ranges = {
+    "example-gke-subnet" = [
+      {
+        range_name    = "example-pods-range"
+        ip_cidr_range = "172.16.0.0/14"
+      },
+      {
+        range_name    = "example-services-range"
+        ip_cidr_range = "172.20.0.0/14"
+      },
+    ],
+  }
+}
+module "cloud_sql_private_service_access_example_network" {
+  source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
+  version = "~> 4.1.0"
+
+  project_id  = module.project.project_id
+  vpc_network = module.example_network.network_name
+}
+
+module "example_router" {
+  source  = "terraform-google-modules/cloud-router/google"
+  version = "~> 0.3.0"
+
+  name    = "example-router"
+  project = module.project.project_id
+  region  = local.constants.compute_region
+  network = module.example_network.network.network.self_link
+
+  nats = [
+    {
+      name                               = "example-nat"
+      source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+
+      subnetworks = [
+        {
+          name                     = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+          source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
+          secondary_ip_range_names = []
+        },
+      ]
     },
   ]
 }

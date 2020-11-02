@@ -21,6 +21,8 @@ output "values" {
     }
     shared = {
       billing_account  = "000"
+      cloud_sql_region = "us-central1"
+      cloud_sql_zone   = "a"
       compute_region   = "us-central1"
       env_code         = "s"
       folder_id        = "123"

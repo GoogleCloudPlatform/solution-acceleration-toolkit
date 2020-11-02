@@ -12,16 +12,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
+{{- $rnKey := "name"}}
+{{- if get $ "use_constants"}}
+{{- $rnKey = "name_suffix"}}
+{{- end}}
+
 {{range get . "storage_buckets"}}
-module "{{resourceName . "name"}}" {
+module "{{resourceName . $rnKey}}" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
+
+  {{- if get $ "use_constants"}}
+  name       = "${local.constants.project_prefix}-${local.constants.env_code}-{{.name_suffix}}"
+  project_id = module.project.project_id
+  location   = local.constants.storage_location
+  {{- else}}
   name       = "{{.name}}"
   project_id = module.project.project_id
-  {{- if get . "use_constants"}}
-  location            = local.constants.storage_location
-  {{- else}}
   location   = "{{get . "storage_location" $.storage_location}}"
   {{- end}}
 

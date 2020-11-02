@@ -19,7 +19,7 @@ module "{{resourceName . "name"}}" {
 
   name         = "{{.name}}"
   project      = module.project.project_id
-  {{- if get . "use_constants"}}
+  {{- if get $ "use_constants"}}
   region            = local.constants.compute_region
   {{- else}}
   region       = "{{get . "compute_region" $.compute_region}}"

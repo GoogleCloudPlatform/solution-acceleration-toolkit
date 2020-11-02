@@ -1042,9 +1042,6 @@ schema = {
       type        = "array"
       additionalProperties = false
       items = {
-        required = [
-          "name"
-        ]
         properties = {
           name = {
             description = "Name of storage bucket."
