@@ -39,7 +39,7 @@ template "app" {
     }
     devops = {
       admins_group  = "admins@example.com"
-      devops_owners = ["devops-owners-group@example.com"]
+      devops_owners = ["group:devops-owners-group@example.com"]
     }
     deployments = [
       {
