@@ -16,6 +16,7 @@
 package tfengine
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -79,26 +80,31 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	if opts.AddLicenses {
-		if err := licenseutil.AddLicense(tmpDir); err != nil {
-			return fmt.Errorf("add license header: %v", err)
-		}
-	}
-
 	if err := os.MkdirAll(outPath, 0755); err != nil {
 		return fmt.Errorf("failed to mkdir %q: %v", outPath, err)
 	}
 
-	if err := copy.Copy(tmpDir, outPath); err != nil {
-		return fmt.Errorf("copy temp dir to output dir: %v", err)
+	var errs []string
+
+	if opts.AddLicenses {
+		if err := licenseutil.AddLicense(tmpDir); err != nil {
+			errs = append(errs, fmt.Sprintf("add license header: %v", err))
+		}
 	}
 
 	if opts.Format {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, outPath); err != nil {
-			return fmt.Errorf("format output dir: %v", err)
+			errs = append(errs, fmt.Sprintf("format output dir: %v", err))
 		}
 	}
 
+	if err := copy.Copy(tmpDir, outPath); err != nil {
+		errs = append(errs, fmt.Sprintf("copy temp dir to output dir: %v", err))
+	}
+
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, "\n"))
+	}
 	return nil
 }
 
