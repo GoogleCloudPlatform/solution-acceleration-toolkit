@@ -35,7 +35,7 @@ module "project" {
   default_service_account = "keep"
   skip_gcloud_download    = true
 
-  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-(get .shared_vpc_attachment.host_name_suffix)"
+  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-(get .shared_vpc_attachment.host_project_suffix)"
   activate_apis = []
 }
 

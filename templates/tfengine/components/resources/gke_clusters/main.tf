@@ -27,6 +27,9 @@ module "{{resourceName . "name"}}" {
   {{- end}}
   regional               = true
   {{hclField . "network_project_id"}}
+  {{- if has . "network_project_suffix"}}
+  network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}"
+  {{- end}}
   network                = "{{.network}}"
   subnetwork             = "{{.subnet}}"
   ip_range_pods          = "{{.ip_range_pods_name}}"

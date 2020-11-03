@@ -139,7 +139,7 @@ EOF
           project = {
             name_suffix = "data"
             shared_vpc_attachment = {
-              host_name_suffix = "networks"
+              host_project_suffix = "networks"
             }
           }
           bigquery_datasets = [{
@@ -255,7 +255,7 @@ EOF
           project = {
             name_suffix        = "apps"
             shared_vpc_attachment = {
-              host_name_suffix = "networks"
+              host_project_suffix = "networks"
             }
             apis = ["compute.googleapis.com"]
           }

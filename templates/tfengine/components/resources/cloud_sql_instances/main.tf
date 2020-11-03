@@ -16,6 +16,8 @@ limitations under the License. */ -}}
 {{$network := .network -}}
 {{if has . "network_project_id" -}}
 {{$network = printf "projects/%s/global/networks/%s" .network_project_id .network -}}
+{{else if has . "network_project_suffix" -}}
+{{$network = printf "projects/${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}/global/networks/{{.network}}" -}}
 {{end -}}
 
 {{if eq .type "mysql" -}}
