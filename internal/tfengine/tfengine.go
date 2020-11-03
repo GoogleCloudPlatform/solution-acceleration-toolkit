@@ -93,7 +93,7 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 
 	if opts.Format {
-		if err := hcl.FormatDir(&runner.Default{Quiet: true}, outPath); err != nil {
+		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			errs = append(errs, fmt.Sprintf("format output dir: %v", err))
 		}
 	}
