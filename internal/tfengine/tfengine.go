@@ -79,12 +79,6 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	if opts.Format {
-		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
-			return err
-		}
-	}
-
 	if opts.AddLicenses {
 		if err := licenseutil.AddLicense(tmpDir); err != nil {
 			return fmt.Errorf("add license header: %v", err)
@@ -95,7 +89,17 @@ func Run(confPath, outPath string, opts *Options) error {
 		return fmt.Errorf("failed to mkdir %q: %v", outPath, err)
 	}
 
-	return copy.Copy(tmpDir, outPath)
+	if err := copy.Copy(tmpDir, outPath); err != nil {
+		return fmt.Errorf("copy temp dir to output dir: %v", err)
+	}
+
+	if opts.Format {
+		if err := hcl.FormatDir(&runner.Default{Quiet: true}, outPath); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[string]bool) error {
