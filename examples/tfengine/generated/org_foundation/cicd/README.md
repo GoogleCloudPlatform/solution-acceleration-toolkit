@@ -14,16 +14,19 @@ to detect changes in the repo, trigger builds, and run the workloads.
     Terraform Engine. Only the Terraform resources in the current directory,
     that is, the `cicd/` directory under root, need to be deployed manually.
 
-1. Before deploying CICD Terraform resources, install the Cloud Build app and
+1. If your VCS is GitHub, first install the Cloud Build app and
     [connect your GitHub repository](https://console.cloud.google.com/cloud-build/triggers/connect)
     to your Cloud project by following the steps in
     [Installing the Cloud Build app](https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app).
     To perform this operation, you need Admin permission in that GitHub
     repository. This can't be done through automation.
 
-1. After the GitHub repo is connected, run the following commands in this
-    directory to enable the necessary APIs, grant the Cloud Build service
-    account the necessary permissions, and create Cloud Build triggers:
+    If your VCS is Cloud Source Repository (CSR), proceed directly to the next
+    step.
+
+1. Run the following commands in this directory to enable the necessary APIs,
+    grant the Cloud Build service account the necessary permissions, and create
+    Cloud Build triggers:
 
     ```shell
     terraform init
@@ -43,8 +46,8 @@ Two presubmit and one postsubmit triggers are created by default.
   * This also performs a non-blocking check for resource deletions. These
         are worth reviewing, as deletions are potentially destructive.
 * \[Postsubmit\] `tf-apply`: Apply the terraform configs that are checked into
-    the Github repo. This trigger is only applicable post-submit. When this
-    trigger is set in the Terraform engine config, the Cloud Build service
+    the config source repo. This trigger is only applicable post-submit. When
+    this trigger is set in the Terraform engine config, the Cloud Build service
     account is given broader permissions to be able to make changes to the
     infrastructure.
 
