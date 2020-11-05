@@ -57,10 +57,10 @@ module "bastion_vm" {
 
 
   startup_script = <<EOF
-    sudo apt-get -y update
-    sudo apt-get -y install mysql-client
-    sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
-    sudo chmod +x /usr/local/bin/cloud_sql_proxy
+sudo apt-get -y update
+sudo apt-get -y install mysql-client
+sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
+sudo chmod +x /usr/local/bin/cloud_sql_proxy
 
 EOF
 }
