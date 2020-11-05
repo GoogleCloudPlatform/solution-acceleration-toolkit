@@ -20,17 +20,18 @@ output "values" {
       folder_id = "456"
     }
     shared = {
-      billing_account  = "000"
-      cloud_sql_region = "us-central1"
-      cloud_sql_zone   = "a"
-      compute_region   = "us-central1"
-      env_code         = "s"
-      folder_id        = "123"
-      gke_region       = "us-central1"
-      project_prefix   = "example-prefix"
-      secret_locations = ["us-central1"]
-      state_bucket     = "example-state"
-      storage_location = "us-central1"
+      billing_account     = "000"
+      cloud_sql_region    = "us-central1"
+      cloud_sql_zone      = "a"
+      compute_region      = "us-central1"
+      env_code            = "s"
+      folder_id           = "123"
+      gke_region          = "us-central1"
+      healthcare_location = "us-central1"
+      project_prefix      = "example-prefix"
+      secret_locations    = ["us-central1"]
+      state_bucket        = "example-state"
+      storage_location    = "us-central1"
     }
   }
 }

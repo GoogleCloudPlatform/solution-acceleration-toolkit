@@ -45,7 +45,7 @@ module "one_billion_ms_example_dataset" {
 
   dataset_id                  = "1billion_ms_example_dataset"
   project_id                  = module.project.project_id
-  location                    = local.constants.bigquery_region
+  location                    = local.constants.bigquery_location
   default_table_expiration_ms = 1e+09
   access = [
     {
@@ -84,7 +84,7 @@ module "example_healthcare_dataset" {
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
-  location = local.constants.healthcare_region
+  location = local.constants.healthcare_location
 
   iam_members = [
     {
