@@ -49,7 +49,7 @@ module "project" {
 
   {{- if has . "shared_vpc_attachment"}}
   {{- if get . "use_constants"}}
-  {{$host := "${local.constants.project_prefix}-${local.constants.env_code}-(get .shared_vpc_attachment.host_project_suffix)"}}
+  {{$host := printf "${local.constants.project_prefix}-${local.constants.env_code}-%s" .shared_vpc_attachment.host_project_suffix}}
   shared_vpc              = "{{$host}}"
   {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [

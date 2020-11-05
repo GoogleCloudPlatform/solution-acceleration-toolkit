@@ -38,8 +38,9 @@ template "app" {
       }
     }
     devops = {
-      admins_group  = "admins@example.com"
-      devops_owners = ["group:devops-owners-group@example.com"]
+      admins_group       = "admins@example.com"
+      devops_owners      = ["group:devops-owners-group@example.com"]
+      enable_gcs_backend = false # TODO(user): change to true after initial devops deployment.
     }
     deployments = [
       {

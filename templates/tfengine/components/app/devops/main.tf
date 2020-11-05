@@ -67,6 +67,9 @@ module "project" {
     "serviceusage.googleapis.com",
     "sourcerepo.googleapis.com",
     "sqladmin.googleapis.com",
+    {{- range get . "apis"}}
+    "{{.}}"
+    {{- end}}
   ]
 }
 
