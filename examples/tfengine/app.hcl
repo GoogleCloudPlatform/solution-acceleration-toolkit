@@ -235,21 +235,21 @@ EOF
         terraform_addons = {
           /* TODO(user): Uncomment and re-run the engine after deploying secrets.
           raw_config = <<EOF
-    data "google_secret_manager_secret_version" "db_user" {
-      provider = google-beta
+data "google_secret_manager_secret_version" "db_user" {
+  provider = google-beta
 
-      secret  = "manual-sql-db-user"
-      project = "example-prod-secrets"
-    }
+  secret  = "manual-sql-db-user"
+  project = "example-prod-secrets"
+}
 
-    data "google_secret_manager_secret_version" "db_password" {
-      provider = google-beta
+data "google_secret_manager_secret_version" "db_password" {
+  provider = google-beta
 
-      secret  = "auto-sql-db-password"
-      project = "example-prod-secrets"
-    }
-    EOF
-    */
+  secret  = "auto-sql-db-password"
+  project = "example-prod-secrets"
+}
+EOF
+*/
         }
       },
       {
