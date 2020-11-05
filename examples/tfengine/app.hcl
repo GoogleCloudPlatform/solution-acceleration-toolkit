@@ -25,6 +25,7 @@ template "app" {
         billing_account     = "000"
         project_prefix      = "example-prefix"
         state_bucket        = "example-state"
+        bigquery_location   = "us-east1" # No BigQuery region in us-central1.
         cloud_sql_region    = "us-central1"
         cloud_sql_zone      = "a"
         compute_region      = "us-central1"
