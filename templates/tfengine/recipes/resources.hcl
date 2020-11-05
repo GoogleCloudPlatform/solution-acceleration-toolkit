@@ -52,14 +52,18 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
           network_project_suffix = {
             description = <<EOF
               Suffix of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
@@ -247,14 +251,18 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
           network_project_suffix = {
             description = <<EOF
               Suffix of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
@@ -307,14 +315,18 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
           network_project_suffix = {
             description = <<EOF
               Suffix of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
@@ -680,14 +692,18 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
           network_project_suffix = {
             description = <<EOF
               Suffix of network project.
-              If both `network_project_id` and `network_project_suffix` are unset, the current project will be used.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
             EOF
             type        = "string"
           }
