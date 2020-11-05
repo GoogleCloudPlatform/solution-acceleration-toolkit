@@ -20,6 +20,7 @@ output "values" {
       folder_id = "456"
     }
     shared = {
+      bigquery_location   = "us-east1"
       billing_account     = "000"
       cloud_sql_region    = "us-central1"
       cloud_sql_zone      = "a"
