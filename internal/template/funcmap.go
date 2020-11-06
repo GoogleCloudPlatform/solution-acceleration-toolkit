@@ -16,6 +16,7 @@ package template
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -100,8 +101,8 @@ func merge(srcs ...map[string]interface{}) (interface{}, error) {
 }
 
 // resourceName builds a Terraform resource name.
-// GCP resource names often use "-" but Terraform resource names should use "_".
-// "." and "@" will also be replaced with "_".
+// invalid characters that are not allowed in terraform resource names such as
+// "-", ".", and "@" are replaced with "_".
 // The resource name is fetched from the given map and key.
 // To override the default behaviour, a user can set the key 'resource_name' in
 // given map, which will be given precedence.
@@ -119,12 +120,9 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 		return "", fmt.Errorf("resource name value %v is not a string", v)
 	}
 
-	r := strings.NewReplacer(
-		"-", "_",
-		".", "_",
-		"@", "_")
-
-	return r.Replace(name), nil
+	// invalidIDRE defines the invalid characters not allowed in terraform resource names.
+	invalidIDRE := regexp.MustCompile("[^a-z0-9_]")
+	return invalidIDRE.ReplaceAllString(strings.ToLower(name), "_"), nil
 }
 
 // alias for strings.Replace with the number of characters fixed to -1 (all).
