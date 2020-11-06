@@ -154,11 +154,11 @@ module "project_iam_members" {
   }
 }
 
-module "example_prod_bucket" {
+module "buckets_example_com" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "example.prod.bucket"
+  name       = "buckets.example.com"
   project_id = module.project.project_id
   location   = "us-central1"
 

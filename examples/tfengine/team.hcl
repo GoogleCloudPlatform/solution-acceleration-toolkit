@@ -301,7 +301,9 @@ template "project_data" {
         ]
       }
       storage_buckets = [{
-        name = "example.prod.bucket"
+        # See https://cloud.google.com/storage/docs/domain-name-verification#requirements
+        # for more information on bucket names that contain dots.
+        name = "buckets.example.com"
         labels = {
           type = "phi"
         }
