@@ -34,6 +34,9 @@ var funcMap = map[string]interface{}{
 	"now":          time.Now,
 }
 
+// invalidIDRE defines the invalid characters not allowed in terraform resource names.
+var invalidIDRE = regexp.MustCompile("[^a-z0-9_]")
+
 // get allows a template to optionally lookup a value from a dict.
 // If a value is not found, it will check for a single default.
 // If there is no default, it will return nil.
@@ -120,8 +123,6 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 		return "", fmt.Errorf("resource name value %v is not a string", v)
 	}
 
-	// invalidIDRE defines the invalid characters not allowed in terraform resource names.
-	invalidIDRE := regexp.MustCompile("[^a-z0-9_]")
 	return invalidIDRE.ReplaceAllString(strings.ToLower(name), "_"), nil
 }
 
