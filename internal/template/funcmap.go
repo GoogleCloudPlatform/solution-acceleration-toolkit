@@ -122,7 +122,6 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("resource name value %v is not a string", v)
 	}
-
 	return invalidIDRE.ReplaceAllString(strings.ToLower(name), "_"), nil
 }
 
