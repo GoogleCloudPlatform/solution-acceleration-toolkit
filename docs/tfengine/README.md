@@ -137,8 +137,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
         changes to the Terraform state.
 
     - {PREFIX}-auditors@{DOMAIN}: Members of this group get security reviewer
-        (metadata viewer) access to the entire org and viewer access to the
-        audit logs BigQuery and Cloud Storage resources.
+        (metadata viewer) access to the entire org or folder and viewer access
+        to the audit logs BigQuery and Cloud Storage resources.
 
     - {PREFIX}-cicd-viewers@{DOMAIN}: Members of this group can view CICD
         results such as presubmit speculative plan and postsubmit deployment
