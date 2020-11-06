@@ -301,7 +301,7 @@ template "project_data" {
         ]
       }
       storage_buckets = [{
-        name = "example-prod-bucket"
+        name = "example.prod.bucket"
         labels = {
           type = "phi"
         }

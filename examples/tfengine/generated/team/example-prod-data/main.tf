@@ -158,7 +158,7 @@ module "example_prod_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "example-prod-bucket"
+  name       = "example.prod.bucket"
   project_id = module.project.project_id
   location   = "us-central1"
 
