@@ -101,7 +101,7 @@ func merge(srcs ...map[string]interface{}) (interface{}, error) {
 }
 
 // resourceName builds a Terraform resource name.
-// invalid characters that are not allowed in terraform resource names such as
+// Invalid characters that are not allowed in terraform resource names such as
 // "-", ".", and "@" are replaced with "_".
 // The resource name is fetched from the given map and key.
 // To override the default behaviour, a user can set the key 'resource_name' in
