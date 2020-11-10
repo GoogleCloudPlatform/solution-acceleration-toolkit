@@ -19,3 +19,7 @@ module "constants" {
 locals {
   constants = merge(module.constants.values.shared, module.constants.values[var.env])
 }
+
+{{if has . "terraform_addons.raw_config" -}}
+{{.terraform_addons.raw_config}}
+{{end -}}
