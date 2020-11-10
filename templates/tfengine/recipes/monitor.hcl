@@ -36,6 +36,18 @@ schema = {
           description = "Domain for the Forseti instance."
           type        = "string"
         }
+        network_project_id = {
+          description = "Name of network project. If unset, will use the current project."
+          type        = "string"
+        }
+        network = {
+          description = "Name of the bastion host's network."
+          type        = "string"
+        }
+        subnet = {
+          description = "Name of the bastion host's subnet."
+          type        = "string"
+        }
         security_command_center_source_id = {
           description = <<EOF
             Security Command Center (SCC) Source ID used for Forseti notification.

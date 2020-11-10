@@ -28,6 +28,18 @@ Domain for the Forseti instance.
 
 Type: string
 
+### forseti.network
+
+Name of the bastion host's network.
+
+Type: string
+
+### forseti.network_project_id
+
+Name of network project. If unset, will use the current project.
+
+Type: string
+
 ### forseti.security_command_center_source_id
 
 Security Command Center (SCC) Source ID used for Forseti notification.
@@ -43,6 +55,12 @@ and obtain the SCC source ID;
 
 3) Add the ID through this field, generate the Terraform configs and
 deploy Forseti again.
+
+Type: string
+
+### forseti.subnet
+
+Name of the bastion host's subnet.
 
 Type: string
 

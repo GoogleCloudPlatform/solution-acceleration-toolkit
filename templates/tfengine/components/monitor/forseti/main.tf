@@ -11,47 +11,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */}}
-locals {
-  forseti_vpc_name    = "forseti-vpc"
-  forseti_subnet_name = "forseti-subnet"
-  forseti_subnet_key  = "{{.compute_region}}/${local.forseti_subnet_name}"
-}
-
-# TODO(xingao): fix the data dependency in Forseti CloudSQL sub module
-# https://github.com/forseti-security/terraform-google-forseti/blob/master/modules/cloudsql/main.tf
-# and reuse the network component instead of putting putting the network here.
-module "network" {
-  source  = "terraform-google-modules/network/google"
-  version = "~> 2.1"
-
-  project_id   = module.project.project_id
-  network_name = local.forseti_vpc_name
-  subnets = [{
-    subnet_name   = local.forseti_subnet_name
-    subnet_ip     = "10.10.10.0/24"
-    subnet_region = "{{.compute_region}}"
-  }]
-}
-
-module "router" {
-  source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.3.0"
-
-  name    = "forseti-router"
-  project = module.project.project_id
-  region  = "{{.compute_region}}"
-  network = module.network.network_name
-
-  nats = [{
-    name                               = "forseti-nat"
-    source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-    subnetworks = [{
-      name                     = module.network.subnets[local.forseti_subnet_key].self_link
-      source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
-      secondary_ip_range_names = []
-    }]
-  }]
-}
 
 module "forseti" {
   source  = "terraform-google-modules/forseti/google"
@@ -64,8 +23,9 @@ module "forseti" {
   {{- else}}
   folder_id  = "{{.parent_id}}"
   {{- end}}
-  network    = module.network.network_name
-  subnetwork = module.network.subnets[local.forseti_subnet_key].name
+  network_project = "{{.network_project_id}}"
+  network         = "{{.network}}"
+  subnetwork      = "{{.subnet}}"
   composite_root_resources = [
     {{- if eq .parent_type "organization"}}
     "organizations/{{.parent_id}}",
