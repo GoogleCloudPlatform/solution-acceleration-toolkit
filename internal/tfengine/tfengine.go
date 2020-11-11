@@ -86,7 +86,7 @@ func Run(confPath, outPath string, opts *Options) error {
 			return fmt.Errorf("mkdir %q: %v", outPath, err)
 		}
 	} else {
-		diffs, err := fileutil.DiffDirs(outPath, tmpDir)
+		diffs, err := fileutil.DiffDirs(tmpDir, outPath)
 		if err != nil {
 			return fmt.Errorf("failed to find diff between dir: %v", err)
 		}
