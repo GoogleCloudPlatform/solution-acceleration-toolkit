@@ -19,6 +19,7 @@ set -ex
 MODULES=(
   devops
   audit
+  example-prod-networks
   monitor
   org_policies
   folders
