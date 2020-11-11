@@ -130,6 +130,22 @@ func TestFlattenData(t *testing.T) {
 				"b": 1,
 			},
 		},
+		{
+			name: "inner",
+			input: map[string]interface{}{
+				"a": []interface{}{
+					map[string]interface{}{
+						"b": map[string]interface{}{
+							"c": 1,
+						}},
+				},
+			},
+			info: []*FlattenInfo{{Key: "a", Index: intPointer(0)}, {Key: "b"}},
+			want: map[string]interface{}{
+				"b": map[string]interface{}{"c": int(1)},
+				"c": 1,
+			},
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

@@ -16,6 +16,7 @@
 package tfengine
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -80,21 +81,9 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	if opts.Format {
-		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
-			return err
-		}
-	}
-
-	if opts.AddLicenses {
-		if err := licenseutil.AddLicense(tmpDir); err != nil {
-			return fmt.Errorf("add license header: %v", err)
-		}
-	}
-
 	if _, err := os.Stat(outPath); os.IsNotExist(err) {
 		if err := os.MkdirAll(outPath, 0755); err != nil {
-			return fmt.Errorf("failed to mkdir %q: %v", outPath, err)
+			return fmt.Errorf("mkdir %q: %v", outPath, err)
 		}
 	} else {
 		diffs, err := fileutil.DiffDirs(outPath, tmpDir)
@@ -105,7 +94,29 @@ func Run(confPath, outPath string, opts *Options) error {
 			log.Printf("Unmanaged files:\n%v", strings.Join(diffs, "\n"))
 		}
 	}
-	return copy.Copy(tmpDir, outPath)
+
+	var errs []string
+
+	if opts.AddLicenses {
+		if err := licenseutil.AddLicense(tmpDir); err != nil {
+			errs = append(errs, fmt.Sprintf("add license header: %v", err))
+		}
+	}
+
+	if opts.Format {
+		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
+			errs = append(errs, fmt.Sprintf("format output dir: %v", err))
+		}
+	}
+
+	if err := copy.Copy(tmpDir, outPath); err != nil {
+		errs = append(errs, fmt.Sprintf("copy temp dir to output dir: %v", err))
+	}
+
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, "\n"))
+	}
+	return nil
 }
 
 func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[string]bool) error {

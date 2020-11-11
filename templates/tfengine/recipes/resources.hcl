@@ -14,7 +14,7 @@
 
 schema = {
   title                = "Recipe for resources within projects"
-  additionalProperties = false
+  # additionalProperties = false # TODO(umairidris): add this field back once we trim the number of fields being set here in app.hcl
   properties = {
     state_bucket = {
       description = "Bucket to store remote state."
@@ -50,7 +50,21 @@ schema = {
             type        = "string"
           }
           network_project_id = {
-            description = "Name of network project. If unset, will use the current project."
+            description = <<EOF
+              Name of network project.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
+            type        = "string"
+          }
+          network_project_suffix = {
+            description = <<EOF
+              Suffix of network project.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
             type        = "string"
           }
           network = {
@@ -235,7 +249,21 @@ schema = {
             type        = "string"
           }
           network_project_id = {
-            description = "Name of network project. If unset, will use the current project."
+            description = <<EOF
+              Name of network project.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
+            type        = "string"
+          }
+          network_project_suffix = {
+            description = <<EOF
+              Suffix of network project.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
             type        = "string"
           }
           network = {
@@ -285,7 +313,21 @@ schema = {
             type        = "string"
           }
           network_project_id = {
-            description = "Name of network project. If unset, will use the current project."
+            description = <<EOF
+              Name of network project.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
+            type        = "string"
+          }
+          network_project_suffix = {
+            description = <<EOF
+              Suffix of network project.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
             type        = "string"
           }
           subnet = {
@@ -648,7 +690,21 @@ schema = {
             type        = "string"
           }
           network_project_id = {
-            description = "Name of network project. If unset, will use the current project."
+            description = <<EOF
+              Name of network project.
+              Only applicable if `use_constants` is false.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
+            type        = "string"
+          }
+          network_project_suffix = {
+            description = <<EOF
+              Suffix of network project.
+              Only applicable if `use_constants` is true.
+              If both `network_project_id` and `network_project_suffix` are unset,
+              the current project will be used.
+            EOF
             type        = "string"
           }
           network = {
@@ -1042,9 +1098,6 @@ schema = {
       type        = "array"
       additionalProperties = false
       items = {
-        required = [
-          "name"
-        ]
         properties = {
           name = {
             description = "Name of storage bucket."

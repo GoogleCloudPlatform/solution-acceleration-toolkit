@@ -28,6 +28,12 @@ Domain for the Forseti instance.
 
 Type: string
 
+### forseti.network
+
+Name of the Forseti network.
+
+Type: string
+
 ### forseti.security_command_center_source_id
 
 Security Command Center (SCC) Source ID used for Forseti notification.
@@ -46,17 +52,17 @@ deploy Forseti again.
 
 Type: string
 
+### forseti.subnet
+
+Name of the Forseti subnet.
+
+Type: string
+
 ### project
 
 Config of project to host monitoring resources
 
 Type: object
-
-### project.project_id
-
-ID of project.
-
-Type: string
 
 ### storage_location
 

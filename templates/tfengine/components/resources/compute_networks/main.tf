@@ -23,49 +23,51 @@ module "{{$resource_name}}" {
   network_name = "{{.name}}"
   project_id   = module.project.project_id
 
-  {{if has . "subnets" -}}
   subnets = [
-    {{range .subnets -}}
+    {{- range .subnets}}
     {
       subnet_name           = "{{.name}}"
       subnet_ip             = "{{.ip_range}}"
+      {{- if get $ "use_constants"}}
+      subnet_region         = local.constants.compute_region
+      {{- else}}
       subnet_region         = "{{get . "compute_region" $.compute_region}}"
+      {{- end}}
       subnet_flow_logs      = true
       subnet_private_access = true
     },
 
-    {{if has . "secondary_ranges" -}}
-    {{$has_secondary_ranges = true -}}
-    {{end -}}
-    {{end -}}
+    {{- if has . "secondary_ranges"}}
+    {{- $has_secondary_ranges = true}}
+    {{- end}}
+    {{- end}}
   ]
-  {{end -}}
 
-  {{if $has_secondary_ranges -}}
+  {{- if $has_secondary_ranges}}
   secondary_ranges = {
-    {{range .subnets -}}
-    {{if has . "secondary_ranges" -}}
+    {{- range .subnets}}
+    {{- if has . "secondary_ranges"}}
     "{{.name}}" = [
-      {{range .secondary_ranges -}}
+      {{- range .secondary_ranges}}
       {
         range_name    = "{{.name}}"
         ip_cidr_range = "{{.ip_range}}"
       },
-      {{end -}}
+      {{- end}}
     ],
-    {{end -}}
-    {{end -}}
+    {{- end}}
+    {{- end}}
   }
-  {{end -}}
+  {{- end}}
 }
 
-{{if has . "cloud_sql_private_service_access" -}}
+{{- if has . "cloud_sql_private_service_access"}}
 module "cloud_sql_private_service_access_{{$resource_name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   project_id  = module.project.project_id
   vpc_network = module.{{$resource_name}}.network_name
 }
-{{end -}}
-{{end -}}
+{{- end}}
+{{- end}}

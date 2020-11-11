@@ -42,7 +42,8 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  shared_vpc              = "example-prod-networks"
+
+  shared_vpc = "example-prod-networks"
   shared_vpc_subnets = [
     "projects/example-prod-networks/regions/us-central1/subnetworks/example-gke-subnet",
   ]
@@ -217,7 +218,7 @@ module "project_iam_members" {
 
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.4.0"
+  version = "~> 1.5.0"
 
   topic      = "foo-topic"
   project_id = module.project.project_id

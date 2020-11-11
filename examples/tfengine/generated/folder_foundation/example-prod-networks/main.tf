@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.12, <0.14"
+  required_version = "~> 0.12.0"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -39,43 +39,7 @@ module "project" {
   default_service_account        = "keep"
   skip_gcloud_download           = true
   enable_shared_vpc_host_project = true
-  activate_apis = [
-    "compute.googleapis.com",
-    "container.googleapis.com",
-    "iap.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "sqladmin.googleapis.com",
-  ]
-}
-
-module "bastion_vm" {
-  source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 2.10.0"
-
-  name         = "bastion-vm"
-  project      = module.project.project_id
-  zone         = "us-central1-a"
-  host_project = module.project.project_id
-  network      = module.example_network.network.network.self_link
-  subnet       = module.example_network.subnets["us-central1/example-bastion-subnet"].self_link
-  members      = ["group:bastion-accessors@example.com"]
-  image_family = "ubuntu-2004-lts"
-
-  image_project = "ubuntu-os-cloud"
-
-
-
-  labels = {
-    env = "prod"
-  }
-
-  startup_script = <<EOF
-sudo apt-get -y update
-sudo apt-get -y install mysql-client
-sudo wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/local/bin/cloud_sql_proxy
-sudo chmod +x /usr/local/bin/cloud_sql_proxy
-
-EOF
+  activate_apis                  = ["compute.googleapis.com"]
 }
 
 module "example_network" {
@@ -87,65 +51,32 @@ module "example_network" {
 
   subnets = [
     {
-      subnet_name           = "example-bastion-subnet"
+      subnet_name           = "forseti-subnet"
       subnet_ip             = "10.1.0.0/16"
       subnet_region         = "us-central1"
       subnet_flow_logs      = true
       subnet_private_access = true
     },
-    {
-      subnet_name           = "example-gke-subnet"
-      subnet_ip             = "10.2.0.0/16"
-      subnet_region         = "us-central1"
-      subnet_flow_logs      = true
-      subnet_private_access = true
-    },
-    {
-      subnet_name           = "example-instance-subnet"
-      subnet_ip             = "10.3.0.0/16"
-      subnet_region         = "us-central1"
-      subnet_flow_logs      = true
-      subnet_private_access = true
-    },
   ]
-  secondary_ranges = {
-    "example-gke-subnet" = [
-      {
-        range_name    = "example-pods-range"
-        ip_cidr_range = "172.16.0.0/14"
-      },
-      {
-        range_name    = "example-services-range"
-        ip_cidr_range = "172.20.0.0/14"
-      },
-    ],
-  }
-}
-module "cloud_sql_private_service_access_example_network" {
-  source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.2.0"
-
-  project_id  = module.project.project_id
-  vpc_network = module.example_network.network_name
 }
 
-module "example_router" {
+module "forseti_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.3.0"
 
-  name    = "example-router"
+  name    = "forseti-router"
   project = module.project.project_id
   region  = "us-central1"
   network = module.example_network.network.network.self_link
 
   nats = [
     {
-      name                               = "example-nat"
+      name                               = "forseti-nat"
       source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
       subnetworks = [
         {
-          name                     = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+          name                     = "${module.example_network.subnets["us-central1/forseti-subnet"].self_link}"
           source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
           secondary_ip_range_names = []
         },

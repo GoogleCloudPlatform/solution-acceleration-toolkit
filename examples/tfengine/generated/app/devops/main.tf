@@ -39,8 +39,8 @@ locals {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source                  = "terraform-google-modules/project-factory/google"
-  version                 = "~> 9.1.0"
-  name                    = "${local.constants.project_prefix}-devops-${local.constants.env_code}"
+  version                 = "~> 9.2.0"
+  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
   org_id                  = ""
   folder_id               = local.constants.folder_id
   billing_account         = local.constants.billing_account
@@ -71,7 +71,7 @@ module "state_bucket" {
 
   name       = local.constants.state_bucket
   project_id = module.project.project_id
-  location   = local.constants.region
+  location   = local.constants.storage_location
 }
 
 # Project level IAM permissions for devops project owners.

@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = ">=0.12, <0.14"
-  required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-  }
-  backend "gcs" {
-    bucket = "example-terraform-state"
-    prefix = "example-prod-secrets"
-  }
+module "constants" {
+  source = "../../../constants"
+}
+
+locals {
+  constants = merge(module.constants.values.shared, module.constants.values[var.env])
 }
 
 resource "random_password" "db" {
@@ -36,10 +32,10 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 9.2.0"
 
-  name                    = "example-prod-secrets"
+  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-secrets"
   org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
+  folder_id               = local.constants.folder_id
+  billing_account         = local.constants.billing_account
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
@@ -54,11 +50,11 @@ resource "google_secret_manager_secret" "manual_sql_db_user" {
 
   replication {
     user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
+      dynamic "replicas" {
+        for_each = toset(local.constants.secret_locations)
+        content {
+          location = replicas.value
+        }
       }
     }
   }
@@ -73,8 +69,11 @@ resource "google_secret_manager_secret" "auto_sql_db_password" {
 
   replication {
     user_managed {
-      replicas {
-        location = "us-central1"
+      dynamic "replicas" {
+        for_each = toset(local.constants.secret_locations)
+        content {
+          location = replicas.value
+        }
       }
     }
   }

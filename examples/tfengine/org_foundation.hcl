@@ -71,6 +71,7 @@ template "cicd" {
     managed_dirs = [
       "devops", // NOTE: CICD service account can only update APIs on the devops project.
       "audit",
+      "example-prod-networks",
       "monitor",
       "org_policies",
       "folders",
@@ -95,15 +96,59 @@ template "audit" {
   }
 }
 
+# Prod central networks project for team 1.
+template "project_networks" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./example-prod-networks"
+  data = {
+    project = {
+      project_id         = "example-prod-networks"
+      is_shared_vpc_host = true
+      apis = [
+        "compute.googleapis.com",
+      ]
+    }
+    resources = {
+      compute_networks = [{
+        name = "example-network"
+        subnets = [
+          {
+            name     = "forseti-subnet"
+            ip_range = "10.1.0.0/16"
+          },
+        ]
+      }]
+      compute_routers = [{
+        name    = "forseti-router"
+        network = "$${module.example_network.network.network.self_link}"
+        nats = [{
+          name                               = "forseti-nat"
+          source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+          subnetworks = [{
+            name                     = "$${module.example_network.subnets[\"us-central1/forseti-subnet\"].self_link}"
+            source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
+            secondary_ip_range_names = []
+          }]
+        }]
+      }]
+    }
+  }
+}
+
 template "monitor" {
   recipe_path = "{{$recipes}}/monitor.hcl"
   output_path = "./monitor"
   data = {
     project = {
       project_id = "example-monitor"
+      shared_vpc_attachment = {
+        host_project_id = "example-prod-networks"
+      }
     }
     forseti = {
-      domain = "example.com"
+      domain             = "example.com"
+      network            = "network"
+      subnet             = "forseti-subnet"
     }
   }
 }

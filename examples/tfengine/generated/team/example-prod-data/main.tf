@@ -38,7 +38,8 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  shared_vpc              = "example-prod-networks"
+
+  shared_vpc = "example-prod-networks"
   activate_apis = [
     "bigquery.googleapis.com",
     "compute.googleapis.com",
@@ -74,7 +75,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_mysql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   name              = "example-mysql-instance"
   project_id        = module.project.project_id
@@ -153,10 +154,11 @@ module "project_iam_members" {
   }
 }
 
-module "example_prod_bucket" {
-  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
 
+
+module "example_prod_bucket" {
+  source     = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version    = "~> 1.4"
   name       = "example-prod-bucket"
   project_id = module.project.project_id
   location   = "us-central1"

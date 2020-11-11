@@ -16,17 +16,24 @@ limitations under the License. */ -}}
 {{$network := .network -}}
 {{if has . "network_project_id" -}}
 {{$network = printf "projects/%s/global/networks/%s" .network_project_id .network -}}
+{{else if has . "network_project_suffix" -}}
+{{$network = printf "projects/${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}/global/networks/{{.network}}" -}}
 {{end -}}
 
 {{if eq .type "mysql" -}}
 module "{{resourceName . "name"}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.1.0"
+  version = "~> 4.2.0"
 
   name              = "{{.name}}"
   project_id        = module.project.project_id
+  {{- if get $ "use_constants"}}
+  region            = local.constants.cloud_sql_region
+  zone              = local.constants.cloud_sql_zone
+  {{- else}}
   region            = "{{get . "cloud_sql_region" $.cloud_sql_region}}"
   zone              = "{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
+  {{- end}}
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "{{$network}}"

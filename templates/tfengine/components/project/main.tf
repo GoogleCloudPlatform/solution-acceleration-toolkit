@@ -22,35 +22,54 @@ module "project" {
   version = "~> 9.2.0"
   {{- end}}
 
+  {{- if get . "use_constants"}}
+
+  name            = "${local.constants.project_prefix}-${local.constants.env_code}-{{.name_suffix}}"
+  org_id          = ""
+  folder_id       = local.constants.folder_id
+  billing_account = local.constants.billing_account
+  {{- else}}
+
   name                    = "{{.project_id}}"
-  {{if eq .parent_type "organization" -}}
+  {{- if eq .parent_type "organization"}}
   org_id                  = "{{.parent_id}}"
-  {{else -}}
+  {{- else}}
   org_id                  = ""
   folder_id               = "{{.parent_id}}"
-  {{end -}}
+  {{- end}}
   billing_account         = "{{.billing_account}}"
+  {{- end}}
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
   skip_gcloud_download    = true
-  {{if get . "is_shared_vpc_host" -}}
+
+  {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true
-  {{end -}}
-  {{if has . "shared_vpc_attachment" -}}
-  {{$host := .shared_vpc_attachment.host_project_id -}}
+  {{- end}}
+
+  {{- if has . "shared_vpc_attachment"}}
+  {{- if get . "use_constants"}}
+  {{$host := printf "${local.constants.project_prefix}-${local.constants.env_code}-%s" .shared_vpc_attachment.host_project_suffix}}
   shared_vpc              = "{{$host}}"
-  {{if has . "shared_vpc_attachment.subnets" -}}
+  {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [
-    {{range get . "shared_vpc_attachment.subnets" -}}
-    {{$region := get . "compute_region" $.compute_region -}}
+    {{- range get . "shared_vpc_attachment.subnets"}}
+    "projects/{{$host}}/regions/${local.constants.compute_region}/subnetworks/{{.name}}",
+    {{- end}}
+  ]
+  {{- end}}
+  {{- else}}
+  {{$host := get .shared_vpc_attachment "host_project_id"}}
+  shared_vpc              = "{{$host}}"
+  {{- if has . "shared_vpc_attachment.subnets"}}
+  shared_vpc_subnets = [
+    {{- range get . "shared_vpc_attachment.subnets"}}
+    {{- $region := get . "compute_region" $.compute_region}}
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
-    {{end -}}
+    {{- end}}
   ]
-  {{end -}}
-  {{end -}}
-  activate_apis = [
-    {{range get . "apis" -}}
-    "{{.}}",
-    {{end -}}
-  ]
+  {{- end}}
+  {{- end}}
+  {{- end}}
+  activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
 }

@@ -26,7 +26,7 @@ variable "source_repo_name" {
 
 variable "terraform_root" {
   description = "Path of the directory relative to the repo root containing the Terraform configs"
-  default     = "."
+  default     = "terraform"
 }
 
 variable "build_viewers" {
