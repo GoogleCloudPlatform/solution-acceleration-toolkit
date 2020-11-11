@@ -120,7 +120,7 @@ template "project_networks" {
       }]
       compute_routers = [{
         name    = "forseti-router"
-        network = "$${module.network.network.network.self_link}"
+        network = "$${module.example_network.network.network.self_link}"
         nats = [{
           name                               = "forseti-nat"
           source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
