@@ -42,11 +42,11 @@ module "project" {
   activate_apis                  = ["compute.googleapis.com"]
 }
 
-module "network" {
+module "example_network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 2.5.0"
 
-  network_name = "network"
+  network_name = "example-network"
   project_id   = module.project.project_id
 
   subnets = [
@@ -67,7 +67,7 @@ module "forseti_router" {
   name    = "forseti-router"
   project = module.project.project_id
   region  = "us-central1"
-  network = module.network.network.network.self_link
+  network = module.example_network.network.network.self_link
 
   nats = [
     {
