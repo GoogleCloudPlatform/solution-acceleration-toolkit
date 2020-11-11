@@ -19,7 +19,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -81,18 +80,8 @@ func Run(confPath, outPath string, opts *Options) error {
 		return err
 	}
 
-	if _, err := os.Stat(outPath); os.IsNotExist(err) {
-		if err := os.MkdirAll(outPath, 0755); err != nil {
-			return fmt.Errorf("mkdir %q: %v", outPath, err)
-		}
-	} else {
-		diffs, err := fileutil.DiffDirs(tmpDir, outPath)
-		if err != nil {
-			return fmt.Errorf("failed to find diff between dir: %v", err)
-		}
-		if len(diffs) > 0 {
-			log.Printf("Unmanaged files:\n%v", strings.Join(diffs, "\n"))
-		}
+	if err := os.MkdirAll(outPath, 0755); err != nil {
+		return fmt.Errorf("mkdir %q: %v", outPath, err)
 	}
 
 	var errs []string
