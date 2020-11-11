@@ -30,11 +30,11 @@ schema = {
           type        = "string"
         }
         network = {
-          description = "Name of the bastion host's network."
+          description = "Name of the Forseti network."
           type        = "string"
         }
         subnet = {
-          description = "Name of the bastion host's subnet."
+          description = "Name of the Forseti subnet."
           type        = "string"
         }
         security_command_center_source_id = {

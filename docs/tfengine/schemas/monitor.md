@@ -30,7 +30,7 @@ Type: string
 
 ### forseti.network
 
-Name of the bastion host's network.
+Name of the Forseti network.
 
 Type: string
 
@@ -54,7 +54,7 @@ Type: string
 
 ### forseti.subnet
 
-Name of the bastion host's subnet.
+Name of the Forseti subnet.
 
 Type: string
 
