@@ -121,7 +121,7 @@ template "project_networks" {
     }
     resources = {
       compute_networks = [{
-        name = "network"
+        name = "example-network"
         subnets = [
           {
             name     = "forseti-subnet"
