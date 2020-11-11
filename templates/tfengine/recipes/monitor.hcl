@@ -19,13 +19,6 @@ schema = {
     project = {
       description          = "Config of project to host monitoring resources"
       type                 = "object"
-      additionalProperties = false
-      properties = {
-        project_id = {
-          description = "ID of project."
-          type        = "string"
-        }
-      }
     }
     forseti = {
       description          = "Config for the Forseti instance."
@@ -34,10 +27,6 @@ schema = {
       properties = {
         domain = {
           description = "Domain for the Forseti instance."
-          type        = "string"
-        }
-        network_project_id = {
-          description = "Name of network project. If unset, will use the current project."
           type        = "string"
         }
         network = {
@@ -89,6 +78,9 @@ template "project" {
 
 template "forseti" {
   component_path = "../components/monitor/forseti"
+  data = {
+    network_project_id = "{{.project.shared_vpc_attachment.host_project_id}}"
+  }
   flatten {
     key = "forseti"
   }

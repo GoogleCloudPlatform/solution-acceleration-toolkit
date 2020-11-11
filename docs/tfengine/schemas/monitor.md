@@ -34,12 +34,6 @@ Name of the bastion host's network.
 
 Type: string
 
-### forseti.network_project_id
-
-Name of network project. If unset, will use the current project.
-
-Type: string
-
 ### forseti.security_command_center_source_id
 
 Security Command Center (SCC) Source ID used for Forseti notification.
@@ -69,12 +63,6 @@ Type: string
 Config of project to host monitoring resources
 
 Type: object
-
-### project.project_id
-
-ID of project.
-
-Type: string
 
 ### storage_location
 

@@ -28,7 +28,7 @@ terraform {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
+  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
   version = "~> 9.2.0"
 
   name                    = "example-monitor"
@@ -38,7 +38,9 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
   skip_gcloud_download    = true
-  activate_apis           = []
+
+  shared_vpc    = "example-prod-networks"
+  activate_apis = []
 }
 
 

@@ -152,10 +152,12 @@ template "monitor" {
   data = {
     project = {
       project_id = "example-monitor"
+      shared_vpc_attachment = {
+        host_project_id = "example-prod-networks"
+      }
     }
     forseti = {
       domain             = "example.com"
-      network_project_id = "example-prod-networks"
       network            = "network"
       subnet             = "forseti-subnet"
     }
