@@ -66,6 +66,12 @@ func TestDiffDirs(t *testing.T) {
 			d2Paths: []string{"dir1/", "dir1/file1.txt", "dir1/file3.txt", "dir3/"},
 			want:    []string{"dir1/file2.txt", "dir2"},
 		},
+		{
+			name:    "hidden dirs",
+			d1Paths: []string{"dir1/.terraform/file1.txt"},
+			d2Paths: []string{"dir1/"},
+			want:    nil,
+		},
 	}
 
 	for _, tc := range tests {

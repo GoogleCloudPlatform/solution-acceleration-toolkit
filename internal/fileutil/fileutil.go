@@ -98,6 +98,12 @@ func listDir(d string) (map[string]bool, error) {
 		if err != nil {
 			return err
 		}
+
+		// Skip hidden dirs e.g. .terraform/ and .git/
+		if info.IsDir() && strings.HasPrefix(info.Name(), ".") {
+			return filepath.SkipDir
+		}
+
 		// Trim the dir and separator so that the return value can be compared to other directories (e.g. in diff).
 		p := strings.TrimPrefix(strings.TrimPrefix(path, d), string(filepath.Separator))
 		fs[p] = true
