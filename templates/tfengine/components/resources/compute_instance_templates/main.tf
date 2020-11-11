@@ -14,7 +14,14 @@ limitations under the License. */ -}}
 
 {{range .compute_instance_templates}}
 {{$template_resource_name := resourceName . "name_prefix" -}}
-{{$network_project_id := get . "network_project_id" "${var.project_id}" -}}
+
+{{$network_project_id :=  "${module.project.project_id}" -}}
+{{if has . "network_project_id" -}}
+{{$network_project_id = .network_project_id -}}
+{{else if has . "network_project_suffix" -}}
+{{$network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}" -}}
+{{end -}}
+
 {{$subnet := .subnet -}}
 module "{{$template_resource_name}}" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"

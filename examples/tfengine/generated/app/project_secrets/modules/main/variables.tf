@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-admins_group = "admins@example.com"
-devops_owners = [
-  "group:devops-owners-group@example.com",
-]
+variable "env" {
+  description = "Name of environment being deployed."
+  type        = string
+}

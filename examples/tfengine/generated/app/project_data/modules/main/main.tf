@@ -19,3 +19,153 @@ module "constants" {
 locals {
   constants = merge(module.constants.values.shared, module.constants.values[var.env])
 }
+
+# Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
+# Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
+# Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
+module "project" {
+  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
+  version = "~> 9.2.0"
+
+  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-data"
+  org_id                  = ""
+  folder_id               = local.constants.folder_id
+  billing_account         = local.constants.billing_account
+  lien                    = true
+  default_service_account = "keep"
+  skip_gcloud_download    = true
+
+  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  activate_apis = []
+}
+
+module "one_billion_ms_example_dataset" {
+  source  = "terraform-google-modules/bigquery/google"
+  version = "~> 4.3.0"
+
+  dataset_id                  = "1billion_ms_example_dataset"
+  project_id                  = module.project.project_id
+  location                    = local.constants.bigquery_location
+  default_table_expiration_ms = 1e+09
+  access = [
+    {
+      role          = "roles/bigquery.dataOwner"
+      special_group = "projectOwners"
+    },
+    {
+      group_by_email = "example-readers@example.com"
+      role           = "roles/bigquery.dataViewer"
+    },
+  ]
+  dataset_labels = {
+    type = "phi"
+  }
+}
+
+module "example_mysql_instance" {
+  source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
+  version = "~> 4.2.0"
+
+  name              = "example-mysql-instance"
+  project_id        = module.project.project_id
+  region            = local.constants.cloud_sql_region
+  zone              = local.constants.cloud_sql_zone
+  availability_type = "REGIONAL"
+  database_version  = "MYSQL_5_7"
+  vpc_network       = "projects/example-prod-networks/global/networks/example-network"
+  user_labels = {
+    type = "no-phi"
+  }
+}
+
+module "example_healthcare_dataset" {
+  source  = "terraform-google-modules/healthcare/google"
+  version = "~> 1.0.0"
+
+  name     = "example-healthcare-dataset"
+  project  = module.project.project_id
+  location = local.constants.healthcare_location
+
+  iam_members = [
+    {
+      member = "group:example-healthcare-dataset-viewers@example.com"
+      role   = "roles/healthcare.datasetViewer"
+    },
+  ]
+  dicom_stores = [
+    {
+      name = "example-dicom-store"
+      labels = {
+        type = "phi"
+      }
+    }
+  ]
+  fhir_stores = [
+    {
+      name    = "example-fhir-store"
+      version = "R4"
+      iam_members = [
+        {
+          member = "group:example-fhir-viewers@example.com"
+          role   = "roles/healthcare.fhirStoreViewer"
+        },
+      ]
+      labels = {
+        type = "phi"
+      }
+    }
+  ]
+  hl7_v2_stores = [
+    {
+      name = "example-hl7-store"
+      labels = {
+        type = "phi"
+      }
+    }
+  ]
+}
+
+module "project_iam_members" {
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 6.3.0"
+
+  projects = [module.project.project_id]
+  mode     = "additive"
+
+  bindings = {
+    "roles/cloudsql.client" = [
+      "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
+    ],
+  }
+}
+
+
+
+module "example_prod_bucket" {
+  source     = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version    = "~> 1.4"
+  name       = "${local.constants.project_prefix}-${local.constants.env_code}-example-prod-bucket"
+  project_id = module.project.project_id
+  location   = local.constants.storage_location
+
+  labels = {
+    type = "phi"
+  }
+  lifecycle_rules = [
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 7
+        with_state = "ANY"
+      }
+    }
+  ]
+  iam_members = [
+    {
+      member = "group:example-readers@example.com"
+      role   = "roles/storage.objectViewer"
+    },
+  ]
+}
