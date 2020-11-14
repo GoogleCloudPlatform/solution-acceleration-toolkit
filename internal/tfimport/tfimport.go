@@ -25,7 +25,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/fileutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
@@ -513,7 +513,7 @@ type RunArgs struct {
 // Run executes the main tfimport logic.
 func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	// Expand the config path (ex. expand ~).
-	inputDir, err := pathutil.Expand(runArgs.InputDir)
+	inputDir, err := fileutil.Expand(runArgs.InputDir)
 	if err != nil {
 		return fmt.Errorf("expand path %q: %v", inputDir, err)
 	}

@@ -25,10 +25,10 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/fileutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/hcl"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/jsonschema"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/licenseutil"
-	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/pathutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/version"
@@ -48,11 +48,11 @@ type Options struct {
 // Run executes the main tfengine logic.
 func Run(confPath, outPath string, opts *Options) error {
 	var err error
-	confPath, err = pathutil.Expand(confPath)
+	confPath, err = fileutil.Expand(confPath)
 	if err != nil {
 		return err
 	}
-	outPath, err = pathutil.Expand(outPath)
+	outPath, err = fileutil.Expand(outPath)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 
 	if err := os.MkdirAll(outPath, 0755); err != nil {
-		return fmt.Errorf("failed to mkdir %q: %v", outPath, err)
+		return fmt.Errorf("mkdir %q: %v", outPath, err)
 	}
 
 	var errs []string
@@ -164,7 +164,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 
 	switch {
 	case ti.RecipePath != "":
-		rp, err := pathutil.Fetch(ti.RecipePath, pwd, cacheDir)
+		rp, err := fileutil.Fetch(ti.RecipePath, pwd, cacheDir)
 		if err != nil {
 			return err
 		}
@@ -178,7 +178,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 			return err
 		}
 		if !compat {
-			return fmt.Errorf("Binary version %v incompatible with template version constraint %v in %v", cmd.Version, rc.Version, rp)
+			return fmt.Errorf("binary version %v incompatible with template version constraint %v in %v", cmd.Version, rc.Version, rp)
 		}
 
 		// Validate the schema, if present.
@@ -200,7 +200,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 
 	case ti.ComponentPath != "":
 		// Fetch the component, which could be remote.
-		cp, err := pathutil.Fetch(ti.ComponentPath, pwd, cacheDir)
+		cp, err := fileutil.Fetch(ti.ComponentPath, pwd, cacheDir)
 		if err != nil {
 			return err
 		}
