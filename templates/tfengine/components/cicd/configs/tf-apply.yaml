@@ -19,6 +19,7 @@ timeout: 21600s
 
 substitutions:
     _TERRAFORM_ROOT: "."
+    _MANAGED_DIRS: ""
 
 steps:
   - name: "{{$cft}}"
@@ -28,6 +29,6 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-a", "plan", "-a", "apply -auto-approve"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "plan", "-a", "apply -auto-approve"]
     dir: "${_TERRAFORM_ROOT}"
     id: Apply

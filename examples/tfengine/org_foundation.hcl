@@ -55,26 +55,30 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    branch_name    = "master"
     terraform_root = "terraform"
-
-    # Prepare and enable default triggers.
-    triggers = {
-      validate = {}
-      plan     = {}
-      apply    = { run_on_push = false } # Do not auto run on push to branch
-    }
-
     build_viewers = [
       "group:example-cicd-viewers@example.com",
     ]
-    managed_dirs = [
-      "devops", // NOTE: CICD service account can only update APIs on the devops project.
-      "audit",
-      "example-prod-networks",
-      "monitor",
-      "org_policies",
-      "folders",
+
+    envs = [
+      {
+        name        = "prod"
+        branch_name = "master"
+        managed_dirs = [
+          "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "audit",
+          "example-prod-networks",
+          "monitor",
+          "org_policies",
+          "folders",
+        ]
+        # Prepare and enable default triggers.
+        triggers = {
+          validate = {}
+          plan     = {}
+          apply    = { run_on_push = false } # Do not auto run on push to branch
+        }
+      }
     ]
   }
 }
@@ -146,9 +150,9 @@ template "monitor" {
       }
     }
     forseti = {
-      domain             = "example.com"
-      network            = "network"
-      subnet             = "forseti-subnet"
+      domain  = "example.com"
+      network = "network"
+      subnet  = "forseti-subnet"
     }
   }
 }
