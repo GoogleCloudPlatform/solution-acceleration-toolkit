@@ -80,6 +80,9 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 
 		// Skip if there are no .tf files directly under the dir (without considering subdirs).
 		fs, err := ioutil.ReadDir(path)
+		if err != nil {
+			return fmt.Errorf("ioutil.ReadDir = %v", err)
+		}
 		hasTerraformFiles := false
 		for _, f := range fs {
 			if strings.HasSuffix(f.Name(), ".tf") {
