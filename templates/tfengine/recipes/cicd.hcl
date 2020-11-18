@@ -84,12 +84,13 @@ schema = {
       EOF
       type        = "array"
       items = {
+        type                 = "object"
+        additionalProperties = false
         required = [
           "name",
           "branch_name",
           "triggers",
         ]
-        additionalProperties = false
         properties = {
           name = {
             description = <<EOF

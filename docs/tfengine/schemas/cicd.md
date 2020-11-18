@@ -28,7 +28,7 @@ Type: string
 
 Config block for per-environment resources.
 
-Type: array()
+Type: array(object)
 
 ### envs.branch_name
 
