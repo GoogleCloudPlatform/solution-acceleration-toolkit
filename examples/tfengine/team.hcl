@@ -81,7 +81,7 @@ template "cicd" {
     envs = [
       {
         name        = "prod"
-        branch_name = "master"
+        branch_name = "main"
         # Prepare and enable default triggers.
         triggers = {
           validate = {}

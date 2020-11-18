@@ -63,7 +63,7 @@ template "cicd" {
     envs = [
       {
         name        = "prod"
-        branch_name = "master"
+        branch_name = "main"
         managed_dirs = [
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "audit",

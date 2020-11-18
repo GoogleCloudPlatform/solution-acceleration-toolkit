@@ -28,7 +28,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
@@ -58,7 +58,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
@@ -90,7 +90,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     push {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
@@ -120,7 +120,7 @@ resource "google_cloud_scheduler_job" "plan_scheduler_prod" {
       service_account_email = google_service_account.cloudbuild_scheduler_sa.email
     }
     uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.plan_scheduled_prod.id}:run"
-    body = base64encode("{\"branchName\":\"master\"}")
+    body = base64encode("{\"branchName\":\"main\"}")
   }
   depends_on = [
     google_project_service.services,
@@ -143,7 +143,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     push {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 

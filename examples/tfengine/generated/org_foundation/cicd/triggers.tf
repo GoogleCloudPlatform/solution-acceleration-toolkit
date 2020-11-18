@@ -28,7 +28,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
@@ -58,7 +58,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     pull_request {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
@@ -89,7 +89,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     owner = "GoogleCloudPlatform"
     name  = "example"
     push {
-      branch = "^master$"
+      branch = "^main$"
     }
   }
 
