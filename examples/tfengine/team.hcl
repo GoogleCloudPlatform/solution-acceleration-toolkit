@@ -72,27 +72,31 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    branch_name    = "master"
+
     terraform_root = "terraform"
-
-    # Prepare and enable default triggers.
-    triggers = {
-      validate = {}
-      plan     = {}
-      apply    = { run_on_push = false } # Do not auto run on push to branch
-    }
-
     build_viewers = [
       "group:example-cicd-viewers@example.com",
     ]
 
-    # Kubernetes intentionally left out as it cannot be deployed by CICD.
-    managed_dirs = [
-      "devops", // NOTE: CICD service account can only update APIs on the devops project.
-      "example-prod-secrets",
-      "example-prod-networks",
-      "example-prod-data",
-      "example-prod-apps",
+    envs = [
+      {
+        name        = "prod"
+        branch_name = "main"
+        # Prepare and enable default triggers.
+        triggers = {
+          validate = {}
+          plan     = {}
+          apply    = { run_on_push = false } # Do not auto run on push to branch
+        }
+        # Kubernetes intentionally left out as it cannot be deployed by CICD.
+        managed_dirs = [
+          "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "example-prod-secrets",
+          "example-prod-networks",
+          "example-prod-data",
+          "example-prod-apps",
+        ]
+      }
     ]
   }
 }
@@ -397,7 +401,7 @@ template "project_apps" {
         instances = [{
           name = "instance"
           access_configs = [{
-            nat_ip = "$${google_compute_address.static.address}"
+            nat_ip       = "$${google_compute_address.static.address}"
             network_tier = "PREMIUM"
           }]
         }]

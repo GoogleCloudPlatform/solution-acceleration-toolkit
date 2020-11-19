@@ -40,6 +40,7 @@ data "google_project" "devops" {
 }
 
 locals {
+  cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -76,14 +77,6 @@ locals {
   ]
 }
 
-locals {
-  # Covert "" and "/" to "." in case users use them to indicate root of the git repo.
-  terraform_root = trim((var.terraform_root == "" || var.terraform_root == "/") ? "." : var.terraform_root, "/")
-  # ./ to indicate root is not recognized by Cloud Build Trigger.
-  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
-  cloudbuild_sa         = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
-}
-
 # Cloud Build - API
 resource "google_project_service" "services" {
   for_each           = toset(local.services)
@@ -91,30 +84,48 @@ resource "google_project_service" "services" {
   service            = each.value
   disable_on_destroy = false
 }
-
-# IAM permissions to allow approvers and contributors to view the cloud build jobs.
-resource "google_project_iam_member" "cloudbuild_builds_viewers" {
-  for_each = toset(var.build_viewers)
-  project  = var.project_id
-  role     = "roles/cloudbuild.builds.viewer"
-  member   = each.value
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-# IAM permissions to allow approvers and contributors to view the cloud build logs.
+# IAM permissions to allow approvers and contributors to view the cloud build jobs and logs.
 # https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
-resource "google_project_iam_member" "cloudbuild_logs_viewers" {
-  for_each = toset(var.build_viewers)
-  project  = var.project_id
-  role     = "roles/viewer"
-  member   = each.value
+resource "google_project_iam_member" "cloudbuild_builds_viewers" {
+  for_each = toset([
+    "group:example-cicd-viewers@example.com",
+  ])
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.viewer"
+  member  = each.value
   depends_on = [
     google_project_service.services,
   ]
 }
 
+resource "google_project_iam_member" "cloudbuild_logs_viewers" {
+  for_each = toset([
+    "group:example-cicd-viewers@example.com",
+  ])
+  project = var.project_id
+  role    = "roles/viewer"
+  member  = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+
+
+# Grant Cloud Build Service Account access to the devops project.
+resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
+  for_each = toset(local.cloudbuild_devops_roles)
+  project  = var.project_id
+  role     = each.key
+  member   = local.cloudbuild_sa
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+
+
+# Cloud Build - Cloud Build Service Account IAM permissions
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
@@ -125,7 +136,6 @@ resource "google_billing_account_iam_member" "binding" {
   ]
 }
 
-# Cloud Build - Cloud Build Service Account IAM permissions
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
@@ -142,107 +152,6 @@ resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
   org_id   = 12345678
   role     = each.value
   member   = local.cloudbuild_sa
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-# Grant Cloud Build Service Account access to the devops project.
-resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
-  for_each = toset(local.cloudbuild_devops_roles)
-  project  = var.project_id
-  role     = each.key
-  member   = local.cloudbuild_sa
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-
-
-resource "google_cloudbuild_trigger" "validate" {
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-validate"
-  description = "Terraform validate job triggered on push event."
-
-  included_files = [
-    "${local.terraform_root_prefix}**",
-  ]
-
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^master$"
-    }
-  }
-
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = local.terraform_root
-  }
-
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-resource "google_cloudbuild_trigger" "plan" {
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-plan"
-  description = "Terraform plan job triggered on push event."
-
-  included_files = [
-    "${local.terraform_root_prefix}**",
-  ]
-
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^master$"
-    }
-  }
-
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-plan.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = local.terraform_root
-  }
-
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-resource "google_cloudbuild_trigger" "apply" {
-  disabled    = true
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-apply"
-  description = "Terraform apply job triggered on push event and/or schedule."
-
-  included_files = [
-    "${local.terraform_root_prefix}**",
-  ]
-
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^master$"
-    }
-  }
-
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = local.terraform_root
-  }
-
   depends_on = [
     google_project_service.services,
   ]

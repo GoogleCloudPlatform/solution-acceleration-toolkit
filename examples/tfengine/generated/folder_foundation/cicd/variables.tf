@@ -25,15 +25,3 @@ variable "state_bucket" {
   description = "Name of the Terraform state bucket"
   type        = string
 }
-
-variable "terraform_root" {
-  description = "Path of the directory relative to the repo root containing the Terraform configs"
-  default     = "."
-}
-
-variable "build_viewers" {
-  type        = list(string)
-  description = "List of IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results"
-  default     = []
-}
-
