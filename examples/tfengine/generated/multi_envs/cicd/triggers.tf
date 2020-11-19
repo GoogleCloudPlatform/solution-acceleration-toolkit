@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops dev/data"
+    _MANAGED_DIRS   = "devops dev/data"
   }
 
   depends_on = [
@@ -66,7 +66,7 @@ resource "google_cloudbuild_trigger" "plan_dev" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops dev/data"
+    _MANAGED_DIRS   = "devops dev/data"
   }
 
   depends_on = [
@@ -98,7 +98,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_dev" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops dev/data"
+    _MANAGED_DIRS   = "devops dev/data"
   }
 
   depends_on = [
@@ -150,7 +150,7 @@ resource "google_cloudbuild_trigger" "apply_dev" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops dev/data"
+    _MANAGED_DIRS   = "devops dev/data"
   }
 
   depends_on = [
@@ -182,7 +182,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops audit prod/data"
+    _MANAGED_DIRS   = "devops audit prod/data"
   }
 
   depends_on = [
@@ -212,7 +212,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops audit prod/data"
+    _MANAGED_DIRS   = "devops audit prod/data"
   }
 
   depends_on = [
@@ -244,7 +244,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops audit prod/data"
+    _MANAGED_DIRS   = "devops audit prod/data"
   }
 
   depends_on = [
@@ -297,7 +297,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = " devops audit prod/data"
+    _MANAGED_DIRS   = "devops audit prod/data"
   }
 
   depends_on = [

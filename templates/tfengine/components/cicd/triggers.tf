@@ -27,7 +27,7 @@
 # ================== Triggers for "{{.name}}" environment ==================
 {{- $managed_dirs := ""}}
 {{- range .managed_dirs}}
-{{- $managed_dirs = printf "%s %s" $managed_dirs . }}
+{{- $managed_dirs = trimSpace (printf "%s %s" $managed_dirs .)}}
 {{- end}}
 
 {{if has .triggers "validate" -}}

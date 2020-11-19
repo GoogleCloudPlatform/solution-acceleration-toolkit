@@ -32,6 +32,7 @@ var funcMap = map[string]interface{}{
 	"replace":      replace,
 	"resourceName": resourceName,
 	"now":          time.Now,
+	"trimSpace":    strings.TrimSpace,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
