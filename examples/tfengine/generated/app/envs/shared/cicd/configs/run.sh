@@ -17,8 +17,8 @@
 set -ex
 
 MODULES=(
-  devops
-  cicd
+  envs/shared/devops
+  envs/shared/cicd
   project_secrets/envs/dev
   project_networks/envs/dev
   project_data/envs/dev

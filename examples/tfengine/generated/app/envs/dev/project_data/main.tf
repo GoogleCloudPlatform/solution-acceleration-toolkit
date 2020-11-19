@@ -20,11 +20,11 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-state"
-    prefix = "project_data/dev"
+    prefix = "dev/project_data"
   }
 }
 
 module "main" {
-  source = "../../modules/main"
+  source = "../../../modules/project_data"
   env    = "dev"
 }

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 module "constants" {
-  source = "../../../constants"
+  source = "../constants"
 }
 
 locals {

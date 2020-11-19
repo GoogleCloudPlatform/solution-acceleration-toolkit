@@ -20,11 +20,11 @@ terraform {
   }
   backend "gcs" {
     bucket = "{{.constants.shared.state_bucket}}"
-    prefix = "{{.deployment}}/{{.env}}"
+    prefix = "{{.env}}/{{.deployment}}"
   }
 }
 
 module "main" {
-  source = "../../modules/main"
+  source = "../../../modules/{{.deployment}}"
   env    = "{{.env}}"
 }

@@ -47,8 +47,27 @@ func TestExamples(t *testing.T) {
 			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
-			runPlanOnDeployments(t, tmp)
+			if ex == "app.hcl" {
+				testApp(t, tmp)
+			} else {
+				runPlanOnDeployments(t, tmp)
+			}
 		})
+	}
+}
+
+func testApp(t *testing.T, dir string) {
+	envsDir := filepath.Join(dir, "envs")
+	envs, err := ioutil.ReadDir(envsDir)
+	if err != nil {
+		t.Fatalf("ioutil.ReadDir = %v", envs)
+	}
+	if len(envs) == 0 {
+		t.Fatalf("found no files in %q", envsDir)
+	}
+
+	for _, env := range envs {
+		runPlanOnDeployments(t, filepath.Join(envsDir, env.Name()))
 	}
 }
 
