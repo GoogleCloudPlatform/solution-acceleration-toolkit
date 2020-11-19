@@ -15,7 +15,3 @@
 billing_account = "000-000-000"
 project_id      = "example-devops"
 state_bucket    = "example-terraform-state"
-terraform_root  = "terraform"
-build_viewers = [
-  "group:example-cicd-viewers@example.com",
-]

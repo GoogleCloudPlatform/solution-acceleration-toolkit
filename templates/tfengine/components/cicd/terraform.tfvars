@@ -15,13 +15,3 @@
 billing_account               = "{{.billing_account}}"
 project_id                    = "{{.project_id}}"
 state_bucket                  = "{{.state_bucket}}"
-{{- if has . "terraform_root"}}
-terraform_root                = "{{.terraform_root}}"
-{{- end}}
-{{- if has . "build_viewers"}}
-build_viewers = [
-  {{- range .build_viewers}}
-  "{{.}}",
-  {{- end}}
-]
-{{- end}}

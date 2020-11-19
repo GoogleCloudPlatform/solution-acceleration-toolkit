@@ -17,8 +17,8 @@ schema = {
   additionalProperties = false
   properties = {
     project = {
-      description          = "Config of project to host monitoring resources"
-      type                 = "object"
+      description = "Config of project to host monitoring resources"
+      type        = "object"
     }
     forseti = {
       description          = "Config for the Forseti instance."

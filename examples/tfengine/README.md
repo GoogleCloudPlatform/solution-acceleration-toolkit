@@ -27,6 +27,9 @@ infrastructure.
   level. This example assumes the root folder has already been created (for
   example by an org foundation config or other means).
 
+- [./multi_envs.hcl](./multi_envs.hcl): This example shows how to set up projects
+  and CICD for a multi-enviroment workflow.
+
 - [./team.hcl](./team.hcl): This example sets up a sample team or application
   within a folder. This example focuses on projects and concrete resources to
   run services and assumes that core security, compliance and folder

@@ -16,18 +16,16 @@
 
 set -ex
 
-MODULES=(
-  devops
-)
-
 ACTIONS=()
+DIRS=()
 ROOT="."
 
-while getopts "a:d:" c
+while getopts "a:d:r:" c
 do
   case $c in
     a) ACTIONS+=("${OPTARG}") ;;
-    d) ROOT="${OPTARG}" ;;
+    d) DIRS="${OPTARG}" ;;
+    r) ROOT="${OPTARG}" ;;
     *)
       echo "Invalid flag ${OPTARG}"
       exit 1
@@ -36,8 +34,10 @@ do
 done
 
 ROOT=$(realpath "${ROOT}")
+# Read DIRS from a space-separated string to list
+IFS=' ' read -r -a DIRS <<< "${DIRS}"
 
-for mod in "${MODULES[@]}"
+for mod in "${DIRS[@]}"
 do
     cd "${ROOT}"/"${mod}"
     terraform init

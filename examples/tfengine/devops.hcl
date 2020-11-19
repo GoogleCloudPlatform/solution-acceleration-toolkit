@@ -50,29 +50,33 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    branch_name    = "master"
     terraform_root = "terraform"
 
     # Required to create Cloud Scheduler jobs.
     scheduler_region = "us-east1"
 
-    # Prepare and enable default triggers.
-    triggers = {
-      validate = {}
-      plan     = {
-        run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
-      }
-      apply    = {
-        run_on_push = false # Do not auto run on push to branch
-      }
-    }
-
     build_viewers = [
       "group:example-cicd-viewers@example.com",
     ]
 
-    managed_dirs = [
-      "devops", // NOTE: CICD service account can only update APIs on the devops project.
+    envs = [
+      {
+        name        = "prod"
+        branch_name = "main"
+        # Prepare and enable default triggers.
+        triggers = {
+          validate = {}
+          plan = {
+            run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
+          }
+          apply = {
+            run_on_push = false # Do not auto run on push to branch
+          }
+        }
+        managed_dirs = [
+          "devops", // NOTE: CICD service account can only update APIs on the devops project.
+        ]
+      }
     ]
   }
 }
