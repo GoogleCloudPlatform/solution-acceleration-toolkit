@@ -43,6 +43,9 @@ schema = {
       description          = "Config for Google Cloud Source Repository Cloud Build triggers."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "name",
+      ]
       properties = {
         name = {
           description = <<EOF
@@ -50,6 +53,24 @@ schema = {
             The Cloud Source Repository should be hosted under the devops project.
           EOF
           type        = "string"
+        }
+        readers = {
+          description = <<EOF
+            IAM members to allow reading the repo.
+          EOF
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+        writers = {
+          description = <<EOF
+            IAM members to allow writing to the repo.
+          EOF
+          type        = "array"
+          items = {
+            type = "string"
+          }
         }
       }
     }
