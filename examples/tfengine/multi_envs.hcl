@@ -51,9 +51,14 @@ template "cicd" {
   output_path = "./cicd"
   data = {
     project_id = "example-devops"
-    github = {
-      owner = "GoogleCloudPlatform"
-      name  = "example"
+    cloud_source_repository = {
+      name    = "example"
+      readers = [
+        "group:readers@example.com"
+      ]
+      writers = [
+        "user:foo@example.com"
+      ]
     }
 
     # Required to create Cloud Scheduler jobs.

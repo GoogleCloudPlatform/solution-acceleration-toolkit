@@ -146,6 +146,34 @@ resource "google_sourcerepo_repository" "configs" {
     google_project_service.services,
   ]
 }
+
+{{if has .cloud_source_repository "readers" -}}
+resource "google_sourcerepo_repository_iam_member" "readers" {
+  for_each = toset([
+    {{- range .cloud_source_repository.readers}}
+    "{{.}}",
+    {{- end}}
+  ])
+  project = var.project_id
+  repository = google_sourcerepo_repository.configs.name
+  role = "roles/source.reader"
+  member = each.key
+}
+{{- end}}
+
+{{if has .cloud_source_repository "writers" -}}
+resource "google_sourcerepo_repository_iam_member" "writers" {
+  for_each = toset([
+    {{- range .cloud_source_repository.writers}}
+    "{{.}}",
+    {{- end}}
+  ])
+  project = var.project_id
+  repository = google_sourcerepo_repository.configs.name
+  role = "roles/source.writer"
+  member = each.key
+}
+{{- end}}
 {{- end}}
 
 # Grant Cloud Build Service Account access to the devops project.

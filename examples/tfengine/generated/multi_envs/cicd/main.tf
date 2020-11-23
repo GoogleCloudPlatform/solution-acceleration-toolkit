@@ -52,6 +52,7 @@ locals {
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
     "sqladmin.googleapis.com",
+    "sourcerepo.googleapis.com",
     "appengine.googleapis.com",
     "cloudscheduler.googleapis.com",
   ]
@@ -110,7 +111,34 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   ]
 }
 
+# Create the Cloud Source Repository.
+resource "google_sourcerepo_repository" "configs" {
+  project = var.project_id
+  name    = "example"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
 
+resource "google_sourcerepo_repository_iam_member" "readers" {
+  for_each = toset([
+    "group:readers@example.com",
+  ])
+  project    = var.project_id
+  repository = google_sourcerepo_repository.configs.name
+  role       = "roles/source.reader"
+  member     = each.key
+}
+
+resource "google_sourcerepo_repository_iam_member" "writers" {
+  for_each = toset([
+    "user:foo@example.com",
+  ])
+  project    = var.project_id
+  repository = google_sourcerepo_repository.configs.name
+  role       = "roles/source.writer"
+  member     = each.key
+}
 
 # Grant Cloud Build Service Account access to the devops project.
 resource "google_project_iam_member" "cloudbuild_sa_project_iam" {

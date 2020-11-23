@@ -24,12 +24,9 @@ resource "google_cloudbuild_trigger" "validate_dev" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^dev$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^dev$"
   }
 
   filename = "terraform/cicd/configs/tf-validate.yaml"
@@ -41,6 +38,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -54,12 +52,9 @@ resource "google_cloudbuild_trigger" "plan_dev" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^dev$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^dev$"
   }
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
@@ -71,6 +66,7 @@ resource "google_cloudbuild_trigger" "plan_dev" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
@@ -86,12 +82,9 @@ resource "google_cloudbuild_trigger" "plan_scheduled_dev" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^dev$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^dev$"
   }
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
@@ -103,6 +96,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_dev" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -138,12 +132,9 @@ resource "google_cloudbuild_trigger" "apply_dev" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^dev$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^dev$"
   }
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
@@ -155,6 +146,7 @@ resource "google_cloudbuild_trigger" "apply_dev" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -170,12 +162,9 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   filename = "terraform/cicd/configs/tf-validate.yaml"
@@ -187,6 +176,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -200,12 +190,9 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
@@ -217,6 +204,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
@@ -232,12 +220,9 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
@@ -249,6 +234,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -285,12 +271,9 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
@@ -302,6 +285,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 

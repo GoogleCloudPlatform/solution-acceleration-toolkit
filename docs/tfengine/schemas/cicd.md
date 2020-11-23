@@ -24,6 +24,18 @@ The Cloud Source Repository should be hosted under the devops project.
 
 Type: string
 
+### cloud_source_repository.readers
+
+IAM members to allow reading the repo.
+
+Type: array(string)
+
+### cloud_source_repository.writers
+
+IAM members to allow writing to the repo.
+
+Type: array(string)
+
 ### envs
 
 Config block for per-environment resources.
