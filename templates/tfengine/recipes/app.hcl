@@ -14,7 +14,7 @@
 
 template "devops" {
   component_path = "../components/app/devops"
-  output_path = "./devops"
+  output_path = "./envs/shared/devops"
   flatten {
     key = "devops"
   }
@@ -22,16 +22,16 @@ template "devops" {
 
 template "cicd" {
   component_path = "../components/app/cicd"
-  output_path = "./cicd"
+  output_path = "./envs/shared/cicd"
 }
 
 template "cicd_configs" {
   component_path = "../components/cicd/configs"
-  output_path    = "./cicd/configs"
+  output_path    = "./envs/shared/cicd/configs"
   data = {
     managed_dirs = [
-      "devops",
-      "cicd",
+      "envs/shared/devops",
+      "envs/shared/cicd",
       {{range $deployment := .deployments}}
       {{range $env, $_ := $.constants}}
       {{if not (eq $env "shared")}}
@@ -45,7 +45,7 @@ template "cicd_configs" {
 
 template "constants" {
   component_path = "../components/app/constants"
-  output_path    = "./constants"
+  output_path    = "./modules/constants"
 }
 
 {{range $i, $deployment := .deployments}}
@@ -53,7 +53,7 @@ template "constants" {
 {{if not (eq $env "shared")}}
 template "env" {
   component_path = "../components/app/env"
-  output_path    = "{{$deployment.name}}/envs/{{$env}}"
+  output_path    = "envs/{{$env}}/{{$deployment.name}}"
   data = {
     env        = "{{$env}}"
     deployment = "{{$deployment.name}}"
@@ -64,7 +64,7 @@ template "env" {
 
 template "main_module" {
   component_path = "../components/app/main_module"
-  output_path    = "{{$deployment.name}}/modules/main"
+  output_path    = "modules/{{$deployment.name}}"
   flatten {
     key   = "deployments"
     index = {{$i}}
@@ -74,7 +74,7 @@ template "main_module" {
 {{if has $deployment "resources"}}
 template "project" {
   component_path = "../components/project"
-  output_path    = "{{$deployment.name}}/modules/main"
+  output_path    = "modules/{{$deployment.name}}"
   data = {
     use_constants = true
     parent_type   = "folder"
@@ -93,7 +93,7 @@ template "project" {
 
 template "resources" {
   recipe_path = "./resources.hcl"
-  output_path = "{{$deployment.name}}/modules/main"
+  output_path = "modules/{{$deployment.name}}"
   data = {
     use_constants = true
   }

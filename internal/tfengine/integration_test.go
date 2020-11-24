@@ -54,7 +54,6 @@ func TestExamples(t *testing.T) {
 	}
 }
 
-// Run plan to verify configs.
 func runPlanOnDeployments(t *testing.T, dir string) {
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -66,16 +65,15 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 			"cicd":       true,
 			"kubernetes": true,
 			"monitor":    true, // TODO(umairidris): don't skip this dir once we switch off Forseti
+			"modules":    true, // modules are called by envs
 		}
 
-		if !info.IsDir() || skipDirs[info.Name()] {
+		if !info.IsDir() {
 			return nil
 		}
 
-		// Cannot run `terraform plan` in */modules/main/ directly. They are indrectly
-		// invoked from envs/{env_name}/.
-		if strings.HasSuffix(path, "modules/main") {
-			return nil
+		if skipDirs[info.Name()] {
+			return filepath.SkipDir
 		}
 
 		// Skip if there are no .tf files directly under the dir (without considering subdirs).
