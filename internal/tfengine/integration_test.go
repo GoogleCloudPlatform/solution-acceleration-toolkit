@@ -68,8 +68,12 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 			"modules":    true, // modules are called by envs
 		}
 
-		if !info.IsDir() || skipDirs[info.Name()] {
+		if !info.IsDir() {
 			return nil
+		}
+
+		if skipDirs[info.Name()] {
+			return filepath.SkipDir
 		}
 
 		// Skip if there are no .tf files directly under the dir (without considering subdirs).
