@@ -19,6 +19,10 @@ output "values" {
       env_code  = "d"
       folder_id = "456"
     }
+    prod = {
+      env_code  = "p"
+      folder_id = "789"
+    }
     shared = {
       bigquery_location   = "us-east1"
       billing_account     = "000"

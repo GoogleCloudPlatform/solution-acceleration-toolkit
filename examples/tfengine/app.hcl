@@ -38,6 +38,10 @@ template "app" {
         env_code  = "d"
         folder_id = "456"
       }
+      prod = {
+        env_code  = "p"
+        folder_id = "789"
+      }
     }
     devops = {
       admins_group       = "admins@example.com"
