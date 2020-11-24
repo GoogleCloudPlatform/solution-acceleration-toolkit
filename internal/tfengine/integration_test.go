@@ -15,10 +15,12 @@
 package tfengine
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -56,6 +58,7 @@ func TestExamples(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD
 func testApp(t *testing.T, dir string) {
 	envsDir := filepath.Join(dir, "envs")
 	envs, err := ioutil.ReadDir(envsDir)
@@ -71,52 +74,69 @@ func testApp(t *testing.T, dir string) {
 	}
 }
 
+=======
+// Run plan to verify configs.
+>>>>>>> a47e174297cf7706cecb7097773859baa47b6c0c
 func runPlanOnDeployments(t *testing.T, dir string) {
-	// Run plan to verify configs.
-	fs, err := ioutil.ReadDir(dir)
-	if err != nil {
-		t.Fatalf("ioutil.ReadDir = %v", err)
-	}
-
-	if len(fs) == 0 {
-		t.Fatalf("found no files in %q", dir)
-	}
-
-	// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
-	skipDirs := map[string]bool{
-		"cicd":       true,
-		"kubernetes": true,
-		"monitor":    true, // TODO(umairidris): don't skip this dir once we switch off Forseti
-	}
-	for _, f := range fs {
-		if !f.IsDir() || skipDirs[f.Name()] {
-			continue
+	fn := func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return fmt.Errorf("walk path %q: %v", path, err)
 		}
-		dir := filepath.Join(dir, f.Name())
 
-		envsDir := filepath.Join(dir, "envs")
-		if _, err := os.Stat(envsDir); err == nil {
-			runPlanOnDeployments(t, envsDir)
-			continue
-		} else if !os.IsNotExist(err) {
-			t.Fatalf("os.Stat(%q) = %v", envsDir, err)
+		// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
+		skipDirs := map[string]bool{
+			"cicd":       true,
+			"kubernetes": true,
+			"monitor":    true, // TODO(umairidris): don't skip this dir once we switch off Forseti
+		}
+
+		if !info.IsDir() || skipDirs[info.Name()] {
+			return nil
+		}
+
+		// Cannot run `terraform plan` in */modules/main/ directly. They are indrectly
+		// invoked from envs/{env_name}/.
+		if strings.HasSuffix(path, "modules/main") {
+			return nil
+		}
+
+		// Skip if there are no .tf files directly under the dir (without considering subdirs).
+		fs, err := ioutil.ReadDir(path)
+		if err != nil {
+			return fmt.Errorf("ioutil.ReadDir = %v", err)
+		}
+		hasTerraformFiles := false
+		for _, f := range fs {
+			if strings.HasSuffix(f.Name(), ".tf") {
+				hasTerraformFiles = true
+				break
+			}
+		}
+
+		if !hasTerraformFiles {
+			return nil
 		}
 
 		// Convert the configs not reference a GCS backend as the state bucket does not exist.
-		if err := ConvertToLocalBackend(dir); err != nil {
-			t.Fatalf("ConvertToLocalBackend(%v): %v", dir, err)
+		if err := ConvertToLocalBackend(path); err != nil {
+			return fmt.Errorf("ConvertToLocalBackend(%v): %v", path, err)
 		}
 		init := exec.Command("terraform", "init")
-		init.Dir = dir
+		init.Dir = path
 		if b, err := init.CombinedOutput(); err != nil {
-			t.Errorf("command %v in %q: %v\n%v", init.Args, dir, err, string(b))
+			return fmt.Errorf("command %v in %q: %v\n%v", init.Args, path, err, string(b))
 		}
 
 		plan := exec.Command("terraform", "plan")
-		plan.Dir = dir
+		plan.Dir = path
 		if b, err := plan.CombinedOutput(); err != nil {
-			t.Errorf("command %v in %q: %v\n%v", plan.Args, dir, err, string(b))
+			return fmt.Errorf("command %v in %q: %v\n%v", plan.Args, path, err, string(b))
 		}
+		return nil
+	}
+
+	if err := filepath.Walk(dir, fn); err != nil {
+		t.Fatal(err)
 	}
 }
 

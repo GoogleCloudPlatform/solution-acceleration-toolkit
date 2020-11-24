@@ -4,14 +4,6 @@
 
 ## Properties
 
-### branch_name
-
-Name of the branch to set the Cloud Build Triggers to monitor.
-Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
-environment.
-
-Type: string
-
 ### build_viewers
 
 IAM members to grant `cloudbuild.builds.viewer` role in the devops project
@@ -29,6 +21,127 @@ Type: object
 
 Cloud Source Repository repo name.
 The Cloud Source Repository should be hosted under the devops project.
+
+Type: string
+
+### cloud_source_repository.readers
+
+IAM members to allow reading the repo.
+
+Type: array(string)
+
+### cloud_source_repository.writers
+
+IAM members to allow writing to the repo.
+
+Type: array(string)
+
+### envs
+
+Config block for per-environment resources.
+
+Type: array(object)
+
+### envs.branch_name
+
+Name of the branch to set the Cloud Build Triggers to monitor.
+Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
+environment.
+
+Type: string
+
+### envs.managed_dirs
+
+List of root modules managed by the CICD relative to `terraform_root`.
+
+NOTE: The modules will be deployed in the given order. If a module
+depends on another module, it should show up after it in this list.
+
+NOTE: The CICD has permission to update APIs within its own project.
+Thus, you can list the devops module as one of the managed modules.
+Other changes to the devops project or CICD pipelines must be deployed
+manually.
+
+Type: array(string)
+
+### envs.name
+
+Name of the environment.
+
+Type: string
+
+### envs.triggers
+
+Config block for the CICD Cloud Build triggers.
+
+Type: object
+
+### envs.triggers.apply
+
+Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+If specified,create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+
+Type: object
+
+### envs.triggers.apply.run_on_push
+
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
+
+Type: boolean
+
+### envs.triggers.apply.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+
+Type: string
+
+### envs.triggers.plan
+
+Config block for the presubmit plan Cloud Build trigger.
+If specified, create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+
+Type: object
+
+### envs.triggers.plan.run_on_push
+
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
+
+Type: boolean
+
+### envs.triggers.plan.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+
+Type: string
+
+### envs.triggers.validate
+
+Config block for the presubmit validation Cloud Build trigger. If specified, create
+the trigger and grant the Cloud Build Service Account necessary permissions to
+perform the build.
+
+Type: object
+
+### envs.triggers.validate.run_on_push
+
+Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
+
+Type: boolean
+
+### envs.triggers.validate.run_on_schedule
+
+Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
 
 Type: string
 
@@ -50,20 +163,6 @@ GitHub repo owner.
 
 Type: string
 
-### managed_dirs
-
-List of root modules managed by the CICD relative to `terraform_root`.
-
-NOTE: The modules will be deployed in the given order. If a module
-depends on another module, it should show up after it in this list.
-
-NOTE: The CICD has permission to update APIs within its own project.
-Thus, you can list the devops module as one of the managed modules.
-Other changes to the devops project or CICD pipelines must be deployed
-manually.
-
-Type: array(string)
-
 ### project_id
 
 ID of project to deploy CICD in.
@@ -81,80 +180,6 @@ Type: string
 ### terraform_root
 
 Path of the directory relative to the repo root containing the Terraform configs.
-
-Type: string
-
-### triggers
-
-Config block for the CICD Cloud Build triggers.
-
-Type: object
-
-### triggers.apply
-
-Config block for the postsubmit apply/deployyemt Cloud Build trigger.
-If specified,create the trigger and grant the Cloud Build Service Account
-necessary permissions to perform the build.
-
-Type: object
-
-### triggers.apply.run_on_push
-
-Whether or not to be automatically triggered from a PR/push to branch.
-Default to true.
-
-Type: boolean
-
-### triggers.apply.run_on_schedule
-
-Whether or not to be automatically triggered according a specified schedule.
-The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
-at Eastern Standard Time (EST). Default to none.
-
-Type: string
-
-### triggers.plan
-
-Config block for the presubmit plan Cloud Build trigger.
-If specified, create the trigger and grant the Cloud Build Service Account
-necessary permissions to perform the build.
-
-Type: object
-
-### triggers.plan.run_on_push
-
-Whether or not to be automatically triggered from a PR/push to branch.
-Default to true.
-
-Type: boolean
-
-### triggers.plan.run_on_schedule
-
-Whether or not to be automatically triggered according a specified schedule.
-The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
-at Eastern Standard Time (EST). Default to none.
-
-Type: string
-
-### triggers.validate
-
-Config block for the presubmit validation Cloud Build trigger. If specified, create
-the trigger and grant the Cloud Build Service Account necessary permissions to
-perform the build.
-
-Type: object
-
-### triggers.validate.run_on_push
-
-Whether or not to be automatically triggered from a PR/push to branch.
-Default to true.
-
-Type: boolean
-
-### triggers.validate.run_on_schedule
-
-Whether or not to be automatically triggered according a specified schedule.
-The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
-at Eastern Standard Time (EST). Default to none.
+Do not include ending "/".
 
 Type: string

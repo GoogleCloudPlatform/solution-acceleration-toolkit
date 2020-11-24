@@ -19,6 +19,7 @@ timeout: 600s
 
 substitutions:
     _TERRAFORM_ROOT: "."
+    _MANAGED_DIRS: ""
 
 steps:
   - name: "{{$cft}}"
@@ -34,6 +35,6 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-a", "validate"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate

@@ -50,7 +50,7 @@ template "app" {
         resources = {
           project = {
             name_suffix = "secrets"
-            apis = ["secretmanager.googleapis.com"]
+            apis        = ["secretmanager.googleapis.com"]
           }
           secrets = [
             {
@@ -63,7 +63,7 @@ template "app" {
           ]
         }
         terraform_addons = {
-      raw_config = <<EOF
+          raw_config = <<EOF
 resource "random_password" "db" {
   length = 16
   special = true
@@ -77,7 +77,7 @@ EOF
           project = {
             name_suffix        = "networks"
             is_shared_vpc_host = true
-            apis = ["compute.googleapis.com"]
+            apis               = ["compute.googleapis.com"]
           }
           compute_networks = [{
             name = "example-network"
@@ -256,7 +256,7 @@ EOF
         name = "project_apps",
         resources = {
           project = {
-            name_suffix        = "apps"
+            name_suffix = "apps"
             shared_vpc_attachment = {
               host_project_suffix = "networks"
             }
