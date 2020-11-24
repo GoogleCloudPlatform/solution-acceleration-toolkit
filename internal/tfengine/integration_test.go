@@ -49,34 +49,11 @@ func TestExamples(t *testing.T) {
 			if err := Run(ex, tmp, &Options{Format: true, CacheDir: tmp}); err != nil {
 				t.Fatalf("tfengine.Run(%q, %q) = %v", ex, tmp, err)
 			}
-			if ex == "app.hcl" {
-				testApp(t, tmp)
-			} else {
-				runPlanOnDeployments(t, tmp)
-			}
+			runPlanOnDeployments(t, tmp)
 		})
 	}
 }
 
-<<<<<<< HEAD
-func testApp(t *testing.T, dir string) {
-	envsDir := filepath.Join(dir, "envs")
-	envs, err := ioutil.ReadDir(envsDir)
-	if err != nil {
-		t.Fatalf("ioutil.ReadDir = %v", envs)
-	}
-	if len(envs) == 0 {
-		t.Fatalf("found no files in %q", envsDir)
-	}
-
-	for _, env := range envs {
-		runPlanOnDeployments(t, filepath.Join(envsDir, env.Name()))
-	}
-}
-
-=======
-// Run plan to verify configs.
->>>>>>> a47e174297cf7706cecb7097773859baa47b6c0c
 func runPlanOnDeployments(t *testing.T, dir string) {
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -88,15 +65,10 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 			"cicd":       true,
 			"kubernetes": true,
 			"monitor":    true, // TODO(umairidris): don't skip this dir once we switch off Forseti
+			"modules":    true, // modules are called by envs
 		}
 
 		if !info.IsDir() || skipDirs[info.Name()] {
-			return nil
-		}
-
-		// Cannot run `terraform plan` in */modules/main/ directly. They are indrectly
-		// invoked from envs/{env_name}/.
-		if strings.HasSuffix(path, "modules/main") {
 			return nil
 		}
 
