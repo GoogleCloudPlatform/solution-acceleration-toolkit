@@ -1,16 +1,16 @@
-{{- /* Copyright 2020 Google LLC
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License. */ -}}
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # This folder contains Terraform resources to setup CI/CD, which includes:
 # - Necessary APIs to enable in the devops project for CI/CD purposes,
@@ -30,7 +30,7 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    bucket = "{{.constants.shared.state_bucket}}"
+    bucket = "example-state"
     prefix = "cicd"
   }
 }
@@ -56,7 +56,7 @@ locals {
   terraform_root = trim((var.terraform_root == "" || var.terraform_root == "/") ? "." : var.terraform_root, "/")
   # ./ to indicate root is not recognized by Cloud Build Trigger.
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
-  cloudbuild_sa        = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  cloudbuild_sa         = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
 }
 
 module "constants" {
@@ -104,7 +104,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 }
 
 locals {
-  folder_ids = [for env in module.constants.values: env.folder_id]
+  folder_ids = [for env in module.constants.values : env.folder_id]
   folder_roles = flatten([
     for f in local.folder_ids : [
       for r in local.cloudbuild_sa_editor_roles : {
@@ -124,8 +124,8 @@ resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
 }
 
 resource "google_sourcerepo_repository" "configs" {
-  project  = data.google_project.devops.project_id
-  name     = var.source_repo_name
+  project = data.google_project.devops.project_id
+  name    = var.source_repo_name
 }
 
 # Grant Cloud Build Service Account access to the devops project.
