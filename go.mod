@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.10.0
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
-	github.com/google/go-cmp v0.5.3
+	github.com/google/go-cmp v0.5.4
 	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-version v1.2.1
