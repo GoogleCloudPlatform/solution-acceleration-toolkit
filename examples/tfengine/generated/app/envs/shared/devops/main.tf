@@ -29,7 +29,7 @@ terraform {
 }
 
 module "constants" {
-  source = "../constants"
+  source = "../../../modules/constants"
 }
 
 locals {
