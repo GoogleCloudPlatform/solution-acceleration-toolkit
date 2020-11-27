@@ -159,7 +159,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
     - `roles/resourcemanager.folderAdmin` on the folder for folder
         deployment
     - `roles/resourcemanager.projectCreator` on the org or folder
-    - `roles/billing.user` on the billing account
+    - `roles/billing.admin` on the billing account
 
 ## Defining Architecture
 
