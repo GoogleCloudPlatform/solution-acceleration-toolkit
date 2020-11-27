@@ -319,3 +319,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
 - Any component file with the extension `.tmpl` will have it removed when
     generated.
+
+## Continuous integration (CI) and continuous deployment (CD)
+
+See [here](../../templates/tfengine/components/cicd/README.md).
