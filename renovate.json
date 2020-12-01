@@ -6,7 +6,8 @@
   "packageRules": [
     {
       "managers": ["regex", "terraform"],
-      "groupName": "terraform"
+      "groupName": "terraform",
+      "schedule": ["before 3am on the first day of the month"]
     }
   ],
   "regexManagers": [
