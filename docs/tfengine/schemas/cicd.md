@@ -4,6 +4,13 @@
 
 ## Properties
 
+### build_editors
+
+IAM members to grant `cloudbuild.builds.editor` role in the devops project
+to see CICD results.
+
+Type: array(string)
+
 ### build_viewers
 
 IAM members to grant `cloudbuild.builds.viewer` role in the devops project

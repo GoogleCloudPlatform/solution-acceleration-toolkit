@@ -84,6 +84,16 @@ schema = {
         type = "string"
       }
     }
+    build_editors = {
+      description = <<EOF
+        IAM members to grant `cloudbuild.builds.editor` role in the devops project
+        to see CICD results.
+      EOF
+      type        = "array"
+      items = {
+        type = "string"
+      }
+    }
     scheduler_region = {
       description = <<EOF
         [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler

@@ -55,9 +55,8 @@ template "cicd" {
     # Required to create Cloud Scheduler jobs.
     scheduler_region = "us-east1"
 
-    build_viewers = [
-      "group:example-cicd-viewers@example.com",
-    ]
+    build_viewers = ["group:example-cicd-viewers@example.com"]
+    build_editors = ["group:example-cicd-editors@example.com"]
 
     envs = [
       {
