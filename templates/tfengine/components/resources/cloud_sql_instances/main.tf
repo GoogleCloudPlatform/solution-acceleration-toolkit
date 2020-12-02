@@ -26,7 +26,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 4.3.0"
 
   name              = "{{.name}}"
-  project_id        = module.project.project_id
+  project_id        = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   {{- if get $ "use_constants"}}
   region            = local.constants.cloud_sql_region
   zone              = local.constants.cloud_sql_zone

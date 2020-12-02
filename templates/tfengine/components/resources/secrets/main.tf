@@ -18,7 +18,7 @@ resource "google_secret_manager_secret" "{{$resource_name}}" {
   provider = google-beta
 
   secret_id = "{{.secret_id}}"
-  project   = module.project.project_id
+  project   = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
 
   replication {
     user_managed {

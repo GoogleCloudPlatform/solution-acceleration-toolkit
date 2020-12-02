@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO(umairidris): fill in resources and detailed project object schema.
 schema = {
   title                = "Project Recipe"
   additionalProperties = false
+  required = [
+    "project",
+  ]
   properties = {
     state_bucket = {
       description = "Bucket to store remote state."
@@ -45,10 +47,17 @@ schema = {
       description          = "Config for the project."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "project_id",
+      ]
       properties = {
         project_id = {
-          description = "ID of project to create."
+          description = "ID of project to create and/or provision resources."
           type        = "string"
+        }
+        exists = {
+          description = "Whether this project exists. Defaults to 'false'."
+          type        = "boolean"
         }
         apis = {
           description = "APIs to enable in the project."
@@ -120,12 +129,15 @@ template "deployment" {
   }
 }
 
+
+{{- if not (get .project "exists" false)}}
 template "project" {
   component_path = "../components/project"
   flatten {
     key = "project"
   }
 }
+{{end}}
 
 {{if has . "resources"}}
 template "resources" {

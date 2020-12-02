@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 2.10.0"
 
   name         = "{{.name}}"
-  project      = module.project.project_id
+  project      = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   {{- if get $ "use_constants"}}
   zone         = local.constants.compute_region
   {{- else}}
@@ -27,7 +27,7 @@ module "{{resourceName . "name"}}" {
   {{if has . "network_project_id" -}}
   host_project = "{{.network_project_id}}"
   {{else -}}
-  host_project = module.project.project_id
+  host_project = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   {{end -}}
   network      = "{{.network}}"
   subnet       = "{{.subnet}}"

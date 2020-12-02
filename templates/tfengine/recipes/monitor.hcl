@@ -74,6 +74,12 @@ schema = {
 
 template "project" {
   recipe_path = "./project.hcl"
+  data = {
+    project = {
+      project_id = {{hcl .project.project_id}}
+    }
+  }
+
 }
 
 template "forseti" {

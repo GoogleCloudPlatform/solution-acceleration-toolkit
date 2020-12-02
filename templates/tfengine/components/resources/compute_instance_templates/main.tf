@@ -16,10 +16,13 @@ limitations under the License. */ -}}
 {{$template_resource_name := resourceName . "name_prefix" -}}
 
 {{$network_project_id :=  "${module.project.project_id}" -}}
+{{if get $.project "exists" false -}}
+  {{$network_project_id = "{{$.project.project_id}}" -}}
+{{end -}}
 {{if has . "network_project_id" -}}
-{{$network_project_id = .network_project_id -}}
+  {{$network_project_id = .network_project_id -}}
 {{else if has . "network_project_suffix" -}}
-{{$network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}" -}}
+  {{$network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}" -}}
 {{end -}}
 
 {{$subnet := .subnet -}}
@@ -28,7 +31,7 @@ module "{{$template_resource_name}}" {
   version = "~> 5.1.0"
 
   name_prefix        = "{{.name_prefix}}"
-  project_id         = module.project.project_id
+  project_id         = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   region             = "{{get . "compute_region" $.compute_region}}"
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"

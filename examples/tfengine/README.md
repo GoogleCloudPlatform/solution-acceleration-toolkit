@@ -35,4 +35,7 @@ infrastructure.
   run services and assumes that core security, compliance and folder
   structure has already been seti up by other configs.
 
+- [./resources_only.hcl](./resources_only.hcl): This example shows how you can
+  attach resources to an existing project without creating one.
+
 The [generated/](./generated) directory shows the output of each example.

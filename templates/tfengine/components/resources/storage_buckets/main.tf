@@ -25,11 +25,11 @@ module "{{resourceName . $rnKey}}" {
 
   {{- if get $ "use_constants"}}
   name       = "${local.constants.project_prefix}-${local.constants.env_code}-{{.name_suffix}}"
-  project_id = module.project.project_id
+  project_id = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   location   = local.constants.storage_location
   {{- else}}
   name       = "{{.name}}"
-  project_id = module.project.project_id
+  project_id = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   location   = "{{get . "storage_location" $.storage_location}}"
   {{- end}}
 
