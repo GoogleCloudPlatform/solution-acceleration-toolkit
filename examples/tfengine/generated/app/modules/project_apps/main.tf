@@ -82,7 +82,8 @@ resource "google_binary_authorization_policy" "policy" {
   admission_whitelist_patterns {
     name_pattern = "gcr.io/projectcalico-org/*"
   }
-  # Whitelist images from this project.
+
+  # Allow images from this project.
   admission_whitelist_patterns {
     name_pattern = "gcr.io/${module.project.project_id}/*"
   }

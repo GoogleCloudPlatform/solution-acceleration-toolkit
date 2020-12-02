@@ -30,6 +30,12 @@ APIs to enable in the project.
 
 Type: array(string)
 
+### project.exists
+
+Whether this project exists. Defaults to 'false'.
+
+Type: boolean
+
 ### project.is_shared_vpc_host
 
 Whether this project is a shared VPC host. Defaults to 'false'.
@@ -38,7 +44,7 @@ Type: boolean
 
 ### project.project_id
 
-ID of project to create.
+ID of project to create and/or provision resources in.
 
 Type: string
 

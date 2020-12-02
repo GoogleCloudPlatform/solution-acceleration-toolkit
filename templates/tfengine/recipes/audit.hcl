@@ -102,6 +102,7 @@ template "project" {
   recipe_path = "./project.hcl"
   data = {
     project = {
+      project_id = {{hcl .project.project_id}}
       apis = [
         "bigquery.googleapis.com",
         "logging.googleapis.com",
