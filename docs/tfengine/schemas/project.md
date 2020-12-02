@@ -44,7 +44,7 @@ Type: boolean
 
 ### project.project_id
 
-ID of project to create and/or provision resources.
+ID of project to create and/or provision resources in.
 
 Type: string
 

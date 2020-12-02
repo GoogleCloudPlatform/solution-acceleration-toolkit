@@ -52,7 +52,7 @@ schema = {
       ]
       properties = {
         project_id = {
-          description = "ID of project to create and/or provision resources."
+          description = "ID of project to create and/or provision resources in."
           type        = "string"
         }
         exists = {
