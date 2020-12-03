@@ -71,7 +71,7 @@ module "{{resourceName . "name"}}" {
         {{range $k, $v := .stream_configs -}}
         {
           bigquery_destination = {
-            dataset_uri = {{hcl $v.bigquery_destination.dataset_uri}}
+            dataset_uri = "{{$v.bigquery_destination.dataset_uri}}"
             schema_config = {
               {{hcl $v.bigquery_destination.schema_config}}
             }
