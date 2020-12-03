@@ -803,43 +803,31 @@ Type: object
 
 ### healthcare_datasets.fhir_stores.stream_configs
 
-https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>
 
 Type: array(object)
 
 ### healthcare_datasets.fhir_stores.stream_configs.bigquery_destination
 
-
-
 Type: object
 
 ### healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.dataset_uri
-
-
 
 Type: string
 
 ### healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config
 
-
-
 Type: object
 
 ### healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.recursive_structure_depth
-
-
 
 Type: integer
 
 ### healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.schema_type
 
-
-
 Type: string
 
 ### healthcare_datasets.fhir_stores.stream_configs.resource_types
-
-
 
 Type: array(string)
 

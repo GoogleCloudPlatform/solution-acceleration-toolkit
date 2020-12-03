@@ -911,7 +911,7 @@ schema = {
                   type        = "object"
                 }
                 stream_configs = {
-                  description = "https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs"
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>"
                   type        = "array"
                   items = {
                     type = "object"
