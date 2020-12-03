@@ -296,6 +296,18 @@ template "project_data" {
           notification_config = {
             pubsub_topic = "projects/example-prod-data/topics/example-topic"
           }
+          stream_configs = [{
+            resource_types = [
+              "Patient",
+            ]
+            bigquery_destination = {
+              dataset_uri = "bq://example-prod-data.example_dataset_id"
+              schema_config = {
+                schema_type               = "ANALYTICS"
+                recursive_structure_depth = 3
+              }
+            }
+          }]
         }]
         hl7_v2_stores = [{
           name = "example-hl7-store"
