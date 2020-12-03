@@ -28,7 +28,10 @@ var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 
 ### {{$name}}
 
+{{- if .Description}}
+
 {{.Description}}
+{{- end}}
 
 {{- if .Type}}
 

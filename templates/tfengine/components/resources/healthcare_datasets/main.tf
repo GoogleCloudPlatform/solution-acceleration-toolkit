@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "healthcare_datasets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.0.0"
+  version = "~> 1.1.0"
 
   name     = "{{.name}}"
   project  = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
@@ -65,6 +65,23 @@ module "{{resourceName . "name"}}" {
         {{hcl .notification_config}}
       }
       {{end -}}
+
+      {{if has . "stream_configs" -}}
+      stream_configs = [
+        {{range $k, $v := .stream_configs -}}
+        {
+          bigquery_destination = {
+            dataset_uri = "{{$v.bigquery_destination.dataset_uri}}"
+            schema_config = {
+              {{hcl $v.bigquery_destination.schema_config}}
+            }
+          }
+          {{hclField $v "resource_types" -}}
+        },
+        {{end -}}
+      ]
+      {{end -}}
+
 
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {
