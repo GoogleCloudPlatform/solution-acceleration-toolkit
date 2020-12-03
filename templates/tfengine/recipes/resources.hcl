@@ -851,6 +851,10 @@ schema = {
                     }
                   }
                 }
+                notification_config = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>"
+                  type        = "object"
+                }
               }
             }
           }
@@ -902,6 +906,10 @@ schema = {
                     }
                   }
                 }
+                notification_config = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>"
+                  type        = "object"
+                }
               }
             }
           }
@@ -946,6 +954,13 @@ schema = {
                         type        = "string"
                       }
                     }
+                  }
+                }
+                notification_configs = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>"
+                  type        = "array"
+                  items = {
+                    type = "object"
                   }
                 }
               }

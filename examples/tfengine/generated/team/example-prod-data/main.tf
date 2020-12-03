@@ -107,6 +107,9 @@ module "example_healthcare_dataset" {
   dicom_stores = [
     {
       name = "example-dicom-store"
+      notification_config = {
+        pubsub_topic = "projects/example-prod-data/topics/example-topic"
+      }
       labels = {
         env  = "prod"
         type = "phi"
@@ -123,6 +126,9 @@ module "example_healthcare_dataset" {
           role   = "roles/healthcare.fhirStoreViewer"
         },
       ]
+      notification_config = {
+        pubsub_topic = "projects/example-prod-data/topics/example-topic"
+      }
       labels = {
         env  = "prod"
         type = "phi"
@@ -132,6 +138,11 @@ module "example_healthcare_dataset" {
   hl7_v2_stores = [
     {
       name = "example-hl7-store"
+      notification_configs = [
+        {
+          pubsub_topic = "projects/example-prod-data/topics/example-topic"
+        },
+      ]
       labels = {
         env  = "prod"
         type = "phi"
