@@ -755,7 +755,7 @@ Type: string
 
 ### healthcare_datasets.dicom_stores.notification_config
 
-https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config
+See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config
 
 Type: object
 
@@ -797,7 +797,7 @@ Type: string
 
 ### healthcare_datasets.fhir_stores.notification_config
 
-https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config
+See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config
 
 Type: object
 
@@ -851,7 +851,7 @@ Type: string
 
 ### healthcare_datasets.hl7_v2_stores.notification_configs
 
-https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs
+See https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs
 
 Type: array(object)
 
