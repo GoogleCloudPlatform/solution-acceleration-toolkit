@@ -34,6 +34,12 @@ module "{{resourceName . "name"}}" {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
 
+      {{if has . "notification_config" -}}
+      notification_config = {
+        {{hcl .notification_config}}
+      }
+      {{end -}}
+
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {
         {{range $k, $v := $labels -}}
@@ -54,6 +60,12 @@ module "{{resourceName . "name"}}" {
       version = "{{.version}}"
       {{hclField . "iam_members" -}}
 
+      {{if has . "notification_config" -}}
+      notification_config = {
+        {{hcl .notification_config}}
+      }
+      {{end -}}
+
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {
         {{range $k, $v := $labels -}}
@@ -72,6 +84,7 @@ module "{{resourceName . "name"}}" {
     {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
+      {{hclField . "notification_configs" -}}
 
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {

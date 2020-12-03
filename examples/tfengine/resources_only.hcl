@@ -41,7 +41,7 @@ template "resources" {
       exists     = true
     }
     resources = {
-     service_accounts = [{
+      service_accounts = [{
         account_id   = "example-sa"
         description  = "Example Service Account"
         display_name = "Example Service Account"

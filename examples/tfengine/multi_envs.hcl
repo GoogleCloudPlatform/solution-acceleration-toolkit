@@ -52,7 +52,7 @@ template "cicd" {
   data = {
     project_id = "example-devops"
     cloud_source_repository = {
-      name    = "example"
+      name = "example"
       readers = [
         "group:readers@example.com"
       ]

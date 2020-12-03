@@ -74,8 +74,8 @@ template "cicd" {
     }
 
     terraform_root = "terraform"
-    build_viewers = ["group:example-cicd-viewers@example.com"]
-    build_editors = ["group:example-cicd-editors@example.com"]
+    build_viewers  = ["group:example-cicd-viewers@example.com"]
+    build_editors  = ["group:example-cicd-editors@example.com"]
 
     envs = [
       {
@@ -276,6 +276,9 @@ template "project_data" {
         }]
         dicom_stores = [{
           name = "example-dicom-store"
+          notification_config = {
+            pubsub_topic = "projects/example-prod-data/topics/example-topic"
+          }
           labels = {
             type = "phi"
           }
@@ -290,9 +293,15 @@ template "project_data" {
             role   = "roles/healthcare.fhirStoreViewer"
             member = "group:example-fhir-viewers@example.com",
           }]
+          notification_config = {
+            pubsub_topic = "projects/example-prod-data/topics/example-topic"
+          }
         }]
         hl7_v2_stores = [{
           name = "example-hl7-store"
+          notification_configs = [{
+            pubsub_topic = "projects/example-prod-data/topics/example-topic"
+          }]
           labels = {
             type = "phi"
           }
