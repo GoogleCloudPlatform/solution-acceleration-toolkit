@@ -129,6 +129,11 @@ template "terraform" {
     key = "terraform_addons"
   }
   {{end}}
+  {{if has . "resources"}}
+  flatten {
+    key = "resources"
+  }
+  {{end}}
 }
 
 {{if has . "terraform_addons.vars"}}

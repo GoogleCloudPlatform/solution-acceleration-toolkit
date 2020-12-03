@@ -63,22 +63,48 @@ template "cicd" {
       {
         name        = "prod"
         branch_name = "main"
-        managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
-          "audit",
-          "example-prod-networks",
-          "monitor",
-          "org_policies",
-          "folders",
-        ]
         # Prepare and enable default triggers.
         triggers = {
           validate = {}
           plan     = {}
           apply    = { run_on_push = false } # Do not auto run on push to branch
         }
+        managed_dirs = [
+          "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "groups",
+          "audit",
+          "example-prod-networks",
+          "monitor",
+          "org_policies",
+          "folders",
+        ]
       }
     ]
+  }
+}
+
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        {
+          id = "example-auditors@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+          members = [
+            "user2@example.com"
+          ]
+        },
+      ]
+    }
   }
 }
 

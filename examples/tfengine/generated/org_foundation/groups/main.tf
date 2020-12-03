@@ -19,19 +19,24 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    bucket = "{{.state_bucket}}"
-    prefix = "{{get . "state_path_prefix" .output_path}}"
+    bucket = "example-terraform-state"
+    prefix = "groups"
   }
 }
 
-{{if has . "groups" -}}
 # Required for Cloud Identity API to create and manage groups.
 provider "google-beta" {
   user_project_override = true
-  billing_project       = {{- if get .project "exists" false}} "{{.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  billing_project       = "example-devops"
 }
-{{end -}}
 
-{{if has . "raw_config" -}}
-{{.raw_config}}
-{{end -}}
+module "example_auditors_example_com" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-auditors@example.com"
+  customer_id = "c12345678"
+
+  owners  = ["user1@example.com"]
+  members = ["user2@example.com"]
+}

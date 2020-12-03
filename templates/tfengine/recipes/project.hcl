@@ -124,9 +124,6 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  flatten {
-    key = "project"
-  }
 }
 
 
