@@ -56,9 +56,8 @@ template "cicd" {
       name  = "example"
     }
     terraform_root = "terraform"
-    build_viewers = [
-      "group:example-cicd-viewers@example.com",
-    ]
+    build_viewers = ["group:example-cicd-viewers@example.com"]
+    build_editors = ["group:example-cicd-editors@example.com"]
 
     envs = [
       {

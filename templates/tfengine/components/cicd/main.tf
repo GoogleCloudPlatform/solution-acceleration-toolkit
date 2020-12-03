@@ -106,8 +106,7 @@ resource "google_project_service" "services" {
 }
 
 {{- if has . "build_viewers"}}
-# IAM permissions to allow approvers and contributors to view the cloud build jobs and logs.
-# https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
+# IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
   for_each = toset([
     {{- range .build_viewers}}
@@ -121,11 +120,38 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
     google_project_service.services,
   ]
 }
+{{- end}}
 
+{{- if has . "build_editors"}}
+# IAM permissions to allow approvers to edit/create the cloud build jobs.
+resource "google_project_iam_member" "cloudbuild_builds_editors" {
+  for_each = toset([
+    {{- range .build_editors}}
+    "{{.}}",
+    {{- end}}
+  ])
+  project  = var.project_id
+  role     = "roles/cloudbuild.builds.editor"
+  member   = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+{{- end}}
+
+# IAM permissions to allow approvers and contributors to view logs.
+# https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
 resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   for_each = toset([
+    {{- if has . "build_viewers"}}
     {{- range .build_viewers}}
     "{{.}}",
+    {{- end}}
+    {{- end}}
+    {{- if has . "build_editors"}}
+    {{- range .build_editors}}
+    "{{.}}",
+    {{- end}}
     {{- end}}
   ])
   project  = var.project_id
@@ -135,7 +161,6 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
     google_project_service.services,
   ]
 }
-{{- end}}
 
 {{if has . "cloud_source_repository" -}}
 # Create the Cloud Source Repository.
