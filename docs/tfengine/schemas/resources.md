@@ -755,7 +755,7 @@ Type: string
 
 ### healthcare_datasets.dicom_stores.notification_config
 
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>.
 
 Type: object
 
@@ -764,6 +764,30 @@ Type: object
 FHIR stores to create.
 
 Type: array(object)
+
+### healthcare_datasets.fhir_stores.disable_referential_integrity
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_referential_integrity>.
+
+Type: boolean
+
+### healthcare_datasets.fhir_stores.disable_resource_versioning
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_resource_versioning>.
+
+Type: boolean
+
+### healthcare_datasets.fhir_stores.enable_history_import
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_import>.
+
+Type: boolean
+
+### healthcare_datasets.fhir_stores.enable_update_create
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_update_create>.
+
+Type: boolean
 
 ### healthcare_datasets.fhir_stores.iam_members
 
@@ -797,13 +821,13 @@ Type: string
 
 ### healthcare_datasets.fhir_stores.notification_config
 
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>.
 
 Type: object
 
 ### healthcare_datasets.fhir_stores.stream_configs
 
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>.
 
 Type: array(object)
 
@@ -881,9 +905,31 @@ Type: string
 
 ### healthcare_datasets.hl7_v2_stores.notification_configs
 
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>.
 
 Type: array(object)
+
+### healthcare_datasets.hl7_v2_stores.parser_config
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#parser_config>.
+
+Type: object
+
+### healthcare_datasets.hl7_v2_stores.parser_config.allow_null_header
+
+Type: boolean
+
+### healthcare_datasets.hl7_v2_stores.parser_config.schema
+
+Type: string
+
+### healthcare_datasets.hl7_v2_stores.parser_config.segment_terminator
+
+Type: string
+
+### healthcare_datasets.hl7_v2_stores.parser_config.version
+
+Type: string
 
 ### healthcare_datasets.iam_members
 

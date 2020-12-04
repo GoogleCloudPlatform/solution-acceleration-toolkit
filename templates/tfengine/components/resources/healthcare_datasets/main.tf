@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "healthcare_datasets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.1.0"
+  version = "~> 1.2.0"
 
   name     = "{{.name}}"
   project  = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
@@ -58,6 +58,12 @@ module "{{resourceName . "name"}}" {
     {
       name    = "{{.name}}"
       version = "{{.version}}"
+
+      {{hclField . "enable_update_create" -}}
+      {{hclField . "disable_referential_integrity" -}}
+      {{hclField . "disable_resource_versioning" -}}
+      {{hclField . "enable_history_import" -}}
+
       {{hclField . "iam_members" -}}
 
       {{if has . "notification_config" -}}
@@ -102,6 +108,19 @@ module "{{resourceName . "name"}}" {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
       {{hclField . "notification_configs" -}}
+
+      {{if has . "parser_config" -}}
+      parser_config = {
+        {{hclField .parser_config "allow_null_header" -}}
+        {{hclField .parser_config "segment_terminator" -}}
+        {{hclField .parser_config "version" -}}
+        {{if has .parser_config "schema" -}}
+        schema = <<EOF
+{{.parser_config.schema -}}
+        EOF
+        {{- end}}
+      }
+      {{end -}}
 
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {

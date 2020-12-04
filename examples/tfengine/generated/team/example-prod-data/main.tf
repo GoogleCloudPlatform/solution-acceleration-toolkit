@@ -102,7 +102,7 @@ module "example_mysql_instance" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.1.0"
+  version = "~> 1.2.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
@@ -130,6 +130,11 @@ module "example_healthcare_dataset" {
     {
       name    = "example-fhir-store"
       version = "R4"
+
+      enable_update_create          = true
+      disable_referential_integrity = false
+      disable_resource_versioning   = false
+      enable_history_import         = false
       iam_members = [
         {
           member = "group:example-fhir-viewers@example.com"
@@ -166,6 +171,15 @@ module "example_healthcare_dataset" {
           pubsub_topic = "projects/example-prod-data/topics/example-topic"
         },
       ]
+      parser_config = {
+        version = "V2"
+        schema  = <<EOF
+{
+  "schematizedParsingType": "SOFT_FAIL",
+  "ignoreMinOccurs": true
+}
+EOF
+      }
       labels = {
         env  = "prod"
         type = "phi"
