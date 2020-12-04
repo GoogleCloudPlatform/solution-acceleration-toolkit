@@ -228,9 +228,18 @@ template "project_data" {
       apis = [
         "bigquery.googleapis.com",
         "compute.googleapis.com",
-        "healthcare.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
+      ]
+      api_identities = [
+        # Need to create stream configs for Cloud Healthcare FHIR store.
+        {
+          api = "healthcare.googleapis.com"
+          roles = [
+            "roles/bigquery.dataEditor",
+            "roles/bigquery.jobUser"
+          ]
+        },
       ]
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
