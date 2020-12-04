@@ -910,6 +910,53 @@ schema = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>"
                   type        = "object"
                 }
+                stream_configs = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>"
+                  type        = "array"
+                  items = {
+                    type = "object"
+                    additionalProperties = false
+                    required = [
+                      "bigquery_destination",
+                    ]
+                    properties = {
+                      resource_types = {
+                        type        = "array"
+                        items = {
+                          type = "string"
+                        }
+                      }
+                      bigquery_destination = {
+                        type        = "object"
+                        additionalProperties = false
+                        required = [
+                          "dataset_uri",
+                          "schema_config",
+                        ]
+                        properties = {
+                          dataset_uri = {
+                            type = "string"
+                          }
+                          schema_config = {
+                            type = "object"
+                            additionalProperties = false
+                            required = [
+                              "recursive_structure_depth",
+                            ]
+                            properties = {
+                              schema_type = {
+                                type = "string"
+                              }
+                              recursive_structure_depth = {
+                                type = "integer"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }

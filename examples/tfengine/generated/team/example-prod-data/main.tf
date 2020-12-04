@@ -92,7 +92,7 @@ module "example_mysql_instance" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.0.0"
+  version = "~> 1.1.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
@@ -129,6 +129,19 @@ module "example_healthcare_dataset" {
       notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/example-topic"
       }
+      stream_configs = [
+        {
+          bigquery_destination = {
+            dataset_uri = "bq://example-prod-data.example_dataset_id"
+            schema_config = {
+              recursive_structure_depth = 3
+
+              schema_type = "ANALYTICS"
+            }
+          }
+          resource_types = ["Patient"]
+        },
+      ]
       labels = {
         env  = "prod"
         type = "phi"

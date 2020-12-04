@@ -80,7 +80,7 @@ module "example_mysql_instance" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.0.0"
+  version = "~> 1.1.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
