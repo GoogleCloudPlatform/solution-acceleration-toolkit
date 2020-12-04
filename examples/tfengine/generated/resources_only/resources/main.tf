@@ -51,7 +51,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.1.0"
+  version = "~> 1.2.0"
 
   name     = "example-healthcare-dataset"
   project  = "example-prod-project"
@@ -76,6 +76,7 @@ module "example_healthcare_dataset" {
     {
       name    = "example-fhir-store"
       version = "R4"
+
       iam_members = [
         {
           member = "group:example-fhir-viewers@example.com"

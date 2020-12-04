@@ -852,7 +852,7 @@ schema = {
                   }
                 }
                 notification_config = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>"
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>."
                   type        = "object"
                 }
               }
@@ -876,6 +876,22 @@ schema = {
                 version = {
                   description = "Version of FHIR store."
                   type        = "string"
+                }
+                enable_update_create = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_update_create>."
+                  type        = "boolean"
+                }
+                disable_referential_integrity = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_referential_integrity>."
+                  type        = "boolean"
+                }
+                disable_resource_versioning = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_resource_versioning>."
+                  type        = "boolean"
+                }
+                enable_history_import = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_import>."
+                  type        = "boolean"
                 }
                 labels = {
                   description = "Labels to set on the FHIR store."
@@ -907,11 +923,11 @@ schema = {
                   }
                 }
                 notification_config = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>"
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>."
                   type        = "object"
                 }
                 stream_configs = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>"
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>."
                   type        = "array"
                   items = {
                     type = "object"
@@ -1004,10 +1020,29 @@ schema = {
                   }
                 }
                 notification_configs = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>"
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>."
                   type        = "array"
                   items = {
                     type = "object"
+                  }
+                }
+                parser_config = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#parser_config>."
+                  type        = "object"
+                  additionalProperties = false
+                  properties = {
+                    allow_null_header = {
+                      type = "boolean"
+                    }
+                    segment_terminator = {
+                      type = "string"
+                    }
+                    schema = {
+                      type = "string"
+                    }
+                    version = {
+                      type = "string"
+                    }
                   }
                 }
               }

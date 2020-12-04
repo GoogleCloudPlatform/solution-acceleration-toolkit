@@ -286,6 +286,10 @@ template "project_data" {
         fhir_stores = [{
           name    = "example-fhir-store"
           version = "R4"
+          enable_update_create          = true
+          disable_referential_integrity = false
+          disable_resource_versioning   = false
+          enable_history_import         = false
           labels = {
             type = "phi"
           }
@@ -314,6 +318,15 @@ template "project_data" {
           notification_configs = [{
             pubsub_topic = "projects/example-prod-data/topics/example-topic"
           }]
+          parser_config = {
+            schema  = <<EOF
+{
+  "schematizedParsingType": "SOFT_FAIL",
+  "ignoreMinOccurs": true
+}
+EOF
+            version = "V2"
+          }
           labels = {
             type = "phi"
           }
