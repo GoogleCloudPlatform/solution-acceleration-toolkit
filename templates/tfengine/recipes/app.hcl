@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+template "git" {
+  component_path = "../components/git"
+}
+
 template "devops" {
   component_path = "../components/app/devops"
   output_path = "./envs/shared/devops"
