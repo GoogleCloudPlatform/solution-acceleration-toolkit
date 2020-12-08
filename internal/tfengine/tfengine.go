@@ -76,6 +76,10 @@ func Run(confPath, outPath string, opts *Options) error {
 	}
 	defer os.RemoveAll(tmpDir)
 
+	if err := addGitIgnore(tmpDir); err != nil {
+		return err
+	}
+
 	if err := dump(c, filepath.Dir(confPath), opts.CacheDir, tmpDir, opts.WantedTemplates); err != nil {
 		return err
 	}
@@ -221,6 +225,20 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 		if err := write(cp, outputPath, data); err != nil {
 			return fmt.Errorf("component %q: %v", cp, err)
 		}
+	}
+	return nil
+}
+
+func addGitIgnore(path string) error {
+	data := []byte(`# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+`)
+	if err := ioutil.WriteFile(fmt.Sprintf("%s/.gitignore", path), data, 0644); err != nil {
+		return err
 	}
 	return nil
 }
