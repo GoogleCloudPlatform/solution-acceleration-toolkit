@@ -237,7 +237,7 @@ func addGitIgnore(path string) error {
 *.tfstate
 *.tfstate.*
 `)
-	if err := ioutil.WriteFile(fmt.Sprintf("%s/.gitignore", path), data, 0644); err != nil {
+	if err := ioutil.WriteFile(filepath.Join(path, ".gitignore"), data, 0644); err != nil {
 		return err
 	}
 	return nil
