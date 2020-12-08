@@ -217,8 +217,8 @@ The engine takes a path to an input config and a path to output the generated
 Terraform configs. For details on fields for the input schemas, see the
 [schemas](./schemas) directory. The input config can use
 [Go templates](https://golang.org/pkg/text/template/#hdr-Actions) to
-programmatically express the resources being deployed. After the output has
-been generated, there is no longer a dependency on the engine and the user can
+programmatically express the resources being deployed. After the output has been
+generated, there is no longer a dependency on the engine and the user can
 directly use the `terraform` binary to deploy the infrastructure.
 
 1. Replace the values in a suitable [example](../../examples/tfengine) with
