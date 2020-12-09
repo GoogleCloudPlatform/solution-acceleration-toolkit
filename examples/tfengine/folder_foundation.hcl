@@ -78,6 +78,7 @@ template "cicd" {
         }
         managed_dirs = [
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "groups",
           "audit",
           "monitor",
           "folders",
@@ -85,6 +86,31 @@ template "cicd" {
         ]
       }
     ]
+  }
+}
+
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        {
+          id = "example-auditors@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+          members = [
+            "user2@example.com"
+          ]
+        },
+      ]
+    }
   }
 }
 

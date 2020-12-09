@@ -212,7 +212,7 @@ module "project_iam_members" {
 
   bindings = {
     "roles/container.viewer" = [
-      "group:example-viewers@example.com",
+      "group:example-apps-viewers@example.com",
     ],
   }
 }
