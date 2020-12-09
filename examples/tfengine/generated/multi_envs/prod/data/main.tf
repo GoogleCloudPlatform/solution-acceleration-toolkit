@@ -24,6 +24,13 @@ terraform {
   }
 }
 
+data "terraform_remote_state" "folders" {
+  backend = "gcs"
+  config = {
+    bucket = "example-terraform-state"
+    prefix = "folders"
+  }
+}
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -33,7 +40,7 @@ module "project" {
 
   name                           = "example-data-prod"
   org_id                         = ""
-  folder_id                      = "12345678"
+  folder_id                      = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
   billing_account                = "000-000-000"
   lien                           = true
   default_service_account        = "keep"
