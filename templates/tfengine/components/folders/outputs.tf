@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 output "folder_ids" {
   value = {
     {{range .folders -}}
-    "{{resourceName . "display_name"}}" = google_folder.{{resourceName . "display_name"}}.folder_id
+    {{resourceName . "display_name"}} = google_folder.{{resourceName . "display_name"}}.folder_id
     {{end -}}
   }
 }

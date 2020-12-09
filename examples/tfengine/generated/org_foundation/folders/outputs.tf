@@ -14,9 +14,9 @@
 
 output "folder_ids" {
   value = {
-    "prod"       = google_folder.prod.folder_id
-    "prod_team1" = google_folder.prod_team1.folder_id
-    "dev"        = google_folder.dev.folder_id
-    "dev_team1"  = google_folder.dev_team1.folder_id
+    prod       = google_folder.prod.folder_id
+    prod_team1 = google_folder.prod_team1.folder_id
+    dev        = google_folder.dev.folder_id
+    dev_team1  = google_folder.dev_team1.folder_id
   }
 }

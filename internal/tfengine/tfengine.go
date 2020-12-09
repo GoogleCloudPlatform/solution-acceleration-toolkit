@@ -256,6 +256,7 @@ func ConvertToLocalBackend(path string) error {
 
 		b = backendRE.ReplaceAll(b, nil)
 		b = remoteStateResourceRE.ReplaceAll(b, nil)
+		// Replace data.terraform_remote_state references with a dummy string value.
 		b = remoteStateDataRE.ReplaceAll(b, []byte("000"))
 
 		if err := ioutil.WriteFile(path, b, 0644); err != nil {

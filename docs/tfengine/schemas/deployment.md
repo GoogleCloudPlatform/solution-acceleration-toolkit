@@ -57,7 +57,8 @@ Type: array(object)
 ### terraform_addons.states.prefix
 
 Prefix of the state to fetch.
-It is the state_path_prefix set for a deployment or the output_path if that is not set.
+It is the `state_path_prefix` set for a deployment or the `output_path`
+if `state_path_prefix` is not set.
 
 Type: string
 
