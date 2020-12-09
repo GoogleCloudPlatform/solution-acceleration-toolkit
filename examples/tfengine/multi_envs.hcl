@@ -81,6 +81,9 @@ template "cicd" {
         }
         managed_dirs = [
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "groups",
+          "audit",
+          "folders",
           "dev/data",
         ]
       },
@@ -98,8 +101,6 @@ template "cicd" {
         }
         managed_dirs = [
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
-          "groups",
-          "audit",
           "prod/data",
         ]
       }
@@ -154,11 +155,29 @@ template "audit" {
   }
 }
 
+# Subfolders.
+template "folders" {
+  recipe_path = "{{$recipes}}/folders.hcl"
+  output_path = "./folders"
+  data = {
+    folders = [
+      {
+        display_name = "dev"
+      },
+      {
+        display_name = "prod"
+      },
+    ]
+  }
+}
+
 # Dev data project for team 1.
 template "project_data_dev" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./dev/data"
   data = {
+    parent_type = "folder"
+    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"dev\"]}"
     project = {
       project_id = "example-data-dev"
       apis = [
@@ -173,6 +192,13 @@ template "project_data_dev" {
         }
       }]
     }
+    terraform_addons = {
+      states = [
+        {
+          prefix = "folders"
+        }
+      ]
+    }
   }
 }
 
@@ -182,6 +208,8 @@ template "project_data_prod" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./prod/data"
   data = {
+    parent_type = "folder"
+    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"prod\"]}"
     project = {
       project_id         = "example-data-prod"
       is_shared_vpc_host = true
@@ -196,6 +224,13 @@ template "project_data_prod" {
           env = "prod"
         }
       }]
+    }
+    terraform_addons = {
+      states = [
+        {
+          prefix = "folders"
+        }
+      ]
     }
   }
 }
