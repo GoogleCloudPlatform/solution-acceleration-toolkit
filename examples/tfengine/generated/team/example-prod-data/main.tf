@@ -73,7 +73,7 @@ module "one_billion_ms_example_dataset" {
       special_group = "projectOwners"
     },
     {
-      group_by_email = "example-readers@example.com"
+      group_by_email = "example-data-viewers@example.com"
       role           = "roles/bigquery.dataViewer"
     },
   ]
@@ -228,7 +228,7 @@ module "example_prod_bucket" {
   ]
   iam_members = [
     {
-      member = "group:example-readers@example.com"
+      member = "group:example-data-viewers@example.com"
       role   = "roles/storage.objectViewer"
     },
   ]

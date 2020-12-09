@@ -770,7 +770,7 @@ schema = {
       }
     }
     healthcare_datasets = {
-      description = "[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)"
+      description = "[Module](https://github.com/terraform-google-modules/terraform-google-healthcare)"
       type        = "array"
       items = {
         additionalProperties = false
@@ -1191,7 +1191,7 @@ schema = {
       }
     }
     storage_buckets = {
-      description = "[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)"
+      description = "[Module](https://github.com/terraform-google-modules/terraform-google-cloud-storage/tree/master/modules/simple_bucket)"
       type        = "array"
       additionalProperties = false
       items = {
@@ -1315,6 +1315,56 @@ schema = {
         }
       }
     }
+    groups = {
+      description = "[Module](https://github.com/terraform-google-modules/terraform-google-group)"
+      type        = "array"
+      additionalProperties = false
+      items = {
+        properties = {
+          id = {
+            description = "Email address of the group."
+            type        = "string"
+          }
+          customer_id = {
+            description = <<EOF
+              Customer ID of the organization to create the group in.
+              See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+              for how to obtain it.
+            EOF
+            type        = "string"
+          }
+          description = {
+            description = "Description of the group."
+            type        = "string"
+          }
+          display_name = {
+            description = "Display name of the group."
+            type        = "string"
+          }
+          owners = {
+            description = "Owners of the group."
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
+          managers = {
+            description = "Managers of the group."
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
+          members = {
+            description = "Members of the group."
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -1405,5 +1455,11 @@ template "service_accounts" {
 {{if has . "storage_buckets"}}
 template "storage_buckets" {
   component_path = "../components/resources/storage_buckets"
+}
+{{end}}
+
+{{if has . "groups"}}
+template "groups" {
+  component_path = "../components/resources/groups"
 }
 {{end}}

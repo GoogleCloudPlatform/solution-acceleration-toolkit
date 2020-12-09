@@ -61,7 +61,7 @@ template "resources" {
           },
           {
             role           = "roles/bigquery.dataViewer"
-            group_by_email = "example-readers@example.com"
+            group_by_email = "example-data-viewers@example.com"
           },
         ]
       }]
@@ -102,7 +102,7 @@ template "resources" {
         }
         iam_members = [{
           role   = "roles/storage.objectViewer"
-          member = "group:example-readers@example.com"
+          member = "group:example-data-viewers@example.com"
         }]
       }]
     }

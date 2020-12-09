@@ -100,6 +100,11 @@ schema = {
   }
 }
 
+template "git" {
+  component_path = "../components/git"
+  output_path    = ".."
+}
+
 template "devops" {
   component_path = "../components/devops"
 }

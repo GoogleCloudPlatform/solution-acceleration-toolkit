@@ -711,9 +711,59 @@ Name of the GKE cluster's subnet.
 
 Type: string
 
+### groups
+
+[Module](https://github.com/terraform-google-modules/terraform-google-group)
+
+Type: array()
+
+### groups.customer_id
+
+Customer ID of the organization to create the group in.
+See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+for how to obtain it.
+
+Type: string
+
+### groups.description
+
+Description of the group.
+
+Type: string
+
+### groups.display_name
+
+Display name of the group.
+
+Type: string
+
+### groups.id
+
+Email address of the group.
+
+Type: string
+
+### groups.managers
+
+Managers of the group.
+
+Type: array(string)
+
+### groups.members
+
+Members of the group.
+
+Type: array(string)
+
+### groups.owners
+
+Owners of the group.
+
+Type: array(string)
+
 ### healthcare_datasets
 
-[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)
+[Module](https://github.com/terraform-google-modules/terraform-google-healthcare)
 
 Type: array()
 
@@ -1099,7 +1149,7 @@ Type: string
 
 ### storage_buckets
 
-[Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql)
+[Module](https://github.com/terraform-google-modules/terraform-google-cloud-storage/tree/master/modules/simple_bucket)
 
 Type: array()
 
