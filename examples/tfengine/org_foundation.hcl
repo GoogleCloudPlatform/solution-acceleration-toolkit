@@ -55,10 +55,14 @@ template "cicd" {
       owner = "GoogleCloudPlatform"
       name  = "example"
     }
-    terraform_root = "terraform"
+
+    # Required for scheduler.
+    scheduler_region = "us-east1"
+
     build_viewers  = ["group:example-cicd-viewers@example.com"]
     build_editors  = ["group:example-cicd-editors@example.com"]
 
+    terraform_root = "terraform"
     envs = [
       {
         name        = "prod"

@@ -53,8 +53,6 @@ locals {
     "serviceusage.googleapis.com",
     "sqladmin.googleapis.com",
     "sourcerepo.googleapis.com",
-    "appengine.googleapis.com",
-    "cloudscheduler.googleapis.com",
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
@@ -167,6 +165,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 
 # Cloud Scheduler resources.
 # Cloud Scheduler requires an App Engine app created in the project.
+# App Engine app cannot be destroyed once created, therefore always create it.
 resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   project     = var.project_id
   location_id = "us-east1"
@@ -175,24 +174,7 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
-# Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
-resource "google_service_account" "cloudbuild_scheduler_sa" {
-  project      = var.project_id
-  account_id   = "cloudbuild-scheduler-sa"
-  display_name = "Cloud Build scheduler service account"
-  depends_on = [
-    google_project_service.services,
-  ]
-}
 
-resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.editor"
-  member  = "serviceAccount:${google_service_account.cloudbuild_scheduler_sa.email}"
-  depends_on = [
-    google_project_service.services,
-  ]
-}
 
 # Cloud Build - Cloud Build Service Account IAM permissions
 # IAM permissions to allow Cloud Build Service Account use the billing account.

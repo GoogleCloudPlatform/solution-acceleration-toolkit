@@ -212,9 +212,9 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   ]
 }
 
-{{if $hasScheduledJobs -}}
 # Cloud Scheduler resources.
 # Cloud Scheduler requires an App Engine app created in the project.
+# App Engine app cannot be destroyed once created, therefore always create it.
 resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   project     = var.project_id
   location_id = "{{.scheduler_region}}"
@@ -223,6 +223,7 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
+{{if $hasScheduledJobs -}}
 # Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
 resource "google_service_account" "cloudbuild_scheduler_sa" {
   project      = var.project_id
