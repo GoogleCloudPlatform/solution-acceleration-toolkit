@@ -18,6 +18,7 @@ schema = {
   required = [
     "envs",
     "terraform_root",
+    "scheduler_region",
   ]
   properties = {
     project_id = {
