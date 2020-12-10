@@ -125,7 +125,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 1. [Create](https://support.google.com/a/answer/33343?hl=en) the following
     administrative
     [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity)
-    groups:
+    groups manually so they can be used in the `devops` and `cicd` deployment:
 
     - {PREFIX}-{org|folder}-admins@{DOMAIN}: Members of this group get
         administrative access to the org or folder. This group can be used in
@@ -136,13 +136,13 @@ This tool helps you follow Google Cloud and Terraform best practices:
         to the devops project to make changes to the CICD project or to make
         changes to the Terraform state.
 
-    - {PREFIX}-auditors@{DOMAIN}: Members of this group get security reviewer
-        (metadata viewer) access to the entire org or folder and viewer access
-        to the audit logs BigQuery and Cloud Storage resources.
-
     - {PREFIX}-cicd-viewers@{DOMAIN}: Members of this group can view CICD
         results such as presubmit speculative plan and postsubmit deployment
         results.
+
+    - {PREFIX}-cicd-editors@{DOMAIN}: Members of this group can edit and
+        trigger CICD pipelines such as presubmit speculative plan and postsubmit
+        deployment.
 
     For example, for an org deployment with sample prefix "gcp" and domain
     "example.com", the admin group "gcp-org-admins@example.com" would be
@@ -151,14 +151,20 @@ This tool helps you follow Google Cloud and Terraform best practices:
     WARNING: The best practice is to always deploy changes using CICD. The
     privileged groups should remain empty and only have humans added for
     emergency situations or when investigation is required. This does not apply
-    to view-only groups such as approvers.
+    to view-only groups such as cicd-viewers.
 
-1. The running user will need to be a super admin or have the following roles:
+    Once `devops` and `cicd` deployments are completed. More groups can be
+    created and managed automatically by using the `groups` resource. See the
+    `template "groups"` section in [team.hcl](../../examples/tfengine/team.hcl)
+    for an example.
+
+1. The running user will need to be a Google Workspace Super Admin and have the
+    following Cloud IAM roles:
 
     - `roles/resourcemanager.organizationAdmin` on the org for org deployment
-    - `roles/resourcemanager.folderAdmin` on the folder for folder
-        deployment
+    - `roles/resourcemanager.folderAdmin` on the folder for folder deployment
     - `roles/resourcemanager.projectCreator` on the org or folder
+    - `roles/compute.xpnAdmin` on the org or folder
     - `roles/billing.admin` on the billing account
 
 ## Defining Architecture
@@ -192,7 +198,7 @@ Download a pre-built
 [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/):
 
 ```shell
-VERSION=v0.2.0
+VERSION=v0.4.0
 wget -O /usr/local/bin/tfengine https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64
 chmod +x /usr/local/bin/tfengine
 ```
@@ -208,8 +214,10 @@ go install ./cmd/tfengine
 ## Usage
 
 The engine takes a path to an input config and a path to output the generated
-Terraform configs. For details on fields for the input schema, see the
-[schema](../../internal/tfengine/schema.go). After the output has been
+Terraform configs. For details on fields for the input schemas, see the
+[schemas](./schemas) directory. The input config can use
+[Go templates](https://golang.org/pkg/text/template/#hdr-Actions) to
+programmatically express the resources being deployed. After the output has been
 generated, there is no longer a dependency on the engine and the user can
 directly use the `terraform` binary to deploy the infrastructure.
 
@@ -291,9 +299,9 @@ directly use the `terraform` binary to deploy the infrastructure.
         ```
 
 1. (Optional) To deploy Continuous Integration (CI) and Continuous Deployment
-    (CD) resources, follow the instructions in components/cicd/README.md in this
-    directory or $OUTPUT_PATH/cicd/README.md in the generated Terraform configs
-    directory.
+    (CD) resources, follow the instructions
+    [here](../../templates/tfengine/components/cicd/README.md) or equivalently,
+    `$OUTPUT_PATH/cicd/README.md` in the generated Terraform configs directory.
 
     Your devops project and CICD pipelines are ready. The following changes
     should be made as Pull Requests (PRs) and go though code reviews. After
@@ -302,9 +310,6 @@ directly use the `terraform` binary to deploy the infrastructure.
 
 1. Deploy org infrastructure and other resources by sending a PR for local
     changes to the config repo.
-
-1. (Optional) Deploy secrets if set and set the values for manual ones in the
-    GCP console.
 
 1. Follow the instructions of all commented out blocks starting with
     `TODO(user)` in the config to deploy the changes. Remove the comment once

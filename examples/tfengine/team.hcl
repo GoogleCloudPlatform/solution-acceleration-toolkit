@@ -73,10 +73,13 @@ template "cicd" {
       name  = "example"
     }
 
-    terraform_root = "terraform"
+    # Required for scheduler.
+    scheduler_region = "us-east1"
+
     build_viewers  = ["group:example-cicd-viewers@example.com"]
     build_editors  = ["group:example-cicd-editors@example.com"]
 
+    terraform_root = "terraform"
     envs = [
       {
         name        = "prod"
@@ -97,6 +100,56 @@ template "cicd" {
         ]
       }
     ]
+  }
+}
+
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        {
+          id = "example-apps-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-data-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-healthcare-dataset-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-fhir-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "bastion-accessors@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+      ]
+    }
   }
 }
 
@@ -252,7 +305,7 @@ template "project_data" {
           },
           {
             role           = "roles/bigquery.dataViewer"
-            group_by_email = "example-readers@example.com"
+            group_by_email = "example-data-viewers@example.com"
           },
         ]
       }]
@@ -354,7 +407,7 @@ EOF
         }]
         iam_members = [{
           role   = "roles/storage.objectViewer"
-          member = "group:example-readers@example.com"
+          member = "group:example-data-viewers@example.com"
         }]
       }]
     }
@@ -443,7 +496,7 @@ template "project_apps" {
         }
       }]
       iam_members = {
-        "roles/container.viewer" = ["group:example-viewers@example.com"]
+        "roles/container.viewer" = ["group:example-apps-viewers@example.com"]
       }
       dns_zones = [{
         name   = "example-domain"

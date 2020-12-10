@@ -41,7 +41,6 @@ schema = {
         Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type    = "string"
-      pattern = "^[0-9]{8,25}$"
     }
     project = {
       description          = "Config for the project."
@@ -124,9 +123,6 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
-  flatten {
-    key = "project"
-  }
 }
 
 

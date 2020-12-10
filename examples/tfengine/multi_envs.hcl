@@ -61,7 +61,7 @@ template "cicd" {
       ]
     }
 
-    # Required to create Cloud Scheduler jobs.
+    # Required for scheduler.
     scheduler_region = "us-east1"
 
     build_viewers = ["group:example-cicd-viewers@example.com"]
@@ -70,17 +70,29 @@ template "cicd" {
     terraform_root = "terraform"
     envs = [
       {
-        name        = "dev"
-        branch_name = "dev"
+        name        = "shared"
+        branch_name = "shared"
         triggers = {
           validate = {}
-          plan = {
-            run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
-          }
+          plan = {}
           apply = {}
         }
         managed_dirs = [
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
+          "groups",
+          "audit",
+          "folders",
+        ]
+      },
+      {
+        name        = "dev"
+        branch_name = "dev"
+        triggers = {
+          validate = {}
+          plan = {}
+          apply = {}
+        }
+        managed_dirs = [
           "dev/data",
         ]
       },
@@ -89,20 +101,41 @@ template "cicd" {
         branch_name = "main"
         triggers = {
           validate = {}
-          plan = {
-            run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
-          }
+          plan = {}
           apply = {
-            run_on_push = false # Do not auto run on push to branch
+            run_on_push = false # Do not auto run on push to prod branch
           }
         }
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
-          "audit",
           "prod/data",
         ]
       }
     ]
+  }
+}
+
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        {
+          id = "example-auditors@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+          members = [
+            "user2@example.com"
+          ]
+        },
+      ]
+    }
   }
 }
 
@@ -128,11 +161,29 @@ template "audit" {
   }
 }
 
+# Subfolders.
+template "folders" {
+  recipe_path = "{{$recipes}}/folders.hcl"
+  output_path = "./folders"
+  data = {
+    folders = [
+      {
+        display_name = "dev"
+      },
+      {
+        display_name = "prod"
+      },
+    ]
+  }
+}
+
 # Dev data project for team 1.
 template "project_data_dev" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./dev/data"
   data = {
+    parent_type = "folder"
+    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"dev\"]}"
     project = {
       project_id = "example-data-dev"
       apis = [
@@ -147,6 +198,13 @@ template "project_data_dev" {
         }
       }]
     }
+    terraform_addons = {
+      states = [
+        {
+          prefix = "folders"
+        }
+      ]
+    }
   }
 }
 
@@ -156,6 +214,8 @@ template "project_data_prod" {
   recipe_path = "{{$recipes}}/project.hcl"
   output_path = "./prod/data"
   data = {
+    parent_type = "folder"
+    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"prod\"]}"
     project = {
       project_id         = "example-data-prod"
       is_shared_vpc_host = true
@@ -170,6 +230,13 @@ template "project_data_prod" {
           env = "prod"
         }
       }]
+    }
+    terraform_addons = {
+      states = [
+        {
+          prefix = "folders"
+        }
+      ]
     }
   }
 }

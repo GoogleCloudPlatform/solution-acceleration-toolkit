@@ -24,6 +24,14 @@ terraform {
   }
 }
 
+{{if has . "groups" -}}
+# Required for Cloud Identity API to create and manage groups.
+provider "google-beta" {
+  user_project_override = true
+  billing_project       = {{- if get .project "exists" false}} "{{.project.project_id}}" {{- else}} module.project.project_id {{end}}
+}
+{{end -}}
+
 {{if has . "raw_config" -}}
 {{.raw_config}}
 {{end -}}

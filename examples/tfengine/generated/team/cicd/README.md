@@ -34,6 +34,11 @@ to detect changes in the repo, trigger builds, and run the workloads.
     terraform apply
     ```
 
+1. Follow the steps
+    [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account)
+    to grant Google Workspace Group Admin role to the CICD service account so
+    CICD can create and manage groups and memberships for you.
+
 ## CICD Container
 
 The Docker container used for CICD executions are built and maintained by the

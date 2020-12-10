@@ -294,6 +294,8 @@ github.com/hashicorp/hcl/v2 v2.7.1 h1:eZWfKEO93WyE4OnZSD5LVy70YHDV/mmQ49gpKDLpDV
 github.com/hashicorp/hcl/v2 v2.7.1/go.mod h1:bQTN5mpo+jewjJgh8jr0JUguIi7qPHUF6yIfAEN3jqY=
 github.com/hashicorp/hcl/v2 v2.7.2 h1:SpE9BfBb/nFxXRZvvKINKeQiGpyj6d0hhgXVqEtLGD4=
 github.com/hashicorp/hcl/v2 v2.7.2/go.mod h1:bQTN5mpo+jewjJgh8jr0JUguIi7qPHUF6yIfAEN3jqY=
+github.com/hashicorp/hcl/v2 v2.8.0 h1:iHLEAsNDp3N2MtqroP1wf0nF/zB2+McHN5YCzwqIm80=
+github.com/hashicorp/hcl/v2 v2.8.0/go.mod h1:bQTN5mpo+jewjJgh8jr0JUguIi7qPHUF6yIfAEN3jqY=
 github.com/hashicorp/hil v0.0.0-20190212112733-ab17b08d6590/go.mod h1:n2TSygSNwsLJ76m8qFXTSc7beTb+auJxYdqrnoqwZWE=
 github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 h1:n9J0rwVWXDpNd5iZnwY7w4WZyq53/rROeI7OVvLW8Ok=
 github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038/go.mod h1:n2TSygSNwsLJ76m8qFXTSc7beTb+auJxYdqrnoqwZWE=
@@ -307,6 +309,10 @@ github.com/hashicorp/terraform v0.13.5 h1:QgPgb/pOBclUMymDji9255FlseySf9dRcUMzJw
 github.com/hashicorp/terraform v0.13.5/go.mod h1:1H1qcnppNc/bBGc7poOfnmmBeQMlF0stEN3haY3emCU=
 github.com/hashicorp/terraform v0.14.0 h1:s0OivKdekGqireI8vzOXkXUHb0QxNfG8rnGuPS+cQMU=
 github.com/hashicorp/terraform v0.14.0/go.mod h1:K/qLM9bt3zVQPWrOn7IWiHbmNms5bn2O4UWycd2kMjk=
+github.com/hashicorp/terraform v0.14.1 h1:yXU8pWSgnxhB2LNO10Dg5S7FZss1hvuEcSsMw+V0DA4=
+github.com/hashicorp/terraform v0.14.1/go.mod h1:zpmSSdH4QT4o1J1+6OeSP2DYIWDCwIrbnLRP5j7z2jI=
+github.com/hashicorp/terraform v0.14.2 h1:5NfiWYxqV4azt0qI25uqOwoMRU3QsT/9kKggITFesBI=
+github.com/hashicorp/terraform v0.14.2/go.mod h1:zpmSSdH4QT4o1J1+6OeSP2DYIWDCwIrbnLRP5j7z2jI=
 github.com/hashicorp/terraform-config-inspect v0.0.0-20191212124732-c6ae6269b9d7/go.mod h1:p+ivJws3dpqbp1iP84+npOyAmTTOLMgCzrXd3GSdn/A=
 github.com/hashicorp/terraform-svchost v0.0.0-20191011084731-65d371908596/go.mod h1:kNDNcF7sN4DocDLBkQYz73HGKwN1ANB1blq4lIYLYvg=
 github.com/hashicorp/terraform-svchost v0.0.0-20191119180714-d2e4933b9136 h1:81Dg7SK6Q5vzqFItO8e1iIF2Nj8bLXV23NXjEgbev/s=
