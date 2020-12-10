@@ -70,13 +70,11 @@ template "cicd" {
     terraform_root = "terraform"
     envs = [
       {
-        name        = "dev"
-        branch_name = "dev"
+        name        = "shared"
+        branch_name = "shared"
         triggers = {
           validate = {}
-          plan = {
-            run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
-          }
+          plan = {}
           apply = {}
         }
         managed_dirs = [
@@ -84,6 +82,17 @@ template "cicd" {
           "groups",
           "audit",
           "folders",
+        ]
+      },
+      {
+        name        = "dev"
+        branch_name = "dev"
+        triggers = {
+          validate = {}
+          plan = {}
+          apply = {}
+        }
+        managed_dirs = [
           "dev/data",
         ]
       },
@@ -92,15 +101,12 @@ template "cicd" {
         branch_name = "main"
         triggers = {
           validate = {}
-          plan = {
-            run_on_schedule = "0 12 * * *" # Run at 12 PM EST everyday
-          }
+          plan = {}
           apply = {
-            run_on_push = false # Do not auto run on push to branch
+            run_on_push = false # Do not auto run on push to prod branch
           }
         }
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "prod/data",
         ]
       }
