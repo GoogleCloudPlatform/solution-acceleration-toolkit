@@ -15,11 +15,11 @@ limitations under the License. */ -}}
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   {{- if has . "shared_vpc_attachment"}}
-  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.2.0"
+  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  version = "~> 10.0.1"
   {{- else}}
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2.0"
+  version = "~> 10.0.1"
   {{- end}}
 
   {{- if get . "use_constants"}}
@@ -41,7 +41,6 @@ module "project" {
   {{- end}}
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
-  skip_gcloud_download    = true
 
   {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true

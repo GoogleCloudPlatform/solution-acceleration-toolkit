@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.12, <0.14"
+  required_version = ">=0.13, <0.14"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -29,7 +29,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2.0"
+  version = "~> 10.0.1"
 
   name                           = "example-prod-networks"
   org_id                         = ""
@@ -37,7 +37,6 @@ module "project" {
   billing_account                = "000-000-000"
   lien                           = true
   default_service_account        = "keep"
-  skip_gcloud_download           = true
   enable_shared_vpc_host_project = true
   activate_apis                  = ["compute.googleapis.com"]
 }

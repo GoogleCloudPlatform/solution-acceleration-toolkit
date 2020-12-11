@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.12, <0.14"
+  required_version = ">=0.13, <0.14"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -32,8 +32,8 @@ resource "google_compute_address" "static" {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.2.0"
+  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  version = "~> 10.0.1"
 
   name                    = "example-prod-apps"
   org_id                  = ""
@@ -41,7 +41,6 @@ module "project" {
   billing_account         = "000-000-000"
   lien                    = true
   default_service_account = "keep"
-  skip_gcloud_download    = true
 
   shared_vpc = "example-prod-networks"
   shared_vpc_subnets = [
@@ -136,6 +135,10 @@ module "example_instance_template" {
     env  = "prod"
     type = "no-phi"
   }
+
+  depends_on = [
+    module.project
+  ]
 }
 
 module "instance" {
@@ -176,33 +179,6 @@ module "example_domain" {
   ]
 }
 
-module "example_gke_cluster" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 12.1.0"
-
-  # Required.
-  name               = "example-gke-cluster"
-  project_id         = module.project.project_id
-  region             = "us-central1"
-  regional           = true
-  network_project_id = "example-prod-networks"
-
-  network                        = "example-network"
-  subnetwork                     = "example-gke-subnet"
-  ip_range_pods                  = "example-pods-range"
-  ip_range_services              = "example-services-range"
-  master_ipv4_cidr_block         = "192.168.0.0/28"
-  istio                          = true
-  skip_provisioners              = true
-  enable_private_endpoint        = false
-  release_channel                = "STABLE"
-  compute_engine_service_account = "gke@example-prod-apps.iam.gserviceaccount.com"
-  cluster_resource_labels = {
-    env  = "prod"
-    type = "no-phi"
-  }
-}
-
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 6.4.0"
@@ -238,6 +214,10 @@ module "foo_topic" {
       name          = "push-subscription"
       push_endpoint = "https://example.com"
     },
+  ]
+
+  depends_on = [
+    module.project
   ]
 }
 

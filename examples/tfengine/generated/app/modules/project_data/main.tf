@@ -24,8 +24,8 @@ locals {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.2.0"
+  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  version = "~> 10.0.1"
 
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-data"
   org_id                  = ""
@@ -33,7 +33,6 @@ module "project" {
   billing_account         = local.constants.billing_account
   lien                    = true
   default_service_account = "keep"
-  skip_gcloud_download    = true
 
   shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
   activate_apis = []

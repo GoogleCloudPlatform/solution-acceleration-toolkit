@@ -25,7 +25,7 @@ locals {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2.0"
+  version = "~> 10.0.1"
 
   name                           = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
   org_id                         = ""
@@ -33,7 +33,6 @@ module "project" {
   billing_account                = local.constants.billing_account
   lien                           = true
   default_service_account        = "keep"
-  skip_gcloud_download           = true
   enable_shared_vpc_host_project = true
   activate_apis                  = ["compute.googleapis.com"]
 }
@@ -114,6 +113,9 @@ module "cloud_sql_private_service_access_example_network" {
 
   project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
+  depends_on = [
+    module.project
+  ]
 }
 
 module "example_router" {

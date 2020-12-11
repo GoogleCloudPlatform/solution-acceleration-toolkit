@@ -68,6 +68,11 @@ module "cloud_sql_private_service_access_{{$resource_name}}" {
 
   project_id  = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
   vpc_network = module.{{$resource_name}}.network_name
+  {{- if not (get $.project "exists" false)}}
+  depends_on =[
+    module.project
+  ]
+  {{end -}}
 }
 {{- end}}
 {{- end}}

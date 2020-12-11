@@ -51,5 +51,7 @@ module "{{resourceName . "name"}}" {
     {{end -}}
   }
   {{end -}}
+  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
+  # Add depends_on = [module.project] once https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/677 is fixed.
 }
 {{end -}}
