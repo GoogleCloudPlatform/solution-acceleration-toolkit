@@ -247,7 +247,7 @@ directly use the `terraform` binary to deploy the infrastructure.
     CONFIG_PATH=examples/tfengine/org_foundation.hcl
     OUTPUT_PATH=/tmp/engine
     ```
-    
+
    **NOTE**: If you plan to set up CICD, the `terraform_root` variable in the
    CICD template should correspond to the parent directory in OUTPUT_PATH that
    would be checked into source control.
