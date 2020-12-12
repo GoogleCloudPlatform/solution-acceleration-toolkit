@@ -715,7 +715,7 @@ Type: string
 
 [Module](https://github.com/terraform-google-modules/terraform-google-group)
 
-Type: array()
+Type: array(object)
 
 ### groups.customer_id
 

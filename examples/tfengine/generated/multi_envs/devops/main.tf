@@ -18,7 +18,8 @@
 # - Deletion lien,
 # - Project level IAM permissions for the project owners,
 # - A Cloud Storage bucket to store Terraform states for all deployments,
-# - Org level IAM permissions for org admins.
+# - Admin permission at folder level,
+# - Cloud Identity groups and memberships, if requested.
 
 // TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
 terraform {
@@ -27,6 +28,12 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
+}
+
+# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
+provider "google-beta" {
+  user_project_override = true
+  billing_project       = "example-devops"
 }
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
@@ -56,16 +63,41 @@ module "state_bucket" {
   location   = "us-central1"
 }
 
+# Devops project owners group.
+module "owners_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-devops-owners@example.com"
+  customer_id = "c12345678"
+  owners      = ["user1@example.com"]
+  depends_on = [
+    module.project
+  ]
+}
+
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = ["group:example-devops-owners@example.com"]
+  members = ["group:${module.owners_group.id}"]
 }
 
-# Org level IAM permissions for org admins.
+# Admins group for at folder level.
+module "admins_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-folder-admins@example.com"
+  customer_id = "c12345678"
+  depends_on = [
+    module.project
+  ]
+}
+
+# Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
   folder = "folders/12345678"
   role   = "roles/resourcemanager.folderAdmin"
-  member = "group:example-folder-admins@example.com"
+  member = "group:${module.admins_group.id}"
 }

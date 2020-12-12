@@ -44,13 +44,17 @@ template "devops" {
     # Run `terraform init` in the devops module to backup its state to GCS.
     # enable_gcs_backend = true
 
-    admins_group = "example-team-admins@example.com"
+    admins_group = {
+      id = "example-team-admins@example.com"
+      exists = true
+    }
 
     project = {
       project_id = "example-devops"
-      owners = [
-        "group:example-devops-owners@example.com",
-      ]
+      owners_group = {
+        id = "example-devops-owners@example.com"
+        exists = true
+      }
       apis = [
         "container.googleapis.com",
         "dns.googleapis.com",
@@ -58,6 +62,68 @@ template "devops" {
         "iap.googleapis.com",
         "pubsub.googleapis.com",
         "secretmanager.googleapis.com",
+      ]
+    }
+  }
+}
+
+# Must first be deployed manually before 'cicd' is deployed because some groups created
+# here are used in 'cicd' template.
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        # Groups used in the CICD.
+        {
+          id = "example-cicd-viewers@example.com"
+          customer_id = "c12345678"
+        },
+        {
+          id = "example-cicd-editors@example.com"
+          customer_id = "c12345678"
+        },
+        # Groups used in the applications.
+        {
+          id = "example-apps-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-data-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-healthcare-dataset-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "example-fhir-viewers@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
+        {
+          id = "bastion-accessors@example.com"
+          customer_id = "c12345678"
+          owners = [
+            "user1@example.com"
+          ]
+        },
       ]
     }
   }
@@ -100,56 +166,6 @@ template "cicd" {
         ]
       }
     ]
-  }
-}
-
-template "groups" {
-  recipe_path = "{{$recipes}}/project.hcl"
-  output_path = "./groups"
-  data = {
-    project = {
-      project_id = "example-devops"
-      exists     = true
-    }
-    resources = {
-      groups = [
-        {
-          id = "example-apps-viewers@example.com"
-          customer_id = "c12345678"
-          owners = [
-            "user1@example.com"
-          ]
-        },
-        {
-          id = "example-data-viewers@example.com"
-          customer_id = "c12345678"
-          owners = [
-            "user1@example.com"
-          ]
-        },
-        {
-          id = "example-healthcare-dataset-viewers@example.com"
-          customer_id = "c12345678"
-          owners = [
-            "user1@example.com"
-          ]
-        },
-        {
-          id = "example-fhir-viewers@example.com"
-          customer_id = "c12345678"
-          owners = [
-            "user1@example.com"
-          ]
-        },
-        {
-          id = "bastion-accessors@example.com"
-          customer_id = "c12345678"
-          owners = [
-            "user1@example.com"
-          ]
-        },
-      ]
-    }
   }
 }
 

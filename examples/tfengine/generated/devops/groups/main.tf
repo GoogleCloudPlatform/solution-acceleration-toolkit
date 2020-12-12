@@ -19,19 +19,29 @@ terraform {
     google-beta = "~> 3.0"
   }
   backend "gcs" {
-    bucket = "{{.state_bucket}}"
-    prefix = "{{get . "state_path_prefix" .output_path}}"
+    bucket = "example-terraform-state"
+    prefix = "groups"
   }
 }
 
-{{if has . "groups" -}}
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
-  billing_project       = {{- if get .project "exists" false}} "{{.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  billing_project       = "example-devops"
 }
-{{end -}}
 
-{{if has . "raw_config" -}}
-{{.raw_config}}
-{{end -}}
+module "example_cicd_viewers_example_com" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-cicd-viewers@example.com"
+  customer_id = "c12345678"
+}
+
+module "example_cicd_editors_example_com" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-cicd-editors@example.com"
+  customer_id = "c12345678"
+}

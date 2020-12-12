@@ -30,12 +30,41 @@ template "devops" {
     # Run `terraform init` in the devops module to backup its state to GCS.
     # enable_gcs_backend = true
 
-    admins_group = "example-org-admins@example.com"
+    admins_group = {
+      id = "example-org-admins@example.com"
+      exists = true
+    }
 
     project = {
       project_id = "example-devops"
-      owners = [
-        "group:example-devops-owners@example.com",
+      owners_group = {
+        id = "example-devops-owners@example.com"
+        exists = true
+      }
+    }
+  }
+}
+
+# Must first be deployed manually before 'cicd' is deployed because some groups created
+# here are used in 'cicd' template.
+template "groups" {
+  recipe_path = "{{$recipes}}/project.hcl"
+  output_path = "./groups"
+  data = {
+    project = {
+      project_id = "example-devops"
+      exists     = true
+    }
+    resources = {
+      groups = [
+        {
+          id = "example-cicd-viewers@example.com"
+          customer_id = "c12345678"
+        },
+        {
+          id = "example-cicd-editors@example.com"
+          customer_id = "c12345678"
+        },
       ]
     }
   }

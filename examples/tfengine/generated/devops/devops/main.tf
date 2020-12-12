@@ -18,7 +18,8 @@
 # - Deletion lien,
 # - Project level IAM permissions for the project owners,
 # - A Cloud Storage bucket to store Terraform states for all deployments,
-# - Org level IAM permissions for org admins.
+# - Admin permission at organization level,
+# - Cloud Identity groups and memberships, if requested.
 
 // TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
 terraform {
@@ -62,7 +63,7 @@ resource "google_project_iam_binding" "devops_owners" {
   members = ["group:example-devops-owners@example.com"]
 }
 
-# Org level IAM permissions for org admins.
+# Admin permission at organization level.
 resource "google_organization_iam_member" "admin" {
   org_id = "12345678"
   role   = "roles/resourcemanager.organizationAdmin"

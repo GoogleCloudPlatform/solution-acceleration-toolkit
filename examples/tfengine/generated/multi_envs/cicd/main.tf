@@ -83,6 +83,7 @@ resource "google_project_service" "services" {
   service            = each.value
   disable_on_destroy = false
 }
+
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
   for_each = toset([
@@ -95,6 +96,7 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
     google_project_service.services,
   ]
 }
+
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
   for_each = toset([
@@ -134,7 +136,7 @@ resource "google_sourcerepo_repository" "configs" {
 
 resource "google_sourcerepo_repository_iam_member" "readers" {
   for_each = toset([
-    "group:readers@example.com",
+    "group:example-source-readers@example.com",
   ])
   project    = var.project_id
   repository = google_sourcerepo_repository.configs.name
@@ -144,7 +146,7 @@ resource "google_sourcerepo_repository_iam_member" "readers" {
 
 resource "google_sourcerepo_repository_iam_member" "writers" {
   for_each = toset([
-    "user:foo@example.com",
+    "group:example-source-writers@example.com",
   ])
   project    = var.project_id
   repository = google_sourcerepo_repository.configs.name
@@ -174,9 +176,8 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
-
-
 # Cloud Build - Cloud Build Service Account IAM permissions
+
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account

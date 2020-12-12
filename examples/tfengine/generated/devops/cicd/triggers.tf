@@ -73,6 +73,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     google_project_service.services,
   ]
 }
+
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
 resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
   # Always disabled on push to branch.
