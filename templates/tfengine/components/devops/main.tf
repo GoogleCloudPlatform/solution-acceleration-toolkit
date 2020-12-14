@@ -18,7 +18,8 @@
 # - Deletion lien,
 # - Project level IAM permissions for the project owners,
 # - A Cloud Storage bucket to store Terraform states for all deployments,
-# - Org level IAM permissions for org admins.
+# - Admin permission at {{.parent_type}} level,
+# - Cloud Identity groups and memberships, if requested.
 
 // TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
 terraform {
@@ -34,6 +35,15 @@ terraform {
   }
 {{- end}}
 }
+
+{{- if or (not (get .admins_group "exists" false)) (not (get .project.owners_group "exists" false))}}
+
+# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
+provider "google-beta" {
+  user_project_override = true
+  billing_project       = "{{.project.project_id}}"
+}
+{{- end}}
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
@@ -69,14 +79,54 @@ source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   location   = "{{.storage_location}}"
 }
 
+{{- if not (get .project.owners_group "exists" false)}}
+
+# Devops project owners group.
+module "owners_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id = "{{.project.owners_group.id}}"
+  customer_id = "{{.project.owners_group.customer_id}}"
+  {{hclField .project.owners_group "description" -}}
+  {{hclField .project.owners_group "display_name" -}}
+  {{hclField .project.owners_group "owners" -}}
+  {{hclField .project.owners_group "managers" -}}
+  {{hclField .project.owners_group "members" -}}
+  depends_on = [
+    module.project
+  ]
+}
+{{- end}}
+
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = {{hcl .project.owners}}
+  members = [{{if get .project.owners_group "exists" false}} "group:{{.project.owners_group.id}}" {{else}} "group:${module.owners_group.id}" {{end}}]
 }
 
-# Org level IAM permissions for org admins.
+{{- if not (get .admins_group "exists" false)}}
+
+# Admins group for at {{.parent_type}} level.
+module "admins_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id = "{{.admins_group.id}}"
+  customer_id = "{{.admins_group.customer_id}}"
+  {{hclField .admins_group "description" -}}
+  {{hclField .admins_group "display_name" -}}
+  {{hclField .admins_group "owners" -}}
+  {{hclField .admins_group "managers" -}}
+  {{hclField .admins_group "members" -}}
+  depends_on = [
+    module.project
+  ]
+}
+{{- end}}
+
+# Admin permission at {{.parent_type}} level.
 resource "google_{{.parent_type}}_iam_member" "admin" {
   {{- if eq .parent_type "organization"}}
   org_id = "{{.parent_id}}"
@@ -84,5 +134,5 @@ resource "google_{{.parent_type}}_iam_member" "admin" {
   folder = "folders/{{.parent_id}}"
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
-  member = "group:{{.admins_group}}"
+  member = {{if get .admins_group "exists" false}} "group:{{.admins_group.id}}" {{else}} "group:${module.admins_group.id}" {{end}}
 }

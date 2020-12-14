@@ -15,6 +15,10 @@
 schema = {
   title                = "Devops Recipe"
   additionalProperties = false
+  required = [
+    "admins_group",
+    "project",
+  ]
   properties = {
     parent_type = {
       description = <<EOF
@@ -40,21 +44,74 @@ schema = {
       description          = "Config for the project to host devops resources such as remote state and CICD."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "project_id",
+        "owners_group",
+      ]
       properties = {
         project_id = {
           description = "ID of project."
           type        = "string"
         }
-        owners = {
+        owners_group = {
           description = <<EOF
-            List of members to transfer ownership of the project to.
-            NOTE: By default the creating user will be the owner of the project.
-            Thus, there should be a group in this list and you must be part of that group,
-            so a group owns the project going forward.
+            Group which will be given owner access to the project.
+            It will be created if 'exists' is false.
+            NOTE: By default, the creating user will be the owner of the project.
+            However, this group will own the project going forward. Make sure to include
+            yourselve in the group,
           EOF
-          type        = "array"
-          items = {
-            type = "string"
+          type        = "object"
+          additionalProperties = false
+          required = [
+            "id",
+          ]
+          properties = {
+            id = {
+              description = "Email address of the group."
+              type        = "string"
+            }
+            exists = {
+              description = "Whether or not the group exists already. Default to 'false'."
+              type        = "boolean"
+            }
+            customer_id = {
+              description = <<EOF
+                Customer ID of the organization to create the group in.
+                See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+                for how to obtain it.
+              EOF
+              type        = "string"
+            }
+            description = {
+              description = "Description of the group."
+              type        = "string"
+            }
+            display_name = {
+              description = "Display name of the group."
+              type        = "string"
+            }
+            owners = {
+              description = "Owners of the group."
+              type        = "array"
+              items = {
+                type = "string"
+              }
+            }
+            managers = {
+              description = "Managers of the group."
+              type        = "array"
+              items = {
+                type = "string"
+              }
+            }
+            members = {
+              description = "Members of the group."
+              type        = "array"
+              items = {
+                type = "string"
+              }
+            }
           }
         }
         apis = {
@@ -77,8 +134,62 @@ schema = {
       type        = "string"
     }
     admins_group = {
-      description = "Group who will be given org admin access."
-      type        = "string"
+      description = <<EOF
+        Group which will be given admin access to the folder or organization.
+        It will be created if 'exists' is false.
+      EOF
+      type        = "object"
+      additionalProperties = false
+      required = [
+        "id",
+      ]
+      properties = {
+        id = {
+          description = "Email address of the group."
+          type        = "string"
+        }
+        exists = {
+          description = "Whether or not the group exists already. Default to 'false'."
+          type        = "boolean"
+        }
+        customer_id = {
+          description = <<EOF
+            Customer ID of the organization to create the group in.
+            See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+            for how to obtain it.
+          EOF
+          type        = "string"
+        }
+        description = {
+          description = "Description of the group."
+          type        = "string"
+        }
+        display_name = {
+          description = "Display name of the group."
+          type        = "string"
+        }
+        owners = {
+          description = "Owners of the group."
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+        managers = {
+          description = "Managers of the group."
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+        members = {
+          description = "Members of the group."
+          type        = "array"
+          items = {
+            type = "string"
+          }
+        }
+      }
     }
     enable_gcs_backend = {
       description = <<EOF

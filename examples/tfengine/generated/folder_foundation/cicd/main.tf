@@ -84,6 +84,7 @@ resource "google_project_service" "services" {
   service            = each.value
   disable_on_destroy = false
 }
+
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
   for_each = toset([
@@ -96,6 +97,7 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
     google_project_service.services,
   ]
 }
+
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
   for_each = toset([
@@ -123,8 +125,6 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
     google_project_service.services,
   ]
 }
-
-
 
 # Grant Cloud Build Service Account access to the devops project.
 resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
@@ -168,6 +168,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 }
 
 # Cloud Build - Cloud Build Service Account IAM permissions
+
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
