@@ -24,7 +24,7 @@ terraform {
   }
 }
 
-# Required for Cloud Identity API to create and manage groups.
+# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
   billing_project       = "example-devops"
@@ -36,7 +36,22 @@ module "example_auditors_example_com" {
 
   id          = "example-auditors@example.com"
   customer_id = "c12345678"
+  owners      = ["user1@example.com"]
+  members     = ["user2@example.com"]
+}
 
-  owners  = ["user1@example.com"]
-  members = ["user2@example.com"]
+module "example_cicd_viewers_example_com" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-cicd-viewers@example.com"
+  customer_id = "c12345678"
+}
+
+module "example_cicd_editors_example_com" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-cicd-editors@example.com"
+  customer_id = "c12345678"
 }

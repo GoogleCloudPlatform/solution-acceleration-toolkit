@@ -6,9 +6,60 @@
 
 ### admins_group
 
-Group who will be given org admin access.
+Group which will be given admin access to the folder or organization.
+It will be created if 'exists' is false.
+
+Type: object
+
+### admins_group.customer_id
+
+Customer ID of the organization to create the group in.
+See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+for how to obtain it.
 
 Type: string
+
+### admins_group.description
+
+Description of the group.
+
+Type: string
+
+### admins_group.display_name
+
+Display name of the group.
+
+Type: string
+
+### admins_group.exists
+
+Whether or not the group exists already. Default to 'false'.
+
+Type: boolean
+
+### admins_group.id
+
+Email address of the group.
+
+Type: string
+
+### admins_group.managers
+
+Managers of the group.
+
+Type: array(string)
+
+### admins_group.members
+
+Members of the group.
+
+Type: array(string)
+
+### admins_group.owners
+
+Owners of the group.
+
+Type: array(string)
 
 ### billing_account
 
@@ -61,12 +112,63 @@ NOTE: If a CICD is deployed within this project, then the APIs of
 all resources managed by the CICD must be listed here
 (even if the resources themselves are in different projects).
 
-### project.owners
+### project.owners_group
 
-List of members to transfer ownership of the project to.
-NOTE: By default the creating user will be the owner of the project.
-Thus, there should be a group in this list and you must be part of that group,
-so a group owns the project going forward.
+Group which will be given owner access to the project.
+It will be created if 'exists' is false.
+NOTE: By default, the creating user will be the owner of the project.
+However, this group will own the project going forward. Make sure to include
+yourselve in the group,
+
+Type: object
+
+### project.owners_group.customer_id
+
+Customer ID of the organization to create the group in.
+See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+for how to obtain it.
+
+Type: string
+
+### project.owners_group.description
+
+Description of the group.
+
+Type: string
+
+### project.owners_group.display_name
+
+Display name of the group.
+
+Type: string
+
+### project.owners_group.exists
+
+Whether or not the group exists already. Default to 'false'.
+
+Type: boolean
+
+### project.owners_group.id
+
+Email address of the group.
+
+Type: string
+
+### project.owners_group.managers
+
+Managers of the group.
+
+Type: array(string)
+
+### project.owners_group.members
+
+Members of the group.
+
+Type: array(string)
+
+### project.owners_group.owners
+
+Owners of the group.
 
 Type: array(string)
 

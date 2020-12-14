@@ -106,6 +106,7 @@ resource "google_project_service" "services" {
 }
 
 {{- if has . "build_viewers"}}
+
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
   for_each = toset([
@@ -123,6 +124,7 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
 {{- end}}
 
 {{- if has . "build_editors"}}
+
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
   for_each = toset([
@@ -162,7 +164,8 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   ]
 }
 
-{{if has . "cloud_source_repository" -}}
+{{- if has . "cloud_source_repository"}}
+
 # Create the Cloud Source Repository.
 resource "google_sourcerepo_repository" "configs" {
   project  = var.project_id
@@ -172,7 +175,8 @@ resource "google_sourcerepo_repository" "configs" {
   ]
 }
 
-{{if has .cloud_source_repository "readers" -}}
+{{- if has .cloud_source_repository "readers"}}
+
 resource "google_sourcerepo_repository_iam_member" "readers" {
   for_each = toset([
     {{- range .cloud_source_repository.readers}}
@@ -186,7 +190,8 @@ resource "google_sourcerepo_repository_iam_member" "readers" {
 }
 {{- end}}
 
-{{if has .cloud_source_repository "writers" -}}
+{{- if has .cloud_source_repository "writers"}}
+
 resource "google_sourcerepo_repository_iam_member" "writers" {
   for_each = toset([
     {{- range .cloud_source_repository.writers}}
@@ -223,7 +228,8 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
-{{if $hasScheduledJobs -}}
+{{- if $hasScheduledJobs}}
+
 # Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
 resource "google_service_account" "cloudbuild_scheduler_sa" {
   project      = var.project_id
@@ -246,6 +252,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 
 # Cloud Build - Cloud Build Service Account IAM permissions
 {{- if $hasApplyJobs}}
+
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account

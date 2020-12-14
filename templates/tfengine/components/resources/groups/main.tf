@@ -19,10 +19,8 @@ module "{{resourceName . "id"}}" {
 
   id = "{{.id}}"
   customer_id = "{{.customer_id}}"
-
   {{hclField . "description" -}}
   {{hclField . "display_name" -}}
-
   {{hclField . "owners" -}}
   {{hclField . "managers" -}}
   {{hclField . "members" -}}

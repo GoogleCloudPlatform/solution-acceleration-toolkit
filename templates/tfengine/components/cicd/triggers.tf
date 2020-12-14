@@ -30,7 +30,8 @@
 {{- $managed_dirs = trimSpace (printf "%s %s" $managed_dirs .)}}
 {{- end}}
 
-{{if has .triggers "validate" -}}
+{{- if has .triggers "validate"}}
+
 resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   {{- if not (get .triggers.validate "run_on_push" true)}}
   disabled    = true
@@ -75,6 +76,7 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
 }
 
 {{- if has .triggers.validate "run_on_schedule"}}
+
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
 resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   # Always disabled on push to branch.
@@ -142,7 +144,8 @@ resource "google_cloud_scheduler_job" "validate_scheduler_{{.name}}" {
 {{- end}}
 {{- end}}
 
-{{if has .triggers "plan" -}}
+{{- if has .triggers "plan"}}
+
 resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   {{- if not (get .triggers.plan "run_on_push" true)}}
   disabled    = true
@@ -187,6 +190,7 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
 }
 
 {{- if has .triggers.plan "run_on_schedule"}}
+
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
 resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   # Always disabled on push to branch.
@@ -254,7 +258,8 @@ resource "google_cloud_scheduler_job" "plan_scheduler_{{.name}}" {
 {{- end}}
 {{- end}}
 
-{{if has .triggers "apply" -}}
+{{- if has .triggers "apply"}}
+
 resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   {{- if not (get .triggers.apply "run_on_push" true)}}
   disabled    = true
@@ -299,6 +304,7 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
 }
 
 {{- if has .triggers.apply "run_on_schedule"}}
+
 resource "google_cloud_scheduler_job" "apply_scheduler_{{.name}}" {
   project   = var.project_id
   name      = "apply-scheduler-{{.name}}"

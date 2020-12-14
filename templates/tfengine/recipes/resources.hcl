@@ -1318,8 +1318,13 @@ schema = {
     groups = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-group)"
       type        = "array"
-      additionalProperties = false
       items = {
+        type                 = "object"
+        additionalProperties = false
+        required = [
+          "id",
+          "customer_id",
+        ]
         properties = {
           id = {
             description = "Email address of the group."

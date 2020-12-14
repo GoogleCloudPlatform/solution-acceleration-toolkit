@@ -233,7 +233,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
     ```hcl
     template "devops" {
-      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.1.0"
+      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.4.0"
       output_path = "./devops"
       data = {
         ...
@@ -247,6 +247,10 @@ directly use the `terraform` binary to deploy the infrastructure.
     CONFIG_PATH=examples/tfengine/org_foundation.hcl
     OUTPUT_PATH=/tmp/engine
     ```
+
+    **NOTE**: If you plan to set up CICD, the `terraform_root` variable in the
+    CICD template should correspond to the parent directory in OUTPUT_PATH that
+    would be checked into source control.
 
 1. Run the engine to generate your Terraform configs:
 
@@ -274,7 +278,6 @@ directly use the `terraform` binary to deploy the infrastructure.
         ```shell
         cd $OUTPUT_PATH/devops
         terraform init
-        terraform plan
         terraform apply
         ```
 
@@ -294,6 +297,49 @@ directly use the `terraform` binary to deploy the infrastructure.
         terraform init -force-copy
         ```
 
+1. (Optional) Create Cloud Identity Groups for coming IAM role assignments.
+
+    It is recommended to
+    [delegate responsibility](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#groups-and-service-accounts)
+    through groups and service accounts so that individuals only obtain
+    permissions through groups rather than direct IAM roles.
+
+    1. Add a separate template called `groups` using the `project.hcl` recipe,
+        and define your groups and memberships in the `resources` block. Set the
+        `project_id` to the `devops` project ID and `exists` to `true`.
+
+        ```hcl
+        template "groups" {
+          recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/project.hcl"
+          output_path = "./groups"
+          data = {
+            project = {
+              project_id = "example-devops"
+              exists     = true
+            }
+            resources = {
+              groups = [
+                {
+                  id = "example-group@example.com"
+                  customer_id = "c12345678"
+                  owners = ["user1@example.com"]
+                  members = ["user2@example.com"]
+                },
+              ]
+            }
+          }
+        }
+        ```
+
+    1. Create groups and initial memberships. You must be at least Google
+        Workspace Group Admin to be able to do so.
+
+        ```shell
+        cd $OUTPUT_PATH/groups
+        terraform init
+        terraform apply
+        ```
+
 1. (Optional) To deploy Continuous Integration (CI) and Continuous Deployment
     (CD) resources, follow the instructions
     [here](../../templates/tfengine/components/cicd/README.md) or equivalently,
@@ -303,6 +349,18 @@ directly use the `terraform` binary to deploy the infrastructure.
     should be made as Pull Requests (PRs) and go though code reviews. After
     approval is granted and CI tests pass, merge the PR. The CD job
     automatically deploys the change to your Google Cloud infra.
+
+    If you would like to enable CICD to manage groups for you:
+
+    1. Include `groups` in the `managed_dirs` of `cicd` template.
+    1. Follow manual steps
+        [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account)
+        to assign the CICD service account Group Admin role. You must be a
+        Google Workspace Super Admin to be able to do so.
+
+    Note that the `groups` template must be deployed manually first if you also
+    use it to create groups to be used in the `cicd` template. These groups
+    should exist before `cicd` template can be deployed.
 
 1. Deploy org infrastructure and other resources by sending a PR for local
     changes to the config repo.
