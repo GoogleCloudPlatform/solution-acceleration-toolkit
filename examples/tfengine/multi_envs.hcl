@@ -37,17 +37,16 @@ template "devops" {
 
     admins_group = {
       id = "example-folder-admins@example.com"
-      customer_id = "c12345678"
+      # 'exists' can only be set to 'true' until Terraform 0.13 is supported.
+      exists = true
     }
 
     project = {
       project_id = "example-devops"
       owners_group = {
         id = "example-devops-owners@example.com"
-        customer_id = "c12345678"
-        owners = [
-          "user1@example.com"
-        ]
+        # 'exists' can only be set to 'true' until Terraform 0.13 is supported.
+        exists = true
       }
     }
   }
