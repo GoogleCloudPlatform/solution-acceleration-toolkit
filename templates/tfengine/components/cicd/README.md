@@ -30,14 +30,14 @@ to detect changes in the repo, trigger builds, and run the workloads.
 
     ```shell
     terraform init
-    terraform plan
     terraform apply
     ```
 
-1. Follow the steps
+1. (Optional) Follow the steps
     [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account)
-    to grant Google Workspace Group Admin role to the CICD service account so
-    CICD can create and manage groups and memberships for you.
+    to grant **Google Workspace Group Admin** role to the CICD service account
+    so CICD can create and manage groups and memberships for you. You must be a
+    **Google Workspace Super Admin** to be able to do so.
 
 ## CICD Container
 
@@ -84,6 +84,66 @@ The triggers all use a [helper runner script](./configs/run.sh) to perform
 actions. The `MODULES` var within the script lists the modules that are managed
 (relative to the `terraform_root` var) by the triggers and the order they are
 run.
+
+### Multi environment CICD workflow
+
+You can configure multi environment CICD by using the `envs` block in the `cicd`
+template. Triggers for each environment can be configured separately.
+
+In each `env` block:
+
+* `branch_name` defines the exact name of the branch that corresponds to the
+    environment. Changes made to that branch will trigger CICD pipelines for its
+    linked environment.
+* `triggers` defines the trigger configurations for this environment.
+* `managed_dirs` defines the order and list of directories in the generated
+    folder that should be managed by the CICD pipelines created and configured
+    for the corresponding environment.
+
+TIP: Use a `shared` branch to manage shared components of the infrastructure,
+such as `devops`, `groups`, `audit`, and `folders`. Changes made to those
+templates and components should be pushed to the `shared` branch and deployed by
+its own CICD pipelines.
+
+When you would like to make a change to your infrastructure, push and merge the
+changes to `dev` branch first. Deploy and verify the changes in the `dev`
+environment. Once they looks good, merge the `dev` branch to the `prod` branch,
+so the same changes can be promoted to the `prod` environment.
+
+```hcl
+envs = [
+  {
+    name        = "shared"
+    branch_name = "shared"
+    triggers = {
+      validate = {}
+      plan = {}
+      apply = {}
+    }
+    managed_dirs = ["devops", "groups", "audit", "folders"]
+  },
+  {
+    name        = "dev"
+    branch_name = "dev"
+    triggers = {
+      validate = {}
+      plan = {}
+      apply = {}
+    }
+    managed_dirs = ["dev/data"]
+  },
+  {
+    name        = "prod"
+    branch_name = "main"
+    triggers = {
+      validate = {}
+      plan = {}
+      apply = {}
+    }
+    managed_dirs = ["prod/data"]
+  }
+]
+```
 
 ### Scheduled builds
 
