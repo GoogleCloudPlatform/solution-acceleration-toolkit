@@ -107,7 +107,7 @@ its own CICD pipelines.
 
 When you would like to make a change to your infrastructure, push and merge the
 changes to `dev` branch first. Deploy and verify the changes in the `dev`
-environment. Once they looks good, merge the `dev` branch to the `prod` branch,
+environment. Once they look good, merge the `dev` branch to the `prod` branch,
 so the same changes can be promoted to the `prod` environment.
 
 ```hcl
