@@ -125,7 +125,7 @@ This tool helps you follow Google Cloud and Terraform best practices:
 1. [Create](https://support.google.com/a/answer/33343?hl=en) the following
     administrative
     [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity)
-    groups manually so they can be used in the `devops` and `cicd` deployment:
+    groups manually so they can be used in the `devops` deployment:
 
     - {PREFIX}-{org|folder}-admins@{DOMAIN}: Members of this group get
         administrative access to the org or folder. This group can be used in
@@ -136,14 +136,6 @@ This tool helps you follow Google Cloud and Terraform best practices:
         to the devops project to make changes to the CICD project or to make
         changes to the Terraform state.
 
-    - {PREFIX}-cicd-viewers@{DOMAIN}: Members of this group can view CICD
-        results such as presubmit speculative plan and postsubmit deployment
-        results.
-
-    - {PREFIX}-cicd-editors@{DOMAIN}: Members of this group can edit and
-        trigger CICD pipelines such as presubmit speculative plan and postsubmit
-        deployment.
-
     For example, for an org deployment with sample prefix "gcp" and domain
     "example.com", the admin group "gcp-org-admins@example.com" would be
     created.
@@ -153,10 +145,10 @@ This tool helps you follow Google Cloud and Terraform best practices:
     emergency situations or when investigation is required. This does not apply
     to view-only groups such as cicd-viewers.
 
-    Once `devops` and `cicd` deployments are completed. More groups can be
-    created and managed automatically by using the `groups` resource. See the
-    `template "groups"` section in [team.hcl](../../examples/tfengine/team.hcl)
-    for an example.
+    Once `devops` deployment is completed. More groups can be created and
+    managed automatically by using the `groups` resource. See the `template
+    "groups"` section in [team.hcl](../../examples/tfengine/team.hcl) for an
+    example.
 
 1. The running user will need to be a Google Workspace Super Admin and have the
     following Cloud IAM roles:
@@ -222,7 +214,8 @@ generated, there is no longer a dependency on the engine and the user can
 directly use the `terraform` binary to deploy the infrastructure.
 
 1. Replace the values in a suitable [example](../../examples/tfengine) with
-    values for your infrastructure.
+    values for your infrastructure. Save it as a separate file called
+    `config.hcl` and copy it to your local configs repo root directory.
 
     Project and Bucket names are globally unique and must be changed from
     defaults. You will get an error if you have chosen a name that is already
@@ -244,13 +237,15 @@ directly use the `terraform` binary to deploy the infrastructure.
 1. To set up helper environment vars, run the following commands:
 
     ```shell
-    CONFIG_PATH=examples/tfengine/org_foundation.hcl
-    OUTPUT_PATH=/tmp/engine
+    GIT_ROOT=/path/to/your/local/configs/repo
+    CONFIG_PATH=$GIT_ROOT/config.hcl
+    OUTPUT_PATH=$GIT_ROOT/terraform
     ```
 
     **NOTE**: If you plan to set up CICD, the `terraform_root` variable in the
-    CICD template should correspond to the parent directory in OUTPUT_PATH that
-    would be checked into source control.
+    CICD template should correspond to the parent directory in `OUTPUT_PATH`
+    that would be checked into source control, i.e. `terraform` in the above
+    setup.
 
 1. Run the engine to generate your Terraform configs:
 
@@ -385,4 +380,8 @@ directly use the `terraform` binary to deploy the infrastructure.
 
 ## Continuous integration (CI) and continuous deployment (CD)
 
-See [here](../../templates/tfengine/components/cicd/README.md).
+See CICD specific documentations
+[here](../../templates/tfengine/components/cicd/README.md).
+
+If you are setting up a multi environment workflow (dev, staging, prod), see
+[multi_envs.hcl](../../examples/tfengine/multi_envs.hcl) for an example config.
