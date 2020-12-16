@@ -42,10 +42,20 @@ module "project" {
   activate_apis = [
     "bigquery.googleapis.com",
     "compute.googleapis.com",
-    "healthcare.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
   ]
+  activate_api_identities = [
+    {
+      api = "healthcare.googleapis.com"
+
+      roles = [
+        "roles/bigquery.dataEditor",
+        "roles/bigquery.jobUser",
+      ]
+    },
+  ]
+
 }
 
 module "one_billion_ms_example_dataset" {
