@@ -24,8 +24,8 @@ locals {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/shared_vpc"
-  version = "~> 9.2.0"
+  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  version = "~> 10.0.1"
 
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-apps"
   org_id                  = ""
@@ -33,7 +33,6 @@ module "project" {
   billing_account         = local.constants.billing_account
   lien                    = true
   default_service_account = "keep"
-  skip_gcloud_download    = true
 
   shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
   activate_apis = ["compute.googleapis.com"]
@@ -90,30 +89,5 @@ resource "google_binary_authorization_policy" "policy" {
 
   admission_whitelist_patterns {
     name_pattern = "gcr.io/cloudsql-docker/*"
-  }
-}
-
-module "example_gke_cluster" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 12.1.0"
-
-  # Required.
-  name               = "example-gke-cluster"
-  project_id         = module.project.project_id
-  region             = local.constants.gke_region
-  regional           = true
-  network_project_id = "example-prod-networks"
-
-  network                 = "example-network"
-  subnetwork              = "example-gke-subnet"
-  ip_range_pods           = "example-pods-range"
-  ip_range_services       = "example-services-range"
-  master_ipv4_cidr_block  = "192.168.0.0/28"
-  istio                   = true
-  skip_provisioners       = true
-  enable_private_endpoint = false
-  release_channel         = "STABLE"
-  cluster_resource_labels = {
-    type = "no-phi"
   }
 }

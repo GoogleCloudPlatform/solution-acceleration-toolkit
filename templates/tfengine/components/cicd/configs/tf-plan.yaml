@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note: Terraform version used in the automation is 0.12.29.
-{{- $cft := "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:47db3e958fbaa0d95881cf99501ebf4522a261ddc68d9566b7cf70e26cf7cddb"}}
+# Note: Terraform version used in the automation is 0.13.5.
+{{- $cft := "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:f17d331d12e1a40907efffd7418177ae068bd81072dd4e18ebaef735cf0f2273"}}
 
 timeout: 1200s
 

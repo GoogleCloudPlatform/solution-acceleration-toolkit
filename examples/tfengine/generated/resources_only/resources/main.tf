@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.12, <0.14"
+  required_version = ">=0.13"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -70,7 +70,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
   fhir_stores = [
     {
@@ -87,7 +87,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
   hl7_v2_stores = [
     {
@@ -96,7 +96,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
 }
 

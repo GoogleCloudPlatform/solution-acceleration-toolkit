@@ -363,36 +363,45 @@ template "project_data" {
             type = "phi"
           }
         }]
-        fhir_stores = [{
-          name    = "example-fhir-store"
-          version = "R4"
-          enable_update_create          = true
-          disable_referential_integrity = false
-          disable_resource_versioning   = false
-          enable_history_import         = false
-          labels = {
-            type = "phi"
-          }
-          iam_members = [{
-            role   = "roles/healthcare.fhirStoreViewer"
-            member = "group:example-fhir-viewers@example.com",
-          }]
-          notification_config = {
-            pubsub_topic = "projects/example-prod-data/topics/example-topic"
-          }
-          stream_configs = [{
-            resource_types = [
-              "Patient",
-            ]
-            bigquery_destination = {
-              dataset_uri = "bq://example-prod-data.example_dataset_id"
-              schema_config = {
-                schema_type               = "ANALYTICS"
-                recursive_structure_depth = 3
-              }
+        fhir_stores = [
+          {
+            name    = "example-fhir-store-a"
+            version = "R4"
+            enable_update_create          = true
+            disable_referential_integrity = false
+            disable_resource_versioning   = false
+            enable_history_import         = false
+            labels = {
+              type = "phi"
             }
-          }]
-        }]
+            iam_members = [{
+              role   = "roles/healthcare.fhirStoreViewer"
+              member = "group:example-fhir-viewers@example.com",
+            }]
+            notification_config = {
+              pubsub_topic = "projects/example-prod-data/topics/example-topic"
+            }
+            stream_configs = [{
+              resource_types = [
+                "Patient",
+              ]
+              bigquery_destination = {
+                dataset_uri = "bq://example-prod-data.example_dataset_id"
+                schema_config = {
+                  schema_type               = "ANALYTICS"
+                  recursive_structure_depth = 3
+                }
+              }
+            }]
+          },
+          {
+            name    = "example-fhir-store-b"
+            version = "R4"
+            labels = {
+              type = "phi"
+            }
+          }
+        ]
         hl7_v2_stores = [{
           name = "example-hl7-store"
           notification_configs = [{
@@ -481,19 +490,21 @@ template "project_apps" {
       }
     }
     resources = {
-      gke_clusters = [{
-        name                   = "example-gke-cluster"
-        network_project_id     = "example-prod-networks"
-        network                = "example-network"
-        subnet                 = "example-gke-subnet"
-        ip_range_pods_name     = "example-pods-range"
-        ip_range_services_name = "example-services-range"
-        master_ipv4_cidr_block = "192.168.0.0/28"
-        service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
-        labels = {
-          type = "no-phi"
-        }
-      }]
+      # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
+      # Add back once https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/677 is fixed.
+      # gke_clusters = [{
+      #   name                   = "example-gke-cluster"
+      #   network_project_id     = "example-prod-networks"
+      #   network                = "example-network"
+      #   subnet                 = "example-gke-subnet"
+      #   ip_range_pods_name     = "example-pods-range"
+      #   ip_range_services_name = "example-services-range"
+      #   master_ipv4_cidr_block = "192.168.0.0/28"
+      #   service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
+      #   labels = {
+      #     type = "no-phi"
+      #   }
+      # }]
       binary_authorization = {
         admission_whitelist_patterns = [{
           name_pattern = "gcr.io/cloudsql-docker/*"
