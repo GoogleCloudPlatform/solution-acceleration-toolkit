@@ -71,4 +71,8 @@ module "project" {
   {{- end}}
   {{- end}}
   activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
+
+  {{- if has . "api_identities"}}
+  activate_api_identities = {{hcl .api_identities}}
+  {{end}}
 }
