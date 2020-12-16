@@ -118,7 +118,7 @@ module "example_healthcare_dataset" {
   ]
   fhir_stores = [
     {
-      name    = "example-staging-fhir-store"
+      name    = "example-fhir-store-a"
       version = "R4"
 
       enable_update_create          = true
@@ -153,7 +153,7 @@ module "example_healthcare_dataset" {
       }
     },
     {
-      name    = "example-final-fhir-store"
+      name    = "example-fhir-store-b"
       version = "R4"
 
       labels = {

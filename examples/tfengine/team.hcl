@@ -356,7 +356,7 @@ template "project_data" {
         }]
         fhir_stores = [
           {
-            name    = "example-staging-fhir-store"
+            name    = "example-fhir-store-a"
             version = "R4"
             enable_update_create          = true
             disable_referential_integrity = false
@@ -386,7 +386,7 @@ template "project_data" {
             }]
           },
           {
-            name    = "example-final-fhir-store"
+            name    = "example-fhir-store-b"
             version = "R4"
             labels = {
               type = "phi"
