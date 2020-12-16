@@ -70,7 +70,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
   fhir_stores = [
     {
@@ -87,7 +87,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
   hl7_v2_stores = [
     {
@@ -96,7 +96,7 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
 }
 

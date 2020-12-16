@@ -354,36 +354,45 @@ template "project_data" {
             type = "phi"
           }
         }]
-        fhir_stores = [{
-          name    = "example-fhir-store"
-          version = "R4"
-          enable_update_create          = true
-          disable_referential_integrity = false
-          disable_resource_versioning   = false
-          enable_history_import         = false
-          labels = {
-            type = "phi"
-          }
-          iam_members = [{
-            role   = "roles/healthcare.fhirStoreViewer"
-            member = "group:example-fhir-viewers@example.com",
-          }]
-          notification_config = {
-            pubsub_topic = "projects/example-prod-data/topics/example-topic"
-          }
-          stream_configs = [{
-            resource_types = [
-              "Patient",
-            ]
-            bigquery_destination = {
-              dataset_uri = "bq://example-prod-data.example_dataset_id"
-              schema_config = {
-                schema_type               = "ANALYTICS"
-                recursive_structure_depth = 3
-              }
+        fhir_stores = [
+          {
+            name    = "example-staging-fhir-store"
+            version = "R4"
+            enable_update_create          = true
+            disable_referential_integrity = false
+            disable_resource_versioning   = false
+            enable_history_import         = false
+            labels = {
+              type = "phi"
             }
-          }]
-        }]
+            iam_members = [{
+              role   = "roles/healthcare.fhirStoreViewer"
+              member = "group:example-fhir-viewers@example.com",
+            }]
+            notification_config = {
+              pubsub_topic = "projects/example-prod-data/topics/example-topic"
+            }
+            stream_configs = [{
+              resource_types = [
+                "Patient",
+              ]
+              bigquery_destination = {
+                dataset_uri = "bq://example-prod-data.example_dataset_id"
+                schema_config = {
+                  schema_type               = "ANALYTICS"
+                  recursive_structure_depth = 3
+                }
+              }
+            }]
+          },
+          {
+            name    = "example-final-fhir-store"
+            version = "R4"
+            labels = {
+              type = "phi"
+            }
+          }
+        ]
         hl7_v2_stores = [{
           name = "example-hl7-store"
           notification_configs = [{

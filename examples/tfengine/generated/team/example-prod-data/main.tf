@@ -114,11 +114,11 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
   fhir_stores = [
     {
-      name    = "example-fhir-store"
+      name    = "example-staging-fhir-store"
       version = "R4"
 
       enable_update_create          = true
@@ -151,7 +151,16 @@ module "example_healthcare_dataset" {
         env  = "prod"
         type = "phi"
       }
-    }
+    },
+    {
+      name    = "example-final-fhir-store"
+      version = "R4"
+
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
+    },
   ]
   hl7_v2_stores = [
     {
@@ -174,7 +183,7 @@ EOF
         env  = "prod"
         type = "phi"
       }
-    }
+    },
   ]
 }
 

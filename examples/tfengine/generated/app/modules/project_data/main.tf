@@ -98,7 +98,7 @@ module "example_healthcare_dataset" {
       labels = {
         type = "phi"
       }
-    }
+    },
   ]
   fhir_stores = [
     {
@@ -114,7 +114,7 @@ module "example_healthcare_dataset" {
       labels = {
         type = "phi"
       }
-    }
+    },
   ]
   hl7_v2_stores = [
     {
@@ -122,7 +122,7 @@ module "example_healthcare_dataset" {
       labels = {
         type = "phi"
       }
-    }
+    },
   ]
 }
 
