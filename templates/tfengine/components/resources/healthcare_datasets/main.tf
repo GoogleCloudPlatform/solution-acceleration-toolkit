@@ -47,7 +47,7 @@ module "{{resourceName . "name"}}" {
         {{end -}}
       }
       {{end -}}
-    }
+    },
     {{end -}}
   ]
   {{end -}}
@@ -96,7 +96,7 @@ module "{{resourceName . "name"}}" {
         {{end -}}
       }
       {{end -}}
-    }
+    },
     {{end -}}
   ]
   {{end -}}
@@ -129,7 +129,7 @@ module "{{resourceName . "name"}}" {
         {{end -}}
       }
       {{end -}}
-    }
+    },
     {{end -}}
   ]
   {{end -}}
