@@ -23,7 +23,7 @@
 
 // TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
 terraform {
-  required_version = ">=0.12, <0.14"
+  required_version = ">=0.13"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -48,7 +48,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 9.2.0"
+  version = "~> 10.0.1"
 
   name                    = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
@@ -60,7 +60,6 @@ module "project" {
   billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
   default_service_account = "keep"
-  skip_gcloud_download    = true
   activate_apis = [
     "cloudbuild.googleapis.com",
     {{range get . "project.apis" -}}

@@ -75,6 +75,11 @@ EOF
     {{end -}}
   }
   {{end -}}
+  {{- if not (get $.project "exists" false)}}
+  depends_on =[
+    module.project
+  ]
+  {{end -}}
 }
 
 {{range get . "instances" -}}

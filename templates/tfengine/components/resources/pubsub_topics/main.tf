@@ -30,5 +30,10 @@ module "{{resourceName . "name"}}" {
 
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}
+  {{- if not (get $.project "exists" false)}}
+  depends_on =[
+    module.project
+  ]
+  {{end -}}
 }
 {{end -}}
