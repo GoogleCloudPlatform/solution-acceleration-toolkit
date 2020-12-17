@@ -51,7 +51,7 @@ module "forseti" {
   project_id      = module.project.project_id
   folder_id       = "12345678"
   network_project = "example-prod-networks"
-  network         = "network"
+  network         = "example-network"
   subnetwork      = "forseti-subnet"
   composite_root_resources = [
     "folders/12345678",

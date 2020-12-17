@@ -194,7 +194,7 @@ template "monitor" {
     }
     forseti = {
       domain  = "example.com"
-      network = "network"
+      network = "example-network"
       subnet  = "forseti-subnet"
     }
   }
