@@ -46,12 +46,15 @@ fi
 
 # Functions to build different artifacts.
 function build_binaries() {
+  BUILD_TIME=$(date)
+
   for OS in "${SUPPORTED_OS[@]}"; do
     for ARCH in "${SUPPORTED_ARCH[@]}"; do
       for build_dir in $(find './cmd' -mindepth 1 -maxdepth 1 -type d); do
-        bin="$(basename ${build_dir})_${VERSION}_${OS}-${ARCH}"
+        bin_name="$(basename ${build_dir})"
+        bin="${bin_name}_${VERSION}_${OS}-${ARCH}"
         echo "Building ${OUTPUT_DIR}/${bin}"
-        env GOOS="${OS}" GOARCH="${ARCH}" go build -ldflags "-X github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=${VERSION}" -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
+        env GOOS="${OS}" GOARCH="${ARCH}" go build -ldflags="-X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=${VERSION}' -X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.BuildTime=${BUILD_TIME}'" -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
       done
     done
   done
