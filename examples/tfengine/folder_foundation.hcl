@@ -119,9 +119,9 @@ template "cicd" {
           "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "groups",
           "audit",
+          "example-prod-networks",
           "monitor",
           "folders",
-          "example-prod-networks",
         ]
       }
     ]
@@ -201,7 +201,7 @@ template "monitor" {
     }
     forseti = {
       domain  = "example.com"
-      network = "network"
+      network = "example-network"
       subnet  = "forseti-subnet"
     }
   }
