@@ -30,6 +30,12 @@ terraform {
   }
 }
 
+# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
+provider "google-beta" {
+  user_project_override = true
+  billing_project       = "example-devops"
+}
+
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -56,11 +62,24 @@ module "state_bucket" {
   location   = "us-central1"
 }
 
+# Devops project owners group.
+module "owners_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id          = "example-devops-owners@example.com"
+  customer_id = "c12345678"
+  owners      = ["user1@example.com"]
+  depends_on = [
+    module.project
+  ]
+}
+
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = ["group:example-devops-owners@example.com"]
+  members = ["group:${module.owners_group.id}"]
 }
 
 # Admin permission at folder level.
