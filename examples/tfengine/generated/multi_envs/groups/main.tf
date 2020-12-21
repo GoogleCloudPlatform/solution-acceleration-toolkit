@@ -36,7 +36,7 @@ module "example_auditors_example_com" {
 
   id           = "example-auditors@example.com"
   customer_id  = "c12345678"
-  display_name = "example-auditors"
+  display_name = "Example Auditors Group"
   owners       = ["user1@example.com"]
   members      = ["user2@example.com"]
 }

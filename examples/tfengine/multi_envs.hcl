@@ -72,6 +72,7 @@ template "groups" {
         {
           id = "example-auditors@example.com"
           customer_id = "c12345678"
+          display_name = "Example Auditors Group"
           owners = [
             "user1@example.com"
           ]
