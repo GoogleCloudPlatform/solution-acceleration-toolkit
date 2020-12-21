@@ -191,6 +191,9 @@ template "monitor" {
       shared_vpc_attachment = {
         host_project_id = "example-prod-networks"
       }
+      apis = [
+        "compute.googleapis.com",
+      ]
     }
     forseti = {
       domain  = "example.com"

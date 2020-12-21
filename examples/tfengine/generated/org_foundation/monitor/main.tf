@@ -38,7 +38,7 @@ module "project" {
   default_service_account = "keep"
 
   shared_vpc    = "example-prod-networks"
-  activate_apis = []
+  activate_apis = ["compute.googleapis.com"]
 }
 
 
