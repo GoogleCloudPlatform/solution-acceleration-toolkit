@@ -37,9 +37,8 @@ module "example_auditors_example_com" {
   id           = "example-auditors@example.com"
   customer_id  = "c12345678"
   display_name = "example-auditors"
-
-  owners  = ["user1@example.com"]
-  members = ["user2@example.com"]
+  owners       = ["user1@example.com"]
+  members      = ["user2@example.com"]
 }
 
 module "example_cicd_viewers_example_com" {
@@ -49,7 +48,6 @@ module "example_cicd_viewers_example_com" {
   id           = "example-cicd-viewers@example.com"
   customer_id  = "c12345678"
   display_name = "example-cicd-viewers"
-
 }
 
 module "example_cicd_editors_example_com" {
@@ -59,7 +57,6 @@ module "example_cicd_editors_example_com" {
   id           = "example-cicd-editors@example.com"
   customer_id  = "c12345678"
   display_name = "example-cicd-editors"
-
 }
 
 module "example_source_readers_example_com" {
@@ -69,7 +66,6 @@ module "example_source_readers_example_com" {
   id           = "example-source-readers@example.com"
   customer_id  = "c12345678"
   display_name = "example-source-readers"
-
 }
 
 module "example_source_writers_example_com" {
@@ -79,5 +75,4 @@ module "example_source_writers_example_com" {
   id           = "example-source-writers@example.com"
   customer_id  = "c12345678"
   display_name = "example-source-writers"
-
 }

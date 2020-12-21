@@ -71,8 +71,7 @@ module "owners_group" {
   id           = "example-devops-owners@example.com"
   customer_id  = "c12345678"
   display_name = "example-devops-owners"
-
-  owners = ["user1@example.com"]
+  owners       = ["user1@example.com"]
   depends_on = [
     module.project
   ]
@@ -93,8 +92,7 @@ module "admins_group" {
   id           = "example-folder-admins@example.com"
   customer_id  = "c12345678"
   display_name = "Example Folder Admins Group"
-
-  owners = ["user1@example.com"]
+  owners       = ["user1@example.com"]
   depends_on = [
     module.project
   ]
