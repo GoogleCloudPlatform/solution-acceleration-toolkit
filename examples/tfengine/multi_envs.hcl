@@ -37,7 +37,11 @@ template "devops" {
 
     admins_group = {
       id = "example-folder-admins@example.com"
-      exists = true
+      display_name = "Example Folder Admins Group"
+      customer_id = "c12345678"
+      owners = [
+        "user1@example.com"
+      ]
     }
 
     project = {

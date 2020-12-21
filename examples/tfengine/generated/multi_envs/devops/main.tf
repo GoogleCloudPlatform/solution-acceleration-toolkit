@@ -68,9 +68,11 @@ module "owners_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id          = "example-devops-owners@example.com"
-  customer_id = "c12345678"
-  owners      = ["user1@example.com"]
+  id           = "example-devops-owners@example.com"
+  customer_id  = "c12345678"
+  display_name = "example-devops-owners"
+
+  owners = ["user1@example.com"]
   depends_on = [
     module.project
   ]
@@ -83,9 +85,24 @@ resource "google_project_iam_binding" "devops_owners" {
   members = ["group:${module.owners_group.id}"]
 }
 
+# Admins group for at folder level.
+module "admins_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.1"
+
+  id           = "example-folder-admins@example.com"
+  customer_id  = "c12345678"
+  display_name = "Example Folder Admins Group"
+
+  owners = ["user1@example.com"]
+  depends_on = [
+    module.project
+  ]
+}
+
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
   folder = "folders/12345678"
   role   = "roles/resourcemanager.folderAdmin"
-  member = "group:example-folder-admins@example.com"
+  member = "group:${module.admins_group.id}"
 }

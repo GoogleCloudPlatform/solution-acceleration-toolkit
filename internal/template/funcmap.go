@@ -24,15 +24,16 @@ import (
 )
 
 var funcMap = map[string]interface{}{
-	"get":          get,
-	"has":          has,
-	"hcl":          hcl,
-	"hclField":     hclField,
-	"merge":        merge,
-	"replace":      replace,
-	"resourceName": resourceName,
-	"now":          time.Now,
-	"trimSpace":    strings.TrimSpace,
+	"get":             get,
+	"has":             has,
+	"hcl":             hcl,
+	"hclField":        hclField,
+	"merge":           merge,
+	"replace":         replace,
+	"resourceName":    resourceName,
+	"now":             time.Now,
+	"trimSpace":       strings.TrimSpace,
+	"regexReplaceAll": regexReplaceAll,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -129,4 +130,12 @@ func resourceName(m map[string]interface{}, key string) (string, error) {
 // alias for strings.Replace with the number of characters fixed to -1 (all).
 func replace(s, old, new string) string {
 	return strings.Replace(s, old, new, -1)
+}
+
+func regexReplaceAll(regex string, s string, repl string) (string, error) {
+	r, err := regexp.Compile(regex)
+	if err != nil {
+		return "", err
+	}
+	return r.ReplaceAllString(s, repl), nil
 }

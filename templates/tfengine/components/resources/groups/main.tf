@@ -19,8 +19,14 @@ module "{{resourceName . "id"}}" {
 
   id = "{{.id}}"
   customer_id = "{{.customer_id}}"
+
+  {{- if has . "display_name"}}
+  display_name = "{{.display_name}}"
+  {{- else}}
+  display_name = "{{regexReplaceAll "@.*" .id ""}}"
+  {{- end}}
+
   {{hclField . "description" -}}
-  {{hclField . "display_name" -}}
   {{hclField . "owners" -}}
   {{hclField . "managers" -}}
   {{hclField . "members" -}}

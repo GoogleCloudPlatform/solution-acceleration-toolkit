@@ -34,14 +34,18 @@ module "example_cicd_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id          = "example-cicd-viewers@example.com"
-  customer_id = "c12345678"
+  id           = "example-cicd-viewers@example.com"
+  customer_id  = "c12345678"
+  display_name = "example-cicd-viewers"
+
 }
 
 module "example_cicd_editors_example_com" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id          = "example-cicd-editors@example.com"
-  customer_id = "c12345678"
+  id           = "example-cicd-editors@example.com"
+  customer_id  = "c12345678"
+  display_name = "example-cicd-editors"
+
 }
