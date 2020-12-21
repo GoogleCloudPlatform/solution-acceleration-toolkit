@@ -43,6 +43,7 @@ module "project" {
   default_service_account = "keep"
   activate_apis = [
     "cloudbuild.googleapis.com",
+    "cloudidentity.googleapis.com",
     "container.googleapis.com",
     "dns.googleapis.com",
     "healthcare.googleapis.com",
