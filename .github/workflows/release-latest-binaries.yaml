@@ -19,6 +19,7 @@ on:
     - master
     paths:
     - '**.go'
+    - '.github/workflows/release-latest-binaries.yaml'
 
 name: Create Latest Binaries Release
 
