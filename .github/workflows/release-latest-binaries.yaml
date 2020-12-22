@@ -62,14 +62,12 @@ jobs:
 
         # If the release exists already, delete it so it can be recreated
         # For some reason, `hub edit` fails to update assets and crashes with various network errors
-        if bin/hub release | grep -q 'latest'; then
-          bin/hub release delete 'latest'
+        bin/hub release delete 'latest' | true
 
-          # Give a bit of time for the release to actually be deleted.
-          # Otherwise, occasionally creating the release will fail with
-          # "Duplicate value for tag_name" when GitHub isn't fast enough.
-          sleep 5
-        fi
+        # Give a bit of time for the release to actually be deleted.
+        # Otherwise, occasionally creating the release will fail with
+        # "Duplicate value for tag_name" when GitHub isn't fast enough.
+        sleep 5
 
         # Create the release with all binaries
         # Set the pre-release flag to indicate that it is not ready for production and may be unstable
