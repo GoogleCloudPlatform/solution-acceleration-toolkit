@@ -340,22 +340,14 @@ directly use the `terraform` binary to deploy the infrastructure.
     [here](../../templates/tfengine/components/cicd/README.md) or equivalently,
     `$OUTPUT_PATH/cicd/README.md` in the generated Terraform configs directory.
 
+    Note that the `groups` template must be deployed manually first if you also
+    use it to create groups to be used in the `cicd` template. These groups
+    should exist before `cicd` template can be deployed.
+
     Your devops project and CICD pipelines are ready. The following changes
     should be made as Pull Requests (PRs) and go though code reviews. After
     approval is granted and CI tests pass, merge the PR. The CD job
     automatically deploys the change to your Google Cloud infra.
-
-    If you would like to enable CICD to manage groups for you:
-
-    1. Include `groups` in the `managed_dirs` of `cicd` template.
-    1. Follow manual steps
-        [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account)
-        to assign the CICD service account Group Admin role. You must be a
-        Google Workspace Super Admin to be able to do so.
-
-    Note that the `groups` template must be deployed manually first if you also
-    use it to create groups to be used in the `cicd` template. These groups
-    should exist before `cicd` template can be deployed.
 
 1. Deploy org infrastructure and other resources by sending a PR for local
     changes to the config repo.

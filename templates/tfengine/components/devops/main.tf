@@ -88,8 +88,12 @@ module "owners_group" {
 
   id = "{{.project.owners_group.id}}"
   customer_id = "{{.project.owners_group.customer_id}}"
+  {{- if has .project.owners_group "display_name"}}
+  display_name = "{{.project.owners_group.display_name}}"
+  {{- else}}
+  display_name = "{{regexReplaceAll "@.*" .project.owners_group.id ""}}"
+  {{- end}}
   {{hclField .project.owners_group "description" -}}
-  {{hclField .project.owners_group "display_name" -}}
   {{hclField .project.owners_group "owners" -}}
   {{hclField .project.owners_group "managers" -}}
   {{hclField .project.owners_group "members" -}}
@@ -115,8 +119,12 @@ module "admins_group" {
 
   id = "{{.admins_group.id}}"
   customer_id = "{{.admins_group.customer_id}}"
+  {{- if has .admins_group "display_name"}}
+  display_name = "{{.admins_group.display_name}}"
+  {{- else}}
+  display_name = "{{regexReplaceAll "@.*" .admins_group.id ""}}"
+  {{- end}}
   {{hclField .admins_group "description" -}}
-  {{hclField .admins_group "display_name" -}}
   {{hclField .admins_group "owners" -}}
   {{hclField .admins_group "managers" -}}
   {{hclField .admins_group "members" -}}

@@ -33,11 +33,27 @@ to detect changes in the repo, trigger builds, and run the workloads.
     terraform apply
     ```
 
-1. (Optional) Follow the steps
-    [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account)
-    to grant **Google Workspace Group Admin** role to the CICD service account
-    so CICD can create and manage groups and memberships for you. You must be a
-    **Google Workspace Super Admin** to be able to do so.
+1. In addition, if you would like to enable CICD to manage groups and
+    memberships for you:
+
+    1. Make sure output directories which contain the groups resources are
+        included in the `managed_dirs` list in the `cicd` template.
+    1. Grant **Google Workspace Group Admin** role to the CICD service account
+        `<devops-project-number>@cloudbuild.gserviceaccount.com` by following
+        the following steps:
+
+        1. Go to Google Admin console's Admin roles configuration page
+            <https://admin.google.com/u/1/ac/roles>
+        1. Click `Groups Admin`;
+        1. Click `Admins assigned`;
+        1. Click `Assign service accounts` and input the CICD service account
+            email address.
+
+    Alternatively, follow steps
+    [here](https://cloud.google.com/identity/docs/how-to/setup#assigning_an_admin_role_to_the_service_account).
+
+    In either approach, you must be a **Google Workspace Super Admin** to be
+    able to complete those steps.
 
 ## CICD Container
 
