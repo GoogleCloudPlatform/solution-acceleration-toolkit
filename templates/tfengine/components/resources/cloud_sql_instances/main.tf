@@ -23,7 +23,7 @@ limitations under the License. */ -}}
 {{if eq .type "mysql" -}}
 module "{{resourceName . "name"}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.3.0"
+  version = "~> 4.4.0"
 
   name              = "{{.name}}"
   project_id        = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
