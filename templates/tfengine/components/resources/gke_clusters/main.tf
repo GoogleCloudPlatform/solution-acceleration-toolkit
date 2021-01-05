@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "gke_clusters"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 12.1.0"
+  version = "~> 12.3.0"
 
   # Required.
   name                   = "{{.name}}"

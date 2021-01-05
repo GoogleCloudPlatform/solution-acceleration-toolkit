@@ -79,7 +79,7 @@ EOF
 
 module "example_network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 2.5.0"
+  version = "~> 2.6.0"
 
   network_name = "example-network"
   project_id   = module.project.project_id
@@ -122,7 +122,7 @@ module "example_network" {
 }
 module "cloud_sql_private_service_access_example_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.3.0"
+  version = "~> 4.4.0"
 
   project_id  = module.project.project_id
   vpc_network = module.example_network.network_name
@@ -133,7 +133,7 @@ module "cloud_sql_private_service_access_example_network" {
 
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 
   name    = "example-router"
   project = module.project.project_id

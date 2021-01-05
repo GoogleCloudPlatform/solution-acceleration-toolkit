@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range .compute_routers}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 
   name         = "{{.name}}"
   project      = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
