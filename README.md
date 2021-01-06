@@ -20,6 +20,10 @@ of your Google Cloud organization.
 - [Terraform Importer](./docs/tfimport): Automatically detect and import
     existing resources defined by your Terraform configs.
 
+## Tutorial video
+
+[Deploying the Data Protection Toolkit](https://www.youtube.com/watch?v=-wIutctaqr0)
+
 ## Releases
 
 Please see [RELEASING.md](./RELEASING.md) for our release strategy.

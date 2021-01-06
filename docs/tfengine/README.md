@@ -4,7 +4,8 @@ The Terraform Engine is a tool to generate complete end-to-end Terraform
 deployments for Google Cloud with security, compliance, and best practices baked
 in.
 
-Use our [example](../../examples/tfengine) configs to quickly get started.
+Watch our [tutorial video](https://www.youtube.com/watch?v=-wIutctaqr0) and use
+[example configs](../../examples/tfengine) to quickly get started.
 
 ## Terminology
 
