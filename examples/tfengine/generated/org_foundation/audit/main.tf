@@ -87,9 +87,9 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
+  log_sink_name          = "storage-audit-logs-sink"
   destination_uri        = module.storage_destination.destination_uri
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
-  log_sink_name          = "storage-audit-logs-sink"
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
   unique_writer_identity = true

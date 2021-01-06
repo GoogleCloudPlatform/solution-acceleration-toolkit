@@ -41,6 +41,13 @@ ID of Bigquery Dataset.
 
 Type: string
 
+### logs_sink_prefix
+
+Optional string to prepend to default logs sink names
+(bigquery-audit-logs-sink and storage-audit-logs-sink).
+
+Type: string
+
 ### logs_storage_bucket
 
 GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements.

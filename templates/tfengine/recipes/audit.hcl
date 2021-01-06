@@ -43,6 +43,13 @@ schema = {
         }
       }
     }
+    logs_sink_prefix = {
+      description = <<EOF
+        Optional string to prepend to default logs sink names
+        (bigquery-audit-logs-sink and storage-audit-logs-sink).
+      EOF
+      type        = "string"
+    }
     logs_bigquery_dataset = {
       description          = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
       type                 = "object"

@@ -177,6 +177,7 @@ template "audit" {
     project = {
       project_id = "example-audit"
     }
+    logs_sink_prefix = "example-"
     logs_bigquery_dataset = {
       dataset_id = "1yr_folder_audit_logs"
     }
