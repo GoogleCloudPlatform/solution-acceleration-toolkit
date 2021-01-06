@@ -32,7 +32,7 @@ module "project" {
   folder_id       = local.constants.folder_id
   billing_account = local.constants.billing_account
   lien            = true
-  # Create and keep default service accounts when certain service APIs are enabled.
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account        = "keep"
   create_project_sa              = false
   enable_shared_vpc_host_project = true

@@ -43,7 +43,7 @@ module "project" {
   folder_id       = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
   billing_account = "000-000-000"
   lien            = true
-  # Create and keep default service accounts when certain service APIs are enabled.
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create the additional project-service-account@example-data-prod.iam.gserviceaccount.com service account.
   create_project_sa              = false

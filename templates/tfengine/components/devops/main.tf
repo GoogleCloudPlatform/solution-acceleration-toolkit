@@ -59,7 +59,7 @@ module "project" {
   {{- end}}
   billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
-  # Create and keep default service accounts when certain service APIs are enabled.
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create the additional project-service-account@{{.project.project_id}}.iam.gserviceaccount.com service account.
   create_project_sa       = false
