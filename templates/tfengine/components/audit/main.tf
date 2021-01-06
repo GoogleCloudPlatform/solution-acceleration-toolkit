@@ -44,7 +44,7 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
-  log_sink_name          = "{{(get .logs_bigquery_dataset "sink_name" "bigquery-audit-logs-sink")}}"
+  log_sink_name          = "{{get .logs_bigquery_dataset "sink_name" "bigquery-audit-logs-sink"}}"
   destination_uri        = "${module.bigquery_destination.destination_uri}"
   filter                 = "{{$filter}}"
   parent_resource_type   = "{{.parent_type}}"
@@ -68,7 +68,7 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
-  log_sink_name          = "{{(get .logs_storage_bucket "sink_name" "storage-audit-logs-sink")}}"
+  log_sink_name          = "{{get .logs_storage_bucket "sink_name" "storage-audit-logs-sink"}}"
   destination_uri        = "${module.storage_destination.destination_uri}"
   filter                 = "{{$filter}}"
   parent_resource_type   = "{{.parent_type}}"
