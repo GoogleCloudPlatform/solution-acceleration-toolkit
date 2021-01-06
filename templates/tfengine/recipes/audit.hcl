@@ -43,13 +43,6 @@ schema = {
         }
       }
     }
-    logs_sink_prefix = {
-      description = <<EOF
-        Optional string to prepend to default logs sink names
-        (bigquery-audit-logs-sink and storage-audit-logs-sink).
-      EOF
-      type        = "string"
-    }
     logs_bigquery_dataset = {
       description          = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
       type                 = "object"
@@ -57,6 +50,12 @@ schema = {
       properties = {
         dataset_id = {
           description = "ID of Bigquery Dataset."
+          type        = "string"
+        }
+        sink_name = {
+          description = <<EOF
+            Name of the logs sink, default to "bigquery-audit-logs-sink".
+          EOF
           type        = "string"
         }
       }
@@ -68,6 +67,12 @@ schema = {
       properties = {
         name = {
           description = "Name of GCS bucket."
+          type        = "string"
+        }
+        sink_name = {
+          description = <<EOF
+            Name of the logs sink, default to "storage-audit-logs-sink".
+          EOF
           type        = "string"
         }
       }

@@ -41,10 +41,9 @@ ID of Bigquery Dataset.
 
 Type: string
 
-### logs_sink_prefix
+### logs_bigquery_dataset.sink_name
 
-Optional string to prepend to default logs sink names
-(bigquery-audit-logs-sink and storage-audit-logs-sink).
+Name of the logs sink, default to "bigquery-audit-logs-sink".
 
 Type: string
 
@@ -57,6 +56,12 @@ Type: object
 ### logs_storage_bucket.name
 
 Name of GCS bucket.
+
+Type: string
+
+### logs_storage_bucket.sink_name
+
+Name of the logs sink, default to "storage-audit-logs-sink".
 
 Type: string
 
