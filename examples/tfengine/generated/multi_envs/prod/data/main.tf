@@ -36,14 +36,17 @@ data "terraform_remote_state" "folders" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
 
-  name                           = "example-data-prod"
-  org_id                         = ""
-  folder_id                      = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
-  billing_account                = "000-000-000"
-  lien                           = true
-  default_service_account        = "keep"
+  name            = "example-data-prod"
+  org_id          = ""
+  folder_id       = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
+  billing_account = "000-000-000"
+  lien            = true
+  # Create and keep default service accounts when certain service APIs are enabled.
+  default_service_account = "keep"
+  # Do not create the additional project-service-account@example-data-prod.iam.gserviceaccount.com service account.
+  create_project_sa              = false
   enable_shared_vpc_host_project = true
   activate_apis                  = ["compute.googleapis.com"]
 }

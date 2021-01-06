@@ -48,7 +48,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
 
   name                    = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
@@ -59,7 +59,10 @@ module "project" {
   {{- end}}
   billing_account         = "{{.billing_account}}"
   lien                    = {{get . "enable_lien" true}}
+  # Create and keep default service accounts when certain service APIs are enabled.
   default_service_account = "keep"
+  # Do not create the additional project-service-account@{{.project.project_id}}.iam.gserviceaccount.com service account.
+  create_project_sa       = false
   activate_apis = [
     "cloudbuild.googleapis.com",
     "cloudidentity.googleapis.com",

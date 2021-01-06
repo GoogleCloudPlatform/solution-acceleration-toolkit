@@ -25,14 +25,16 @@ locals {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
 
-  name                           = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
-  org_id                         = ""
-  folder_id                      = local.constants.folder_id
-  billing_account                = local.constants.billing_account
-  lien                           = true
+  name            = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  org_id          = ""
+  folder_id       = local.constants.folder_id
+  billing_account = local.constants.billing_account
+  lien            = true
+  # Create and keep default service accounts when certain service APIs are enabled.
   default_service_account        = "keep"
+  create_project_sa              = false
   enable_shared_vpc_host_project = true
   activate_apis                  = ["compute.googleapis.com"]
 }

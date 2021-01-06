@@ -16,10 +16,10 @@ limitations under the License. */ -}}
 module "project" {
   {{- if has . "shared_vpc_attachment"}}
   source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
   {{- else}}
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
   {{- end}}
 
   {{- if get . "use_constants"}}
@@ -40,7 +40,12 @@ module "project" {
   billing_account         = "{{.billing_account}}"
   {{- end}}
   lien                    = {{get . "enable_lien" true}}
+  # Create and keep default service accounts when certain service APIs are enabled.
   default_service_account = "keep"
+  {{- if not (get . "use_constants" false)}}
+  # Do not create the additional project-service-account@{{.project_id}}.iam.gserviceaccount.com service account.
+  {{- end}}
+  create_project_sa       = false
 
   {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true

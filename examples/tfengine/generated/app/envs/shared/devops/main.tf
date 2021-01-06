@@ -39,13 +39,14 @@ locals {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source                  = "terraform-google-modules/project-factory/google"
-  version                 = "~> 10.0.1"
+  version                 = "~> 10.0.2"
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
   org_id                  = ""
   folder_id               = local.constants.folder_id
   billing_account         = local.constants.billing_account
   lien                    = true
   default_service_account = "keep"
+  create_project_sa       = false
   activate_apis = [
     "admin.googleapis.com",
     "appengine.googleapis.com",

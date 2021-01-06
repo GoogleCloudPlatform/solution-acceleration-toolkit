@@ -33,14 +33,17 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
 
-  name                    = "example-prod-apps"
-  org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
+  name            = "example-prod-apps"
+  org_id          = ""
+  folder_id       = "12345678"
+  billing_account = "000-000-000"
+  lien            = true
+  # Create and keep default service accounts when certain service APIs are enabled.
   default_service_account = "keep"
+  # Do not create the additional project-service-account@example-prod-apps.iam.gserviceaccount.com service account.
+  create_project_sa = false
 
   shared_vpc = "example-prod-networks"
   shared_vpc_subnets = [

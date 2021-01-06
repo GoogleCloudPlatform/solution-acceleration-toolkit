@@ -29,13 +29,16 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  version = "~> 10.0.2"
 
-  name                    = "example-audit"
-  org_id                  = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
+  name            = "example-audit"
+  org_id          = "12345678"
+  billing_account = "000-000-000"
+  lien            = true
+  # Create and keep default service accounts when certain service APIs are enabled.
   default_service_account = "keep"
+  # Do not create the additional project-service-account@example-audit.iam.gserviceaccount.com service account.
+  create_project_sa = false
   activate_apis = [
     "bigquery.googleapis.com",
     "logging.googleapis.com",
