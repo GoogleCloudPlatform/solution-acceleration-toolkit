@@ -64,7 +64,7 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
-  log_sink_name          = "bigquery-audit-logs-sink"
+  log_sink_name          = "example-bigquery-audit-logs-sink"
   destination_uri        = module.bigquery_destination.destination_uri
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
   parent_resource_type   = "folder"
@@ -88,9 +88,9 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.0.0"
 
+  log_sink_name          = "example-storage-audit-logs-sink"
   destination_uri        = module.storage_destination.destination_uri
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
-  log_sink_name          = "storage-audit-logs-sink"
   parent_resource_type   = "folder"
   parent_resource_id     = var.folder
   unique_writer_identity = true

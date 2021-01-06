@@ -52,6 +52,12 @@ schema = {
           description = "ID of Bigquery Dataset."
           type        = "string"
         }
+        sink_name = {
+          description = <<EOF
+            Name of the logs sink, default to "bigquery-audit-logs-sink".
+          EOF
+          type        = "string"
+        }
       }
     }
     logs_storage_bucket = {
@@ -61,6 +67,12 @@ schema = {
       properties = {
         name = {
           description = "Name of GCS bucket."
+          type        = "string"
+        }
+        sink_name = {
+          description = <<EOF
+            Name of the logs sink, default to "storage-audit-logs-sink".
+          EOF
           type        = "string"
         }
       }
