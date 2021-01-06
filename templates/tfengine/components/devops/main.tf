@@ -50,19 +50,19 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.2"
 
-  name                    = "{{.project.project_id}}"
+  name            = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
-  org_id                  = "{{.parent_id}}"
+  org_id          = "{{.parent_id}}"
   {{- else}}
-  org_id                  = ""
-  folder_id               = "{{.parent_id}}"
+  org_id          = ""
+  folder_id       = "{{.parent_id}}"
   {{- end}}
-  billing_account         = "{{.billing_account}}"
-  lien                    = {{get . "enable_lien" true}}
+  billing_account = "{{.billing_account}}"
+  lien            = {{get . "enable_lien" true}}
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create the additional project-service-account@{{.project.project_id}}.iam.gserviceaccount.com service account.
-  create_project_sa       = false
+  create_project_sa = false
   activate_apis = [
     "cloudbuild.googleapis.com",
     "cloudidentity.googleapis.com",

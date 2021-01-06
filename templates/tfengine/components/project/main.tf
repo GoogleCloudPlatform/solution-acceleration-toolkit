@@ -30,22 +30,22 @@ module "project" {
   billing_account = local.constants.billing_account
   {{- else}}
 
-  name                    = "{{.project_id}}"
+  name            = "{{.project_id}}"
   {{- if eq .parent_type "organization"}}
-  org_id                  = "{{.parent_id}}"
+  org_id          = "{{.parent_id}}"
   {{- else}}
-  org_id                  = ""
-  folder_id               = "{{.parent_id}}"
+  org_id          = ""
+  folder_id       = "{{.parent_id}}"
   {{- end}}
-  billing_account         = "{{.billing_account}}"
+  billing_account = "{{.billing_account}}"
   {{- end}}
-  lien                    = {{get . "enable_lien" true}}
+  lien            = {{get . "enable_lien" true}}
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   {{- if not (get . "use_constants" false)}}
   # Do not create the additional project-service-account@{{.project_id}}.iam.gserviceaccount.com service account.
   {{- end}}
-  create_project_sa       = false
+  create_project_sa = false
 
   {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true
