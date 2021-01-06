@@ -551,8 +551,9 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		return false, fmt.Errorf("init: %v\v%v", err, string(out))
 	}
 
-	// Generate and load the plan using a temp var.
-	tmpfile, err := ioutil.TempFile("", "")
+	// Generate and load the plan using a temp file.
+	// Use the .tf files input dir in case the system can't write to /tmp.
+	tmpfile, err := ioutil.TempFile(runArgs.InputDir, "plan-for-import-*.tfplan")
 	if err != nil {
 		return false, fmt.Errorf("create temp file: %v", err)
 	}
@@ -577,6 +578,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	var errs []string
 	var skipped []string
 	var importCmds []string
+	var notImportable []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -588,7 +590,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// Try to convert to an importable resource.
 		ir, ok := Importable(cc, pcv)
 		if !ok {
-			log.Printf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
+			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
+			log.Println(notImportableMsg)
+			if runArgs.DryRun {
+				notImportable = append(notImportable, notImportableMsg)
+			}
 			continue
 		}
 
@@ -651,10 +657,17 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		}
 	}
 
-	if runArgs.DryRun && len(importCmds) > 0 {
-		log.Printf("Import commands:")
-		fmt.Printf("cd %v\n", runArgs.InputDir)
-		fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
+	if runArgs.DryRun {
+		if len(importCmds) > 0 {
+			log.Printf("Import commands:")
+			fmt.Printf("cd %v\n", runArgs.InputDir)
+			fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
+		}
+
+		if len(notImportable) > 0 {
+			log.Printf("The following resources are NOT importable:")
+			fmt.Printf("%v\n", strings.Join(notImportable, ""))
+		}
 
 		return false, nil
 	}
