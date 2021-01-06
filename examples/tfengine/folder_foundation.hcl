@@ -138,9 +138,11 @@ template "audit" {
     }
     logs_bigquery_dataset = {
       dataset_id = "1yr_folder_audit_logs"
+      sink_name  = "example-bigquery-audit-logs-sink"
     }
     logs_storage_bucket = {
-      name = "7yr-folder-audit-logs"
+      name       = "7yr-folder-audit-logs"
+      sink_name  = "example-storage-audit-logs-sink"
     }
     additional_filters = [
       # Need to escape \ and " to preserve them in the final filter strings.
