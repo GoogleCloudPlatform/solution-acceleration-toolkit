@@ -362,6 +362,10 @@ var Importers = map[string]resourceImporter{
 		Tmpl:   "{{.service_account_id}}",
 	},
 	"google_service_networking_connection": &importer.ServiceNetworkingConnection{},
+	"google_service_usage_consumer_quota_override": &importer.SimpleImporter{
+		Fields: []string{"project", "service", "metric", "limit", "name"},
+		Tmpl:   "projects/{{.project}}/services/{{.service}}/consumerQuotaMetrics/{{.metric}}/limits/{{.limit}}/consumerOverrides/{{.name}}",
+	},
 	"google_sql_database": &importer.SimpleImporter{
 		Fields: []string{"project", "instance", "name"},
 		Tmpl:   "projects/{{.project}}/instances/{{.instance}}/databases/{{.name}}",

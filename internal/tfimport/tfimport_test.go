@@ -844,6 +844,17 @@ func TestImportersSanity(t *testing.T) {
 			"projects/my-project/serviceAccounts/my-sa@my-project.iam.gserviceaccount.com",
 		},
 		{
+			"google_service_usage_consumer_quota_override",
+			map[string]interface{}{
+				"project": "my-project",
+				"service": "healthcare.googleapis.com",
+				"metric":  "healthcare.googleapis.com%2Fannotation_ops",
+				"limit":   "%2Fmin%2Fproject%2Fregion",
+				"name":    "server-generated",
+			},
+			"projects/my-project/services/healthcare.googleapis.com/consumerQuotaMetrics/healthcare.googleapis.com%2Fannotation_ops/limits/%2Fmin%2Fproject%2Fregion/consumerOverrides/server-generated",
+		},
+		{
 			"google_sql_database",
 			map[string]interface{}{
 				"project":  "my-project",
