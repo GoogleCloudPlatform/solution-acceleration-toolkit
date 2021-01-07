@@ -36,6 +36,8 @@ provider "google-beta" {
   billing_project       = "example-devops"
 }
 
+data "google_client_openid_userinfo" "caller" {}
+
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -74,7 +76,7 @@ module "owners_group" {
   id           = "example-devops-owners@example.com"
   customer_id  = "c12345678"
   display_name = "example-devops-owners"
-  owners       = ["user1@example.com"]
+  owners       = [data.google_client_openid_userinfo.caller.email]
   depends_on = [
     module.project
   ]

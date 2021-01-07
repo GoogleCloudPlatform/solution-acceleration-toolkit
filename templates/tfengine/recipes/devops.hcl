@@ -92,7 +92,10 @@ schema = {
               type        = "string"
             }
             owners = {
-              description = "Owners of the group."
+              description = <<EOF
+                Owners of the group.
+                If not specified, the caller will be added as the default owner of the group.
+              EOF
               type        = "array"
               items = {
                 type = "string"
@@ -169,7 +172,10 @@ schema = {
           type        = "string"
         }
         owners = {
-          description = "Owners of the group."
+          description = <<EOF
+            Owners of the group.
+            If not specified, the caller will be added as the default owner of the group.
+          EOF
           type        = "array"
           items = {
             type = "string"
