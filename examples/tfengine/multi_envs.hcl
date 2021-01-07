@@ -49,9 +49,7 @@ template "devops" {
       owners_group = {
         id = "example-devops-owners@example.com"
         customer_id = "c12345678"
-        owners = [
-          "user1@example.com"
-        ]
+        // No owner specified. The caller will be added as the default owner of the group.
       }
     }
   }
