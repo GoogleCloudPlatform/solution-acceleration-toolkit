@@ -42,9 +42,7 @@ module "project" {
   lien            = {{get . "enable_lien" true}}
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
-  {{- if not (get . "use_constants" false)}}
-  # Do not create the additional project-service-account@{{.project_id}}.iam.gserviceaccount.com service account.
-  {{- end}}
+  # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
 
   {{- if get . "is_shared_vpc_host"}}

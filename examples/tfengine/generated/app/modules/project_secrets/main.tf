@@ -39,8 +39,9 @@ module "project" {
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
-  create_project_sa       = false
-  activate_apis           = ["secretmanager.googleapis.com"]
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  activate_apis     = ["secretmanager.googleapis.com"]
 }
 
 resource "google_secret_manager_secret" "manual_sql_db_user" {

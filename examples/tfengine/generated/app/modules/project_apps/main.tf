@@ -34,7 +34,8 @@ module "project" {
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
-  create_project_sa       = false
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
 
   shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
   activate_apis = ["compute.googleapis.com"]
