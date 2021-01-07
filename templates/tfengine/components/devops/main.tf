@@ -97,7 +97,7 @@ module "owners_group" {
   {{- end}}
   {{hclField .project.owners_group "description" -}}
   {{if has .project.owners_group "owners" -}}
-  owners = {{hcl .project.owners_group.owners}}
+  owners = {{hcl .project.owners_group.owners -}}
   {{else -}}
   owners = [data.google_client_openid_userinfo.caller.email]
   {{- end}}
@@ -132,7 +132,7 @@ module "admins_group" {
   {{- end}}
   {{hclField .admins_group "description" -}}
   {{if has .admins_group "owners" -}}
-  owners = {{hcl .admins_group.owners}}
+  owners = {{hcl .admins_group.owners -}}
   {{else -}}
   owners = [data.google_client_openid_userinfo.caller.email]
   {{- end}}

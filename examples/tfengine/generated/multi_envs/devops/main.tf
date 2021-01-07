@@ -95,7 +95,6 @@ module "admins_group" {
   customer_id  = "c12345678"
   display_name = "Example Folder Admins Group"
   owners       = ["user1@example.com"]
-
   depends_on = [
     module.project
   ]
