@@ -578,7 +578,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	var errs []string
 	var skipped []string
 	var importCmds []string
-	var notImportable []string
+	var notImportableMsgs []string
 	for _, cc := range createChanges {
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
@@ -593,7 +593,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			log.Println(notImportableMsg)
 			if runArgs.DryRun {
-				notImportable = append(notImportable, notImportableMsg)
+				notImportableMsgs = append(notImportableMsgs, notImportableMsg)
 			}
 			continue
 		}
@@ -664,9 +664,9 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
 		}
 
-		if len(notImportable) > 0 {
+		if len(notImportableMsgs) > 0 {
 			log.Printf("The following resources are NOT importable:")
-			fmt.Printf("%v\n", strings.Join(notImportable, ""))
+			fmt.Printf("%v\n", strings.Join(notImportableMsgs, ""))
 		}
 
 		return false, nil
