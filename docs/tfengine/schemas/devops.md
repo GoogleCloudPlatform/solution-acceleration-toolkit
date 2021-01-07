@@ -58,7 +58,6 @@ Type: array(string)
 ### admins_group.owners
 
 Owners of the group.
-If not specified, the caller will be added as the default owner of the group.
 
 Type: array(string)
 
@@ -170,7 +169,6 @@ Type: array(string)
 ### project.owners_group.owners
 
 Owners of the group.
-If not specified, the caller will be added as the default owner of the group.
 
 Type: array(string)
 
