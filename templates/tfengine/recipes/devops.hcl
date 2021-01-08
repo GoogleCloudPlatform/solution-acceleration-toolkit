@@ -52,6 +52,7 @@ schema = {
         project_id = {
           description = "ID of project."
           type        = "string"
+          pattern     = "^[a-z0-9\\-]{6,30}$"
         }
         owners_group = {
           description = <<EOF

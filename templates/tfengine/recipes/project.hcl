@@ -53,6 +53,7 @@ schema = {
         project_id = {
           description = "ID of project to create and/or provision resources in."
           type        = "string"
+          pattern     = "^[a-z0-9\\-]{6,30}$"
         }
         exists = {
           description = "Whether this project exists. Defaults to 'false'."
@@ -109,6 +110,7 @@ schema = {
             host_project_id = {
               description = "ID of host project to connect this project to."
               type        = "string"
+              pattern     = "^[a-z0-9\\-]{6,30}$"
             }
             subnets = {
               description = "Subnets within the host project to grant this project access to."

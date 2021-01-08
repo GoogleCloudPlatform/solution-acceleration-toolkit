@@ -57,6 +57,7 @@ schema = {
               the current project will be used.
             EOF
             type        = "string"
+            pattern     = "^[a-z0-9\\-]{6,30}$"
           }
           network_project_suffix = {
             description = <<EOF
@@ -256,6 +257,7 @@ schema = {
               the current project will be used.
             EOF
             type        = "string"
+            pattern     = "^[a-z0-9\\-]{6,30}$"
           }
           network_project_suffix = {
             description = <<EOF
@@ -320,6 +322,7 @@ schema = {
               the current project will be used.
             EOF
             type        = "string"
+            pattern     = "^[a-z0-9\\-]{6,30}$"
           }
           network_project_suffix = {
             description = <<EOF
@@ -697,6 +700,7 @@ schema = {
               the current project will be used.
             EOF
             type        = "string"
+            pattern     = "^[a-z0-9\\-]{6,30}$"
           }
           network_project_suffix = {
             description = <<EOF
