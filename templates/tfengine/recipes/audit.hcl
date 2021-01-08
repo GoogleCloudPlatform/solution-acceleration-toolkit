@@ -40,7 +40,7 @@ schema = {
         project_id = {
           description = "ID of project."
           type        = "string"
-          pattern     = "^[a-z0-9\\-]{6,30}$"
+          pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
         }
       }
     }
