@@ -43,8 +43,6 @@ provider "google-beta" {
   user_project_override = true
   billing_project       = "{{.project.project_id}}"
 }
-
-data "google_client_openid_userinfo" "caller" {}
 {{- end}}
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
@@ -99,11 +97,7 @@ module "owners_group" {
   display_name = "{{regexReplaceAll "@.*" .project.owners_group.id ""}}"
   {{- end}}
   {{hclField .project.owners_group "description" -}}
-  {{if has .project.owners_group "owners" -}}
-  owners = {{hcl .project.owners_group.owners -}}
-  {{else -}}
-  owners = [data.google_client_openid_userinfo.caller.email]
-  {{- end}}
+  {{hclField .project.owners_group "owners" -}}
   {{hclField .project.owners_group "managers" -}}
   {{hclField .project.owners_group "members" -}}
   depends_on = [
@@ -134,11 +128,7 @@ module "admins_group" {
   display_name = "{{regexReplaceAll "@.*" .admins_group.id ""}}"
   {{- end}}
   {{hclField .admins_group "description" -}}
-  {{if has .admins_group "owners" -}}
-  owners = {{hcl .admins_group.owners -}}
-  {{else -}}
-  owners = [data.google_client_openid_userinfo.caller.email]
-  {{- end}}
+  {{hclField .admins_group "owners" -}}
   {{hclField .admins_group "managers" -}}
   {{hclField .admins_group "members" -}}
   depends_on = [

@@ -52,6 +52,7 @@ schema = {
         project_id = {
           description = "ID of project."
           type        = "string"
+          pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
         }
         owners_group = {
           description = <<EOF
@@ -92,10 +93,7 @@ schema = {
               type        = "string"
             }
             owners = {
-              description = <<EOF
-                Owners of the group.
-                If not specified, the caller will be added as the default owner of the group.
-              EOF
+              description = "Owners of the group."
               type        = "array"
               items = {
                 type = "string"
@@ -172,10 +170,7 @@ schema = {
           type        = "string"
         }
         owners = {
-          description = <<EOF
-            Owners of the group.
-            If not specified, the caller will be added as the default owner of the group.
-          EOF
+          description = "Owners of the group."
           type        = "array"
           items = {
             type = "string"
