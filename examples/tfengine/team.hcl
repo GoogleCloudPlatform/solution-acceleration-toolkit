@@ -488,21 +488,19 @@ template "project_apps" {
       }
     }
     resources = {
-      # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
-      # Add back once https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/677 is fixed.
-      # gke_clusters = [{
-      #   name                   = "example-gke-cluster"
-      #   network_project_id     = "example-prod-networks"
-      #   network                = "example-network"
-      #   subnet                 = "example-gke-subnet"
-      #   ip_range_pods_name     = "example-pods-range"
-      #   ip_range_services_name = "example-services-range"
-      #   master_ipv4_cidr_block = "192.168.0.0/28"
-      #   service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
-      #   labels = {
-      #     type = "no-phi"
-      #   }
-      # }]
+      gke_clusters = [{
+        name                   = "example-gke-cluster"
+        network_project_id     = "example-prod-networks"
+        network                = "example-network"
+        subnet                 = "example-gke-subnet"
+        ip_range_pods_name     = "example-pods-range"
+        ip_range_services_name = "example-services-range"
+        master_ipv4_cidr_block = "192.168.0.0/28"
+        service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
+        labels = {
+          type = "no-phi"
+        }
+      }]
       binary_authorization = {
         admission_whitelist_patterns = [{
           name_pattern = "gcr.io/cloudsql-docker/*"
@@ -575,9 +573,7 @@ EOF
   }
 }
 
-# Kubernetes Terraform deployment. This should be deployed manually as Cloud
-# Build cannot access the GKE cluster and should be deployed after the GKE
-# Cluster has been deployed.
+# Kubernetes Terraform deployment. This should be deployed after the GKE Cluster has been deployed.
 template "kubernetes" {
   recipe_path = "{{$recipes}}/deployment.hcl"
   output_path = "./kubernetes"
