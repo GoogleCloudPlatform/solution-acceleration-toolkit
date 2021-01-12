@@ -26,7 +26,9 @@ and monitoring. By using out-of-the-box end-to-end configs that implement these
 steps for you, you can quickly set up a secure and compliant environment and
 focus on the parts of the infrastructure that drive your business.
 
-This tool helps you follow Google Cloud and Terraform best practices:
+This tool helps you follow Google Cloud, Terraform and security best practices.
+
+### Infra-as-code best practices
 
 - Clearly define your
     [resource hierarchy](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#define-hierarchy)
@@ -35,8 +37,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
   - For example, the
         [org foundation example](../../examples/tfengine/org_foundation.hcl) can
         be used to define org level components and folders. Then, the
-        [sample team example](../../examples/tfengine/team.hcl) can be used to
-        define projects and resources within one of the folders.
+        [team example](../../examples/tfengine/team.hcl) can be used to define
+        projects and resources within one of the folders.
 
 - Break up Terraform state files into
     [logical deployments](https://www.hashicorp.com/resources/evolving-infrastructure-terraform-opencredo/)
@@ -47,6 +49,8 @@ This tool helps you follow Google Cloud and Terraform best practices:
         creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
         `folders`, etc.
 
+### Google Cloud best practices
+
 - Set up GCP Organization Policy Constraints for security best practices.
 
   - For example, the [org policy recipe](./schemas/org_policies.md) can be
@@ -54,18 +58,40 @@ This tool helps you follow Google Cloud and Terraform best practices:
         [GCP Organization Policy Constraints](https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints)
         to help align your GCP infrastructure with HIPAA requirements.
 
-- Work towards alignment with HIPAA and compliance requirements for
-    [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
+- Define many security sensitive resources such as
+    [VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
+    and storage resources.
 
-  - For example, the [audit recipe](./schemas/audit.md) creates a dedicated
-        project to host audit logs and creates logs routers to export all audit
-        logs to BigQuery (for 1 year) and to GCS (for 7 years). These
-        configurations help align with
-        [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
-        requirements.
+  - For example, the [project recipe](./schemas/project.md) can be used to
+        create projects and resources within projects.
 
-- Reduce human access to the org infrastructure. Promote coding and version
-    control best practices.
+- Benefit from per-service best practices through use of the
+    [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+
+  - Our recipes use Cloud Foundation Toolkit modules wherever they make
+        sense. When there are multiple options, we choose the most secure
+        option. For example, creating a GKE cluster through our
+        [project recipe](./schemas/project.md) will utilize the
+        [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)
+        module from Cloud Foundation Toolkit.
+
+- Promote
+    [centralized network control](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control)
+    pattern.
+
+  - For example, the [team example](../../examples/tfengine/team.hcl)
+        configures deployment to use a
+        [VPC host project](https://cloud.google.com/vpc/docs/shared-vpc) to
+        manage networks and subnets in a centralized way (enabling network
+        administration to be separated from project administration). Resources
+        in different projects communicate securely with internal IPs.
+
+### DevOps best practices
+
+- Configure
+    [Continuous Integration and Continuous Deployment](https://cloud.google.com/solutions/managing-infrastructure-as-code)
+    (CICD) pipelines to reduce human access to the org infrastructure. Promote
+    coding and version control best practices.
 
   - For example, the [CICD recipe](./schemas/cicd.md) sets up a pipeline
         that is run by Cloud Build service accounts. Through integration with
@@ -83,22 +109,27 @@ This tool helps you follow Google Cloud and Terraform best practices:
         to manage projects and resources within the folder. The service accounts
         of other CICD pipelines cannot access these projects.
 
-- Define many security sensitive resources such as
-    [centralized VPC networks](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#networking_and_security)
-    and storage resources.
+- [Delegate responsibility](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#groups-and-service-accounts)
+    through groups and service accounts:
 
-  - For example, the [project recipe](./schemas/project.md) can be used to
-        create projects and resources within projects.
+  - For example, the
+        [group component](../../templates/tfengine/components/resources/groups)
+        can be used to create and manage Cloud Identity groups and memberships.
+        IAM roles should only be assigned to these groups so that individuals
+        obtain permissions through groups rather than direct IAM roles. See
+        [multi envs example](../../examples/tfengine/multi_envs.hcl)
 
-- Benefit from per-service best practices through use of the
-    [Cloud Foundation Toolkit](https://cloud.google.com/foundation-toolkit).
+### HIPAA alignment
 
-  - Our recipes use Cloud Foundation Toolkit modules wherever they make
-        sense. When there are multiple options, we choose the most secure
-        option. For example, creating a GKE cluster through our
-        [project recipe](./schemas/project.md) will utilize the
-        [safer GKE cluster](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)
-        module from Cloud Foundation Toolkit.
+- Work towards alignment with HIPAA and compliance requirements for
+    [auditing and monitoring](https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#logging_monitoring_and_operations).
+
+  - For example, the [audit recipe](./schemas/audit.md) creates a dedicated
+        project to host audit logs and creates logs routers to export all audit
+        logs to BigQuery (for 1 year) and to GCS (for 7 years). These
+        configurations help align with
+        [HIPAA audit log](https://www.securitymetrics.com/blog/what-are-hipaa-compliant-system-logs)
+        requirements.
 
 ## Prerequisites
 
