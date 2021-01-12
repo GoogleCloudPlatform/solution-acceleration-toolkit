@@ -116,8 +116,8 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
         [group component](../../templates/tfengine/components/resources/groups)
         can be used to create and manage Cloud Identity groups and memberships.
         IAM roles should only be assigned to these groups so that individuals
-        obtain permissions through groups rather than direct IAM roles. See
-        [multi envs example](../../examples/tfengine/multi_envs.hcl) for how to
+        obtain permissions through groups rather than direct IAM roles. See the
+        [multi-envs example](../../examples/tfengine/multi_envs.hcl) for how to
         create and configure groups in [devops](./schemas/devops.md) and
         [project](./schemas/project.md) recipes.
 
