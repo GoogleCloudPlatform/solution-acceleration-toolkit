@@ -181,6 +181,54 @@ module "example_domain" {
     },
   ]
 }
+data "google_client_config" "default" {}
+
+
+provider "kubernetes" {
+  alias                  = "example_gke_cluster"
+  load_config_file       = false
+  host                   = "https://${module.example_gke_cluster.endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.example_gke_cluster.ca_certificate)
+}
+
+module "example_gke_cluster" {
+  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
+  # Pin to stable version once released.
+  # source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
+  # version = "~> 13.0.0"
+  source = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/safer-cluster-update-variant?ref=81b0a9491d51546eedc6c1aabd368dc085c16b5e"
+
+  providers = {
+    kubernetes = kubernetes.example_gke_cluster
+  }
+
+  # Required.
+  name               = "example-gke-cluster"
+  project_id         = module.project.project_id
+  region             = "us-central1"
+  regional           = true
+  network_project_id = "example-prod-networks"
+
+  network                        = "example-network"
+  subnetwork                     = "example-gke-subnet"
+  ip_range_pods                  = "example-pods-range"
+  ip_range_services              = "example-services-range"
+  master_ipv4_cidr_block         = "192.168.0.0/28"
+  istio                          = true
+  skip_provisioners              = true
+  enable_private_endpoint        = false
+  release_channel                = "STABLE"
+  compute_engine_service_account = "gke@example-prod-apps.iam.gserviceaccount.com"
+  cluster_resource_labels = {
+    env  = "prod"
+    type = "no-phi"
+  }
+
+  depends_on = [
+    module.project
+  ]
+}
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"

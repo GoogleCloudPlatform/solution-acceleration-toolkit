@@ -12,10 +12,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
+data "google_client_config" "default" {}
+
 {{range get . "gke_clusters"}}
+provider "kubernetes" {
+  alias                  = "{{resourceName . "name"}}"
+  load_config_file       = false
+  host                   = "https://${module.{{resourceName . "name"}}.endpoint}"
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(module.{{resourceName . "name"}}.ca_certificate)
+}
+
 module "{{resourceName . "name"}}" {
-  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 12.3.0"
+  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
+  # Pin to stable version once released.
+  # source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
+  # version = "~> 13.0.0"
+  source  = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/safer-cluster-update-variant?ref=81b0a9491d51546eedc6c1aabd368dc085c16b5e"
+
+  providers = {
+    kubernetes = kubernetes.{{resourceName . "name"}}
+  }
 
   # Required.
   name                   = "{{.name}}"
@@ -51,7 +68,11 @@ module "{{resourceName . "name"}}" {
     {{end -}}
   }
   {{end -}}
-  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
-  # Add depends_on = [module.project] once https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/677 is fixed.
+
+  {{- if not (get $.project "exists" false)}}
+  depends_on =[
+    module.project
+  ]
+  {{end -}}
 }
 {{end -}}
