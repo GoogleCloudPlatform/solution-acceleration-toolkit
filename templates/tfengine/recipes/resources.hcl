@@ -770,6 +770,12 @@ schema = {
             EOF
             type        = "string"
           }
+          istio = {
+            description = <<EOF
+              Whether or not to enable Istio addon.
+            EOF
+            type        = "boolean"
+          }
         }
       }
     }
