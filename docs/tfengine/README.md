@@ -305,7 +305,7 @@ directly use the `terraform` binary to deploy the infrastructure.
         and
         [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
         used in our recipes to manage groups and memberships have these known
-        [limitations](https://github.com/terraform-google-modulesterraform-google-group#limitations).
+        [limitations](https://github.com/terraform-google-modules/terraform-google-group#limitations).
         It is currently recommended to only create the groups (so they can be
         used for IAM role assignment in other recipes seamlessly) and set
         initial owners of the groups through Terraform and make further
@@ -387,7 +387,7 @@ directly use the `terraform` binary to deploy the infrastructure.
     and
     [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
     used in our recipes to manage groups and memberships have these known
-    [limitations](https://github.com/terraform-google-modulesterraform-google-group#limitations).
+    [limitations](https://github.com/terraform-google-modules/terraform-google-group#limitations).
     It is currently recommended to only create the groups (so they can be used
     for IAM role assignment in other recipes seamlessly) and set initial owners
     of the groups through Terraform and make further memberships modifications
