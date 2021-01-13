@@ -301,9 +301,9 @@ directly use the `terraform` binary to deploy the infrastructure.
         for emergency situations or when investigation is required.
 
         **NOTE**: The underlying Terraform
-        [module](https://github.com/terraform-google-modulesterraform-google-group)
+        [module](https://github.com/terraform-google-modules/terraform-google-group)
         and
-        [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
+        [resources](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_identity_group)
         used in our recipes to manage groups and memberships have these known
         [limitations](https://github.com/terraform-google-modules/terraform-google-group#limitations).
         It is currently recommended to only create the groups (so they can be
@@ -383,9 +383,9 @@ directly use the `terraform` binary to deploy the infrastructure.
         ```
 
     **NOTE**: The underlying Terraform
-    [module](https://github.com/terraform-google-modulesterraform-google-group)
+    [module](https://github.com/terraform-google-modules/terraform-google-group)
     and
-    [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
+    [resources](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_identity_group)
     used in our recipes to manage groups and memberships have these known
     [limitations](https://github.com/terraform-google-modules/terraform-google-group#limitations).
     It is currently recommended to only create the groups (so they can be used
