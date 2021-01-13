@@ -156,34 +156,6 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
     [folder](https://cloud.google.com/resource-manager/docs/creating-managing-folders)
     for Google Cloud resources.
 
-1. [Create](https://support.google.com/a/answer/33343?hl=en) the following
-    administrative
-    [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity)
-    groups manually so they can be used in the `devops` deployment:
-
-    - {PREFIX}-{org|folder}-admins@{DOMAIN}: Members of this group get
-        administrative access to the org or folder. This group can be used in
-        break-glass situations to give humans access to the org or folder to
-        make changes.
-
-    - {PREFIX}-devops-owners@{DOMAIN}: Members of this group get owners access
-        to the devops project to make changes to the CICD project or to make
-        changes to the Terraform state.
-
-    For example, for an org deployment with sample prefix "gcp" and domain
-    "example.com", the admin group "gcp-org-admins@example.com" would be
-    created.
-
-    WARNING: The best practice is to always deploy changes using CICD. The
-    privileged groups should remain empty and only have humans added for
-    emergency situations or when investigation is required. This does not apply
-    to view-only groups such as cicd-viewers.
-
-    Once `devops` deployment is completed. More groups can be created and
-    managed automatically by using the `groups` resource. See the `template
-    "groups"` section in [team.hcl](../../examples/tfengine/team.hcl) for an
-    example.
-
 1. The running user will need to be a Google Workspace Super Admin and have the
     following Cloud IAM roles:
 
@@ -255,8 +227,8 @@ directly use the `terraform` binary to deploy the infrastructure.
     defaults. You will get an error if you have chosen a name that is already
     taken.
 
-    TIP: Prefer to remotely fetch templates from a release which can be more
-    stable than using the HEAD templates.
+    **TIP**: Prefer to remotely fetch recipes from a release which can be more
+    stable than using the HEAD recipes.
 
     ```hcl
     template "devops" {
@@ -276,8 +248,8 @@ directly use the `terraform` binary to deploy the infrastructure.
     OUTPUT_PATH=$GIT_ROOT/terraform
     ```
 
-    **NOTE**: If you plan to set up CICD, the `terraform_root` variable in the
-    CICD template should correspond to the parent directory in `OUTPUT_PATH`
+    **NOTE**: If you plan to set up CICD, the `terraform_root` variable set in
+    the CICD recipe should correspond to the parent directory in `OUTPUT_PATH`
     that would be checked into source control, i.e. `terraform` in the above
     setup.
 
@@ -300,7 +272,48 @@ directly use the `terraform` binary to deploy the infrastructure.
 
     - **terraform.tfvars**: This file defines values for the input variables.
 
-1. Set up the devops project to host the Terraform state and CICD:
+1. Deploy the `devops` recipe to create administrative
+    [IAM](https://cloud.google.com/iam/docs/overview#concepts_related_identity)
+    groups and set up the `devops` project to host the Terraform state and CICD:
+
+    1. Define the org/folder admins group and `devops` project owners group in
+        the `devops` recipe. It is recommended to use the following naming
+        conventions:
+
+        - `{PREFIX}-{org|folder}-admins@{DOMAIN}`: Members of this group get
+            administrative access to the org or folder. This group can be used
+            in break-glass situations to give humans access to the org or folder
+            to make changes.
+
+        - `{PREFIX}-devops-owners@{DOMAIN}`: Members of this group get owners
+            access to the devops project to make changes to the CICD project or
+            to make changes to the Terraform state. Make sure to include
+            yourself as an owner of this group. Otherwise, you might lose access
+            to the `devops` project after the ownership is transferred to this
+            group.
+
+        For example, for a folder deployment with sample prefix `gcp` and domain
+        `example.com`, the admins group should be named as
+        `gcp-folder-admins@example.com`.
+
+        **WARNING**: The best practice is to always deploy changes using CICD.
+        These privileged groups should remain empty and only have humans added
+        for emergency situations or when investigation is required.
+
+        **NOTE**: The underlying Terraform
+        [module](https://github.com/terraform-google-modulesterraform-google-group)
+        and
+        [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
+        used in our recipes to manage groups and memberships have these known
+        [limitations](https://github.com/terraform-google-modulesterraform-google-group#limitations).
+        It is currently recommended to only create the groups (so they can be
+        used for IAM role assignment in other recipes seamlessly) and set
+        initial owners of the groups through Terraform and make further
+        memberships modifications through the Google Workspace Admin console.
+
+        Alternatively, [create](https://support.google.com/a/answer/33343?hl=en)
+        these groups manually and use them as existing groups in the `devops`
+        recipe.
 
     1. Deploy the `devops` project and Terraform state bucket.
 
@@ -369,22 +382,33 @@ directly use the `terraform` binary to deploy the infrastructure.
         terraform apply
         ```
 
+    **NOTE**: The underlying Terraform
+    [module](https://github.com/terraform-google-modulesterraform-google-group)
+    and
+    [resources](https://registry.terraform.io/providers/hashicorp/googlelatest/docs/resources/cloud_identity_group)
+    used in our recipes to manage groups and memberships have these known
+    [limitations](https://github.com/terraform-google-modulesterraform-google-group#limitations).
+    It is currently recommended to only create the groups (so they can be used
+    for IAM role assignment in other recipes seamlessly) and set initial owners
+    of the groups through Terraform and make further memberships modifications
+    through the Google Workspace Admin console.
+
 1. (Optional) To deploy Continuous Integration (CI) and Continuous Deployment
     (CD) resources, follow the instructions
     [here](../../templates/tfengine/components/cicd/README.md) or equivalently,
     `$OUTPUT_PATH/cicd/README.md` in the generated Terraform configs directory.
 
-    Note that the `groups` template must be deployed manually first if you also
-    use it to create groups to be used in the `cicd` template. These groups
-    should exist before `cicd` template can be deployed.
+    Note that the above `groups` template must be deployed manually first if you
+    also use it to create groups to be used in the `cicd` recipe. These groups
+    should exist before `cicd` recipe can be deployed.
 
     Your devops project and CICD pipelines are ready. The following changes
     should be made as Pull Requests (PRs) and go though code reviews. After
     approval is granted and CI tests pass, merge the PR. The CD job
     automatically deploys the change to your Google Cloud infra.
 
-1. Deploy org infrastructure and other resources by sending a PR for local
-    changes to the config repo.
+1. Deploy org/folder infrastructure and other resources by sending a PR for
+    local changes to the config repo.
 
 1. Follow the instructions of all commented out blocks starting with
     `TODO(user)` in the config to deploy the changes. Remove the comment once
