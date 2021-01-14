@@ -41,6 +41,9 @@ module "project" {
   default_service_account = "keep"
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
+  # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
+  # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  grant_services_security_admin_role = true
   activate_apis = [
     "bigquery.googleapis.com",
     "logging.googleapis.com",
