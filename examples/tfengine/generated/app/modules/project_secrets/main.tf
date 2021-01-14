@@ -29,16 +29,21 @@ resource "random_password" "db" {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  # TODO(xingao): pin to released version once available.
+  source = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
 
-  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-secrets"
-  org_id                  = ""
-  folder_id               = local.constants.folder_id
-  billing_account         = local.constants.billing_account
-  lien                    = true
+  name            = "${local.constants.project_prefix}-${local.constants.env_code}-secrets"
+  org_id          = ""
+  folder_id       = local.constants.folder_id
+  billing_account = local.constants.billing_account
+  lien            = true
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
-  activate_apis           = ["secretmanager.googleapis.com"]
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  activate_apis     = ["secretmanager.googleapis.com"]
 }
 
 resource "google_secret_manager_secret" "manual_sql_db_user" {

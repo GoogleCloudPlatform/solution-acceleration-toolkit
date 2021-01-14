@@ -14,8 +14,10 @@ limitations under the License. */ -}}
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  # TODO(xingao): pin to released version once available.
+  source  = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
 
   {{- if get . "use_constants"}}
 
@@ -25,17 +27,20 @@ module "project" {
   billing_account = local.constants.billing_account
   {{- else}}
 
-  name                    = "{{.project_id}}"
+  name            = "{{.project_id}}"
   {{- if eq .parent_type "organization"}}
-  org_id                  = "{{.parent_id}}"
+  org_id          = "{{.parent_id}}"
   {{- else}}
-  org_id                  = ""
-  folder_id               = "{{.parent_id}}"
+  org_id          = ""
+  folder_id       = "{{.parent_id}}"
   {{- end}}
-  billing_account         = "{{.billing_account}}"
+  billing_account = "{{.billing_account}}"
   {{- end}}
-  lien                    = {{get . "enable_lien" true}}
+  lien            = {{get . "enable_lien" true}}
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
 
   {{- if get . "is_shared_vpc_host"}}
   enable_shared_vpc_host_project = true
