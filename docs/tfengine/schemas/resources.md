@@ -629,6 +629,12 @@ Name of the secondary subnet range to use for services.
 
 Type: string
 
+### gke_clusters.istio
+
+Whether or not to enable Istio addon.
+
+Type: boolean
+
 ### gke_clusters.labels
 
 Labels to set on the cluster.
