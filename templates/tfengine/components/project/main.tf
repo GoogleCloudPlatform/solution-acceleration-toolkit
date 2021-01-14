@@ -14,13 +14,8 @@ limitations under the License. */ -}}
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  {{- if has . "shared_vpc_attachment"}}
-  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
-  version = "~> 10.0.1"
-  {{- else}}
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.1"
-  {{- end}}
 
   {{- if get . "use_constants"}}
 
@@ -49,7 +44,7 @@ module "project" {
   {{- if has . "shared_vpc_attachment"}}
   {{- if get . "use_constants"}}
   {{$host := printf "${local.constants.project_prefix}-${local.constants.env_code}-%s" .shared_vpc_attachment.host_project_suffix}}
-  shared_vpc              = "{{$host}}"
+  svpc_host_project_id = "{{$host}}"
   {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [
     {{- range get . "shared_vpc_attachment.subnets"}}
@@ -59,7 +54,7 @@ module "project" {
   {{- end}}
   {{- else}}
   {{$host := get .shared_vpc_attachment "host_project_id"}}
-  shared_vpc              = "{{$host}}"
+  svpc_host_project_id = "{{$host}}"
   {{- if has . "shared_vpc_attachment.subnets"}}
   shared_vpc_subnets = [
     {{- range get . "shared_vpc_attachment.subnets"}}

@@ -24,7 +24,7 @@ locals {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.1"
 
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-data"
@@ -34,8 +34,8 @@ module "project" {
   lien                    = true
   default_service_account = "keep"
 
-  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
-  activate_apis = []
+  svpc_host_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  activate_apis        = []
 }
 
 module "one_billion_ms_example_dataset" {
