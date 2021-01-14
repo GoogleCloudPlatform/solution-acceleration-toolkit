@@ -215,7 +215,6 @@ module "example_gke_cluster" {
   ip_range_pods                  = "example-pods-range"
   ip_range_services              = "example-services-range"
   master_ipv4_cidr_block         = "192.168.0.0/28"
-  istio                          = true
   skip_provisioners              = true
   enable_private_endpoint        = false
   release_channel                = "STABLE"
