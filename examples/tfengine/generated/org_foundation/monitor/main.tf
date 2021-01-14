@@ -28,7 +28,7 @@ terraform {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.2"
 
   name            = "example-monitor"
@@ -40,8 +40,8 @@ module "project" {
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
 
-  shared_vpc    = "example-prod-networks"
-  activate_apis = ["compute.googleapis.com"]
+  svpc_host_project_id = "example-prod-networks"
+  activate_apis        = ["compute.googleapis.com"]
 }
 
 

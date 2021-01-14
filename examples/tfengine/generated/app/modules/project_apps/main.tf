@@ -24,7 +24,7 @@ locals {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
+  source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.2"
 
   name            = "${local.constants.project_prefix}-${local.constants.env_code}-apps"
@@ -37,8 +37,8 @@ module "project" {
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
 
-  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
-  activate_apis = ["compute.googleapis.com"]
+  svpc_host_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  activate_apis        = ["compute.googleapis.com"]
 }
 resource "google_binary_authorization_policy" "policy" {
   project = module.project.project_id
