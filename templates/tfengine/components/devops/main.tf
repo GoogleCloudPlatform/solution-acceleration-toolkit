@@ -48,7 +48,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   # TODO(xingao): pin to released version once available.
-  source  = "github.com/terraform-google-modules/project-factory/google?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  source  = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
   # source  = "terraform-google-modules/project-factory/google"
   # version = "~> 10.1.0"
 
