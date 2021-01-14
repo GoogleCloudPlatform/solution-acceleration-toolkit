@@ -28,8 +28,10 @@ terraform {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.2"
+  # TODO(xingao): pin to released version once available.
+  source = "github.com/terraform-google-modules/project-factory/google?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
 
   name            = "example-audit"
   org_id          = ""
