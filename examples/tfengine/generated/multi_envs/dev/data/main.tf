@@ -51,6 +51,7 @@ module "project" {
   create_project_sa = false
   # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
   # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
   activate_apis                      = ["compute.googleapis.com"]
 }
