@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.13"
+  required_version = ">=0.14"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -58,7 +58,7 @@ module "project" {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 2.10.0"
+  version = "~> 3.0.0"
 
   name         = "bastion-vm"
   project      = module.project.project_id

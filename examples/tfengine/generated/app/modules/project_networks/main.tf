@@ -48,7 +48,7 @@ module "project" {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 2.10.0"
+  version = "~> 3.0.0"
 
   name         = "bastion-vm"
   project      = module.project.project_id
