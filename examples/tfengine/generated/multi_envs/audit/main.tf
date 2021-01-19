@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">=0.13"
+  required_version = ">=0.14"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -28,15 +28,24 @@ terraform {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  # TODO(xingao): pin to released version once available.
+  source = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
 
-  name                    = "example-audit"
-  org_id                  = ""
-  folder_id               = "12345678"
-  billing_account         = "000-000-000"
-  lien                    = true
+  name            = "example-audit"
+  org_id          = ""
+  folder_id       = "12345678"
+  billing_account = "000-000-000"
+  lien            = true
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
+  # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  # It is a no-op when Kubernetes Engine API is not enabled in the project.
+  grant_services_security_admin_role = true
   activate_apis = [
     "bigquery.googleapis.com",
     "logging.googleapis.com",
@@ -62,7 +71,7 @@ resource "google_folder_iam_audit_config" "config" {
 
 module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   log_sink_name          = "example-bigquery-audit-logs-sink"
   destination_uri        = module.bigquery_destination.destination_uri
@@ -75,7 +84,7 @@ module "bigquery_export" {
 
 module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   dataset_name             = "1yr_folder_audit_logs"
   project_id               = module.project.project_id
@@ -86,7 +95,7 @@ module "bigquery_destination" {
 
 module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   log_sink_name          = "example-storage-audit-logs-sink"
   destination_uri        = module.storage_destination.destination_uri
@@ -102,7 +111,7 @@ module "storage_export" {
 // and set the actual expiry to be greater than this amount (7 years).
 module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
-  version = "~> 5.0.0"
+  version = "~> 5.1.0"
 
   storage_bucket_name      = "7yr-folder-audit-logs"
   project_id               = module.project.project_id

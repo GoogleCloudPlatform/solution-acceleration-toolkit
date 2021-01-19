@@ -53,7 +53,7 @@ module "{{resourceName . "name"}}" {
   ip_range_services      = "{{.ip_range_services_name}}"
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
   {{hclField . "master_authorized_networks" -}}
-  istio                      = true
+  {{hclField . "istio" -}}
   skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"

@@ -21,7 +21,7 @@ limitations under the License. */ -}}
 # - Folder level IAM permissions for admins.
 
 terraform {
-  required_version = ">=0.13"
+  required_version = ">=0.14"
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
@@ -44,14 +44,17 @@ locals {
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.0.1"
+  # TODO(xingao): pin to released version once available.
+  source  = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
   org_id                  = ""
   folder_id               = local.constants.folder_id
   billing_account         = local.constants.billing_account
   lien                    = true
   default_service_account = "keep"
+  create_project_sa       = false
   activate_apis = [
     "admin.googleapis.com",
     "appengine.googleapis.com",

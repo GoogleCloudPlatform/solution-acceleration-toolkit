@@ -24,18 +24,27 @@ locals {
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
-  version = "~> 10.0.1"
+  # TODO(xingao): pin to released version once available.
+  source = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
+  # source  = "terraform-google-modules/project-factory/google"
+  # version = "~> 10.1.0"
 
-  name                    = "${local.constants.project_prefix}-${local.constants.env_code}-apps"
-  org_id                  = ""
-  folder_id               = local.constants.folder_id
-  billing_account         = local.constants.billing_account
-  lien                    = true
+  name            = "${local.constants.project_prefix}-${local.constants.env_code}-apps"
+  org_id          = ""
+  folder_id       = local.constants.folder_id
+  billing_account = local.constants.billing_account
+  lien            = true
+  # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
+  # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  # It is a no-op when Kubernetes Engine API is not enabled in the project.
+  grant_services_security_admin_role = true
 
-  shared_vpc    = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
-  activate_apis = ["compute.googleapis.com"]
+  svpc_host_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-networks"
+  activate_apis        = ["compute.googleapis.com"]
 }
 resource "google_binary_authorization_policy" "policy" {
   project = module.project.project_id
@@ -125,7 +134,6 @@ module "example_gke_cluster" {
   ip_range_pods           = "example-pods-range"
   ip_range_services       = "example-services-range"
   master_ipv4_cidr_block  = "192.168.0.0/28"
-  istio                   = true
   skip_provisioners       = true
   enable_private_endpoint = false
   release_channel         = "STABLE"
