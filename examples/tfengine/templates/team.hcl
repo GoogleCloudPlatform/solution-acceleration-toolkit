@@ -190,7 +190,8 @@ template "project_data" {
           type = "no-phi"
         }
         user_name        = "admin"
-        user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
+        # TODO(user): uncomment once secret project has been deployed
+        # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
       }]
       healthcare_datasets = [{
         name = "example-healthcare-dataset"
