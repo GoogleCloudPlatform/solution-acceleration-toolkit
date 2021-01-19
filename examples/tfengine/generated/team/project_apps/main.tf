@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "example-prod-apps"
+    prefix = "project_apps"
   }
 }
 
@@ -35,7 +35,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/svpc_service_project"
   version = "~> 10.0.1"
 
-  name                    = "example-prod-apps"
+  name                    = "example-apps"
   org_id                  = ""
   folder_id               = "12345678"
   billing_account         = "000-000-000"
@@ -182,14 +182,14 @@ data "google_client_config" "default" {}
 
 
 provider "kubernetes" {
-  alias                  = "example_gke_cluster"
+  alias                  = "gke_cluster"
   load_config_file       = false
-  host                   = "https://${module.example_gke_cluster.endpoint}"
+  host                   = "https://${module.gke_cluster.endpoint}"
   token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(module.example_gke_cluster.ca_certificate)
+  cluster_ca_certificate = base64decode(module.gke_cluster.ca_certificate)
 }
 
-module "example_gke_cluster" {
+module "gke_cluster" {
   # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
   # Pin to stable version once released.
   # source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
@@ -197,15 +197,15 @@ module "example_gke_cluster" {
   source = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/safer-cluster-update-variant?ref=81b0a9491d51546eedc6c1aabd368dc085c16b5e"
 
   providers = {
-    kubernetes = kubernetes.example_gke_cluster
+    kubernetes = kubernetes.gke_cluster
   }
 
   # Required.
-  name               = "example-gke-cluster"
+  name               = "gke-cluster"
   project_id         = module.project.project_id
   region             = "us-central1"
   regional           = true
-  network_project_id = "example-prod-networks"
+  network_project_id = "example-networks"
 
   network                        = "example-network"
   subnetwork                     = "example-gke-subnet"

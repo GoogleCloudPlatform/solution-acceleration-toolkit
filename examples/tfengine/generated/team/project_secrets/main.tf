@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "example-prod-secrets"
+    prefix = "project_secrets"
   }
 }
 
@@ -36,7 +36,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.0.1"
 
-  name                    = "example-prod-secrets"
+  name                    = "example-secrets"
   org_id                  = ""
   folder_id               = "12345678"
   billing_account         = "000-000-000"
@@ -44,25 +44,6 @@ module "project" {
   default_service_account = "keep"
   activate_apis           = ["secretmanager.googleapis.com"]
 }
-
-resource "google_secret_manager_secret" "manual_sql_db_user" {
-  provider = google-beta
-
-  secret_id = "manual-sql-db-user"
-  project   = module.project.project_id
-
-  replication {
-    user_managed {
-      replicas {
-        location = "us-central1"
-      }
-      replicas {
-        location = "us-east1"
-      }
-    }
-  }
-}
-
 
 resource "google_secret_manager_secret" "auto_sql_db_password" {
   provider = google-beta
