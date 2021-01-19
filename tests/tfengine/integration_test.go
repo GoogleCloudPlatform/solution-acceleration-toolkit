@@ -100,9 +100,12 @@ func TestFullDeployment(t *testing.T) {
 		}
 
 		err := apply.Run()
-		defer destroy.Run()
+		defer func(){
+			if err := destroy.Run(); err != nil {
+				t.Errorf("command %v in %q: %v", destroy.Args, path, err)
+			}
 		if err != nil {
-			t.Fatalf("command %v in %q: %v", init.Args, path, err)
+			t.Fatalf("command %v in %q: %v", apply.Args, path, err)
 		}
 	}
 }
