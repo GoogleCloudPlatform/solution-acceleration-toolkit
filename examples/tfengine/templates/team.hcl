@@ -113,8 +113,8 @@ template "project_networks" {
       }]
       bastion_hosts = [{
         name           = "bastion-vm"
-        network        = "$${module.example_network.network.network.self_link}"
-        subnet         = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+        network        = "$${module.network.network.network.self_link}"
+        subnet         = "$${module.network.subnets[\"us-central1/bastion-subnet\"].self_link}"
         image_family   = "ubuntu-2004-lts"
         image_project  = "ubuntu-os-cloud"
         members        = ["group:bastion-accessors@example.com"]
@@ -127,12 +127,12 @@ EOF
       }]
       compute_routers = [{
         name    = "router"
-        network = "$${module.example_network.network.network.self_link}"
+        network = "$${module.network.network.network.self_link}"
         nats = [{
           name                               = "nat"
           source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
           subnetworks = [{
-            name                     = "$${module.example_network.subnets[\"us-central1/example-bastion-subnet\"].self_link}"
+            name                     = "$${module.network.subnets[\"us-central1/bastion-subnet\"].self_link}"
             source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
             secondary_ip_range_names = []
           }]
