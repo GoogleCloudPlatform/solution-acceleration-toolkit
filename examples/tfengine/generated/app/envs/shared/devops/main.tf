@@ -38,10 +38,9 @@ locals {
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
-  # TODO(xingao): pin to released version once available.
-  source = "github.com/terraform-google-modules/terraform-google-project-factory?ref=c41ba360a6bc6800a30d284b8fa23eb3ef5a8d7f"
-  # source  = "terraform-google-modules/project-factory/google"
-  # version = "~> 10.1.0"
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 10.1.0"
+
   name                    = "${local.constants.project_prefix}-${local.constants.env_code}-devops"
   org_id                  = ""
   folder_id               = local.constants.folder_id
