@@ -93,7 +93,6 @@ module "sql_instance" {
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
   user_name         = "admin"
-  user_password     = data.google_secret_manager_secret_version.db_password.secret_data
   user_labels = {
     env  = "prod"
     type = "no-phi"
