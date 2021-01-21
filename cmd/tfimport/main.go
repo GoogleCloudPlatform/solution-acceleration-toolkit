@@ -61,7 +61,8 @@ func run() error {
 		importRn = &runner.Dry{}
 		log.Printf("Dry run mode, logging commands but not executing any imports.")
 	} else {
-		importRn = &runner.Default{}
+		// Use the Multi runner to print temporary output in case the terraform import command freezes.
+		importRn = &runner.Multi{}
 	}
 
 	args := &tfimport.RunArgs{
