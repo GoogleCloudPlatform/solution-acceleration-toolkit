@@ -86,8 +86,8 @@ func (d *Multi) CmdRun(cmd *exec.Cmd) error {
 		log.Printf("Running: %v", cmd.Args)
 	}
 
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
+	var stderr bytes.Buffer
+	cmd.Stdout = os.Stdout
 	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
 
 	if err := cmd.Run(); err != nil {
