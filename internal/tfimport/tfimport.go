@@ -645,7 +645,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		case errors.As(err, &ie):
 			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
 			errs = append(errs, errMsg)
-			log.Println("Skipping")
+			log.Printf("Skipping: %v\n", errMsg)
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
@@ -658,6 +658,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		default:
 			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
 			errs = append(errs, errMsg)
+			log.Printf("Skipping: %v\n", errMsg)
 		}
 	}
 
