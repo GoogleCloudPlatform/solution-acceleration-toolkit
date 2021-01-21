@@ -12,41 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Prerequisites:
+//  - The terraform binary must be available in $PATH.
+//  - The environment variable RUN_INTEGRATION_TEST must be set to "true".
+//  - The environment variables BILLING_ACCOUNT and FOLDER_ID must be set.
+//  - The calling user (e.g. authenticated local user or service account) must have
+//    `roles/resourcemanager.projectCreator` on the project and
+//    `roles/billing.user` on the billing account.
+
 package integration_test
 
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"testing"
-	"text/template"
 	"time"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
 
-var (
-	dirs = []string{"project_secrets"}
-
-	confTmpl = template.Must(template.New("").Parse(`
-template "main" {
-	recipe_path = "{{.CWD}}/../../examples/tfengine/templates/team.hcl"
-	data = {
-		state_bucket    = "placeholder" # Remote backend block will be removed by test.
-		prefix          = "{{.PREFIX}}"
-		billing_account = "{{.BILLING_ACCOUNT}}"
-		parent_id       = "{{.FOLDER_ID}}"
-	}
-}
-`))
-)
+var dirsToDeploy = []string{"project_secrets"}
 
 func TestFullDeployment(t *testing.T) {
-	if os.Getenv("RUN_INTEGRATION_TEST") == "" {
+	if os.Getenv("RUN_INTEGRATION_TEST") != "true" {
 		t.SkipNow()
 	}
 
@@ -56,6 +50,62 @@ func TestFullDeployment(t *testing.T) {
 	}
 	defer os.RemoveAll(tmp)
 
+	confPath := filepath.Join(tmp, "config.hcl")
+	writeConfig(t, confPath)
+	if err := tfengine.Run(confPath, tmp, &tfengine.Options{Format: true, CacheDir: tmp}); err != nil {
+		t.Fatalf("tfengine.Run = %v", err)
+	}
+
+	for _, dir := range dirsToDeploy {
+		path := filepath.Join(tmp, dir)
+		if err := tfengine.ConvertToLocalBackend(path); err != nil {
+			t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
+		}
+
+		buildCmd := func(bin string, args ...string) *exec.Cmd {
+			cmd := exec.Command(bin, args...)
+			cmd.Dir = path
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			return cmd
+		}
+
+		init := buildCmd("terraform", "init")
+		apply := buildCmd("terraform", "apply", "-auto-approve")
+		destroy := buildCmd("terraform", "destroy", "-auto-approve")
+
+		if err := init.Run(); err != nil {
+			t.Fatalf("command %v in %q: %v", init.Args, path, err)
+		}
+
+		defer func() {
+			if err := destroy.Run(); err != nil {
+				t.Errorf("command %v in %q: %v", destroy.Args, path, err)
+			}
+		}()
+
+		if err := apply.Run(); err != nil {
+			t.Fatalf("command %v in %q: %v", apply.Args, path, err)
+		}
+	}
+}
+
+// confTmpl is a template for the input config file.
+// CWD must be the path to the directory containing this integration test.
+// For data values, see the schema in the team.hcl recipe.
+var confTmpl = template.Must(template.New("").Parse(`
+template "main" {
+	recipe_path = "{{.CWD}}/../../examples/tfengine/modules/team.hcl"
+	data = {
+		state_bucket    = "placeholder" # Remote backend block will be removed by test.
+		prefix          = "{{.PREFIX}}"
+		billing_account = "{{.BILLING_ACCOUNT}}"
+		parent_id       = "{{.FOLDER_ID}}"
+	}
+}`))
+
+func writeConfig(t *testing.T, path string) {
+	t.Helper()
 	data := buildData(t)
 
 	var buf bytes.Buffer
@@ -63,51 +113,10 @@ func TestFullDeployment(t *testing.T) {
 		t.Fatalf("confTmpl.Execute(&buf, %v) = %v", data, err)
 	}
 
-	confPath := filepath.Join(tmp, "config.hcl")
 	b := buf.Bytes()
 	t.Logf("config file:\n%v", string(b))
-	if err := ioutil.WriteFile(confPath, b, 0644); err != nil {
+	if err := ioutil.WriteFile(path, b, 0644); err != nil {
 		t.Fatalf("ioutil.WriteFile = %v", err)
-	}
-
-	if err := tfengine.Run(confPath, tmp, &tfengine.Options{Format: true, CacheDir: tmp}); err != nil {
-		t.Fatalf("tfengine.Run = %v", err)
-	}
-
-	for _, dir := range dirs {
-		path := filepath.Join(tmp, dir)
-		if err := tfengine.ConvertToLocalBackend(path); err != nil {
-			t.Fatalf("ConvertToLocalBackend(%v): %v", path, err)
-		}
-
-		setupCmd := func(cmd *exec.Cmd) {
-			cmd.Dir = path
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
-		}
-
-		init := exec.Command("terraform", "init")
-		setupCmd(init)
-
-		apply := exec.Command("terraform", "apply", "-auto-approve")
-		setupCmd(apply)
-
-		destroy := exec.Command("terraform", "destroy", "-auto-approve")
-		setupCmd(destroy)
-
-		if err := init.Run(); err != nil {
-			t.Fatalf("command %v in %q: %v", init.Args, path, err)
-		}
-
-		err := apply.Run()
-		defer func() {
-			if err := destroy.Run(); err != nil {
-				t.Errorf("command %v in %q: %v", destroy.Args, path, err)
-			}
-		}()
-		if err != nil {
-			t.Fatalf("command %v in %q: %v", apply.Args, path, err)
-		}
 	}
 }
 

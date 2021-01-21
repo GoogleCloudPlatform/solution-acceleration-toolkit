@@ -170,7 +170,7 @@ template "cicd" {
 }
 
 template "main" {
-	recipe_path = "./templates/team.hcl"
+	recipe_path = "./modules/team.hcl"
 	data = {
 		prefix = "example"
 	}
