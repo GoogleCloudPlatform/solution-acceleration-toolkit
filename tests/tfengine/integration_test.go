@@ -16,8 +16,8 @@
 //  - The terraform binary must be available in $PATH.
 //  - The environment variable RUN_INTEGRATION_TEST must be set to "true".
 //  - The environment variables BILLING_ACCOUNT and FOLDER_ID must be set.
-//  - The calling user (e.g. authenticated local user or service account) must have
-//    `roles/resourcemanager.projectCreator` on the project and
+//  - The runner (e.g. authenticated local user or service account) must have
+//    `roles/resourcemanager.projectCreator` on the folder and
 //    `roles/billing.user` on the billing account.
 
 package integration_test
