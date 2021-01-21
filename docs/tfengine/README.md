@@ -196,7 +196,7 @@ Download a pre-built
 [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/):
 
 ```shell
-VERSION=v0.4.0
+VERSION=v0.5.0
 wget -O /usr/local/bin/tfengine https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64
 chmod +x /usr/local/bin/tfengine
 ```
