@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "example-prod-data"
+    prefix = "project_data"
   }
 }
 
@@ -73,33 +73,24 @@ module "one_billion_ms_example_dataset" {
   project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
-  access = [
-    {
-      role          = "roles/bigquery.dataOwner"
-      special_group = "projectOwners"
-    },
-    {
-      group_by_email = "example-data-viewers@example.com"
-      role           = "roles/bigquery.dataViewer"
-    },
-  ]
   dataset_labels = {
     env  = "prod"
     type = "phi"
   }
 }
 
-module "example_mysql_instance" {
+module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 4.4.0"
 
-  name              = "example-mysql-instance"
+  name              = "sql-instance"
   project_id        = module.project.project_id
   region            = "us-central1"
   zone              = "a"
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
+  user_name         = "admin"
   user_labels = {
     env  = "prod"
     type = "no-phi"
@@ -114,12 +105,6 @@ module "example_healthcare_dataset" {
   project  = module.project.project_id
   location = "us-central1"
 
-  iam_members = [
-    {
-      member = "group:example-healthcare-dataset-viewers@example.com"
-      role   = "roles/healthcare.datasetViewer"
-    },
-  ]
   dicom_stores = [
     {
       name = "example-dicom-store"
@@ -141,12 +126,6 @@ module "example_healthcare_dataset" {
       disable_referential_integrity = false
       disable_resource_versioning   = false
       enable_history_import         = false
-      iam_members = [
-        {
-          member = "group:example-fhir-viewers@example.com"
-          role   = "roles/healthcare.fhirStoreViewer"
-        },
-      ]
       notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/example-topic"
       }
@@ -212,7 +191,7 @@ module "project_iam_members" {
 
   bindings = {
     "roles/cloudsql.client" = [
-      "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
+      "serviceAccount:bastion@example-networks.iam.gserviceaccount.com",
     ],
   }
 }

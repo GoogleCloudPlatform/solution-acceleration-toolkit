@@ -41,7 +41,7 @@ func Expand(path string) (string, error) {
 // Relative paths are handled from pwd.
 // TODO(umairidris): support absolute paths.
 func Fetch(path, pwd, cacheDir string) (string, error) {
-	if strings.HasPrefix(path, ".") { // Is local path.
+	if strings.HasPrefix(path, ".") || strings.HasPrefix(path, "/") { // Is local path.
 		path, err := Expand(path)
 		if err != nil {
 			return "", err

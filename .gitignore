@@ -16,3 +16,7 @@
 
 # Terraform cache.
 .terraform/
+
+# Terraform state
+*.tfstate
+*.tfstate.*

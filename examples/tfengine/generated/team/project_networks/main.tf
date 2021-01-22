@@ -20,7 +20,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "example-prod-networks"
+    prefix = "project_networks"
   }
 }
 
@@ -31,7 +31,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.1.0"
 
-  name            = "example-prod-networks"
+  name            = "example-networks"
   org_id          = ""
   folder_id       = "12345678"
   billing_account = "000-000-000"
@@ -62,8 +62,8 @@ module "bastion_vm" {
   project      = module.project.project_id
   zone         = "us-central1-a"
   host_project = module.project.project_id
-  network      = module.example_network.network.network.self_link
-  subnet       = module.example_network.subnets["us-central1/example-bastion-subnet"].self_link
+  network      = module.network.network.network.self_link
+  subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
   members      = ["group:bastion-accessors@example.com"]
   image_family = "ubuntu-2004-lts"
 
@@ -84,30 +84,30 @@ sudo chmod +x /usr/local/bin/cloud_sql_proxy
 EOF
 }
 
-module "example_network" {
+module "network" {
   source  = "terraform-google-modules/network/google"
   version = "~> 3.0.0"
 
-  network_name = "example-network"
+  network_name = "network"
   project_id   = module.project.project_id
 
   subnets = [
     {
-      subnet_name           = "example-bastion-subnet"
+      subnet_name           = "bastion-subnet"
       subnet_ip             = "10.1.0.0/16"
       subnet_region         = "us-central1"
       subnet_flow_logs      = true
       subnet_private_access = true
     },
     {
-      subnet_name           = "example-gke-subnet"
+      subnet_name           = "gke-subnet"
       subnet_ip             = "10.2.0.0/16"
       subnet_region         = "us-central1"
       subnet_flow_logs      = true
       subnet_private_access = true
     },
     {
-      subnet_name           = "example-instance-subnet"
+      subnet_name           = "instance-subnet"
       subnet_ip             = "10.3.0.0/16"
       subnet_region         = "us-central1"
       subnet_flow_logs      = true
@@ -115,46 +115,46 @@ module "example_network" {
     },
   ]
   secondary_ranges = {
-    "example-gke-subnet" = [
+    "gke-subnet" = [
       {
-        range_name    = "example-pods-range"
+        range_name    = "pods-range"
         ip_cidr_range = "172.16.0.0/14"
       },
       {
-        range_name    = "example-services-range"
+        range_name    = "services-range"
         ip_cidr_range = "172.20.0.0/14"
       },
     ],
   }
 }
-module "cloud_sql_private_service_access_example_network" {
+module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 4.4.0"
 
   project_id  = module.project.project_id
-  vpc_network = module.example_network.network_name
+  vpc_network = module.network.network_name
   depends_on = [
     module.project
   ]
 }
 
-module "example_router" {
+module "router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 0.4.0"
 
-  name    = "example-router"
+  name    = "router"
   project = module.project.project_id
   region  = "us-central1"
-  network = module.example_network.network.network.self_link
+  network = module.network.network.network.self_link
 
   nats = [
     {
-      name                               = "example-nat"
+      name                               = "nat"
       source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
       subnetworks = [
         {
-          name                     = "${module.example_network.subnets["us-central1/example-bastion-subnet"].self_link}"
+          name                     = "${module.network.subnets["us-central1/bastion-subnet"].self_link}"
           source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
           secondary_ip_range_names = []
         },
