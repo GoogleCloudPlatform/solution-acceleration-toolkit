@@ -36,7 +36,7 @@ module "{{resourceName . "name"}}" {
 
   # Required.
   name                   = "{{.name}}"
-  project_id             = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  project_id             = module.project.project_id
   {{- if get $ "use_constants"}}
   region                 = local.constants.gke_region
   {{- else}}
@@ -69,10 +69,8 @@ module "{{resourceName . "name"}}" {
   }
   {{end -}}
 
-  {{- if not (get $.project "exists" false)}}
-  depends_on =[
+  depends_on = [
     module.project
   ]
-  {{end -}}
 }
 {{end -}}

@@ -27,7 +27,15 @@ terraform {
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
-  billing_project       = "example-devops"
+  billing_project       = module.project.project_id
+}
+
+module "project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 10.1.0"
+
+  project_id    = "example-devops"
+  activate_apis = []
 }
 
 module "example_cicd_viewers_example_com" {

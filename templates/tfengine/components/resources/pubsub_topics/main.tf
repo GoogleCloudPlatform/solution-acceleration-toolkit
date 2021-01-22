@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 1.7.0"
 
   topic        = "{{.name}}"
-  project_id   = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  project_id   = module.project.project_id
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   topic_labels = {
@@ -30,10 +30,9 @@ module "{{resourceName . "name"}}" {
 
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}
-  {{- if not (get $.project "exists" false)}}
-  depends_on =[
+
+  depends_on = [
     module.project
   ]
-  {{end -}}
 }
 {{end -}}

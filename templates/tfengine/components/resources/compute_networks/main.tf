@@ -21,7 +21,7 @@ module "{{$resource_name}}" {
   version = "~> 3.0.0"
 
   network_name = "{{.name}}"
-  project_id   = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  project_id   = module.project.project_id
 
   subnets = [
     {{- range .subnets}}
@@ -66,13 +66,11 @@ module "cloud_sql_private_service_access_{{$resource_name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 4.4.0"
 
-  project_id  = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  project_id  = module.project.project_id
   vpc_network = module.{{$resource_name}}.network_name
-  {{- if not (get $.project "exists" false)}}
-  depends_on =[
+  depends_on = [
     module.project
   ]
-  {{end -}}
 }
 {{- end}}
 {{- end}}

@@ -25,6 +25,14 @@ terraform {
 }
 
 
+module "project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 10.1.0"
+
+  project_id    = "example-prod-project"
+  activate_apis = []
+}
+
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.3.0"

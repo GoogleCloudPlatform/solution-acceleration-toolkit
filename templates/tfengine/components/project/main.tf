@@ -9,7 +9,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
+{{- if get . "exists"}}
+module "project" {
+  source = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 10.1.0"
 
+  project_id =  "{{.project_id}}"
+  activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
+}
+{{- else -}}
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -78,3 +86,4 @@ module "project" {
   activate_api_identities = {{hcl .api_identities}}
   {{end}}
 }
+{{- end}}
