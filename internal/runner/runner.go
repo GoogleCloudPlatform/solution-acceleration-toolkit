@@ -80,20 +80,17 @@ type Multi struct {
 	Quiet bool
 }
 
-// CmdRun executes the command aand prints stdout and stderr without returning either.
+// CmdRun executes the command and prints stdout and stderr without returning either.
 func (d *Multi) CmdRun(cmd *exec.Cmd) error {
 	if !d.Quiet {
 		log.Printf("Running: %v", cmd.Args)
 	}
 
-	var stderr bytes.Buffer
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
+	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%v: %s", err, stderr.String())
-	}
-	return nil
+	return cmd.Run()
 }
 
 // CmdOutput executes the command and prints stdout and stderr then returns just stdout.
@@ -102,14 +99,12 @@ func (d *Multi) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
 		log.Printf("Running: %v", cmd.Args)
 	}
 
-	var stdout, stderr bytes.Buffer
+	var stdout bytes.Buffer
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
-	cmd.Stderr = io.MultiWriter(os.Stderr, &stderr)
+	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
-	if err != nil {
-		err = fmt.Errorf("%v: %s", err, stderr.String())
-	}
 	return stdout.Bytes(), err
 }
 
@@ -119,6 +114,7 @@ func (d *Multi) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 		log.Printf("Running: %v", cmd.Args)
 	}
 	var combined bytes.Buffer
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = io.MultiWriter(os.Stdout, &combined)
 	cmd.Stderr = io.MultiWriter(os.Stderr, &combined)
 
