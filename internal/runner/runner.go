@@ -18,6 +18,7 @@ package runner
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -70,6 +71,55 @@ func (d *Default) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
 		log.Printf("Running: %v", cmd.Args)
 	}
 	return cmd.CombinedOutput()
+}
+
+// Multi will both print the output for the user and return it to callers.
+// Useful for debugging, e.g. if the importer calls terraform import but it freezes without returning output.
+// Inspired by https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
+type Multi struct {
+	Quiet bool
+}
+
+// CmdRun executes the command and prints stdout and stderr without returning either.
+func (d *Multi) CmdRun(cmd *exec.Cmd) error {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
+}
+
+// CmdOutput executes the command and prints stdout and stderr then returns just stdout.
+func (d *Multi) CmdOutput(cmd *exec.Cmd) ([]byte, error) {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
+
+	var stdout bytes.Buffer
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	return stdout.Bytes(), err
+}
+
+// CmdCombinedOutput executes the command and prints stdout and stderr then returns them.
+func (d *Multi) CmdCombinedOutput(cmd *exec.Cmd) ([]byte, error) {
+	if !d.Quiet {
+		log.Printf("Running: %v", cmd.Args)
+	}
+	var combined bytes.Buffer
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = io.MultiWriter(os.Stdout, &combined)
+	cmd.Stderr = io.MultiWriter(os.Stderr, &combined)
+
+	err := cmd.Run()
+	return combined.Bytes(), err
 }
 
 // Dry is the Runner that only prints commands and does not execute them.
