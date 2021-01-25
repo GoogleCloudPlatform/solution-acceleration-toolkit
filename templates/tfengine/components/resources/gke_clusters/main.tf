@@ -69,15 +69,15 @@ module "{{resourceName . "name"}}" {
   }
   {{end -}}
 
-  {{- if has . "node_pools"}}
+  {{if has . "node_pools" -}}
   node_pools = [
-    {{- range $_, $pool := .node_pools}}
+    {{range $_, $pool := .node_pools -}}
     {
-    {{- range $k, $v := $pool}}
+    {{range $k, $v := $pool -}}
       {{$k}} = "{{$v}}"
-    {{- end}}
+    {{end -}}
     },
-    {{- end}}
+    {{end -}}
   ]
   {{- end}}
 

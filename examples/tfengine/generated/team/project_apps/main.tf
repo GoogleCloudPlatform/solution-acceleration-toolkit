@@ -226,7 +226,6 @@ module "gke_cluster" {
     env  = "prod"
     type = "no-phi"
   }
-
   node_pools = [
     {
       machine_type = "e2-small"
