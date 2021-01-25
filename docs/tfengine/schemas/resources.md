@@ -696,6 +696,12 @@ the current project will be used.
 
 Type: string
 
+### gke_clusters.node_pools
+
+List of maps containing node pools.
+For supported fields, see the
+[module example](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/examples/node_pool_update_variant).
+
 ### gke_clusters.resource_name
 
 Override for Terraform resource name.

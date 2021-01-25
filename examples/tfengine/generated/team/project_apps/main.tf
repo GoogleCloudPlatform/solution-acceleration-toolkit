@@ -226,6 +226,14 @@ module "gke_cluster" {
     env  = "prod"
     type = "no-phi"
   }
+
+  node_pools = [
+    {
+      machine_type = "e2-small"
+      name         = "default-node-pool"
+    },
+  ]
+
   depends_on = [
     module.project
   ]
