@@ -156,15 +156,12 @@ template "deployment" {
   recipe_path = "./deployment.hcl"
 }
 
-
-{{- if not (get .project "exists" false)}}
 template "project" {
   component_path = "../components/project"
   flatten {
     key = "project"
   }
 }
-{{end}}
 
 {{if has . "resources"}}
 template "resources" {

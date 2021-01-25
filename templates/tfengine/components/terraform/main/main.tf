@@ -24,14 +24,6 @@ terraform {
   }
 }
 
-{{if has . "groups" -}}
-# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
-provider "google-beta" {
-  user_project_override = true
-  billing_project       = {{- if get .project "exists" false}} "{{.project.project_id}}" {{- else}} module.project.project_id {{end}}
-}
-{{end -}}
-
 {{if has . "raw_config" -}}
 {{.raw_config}}
 {{end -}}

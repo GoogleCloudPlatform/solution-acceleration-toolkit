@@ -142,7 +142,6 @@ module "example_instance_template" {
     env  = "prod"
     type = "no-phi"
   }
-
   depends_on = [
     module.project
   ]
@@ -227,7 +226,6 @@ module "gke_cluster" {
     env  = "prod"
     type = "no-phi"
   }
-
   depends_on = [
     module.project
   ]
@@ -269,7 +267,6 @@ module "foo_topic" {
       push_endpoint = "https://example.com"
     },
   ]
-
   depends_on = [
     module.project
   ]

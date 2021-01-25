@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 0.4.0"
 
   name         = "{{.name}}"
-  project      = {{- if get $.project "exists" false}} "{{$.project.project_id}}" {{- else}} module.project.project_id {{end}}
+  project      = module.project.project_id
   {{- if get $ "use_constants"}}
   region            = local.constants.compute_region
   {{- else}}
