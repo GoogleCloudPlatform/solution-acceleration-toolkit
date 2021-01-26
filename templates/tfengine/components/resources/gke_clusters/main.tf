@@ -69,6 +69,18 @@ module "{{resourceName . "name"}}" {
   }
   {{end -}}
 
+  {{if has . "node_pools" -}}
+  node_pools = [
+    {{range $_, $pool := .node_pools -}}
+    {
+    {{range $k, $v := $pool -}}
+      {{$k}} = "{{$v}}"
+    {{end -}}
+    },
+    {{end -}}
+  ]
+  {{- end}}
+
   depends_on = [
     module.project
   ]

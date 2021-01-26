@@ -763,6 +763,17 @@ schema = {
               }
             }
           }
+          node_pools = {
+            description = <<EOF
+              List of maps containing node pools.
+              For supported fields, see the
+              [module example](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/examples/node_pool_update_variant).
+            EOF
+            type = "array"
+            items = {
+              type = "object"
+            }
+          }
           service_account = {
             description = <<EOF
               Use the given service account for nodes rather than creating a

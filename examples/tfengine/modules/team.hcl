@@ -353,6 +353,12 @@ template "project_apps" {
         ip_range_services_name = "example-services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
         service_account        = "gke@example-prod-apps.iam.gserviceaccount.com"
+
+        # Set custom node pool to control machine type.
+        node_pools = [{
+          name         = "default-node-pool"
+          machine_type = "e2-small"
+        }]
         labels = {
           type = "no-phi"
         }

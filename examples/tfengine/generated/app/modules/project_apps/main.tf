@@ -138,6 +138,8 @@ module "example_gke_cluster" {
   cluster_resource_labels = {
     type = "no-phi"
   }
+
+
   depends_on = [
     module.project
   ]
