@@ -90,6 +90,7 @@ module "sql_instance" {
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "projects/example-prod-networks/global/networks/example-network"
+  tier              = "db-n1-standard-1"
   user_name         = "admin"
   user_labels = {
     env  = "prod"

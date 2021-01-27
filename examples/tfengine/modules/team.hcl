@@ -210,6 +210,7 @@ template "project_data" {
         type               = "mysql"
         network_project_id = "example-prod-networks"
         network            = "example-network"
+        tier               = "db-n1-standard-1"
         labels = {
           type = "no-phi"
         }

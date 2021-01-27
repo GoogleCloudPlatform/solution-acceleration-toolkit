@@ -272,6 +272,10 @@ schema = {
             description = "Name of the network."
             type        = "string"
           }
+          tier = {
+            description = "The tier for the master instance."
+            type        = "string"
+          }
           user_name = {
             description = "Default user name."
             type        = "string"
