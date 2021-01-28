@@ -272,6 +272,14 @@ schema = {
             description = "Name of the network."
             type        = "string"
           }
+          tier = {
+            description = <<EOF
+              The
+              [tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)
+              for the master instance.
+              EOF
+            type        = "string"
+          }
           user_name = {
             description = "Default user name."
             type        = "string"

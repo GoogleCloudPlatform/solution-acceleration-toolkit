@@ -245,6 +245,14 @@ Normalization will make all characters alphanumeric with underscores.
 
 Type: string
 
+### cloud_sql_instances.tier
+
+The
+[tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)
+for the master instance.
+
+Type: string
+
 ### cloud_sql_instances.type
 
 Type of the cloud sql instance. Currently only supports 'mysql'.
