@@ -34,11 +34,6 @@ func FormatDir(rn runner.Runner, dir string) error {
 	if _, err := rn.CmdOutput(tfFmt); err != nil {
 		return fmt.Errorf("format terraform files: %v", err)
 	}
-
-	if err := removeDeprecatedBracesFromDir(dir); err != nil {
-		return fmt.Errorf("remove deprecated braces: %v", err)
-	}
-
 	return nil
 }
 
