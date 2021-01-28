@@ -273,7 +273,11 @@ schema = {
             type        = "string"
           }
           tier = {
-            description = "The tier for the master instance."
+            description = <<EOF
+              The
+              [tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)
+              for the master instance.
+              EOF
             type        = "string"
           }
           user_name = {

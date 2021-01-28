@@ -247,7 +247,9 @@ Type: string
 
 ### cloud_sql_instances.tier
 
-The tier for the master instance.
+The
+[tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)
+for the master instance.
 
 Type: string
 
