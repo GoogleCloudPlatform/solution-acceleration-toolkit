@@ -110,11 +110,8 @@ provider "kubernetes" {
 }
 
 module "example_gke_cluster" {
-  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
-  # Pin to stable version once released.
-  # source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  # version = "~> 13.0.0"
-  source = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/safer-cluster-update-variant?ref=81b0a9491d51546eedc6c1aabd368dc085c16b5e"
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
+  version = "~> 13.0.0"
 
   providers = {
     kubernetes = kubernetes.example_gke_cluster
