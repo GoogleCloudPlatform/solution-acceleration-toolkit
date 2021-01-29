@@ -7,6 +7,10 @@ in.
 Watch our [tutorial video](https://www.youtube.com/watch?v=-wIutctaqr0) and use
 [example configs](../../examples/tfengine) to quickly get started.
 
+Note that YAML-formatted configs were used at the time when the Tutorial video
+was made. The config format has been changed to
+[HCL](https://github.com/hashicorp/hcl).
+
 ## Terminology
 
 The Terraform engine introduces the concept of "templates". Templates can be
