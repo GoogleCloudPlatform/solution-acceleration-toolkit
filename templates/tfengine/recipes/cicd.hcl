@@ -114,6 +114,7 @@ schema = {
     grant_automation_billing_user_role = {
       description = <<EOF
         Whether or not to grant automation service account the billing.user role.
+        Default to true.
       EOF
       type        = "boolean"
     }
