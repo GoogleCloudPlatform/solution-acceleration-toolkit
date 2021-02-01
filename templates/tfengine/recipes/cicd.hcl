@@ -106,10 +106,16 @@ schema = {
     }
     terraform_root = {
       description = <<EOF
-      Path of the directory relative to the repo root containing the Terraform configs.
-      Do not include ending "/".
-    EOF
+        Path of the directory relative to the repo root containing the Terraform configs.
+        Do not include ending "/".
+      EOF
       type        = "string"
+    }
+    grant_automation_billing_user_role = {
+      description = <<EOF
+        Whether or not to grant automation service account the billing.user role.
+      EOF
+      type        = "boolean"
     }
     envs = {
       description = <<EOF

@@ -251,7 +251,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 {{- end}}
 
 # Cloud Build - Cloud Build Service Account IAM permissions
-{{- if $hasApplyJobs}}
+{{- if and $hasApplyJobs (get . "grant_automation_billing_user_role" true)}}
 
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
