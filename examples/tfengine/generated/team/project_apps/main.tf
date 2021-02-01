@@ -168,7 +168,7 @@ module "instance" {
 
 module "example_domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.0.0"
+  version = "~> 3.1.0"
 
   name       = "example-domain"
   project_id = module.project.project_id
@@ -251,7 +251,7 @@ module "project_iam_members" {
 
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.7.0"
+  version = "~> 1.8.0"
 
   topic      = "foo-topic"
   project_id = module.project.project_id
