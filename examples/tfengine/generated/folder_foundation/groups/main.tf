@@ -47,7 +47,6 @@ module "example_auditors_example_com" {
   customer_id  = "c12345678"
   display_name = "example-auditors"
   owners       = ["user1@example.com"]
-  members      = ["user2@example.com"]
 }
 
 module "example_cicd_viewers_example_com" {
