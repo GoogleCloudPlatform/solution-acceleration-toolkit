@@ -43,18 +43,6 @@ Email address of the group.
 
 Type: string
 
-### admins_group.managers
-
-Managers of the group.
-
-Type: array(string)
-
-### admins_group.members
-
-Members of the group.
-
-Type: array(string)
-
 ### admins_group.owners
 
 Owners of the group.
@@ -153,18 +141,6 @@ Type: boolean
 Email address of the group.
 
 Type: string
-
-### project.owners_group.managers
-
-Managers of the group.
-
-Type: array(string)
-
-### project.owners_group.members
-
-Members of the group.
-
-Type: array(string)
 
 ### project.owners_group.owners
 
