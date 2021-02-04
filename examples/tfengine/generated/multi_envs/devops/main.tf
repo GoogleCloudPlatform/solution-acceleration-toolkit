@@ -80,11 +80,19 @@ module "owners_group" {
   ]
 }
 
+resource "time_sleep" "owners_wait" {
+  depends_on = [
+    module.owners_group,
+  ]
+  create_duration = "10s"
+}
+
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
-  project = module.project.project_id
-  role    = "roles/owner"
-  members = ["group:${module.owners_group.id}"]
+  project    = module.project.project_id
+  role       = "roles/owner"
+  members    = ["group:${module.owners_group.id}"]
+  depends_on = [time_sleep.owners_wait]
 }
 
 # Admins group for at folder level.
@@ -101,9 +109,17 @@ module "admins_group" {
   ]
 }
 
+resource "time_sleep" "admins_wait" {
+  depends_on = [
+    module.admins_group,
+  ]
+  create_duration = "10s"
+}
+
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder = "folders/12345678"
-  role   = "roles/resourcemanager.folderAdmin"
-  member = "group:${module.admins_group.id}"
+  folder     = "folders/12345678"
+  role       = "roles/resourcemanager.folderAdmin"
+  member     = "group:${module.admins_group.id}"
+  depends_on = [time_sleep.admins_wait]
 }
