@@ -29,6 +29,12 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
+    args: ["./cicd/configs/import.sh", "-d", "${_MANAGED_DIRS}"]
+    dir: "${_TERRAFORM_ROOT}"
+    id: Import existing projects
+
+  - name: "{{$cft}}"
+    entrypoint: bash
     args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "plan", "-a", "apply -auto-approve"]
     dir: "${_TERRAFORM_ROOT}"
     id: Apply
