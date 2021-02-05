@@ -20,6 +20,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -33,7 +34,10 @@ import (
 type mapFlag map[string]bool
 
 func (i *mapFlag) String() string {
-	return "my string representation"
+	if b, err := json.Marshal(*i); err == nil {
+		return string(b)
+	}
+	return ""
 }
 
 func (i *mapFlag) Set(value string) error {
