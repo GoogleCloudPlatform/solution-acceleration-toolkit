@@ -33,14 +33,15 @@ ROOT=$(realpath .)
 # Read DIRS from a space-separated string to list
 IFS=' ' read -r -a DIRS <<< "${DIRS}"
 
+VERSION=v0.6.0
+wget -O ${ROOT}/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
+chmod +x ${ROOT}/tfimport
+
 for mod in "${DIRS[@]}"
 do
     cd "${ROOT}"/"${mod}"
-    terraform init
-    terraform plan -out=plan.tfplan
-    project_id=$(terraform show -json plan.tfplan | jq -rM '.resource_changes[]? | select(.change.actions | index("create")) | select(.address | index("module.project.module.project-factory.google_project.main")) | .change.after.project_id')
-    if ! [[ -z "${project_id}" ]]; then
-      terraform import module.project.module.project-factory.google_project.main ${project_id} | true
-    fi
-    rm -rf .terraform* plan.tfplan
+    ${ROOT}/tfimport -input_dir ${ROOT}"/"${mod} --resource_types 'google_project' --resource_types 'google_project_service' --interactive false || true
+    rm -rf .terraform*
 done
+
+rm -f ${ROOT}/tfimport
