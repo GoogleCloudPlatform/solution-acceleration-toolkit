@@ -16,7 +16,7 @@
 // Requires Terraform to be installed and for authentication to be configured for each provider in the Terraform configs provider blocks.
 //
 // Usage:
-// $ go run . [--input_dir=/path/to/config] [--resources 'google_storage_bucket.bucket' --resources 'google_resource_manager_lien.lien']
+// $ go run . [--input_dir=/path/to/config] [--resource_types 'google_storage_bucket.bucket' --resources 'google_resource_manager_lien.lien']
 package main
 
 import (
@@ -52,7 +52,7 @@ var (
 )
 
 func main() {
-	flag.Var(&resourcesFlag, "resources", "Specific resources to import, specified as terraform resource addresses (e.g. 'google_storage_bucket.mybucket'). Leave empty to import all.")
+	flag.Var(&resourcesFlag, "resource_types", "Specific resource types to import, specified as terraform resource names (e.g. 'google_storage_bucket', 'google_resource_manager_lien'). Leave empty to import all.")
 
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -82,11 +82,11 @@ func run() error {
 	}
 
 	args := &tfimport.RunArgs{
-		InputDir:          *inputDir,
-		TerraformPath:     *terraformPath,
-		DryRun:            *dryRun,
-		Interactive:       *interactive,
-		SpecificResources: resourcesFlag,
+		InputDir:              *inputDir,
+		TerraformPath:         *terraformPath,
+		DryRun:                *dryRun,
+		Interactive:           *interactive,
+		SpecificResourceTypes: resourcesFlag,
 	}
 
 	if err := tfimport.Run(rn, importRn, args); err != nil {

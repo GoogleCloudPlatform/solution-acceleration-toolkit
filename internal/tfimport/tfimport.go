@@ -523,9 +523,9 @@ type RunArgs struct {
 	DryRun        bool
 	Interactive   bool
 
-	// This is a "set" of resource addresses to import.
-	// If not nil and not empty, will import only resources which are in it.
-	SpecificResources map[string]bool
+	// This is a "set" of resource types to import.
+	// If not nil and not empty, will import only resources which match it.
+	SpecificResourceTypes map[string]bool
 }
 
 // Run executes the main tfimport logic.
@@ -619,9 +619,9 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
 
 		// Check against specific resources list, if present.
-		if len(runArgs.SpecificResources) > 0 {
-			if _, ok := runArgs.SpecificResources[ir.Change.Address]; !ok {
-				log.Printf("Skipping %v, not in list of specific resources to import", ir.Change.Address)
+		if len(runArgs.SpecificResourceTypes) > 0 {
+			if _, ok := runArgs.SpecificResourceTypes[ir.Change.Kind]; !ok {
+				log.Printf("Skipping %v, not in list of specific resource types to import", ir.Change.Address)
 				continue
 			}
 		}
