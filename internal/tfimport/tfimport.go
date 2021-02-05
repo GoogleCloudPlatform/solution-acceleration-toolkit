@@ -479,7 +479,6 @@ func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap, interactive
 	}
 
 	if _, reqInteractive := RequiresInteractive[rc.Kind]; reqInteractive && !interactive {
-		fmt.Printf("Martin found %v requires interactive\n", rc.Kind)
 		return nil, false
 	}
 
