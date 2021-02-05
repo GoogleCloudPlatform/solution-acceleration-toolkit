@@ -40,6 +40,7 @@ do
     terraform plan -out=plan.tfplan
     project_id=$(terraform show -json plan.tfplan | jq -rM '.resource_changes[]? | select(.change.actions | index("create")) | select(.address | index("module.project.module.project-factory.google_project.main")) | .change.after.project_id')
     if ! [[ -z "${project_id}" ]]; then
-      terraform import module.project.module.project-factory.google_project.main ${project_id}
+      terraform import module.project.module.project-factory.google_project.main ${project_id} | true
     fi
+    rm -rf .terraform* plan.tfplan
 done
