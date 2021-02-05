@@ -638,6 +638,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// Handle the different outcomes of the import attempt.
 		var ie *importer.InsufficientInfoErr
 		var se *importer.SkipErr
+		var dne *importer.DoesNotExistErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
@@ -659,7 +660,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
-		case DoesNotExist(output):
+		case errors.As(err, &dne), DoesNotExist(output):
 			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
 
 		// Important to handle this last.
