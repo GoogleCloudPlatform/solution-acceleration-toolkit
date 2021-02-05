@@ -446,6 +446,12 @@ var Unimportable = map[string]bool{
 	"tls_private_key":                true,
 }
 
+// RequiresInteractive lists resources which require interactivity and can't be fully automatically imported.
+var RequiresInteractive = map[string]bool{
+	"google_billing_budget":        true,
+	"google_resource_manager_lien": true,
+}
+
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
@@ -466,9 +472,14 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
-func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
+func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap, interactive bool) (*Resource, bool) {
 	ri, ok := Importers[rc.Kind]
 	if !ok {
+		return nil, false
+	}
+
+	if _, reqInteractive := RequiresInteractive[rc.Kind]; reqInteractive && !interactive {
+		fmt.Printf("Martin found %v requires interactive\n", rc.Kind)
 		return nil, false
 	}
 
@@ -592,7 +603,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		}
 
 		// Try to convert to an importable resource.
-		ir, ok := Importable(cc, pcv)
+		ir, ok := Importable(cc, pcv, runArgs.Interactive)
 		if !ok {
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			log.Println(notImportableMsg)
@@ -628,7 +639,6 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// Handle the different outcomes of the import attempt.
 		var ie *importer.InsufficientInfoErr
 		var se *importer.SkipErr
-		var dne *importer.DoesNotExistErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
@@ -650,7 +660,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
-		case errors.As(err, &dne), DoesNotExist(output):
+		case DoesNotExist(output):
 			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
 
 		// Important to handle this last.
