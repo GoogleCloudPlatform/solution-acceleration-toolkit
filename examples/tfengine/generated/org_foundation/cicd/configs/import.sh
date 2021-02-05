@@ -34,13 +34,13 @@ ROOT=$(realpath .)
 IFS=' ' read -r -a DIRS <<< "${DIRS}"
 
 VERSION=v0.6.0
-wget -O ${ROOT}/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
+wget -q -O ${ROOT}/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
 chmod +x ${ROOT}/tfimport
 
 for mod in "${DIRS[@]}"
 do
     cd "${ROOT}"/"${mod}"
-    ${ROOT}/tfimport -input_dir ${ROOT}"/"${mod} --resource_types 'google_project' --resource_types 'google_project_service' --interactive false || true
+    ${ROOT}/tfimport -input_dir "${ROOT}"/"${mod}" --resource_types 'google_project' --resource_types 'google_project_service' --interactive false || true
     rm -rf .terraform*
 done
 
