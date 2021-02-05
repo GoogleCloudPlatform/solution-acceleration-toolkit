@@ -16,10 +16,11 @@
 // Requires Terraform to be installed and for authentication to be configured for each provider in the Terraform configs provider blocks.
 //
 // Usage:
-// $ go run . [--input_dir=/path/to/config]
+// $ go run . [--input_dir=/path/to/config] [--resource_types 'google_storage_bucket.bucket' --resources 'google_resource_manager_lien.lien']
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -28,6 +29,23 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport"
 )
+
+// From https://stackoverflow.com/a/28323276
+type mapFlag map[string]bool
+
+func (i *mapFlag) String() string {
+	if b, err := json.Marshal(*i); err == nil {
+		return string(b)
+	}
+	return ""
+}
+
+func (i *mapFlag) Set(value string) error {
+	(*i)[value] = true
+	return nil
+}
+
+var resourcesFlag = make(mapFlag)
 
 var (
 	inputDir      = flag.String("input_dir", ".", "Path to the directory containing Terraform configs.")
@@ -38,6 +56,8 @@ var (
 )
 
 func main() {
+	flag.Var(&resourcesFlag, "resource_types", "Specific resource types to import, specified as terraform resource names (e.g. 'google_storage_bucket', 'google_resource_manager_lien'). Leave empty to import all.")
+
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
@@ -66,10 +86,11 @@ func run() error {
 	}
 
 	args := &tfimport.RunArgs{
-		InputDir:      *inputDir,
-		TerraformPath: *terraformPath,
-		DryRun:        *dryRun,
-		Interactive:   *interactive,
+		InputDir:              *inputDir,
+		TerraformPath:         *terraformPath,
+		DryRun:                *dryRun,
+		Interactive:           *interactive,
+		SpecificResourceTypes: resourcesFlag,
 	}
 
 	if err := tfimport.Run(rn, importRn, args); err != nil {

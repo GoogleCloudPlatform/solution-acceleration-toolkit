@@ -29,6 +29,11 @@ type BillingBudget struct{}
 
 // ImportID returns the ID of the resource to use in importing.
 func (i *BillingBudget) ImportID(rc terraform.ResourceChange, pcv ConfigMap, interactive bool) (string, error) {
+	// Can't import if not interactive, since budget names are system-generated and will never be in the plan.
+	if !interactive {
+		return "", &InsufficientInfoErr{[]string{"budget"}, "Budget name is system-generated and will never be in the plan"}
+	}
+
 	billingAccountI, err := fromConfigValues("billing_account", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
@@ -42,17 +47,19 @@ func (i *BillingBudget) ImportID(rc terraform.ResourceChange, pcv ConfigMap, int
 		return "", err
 	}
 
-	// Present the choices, if any.
-	prompt := fmt.Sprintf("No existing budgets found in %v", billingAccount)
-	if len(budgets) > 0 {
-		// Format the budgets more nicely.
-		budgetsLines := []string{"Name|Display Name"}
-		for _, budget := range budgets {
-			budgetsLines = append(budgetsLines, fmt.Sprintf("%v|%v", budget.Name, budget.DisplayName))
-		}
-
-		prompt = fmt.Sprintf("Found the following budgets in billing account %v (copy the full value from the \"Name\" column):\n%s", billingAccount, columnize.SimpleFormat(budgetsLines))
+	if len(budgets) <= 0 {
+		// There are no budgets, just return that it doesn't exist so it can be created.
+		return "", &DoesNotExistErr{rc.Address}
 	}
+
+	// Present the choices, if any.
+	// Format the budgets more nicely.
+	budgetsLines := []string{"Name|Display Name"}
+	for _, budget := range budgets {
+		budgetsLines = append(budgetsLines, fmt.Sprintf("%v|%v", budget.Name, budget.DisplayName))
+	}
+
+	prompt := fmt.Sprintf("Found the following budgets in billing account %v (copy the full value from the \"Name\" column):\n%s", billingAccount, columnize.SimpleFormat(budgetsLines))
 
 	// Get the value from the user
 	budget, err := fromUser(os.Stdin, "budget", prompt)

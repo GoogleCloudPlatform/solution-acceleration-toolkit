@@ -50,6 +50,16 @@ func (e *SkipErr) Error() string {
 	return "Skipped resource"
 }
 
+// DoesNotExistErr indicates that a resources specifically determined that it doesn't exist.
+// Example: google_resource_manager_lien requires a name to import, but if it finds no liens, it should return this error.
+type DoesNotExistErr struct {
+	Resource string
+}
+
+func (e *DoesNotExistErr) Error() string {
+	return fmt.Sprintf("Resource %v does not exist", e.Resource)
+}
+
 // fromConfigValues returns the first matching config value for key, from the given config value maps cvs.
 func fromConfigValues(key string, cvs ...ConfigMap) (interface{}, error) {
 	for _, cv := range cvs {
