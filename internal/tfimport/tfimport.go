@@ -446,6 +446,12 @@ var Unimportable = map[string]bool{
 	"tls_private_key":                true,
 }
 
+// RequiresInteractive lists resources which require interactivity and can't be fully automatically imported.
+var RequiresInteractive = map[string]bool{
+	"google_billing_budget":        true,
+	"google_resource_manager_lien": true,
+}
+
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
@@ -466,9 +472,13 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
-func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
+func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap, interactive bool) (*Resource, bool) {
 	ri, ok := Importers[rc.Kind]
 	if !ok {
+		return nil, false
+	}
+
+	if _, reqInteractive := RequiresInteractive[rc.Kind]; reqInteractive && !interactive {
 		return nil, false
 	}
 
@@ -485,7 +495,7 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	// Try to get the ImportID()
 	importID, err := ir.ImportID(interactive)
 	if err != nil {
-		return output, err
+		return "", err
 	}
 
 	// Run the import.
@@ -592,7 +602,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		}
 
 		// Try to convert to an importable resource.
-		ir, ok := Importable(cc, pcv)
+		ir, ok := Importable(cc, pcv, runArgs.Interactive)
 		if !ok {
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			log.Println(notImportableMsg)

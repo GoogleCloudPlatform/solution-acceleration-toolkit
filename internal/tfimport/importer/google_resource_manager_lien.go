@@ -30,6 +30,11 @@ type ResourceManagerLien struct{}
 
 // ImportID returns the ID of the resource to use in importing.
 func (i *ResourceManagerLien) ImportID(rc terraform.ResourceChange, pcv ConfigMap, interactive bool) (string, error) {
+	// Can't import if not interactive, since lien names are system-generated and will never be in the plan.
+	if !interactive {
+		return "", &InsufficientInfoErr{[]string{"name"}, "Lien name is system-generated and will never be in the plan"}
+	}
+
 	parentI, err := fromConfigValues("parent", rc.Change.After, pcv)
 	if err != nil {
 		return "", err
@@ -47,19 +52,21 @@ func (i *ResourceManagerLien) ImportID(rc terraform.ResourceChange, pcv ConfigMa
 		return "", err
 	}
 
-	// Present the choices, if any
-	prompt := fmt.Sprintf("No existing liens found in %v", parent)
-	if len(liens) > 0 {
-		// Format the liens more nicely.
-		liensLines := []string{"Name|Origin|Reason|Restrictions"}
-		for _, lien := range liens {
-			// The name is always "liens/<id for import>".
-			lienID := strings.Split(lien.Name, "/")[1]
-			liensLines = append(liensLines, fmt.Sprintf("%v|%v|%v|%v", lienID, lien.Origin, lien.Reason, strings.Join(lien.Restrictions, ", ")))
-		}
-
-		prompt = fmt.Sprintf("Found the following liens in %v:\n%s", parentFull, columnize.SimpleFormat(liensLines))
+	if len(liens) <= 0 {
+		// There are no liens, just return that it doesn't exist so it can be created.
+		return "", &DoesNotExistErr{rc.Address}
 	}
+
+	// Present the choices, if any
+	// Format the liens more nicely.
+	liensLines := []string{"Name|Origin|Reason|Restrictions"}
+	for _, lien := range liens {
+		// The name is always "liens/<id for import>".
+		lienID := strings.Split(lien.Name, "/")[1]
+		liensLines = append(liensLines, fmt.Sprintf("%v|%v|%v|%v", lienID, lien.Origin, lien.Reason, strings.Join(lien.Restrictions, ", ")))
+	}
+
+	prompt := fmt.Sprintf("Found the following liens in %v:\n%s", parentFull, columnize.SimpleFormat(liensLines))
 
 	// Get the value from the user
 	name, err := fromUser(os.Stdin, "name", prompt)
