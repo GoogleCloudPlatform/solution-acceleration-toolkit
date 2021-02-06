@@ -57,14 +57,22 @@ differences between the configs and the actual infrastructure.
 $ tfimport -h
 Usage:
   -dry_run
-     Run in dry-run mode, which only prints the import commands without running them.
+        Run in dry-run mode, which only prints the import commands
+        without running them.
   -input_dir string
-     Path to the directory containing Terraform configs. (default ".")
+        Path to the directory containing Terraform configs. (default ".")
   -interactive
-     Interactively ask for user input when import information cannot be
-     automatically determined. (default true)
+        Interactively ask for user input when import information cannot be
+        automatically determined. (default true)
+  -resource_types value
+        Specific resource types to import, specified as terraform
+        resource names (e.g. 'google_storage_bucket',
+        'google_resource_manager_lien'). Leave empty to import all.
+        (default {})
   -terraform_path string
-     Name or path to the terraform binary to use (default "terraform").
+        Name or path to the terraform binary to use. (default "terraform")
+  -version
+        show version and exit
 ```
 
 ## Limitations

@@ -16,7 +16,7 @@
 // Requires Terraform to be installed and for authentication to be configured for each provider in the Terraform configs provider blocks.
 //
 // Usage:
-// $ go run . [--input_dir=/path/to/config] [--resource_types 'google_storage_bucket.bucket' --resources 'google_resource_manager_lien.lien']
+// $ go run . [--input_dir=/path/to/config] [--resource_types 'google_storage_bucket' --resource_types 'google_resource_manager_lien']
 package main
 
 import (
