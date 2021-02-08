@@ -130,6 +130,9 @@ module "example_healthcare_dataset" {
       }
     },
   ]
+  depends_on = [
+    module.project
+  ]
 }
 
 module "project_iam_members" {

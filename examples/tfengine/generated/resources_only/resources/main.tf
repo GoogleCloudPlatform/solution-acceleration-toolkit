@@ -106,6 +106,9 @@ module "example_healthcare_dataset" {
       }
     },
   ]
+  depends_on = [
+    module.project
+  ]
 }
 
 resource "google_service_account" "example_sa" {
