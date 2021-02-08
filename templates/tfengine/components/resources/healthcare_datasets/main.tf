@@ -133,5 +133,9 @@ module "{{resourceName . "name"}}" {
     {{end -}}
   ]
   {{end -}}
+
+  depends_on = [
+    module.project
+  ]
 }
 {{end -}}
