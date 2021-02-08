@@ -22,6 +22,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"regexp"
 	"strings"
 
@@ -576,11 +577,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		return false, fmt.Errorf("create temp file: %v", err)
 	}
 	defer os.Remove(tmpfile.Name())
-	planPath := tmpfile.Name()
-	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
+	planName := path.Base(tmpfile.Name())
+	if out, err := tfCmdOutput("plan", "-out", planName); err != nil {
 		return false, fmt.Errorf("plan: %v\n%v", err, string(out))
 	}
-	b, err := tfCmdOutput("show", "-json", planPath)
+	b, err := tfCmdOutput("show", "-json", planName)
 	if err != nil {
 		return false, fmt.Errorf("show: %v\n%v", err, string(b))
 	}
