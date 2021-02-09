@@ -529,8 +529,6 @@ type RunArgs struct {
 	SpecificResourceTypes map[string]bool
 }
 
-var skipped = make(map[string]bool)
-
 // Run executes the main tfimport logic.
 func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	// Expand the config path (ex. expand ~).
@@ -539,8 +537,9 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 		return fmt.Errorf("expand path %q: %v", inputDir, err)
 	}
 
+	skipped := make(map[string]bool)
 	for {
-		retry, err := planAndImport(rn, importRn, runArgs)
+		retry, err := planAndImport(rn, importRn, runArgs, skipped)
 		if err != nil {
 			return err
 		}
@@ -552,6 +551,7 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 
 		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 	}
+	fmt.Printf("Martin skipped: %v\n", skipped)
 
 	return nil
 }
@@ -559,7 +559,8 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 // This function does the full plan and import cycle.
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
-func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, err error) {
+// skipped is a map to be filled with skipped resources so they are skipped on subsequent runs too.
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (retry bool, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(runArgs.TerraformPath, args...)
