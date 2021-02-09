@@ -538,8 +538,9 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 		return fmt.Errorf("expand path %q: %v", inputDir, err)
 	}
 
+	skipped := make(map[string]bool)
 	for {
-		retry, err := planAndImport(rn, importRn, runArgs)
+		retry, err := planAndImport(rn, importRn, runArgs, skipped)
 		if err != nil {
 			return err
 		}
@@ -558,7 +559,8 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 // This function does the full plan and import cycle.
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
-func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, err error) {
+// skipped is a map to be filled with skipped resources so they are skipped on subsequent runs too.
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (retry bool, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(runArgs.TerraformPath, args...)
@@ -596,10 +598,14 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
-	var skipped []string
 	var importCmds []string
 	var notImportableMsgs []string
 	for _, cc := range createChanges {
+		// If previously skipped, skip again
+		if _, ok := skipped[cc.Address]; ok {
+			continue
+		}
+
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
 		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
@@ -661,7 +667,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 		// Check if the user manually skipped the import.
 		case errors.As(err, &se):
-			skipped = append(skipped, cc.Address)
+			skipped[cc.Address] = true
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
@@ -715,7 +721,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 	if len(skipped) > 0 {
 		// Don't treat manual skips as errors.
-		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
+		var s []string
+		for resource := range skipped {
+			s = append(s, resource)
+		}
+		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
 	}
 
 	if len(errs) > 0 {

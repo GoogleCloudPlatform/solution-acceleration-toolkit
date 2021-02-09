@@ -96,9 +96,5 @@ func run() error {
 		Verbose:               *verbose,
 	}
 
-	if err := tfimport.Run(rn, importRn, args); err != nil {
-		return fmt.Errorf("failed to import resources: %v", err)
-	}
-
-	return nil
+	return tfimport.Run(rn, importRn, args)
 }
