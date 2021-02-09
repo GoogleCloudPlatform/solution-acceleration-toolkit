@@ -52,6 +52,7 @@ var (
 	terraformPath = flag.String("terraform_path", "terraform", "Name or path to the terraform binary to use.")
 	dryRun        = flag.Bool("dry_run", false, "Run in dry-run mode, which only prints the import commands without running them.")
 	interactive   = flag.Bool("interactive", true, "Interactively ask for user input when import information cannot be\nautomatically determined.")
+	verbose       = flag.Bool("verbose", false, "Log additional information during import")
 	showVersion   = flag.Bool("version", false, "show version and exit")
 )
 
@@ -76,11 +77,11 @@ func run() error {
 	}
 	// Determine the runners to use.
 	rn := &runner.Default{}
-	var importRn runner.Runner
+	var importRn runner.Runner = &runner.Default{}
 	if *dryRun {
 		importRn = &runner.Dry{}
 		log.Printf("Dry run mode, logging commands but not executing any imports.")
-	} else {
+	} else if *verbose {
 		// Use the Multi runner to print temporary output in case the terraform import command freezes.
 		importRn = &runner.Multi{}
 	}
