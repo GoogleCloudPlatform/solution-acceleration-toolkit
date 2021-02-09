@@ -523,6 +523,7 @@ type RunArgs struct {
 	TerraformPath string
 	DryRun        bool
 	Interactive   bool
+	Verbose       bool
 
 	// This is a "set" of resource types to import.
 	// If not nil and not empty, will import only resources which match it.
@@ -665,7 +666,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
 			log.Printf("Insufficient information to import %q\n", cc.Address)
-			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
+
+			errMsg := fmt.Sprintf("%q (insufficient information)", cc.Address)
+			if runArgs.Verbose {
+				errMsg = fmt.Sprintf("%q ; insufficient information; full error: %v", cc.Address, err)
+			}
 			errs = append(errs, errMsg)
 
 		// Check if error indicates resource is not importable or does not exist.
@@ -678,7 +683,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		// Important to handle this last.
 		default:
 			log.Printf("Failed to import %q\n", cc.Address)
-			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", cc.Address, err, output)
+
+			errMsg := fmt.Sprintf("%q (error while running terraform import)", cc.Address)
+			if runArgs.Verbose {
+				errMsg = fmt.Sprintf("%q ; full error: %v\n%v", cc.Address, err, output)
+			}
 			errs = append(errs, errMsg)
 		}
 	}
