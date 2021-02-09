@@ -257,6 +257,11 @@ directly use the `terraform` binary to deploy the infrastructure.
     that would be checked into source control, i.e. `terraform` in the above
     setup.
 
+1. Login to your Google account by following instructions
+    [here](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login).
+    Make sure to login using `gcloud auth application-default login` since
+    Terraform uses Application Default Credentials.
+
 1. Run the engine to generate your Terraform configs:
 
     ```shell
