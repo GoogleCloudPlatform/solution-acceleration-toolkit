@@ -670,22 +670,22 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
+			log.Printf("Insufficient information to import %q\n", cc.Address)
 			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
 			errs = append(errs, errMsg)
-			log.Printf("Skipping: %v\n", errMsg)
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
-			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
+			log.Printf("Import not supported by provider for resource %q\n", cc.Address)
 		case DoesNotExist(output):
-			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
+			log.Printf("Resource %q does not exist, not importing\n", cc.Address)
 
 		// Important to handle this last.
 		default:
-			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
+			log.Printf("Failed to import %q\n", cc.Address)
+			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", cc.Address, err, output)
 			errs = append(errs, errMsg)
-			log.Printf("Skipping: %v\n", errMsg)
 		}
 	}
 

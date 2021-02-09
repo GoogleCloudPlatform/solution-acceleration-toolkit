@@ -76,13 +76,14 @@ func run() error {
 		return fmt.Errorf("--input_dir must be set and not be empty")
 	}
 	// Determine the runners to use.
-	rn := &runner.Default{}
+	var rn runner.Runner = &runner.Default{}
 	var importRn runner.Runner = &runner.Default{}
 	if *dryRun {
 		importRn = &runner.Dry{}
 		log.Printf("Dry run mode, logging commands but not executing any imports.")
 	} else if *verbose {
 		// Use the Multi runner to print temporary output in case the terraform import command freezes.
+		rn = &runner.Multi{}
 		importRn = &runner.Multi{}
 	}
 
