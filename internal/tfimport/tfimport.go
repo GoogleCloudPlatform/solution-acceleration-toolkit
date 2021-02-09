@@ -32,12 +32,6 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 )
 
-// Regexes used in parsing the output of the `terraform import` command.
-var (
-	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
-	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
-)
-
 var kubernetesImporter = &importer.SimpleImporter{
 	Fields: []string{"metadata"},
 	Tmpl:   "{{or (index .metadata \"namespace\") \"default\"}}/{{.metadata.name}}",
@@ -507,6 +501,12 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	return string(outputBytes), err
 }
 
+// Regexes used in parsing the output of the `terraform import` command.
+var (
+	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
+	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
+)
+
 // NotImportable parses the output of a `terraform import` command to determine if it indicated that a resource is not importable.
 func NotImportable(output string) bool {
 	return reNotImportable.FindStringIndex(output) != nil
@@ -707,26 +707,19 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		return false, nil
 	}
 
+	if importedSomething {
+		// Time to retry. Some resources imported successfully, but others didn't.
+		return true, nil
+	}
+	log.Printf("No resources imported.")
+
 	if len(skipped) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
 		// Don't treat manual skips as errors.
 		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
-		return false, nil
 	}
 
 	if len(errs) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
 		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
-	}
-
-	if !importedSomething {
-		log.Printf("No resources imported.")
 	}
 
 	return false, nil
