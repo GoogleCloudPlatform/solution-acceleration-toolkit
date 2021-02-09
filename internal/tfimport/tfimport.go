@@ -714,7 +714,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		for resource := range skipped {
 			s = append(s, resource)
 		}
-		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
+		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
 		return false, nil
 	}
 
