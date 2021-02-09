@@ -551,7 +551,6 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 
 		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 	}
-	fmt.Printf("Martin skipped: %v\n", skipped)
 
 	return nil
 }
