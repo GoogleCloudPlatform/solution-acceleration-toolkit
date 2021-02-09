@@ -529,6 +529,8 @@ type RunArgs struct {
 	SpecificResourceTypes map[string]bool
 }
 
+var skipped = make(map[string]bool)
+
 // Run executes the main tfimport logic.
 func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	// Expand the config path (ex. expand ~).
@@ -595,10 +597,14 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 	// Import all importable create changes.
 	importedSomething := false
 	var errs []string
-	var skipped []string
 	var importCmds []string
 	var notImportableMsgs []string
 	for _, cc := range createChanges {
+		// If previously skipped, skip again
+		if _, ok := skipped[cc.Address]; ok {
+			continue
+		}
+
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
 		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
@@ -660,7 +666,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 		// Check if the user manually skipped the import.
 		case errors.As(err, &se):
-			skipped = append(skipped, cc.Address)
+			skipped[cc.Address] = true
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
@@ -704,7 +710,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			return true, nil
 		}
 		// Don't treat manual skips as errors.
-		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
+		var s []string
+		for resource := range skipped {
+			s = append(s, resource)
+		}
+		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
 		return false, nil
 	}
 
