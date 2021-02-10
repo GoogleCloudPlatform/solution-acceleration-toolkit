@@ -729,7 +729,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 	}
 
 	if len(errs) > 0 {
-		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
+		return false, fmt.Errorf("failed to find or import %v resources. Use --verbose flag to see detailed error messages.\n%v", len(errs), strings.Join(errs, "\n"))
 	}
 
 	return false, nil
