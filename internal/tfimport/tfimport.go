@@ -538,16 +538,16 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 		return fmt.Errorf("expand path %q: %v", inputDir, err)
 	}
 
-	var successes, successesTotal, errs []string
+	var successes, successesTotal, failures []string
 	skipped := make(map[string]bool)
 	for {
-		successes, errs, err = planAndImport(rn, importRn, runArgs, skipped)
+		successes, failures, err = planAndImport(rn, importRn, runArgs, skipped)
 		if err != nil {
 			return err
 		}
 		successesTotal = append(successesTotal, successes...)
 
-		if len(successes) > 0 && len(errs) > 0 {
+		if len(successes) > 0 && len(failures) > 0 {
 			// Time to retry. Some resources imported successfully, but others didn't.
 			log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 			continue
@@ -570,8 +570,8 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
 	}
 
-	if len(errs) > 0 {
-		return fmt.Errorf("failed to find or import %v resources. Use --verbose flag to see detailed error messages.\n%v", len(errs), strings.Join(errs, "\n"))
+	if len(failures) > 0 {
+		return fmt.Errorf("failed to find or import %v resources. Use --verbose flag to see detailed error messages.\n%v", len(failures), strings.Join(failures, "\n"))
 	}
 
 	return nil
@@ -581,7 +581,7 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
 // skipped is a map to be filled with skipped resources so they are skipped on subsequent runs too.
-func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (successes, errs []string, err error) {
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (successes, failures []string, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(runArgs.TerraformPath, args...)
@@ -693,11 +693,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		case errors.As(err, &ie):
 			log.Printf("Insufficient information to import %q\n", cc.Address)
 
-			errMsg := fmt.Sprintf("%v (insufficient information)", cc.Address)
+			failedMsg := fmt.Sprintf("%v (insufficient information)", cc.Address)
 			if runArgs.Verbose {
-				errMsg = fmt.Sprintf("%v ; insufficient information; full error: %v", cc.Address, err)
+				failedMsg = fmt.Sprintf("%v ; insufficient information; full error: %v", cc.Address, err)
 			}
-			errs = append(errs, errMsg)
+			failures = append(failures, failedMsg)
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
@@ -710,11 +710,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		default:
 			log.Printf("Failed to import %q\n", cc.Address)
 
-			errMsg := fmt.Sprintf("%v (error while running terraform import)", cc.Address)
+			failedMsg := fmt.Sprintf("%v (error while running terraform import)", cc.Address)
 			if runArgs.Verbose {
-				errMsg = fmt.Sprintf("%v ; full error: %v\n%v", cc.Address, err, output)
+				failedMsg = fmt.Sprintf("%v ; full error: %v\n%v", cc.Address, err, output)
 			}
-			errs = append(errs, errMsg)
+			failures = append(failures, failedMsg)
 		}
 	}
 
@@ -733,5 +733,5 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		return nil, nil, nil
 	}
 
-	return successes, errs, nil
+	return successes, failures, nil
 }
