@@ -93,6 +93,7 @@ func run() error {
 		DryRun:                *dryRun,
 		Interactive:           *interactive,
 		SpecificResourceTypes: resourcesFlag,
+		Verbose:               *verbose,
 	}
 
 	return tfimport.Run(rn, importRn, args)

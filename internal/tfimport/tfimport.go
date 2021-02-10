@@ -32,12 +32,6 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
 )
 
-// Regexes used in parsing the output of the `terraform import` command.
-var (
-	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
-	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
-)
-
 var kubernetesImporter = &importer.SimpleImporter{
 	Fields: []string{"metadata"},
 	Tmpl:   "{{or (index .metadata \"namespace\") \"default\"}}/{{.metadata.name}}",
@@ -507,6 +501,12 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	return string(outputBytes), err
 }
 
+// Regexes used in parsing the output of the `terraform import` command.
+var (
+	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
+	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
+)
+
 // NotImportable parses the output of a `terraform import` command to determine if it indicated that a resource is not importable.
 func NotImportable(output string) bool {
 	return reNotImportable.FindStringIndex(output) != nil
@@ -523,6 +523,7 @@ type RunArgs struct {
 	TerraformPath string
 	DryRun        bool
 	Interactive   bool
+	Verbose       bool
 
 	// This is a "set" of resource types to import.
 	// If not nil and not empty, will import only resources which match it.
@@ -671,7 +672,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &ie):
 			log.Printf("Insufficient information to import %q\n", cc.Address)
-			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
+
+			errMsg := fmt.Sprintf("%q (insufficient information)", cc.Address)
+			if runArgs.Verbose {
+				errMsg = fmt.Sprintf("%q ; insufficient information; full error: %v", cc.Address, err)
+			}
 			errs = append(errs, errMsg)
 
 		// Check if error indicates resource is not importable or does not exist.
@@ -684,7 +689,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// Important to handle this last.
 		default:
 			log.Printf("Failed to import %q\n", cc.Address)
-			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", cc.Address, err, output)
+
+			errMsg := fmt.Sprintf("%q (error while running terraform import)", cc.Address)
+			if runArgs.Verbose {
+				errMsg = fmt.Sprintf("%q ; full error: %v\n%v", cc.Address, err, output)
+			}
 			errs = append(errs, errMsg)
 		}
 	}
@@ -704,30 +713,23 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		return false, nil
 	}
 
+	if importedSomething {
+		// Time to retry. Some resources imported successfully, but others didn't.
+		return true, nil
+	}
+	log.Printf("No resources imported.")
+
 	if len(skipped) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
 		// Don't treat manual skips as errors.
 		var s []string
 		for resource := range skipped {
 			s = append(s, resource)
 		}
 		log.Printf("Skipped %d resources:\n%v", len(skipped), strings.Join(s, "\n"))
-		return false, nil
 	}
 
 	if len(errs) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
 		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
-	}
-
-	if !importedSomething {
-		log.Printf("No resources imported.")
 	}
 
 	return false, nil
