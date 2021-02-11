@@ -534,9 +534,9 @@ func (e *importErr) Error() string {
 var summaryTmpl string = `
 Summary:
 
-Found {{.total}} unimported resources.
+Found {{.total}} importable resources.
 
-Imported {{len .successes}}{{if gt (len .successes) 0}}:{{else}}.{{end}}
+Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{else}}.{{end}}
 {{- range $resource := .successes}}
 - {{$resource}}
 {{- end}}
