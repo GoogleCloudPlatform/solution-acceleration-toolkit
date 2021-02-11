@@ -33,7 +33,7 @@ ROOT=$(realpath .)
 # Read DIRS from a space-separated string to list
 IFS=' ' read -r -a DIRS <<< "${DIRS}"
 
-VERSION=v0.7.0
+VERSION=v0.8.0
 wget -q -O ${ROOT}/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
 chmod +x ${ROOT}/tfimport
 
