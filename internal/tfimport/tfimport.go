@@ -518,35 +518,35 @@ func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
 }
 
-// importErr is an error indicating a resource failed to be imported.
+// importError is an error indicating a resource failed to be imported.
 // This doesn't indicate an error in running the steps around trying an import,
 // it's specifically for terraform failing to import a resource for a reason
 // that can't be handled (i.e. does not exist or not importable at all).
-type importErr struct {
+type importError struct {
 	// errMgs contains the error messages for all failed imports.
 	errMsgs []string
 }
 
-func (e *importErr) Error() string {
+func (e *importError) Error() string {
 	return fmt.Sprintf("failed to find or import %v resources. Use --verbose flag to see detailed error messages.", len(e.errMsgs))
 }
 
 var summaryTmpl string = `
 Summary:
 
-Found {{.total}} importable resources.
+Found {{.total}} importable resources
 
-Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{else}}.{{end}}
+Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{end}}
 {{- range $resource := .successes}}
 - {{$resource}}
 {{- end}}
 
-Skipped {{len .skipped}}{{if gt (len .skipped) 0}}:{{else}}.{{end}}
+Skipped {{len .skipped}}{{if gt (len .skipped) 0}}:{{end}}
 {{- range $resource := .skipped}}
 - {{$resource}}
 {{- end}}
 
-Failed to import {{len .failures}}{{if gt (len .failures) 0}}:{{else}}.{{end}}
+Failed to import {{len .failures}}{{if gt (len .failures) 0}}:{{end}}
 {{- range $resource := .failures}}
 - {{$resource}}
 {{- end}}
@@ -575,41 +575,40 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 
 	var successesTotal, failuresTotal []string
 	skipped := make(map[string]bool)
-	var ie *importErr
+	var ie *importError
 	for {
 		failuresTotal = nil
 		successes, err := planAndImport(rn, importRn, runArgs, skipped)
 		successesTotal = append(successesTotal, successes...)
 
-		if err != nil {
-			if errors.As(err, &ie) {
-				failuresTotal = ie.errMsgs
-				if len(successes) > 0 {
-					// Some resources imported successfully, but others didn't.
-					// Time to retry.
-					log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
-					continue
-				}
-			} else {
-				// Otherwise it's some other kind of error and we should return it.
-				return err
-			}
+		if err == nil {
+			// Either no successes, or no errors.
+			// No need to retry.
+			break
 		}
 
-		// Either no successes, or no errors.
-		// No need to retry.
-		break
-	}
+		if !errors.As(err, &ie) {
+			// It's some other kind of error and we should return it.
+			return err
+		}
 
-	var skippedS []string
-	for resource := range skipped {
-		skippedS = append(skippedS, resource)
+		// It's an importError.
+		failuresTotal = ie.errMsgs
+
+		// If no successes, break out of the loop.
+		if len(successes) <= 0 {
+			break
+		}
+
+		// Some resources imported successfully, but others didn't.
+		// Time to retry.
+		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
 	}
 
 	buf, err := template.WriteBuffer(summaryTmpl, map[string]interface{}{
-		"total":     len(successesTotal) + len(skippedS) + len(failuresTotal),
+		"total":     len(successesTotal) + len(skipped) + len(failuresTotal),
 		"successes": successesTotal,
-		"skipped":   skippedS,
+		"skipped":   skipped,
 		"failures":  failuresTotal,
 	})
 	if err != nil {
@@ -741,11 +740,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		case errors.As(err, &iie):
 			log.Printf("Insufficient information to import %q, missing fields %s\n", cc.Address, strings.Join(iie.MissingFields, ","))
 
-			failedMsg := fmt.Sprintf("%v (insufficient information)", cc.Address)
+			msg := fmt.Sprintf("%v (insufficient information)", cc.Address)
 			if runArgs.Verbose {
-				failedMsg = fmt.Sprintf("%v ; insufficient information; full error: %v", cc.Address, err)
+				msg = fmt.Sprintf("%v ; insufficient information; full error: %v", cc.Address, err)
 			}
-			failures = append(failures, failedMsg)
+			failures = append(failures, msg)
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
@@ -758,11 +757,11 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		default:
 			log.Printf("Failed to import %q\n", cc.Address)
 
-			failedMsg := fmt.Sprintf("%v (error while running terraform import)", cc.Address)
+			msg := fmt.Sprintf("%v (error while running terraform import)", cc.Address)
 			if runArgs.Verbose {
-				failedMsg = fmt.Sprintf("%v ; full error: %v\n%v", cc.Address, err, output)
+				msg = fmt.Sprintf("%v ; full error: %v\n%v", cc.Address, err, output)
 			}
-			failures = append(failures, failedMsg)
+			failures = append(failures, msg)
 		}
 	}
 
@@ -781,10 +780,9 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		return nil, nil
 	}
 
-	var ie *importErr
 	if len(failures) > 0 {
-		ie = &importErr{failures}
+		return successes, &importError{failures}
 	}
 
-	return successes, ie
+	return successes, nil
 }
