@@ -383,7 +383,7 @@ directly use the `terraform` binary to deploy the infrastructure.
         ```
 
     1. Create groups and initial memberships. You must be at least Google
-        Workspace Group Admin to be able to do so.
+        Workspace Group Editor to be able to do so.
 
         ```shell
         cd $OUTPUT_PATH/groups
