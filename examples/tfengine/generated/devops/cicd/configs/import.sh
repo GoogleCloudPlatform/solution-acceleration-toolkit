@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+set -e
 
 DIRS=()
 
@@ -23,7 +23,7 @@ do
   case $c in
     d) DIRS="${OPTARG}" ;;
     *)
-      echo "Invalid flag ${OPTARG}"
+      echo "Usage: import.sh -d=\"dir1 dir2 ...\""
       exit 1
       ;;
   esac
