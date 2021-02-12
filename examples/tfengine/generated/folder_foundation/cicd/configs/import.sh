@@ -23,7 +23,7 @@ do
   case $c in
     d) DIRS="${OPTARG}" ;;
     *)
-      echo "Invalid flag ${OPTARG}"
+      echo "Usage: import.sh -d=\"dir1 dir2 ...\""
       exit 1
       ;;
   esac
