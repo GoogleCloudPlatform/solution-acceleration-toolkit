@@ -132,6 +132,7 @@ module "example_instance_template" {
     scopes = ["cloud-platform"]
   }
 
+
   enable_shielded_vm = true
   shielded_instance_config = {
     enable_secure_boot          = true

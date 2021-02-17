@@ -369,6 +369,13 @@ schema = {
             description = "Whether the instance template can be preempted. Defaults to false."
             type        = "boolean"
           }
+          tags = {
+            description = "Tags for the instance template."
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
           enable_shielded_vm = {
             description = "Whether to enable shielded VM. Defaults to true."
             type        = "boolean"

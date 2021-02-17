@@ -409,6 +409,12 @@ Name of the the instance template's subnet.
 
 Type: string
 
+### compute_instance_templates.tags
+
+Tags for the instance template.
+
+Type: array(string)
+
 ### compute_networks
 
 [Module](https://github.com/terraform-google-modules/terraform-google-network)
