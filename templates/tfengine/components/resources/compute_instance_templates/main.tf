@@ -51,7 +51,6 @@ module "{{$template_resource_name}}" {
     scopes = ["cloud-platform"]
   }
 
-
   {{if get . "enable_shielded_vm" true -}}
   enable_shielded_vm = true
   shielded_instance_config = {
