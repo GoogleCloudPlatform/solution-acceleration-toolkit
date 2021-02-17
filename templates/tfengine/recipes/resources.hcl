@@ -1338,20 +1338,23 @@ schema = {
               type = "string"
             }
           }
-          managers = {
-            description = "Managers of the group."
-            type        = "array"
-            items = {
-              type = "string"
-            }
-          }
-          members = {
-            description = "Members of the group."
-            type        = "array"
-            items = {
-              type = "string"
-            }
-          }
+          # Due to limitations in the underlying module, managers and members
+          # are not supported and should be configured in the Google Workspace
+          # Admin console.
+          # managers = {
+          #   description = "Managers of the group."
+          #   type        = "array"
+          #   items = {
+          #     type = "string"
+          #   }
+          # }
+          # members = {
+          #   description = "Members of the group."
+          #   type        = "array"
+          #   items = {
+          #     type = "string"
+          #   }
+          # }
         }
       }
     }

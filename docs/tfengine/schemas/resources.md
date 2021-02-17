@@ -721,18 +721,6 @@ Email address of the group.
 
 Type: string
 
-### groups.managers
-
-Managers of the group.
-
-Type: array(string)
-
-### groups.members
-
-Members of the group.
-
-Type: array(string)
-
 ### groups.owners
 
 Owners of the group.

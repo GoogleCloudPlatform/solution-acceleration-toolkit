@@ -14,8 +14,11 @@
 # Bundled templates.
 *.tar.gz
 
-# Terraform cache.
-.terraform/
+# Local .terraform directories
+**/.terraform/*
+
+# Dependency Lock File
+.terraform.lock.hcl
 
 # Terraform state
 *.tfstate

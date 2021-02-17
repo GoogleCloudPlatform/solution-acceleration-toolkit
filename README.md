@@ -24,6 +24,10 @@ of your Google Cloud organization.
 
 [Deploying the Data Protection Toolkit](https://www.youtube.com/watch?v=-wIutctaqr0)
 
+Note that YAML-formatted configs were used at the time when the Tutorial video
+was made. The config format has been changed to
+[HCL](https://github.com/hashicorp/hcl).
+
 ## Releases
 
 Please see [RELEASING.md](./RELEASING.md) for our release strategy.

@@ -35,7 +35,7 @@ module "project" {
 
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.3.0"
+  version = "~> 4.4.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
   project_id                  = module.project.project_id
@@ -59,7 +59,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.2.0"
+  version = "~> 1.2.1"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
@@ -105,6 +105,9 @@ module "example_healthcare_dataset" {
         type = "phi"
       }
     },
+  ]
+  depends_on = [
+    module.project
   ]
 }
 

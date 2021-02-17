@@ -28,6 +28,12 @@ steps:
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a4595b3e0a90fe2aa4d305c22f7ceb269c216ae203d681c7727e26fc74c53e20"
     entrypoint: bash
+    args: ["./cicd/configs/import.sh", "-d", "${_MANAGED_DIRS}"]
+    dir: "${_TERRAFORM_ROOT}"
+    id: Import existing projects
+
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a4595b3e0a90fe2aa4d305c22f7ceb269c216ae203d681c7727e26fc74c53e20"
+    entrypoint: bash
     args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "plan", "-a", "apply -auto-approve"]
     dir: "${_TERRAFORM_ROOT}"
     id: Apply

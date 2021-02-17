@@ -22,19 +22,15 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"regexp"
 	"strings"
 
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/fileutil"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/runner"
+	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/template"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/terraform"
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfimport/importer"
-)
-
-// Regexes used in parsing the output of the `terraform import` command.
-var (
-	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
-	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
 )
 
 var kubernetesImporter = &importer.SimpleImporter{
@@ -446,6 +442,12 @@ var Unimportable = map[string]bool{
 	"tls_private_key":                true,
 }
 
+// RequiresInteractive lists resources which require interactivity and can't be fully automatically imported.
+var RequiresInteractive = map[string]bool{
+	"google_billing_budget":        true,
+	"google_resource_manager_lien": true,
+}
+
 // Resource represents a resource and an importer that can import it.
 type Resource struct {
 	Change         terraform.ResourceChange
@@ -466,9 +468,13 @@ func (ir Resource) ImportID(interactive bool) (string, error) {
 
 // Importable returns an importable Resource which contains an Importer, and whether it successfully created that resource.
 // pcv represents provider config values, which will be used if the resource does not have values defined.
-func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap) (*Resource, bool) {
+func Importable(rc terraform.ResourceChange, pcv importer.ConfigMap, interactive bool) (*Resource, bool) {
 	ri, ok := Importers[rc.Kind]
 	if !ok {
+		return nil, false
+	}
+
+	if _, reqInteractive := RequiresInteractive[rc.Kind]; reqInteractive && !interactive {
 		return nil, false
 	}
 
@@ -485,7 +491,7 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	// Try to get the ImportID()
 	importID, err := ir.ImportID(interactive)
 	if err != nil {
-		return output, err
+		return "", err
 	}
 
 	// Run the import.
@@ -495,6 +501,12 @@ func Import(rn runner.Runner, ir *Resource, inputDir string, terraformPath strin
 	outputBytes, err := rn.CmdCombinedOutput(cmd)
 	return string(outputBytes), err
 }
+
+// Regexes used in parsing the output of the `terraform import` command.
+var (
+	reNotImportable = regexp.MustCompile(`(?i)Error:.*resource (.*) doesn't support import`)
+	reDoesNotExist  = regexp.MustCompile(`(?i)Error:.*Cannot import non-existent.*object`)
+)
 
 // NotImportable parses the output of a `terraform import` command to determine if it indicated that a resource is not importable.
 func NotImportable(output string) bool {
@@ -506,12 +518,51 @@ func DoesNotExist(output string) bool {
 	return reDoesNotExist.FindStringIndex(output) != nil
 }
 
+// importError is an error indicating a resource failed to be imported.
+// This doesn't indicate an error in running the steps around trying an import,
+// it's specifically for terraform failing to import a resource for a reason
+// that can't be handled (i.e. does not exist or not importable at all).
+type importError struct {
+	// errMgs contains the error messages for all failed imports.
+	errMsgs []string
+}
+
+func (e *importError) Error() string {
+	return fmt.Sprintf("failed to find or import %v resources. Use --verbose flag to see detailed error messages.", len(e.errMsgs))
+}
+
+var summaryTmpl string = `
+Summary:
+
+Found {{.total}} importable resources
+
+Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{end}}
+{{- range $resource := .successes}}
+- {{$resource}}
+{{- end}}
+
+Skipped {{len .skipped}}{{if gt (len .skipped) 0}}:{{end}}
+{{- range $resource := .skipped}}
+- {{$resource}}
+{{- end}}
+
+Failed to import {{len .failures}}{{if gt (len .failures) 0}}:{{end}}
+{{- range $resource := .failures}}
+- {{$resource}}
+{{- end}}
+`
+
 // RunArgs are the supported tfimport run arguments.
 type RunArgs struct {
 	InputDir      string
 	TerraformPath string
 	DryRun        bool
 	Interactive   bool
+	Verbose       bool
+
+	// This is a "set" of resource types to import.
+	// If not nil and not empty, will import only resources which match it.
+	SpecificResourceTypes map[string]bool
 }
 
 // Run executes the main tfimport logic.
@@ -522,18 +573,51 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 		return fmt.Errorf("expand path %q: %v", inputDir, err)
 	}
 
+	var successesTotal, failuresTotal []string
+	skipped := make(map[string]bool)
+	var ie *importError
 	for {
-		retry, err := planAndImport(rn, importRn, runArgs)
-		if err != nil {
-			return err
-		}
+		failuresTotal = nil
+		successes, err := planAndImport(rn, importRn, runArgs, skipped)
+		successesTotal = append(successesTotal, successes...)
 
-		// If all imports succeeded, or none did, stop trying to import things, since we aren't making progress anymore.
-		if !retry {
+		if err == nil {
+			// Either no successes, or no errors.
+			// No need to retry.
 			break
 		}
 
+		if !errors.As(err, &ie) {
+			// It's some other kind of error and we should return it.
+			return err
+		}
+
+		// It's an importError.
+		failuresTotal = ie.errMsgs
+
+		// If no successes, break out of the loop.
+		if len(successes) <= 0 {
+			break
+		}
+
+		// Some resources imported successfully, but others didn't.
+		// Time to retry.
 		log.Println("Some imports succeeded but others did not. Retrying the import, in case dependent values have now been populated.")
+	}
+
+	buf, err := template.WriteBuffer(summaryTmpl, map[string]interface{}{
+		"total":     len(successesTotal) + len(skipped) + len(failuresTotal),
+		"successes": successesTotal,
+		"skipped":   skipped,
+		"failures":  failuresTotal,
+	})
+	if err != nil {
+		return fmt.Errorf("building summary template: %v", err)
+	}
+	log.Printf("%s\n", buf)
+
+	if ie != nil {
+		return ie
 	}
 
 	return nil
@@ -542,7 +626,8 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 // This function does the full plan and import cycle.
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
-func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, err error) {
+// skipped is a map to be filled with skipped resources so they are skipped on subsequent runs too.
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (successes []string, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(runArgs.TerraformPath, args...)
@@ -552,47 +637,50 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 
 	// Init is safe to run on an already-initialized config dir.
 	if out, err := tfCmdOutput("init"); err != nil {
-		return false, fmt.Errorf("init: %v\v%v", err, string(out))
+		return nil, fmt.Errorf("init: %v\v%v", err, string(out))
 	}
 
 	// Generate and load the plan using a temp file.
 	// Use the .tf files input dir in case the system can't write to /tmp.
 	tmpfile, err := ioutil.TempFile(runArgs.InputDir, "plan-for-import-*.tfplan")
 	if err != nil {
-		return false, fmt.Errorf("create temp file: %v", err)
+		return nil, fmt.Errorf("create temp file: %v", err)
 	}
 	defer os.Remove(tmpfile.Name())
-	planPath := tmpfile.Name()
-	if out, err := tfCmdOutput("plan", "-out", planPath); err != nil {
-		return false, fmt.Errorf("plan: %v\n%v", err, string(out))
+	planName := path.Base(tmpfile.Name())
+	if out, err := tfCmdOutput("plan", "-out", planName); err != nil {
+		return nil, fmt.Errorf("plan: %v\n%v", err, string(out))
 	}
-	b, err := tfCmdOutput("show", "-json", planPath)
+	b, err := tfCmdOutput("show", "-json", planName)
 	if err != nil {
-		return false, fmt.Errorf("show: %v\n%v", err, string(b))
+		return nil, fmt.Errorf("show: %v\n%v", err, string(b))
 	}
 
 	// Load only "create" changes.
 	createChanges, err := terraform.ReadPlanChanges(b, []string{"create"})
 	if err != nil {
-		return false, fmt.Errorf("read Terraform plan changes: %q", err)
+		return nil, fmt.Errorf("read Terraform plan changes: %q", err)
 	}
 
 	// Import all importable create changes.
-	importedSomething := false
-	var errs []string
-	var skipped []string
 	var importCmds []string
 	var notImportableMsgs []string
+	var failures []string
 	for _, cc := range createChanges {
+		// If previously skipped, skip again
+		if _, ok := skipped[cc.Address]; ok {
+			continue
+		}
+
 		// Get the provider config values (pcv) for this particular resource.
 		// This is needed to determine if it's possible to import the resource.
 		pcv, err := terraform.ReadProviderConfigValues(b, cc.Kind, cc.Name)
 		if err != nil {
-			return false, fmt.Errorf("read provider config values from the Terraform plan: %q", err)
+			return nil, fmt.Errorf("read provider config values from the Terraform plan: %q", err)
 		}
 
 		// Try to convert to an importable resource.
-		ir, ok := Importable(cc, pcv)
+		ir, ok := Importable(cc, pcv, runArgs.Interactive)
 		if !ok {
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			log.Println(notImportableMsg)
@@ -603,6 +691,14 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		}
 
 		log.Printf("Found importable resource: %q\n", ir.Change.Address)
+
+		// Check against specific resources list, if present.
+		if len(runArgs.SpecificResourceTypes) > 0 {
+			if _, ok := runArgs.SpecificResourceTypes[ir.Change.Kind]; !ok {
+				log.Printf("Skipping %v, not in list of specific resource types to import", ir.Change.Address)
+				continue
+			}
+		}
 
 		// Attempt the import.
 		output, err := Import(importRn, ir, runArgs.InputDir, runArgs.TerraformPath, runArgs.Interactive)
@@ -626,37 +722,46 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		}
 
 		// Handle the different outcomes of the import attempt.
-		var ie *importer.InsufficientInfoErr
+		var iie *importer.InsufficientInfoErr
 		var se *importer.SkipErr
 		switch {
 		// err will only be nil when the import succeed.
 		// Import succeeded, print the success output.
 		case err == nil:
 			// Import succeeded.
-			importedSomething = true
+			log.Printf("Successfully imported %v\n", cc.Address)
+			successes = append(successes, cc.Address)
 
 		// Check if the user manually skipped the import.
 		case errors.As(err, &se):
-			skipped = append(skipped, cc.Address)
+			skipped[cc.Address] = true
 
 		// Check if the error indicates insufficient information.
-		case errors.As(err, &ie):
-			errMsg := fmt.Sprintf("Insufficient information to import %q: %v\n", cc.Address, err)
-			errs = append(errs, errMsg)
-			log.Printf("Skipping: %v\n", errMsg)
+		case errors.As(err, &iie):
+			log.Printf("Insufficient information to import %q, missing fields %s\n", cc.Address, strings.Join(iie.MissingFields, ","))
+
+			msg := fmt.Sprintf("%v (insufficient information)", cc.Address)
+			if runArgs.Verbose {
+				msg = fmt.Sprintf("%v ; insufficient information; full error: %v", cc.Address, err)
+			}
+			failures = append(failures, msg)
 
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
-			log.Printf("Import not supported by provider for resource %q\n", ir.Change.Address)
+			log.Printf("Import not supported by provider for resource %q\n", cc.Address)
 		case DoesNotExist(output):
-			log.Printf("Resource %q does not exist, not importing\n", ir.Change.Address)
+			log.Printf("Resource %q does not exist, not importing\n", cc.Address)
 
 		// Important to handle this last.
 		default:
-			errMsg := fmt.Sprintf("failed to import %q: %v\n%v", ir.Change.Address, err, output)
-			errs = append(errs, errMsg)
-			log.Printf("Skipping: %v\n", errMsg)
+			log.Printf("Failed to import %q\n", cc.Address)
+
+			msg := fmt.Sprintf("%v (error while running terraform import)", cc.Address)
+			if runArgs.Verbose {
+				msg = fmt.Sprintf("%v ; full error: %v\n%v", cc.Address, err, output)
+			}
+			failures = append(failures, msg)
 		}
 	}
 
@@ -664,7 +769,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 		if len(importCmds) > 0 {
 			log.Printf("Import commands:")
 			fmt.Printf("cd %v\n", runArgs.InputDir)
-			fmt.Printf("%v\n", strings.Join(importCmds, "\n"))
+			fmt.Printf("%v\n", strings.Join(importCmds, ""))
 		}
 
 		if len(notImportableMsgs) > 0 {
@@ -672,30 +777,12 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs) (retry bool, er
 			fmt.Printf("%v\n", strings.Join(notImportableMsgs, ""))
 		}
 
-		return false, nil
+		return nil, nil
 	}
 
-	if len(skipped) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
-		// Don't treat manual skips as errors.
-		log.Printf("skipped %d resources:\n%v", len(skipped), strings.Join(skipped, "\n"))
-		return false, nil
+	if len(failures) > 0 {
+		return successes, &importError{failures}
 	}
 
-	if len(errs) > 0 {
-		if importedSomething {
-			// Time to retry. Some resources imported successfully, but others didn't.
-			return true, nil
-		}
-		return false, fmt.Errorf("failed to import %v resources:\n%v", len(errs), strings.Join(errs, "\n"))
-	}
-
-	if !importedSomething {
-		log.Printf("No resources imported.")
-	}
-
-	return false, nil
+	return successes, nil
 }

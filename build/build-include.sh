@@ -54,7 +54,7 @@ function build_binaries() {
         bin_name="$(basename ${build_dir})"
         bin="${bin_name}_${VERSION}_${OS}-${ARCH}"
         echo "Building ${OUTPUT_DIR}/${bin}"
-        env GOOS="${OS}" GOARCH="${ARCH}" go build -ldflags="-X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=${VERSION}' -X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.BuildTime=${BUILD_TIME}'" -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
+        env CGO_ENABLED=0 GOOS="${OS}" GOARCH="${ARCH}" go build -ldflags="-extldflags '-static' -X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.Version=${VERSION}' -X 'github.com/GoogleCloudPlatform/healthcare-data-protection-suite/cmd.BuildTime=${BUILD_TIME}'" -o "${OUTPUT_DIR}/${bin}" "${build_dir}"
       done
     done
   done

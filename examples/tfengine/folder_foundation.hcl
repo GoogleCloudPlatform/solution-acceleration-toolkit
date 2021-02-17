@@ -68,9 +68,6 @@ template "groups" {
           owners = [
             "user1@example.com"
           ]
-          members = [
-            "user2@example.com"
-          ]
         },
         {
           id = "example-cicd-viewers@example.com"

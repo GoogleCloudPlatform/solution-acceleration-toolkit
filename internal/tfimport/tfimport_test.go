@@ -74,7 +74,7 @@ func TestImportable(t *testing.T) {
 		},
 	}
 	for _, tc := range tests {
-		got, ok := Importable(tc.rc, tc.pcv)
+		got, ok := Importable(tc.rc, tc.pcv, false)
 
 		// If we want nil, we should get nil.
 		// If we don't want nil, then the address and importer should match.

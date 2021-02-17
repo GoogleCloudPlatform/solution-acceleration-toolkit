@@ -170,6 +170,13 @@ GitHub repo owner.
 
 Type: string
 
+### grant_automation_billing_user_role
+
+Whether or not to grant automation service account the billing.user role.
+Default to true.
+
+Type: boolean
+
 ### project_id
 
 ID of project to deploy CICD in.

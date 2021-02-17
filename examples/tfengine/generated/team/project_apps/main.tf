@@ -168,7 +168,7 @@ module "instance" {
 
 module "example_domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.0.0"
+  version = "~> 3.1.0"
 
   name       = "example-domain"
   project_id = module.project.project_id
@@ -196,11 +196,8 @@ provider "kubernetes" {
 }
 
 module "gke_cluster" {
-  # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/695):
-  # Pin to stable version once released.
-  # source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  # version = "~> 13.0.0"
-  source = "github.com/terraform-google-modules/terraform-google-kubernetes-engine//modules/safer-cluster-update-variant?ref=81b0a9491d51546eedc6c1aabd368dc085c16b5e"
+  source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
+  version = "~> 13.0.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
@@ -254,7 +251,7 @@ module "project_iam_members" {
 
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.7.0"
+  version = "~> 1.8.0"
 
   topic      = "foo-topic"
   project_id = module.project.project_id
