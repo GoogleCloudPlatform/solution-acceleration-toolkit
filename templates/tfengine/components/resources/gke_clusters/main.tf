@@ -37,16 +37,9 @@ module "{{resourceName . "name"}}" {
   # Required.
   name                   = "{{.name}}"
   project_id             = module.project.project_id
-  {{- if get $ "use_constants"}}
-  region                 = local.constants.gke_region
-  {{- else}}
   region                 = "{{get . "gke_region" (get $ "gke_region")}}"
-  {{- end}}
   regional               = true
   {{hclField . "network_project_id"}}
-  {{- if has . "network_project_suffix"}}
-  network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}"
-  {{- end}}
   network                = "{{.network}}"
   subnetwork             = "{{.subnet}}"
   ip_range_pods          = "{{.ip_range_pods_name}}"

@@ -25,14 +25,6 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.1.0"
 
-  {{- if get . "use_constants"}}
-
-  name            = "${local.constants.project_prefix}-${local.constants.env_code}-{{.name_suffix}}"
-  org_id          = ""
-  folder_id       = local.constants.folder_id
-  billing_account = local.constants.billing_account
-  {{- else}}
-
   name            = "{{.project_id}}"
   {{- if eq .parent_type "organization"}}
   org_id          = "{{.parent_id}}"
@@ -41,7 +33,6 @@ module "project" {
   folder_id       = "{{.parent_id}}"
   {{- end}}
   billing_account = "{{.billing_account}}"
-  {{- end}}
   lien            = {{get . "enable_lien" true}}
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
@@ -57,17 +48,6 @@ module "project" {
   {{- end}}
 
   {{- if has . "shared_vpc_attachment"}}
-  {{- if get . "use_constants"}}
-  {{$host := printf "${local.constants.project_prefix}-${local.constants.env_code}-%s" .shared_vpc_attachment.host_project_suffix}}
-  svpc_host_project_id = "{{$host}}"
-  {{- if has . "shared_vpc_attachment.subnets"}}
-  shared_vpc_subnets = [
-    {{- range get . "shared_vpc_attachment.subnets"}}
-    "projects/{{$host}}/regions/${local.constants.compute_region}/subnetworks/{{.name}}",
-    {{- end}}
-  ]
-  {{- end}}
-  {{- else}}
   {{$host := get .shared_vpc_attachment "host_project_id"}}
   svpc_host_project_id = "{{$host}}"
   {{- if has . "shared_vpc_attachment.subnets"}}
@@ -77,7 +57,6 @@ module "project" {
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
   ]
-  {{- end}}
   {{- end}}
   {{- end}}
   activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}

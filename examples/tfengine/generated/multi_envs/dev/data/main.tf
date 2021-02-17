@@ -54,11 +54,10 @@ module "project" {
   activate_apis                      = ["compute.googleapis.com"]
 }
 
-
-
 module "example_bucket_dev" {
-  source     = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version    = "~> 1.4"
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 1.4"
+
   name       = "example-bucket-dev"
   project_id = module.project.project_id
   location   = "us-central1"

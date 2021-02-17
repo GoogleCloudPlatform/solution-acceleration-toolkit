@@ -61,18 +61,7 @@ Type: string
 ### bastion_hosts.network_project_id
 
 Name of network project.
-Only applicable if `use_constants` is false.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
-
-Type: string
-
-### bastion_hosts.network_project_suffix
-
-Suffix of network project.
-Only applicable if `use_constants` is true.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
+If  unset, the current project will be used.
 
 Type: string
 
@@ -222,18 +211,7 @@ Type: string
 ### cloud_sql_instances.network_project_id
 
 Name of network project.
-Only applicable if `use_constants` is false.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
-
-Type: string
-
-### cloud_sql_instances.network_project_suffix
-
-Suffix of network project.
-Only applicable if `use_constants` is true.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
+If unset, the current project will be used.
 
 Type: string
 
@@ -362,18 +340,7 @@ Type: string
 ### compute_instance_templates.network_project_id
 
 Name of network project.
-Only applicable if `use_constants` is false.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
-
-Type: string
-
-### compute_instance_templates.network_project_suffix
-
-Suffix of network project.
-Only applicable if `use_constants` is true.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
+If unset, the current project will be used.
 
 Type: string
 
@@ -689,18 +656,7 @@ Type: string
 ### gke_clusters.network_project_id
 
 Name of network project.
-Only applicable if `use_constants` is false.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
-
-Type: string
-
-### gke_clusters.network_project_suffix
-
-Suffix of network project.
-Only applicable if `use_constants` is true.
-If both `network_project_id` and `network_project_suffix` are unset,
-the current project will be used.
+If unset, the current project will be used.
 
 Type: string
 

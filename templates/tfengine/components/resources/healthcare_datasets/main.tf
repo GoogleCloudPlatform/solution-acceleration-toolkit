@@ -19,11 +19,7 @@ module "{{resourceName . "name"}}" {
 
   name     = "{{.name}}"
   project  = module.project.project_id
-  {{- if get $ "use_constants"}}
-  location = local.constants.healthcare_location
-  {{- else}}
   location = "{{get . "healthcare_location" $.healthcare_location}}"
-  {{- end}}
 
   {{hclField . "iam_members" -}}
 
