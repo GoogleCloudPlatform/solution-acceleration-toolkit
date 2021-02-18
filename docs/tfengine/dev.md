@@ -2,7 +2,7 @@
 
 ## New Resource
 
-1. Verify the resource does not already exist in the resources
+1. Verify if the resource already exists in the resources
   [list](./schemas/resources.md).
 
 1. If it does not exist, add a new
@@ -14,7 +14,13 @@
 
 1. When implementing the template, prefer to use
   [Cloud Foundation Toolkit](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/blob/master/docs/terraform.md)
-  modules. If none is available, use a resource directly from the
+  modules.
+
+  If none is available, consider writing a new CFT module if you
+  anticipate it would be useful to the community (or file a
+  [feature request](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/issues)).
+
+  If a module would not add much value, use a resource directly from the
   [Terraform Google Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs).
 
 1. Add the resource in [resources recipe](../../templates/tfengine/recipes/resources.hcl).
@@ -24,7 +30,8 @@
 1. Regenerate docs and examples by running `scripts/regen.sh` from the root repo
   dir.
 
-1. Run `go test ./...` from root repo dir to verify resource works as intended.
+1. Run `go test ./...` from root repo dir to verify the resource works as
+  intended.
 
 ## New Field
 
@@ -44,4 +51,5 @@ This should be done if the resource already exists.
 1. Regenerate docs and examples by running `scripts/regen.sh` from the root repo
   dir.
 
-1. Run `go test ./...` from root repo dir to verify resource works as intended.
+1. Run `go test ./...` from root repo dir to verify the resource works as
+  intended.
