@@ -18,8 +18,6 @@ limitations under the License. */ -}}
 {{$network_project_id :=  "${module.project.project_id}" -}}
 {{if has . "network_project_id" -}}
   {{$network_project_id = .network_project_id -}}
-{{else if has . "network_project_suffix" -}}
-  {{$network_project_id = "${local.constants.project_prefix}-${local.constants.env_code}-{{.network_project_suffix}}" -}}
 {{end -}}
 
 {{$subnet := .subnet -}}

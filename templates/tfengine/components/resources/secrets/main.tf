@@ -22,19 +22,10 @@ resource "google_secret_manager_secret" "{{$resource_name}}" {
 
   replication {
     user_managed {
-      {{- if get $ "use_constants"}}
-      dynamic "replicas" {
-        for_each = toset(local.constants.secret_locations)
-        content {
-          location = replicas.value
-        }
-      }
-      {{- else}}
       {{- range get . "secret_locations" $.secret_locations}}
       replicas {
         location = "{{.}}"
       }
-      {{- end}}
       {{- end}}
     }
   }

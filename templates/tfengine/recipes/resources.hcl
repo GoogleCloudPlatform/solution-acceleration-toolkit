@@ -52,21 +52,10 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              Only applicable if `use_constants` is false.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
+              If unset, the current project will be used.
             EOF
             type        = "string"
             pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
-          }
-          network_project_suffix = {
-            description = <<EOF
-              Suffix of network project.
-              Only applicable if `use_constants` is true.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
-            EOF
-            type        = "string"
           }
           network = {
             description = "Name of the bastion host's network."
@@ -252,21 +241,10 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              Only applicable if `use_constants` is false.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
+              If unset, the current project will be used.
             EOF
             type        = "string"
             pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
-          }
-          network_project_suffix = {
-            description = <<EOF
-              Suffix of network project.
-              Only applicable if `use_constants` is true.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
-            EOF
-            type        = "string"
           }
           network = {
             description = "Name of the network."
@@ -325,21 +303,10 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              Only applicable if `use_constants` is false.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
+              If unset, the current project will be used.
             EOF
             type        = "string"
             pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
-          }
-          network_project_suffix = {
-            description = <<EOF
-              Suffix of network project.
-              Only applicable if `use_constants` is true.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
-            EOF
-            type        = "string"
           }
           subnet = {
             description = "Name of the the instance template's subnet."
@@ -713,21 +680,10 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              Only applicable if `use_constants` is false.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
+              If unset, the current project will be used.
             EOF
             type        = "string"
             pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
-          }
-          network_project_suffix = {
-            description = <<EOF
-              Suffix of network project.
-              Only applicable if `use_constants` is true.
-              If both `network_project_id` and `network_project_suffix` are unset,
-              the current project will be used.
-            EOF
-            type        = "string"
           }
           network = {
             description = "Name of the GKE cluster's network."
