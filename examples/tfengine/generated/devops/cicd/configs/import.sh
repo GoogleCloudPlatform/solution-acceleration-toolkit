@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+set -e
 
 DIRS=()
 
@@ -23,7 +23,7 @@ do
   case $c in
     d) DIRS="${OPTARG}" ;;
     *)
-      echo "Invalid flag ${OPTARG}"
+      echo "Usage: import.sh -d=\"dir1 dir2 ...\""
       exit 1
       ;;
   esac
@@ -33,13 +33,13 @@ ROOT=$(realpath .)
 # Read DIRS from a space-separated string to list
 IFS=' ' read -r -a DIRS <<< "${DIRS}"
 
-VERSION=v0.7.0
+VERSION=v0.8.0
 wget -q -O ${ROOT}/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
 chmod +x ${ROOT}/tfimport
 
 for mod in "${DIRS[@]}"
 do
-  ${ROOT}/tfimport --input_dir "${ROOT}"/"${mod}" --resource_types 'google_project' --resource_types 'google_project_service' --interactive false || true
+  ${ROOT}/tfimport --input_dir="${ROOT}"/"${mod}" --resource_types='google_project' --resource_types='google_project_service' --interactive=false || true
 done
 
 rm -f ${ROOT}/tfimport

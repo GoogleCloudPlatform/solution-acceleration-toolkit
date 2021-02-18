@@ -38,13 +38,13 @@ to detect changes in the repo, trigger builds, and run the workloads.
 
     1. Make sure output directories which contain the groups resources are
         included in the `managed_dirs` list in the `cicd` template.
-    1. Grant **Google Workspace Group Admin** role to the CICD service account
+    1. Grant **Google Workspace Group Editor** role to the CICD service account
         `<devops-project-number>@cloudbuild.gserviceaccount.com` by following
         the following steps:
 
         1. Go to Google Admin console's Admin roles configuration page
             <https://admin.google.com/u/1/ac/roles>
-        1. Click `Groups Admin`;
+        1. Click `Groups Editor`;
         1. Click `Admins assigned`;
         1. Click `Assign service accounts` and input the CICD service account
             email address.
