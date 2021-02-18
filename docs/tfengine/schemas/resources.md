@@ -411,7 +411,8 @@ Type: string
 
 ### compute_instance_templates.tags
 
-Tags for the instance template.
+[Network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags)
+for the instance template."
 
 Type: array(string)
 

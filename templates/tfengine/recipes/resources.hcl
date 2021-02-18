@@ -370,7 +370,10 @@ schema = {
             type        = "boolean"
           }
           tags = {
-            description = "Tags for the instance template."
+            description = <<EOF
+              [Network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags)
+              for the instance template."
+            EOF
             type        = "array"
             items = {
               type = "string"
