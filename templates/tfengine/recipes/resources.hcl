@@ -52,7 +52,7 @@ schema = {
           network_project_id = {
             description = <<EOF
               Name of network project.
-              If  unset, the current project will be used.
+              If unset, the current project will be used.
             EOF
             type        = "string"
             pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"

@@ -61,7 +61,7 @@ Type: string
 ### bastion_hosts.network_project_id
 
 Name of network project.
-If  unset, the current project will be used.
+If unset, the current project will be used.
 
 Type: string
 
