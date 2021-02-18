@@ -336,6 +336,16 @@ schema = {
             description = "Whether the instance template can be preempted. Defaults to false."
             type        = "boolean"
           }
+          tags = {
+            description = <<EOF
+              [Network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags)
+              for the instance template."
+            EOF
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
           enable_shielded_vm = {
             description = "Whether to enable shielded VM. Defaults to true."
             type        = "boolean"

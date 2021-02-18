@@ -35,6 +35,7 @@ module "{{$template_resource_name}}" {
   {{hclField . "disk_size_gb" -}}
   {{hclField . "disk_type" -}}
   {{hclField . "preemptible" -}}
+  {{hclField . "tags" -}}
 
   {{if has . "image_family" -}}
   source_image_family = "{{.image_family}}"

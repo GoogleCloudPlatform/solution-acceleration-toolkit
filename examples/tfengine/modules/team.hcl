@@ -381,6 +381,12 @@ template "project_apps" {
         service_account    = "$${google_service_account.example_sa.email}"
         image_family       = "ubuntu-2004-lts"
         image_project      = "ubuntu-os-cloud"
+        labels = {
+          type = "no-phi"
+        }
+        tags = [
+          "service",
+        ]
         instances = [{
           name = "instance"
           access_configs = [{
@@ -388,9 +394,6 @@ template "project_apps" {
             network_tier = "PREMIUM"
           }]
         }]
-        labels = {
-          type = "no-phi"
-        }
       }]
       iam_members = {
         "roles/container.viewer" = ["group:example-apps-viewers@example.com"]
