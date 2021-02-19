@@ -66,7 +66,7 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 		skipDirs := map[string]bool{
 			"cicd":       true,
 			"kubernetes": true,
-			"monitor":    true, // TODO(umairidris): don't skip this dir once we switch off Forseti
+			"monitor":    true,
 			"modules":    true, // modules are called by envs
 		}
 
