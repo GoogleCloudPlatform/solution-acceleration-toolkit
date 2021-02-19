@@ -14,7 +14,6 @@
 
 schema = {
   title                = "Recipe for resources within projects"
-  # additionalProperties = false # TODO(umairidris): add this field back once we trim the number of fields being set here in app.hcl
   properties = {
     state_bucket = {
       description = "Bucket to store remote state."
