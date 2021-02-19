@@ -139,7 +139,6 @@ func FlattenData(src map[string]interface{}, fis []*FlattenInfo) (map[string]int
 				return nil, fmt.Errorf("flatten key %q not found in data: %v", fi.Key, src)
 			}
 		}
-		// TODO(umairidris): Support deleting multi level key
 		delete(src, fi.Key)
 
 		// If index is set assume value is a list and the index is being flattened.
