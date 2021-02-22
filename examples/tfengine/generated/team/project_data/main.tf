@@ -224,6 +224,10 @@ module "example_prod_bucket" {
       }
     }
   ]
+  retention_policy = {
+    is_locked        = false
+    retention_period = 86400
+  }
   iam_members = [
     {
       member = "group:example-data-viewers@example.com"

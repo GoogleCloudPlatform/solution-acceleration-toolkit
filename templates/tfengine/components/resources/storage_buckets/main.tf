@@ -49,6 +49,13 @@ module "{{resourceName . "name"}}" {
   ]
   {{end -}}
 
+  {{if has . "retention_policy" -}}
+  retention_policy = {
+    is_locked        = {{.retention_policy.is_locked}}
+    retention_period = {{.retention_policy.retention_period}}
+  }
+  {{end -}}
+
   {{hclField . "iam_members" -}}
 }
 {{end -}}
