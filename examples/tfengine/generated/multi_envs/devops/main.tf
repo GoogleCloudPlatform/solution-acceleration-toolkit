@@ -39,7 +39,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.1.0"
+  version = "~> 10.1.1"
 
   name            = "example-devops"
   org_id          = ""
