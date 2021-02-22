@@ -39,7 +39,11 @@ chmod +x ${ROOT}/tfimport
 
 for mod in "${DIRS[@]}"
 do
-  ${ROOT}/tfimport --input_dir="${ROOT}"/"${mod}" --resource_types='google_project' --resource_types='google_project_service' --interactive=false || true
+  ${ROOT}/tfimport --input_dir="${ROOT}"/"${mod}" \
+    --resource_types='google_project' \
+    --resource_types='google_project_service' \
+    --resource_types='google_service_account' \
+    --interactive=false || true
 done
 
 rm -f ${ROOT}/tfimport
