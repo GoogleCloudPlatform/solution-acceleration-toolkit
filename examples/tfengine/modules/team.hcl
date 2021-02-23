@@ -304,7 +304,6 @@ EOF
           }
         }]
         retention_policy = {
-          is_locked        = false
           retention_period = 86400 # 1 day.
         }
         iam_members = [{

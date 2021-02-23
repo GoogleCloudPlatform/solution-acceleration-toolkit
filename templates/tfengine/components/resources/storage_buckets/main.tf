@@ -51,7 +51,7 @@ module "{{resourceName . "name"}}" {
 
   {{if has . "retention_policy" -}}
   retention_policy = {
-    is_locked        = {{.retention_policy.is_locked}}
+    is_locked        = {{get . "retention_policy.is_locked" false}}
     retention_period = {{.retention_policy.retention_period}}
   }
   {{end -}}

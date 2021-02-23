@@ -1235,9 +1235,11 @@ Type: object
 
 ### storage_buckets.retention_policy.is_locked
 
-If set to true, the bucket will be locked and permanently
-restrict edits to the bucket's retention policy.
-Caution: Locking a bucket is an irreversible action.
+If set to true, the bucket will be
+[locked](https://cloud.google.com/storage/docs/bucket-lock#overview)
+and permanently restrict edits to the bucket's retention
+policy. Caution: Locking a bucket is an irreversible action.
+Defaults to false.
 
 Type: boolean
 
