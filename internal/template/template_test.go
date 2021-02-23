@@ -224,3 +224,20 @@ func TestWriteBufferErr(t *testing.T) {
 func intPointer(i int) *int {
 	return &i
 }
+
+func TestMakeSlice(t *testing.T) {
+	tests := []struct {
+		inputs, want []interface{}
+	}{
+		{
+			inputs: []interface{}{"a", "b", "c"},
+			want: []interface{}{"a", "b", "c"},
+		},
+	}
+	for _, tc := range tests {
+		got := makeSlice(tc.inputs...)
+		if diff := cmp.Diff(tc.want, got); diff != "" {
+			t.Errorf("makeSlice result differs (-want +got):\n%v", diff)
+		}
+	}
+}

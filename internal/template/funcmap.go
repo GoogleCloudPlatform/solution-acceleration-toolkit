@@ -34,6 +34,7 @@ var funcMap = map[string]interface{}{
 	"now":             time.Now,
 	"trimSpace":       strings.TrimSpace,
 	"regexReplaceAll": regexReplaceAll,
+	"makeSlice":       makeSlice,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -138,4 +139,9 @@ func regexReplaceAll(regex string, s string, repl string) (string, error) {
 		return "", err
 	}
 	return r.ReplaceAllString(s, repl), nil
+}
+
+// makeSlice combines the arguments into an array and returns the array.
+func makeSlice(args ...interface{}) []interface{} {
+	return args
 }
