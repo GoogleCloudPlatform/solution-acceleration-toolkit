@@ -303,6 +303,9 @@ EOF
             with_state = "ANY"
           }
         }]
+        retention_policy = {
+          retention_period = 86400 # 1 day.
+        }
         iam_members = [{
           role   = "roles/storage.objectViewer"
           member = "group:example-data-viewers@example.com"

@@ -1284,6 +1284,33 @@ schema = {
               }
             }
           }
+          retention_policy = {
+            description = <<EOF
+              Configuration of the bucket's data retention policy for how long
+              objects in the bucket should be retained.
+            EOF
+            type        = "object"
+            properties = {
+              is_locked = {
+                description = <<EOF
+                  If set to true, the bucket will be
+                  [locked](https://cloud.google.com/storage/docs/bucket-lock#overview)
+                  and permanently restrict edits to the bucket's retention
+                  policy. Caution: Locking a bucket is an irreversible action.
+                  Defaults to false.
+                EOF
+                type = "boolean"
+              }
+              retention_period = {
+                description = <<EOF
+                  The period of time, in seconds, that objects in the bucket
+                  must be retained and cannot be deleted, overwritten, or
+                  archived. The value must be less than 2,147,483,647 seconds.
+                EOF
+                type        = "number"
+              }
+            }
+          }
           iam_members = {
             description = "IAM member to grant access for."
             type        = "array"

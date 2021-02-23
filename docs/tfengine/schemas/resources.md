@@ -1226,6 +1226,31 @@ Normalization will make all characters alphanumeric with underscores.
 
 Type: string
 
+### storage_buckets.retention_policy
+
+Configuration of the bucket's data retention policy for how long
+objects in the bucket should be retained.
+
+Type: object
+
+### storage_buckets.retention_policy.is_locked
+
+If set to true, the bucket will be
+[locked](https://cloud.google.com/storage/docs/bucket-lock#overview)
+and permanently restrict edits to the bucket's retention
+policy. Caution: Locking a bucket is an irreversible action.
+Defaults to false.
+
+Type: boolean
+
+### storage_buckets.retention_policy.retention_period
+
+The period of time, in seconds, that objects in the bucket
+must be retained and cannot be deleted, overwritten, or
+archived. The value must be less than 2,147,483,647 seconds.
+
+Type: number
+
 ### storage_buckets.storage_location
 
 Location to create the storage bucket. Can be defined in global data block.
