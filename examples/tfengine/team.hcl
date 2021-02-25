@@ -158,7 +158,6 @@ template "cicd" {
         }
         # Kubernetes intentionally left out as it cannot be deployed by CICD.
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "project_secrets",
           "project_networks",
           "project_data",

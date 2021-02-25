@@ -130,7 +130,6 @@ template "cicd" {
           apply = {}
         }
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "groups",
           "audit",
           "folders",

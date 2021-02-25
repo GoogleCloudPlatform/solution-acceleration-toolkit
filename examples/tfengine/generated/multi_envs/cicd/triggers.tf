@@ -33,7 +33,7 @@ resource "google_cloudbuild_trigger" "validate_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [
@@ -61,7 +61,7 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [
@@ -89,7 +89,7 @@ resource "google_cloudbuild_trigger" "apply_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [

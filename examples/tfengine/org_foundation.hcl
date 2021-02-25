@@ -110,7 +110,6 @@ template "cicd" {
           apply    = { run_on_push = false } # Do not auto run on push to branch
         }
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "groups",
           "audit",
           "example-prod-networks",

@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit example-prod-networks monitor org_policies folders"
+    _MANAGED_DIRS   = "groups audit example-prod-networks monitor org_policies folders"
   }
 
   depends_on = [
@@ -66,7 +66,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit example-prod-networks monitor org_policies folders"
+    _MANAGED_DIRS   = "groups audit example-prod-networks monitor org_policies folders"
   }
 
   depends_on = [
@@ -97,7 +97,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit example-prod-networks monitor org_policies folders"
+    _MANAGED_DIRS   = "groups audit example-prod-networks monitor org_policies folders"
   }
 
   depends_on = [
