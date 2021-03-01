@@ -118,7 +118,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "example_instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.0.0"
+  version = "~> 6.1.0"
 
   name_prefix        = "example-instance-template"
   project_id         = module.project.project_id
@@ -151,7 +151,7 @@ module "example_instance_template" {
 
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.0.0"
+  version = "~> 6.1.0"
 
   hostname           = "instance"
   instance_template  = module.example_instance_template.self_link
@@ -199,7 +199,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.0.0"
+  version = "~> 13.1.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
@@ -253,7 +253,7 @@ module "project_iam_members" {
 
 module "foo_topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.8.0"
+  version = "~> 1.9.0"
 
   topic      = "foo-topic"
   project_id = module.project.project_id

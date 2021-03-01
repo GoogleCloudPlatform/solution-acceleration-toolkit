@@ -82,7 +82,7 @@ module "one_billion_ms_example_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.4.0"
+  version = "~> 4.5.0"
 
   name              = "sql-instance"
   project_id        = module.project.project_id
@@ -101,7 +101,7 @@ module "sql_instance" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.2.1"
+  version = "~> 1.3.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id

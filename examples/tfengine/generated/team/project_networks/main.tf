@@ -87,7 +87,7 @@ EOF
 
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 3.0.0"
+  version = "~> 3.1.0"
 
   network_name = "network"
   project_id   = module.project.project_id
@@ -130,7 +130,7 @@ module "network" {
 }
 module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.4.0"
+  version = "~> 4.5.0"
 
   project_id  = module.project.project_id
   vpc_network = module.network.network_name
