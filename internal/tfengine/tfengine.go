@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -37,9 +38,10 @@ import (
 
 // Options is the options for tfengine execution.
 type Options struct {
-	Format      bool
-	AddLicenses bool
-	CacheDir    string
+	Format        bool
+	AddLicenses   bool
+	CacheDir      string
+	ShowUnmanaged bool
 
 	// Leave empty to generate all templates.
 	WantedTemplates map[string]bool
@@ -95,6 +97,12 @@ func Run(confPath, outPath string, opts *Options) error {
 	if opts.Format {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			errs = append(errs, fmt.Sprintf("format output dir: %v", err))
+		}
+	}
+
+	if opts.ShowUnmanaged {
+		if err := showUnmanaged(tmpDir, outPath); err != nil {
+			errs = append(errs, err.Error())
 		}
 	}
 
@@ -268,6 +276,42 @@ func ConvertToLocalBackend(path string) error {
 
 	if err := filepath.Walk(path, fn); err != nil {
 		return fmt.Errorf("walk %qs: %v", path, err)
+	}
+
+	return nil
+}
+
+// showUnmanaged walks both directories and shows all files in the output
+// directory which aren't in the generated files directory.
+func showUnmanaged(generatedDir, outputDir string) error {
+	managed := make(map[string]bool)
+
+	mkFn := func(addToManaged bool, prefix string) func(path string, info os.FileInfo, err error) error {
+		prefix = filepath.Clean(prefix)
+		return func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return fmt.Errorf("walk path %q: %v", path, err)
+			}
+
+			trimmedPath := strings.TrimPrefix(filepath.Clean(path), prefix)
+			if addToManaged {
+				managed[trimmedPath] = true
+			} else if _, ok := managed[trimmedPath]; !ok {
+				log.Printf("WARNING: Unmanaged file in output directory %v: %v\n", outputDir, trimmedPath)
+			}
+
+			return nil
+		}
+	}
+
+	// Walk the generate files to determine which files are managed.
+	if err := filepath.Walk(generatedDir, mkFn(true, generatedDir)); err != nil {
+		return fmt.Errorf("walk %qs: %v", generatedDir, err)
+	}
+
+	// Walk the output dir to find extra files.
+	if err := filepath.Walk(outputDir, mkFn(false, outputDir)); err != nil {
+		return fmt.Errorf("walk %qs: %v", outputDir, err)
 	}
 
 	return nil
