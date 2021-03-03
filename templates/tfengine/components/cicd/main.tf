@@ -26,7 +26,7 @@
 {{- $hasScheduledJobs := false}}
 {{- $hasApplyJobs := false}}
 {{- range .envs}}
-  {{- if or (has .triggers.validate "run_on_schedule") (has .triggers.plan "run_on_schedule") (has .triggers.apply "run_on_schedule")}}
+  {{- if or (has .triggers "validate.run_on_schedule") (has .triggers "plan.run_on_schedule") (has .triggers "apply.run_on_schedule")}}
     {{- $hasScheduledJobs = true}}
   {{- end}}
   {{- if has .triggers "apply"}}
