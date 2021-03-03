@@ -120,21 +120,13 @@ template "cicd" {
     build_editors = ["group:example-cicd-editors@example.com"]
 
     terraform_root = "terraform"
-
-    # IMPORTANT: Cloud Source Repositories does not support code review or
-    #   presubmit runs. If we set both plan and apply to run at the same time,
-    #   they will conflict when trying to acquire the lock and may error out.
-    #   To get around this, below we only auto-apply for non-prod envs,
-    #   and only plan for the prod env.
     envs = [
       {
         name        = "shared"
         branch_name = "shared"
         triggers = {
           validate = {}
-          plan = {
-            run_on_push = false # Do not auto run on push to CSR non-prod branch
-          }
+          plan = {}
           apply = {}
         }
         managed_dirs = [
@@ -148,9 +140,7 @@ template "cicd" {
         branch_name = "dev"
         triggers = {
           validate = {}
-          plan = {
-            run_on_push = false # Do not auto run on push to CSR non-prod branch
-          }
+          plan = {}
           apply = {}
         }
         managed_dirs = [
