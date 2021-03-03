@@ -20,7 +20,14 @@ Type: array(string)
 
 ### cloud_source_repository
 
-Config for Google Cloud Source Repository Cloud Build triggers.
+Config for Google Cloud Source Repository.
+
+IMPORTANT: Cloud Source Repositories does not support code review or
+presubmit runs. If you set both plan and apply to run at the same time,
+they will conflict and may error out. To get around this, for 'shared'
+and 'prod' environment, set 'apply' trigger to not 'run_on_push',
+and for other environments, do not specify the 'plan' trigger block
+and let 'apply' trigger 'run_on_push'.
 
 Type: object
 
