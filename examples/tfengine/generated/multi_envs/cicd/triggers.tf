@@ -129,35 +129,6 @@ resource "google_cloudbuild_trigger" "validate_dev" {
   ]
 }
 
-resource "google_cloudbuild_trigger" "plan_dev" {
-  disabled    = true
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-plan-dev"
-  description = "Terraform plan job triggered on push event."
-
-  included_files = [
-    "terraform/**",
-  ]
-
-  trigger_template {
-    repo_name   = "example"
-    branch_name = "^dev$"
-  }
-
-  filename = "terraform/cicd/configs/tf-plan.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "dev/data"
-  }
-
-  depends_on = [
-    google_project_service.services,
-    google_sourcerepo_repository.configs,
-  ]
-}
-
 resource "google_cloudbuild_trigger" "apply_dev" {
   provider    = google-beta
   project     = var.project_id

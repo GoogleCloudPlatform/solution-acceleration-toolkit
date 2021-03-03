@@ -135,7 +135,7 @@ template "cicd" {
           validate = {}
           plan = {}
           apply = {
-            run_on_push = false # Do not auto run on push to CSR non-prod branch
+            run_on_push = false # Do not 'apply' trigger on push to CSR 'shared' branch
           }
         }
         managed_dirs = [
@@ -149,9 +149,6 @@ template "cicd" {
         branch_name = "dev"
         triggers = {
           validate = {}
-          plan = {
-            run_on_push = false # Do not auto run on push to CSR non-prod branch
-          }
           apply = {}
         }
         managed_dirs = [
@@ -165,7 +162,7 @@ template "cicd" {
           validate = {}
           plan = {}
           apply = {
-            run_on_push = false # Do not auto run on push to prod branch
+            run_on_push = false # Do not 'apply' trigger on push to CSR 'prod' branch
           }
         }
         managed_dirs = [
