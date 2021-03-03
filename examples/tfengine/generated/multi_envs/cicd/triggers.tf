@@ -43,7 +43,6 @@ resource "google_cloudbuild_trigger" "validate_shared" {
 }
 
 resource "google_cloudbuild_trigger" "plan_shared" {
-  disabled    = true
   provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-shared"
@@ -72,6 +71,7 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 }
 
 resource "google_cloudbuild_trigger" "apply_shared" {
+  disabled    = true
   provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-shared"
