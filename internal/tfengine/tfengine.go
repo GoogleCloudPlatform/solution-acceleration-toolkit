@@ -319,12 +319,12 @@ func findUnmanaged(generatedDir, outputDir string, deleteFiles bool) error {
 		}
 	}
 
-	// Walk the generate files to determine which files are managed.
+	// Walk the generated dir to find the managed files.
 	if err := filepath.Walk(generatedDir, mkFn(true, generatedDir)); err != nil {
 		return fmt.Errorf("walk %qs: %v", generatedDir, err)
 	}
 
-	// Walk the output dir to find extra files.
+	// Walk the output dir to find the unmanaged files.
 	if err := filepath.Walk(outputDir, mkFn(false, outputDir)); err != nil {
 		return fmt.Errorf("walk %qs: %v", outputDir, err)
 	}
