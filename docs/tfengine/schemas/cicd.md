@@ -22,6 +22,12 @@ Type: array(string)
 
 Config for Google Cloud Source Repository Cloud Build triggers.
 
+IMPORTANT: Cloud Source Repositories does not support code review or
+presubmit runs. If you set both plan and apply to run at the same time,
+they will conflict when trying to acquire the lock and may error out.
+To get around this, you should only auto-apply for non-prod envs,
+and only plan for the prod env.
+
 Type: object
 
 ### cloud_source_repository.name
