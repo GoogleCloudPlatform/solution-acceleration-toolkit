@@ -43,13 +43,12 @@ schema = {
     }
     cloud_source_repository = {
       description          = <<EOF
-        Config for Google Cloud Source Repository Cloud Build triggers.
+        Config for Google Cloud Source Repository.
 
         IMPORTANT: Cloud Source Repositories does not support code review or
         presubmit runs. If you set both plan and apply to run at the same time,
-        they will conflict when trying to acquire the lock and may error out.
-        To get around this, you should only auto-apply for non-prod envs,
-        and only plan for the prod env.
+        they will conflict and may error out. To get around this, you should
+        only auto-apply for non-prod envs, and only plan for the prod env.
       EOF
       type                 = "object"
       additionalProperties = false

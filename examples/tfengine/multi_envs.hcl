@@ -122,10 +122,9 @@ template "cicd" {
     terraform_root = "terraform"
 
     # IMPORTANT: Cloud Source Repositories does not support code review or
-    #   presubmit runs. If we set both plan and apply to run at the same time,
-    #   they will conflict when trying to acquire the lock and may error out.
-    #   To get around this, below we only auto-apply for non-prod envs,
-    #   and only plan for the prod env.
+    # presubmit runs. If we set both plan and apply to run at the same time,
+    # they will conflict and may error out. To get around this, below we only
+    # auto-apply for non-prod envs and only plan for the prod env.
     envs = [
       {
         name        = "shared"
