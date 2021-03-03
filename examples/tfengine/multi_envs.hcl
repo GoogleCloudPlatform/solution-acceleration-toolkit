@@ -123,10 +123,10 @@ template "cicd" {
 
     # IMPORTANT: Cloud Source Repositories does not support code review or
     # presubmit runs. If we set both plan and apply to run at the same time,
-	  # they will conflict and may error out. To get around this, for 'shared'
-	  # and 'prod' environment, set 'apply' trigger to not 'run_on_push',
-	  # and for other environments, do not specify the 'plan' trigger block
-	  # and let 'apply' trigger to 'run_on_push'.
+    # they will conflict and may error out. To get around this, for 'shared'
+    # and 'prod' environment, set 'apply' trigger to not 'run_on_push',
+    # and for other environments, do not specify the 'plan' trigger block
+    # and let 'apply' trigger 'run_on_push'.
     envs = [
       {
         name        = "shared"
@@ -135,7 +135,7 @@ template "cicd" {
           validate = {}
           plan = {}
           apply = {
-            run_on_push = false # Do not 'apply' trigger on push to CSR 'shared' branch
+            run_on_push = false # Do not 'apply' on push to CSR 'shared' branch
           }
         }
         managed_dirs = [
@@ -162,7 +162,7 @@ template "cicd" {
           validate = {}
           plan = {}
           apply = {
-            run_on_push = false # Do not 'apply' trigger on push to CSR 'prod' branch
+            run_on_push = false # Do not 'apply' on push to CSR 'prod' branch
           }
         }
         managed_dirs = [

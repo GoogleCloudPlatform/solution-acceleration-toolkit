@@ -50,7 +50,7 @@ schema = {
         they will conflict and may error out. To get around this, for 'shared'
         and 'prod' environment, set 'apply' trigger to not 'run_on_push',
         and for other environments, do not specify the 'plan' trigger block
-        and let 'apply' trigger to 'run_on_push'.
+        and let 'apply' trigger 'run_on_push'.
       EOF
       type                 = "object"
       additionalProperties = false
