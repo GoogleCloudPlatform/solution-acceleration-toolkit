@@ -100,19 +100,18 @@ func Run(confPath, outPath string, opts *Options) error {
 		}
 	}
 
-	if len(errs) > 0 {
-		return errors.New(strings.Join(errs, "\n"))
-	}
-
 	// Always show unmanaged files but control deletion via flag.
 	if err := findUnmanaged(tmpDir, outPath, opts.DeleteUnmanaged); err != nil {
-		return fmt.Errorf("find unmanaged files: %v", err)
+		errs = append(errs, err.Error())
 	}
 
 	if err := copy.Copy(tmpDir, outPath); err != nil {
-		return fmt.Errorf("copy temp dir to output dir: %v", err)
+		errs = append(errs, fmt.Sprintf("copy temp dir to output dir: %v", err))
 	}
 
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, "\n"))
+	}
 	return nil
 }
 
