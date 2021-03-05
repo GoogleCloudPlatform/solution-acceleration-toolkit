@@ -304,7 +304,7 @@ func findUnmanaged(generatedDir, outputDir string, deleteFiles bool) error {
 			}
 
 			if !deleteFiles {
-				log.Printf("WARNING: Unmanaged file: %v\n", path)
+				log.Printf("INFO: Unmanaged file: %v\n", path)
 				return nil
 			}
 
@@ -313,9 +313,7 @@ func findUnmanaged(generatedDir, outputDir string, deleteFiles bool) error {
 				return err
 			}
 			log.Printf("WARNING: Deleting unmanaged file: %v\n", path)
-			os.RemoveAll(fullPath)
-
-			return nil
+			return os.RemoveAll(fullPath)
 		}
 	}
 
