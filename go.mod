@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/go-version v1.2.1
 	github.com/hashicorp/hcl/v2 v2.9.0
 	github.com/hashicorp/terraform v0.14.7
-	github.com/imdario/mergo v0.3.11
+	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/otiai10/copy v1.5.0
 	github.com/rodaine/hclencoder v0.0.0-20200910194838-aaa140ee61ed
