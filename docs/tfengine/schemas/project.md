@@ -18,6 +18,8 @@ Can be one of 'organization' or 'folder'.
 
 Type: string
 
+Pattern: ^organization|folder$
+
 ### project
 
 Config for the project.
@@ -71,6 +73,8 @@ ID of project to create and/or provision resources in.
 
 Type: string
 
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
+
 ### project.shared_vpc_attachment
 
 If set, treats this project as a shared VPC service project.
@@ -82,6 +86,8 @@ Type: object
 ID of host project to connect this project to.
 
 Type: string
+
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
 
 ### project.shared_vpc_attachment.subnets
 

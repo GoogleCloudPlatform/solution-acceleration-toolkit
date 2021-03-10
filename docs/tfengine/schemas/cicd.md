@@ -190,6 +190,8 @@ ID of project to deploy CICD in.
 
 Type: string
 
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
+
 ### scheduler_region
 
 [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
