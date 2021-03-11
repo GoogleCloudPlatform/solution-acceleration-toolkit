@@ -230,6 +230,9 @@ template "project_apps" {
       }]
       iam_members = {
         "roles/container.viewer" = ["group:{{.prefix}}-apps-viewers@{{.domain}}"]
+        "roles/storage.objectViewer" = [
+          "serviceAccount:$${google_service_account.runner.account_id}@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com",
+        ]
       }
       dns_zones = [{
         name   = "domain"

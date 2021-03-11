@@ -248,6 +248,9 @@ module "project_iam_members" {
     "roles/container.viewer" = [
       "group:example-apps-viewers@example.com",
     ],
+    "roles/storage.objectViewer" = [
+      "serviceAccount:${google_service_account.runner.account_id}@example-prod-apps.iam.gserviceaccount.com",
+    ],
   }
 }
 
