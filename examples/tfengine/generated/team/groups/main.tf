@@ -30,7 +30,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 10.1.1"
 
-  project_id    = "example-devops"
+  project_id    = "example-prod-devops"
   activate_apis = []
 }
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
@@ -98,12 +98,12 @@ module "example_fhir_viewers_example_com" {
   owners       = ["user1@example.com"]
 }
 
-module "bastion_accessors_example_com" {
+module "example_bastion_accessors_example_com" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id           = "bastion-accessors@example.com"
+  id           = "example-bastion-accessors@example.com"
   customer_id  = "c12345678"
-  display_name = "bastion-accessors"
+  display_name = "example-bastion-accessors"
   owners       = ["user1@example.com"]
 }

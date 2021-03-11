@@ -13,5 +13,5 @@
 # limitations under the License.
 
 billing_account = "000-000-000"
-project_id      = "example-devops"
+project_id      = "example-prod-devops"
 state_bucket    = "example-terraform-state"

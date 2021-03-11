@@ -28,7 +28,7 @@ terraform {
 data "google_client_config" "default" {}
 
 data "google_container_cluster" "gke_cluster" {
-  name     = "example-gke-cluster"
+  name     = "gke-cluster"
   location = "us-central1"
   project  = "example-prod-apps"
 }
@@ -42,11 +42,11 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
 }
 
-resource "kubernetes_namespace" "example_namespace" {
+resource "kubernetes_namespace" "namespace" {
   metadata {
-    name = "example-namespace"
+    name = "namespace"
     annotations = {
-      name = "example-namespace"
+      name = "namespace"
     }
   }
 }

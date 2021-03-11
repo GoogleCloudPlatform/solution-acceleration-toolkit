@@ -36,7 +36,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.1.1"
 
-  name            = "example-apps"
+  name            = "example-prod-apps"
   org_id          = ""
   folder_id       = "12345678"
   billing_account = "000-000-000"
@@ -52,7 +52,7 @@ module "project" {
 
   svpc_host_project_id = "example-prod-networks"
   shared_vpc_subnets = [
-    "projects/example-prod-networks/regions/us-central1/subnetworks/example-gke-subnet",
+    "projects/example-prod-networks/regions/us-central1/subnetworks/gke-subnet",
   ]
   activate_apis = [
     "compute.googleapis.com",
@@ -116,21 +116,21 @@ resource "google_binary_authorization_policy" "policy" {
   }
 }
 
-module "example_instance_template" {
+module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
   version = "~> 6.1.0"
 
-  name_prefix        = "example-instance-template"
+  name_prefix        = "instance-template"
   project_id         = module.project.project_id
   region             = "us-central1"
   subnetwork_project = "example-prod-networks"
-  subnetwork         = "example-instance-subnet"
+  subnetwork         = "instance-subnet"
 
   tags                 = ["service"]
   source_image_family  = "ubuntu-2004-lts"
   source_image_project = "ubuntu-os-cloud"
   service_account = {
-    email  = "${google_service_account.example_sa.email}"
+    email  = "${google_service_account.sa.email}"
     scopes = ["cloud-platform"]
   }
 
@@ -154,10 +154,10 @@ module "instance" {
   version = "~> 6.1.0"
 
   hostname           = "instance"
-  instance_template  = module.example_instance_template.self_link
+  instance_template  = module.instance_template.self_link
   region             = "us-central1"
   subnetwork_project = "example-prod-networks"
-  subnetwork         = "example-instance-subnet"
+  subnetwork         = "instance-subnet"
 
   access_config = [
     {
@@ -168,18 +168,18 @@ module "instance" {
 
 }
 
-module "example_domain" {
+module "domain" {
   source  = "terraform-google-modules/cloud-dns/google"
   version = "~> 3.1.0"
 
-  name       = "example-domain"
+  name       = "domain"
   project_id = module.project.project_id
-  domain     = "example-domain.com."
+  domain     = "example.com."
   type       = "public"
 
   recordsets = [
     {
-      name    = "example"
+      name    = "record"
       records = ["142.0.0.0"]
       ttl     = 30
       type    = "A"
@@ -210,17 +210,17 @@ module "gke_cluster" {
   project_id         = module.project.project_id
   region             = "us-central1"
   regional           = true
-  network_project_id = "example-networks"
+  network_project_id = "example-prod-networks"
 
-  network                        = "example-network"
-  subnetwork                     = "example-gke-subnet"
-  ip_range_pods                  = "example-pods-range"
-  ip_range_services              = "example-services-range"
+  network                        = "network"
+  subnetwork                     = "gke-subnet"
+  ip_range_pods                  = "pods-range"
+  ip_range_services              = "services-range"
   master_ipv4_cidr_block         = "192.168.0.0/28"
   skip_provisioners              = true
   enable_private_endpoint        = false
   release_channel                = "STABLE"
-  compute_engine_service_account = "gke@example-prod-apps.iam.gserviceaccount.com"
+  compute_engine_service_account = "${google_service_account.sa.account_id}@example-prod-apps.iam.gserviceaccount.com"
   cluster_resource_labels = {
     env  = "prod"
     type = "no-phi"
@@ -251,11 +251,11 @@ module "project_iam_members" {
   }
 }
 
-module "foo_topic" {
+module "topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 1.9.0"
 
-  topic      = "foo-topic"
+  topic      = "topic"
   project_id = module.project.project_id
 
   topic_labels = {
@@ -278,11 +278,11 @@ module "foo_topic" {
   ]
 }
 
-resource "google_service_account" "example_sa" {
-  account_id   = "example-sa"
-  display_name = "Example Service Account"
+resource "google_service_account" "sa" {
+  account_id   = "sa"
+  display_name = "Service Account"
 
-  description = "Example Service Account"
+  description = "Service Account"
 
   project = module.project.project_id
 }
