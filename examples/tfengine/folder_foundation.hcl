@@ -36,14 +36,14 @@ template "devops" {
     # enable_gcs_backend = true
 
     admins_group = {
-      id = "example-folder-admins@example.com"
+      id     = "example-folder-admins@example.com"
       exists = true
     }
 
     project = {
       project_id = "example-devops"
       owners_group = {
-        id = "example-devops-owners@example.com"
+        id     = "example-devops-owners@example.com"
         exists = true
       }
     }
@@ -63,18 +63,18 @@ template "groups" {
     resources = {
       groups = [
         {
-          id = "example-auditors@example.com"
+          id          = "example-auditors@example.com"
           customer_id = "c12345678"
           owners = [
             "user1@example.com"
           ]
         },
         {
-          id = "example-cicd-viewers@example.com"
+          id          = "example-cicd-viewers@example.com"
           customer_id = "c12345678"
         },
         {
-          id = "example-cicd-editors@example.com"
+          id          = "example-cicd-editors@example.com"
           customer_id = "c12345678"
         },
       ]
@@ -137,8 +137,8 @@ template "audit" {
       sink_name  = "example-bigquery-audit-logs-sink"
     }
     logs_storage_bucket = {
-      name       = "7yr-folder-audit-logs"
-      sink_name  = "example-storage-audit-logs-sink"
+      name      = "7yr-folder-audit-logs"
+      sink_name = "example-storage-audit-logs-sink"
     }
     additional_filters = [
       # Need to escape \ and " to preserve them in the final filter strings.

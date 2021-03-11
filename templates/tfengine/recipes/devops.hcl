@@ -55,14 +55,14 @@ schema = {
           pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
         }
         owners_group = {
-          description = <<EOF
+          description          = <<EOF
             Group which will be given owner access to the project.
             It will be created if 'exists' is false.
             NOTE: By default, the creating user will be the owner of the project.
             However, this group will own the project going forward. Make sure to include
             yourselve in the group,
           EOF
-          type        = "object"
+          type                 = "object"
           additionalProperties = false
           required = [
             "id",
@@ -138,11 +138,11 @@ schema = {
       type        = "string"
     }
     admins_group = {
-      description = <<EOF
+      description          = <<EOF
         Group which will be given admin access to the folder or organization.
         It will be created if 'exists' is false.
       EOF
-      type        = "object"
+      type                 = "object"
       additionalProperties = false
       required = [
         "id",

@@ -32,7 +32,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.1.1"
 
-  name            = "example-networks"
+  name            = "example-prod-networks"
   org_id          = ""
   folder_id       = "12345678"
   billing_account = "000-000-000"
@@ -65,7 +65,7 @@ module "bastion_vm" {
   host_project = module.project.project_id
   network      = module.network.network.network.self_link
   subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
-  members      = ["group:bastion-accessors@example.com"]
+  members      = ["group:example-bastion-accessors@example.com"]
   image_family = "ubuntu-2004-lts"
 
   image_project = "ubuntu-os-cloud"
