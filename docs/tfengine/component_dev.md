@@ -43,8 +43,8 @@ This should be done if the resource already exists.
     [component](../../templates/tfengine/components/resources).
 
     *Note*: If the resource uses a Cloud Foundation Toolkit module, you may need
-    to add the field there first by sending a pull request and then wait for a
-    release.
+    to add the field there first by sending a pull request and then waiting for
+    a release.
 
 1. Update the
     [resource schema](../../templates/tfengine/recipes/resources.hcl).

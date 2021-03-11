@@ -3,7 +3,7 @@
 ## Authentication Errors
 
 1. Use `gcloud auth application-default login` for authentication, Terraform
-    use Google Cloud Application Default Credentials (ADC).
+    uses Google Cloud Application Default Credentials (ADC).
 
 ## GCP Errors
 
