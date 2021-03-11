@@ -130,7 +130,7 @@ module "instance_template" {
   source_image_family  = "ubuntu-2004-lts"
   source_image_project = "ubuntu-os-cloud"
   service_account = {
-    email  = "${google_service_account.sa.email}"
+    email  = "${google_service_account.runner.email}"
     scopes = ["cloud-platform"]
   }
 
@@ -220,7 +220,7 @@ module "gke_cluster" {
   skip_provisioners              = true
   enable_private_endpoint        = false
   release_channel                = "STABLE"
-  compute_engine_service_account = "${google_service_account.sa.account_id}@example-prod-apps.iam.gserviceaccount.com"
+  compute_engine_service_account = "${google_service_account.runner.account_id}@example-prod-apps.iam.gserviceaccount.com"
   cluster_resource_labels = {
     env  = "prod"
     type = "no-phi"
@@ -251,35 +251,8 @@ module "project_iam_members" {
   }
 }
 
-module "topic" {
-  source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.9.0"
-
-  topic      = "topic"
-  project_id = module.project.project_id
-
-  topic_labels = {
-    env  = "prod"
-    type = "no-phi"
-  }
-  pull_subscriptions = [
-    {
-      name = "pull-subscription"
-    },
-  ]
-  push_subscriptions = [
-    {
-      name          = "push-subscription"
-      push_endpoint = "https://example.com"
-    },
-  ]
-  depends_on = [
-    module.project
-  ]
-}
-
-resource "google_service_account" "sa" {
-  account_id   = "sa"
+resource "google_service_account" "runner" {
+  account_id   = "runner"
   display_name = "Service Account"
 
   description = "Service Account"

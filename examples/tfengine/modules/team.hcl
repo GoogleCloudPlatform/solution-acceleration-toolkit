@@ -186,7 +186,7 @@ template "project_apps" {
         ip_range_pods_name     = "pods-range"
         ip_range_services_name = "services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
-        service_account        = "$${google_service_account.sa.account_id}@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        service_account        = "$${google_service_account.runner.account_id}@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
 
         # Set custom node pool to control machine type.
         node_pools = [{
@@ -203,7 +203,7 @@ template "project_apps" {
         }]
       }
       service_accounts = [{
-        account_id   = "sa"
+        account_id   = "runner"
         description  = "Service Account"
         display_name = "Service Account"
       }]
@@ -211,7 +211,7 @@ template "project_apps" {
         name_prefix        = "instance-template"
         network_project_id = "{{.prefix}}-{{.env}}-networks"
         subnet             = "instance-subnet"
-        service_account    = "$${google_service_account.sa.email}"
+        service_account    = "$${google_service_account.runner.email}"
         image_family       = "ubuntu-2004-lts"
         image_project      = "ubuntu-os-cloud"
         labels = {
@@ -243,23 +243,6 @@ template "project_apps" {
             "142.0.0.0",
           ]
         }]
-      }]
-      pubsub_topics = [{
-        name = "topic"
-        labels = {
-          type = "no-phi"
-        }
-        push_subscriptions = [
-          {
-            name          = "push-subscription"
-            push_endpoint = "https://{{.domain}}" // required
-          }
-        ]
-        pull_subscriptions = [
-          {
-            name = "pull-subscription"
-          }
-        ]
       }]
     }
     terraform_addons = {
@@ -414,6 +397,23 @@ EOF
           role   = "roles/storage.objectViewer"
           member = "group:{{.prefix}}-data-viewers@{{.domain}}"
         }]
+      }]
+      pubsub_topics = [{
+        name = "topic"
+        labels = {
+          type = "no-phi"
+        }
+        push_subscriptions = [
+          {
+            name          = "push-subscription"
+            push_endpoint = "https://{{.domain}}" // required
+          }
+        ]
+        pull_subscriptions = [
+          {
+            name = "pull-subscription"
+          }
+        ]
       }]
     }
     terraform_addons = {

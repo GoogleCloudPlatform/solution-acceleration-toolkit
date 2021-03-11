@@ -201,6 +201,33 @@ module "project_iam_members" {
   }
 }
 
+module "topic" {
+  source  = "terraform-google-modules/pubsub/google"
+  version = "~> 1.9.0"
+
+  topic      = "topic"
+  project_id = module.project.project_id
+
+  topic_labels = {
+    env  = "prod"
+    type = "no-phi"
+  }
+  pull_subscriptions = [
+    {
+      name = "pull-subscription"
+    },
+  ]
+  push_subscriptions = [
+    {
+      name          = "push-subscription"
+      push_endpoint = "https://example.com"
+    },
+  ]
+  depends_on = [
+    module.project
+  ]
+}
+
 module "bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
