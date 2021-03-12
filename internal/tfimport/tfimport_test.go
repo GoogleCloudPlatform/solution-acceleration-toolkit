@@ -623,6 +623,14 @@ func TestImportersSanity(t *testing.T) {
 			"folders/my-folder/sinks/my_sink",
 		},
 		{
+			"google_logging_metric",
+			map[string]interface{}{
+				"project": "my-project",
+				"name":    "my-metric",
+			},
+			"my-project my-metric",
+		},
+		{
 			"google_logging_organization_sink",
 			map[string]interface{}{
 				"org_id": "my-org",
