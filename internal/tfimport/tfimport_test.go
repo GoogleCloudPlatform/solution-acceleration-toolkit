@@ -679,6 +679,14 @@ func TestImportersSanity(t *testing.T) {
 			"my-project",
 		},
 		{
+			"google_project_iam_audit_config",
+			map[string]interface{}{
+				"project": "my-project",
+				"service": "allServices",
+			},
+			"my-project allServices",
+		},
+		{
 			"google_project_iam_binding",
 			map[string]interface{}{
 				"project": "my-project",
