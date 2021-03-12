@@ -91,13 +91,14 @@ developers.
     [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl).
 
 1. [Custom schemas](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L15)
-    with additional variable pattern restrictions can be added to templates to
-    perform custom validation.
+    with additional variable
+    [pattern](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L27)
+    restrictions can be added to templates to perform custom validation.
 
 ## Deployment and Resource Dependencies
 
 1. Deployment order of subfolders in the output is defined by the
-    `managed_dirs` list in cicd template
+    `managed_dirs` list in the `cicd` template
     ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/multi_envs.hcl#L141)).
     CICD jobs will iterate over the list and do plan or apply according to the
     type of Cloud Build trigger.
