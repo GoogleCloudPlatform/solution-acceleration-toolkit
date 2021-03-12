@@ -89,6 +89,51 @@ developers.
     and
     [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl).
 
+## Deployment and Resource Dependencies
+
+1. Deployment order of subfolders in the output is defined by the
+    `managed_dirs` list in cicd template
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/34293f5f4a28f5a8154c01f4e8ea096c2da576d0/examples/tfengine/multi_envs.hcl#L141)).
+    CICD jobs will iterate over the list and do plan or apply according to the
+    type of Cloud Build trigger.
+
+    Note that the `tf-plan` job could fail if one subfolder requires another
+    subfolder to be fully deployed first. For example, deployment of subfolder B
+    has a
+    [data dependency](https://www.terraform.io/docs/language/data-sources/index.html)
+    on the deployment of subfolder A, and in this case, `terraform plan` in the
+    subfolder B will fail until subfolder A is fully deployed.
+
+1. Resource dependency is done by using Terraform's
+    [implicit dependency](https://learn.hashicorp.com/tutorials/terraform/dependencies#manage-implicit-dependencies)
+    mechanism.
+
+    Note that Terraform Engine automatically converts all non-alphanumeric
+    characters to `_` when naming the underlying Terraform modules or Terraform
+    resources, so make sure to do that conversion when referencing them. In the
+    example below, the service account's ID is `compute-runner`, but the
+    underlying Terraform resource will be named as `compute_runner`. So when
+    referencing this service account in an `iam_member` resource, use
+    `google_service_account.compute_runner` with the `_`.
+
+    ```hcl
+    template "example" {
+      ...
+      data = {
+        resources = {
+          service_accounts = [{
+            account_id   = "compute-runner"
+          }]
+          iam_members = {
+            "roles/storage.objectViewer" = [
+              "serviceAccount:$${google_service_account.compute_runner.account_id}@my-project.iam.gserviceaccount.com",
+            ]
+          }
+        }
+      }
+    }
+    ```
+
 ## Formatting
 
 1. `terraform fmt` is run by default as part of the `tfengine` command
