@@ -241,6 +241,10 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"folder", "name"},
 		Tmpl:   "folders/{{.folder}}/sinks/{{.name}}",
 	},
+	"google_logging_metric": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "{{.project}} {{.name}}",
+	},
 	"google_logging_organization_sink": &importer.SimpleImporter{
 		Fields: []string{"org_id", "name"},
 		Tmpl:   "organizations/{{.org_id}}/sinks/{{.name}}",
