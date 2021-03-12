@@ -89,6 +89,10 @@ developers.
     and
     [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl).
 
+1. [Custom schemas](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl#L15)
+    with additional variable pattern restrictions can be added to templates to
+    perform custom validation.
+
 ## Deployment and Resource Dependencies
 
 1. Deployment order of subfolders in the output is defined by the
