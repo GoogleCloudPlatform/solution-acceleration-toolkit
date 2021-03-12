@@ -241,6 +241,10 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"folder", "name"},
 		Tmpl:   "folders/{{.folder}}/sinks/{{.name}}",
 	},
+	"google_logging_metric": &importer.SimpleImporter{
+		Fields: []string{"project", "name"},
+		Tmpl:   "{{.project}} {{.name}}",
+	},
 	"google_logging_organization_sink": &importer.SimpleImporter{
 		Fields: []string{"org_id", "name"},
 		Tmpl:   "organizations/{{.org_id}}/sinks/{{.name}}",
@@ -546,7 +550,7 @@ Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{end}}
 {{- end}}
 
 Skipped {{len .skipped}}{{if gt (len .skipped) 0}}:{{end}}
-{{- range $resource := .skipped}}
+{{- range $resource, $_ := .skipped}}
 - {{$resource}}
 {{- end}}
 
@@ -722,6 +726,9 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 
 			// If the output isn't command with 4 parts, just print it as-is.
 			importCmds = append(importCmds, cmd)
+
+			// Treat it as skipped for the purposes of reporting "importable" resources.
+			skipped[cc.Address] = true
 			continue
 		}
 
