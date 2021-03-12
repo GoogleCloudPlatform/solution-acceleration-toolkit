@@ -37,7 +37,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.1.1"
 
-  name            = "example-secrets"
+  name            = "example-prod-secrets"
   org_id          = ""
   folder_id       = "12345678"
   billing_account = "000-000-000"

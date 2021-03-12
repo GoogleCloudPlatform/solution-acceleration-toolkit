@@ -53,9 +53,13 @@ folder ID, or project ID according to parent_type.
 
 Type: string
 
+Pattern: ^[0-9]{8,25}$
+
 ### parent_type
 
 Type of parent GCP resource to apply the policy: can be one of "organization",
 "folder", or "project".
 
 Type: string
+
+Pattern: ^organization|folder|project$

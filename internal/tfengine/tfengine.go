@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -37,9 +38,10 @@ import (
 
 // Options is the options for tfengine execution.
 type Options struct {
-	Format      bool
-	AddLicenses bool
-	CacheDir    string
+	Format          bool
+	AddLicenses     bool
+	CacheDir        string
+	DeleteUnmanaged bool
 
 	// Leave empty to generate all templates.
 	WantedTemplates map[string]bool
@@ -96,6 +98,11 @@ func Run(confPath, outPath string, opts *Options) error {
 		if err := hcl.FormatDir(&runner.Default{Quiet: true}, tmpDir); err != nil {
 			errs = append(errs, fmt.Sprintf("format output dir: %v", err))
 		}
+	}
+
+	// Always show unmanaged files but control deletion via flag.
+	if err := findUnmanaged(tmpDir, outPath, opts.DeleteUnmanaged); err != nil {
+		errs = append(errs, err.Error())
 	}
 
 	if err := copy.Copy(tmpDir, outPath); err != nil {
@@ -268,6 +275,56 @@ func ConvertToLocalBackend(path string) error {
 
 	if err := filepath.Walk(path, fn); err != nil {
 		return fmt.Errorf("walk %qs: %v", path, err)
+	}
+
+	return nil
+}
+
+// findUnmanaged walks both directories and shows all files in the output
+// directory which aren't in the generated files directory.
+// If the deleteFiles flag is set, it will also delete these files.
+func findUnmanaged(generatedDir, outputDir string, deleteFiles bool) error {
+	managed := make(map[string]bool)
+
+	mkFn := func(addToManaged bool, root string) func(path string, info os.FileInfo, err error) error {
+		root = filepath.Clean(root)
+		return func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return fmt.Errorf("walk path %q: %v", path, err)
+			}
+
+			trimmedPath := strings.TrimPrefix(filepath.Clean(path), root)
+			if addToManaged {
+				managed[trimmedPath] = true
+				return nil
+			}
+
+			if _, ok := managed[trimmedPath]; ok {
+				return nil
+			}
+
+			if !deleteFiles {
+				log.Printf("INFO: Unmanaged file: %v\n", path)
+				return nil
+			}
+
+			fullPath, err := fileutil.Expand(path)
+			if err != nil {
+				return err
+			}
+			log.Printf("WARNING: Deleting unmanaged file: %v\n", path)
+			return os.RemoveAll(fullPath)
+		}
+	}
+
+	// Walk the generated dir to find the managed files.
+	if err := filepath.Walk(generatedDir, mkFn(true, generatedDir)); err != nil {
+		return fmt.Errorf("walk %qs: %v", generatedDir, err)
+	}
+
+	// Walk the output dir to find the unmanaged files.
+	if err := filepath.Walk(outputDir, mkFn(false, outputDir)); err != nil {
+		return fmt.Errorf("walk %qs: %v", outputDir, err)
 	}
 
 	return nil

@@ -31,14 +31,14 @@ template "devops" {
     # enable_gcs_backend = true
 
     admins_group = {
-      id = "example-org-admins@example.com"
+      id     = "example-org-admins@example.com"
       exists = true
     }
 
     project = {
       project_id = "example-devops"
       owners_group = {
-        id = "example-devops-owners@example.com"
+        id     = "example-devops-owners@example.com"
         exists = true
       }
     }
@@ -58,11 +58,11 @@ template "groups" {
     resources = {
       groups = [
         {
-          id = "example-cicd-viewers@example.com"
+          id          = "example-cicd-viewers@example.com"
           customer_id = "c12345678"
         },
         {
-          id = "example-cicd-editors@example.com"
+          id          = "example-cicd-editors@example.com"
           customer_id = "c12345678"
         },
       ]
@@ -101,9 +101,7 @@ template "cicd" {
             run_on_push = false # Do not auto run on push to branch
           }
         }
-        managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
-        ]
+        managed_dirs = []
       }
     ]
   }

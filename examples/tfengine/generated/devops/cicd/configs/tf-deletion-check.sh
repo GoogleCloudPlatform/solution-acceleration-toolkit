@@ -27,7 +27,7 @@
 # patterns will be matched against the resource address.
 # See https://en.wikipedia.org/wiki/Regular_expression#POSIX_extended
 
-set -e
+set -ex
 
 # Look for an allowlist of which resources are allowed to be deleted.
 # Make sure it exists, is readable, and isn't empty.

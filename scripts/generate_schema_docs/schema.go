@@ -24,6 +24,7 @@ type schema struct {
 type property struct {
 	Description          string               `json:"description"`
 	Type                 string               `json:"type"`
+	Pattern              string               `json:"pattern"`
 	AdditionalProperties bool                 `json:"additionalProperties"`
 	Properties           map[string]*property `json:"properties"`
 	Items                *property            `json:"items"`

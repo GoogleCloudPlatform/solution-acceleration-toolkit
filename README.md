@@ -1,6 +1,8 @@
 # Google Cloud Healthcare Data Protection Suite
 
-Status: Alpha
+Stable releases:
+
+![version](https://img.shields.io/github/v/release/GoogleCloudPlatform/healthcare-data-protection-suite?color=green&label=Binaries&sort=semver)
 
 This repository contains a suite of tools that can be used to manage key areas
 of your Google Cloud organization.

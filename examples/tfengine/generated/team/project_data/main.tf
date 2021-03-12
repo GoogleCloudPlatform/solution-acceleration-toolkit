@@ -66,11 +66,11 @@ module "project" {
 
 }
 
-module "one_billion_ms_example_dataset" {
+module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 4.4.0"
 
-  dataset_id                  = "1billion_ms_example_dataset"
+  dataset_id                  = "1billion_ms_dataset"
   project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
@@ -82,7 +82,7 @@ module "one_billion_ms_example_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.4.0"
+  version = "~> 4.5.0"
 
   name              = "sql-instance"
   project_id        = module.project.project_id
@@ -90,7 +90,7 @@ module "sql_instance" {
   zone              = "a"
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
-  vpc_network       = "projects/example-prod-networks/global/networks/example-network"
+  vpc_network       = "projects/example-prod-networks/global/networks/network"
   tier              = "db-n1-standard-1"
   user_name         = "admin"
   user_labels = {
@@ -99,19 +99,19 @@ module "sql_instance" {
   }
 }
 
-module "example_healthcare_dataset" {
+module "healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.2.1"
+  version = "~> 1.3.0"
 
-  name     = "example-healthcare-dataset"
+  name     = "healthcare-dataset"
   project  = module.project.project_id
   location = "us-central1"
 
   dicom_stores = [
     {
-      name = "example-dicom-store"
+      name = "dicom-store"
       notification_config = {
-        pubsub_topic = "projects/example-prod-data/topics/example-topic"
+        pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
       }
       labels = {
         env  = "prod"
@@ -121,7 +121,7 @@ module "example_healthcare_dataset" {
   ]
   fhir_stores = [
     {
-      name    = "example-fhir-store-a"
+      name    = "fhir-store-a"
       version = "R4"
 
       enable_update_create          = true
@@ -129,12 +129,12 @@ module "example_healthcare_dataset" {
       disable_resource_versioning   = false
       enable_history_import         = false
       notification_config = {
-        pubsub_topic = "projects/example-prod-data/topics/example-topic"
+        pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
       }
       stream_configs = [
         {
           bigquery_destination = {
-            dataset_uri = "bq://example-prod-data.example_dataset_id"
+            dataset_uri = "bq://example-prod-data.dataset_id"
             schema_config = {
               recursive_structure_depth = 3
 
@@ -150,7 +150,7 @@ module "example_healthcare_dataset" {
       }
     },
     {
-      name    = "example-fhir-store-b"
+      name    = "fhir-store-b"
       version = "R4"
 
       labels = {
@@ -161,10 +161,10 @@ module "example_healthcare_dataset" {
   ]
   hl7_v2_stores = [
     {
-      name = "example-hl7-store"
+      name = "hl7-store"
       notification_configs = [
         {
-          pubsub_topic = "projects/example-prod-data/topics/example-topic"
+          pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
         },
       ]
       parser_config = {
@@ -196,16 +196,43 @@ module "project_iam_members" {
 
   bindings = {
     "roles/cloudsql.client" = [
-      "serviceAccount:bastion@example-networks.iam.gserviceaccount.com",
+      "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
     ],
   }
 }
 
-module "example_prod_bucket" {
+module "topic" {
+  source  = "terraform-google-modules/pubsub/google"
+  version = "~> 1.9.0"
+
+  topic      = "topic"
+  project_id = module.project.project_id
+
+  topic_labels = {
+    env  = "prod"
+    type = "no-phi"
+  }
+  pull_subscriptions = [
+    {
+      name = "pull-subscription"
+    },
+  ]
+  push_subscriptions = [
+    {
+      name          = "push-subscription"
+      push_endpoint = "https://example.com"
+    },
+  ]
+  depends_on = [
+    module.project
+  ]
+}
+
+module "bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "example-prod-bucket"
+  name       = "bucket"
   project_id = module.project.project_id
   location   = "us-central1"
 

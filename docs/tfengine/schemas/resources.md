@@ -65,6 +65,8 @@ If unset, the current project will be used.
 
 Type: string
 
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
+
 ### bastion_hosts.scopes
 
 Scopes to grant. If unset, will grant access to all cloud platform scopes.
@@ -215,6 +217,8 @@ If unset, the current project will be used.
 
 Type: string
 
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
+
 ### cloud_sql_instances.resource_name
 
 Override for Terraform resource name.
@@ -236,6 +240,8 @@ Type: string
 Type of the cloud sql instance. Currently only supports 'mysql'.
 
 Type: string
+
+Pattern: ^mysql$
 
 ### cloud_sql_instances.user_name
 
@@ -343,6 +349,8 @@ Name of network project.
 If unset, the current project will be used.
 
 Type: string
+
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
 
 ### compute_instance_templates.preemptible
 
@@ -539,6 +547,8 @@ Domain of DNS zone. Must end with period.
 
 Type: string
 
+Pattern: ^.+\.$
+
 ### dns_zones.name
 
 Name of DNS zone.
@@ -666,6 +676,8 @@ Name of network project.
 If unset, the current project will be used.
 
 Type: string
+
+Pattern: ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$
 
 ### gke_clusters.node_pools
 

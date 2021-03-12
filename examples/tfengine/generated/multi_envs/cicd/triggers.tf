@@ -33,7 +33,7 @@ resource "google_cloudbuild_trigger" "validate_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [
@@ -61,7 +61,7 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [
@@ -71,6 +71,7 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 }
 
 resource "google_cloudbuild_trigger" "apply_shared" {
+  disabled    = true
   provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-shared"
@@ -89,7 +90,7 @@ resource "google_cloudbuild_trigger" "apply_shared" {
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "devops groups audit folders"
+    _MANAGED_DIRS   = "groups audit folders"
   }
 
   depends_on = [
@@ -116,34 +117,6 @@ resource "google_cloudbuild_trigger" "validate_dev" {
   }
 
   filename = "terraform/cicd/configs/tf-validate.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = "terraform"
-    _MANAGED_DIRS   = "dev/data"
-  }
-
-  depends_on = [
-    google_project_service.services,
-    google_sourcerepo_repository.configs,
-  ]
-}
-
-resource "google_cloudbuild_trigger" "plan_dev" {
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-plan-dev"
-  description = "Terraform plan job triggered on push event."
-
-  included_files = [
-    "terraform/**",
-  ]
-
-  trigger_template {
-    repo_name   = "example"
-    branch_name = "^dev$"
-  }
-
-  filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"

@@ -36,9 +36,13 @@ Can be one of the organization ID or folder ID according to parent_type.
 
 Type: string
 
+Pattern: ^[0-9]{8,25}$
+
 ### parent_type
 
 Type of parent GCP resource to apply the policy.
 Can be one of 'organization' or 'folder'.
 
 Type: string
+
+Pattern: ^organization|folder$

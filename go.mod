@@ -6,14 +6,13 @@ require (
 	cloud.google.com/go/storage v1.10.0
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
-	github.com/google/go-cmp v0.5.4
+	github.com/google/go-cmp v0.5.5
 	github.com/hashicorp/go-getter v1.5.2
 	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/go-version v1.2.1
-	github.com/hashicorp/hcl/v2 v2.9.0
-	github.com/hashicorp/hil v0.0.0-20200423225030-a18a1cd20038 // indirect
-	github.com/hashicorp/terraform v0.14.7
-	github.com/imdario/mergo v0.3.11
+	github.com/hashicorp/hcl/v2 v2.9.1
+	github.com/hashicorp/terraform v0.14.8
+	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/otiai10/copy v1.5.0
 	github.com/rodaine/hclencoder v0.0.0-20200910194838-aaa140ee61ed
@@ -21,5 +20,5 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.8.0
-	google.golang.org/api v0.40.0
+	google.golang.org/api v0.41.0
 )

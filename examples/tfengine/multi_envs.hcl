@@ -36,9 +36,9 @@ template "devops" {
     # enable_gcs_backend = true
 
     admins_group = {
-      id = "example-folder-admins@example.com"
+      id           = "example-folder-admins@example.com"
       display_name = "Example Folder Admins Group"
-      customer_id = "c12345678"
+      customer_id  = "c12345678"
       owners = [
         "user1@example.com"
       ]
@@ -47,7 +47,7 @@ template "devops" {
     project = {
       project_id = "example-devops"
       owners_group = {
-        id = "example-devops-owners@example.com"
+        id          = "example-devops-owners@example.com"
         customer_id = "c12345678"
         owners = [
           "user1@example.com"
@@ -70,27 +70,27 @@ template "groups" {
     resources = {
       groups = [
         {
-          id = "example-auditors@example.com"
-          customer_id = "c12345678"
+          id           = "example-auditors@example.com"
+          customer_id  = "c12345678"
           display_name = "Example Auditors Group"
           owners = [
             "user1@example.com"
           ]
         },
         {
-          id = "example-cicd-viewers@example.com"
+          id          = "example-cicd-viewers@example.com"
           customer_id = "c12345678"
         },
         {
-          id = "example-cicd-editors@example.com"
+          id          = "example-cicd-editors@example.com"
           customer_id = "c12345678"
         },
         {
-          id = "example-source-readers@example.com"
+          id          = "example-source-readers@example.com"
           customer_id = "c12345678"
         },
         {
-          id = "example-source-writers@example.com"
+          id          = "example-source-writers@example.com"
           customer_id = "c12345678"
         },
       ]
@@ -120,17 +120,25 @@ template "cicd" {
     build_editors = ["group:example-cicd-editors@example.com"]
 
     terraform_root = "terraform"
+
+    # IMPORTANT: Cloud Source Repositories does not support code review or
+    # presubmit runs. If we set both plan and apply to run at the same time,
+    # they will conflict and may error out. To get around this, for 'shared'
+    # and 'prod' environment, set 'apply' trigger to not 'run_on_push',
+    # and for other environments, do not specify the 'plan' trigger block
+    # and let 'apply' trigger 'run_on_push'.
     envs = [
       {
         name        = "shared"
         branch_name = "shared"
         triggers = {
           validate = {}
-          plan = {}
-          apply = {}
+          plan     = {}
+          apply = {
+            run_on_push = false # Do not 'apply' on push to CSR 'shared' branch
+          }
         }
         managed_dirs = [
-          "devops", // NOTE: CICD service account can only update APIs on the devops project.
           "groups",
           "audit",
           "folders",
@@ -141,8 +149,7 @@ template "cicd" {
         branch_name = "dev"
         triggers = {
           validate = {}
-          plan = {}
-          apply = {}
+          apply    = {}
         }
         managed_dirs = [
           "dev/data",
@@ -153,9 +160,9 @@ template "cicd" {
         branch_name = "main"
         triggers = {
           validate = {}
-          plan = {}
+          plan     = {}
           apply = {
-            run_on_push = false # Do not auto run on push to prod branch
+            run_on_push = false # Do not 'apply' on push to CSR 'prod' branch
           }
         }
         managed_dirs = [
@@ -179,8 +186,8 @@ template "audit" {
       sink_name  = "example-bigquery-audit-logs-sink"
     }
     logs_storage_bucket = {
-      name       = "7yr-folder-audit-logs"
-      sink_name  = "example-storage-audit-logs-sink"
+      name      = "7yr-folder-audit-logs"
+      sink_name = "example-storage-audit-logs-sink"
     }
     additional_filters = [
       # Need to escape \ and " to preserve them in the final filter strings.

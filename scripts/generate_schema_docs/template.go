@@ -37,5 +37,10 @@ var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 
 Type: {{.Type}}
 {{- end}}
+
+{{- if .Pattern}}
+
+Pattern: {{.Pattern}}
+{{- end}}
 {{- end}}
 `))
