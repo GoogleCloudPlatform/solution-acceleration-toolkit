@@ -269,6 +269,10 @@ var Importers = map[string]resourceImporter{
 		Fields: []string{"project_id"},
 		Tmpl:   "{{.project_id}}",
 	},
+	"google_project_iam_audit_config": &importer.SimpleImporter{
+		Fields: []string{"project", "service"},
+		Tmpl:   "{{.project}} {{.service}}",
+	},
 	"google_project_iam_binding": &importer.SimpleImporter{
 		Fields: []string{"project", "role"},
 		Tmpl:   "{{.project}} {{.role}}",
