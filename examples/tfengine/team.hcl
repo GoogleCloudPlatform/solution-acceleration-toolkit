@@ -12,34 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# {{$recipes := "../../templates/tfengine/recipes"}}
-
-data = {
-  parent_type      = "folder"
-  parent_id        = "12345678"
-  billing_account  = "000-000-000"
-  state_bucket     = "example-terraform-state"
-  domain           = "example.com"
-  prefix           = "example"
-  env              = "prod"
-  default_location = "us-central1"
-  default_zone     = "a"
-  storage_location = "us-central1"
-  labels = {
-    env = "prod"
-  }
-}
-
-template "foundation" {
-  recipe_path = "./modules/foundation.hcl"
+template "root" {
+  recipe_path = "./modules/root.hcl"
   data = {
-    recipes = "../{{$recipes}}"
-  }
-}
-
-template "main" {
-  recipe_path = "./modules/team.hcl"
-  data = {
-    recipes = "../{{$recipes}}"
+    recipes          = "../../templates/tfengine/recipes"
+    folder_id        = "12345678"
+    billing_account  = "000-000-000"
+    state_bucket     = "example-terraform-state"
+    domain           = "example.com"
+    prefix           = "example"
+    env              = "prod"
+    default_location = "us-central1"
+    default_zone     = "a"
+    labels = {
+      env = "prod"
+    }
   }
 }

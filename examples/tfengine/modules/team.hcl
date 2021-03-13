@@ -12,29 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-schema = {
-  title       = "Team module"
-  description = "This module is reusable so that it can be used both as an example and during integration tests."
-  properties = {
-    prefix = {
-      description = "Prefix to attach to all global resources (e.g. project IDs and storage buckets)."
-      type        = "string"
-    }
-    billing_account = {
-      description = "ID of billing account to associate projects with."
-      type        = "string"
-    }
-    folder_id = {
-      description = "ID of folder to create projects."
-      type        = "string"
-    }
-    state_bucket = {
-      description = "Name of the state bucket."
-      type        = "string"
-    }
-  }
-}
-
 data = {
   # Default locations for resources. Can be overridden in individual templates.
   bigquery_location   = "us-east1"
@@ -44,6 +21,7 @@ data = {
   compute_zone        = "{{.default_zone}}"
   gke_region          = "{{.default_location}}"
   healthcare_location = "{{.default_location}}"
+  storage_location    = "{{.default_location}}"
   secret_locations    = ["{{.default_location}}"]
 }
 

@@ -9,7 +9,7 @@ developers.
     under the hood.
 
 1. Use `$` to escape `$` in the Terraform Engine templates.
-    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl#L68))
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl#L46))
 
 1. Use dot (`.`) to obtain mandatory map fields, e.g. `{{.name}}`.
 
@@ -38,16 +38,16 @@ developers.
 
 1. When Terraform Engine generates Terraform configs from templates, if the
     `resource_name` field is not specified for a resource
-    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/foundation.hcl#L46)),
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/foundation.hcl#L62)),
     then the underlying Terraform module or Terraform resource in the generated
     Terraform configs will be automatically named from the resource's uniqie
     identifier (bucket's name, network's name, group's id, etc)
-    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/generated/team/groups/main.tf#L43)).
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/generated/team/groups/main.tf#L43)).
     All non-alphanumeric characters will be converted to `_`, such as `-`, `.`,
     and `@`.
 
 1. Members in
-    [iam_members](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl#L231)
+    [iam_members](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl#L209)
     component do not support referencing calculated values/attributes from other
     resources due to an underlying module
     [limitation](https://github.com/terraform-google-modules/terraform-google-iam#referencing-valuesattributes-from-other-resources).
@@ -57,7 +57,7 @@ developers.
     `$${google_service_account.myserviceaccount.account_id}@myproject.iam.gserviceaccount.com`
     instead of `$${google_service_account.myserviceaccount.email}` as the
     `account_id` is not a calculated value.
-    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl#L234))
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl#L212))
 
 1. When writing raw Terraform configs, use `for_each` to group similar
     resources.
@@ -83,17 +83,23 @@ developers.
     available. There is no need to repeat those values in the `data` block in
     child templates unless you would like to override them. For example, all
     values specified in the top level template
-    [here](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/team.hcl#L17)
+    [here](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/team.hcl#L17)
     are passed down and made available to child templates
-    [foundation.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/foundation.hcl)
+    [root.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl),
+    [foundation.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/foundation.hcl)
     and
-    [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/cf04e009d21974b1ad5e5fdccef4077e7869bdb0/examples/tfengine/modules/team.hcl).
+    [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl).
+
+1. [Custom schemas](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L15)
+    with additional variable
+    [pattern](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L27)
+    restrictions can be added to templates to perform custom validation.
 
 ## Deployment and Resource Dependencies
 
 1. Deployment order of subfolders in the output is defined by the
-    `managed_dirs` list in cicd template
-    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/34293f5f4a28f5a8154c01f4e8ea096c2da576d0/examples/tfengine/multi_envs.hcl#L141)).
+    `managed_dirs` list in the `cicd` template
+    ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/multi_envs.hcl#L141)).
     CICD jobs will iterate over the list and do plan or apply according to the
     type of Cloud Build trigger.
 
