@@ -31,6 +31,9 @@ f=$(gofmt -l .)
 if [[ "${f}" ]]; then
   echo "The following files are not formatted:"
   echo "${f}"
+  echo 'To fix, run `gofmt .`'
+  echo 'Diffs:'
+  gofmt -d .
   exit 1
 fi
 
