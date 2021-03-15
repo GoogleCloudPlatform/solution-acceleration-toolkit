@@ -231,11 +231,11 @@ func TestMakeSlice(t *testing.T) {
 	}{
 		{
 			inputs: []interface{}{"a", "b", "c"},
-			want: []interface{}{"a", "b", "c"},
+			want:   []interface{}{"a", "b", "c"},
 		},
 		{
 			inputs: []interface{}{1, 2, 3},
-			want: []interface{}{1, 2, 3},
+			want:   []interface{}{1, 2, 3},
 		},
 	}
 	for _, tc := range tests {
