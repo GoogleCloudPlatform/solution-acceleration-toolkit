@@ -23,6 +23,37 @@ module "{{resourceName . "name"}}" {
 
   {{hclField . "iam_members" -}}
 
+  {{if has . "consent_stores" -}}
+  consent_stores = [
+    {{range .consent_stores -}}
+    {
+      name = "{{.name}}"
+      {{hclField . "iam_members" -}}
+
+      {{if has . "enable_consent_create_on_update" -}}
+      enable_consent_create_on_update = {
+        {{hcl .enable_consent_create_on_update}}
+      }
+      {{end -}}
+
+      {{if has . "default_consent_ttl" -}}
+      default_consent_ttl = {
+        {{hcl .default_consent_ttl}}
+      }
+      {{end -}}
+
+      {{if $labels := merge (get $ "labels") (get . "labels") -}}
+      labels = {
+        {{range $k, $v := $labels -}}
+        {{$k}} = "{{$v}}"
+        {{end -}}
+      }
+      {{end -}}
+    },
+    {{end -}}
+  ]
+  {{end -}}
+
   {{if has . "dicom_stores" -}}
   dicom_stores = [
     {{range .dicom_stores -}}

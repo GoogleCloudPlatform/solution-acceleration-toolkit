@@ -288,6 +288,12 @@ template "project_data" {
       }]
       healthcare_datasets = [{
         name = "healthcare-dataset"
+        consent_stores = [{
+          name = "consent-store"
+          labels = {
+            type = "phi"
+          }
+        }]
         dicom_stores = [{
           name = "dicom-store"
           notification_config = {

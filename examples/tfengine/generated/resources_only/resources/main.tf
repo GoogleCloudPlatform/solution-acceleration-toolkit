@@ -72,6 +72,15 @@ module "example_healthcare_dataset" {
       role   = "roles/healthcare.datasetViewer"
     },
   ]
+  consent_stores = [
+    {
+      name = "example-consent-store"
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
+    },
+  ]
   dicom_stores = [
     {
       name = "example-dicom-store"

@@ -107,6 +107,17 @@ module "healthcare_dataset" {
   project  = module.project.project_id
   location = "us-central1"
 
+  consent_stores = [
+    {
+      name = "example-consent-store"
+      enable_consent_create_on_update = true
+      default_consent_ttl = "100000s"
+      labels = {
+        env  = "prod"
+        type = "phi"
+      }
+    },
+  ]
   dicom_stores = [
     {
       name = "dicom-store"

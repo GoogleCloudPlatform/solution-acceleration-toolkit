@@ -752,6 +752,54 @@ Type: array(string)
 
 Type: array()
 
+### healthcare_datasets.consent_stores
+
+consent stores to create.
+
+Type: array(object)
+
+### healthcare_datasets.consent_stores.iam_members
+
+IAM member to grant access for.
+
+Type: array(object)
+
+### healthcare_datasets.consent_stores.iam_members.member
+
+Member to grant acess to role.
+
+Type: string
+
+### healthcare_datasets.consent_stores.iam_members.role
+
+IAM role to grant.
+
+Type: string
+
+### healthcare_datasets.consent_stores.labels
+
+Labels to set on the consent store.
+
+Type: object
+
+### healthcare_datasets.consent_stores.name
+
+Name of consent store.
+
+Type: string
+
+### healthcare_datasets.consent_stores.enable_consent_create_on_update
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#enable_consent_create_on_update>.
+
+Type: boolean
+
+### healthcare_datasets.consent_stores.default_consent_ttl
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#default_consent_ttl>.
+
+Type: string
+
 ### healthcare_datasets.dicom_stores
 
 Dicom stores to create.

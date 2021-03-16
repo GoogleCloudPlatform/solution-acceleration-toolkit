@@ -802,6 +802,60 @@ schema = {
               }
             }
           }
+          consent_stores = {
+            description = "Consent stores to create."
+            type        = "array"
+            items = {
+              type                 = "object"
+              additionalProperties = false
+              required = [
+                "name",
+              ]
+              properties = {
+                name = {
+                  description = "Name of consent store."
+                  type        = "string"
+                }
+                labels = {
+                  description = "Labels to set on the consent store."
+                  type        = "object"
+                  patternProperties = {
+                    ".+" = { type = "string" }
+                  }
+                }
+                iam_members = {
+                  description = "IAM member to grant access for."
+                  type        = "array"
+                  items = {
+                    type                 = "object"
+                    additionalProperties = false
+                    required = [
+                      "role",
+                      "member",
+                    ]
+                    properties = {
+                      role = {
+                        description = "IAM role to grant."
+                        type        = "string"
+                      }
+                      member = {
+                        description = "Member to grant acess to role."
+                        type        = "string"
+                      }
+                    }
+                  }
+                }
+                enable_consent_create_on_update = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#enable_consent_create_on_update>."
+                  type = "boolean"
+                }
+                default_consent_ttl = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#default_consent_ttl>."
+                  type = "string"
+                }
+              }
+            }
+          }
           dicom_stores = {
             description = "Dicom stores to create."
             type        = "array"
