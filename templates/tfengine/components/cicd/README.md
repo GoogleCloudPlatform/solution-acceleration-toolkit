@@ -59,12 +59,11 @@ to detect changes in the repo, trigger builds, and run the workloads.
 
 The Docker container used for CICD executions are built and maintained by the
 Cloud Foundation Toolkit (CFT) team. Documentations and scripts can be found
-[here](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/master/infra/build/developer-tools).
-This container includes all necessary dependencies (e.g. Terraform. gcloud,
-inspec) to deploy Terraform and run the lint, unit and integration tests for CFT
-terraform modules. If you would like to use a different container for production
-deployment, you can modify the Cloud Build YAML files in [./configs](./configs)
-directory to point to your container.
+[here](https://github.com/GoogleCloudPlatform/cloud-foundation-toolkit/tree/master/infra/build/developer-tools-light).
+This container includes necessary dependencies (e.g. bash, terraform, gcloud) to
+validate and deploy Terraform configs. If you would like to use a different
+container for production deployment, you can modify the Cloud Build YAML files
+in [./configs](./configs) directory to point to your container.
 
 ## Features
 
