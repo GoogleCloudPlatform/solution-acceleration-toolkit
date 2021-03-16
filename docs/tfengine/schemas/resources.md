@@ -754,9 +754,21 @@ Type: array()
 
 ### healthcare_datasets.consent_stores
 
-consent stores to create.
+Consent stores to create.
 
 Type: array(object)
+
+### healthcare_datasets.consent_stores.default_consent_ttl
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#default_consent_ttl>.
+
+Type: string
+
+### healthcare_datasets.consent_stores.enable_consent_create_on_update
+
+See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#enable_consent_create_on_update>.
+
+Type: boolean
 
 ### healthcare_datasets.consent_stores.iam_members
 
@@ -778,25 +790,13 @@ Type: string
 
 ### healthcare_datasets.consent_stores.labels
 
-Labels to set on the consent store.
+Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels>
 
 Type: object
 
 ### healthcare_datasets.consent_stores.name
 
 Name of consent store.
-
-Type: string
-
-### healthcare_datasets.consent_stores.enable_consent_create_on_update
-
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#enable_consent_create_on_update>.
-
-Type: boolean
-
-### healthcare_datasets.consent_stores.default_consent_ttl
-
-See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#default_consent_ttl>.
 
 Type: string
 

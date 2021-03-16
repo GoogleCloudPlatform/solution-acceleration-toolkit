@@ -44,9 +44,7 @@ module "{{resourceName . "name"}}" {
 
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {
-        {{range $k, $v := $labels -}}
-        {{$k}} = "{{$v}}"
-        {{end -}}
+        {{hcl $labels}}
       }
       {{end -}}
     },

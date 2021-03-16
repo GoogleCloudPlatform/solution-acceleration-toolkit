@@ -101,7 +101,7 @@ module "sql_instance" {
 
 module "healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.3.0"
+  version = "~> 2.0.0"
 
   name     = "healthcare-dataset"
   project  = module.project.project_id
@@ -109,11 +109,10 @@ module "healthcare_dataset" {
 
   consent_stores = [
     {
-      name = "example-consent-store"
-      enable_consent_create_on_update = true
-      default_consent_ttl = "100000s"
+      name = "consent-store"
       labels = {
-        env  = "prod"
+        env = "prod"
+
         type = "phi"
       }
     },
