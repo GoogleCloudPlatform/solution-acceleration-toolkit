@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "healthcare_datasets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.3.0"
+  version = "~> 2.0.0"
 
   name     = "{{.name}}"
   project  = module.project.project_id
@@ -32,13 +32,13 @@ module "{{resourceName . "name"}}" {
 
       {{if has . "enable_consent_create_on_update" -}}
       enable_consent_create_on_update = {
-        {{hcl .enable_consent_create_on_update}}
+        {{hclField .enable_consent_create_on_update}}
       }
       {{end -}}
 
       {{if has . "default_consent_ttl" -}}
       default_consent_ttl = {
-        {{hcl .default_consent_ttl}}
+        {{hclField .default_consent_ttl}}
       }
       {{end -}}
 
