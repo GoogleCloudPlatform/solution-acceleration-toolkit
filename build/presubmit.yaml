@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Terraform version used is 0.14.7.
+# Terraform version used is 0.14.8.
+substitutions:
+  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:3a3b2cf77a1096c56bd76c3466d7f2a584132396097944a7725e996fce76d5cc"
 
 options:
   env: ["GOPATH=/go"]
@@ -31,25 +33,25 @@ steps:
   waitFor: ["-"]
   id: Markdownlint check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a9f8f41fdd1f2e1919a052df23d5a15b07ecd29bb447d5cd111d5a80228f1e75"
+- name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "terraform"
   args: ["version"]
   waitFor: ["-"]
   id: Terraform version
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a9f8f41fdd1f2e1919a052df23d5a15b07ecd29bb447d5cd111d5a80228f1e75"
+- name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "sh"
   args: ["build/go_check.sh"]
   waitFor: ["-"]
   id: Go code check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a9f8f41fdd1f2e1919a052df23d5a15b07ecd29bb447d5cd111d5a80228f1e75"
+- name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "bash"
   args: ["build/gen_check.sh"]
   waitFor: ["-"]
   id: Generated files check
 
-- name: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:a9f8f41fdd1f2e1919a052df23d5a15b07ecd29bb447d5cd111d5a80228f1e75"
+- name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "bash"
   args: ["tests/policygen/integration_test.sh"]
   waitFor: ["-"]
