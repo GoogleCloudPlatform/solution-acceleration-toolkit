@@ -142,7 +142,7 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
 1. Install the following dependencies and add them to your PATH:
 
     - [gcloud](https://cloud.google.com/sdk/gcloud)
-    - [Terraform 0.14.7](https://releases.hashicorp.com/terraform/)
+    - [Terraform 0.14.8](https://releases.hashicorp.com/terraform/)
         (consistent with the version of Terraform used by CICD)
     - [Go 1.14+](https://golang.org/dl/)
 
