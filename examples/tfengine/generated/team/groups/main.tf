@@ -28,7 +28,7 @@ terraform {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 10.1.1"
+  version = "~> 10.2.2"
 
   project_id    = "example-prod-devops"
   activate_apis = []
