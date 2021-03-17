@@ -109,7 +109,9 @@ module "healthcare_dataset" {
 
   consent_stores = [
     {
-      name = "consent-store"
+      name                            = "consent-store"
+      enable_consent_create_on_update = true
+      default_consent_ttl             = "90000s"
       labels = {
         env = "prod"
 

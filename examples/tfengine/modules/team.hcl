@@ -293,6 +293,8 @@ template "project_data" {
           labels = {
             type = "phi"
           }
+          enable_consent_create_on_update = true
+          default_consent_ttl = "90000s"
         }]
         dicom_stores = [{
           name = "dicom-store"
