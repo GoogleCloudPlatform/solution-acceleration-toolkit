@@ -29,18 +29,8 @@ module "{{resourceName . "name"}}" {
     {
       name = "{{.name}}"
       {{hclField . "iam_members" -}}
-
-      {{if has . "enable_consent_create_on_update" -}}
-      enable_consent_create_on_update = {
-        {{hclField .enable_consent_create_on_update}}
-      }
-      {{end -}}
-
-      {{if has . "default_consent_ttl" -}}
-      default_consent_ttl = {
-        {{hclField .default_consent_ttl}}
-      }
-      {{end -}}
+      {{hclField . "enable_consent_create_on_update" -}}
+      {{hclField . "default_consent_ttl" -}}
 
       {{if $labels := merge (get $ "labels") (get . "labels") -}}
       labels = {
