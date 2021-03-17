@@ -288,6 +288,14 @@ template "project_data" {
       }]
       healthcare_datasets = [{
         name = "healthcare-dataset"
+        consent_stores = [{
+          name = "consent-store"
+          labels = {
+            type = "phi"
+          }
+          enable_consent_create_on_update = true
+          default_consent_ttl = "90000s"
+        }]
         dicom_stores = [{
           name = "dicom-store"
           notification_config = {

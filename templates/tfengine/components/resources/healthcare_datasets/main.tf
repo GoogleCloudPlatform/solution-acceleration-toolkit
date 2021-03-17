@@ -15,13 +15,32 @@ limitations under the License. */ -}}
 {{range get . "healthcare_datasets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.3.0"
+  version = "~> 2.0.0"
 
   name     = "{{.name}}"
   project  = module.project.project_id
   location = "{{get . "healthcare_location" $.healthcare_location}}"
 
   {{hclField . "iam_members" -}}
+
+  {{if has . "consent_stores" -}}
+  consent_stores = [
+    {{range .consent_stores -}}
+    {
+      name = "{{.name}}"
+      {{hclField . "iam_members" -}}
+      {{hclField . "enable_consent_create_on_update" -}}
+      {{hclField . "default_consent_ttl" -}}
+
+      {{if $labels := merge (get $ "labels") (get . "labels") -}}
+      labels = {
+        {{hcl $labels}}
+      }
+      {{end -}}
+    },
+    {{end -}}
+  ]
+  {{end -}}
 
   {{if has . "dicom_stores" -}}
   dicom_stores = [

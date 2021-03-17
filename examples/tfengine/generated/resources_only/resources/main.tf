@@ -60,7 +60,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 1.3.0"
+  version = "~> 2.0.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
