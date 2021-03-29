@@ -71,6 +71,16 @@ EOF
     {{end -}}
   }
   {{end -}}
+
+
+  {{if has . "metadata" -}}
+  metadata = {
+    {{range $k, $v := .metadata -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
+
   depends_on =[
     module.project
   ]

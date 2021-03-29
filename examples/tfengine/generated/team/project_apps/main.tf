@@ -144,6 +144,9 @@ module "instance_template" {
     env  = "prod"
     type = "no-phi"
   }
+  metadata = {
+    enable-oslogin = "TRUE"
+  }
   depends_on = [
     module.project
   ]

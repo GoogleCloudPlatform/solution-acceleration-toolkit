@@ -337,6 +337,12 @@ Labels to set on the instance template.
 
 Type: object
 
+### compute_instance_templates.metadata
+
+Metadata to set on the instance template.
+
+Type: object
+
 ### compute_instance_templates.name_prefix
 
 Name prefix of the instance template.
