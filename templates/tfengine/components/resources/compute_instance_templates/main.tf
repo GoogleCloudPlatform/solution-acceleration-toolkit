@@ -75,9 +75,7 @@ EOF
 
   {{if has . "metadata" -}}
   metadata = {
-    {{range $k, $v := .metadata -}}
-    {{$k}} = "{{$v}}"
-    {{end -}}
+    {{hcl .metadata}}
   }
   {{end -}}
 
