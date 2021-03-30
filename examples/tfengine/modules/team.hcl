@@ -195,6 +195,9 @@ template "project_apps" {
         labels = {
           type = "no-phi"
         }
+        metadata = {
+          enable-oslogin = "TRUE"
+        }
         tags = [
           "service",
         ]

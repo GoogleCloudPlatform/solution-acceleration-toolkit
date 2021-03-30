@@ -71,6 +71,14 @@ EOF
     {{end -}}
   }
   {{end -}}
+
+
+  {{if has . "metadata" -}}
+  metadata = {
+    {{hcl .metadata}}
+  }
+  {{end -}}
+
   depends_on =[
     module.project
   ]

@@ -360,6 +360,10 @@ schema = {
               ".+" = { type = "string" }
             }
           }
+          metadata = {
+            description = "Metadata to set on the instance template."
+            type        = "object"
+          }
           instances = {
             description = "[Module](https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance)"
             type        = "array"
