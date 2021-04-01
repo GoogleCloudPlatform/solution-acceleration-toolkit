@@ -550,8 +550,8 @@ Successfully imported {{len .successes}}{{if gt (len .successes) 0}}:{{end}}
 {{- end}}
 
 Skipped {{len .skipped}}{{if gt (len .skipped) 0}}:{{end}}
-{{- range $resource, $_ := .skipped}}
-- {{$resource}}
+{{- range $resource, $reason := .skipped}}
+- {{$resource}} ({{$reason}})
 {{- end}}
 
 Failed to import {{len .failures}}{{if gt (len .failures) 0}}:{{end}}
@@ -582,7 +582,7 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 	}
 
 	var successesTotal, failuresTotal []string
-	skipped := make(map[string]bool)
+	skipped := make(map[string]string)
 	var ie *importError
 	for {
 		failuresTotal = nil
@@ -635,7 +635,7 @@ func Run(rn runner.Runner, importRn runner.Runner, runArgs *RunArgs) error {
 // If it imported some resources but failed to import others, it will return true for retry. This is a simple way to solve dependencies without having to figure out the graph.
 // A specific case: GKE node pool name depends on random_id; import the random_id first, then do the cycle again and import the node pool.
 // skipped is a map to be filled with skipped resources so they are skipped on subsequent runs too.
-func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]bool) (successes []string, err error) {
+func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[string]string) (successes []string, err error) {
 	// Create Terraform command runners.
 	tfCmdOutput := func(args ...string) ([]byte, error) {
 		cmd := exec.Command(runArgs.TerraformPath, args...)
@@ -690,8 +690,8 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// Try to convert to an importable resource.
 		ir, ok := Importable(cc, pcv, runArgs.Interactive)
 		if !ok {
-			skipped[cc.Address] = true
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
+			skipped[cc.Address] = notImportableMsg
 			log.Println(notImportableMsg)
 			if runArgs.DryRun {
 				notImportableMsgs = append(notImportableMsgs, notImportableMsg)
@@ -729,7 +729,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 			importCmds = append(importCmds, cmd)
 
 			// Treat it as skipped for the purposes of reporting "importable" resources.
-			skipped[cc.Address] = true
+			skipped[cc.Address] = "dry run"
 			continue
 		}
 
@@ -746,7 +746,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 
 		// Check if the user manually skipped the import.
 		case errors.As(err, &se):
-			skipped[cc.Address] = true
+			skipped[cc.Address] = "manually skipped"
 
 		// Check if the error indicates insufficient information.
 		case errors.As(err, &iie):
@@ -761,11 +761,13 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// Check if error indicates resource is not importable or does not exist.
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
-			log.Printf("Import not supported by provider for resource %q\n", cc.Address)
-			skipped[cc.Address] = true
+			msg := fmt.Sprintf("Import not supported by provider for resource %q\n", cc.Address)
+			log.Print(msg)
+			skipped[cc.Address] = msg
 		case DoesNotExist(output):
-			log.Printf("Resource %q does not exist, not importing\n", cc.Address)
-			skipped[cc.Address] = true
+			msg := fmt.Sprintf("Resource %q does not exist, not importing\n", cc.Address)
+			log.Print(msg)
+			skipped[cc.Address] = msg
 
 		// Important to handle this last.
 		default:
