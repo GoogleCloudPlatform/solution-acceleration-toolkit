@@ -690,6 +690,7 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// Try to convert to an importable resource.
 		ir, ok := Importable(cc, pcv, runArgs.Interactive)
 		if !ok {
+			skipped[cc.Address] = true
 			notImportableMsg := fmt.Sprintf("Resource %q of type %q not importable\n", cc.Address, cc.Kind)
 			log.Println(notImportableMsg)
 			if runArgs.DryRun {
