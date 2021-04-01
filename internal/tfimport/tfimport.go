@@ -761,8 +761,10 @@ func planAndImport(rn, importRn runner.Runner, runArgs *RunArgs, skipped map[str
 		// err will be `exit code 1` even when it failed because the resource is not importable or already exists.
 		case NotImportable(output):
 			log.Printf("Import not supported by provider for resource %q\n", cc.Address)
+			skipped[cc.Address] = true
 		case DoesNotExist(output):
 			log.Printf("Resource %q does not exist, not importing\n", cc.Address)
+			skipped[cc.Address] = true
 
 		// Important to handle this last.
 		default:
