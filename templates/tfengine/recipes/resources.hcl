@@ -254,7 +254,7 @@ schema = {
               The
               [tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)
               for the master instance.
-              EOF
+            EOF
             type        = "string"
           }
           user_name = {
@@ -264,6 +264,12 @@ schema = {
           user_password = {
             description = "Default user password."
             type        = "string"
+          }
+          deletion_protection = {
+            description = <<EOF
+              Used to block Terraform from deleting a SQL Instance. Defaults to true.
+            EOF
+            type        = "boolean"
           }
           labels = {
             description = "Labels to set on the instance."

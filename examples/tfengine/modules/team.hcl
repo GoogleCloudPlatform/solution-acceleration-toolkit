@@ -103,13 +103,18 @@ template "project_networks" {
         ]
         cloud_sql_private_service_access = {} # Enable SQL private service access.
       }]
+      service_accounts = [{
+        account_id   = "bastion-accessor"
+        description  = "Placeholder service account to use as members who can access the bastion host."
+        display_name = "Bastion Accessor Service Account"
+      }]
       bastion_hosts = [{
         name           = "bastion-vm"
         network        = "$${module.network.network.network.self_link}"
         subnet         = "$${module.network.subnets[\"{{.default_location}}/bastion-subnet\"].self_link}"
         image_family   = "ubuntu-2004-lts"
         image_project  = "ubuntu-os-cloud"
-        members        = ["group:{{.prefix}}-bastion-accessors@{{.domain}}"]
+        members        = ["serviceAccount:$${google_service_account.bastion_accessor.email}"] # Placeholder for testing.
         startup_script = <<EOF
 sudo apt-get -y update
 sudo apt-get -y install mysql-client
@@ -143,10 +148,10 @@ template "project_apps" {
     project = {
       project_id = "{{.prefix}}-{{.env}}-apps"
       apis = [
+        "binaryauthorization.googleapis.com",
         "compute.googleapis.com",
         "dns.googleapis.com",
         "container.googleapis.com",
-        "pubsub.googleapis.com",
       ]
       shared_vpc_attachment = {
         host_project_id = "{{.prefix}}-{{.env}}-networks"
@@ -164,7 +169,6 @@ template "project_apps" {
         ip_range_pods_name     = "pods-range"
         ip_range_services_name = "services-range"
         master_ipv4_cidr_block = "192.168.0.0/28"
-        service_account        = "$${google_service_account.runner.account_id}@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
 
         # Set custom node pool to control machine type.
         node_pools = [{
@@ -210,7 +214,6 @@ template "project_apps" {
         }]
       }]
       iam_members = {
-        "roles/container.viewer" = ["group:{{.prefix}}-apps-viewers@{{.domain}}"]
         "roles/storage.objectViewer" = [
           "serviceAccount:$${google_service_account.runner.account_id}@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com",
         ]
@@ -232,7 +235,9 @@ template "project_apps" {
     terraform_addons = {
       raw_config = <<EOF
 resource "google_compute_address" "static" {
-  name = "static-ipv4-address"
+  name    = "static-ipv4-address"
+  project = module.project.project_id
+  region  = "{{.default_location}}"
 }
 EOF
     }
@@ -251,14 +256,17 @@ template "project_data" {
         "compute.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
+        "pubsub.googleapis.com",
       ]
       api_identities = [
-        # Need to create stream configs for Cloud Healthcare FHIR store.
         {
           api = "healthcare.googleapis.com"
           roles = [
+            # Need to create stream configs for Cloud Healthcare FHIR store.
             "roles/bigquery.dataEditor",
-            "roles/bigquery.jobUser"
+            "roles/bigquery.jobUser",
+            # Need to create pubsub configs.
+            "roles/pubsub.publisher",
           ]
         },
       ]
@@ -277,17 +285,18 @@ template "project_data" {
         }
       }]
       cloud_sql_instances = [{
-        name               = "sql-instance"
-        type               = "mysql"
-        network_project_id = "{{.prefix}}-{{.env}}-networks"
-        network            = "network"
-        tier               = "db-n1-standard-1"
+        name                = "sql-instance"
+        type                = "mysql"
+        network_project_id  = "{{.prefix}}-{{.env}}-networks"
+        network             = "network"
+        tier                = "db-n1-standard-1"
+        deletion_protection = false
         labels = {
           type = "no-phi"
         }
         user_name = "admin"
-        # TODO(user): uncomment once secret project has been deployed
-        # user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
+        # The secret project must be deployed first so this value is available.
+        user_password    = "$${data.google_secret_manager_secret_version.db_password.secret_data}"
       }]
       healthcare_datasets = [{
         name = "healthcare-dataset"
@@ -302,7 +311,7 @@ template "project_data" {
         dicom_stores = [{
           name = "dicom-store"
           notification_config = {
-            pubsub_topic = "projects/{{.prefix}}-{{.env}}-apps/topics/$${module.topic.topic}"
+            pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
           }
           labels = {
             type = "phi"
@@ -320,14 +329,14 @@ template "project_data" {
               type = "phi"
             }
             notification_config = {
-              pubsub_topic = "projects/{{.prefix}}-{{.env}}-apps/topics/$${module.topic.topic}"
+              pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
             }
             stream_configs = [{
               resource_types = [
                 "Patient",
               ]
               bigquery_destination = {
-                dataset_uri = "bq://{{.prefix}}-{{.env}}-data.dataset_id"
+                dataset_uri = "bq://{{.prefix}}-{{.env}}-data.$${module.one_billion_ms_dataset.bigquery_dataset.dataset_id}"
                 schema_config = {
                   schema_type               = "ANALYTICS"
                   recursive_structure_depth = 3
@@ -346,7 +355,7 @@ template "project_data" {
         hl7_v2_stores = [{
           name = "hl7-store"
           notification_configs = [{
-            pubsub_topic = "projects/{{.prefix}}-{{.env}}-apps/topics/$${module.topic.topic}"
+            pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
           }]
           parser_config = {
             schema  = <<EOF
@@ -368,7 +377,7 @@ EOF
         ]
       }
       storage_buckets = [{
-        name = "bucket"
+        name = "{{.prefix}}-bucket"
         labels = {
           type = "phi"
         }
@@ -382,13 +391,10 @@ EOF
             with_state = "ANY"
           }
         }]
-        retention_policy = {
-          retention_period = 86400 # 1 day.
-        }
-        iam_members = [{
-          role   = "roles/storage.objectViewer"
-          member = "group:{{.prefix}}-data-viewers@{{.domain}}"
-        }]
+        # Skip for integration tests.
+        # retention_policy = {
+        #   retention_period = 86400 # 1 day.
+        # }
       }]
       pubsub_topics = [{
         name = "topic"
@@ -409,8 +415,8 @@ EOF
       }]
     }
     terraform_addons = {
-      /* TODO(user): Uncomment and re-run the engine after deploying secrets.
       raw_config = <<EOF
+# The secret project must be deployed first so this value is available.
 data "google_secret_manager_secret_version" "db_password" {
   provider = google-beta
 
@@ -418,7 +424,6 @@ data "google_secret_manager_secret_version" "db_password" {
   project = "{{.prefix}}-{{.env}}-secrets"
 }
 EOF
-*/
     }
   }
 }

@@ -17,8 +17,11 @@
 //  - The environment variable RUN_INTEGRATION_TEST must be set to "true".
 //  - The environment variables BILLING_ACCOUNT and FOLDER_ID must be set.
 //  - The runner (e.g. authenticated local user or service account) must have
-//    `roles/resourcemanager.projectCreator` on the folder and
-//    `roles/billing.user` on the billing account.
+//    the following roles:
+//    - `roles/resourcemanager.projectCreator` on the folder
+//    - `roles/resourcemanager.folderAdmin` on the folder
+//    - `roles/compute.xpnAdmin` on the folder
+//    - `roles/billing.user` on the billing account
 
 package integration_test
 
@@ -37,7 +40,12 @@ import (
 	"github.com/GoogleCloudPlatform/healthcare-data-protection-suite/internal/tfengine"
 )
 
-var dirsToDeploy = []string{"project_secrets"}
+var dirsToDeploy = []string{
+	"project_secrets",
+	"project_networks",
+	"project_apps",
+	"project_data",
+}
 
 func TestFullDeployment(t *testing.T) {
 	if os.Getenv("RUN_INTEGRATION_TEST") != "true" {
@@ -95,12 +103,20 @@ func TestFullDeployment(t *testing.T) {
 // For data values, see the schema in the team.hcl recipe.
 var confTmpl = template.Must(template.New("").Parse(`
 template "main" {
-	recipe_path = "{{.CWD}}/../../examples/tfengine/modules/team.hcl"
+	recipe_path = "{{.CWD}}/../../examples/tfengine/modules/root.hcl"
 	data = {
-		state_bucket    = "placeholder" # Remote backend block will be removed by test.
-		prefix          = "{{.PREFIX}}"
+		recipes          = "../../templates/tfengine/recipes"
+		folder_id       = "{{.FOLDER_ID}}"
 		billing_account = "{{.BILLING_ACCOUNT}}"
-		parent_id       = "{{.FOLDER_ID}}"
+		prefix          = "{{.PREFIX}}"
+		state_bucket    = "placeholder" # Remote backend block will be removed by test.
+		domain           = "{{.DOMAIN}}"
+		env              = "p"
+		default_location = "us-central1"
+		default_zone     = "a"
+		labels = {
+			env = "prod"
+		}
 	}
 }`))
 
@@ -113,9 +129,7 @@ func writeConfig(t *testing.T, path string) {
 		t.Fatalf("confTmpl.Execute(&buf, %v) = %v", data, err)
 	}
 
-	b := buf.Bytes()
-	t.Logf("config file:\n%v", string(b))
-	if err := ioutil.WriteFile(path, b, 0644); err != nil {
+	if err := ioutil.WriteFile(path, buf.Bytes(), 0644); err != nil {
 		t.Fatalf("ioutil.WriteFile = %v", err)
 	}
 }
@@ -127,9 +141,9 @@ func buildData(t *testing.T) map[string]interface{} {
 	if !ok {
 		t.Fatal("runtime.Caller not ok")
 	}
-	prefix := fmt.Sprintf("dpstest-%v", time.Now().Unix())
+	prefix := fmt.Sprintf("dpt%v", time.Now().Unix())
 
-	data := fromEnv(t, "BILLING_ACCOUNT", "FOLDER_ID")
+	data := fromEnv(t, "BILLING_ACCOUNT", "FOLDER_ID", "DOMAIN")
 	data["CWD"] = filepath.Dir(callerPath)
 	data["PREFIX"] = prefix
 	return data
