@@ -18,7 +18,7 @@ substitutions:
 
 options:
   env: ["GOPATH=/go"]
-  machineType: 'N1_HIGHCPU_8'
+  machineType: "N1_HIGHCPU_8"
 
 steps:
 - name: "gcr.io/cloud-builders/go"
@@ -50,9 +50,3 @@ steps:
   args: ["build/gen_check.sh"]
   waitFor: ["-"]
   id: Generated files check
-
-- name: "${_CFT_TOOLS_CONTAINER}"
-  entrypoint: "bash"
-  args: ["tests/policygen/integration_test.sh"]
-  waitFor: ["-"]
-  id: Policy Generator integration tests

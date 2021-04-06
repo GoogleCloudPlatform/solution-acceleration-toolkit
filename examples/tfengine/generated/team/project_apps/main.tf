@@ -26,7 +26,9 @@ terraform {
 }
 
 resource "google_compute_address" "static" {
-  name = "static-ipv4-address"
+  name    = "static-ipv4-address"
+  project = module.project.project_id
+  region  = "us-central1"
 }
 
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
@@ -55,10 +57,10 @@ module "project" {
     "projects/example-prod-networks/regions/us-central1/subnetworks/gke-subnet",
   ]
   activate_apis = [
+    "binaryauthorization.googleapis.com",
     "compute.googleapis.com",
     "dns.googleapis.com",
     "container.googleapis.com",
-    "pubsub.googleapis.com",
   ]
 }
 resource "google_binary_authorization_policy" "policy" {
@@ -215,15 +217,14 @@ module "gke_cluster" {
   regional           = true
   network_project_id = "example-prod-networks"
 
-  network                        = "network"
-  subnetwork                     = "gke-subnet"
-  ip_range_pods                  = "pods-range"
-  ip_range_services              = "services-range"
-  master_ipv4_cidr_block         = "192.168.0.0/28"
-  skip_provisioners              = true
-  enable_private_endpoint        = false
-  release_channel                = "STABLE"
-  compute_engine_service_account = "${google_service_account.runner.account_id}@example-prod-apps.iam.gserviceaccount.com"
+  network                 = "network"
+  subnetwork              = "gke-subnet"
+  ip_range_pods           = "pods-range"
+  ip_range_services       = "services-range"
+  master_ipv4_cidr_block  = "192.168.0.0/28"
+  skip_provisioners       = true
+  enable_private_endpoint = false
+  release_channel         = "STABLE"
   cluster_resource_labels = {
     env  = "prod"
     type = "no-phi"
@@ -248,9 +249,6 @@ module "project_iam_members" {
   mode     = "additive"
 
   bindings = {
-    "roles/container.viewer" = [
-      "group:example-apps-viewers@example.com",
-    ],
     "roles/storage.objectViewer" = [
       "serviceAccount:${google_service_account.runner.account_id}@example-prod-apps.iam.gserviceaccount.com",
     ],

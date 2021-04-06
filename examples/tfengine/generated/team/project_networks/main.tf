@@ -65,7 +65,7 @@ module "bastion_vm" {
   host_project = module.project.project_id
   network      = module.network.network.network.self_link
   subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
-  members      = ["group:example-bastion-accessors@example.com"]
+  members      = ["serviceAccount:${google_service_account.bastion_accessor.email}"]
   image_family = "ubuntu-2004-lts"
 
   image_project = "ubuntu-os-cloud"
@@ -162,4 +162,13 @@ module "router" {
       ]
     },
   ]
+}
+
+resource "google_service_account" "bastion_accessor" {
+  account_id   = "bastion-accessor"
+  display_name = "Bastion Accessor Service Account"
+
+  description = "Placeholder service account to use as members who can access the bastion host."
+
+  project = module.project.project_id
 }
