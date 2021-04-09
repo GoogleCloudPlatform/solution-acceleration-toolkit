@@ -1,0 +1,48 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Terraform version used is 0.14.8.
+substitutions:
+  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:8b0d85766044b0e4701729f9e70ee78dcecdb8688bd86915eb2a1cb00580ba1e"
+
+timeout: 3600s
+
+options:
+  env: ["GOPATH=/go"]
+  machineType: "N1_HIGHCPU_8"
+
+steps:
+- name: "${_CFT_TOOLS_CONTAINER}"
+  entrypoint: "terraform"
+  args: ["version"]
+  waitFor: ["-"]
+  id: Terraform version
+
+- name: "${_CFT_TOOLS_CONTAINER}"
+  entrypoint: "go"
+  args: ["test", "./tests/tfengine/...", "-v", "-timeout", "60m"]
+  waitFor: ["-"]
+  id: Terraform Engine integration tests
+  env:
+  - "RUN_INTEGRATION_TEST=true"
+  # These values are configured in the Cloud Build Trigger as substitutions.
+  - "BILLING_ACCOUNT=${_BILLING_ACCOUNT}"
+  - "FOLDER_ID=${_FOLDER_ID}"
+  - "DOMAIN=${_DOMAIN}"
+
+- name: "${_CFT_TOOLS_CONTAINER}"
+  entrypoint: "bash"
+  args: ["tests/policygen/integration_test.sh"]
+  waitFor: ["-"]
+  id: Policy Generator integration tests
