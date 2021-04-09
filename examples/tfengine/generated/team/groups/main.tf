@@ -28,7 +28,7 @@ terraform {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 10.2.2"
+  version = "~> 10.3.0"
 
   project_id    = "example-prod-devops"
   activate_apis = []
@@ -42,7 +42,7 @@ provider "google-beta" {
 
 module "example_cicd_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-cicd-viewers@example.com"
   customer_id  = "c12345678"
@@ -51,7 +51,7 @@ module "example_cicd_viewers_example_com" {
 
 module "example_cicd_editors_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-cicd-editors@example.com"
   customer_id  = "c12345678"
@@ -60,7 +60,7 @@ module "example_cicd_editors_example_com" {
 
 module "example_apps_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-apps-viewers@example.com"
   customer_id  = "c12345678"
@@ -70,7 +70,7 @@ module "example_apps_viewers_example_com" {
 
 module "example_data_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-data-viewers@example.com"
   customer_id  = "c12345678"
@@ -80,7 +80,7 @@ module "example_data_viewers_example_com" {
 
 module "example_healthcare_dataset_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-healthcare-dataset-viewers@example.com"
   customer_id  = "c12345678"
@@ -90,7 +90,7 @@ module "example_healthcare_dataset_viewers_example_com" {
 
 module "example_fhir_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-fhir-viewers@example.com"
   customer_id  = "c12345678"
@@ -100,7 +100,7 @@ module "example_fhir_viewers_example_com" {
 
 module "example_bastion_accessors_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.0"
 
   id           = "example-bastion-accessors@example.com"
   customer_id  = "c12345678"

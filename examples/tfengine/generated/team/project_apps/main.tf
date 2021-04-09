@@ -36,7 +36,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.2.2"
+  version = "~> 10.3.0"
 
   name            = "example-prod-apps"
   org_id          = ""
@@ -120,7 +120,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.1.0"
+  version = "~> 6.2.0"
 
   name_prefix        = "instance-template"
   project_id         = module.project.project_id
@@ -156,7 +156,7 @@ module "instance_template" {
 
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.1.0"
+  version = "~> 6.2.0"
 
   hostname           = "instance"
   instance_template  = module.instance_template.self_link
