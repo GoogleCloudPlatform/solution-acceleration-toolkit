@@ -50,3 +50,9 @@ steps:
   args: ["build/gen_check.sh"]
   waitFor: ["-"]
   id: Generated files check
+
+- name: "${_CFT_TOOLS_CONTAINER}"
+  entrypoint: "bash"
+  args: ["tests/policygen/integration_test.sh"]
+  waitFor: ["-"]
+  id: Policy Generator integration tests
