@@ -26,13 +26,14 @@ module "{{resourceName . "name"}}" {
   name              = "{{.name}}"
   project_id        = module.project.project_id
   region            = "{{get . "cloud_sql_region" $.cloud_sql_region}}"
-  zone              = "{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
+  zone              = "{{get . "cloud_sql_region" $.cloud_sql_region}}-{{get . "cloud_sql_zone" $.cloud_sql_zone}}"
   availability_type = "REGIONAL"
   database_version  = "MYSQL_5_7"
   vpc_network       = "{{$network}}"
   {{hclField . "tier" -}}
   {{hclField . "user_name" -}}
   {{hclField . "user_password" -}}
+  {{hclField . "deletion_protection" -}}
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   user_labels = {

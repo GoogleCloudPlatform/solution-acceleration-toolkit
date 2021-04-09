@@ -192,6 +192,12 @@ Zone to reate cloud sql instance in. Can be defined in global data block.
 
 Type: string
 
+### cloud_sql_instances.deletion_protection
+
+Used to block Terraform from deleting a SQL Instance. Defaults to true.
+
+Type: boolean
+
 ### cloud_sql_instances.labels
 
 Labels to set on the instance.
