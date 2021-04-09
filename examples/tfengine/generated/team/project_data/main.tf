@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -78,7 +78,7 @@ module "project" {
 
 module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.4.0"
+  version = "~> 5.0.0"
 
   dataset_id                  = "1billion_ms_dataset"
   project_id                  = module.project.project_id
@@ -92,7 +92,7 @@ module "one_billion_ms_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.5.0"
+  version = "~> 5.0.0"
 
   name                = "sql-instance"
   project_id          = module.project.project_id
@@ -213,7 +213,7 @@ EOF
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.4.0"
+  version = "~> 7.1.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
@@ -227,7 +227,7 @@ module "project_iam_members" {
 
 module "topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.9.0"
+  version = "~> 2.0.0"
 
   topic      = "topic"
   project_id = module.project.project_id

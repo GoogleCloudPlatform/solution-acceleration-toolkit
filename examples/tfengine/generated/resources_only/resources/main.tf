@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -36,7 +36,7 @@ module "project" {
 
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.4.0"
+  version = "~> 5.0.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
   project_id                  = module.project.project_id

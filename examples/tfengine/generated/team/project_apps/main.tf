@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -204,7 +204,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.1.0"
+  version = "~> 14.1.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
@@ -243,7 +243,7 @@ module "gke_cluster" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.4.0"
+  version = "~> 7.1.0"
 
   projects = [module.project.project_id]
   mode     = "additive"

@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -130,7 +130,7 @@ module "network" {
 }
 module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.5.0"
+  version = "~> 5.0.0"
 
   project_id  = module.project.project_id
   vpc_network = module.network.network_name
