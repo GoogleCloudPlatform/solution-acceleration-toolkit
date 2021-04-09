@@ -25,6 +25,14 @@ terraform {
   }
 }
 
+# The secret project must be deployed first so this value is available.
+data "google_secret_manager_secret_version" "db_password" {
+  provider = google-beta
+
+  secret  = "auto-sql-db-password"
+  project = "example-prod-secrets"
+}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -52,6 +60,7 @@ module "project" {
     "compute.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
+    "pubsub.googleapis.com",
   ]
   activate_api_identities = [
     {
@@ -60,6 +69,7 @@ module "project" {
       roles = [
         "roles/bigquery.dataEditor",
         "roles/bigquery.jobUser",
+        "roles/pubsub.publisher",
       ]
     },
   ]
@@ -84,15 +94,17 @@ module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 4.5.0"
 
-  name              = "sql-instance"
-  project_id        = module.project.project_id
-  region            = "us-central1"
-  zone              = "a"
-  availability_type = "REGIONAL"
-  database_version  = "MYSQL_5_7"
-  vpc_network       = "projects/example-prod-networks/global/networks/network"
-  tier              = "db-n1-standard-1"
-  user_name         = "admin"
+  name                = "sql-instance"
+  project_id          = module.project.project_id
+  region              = "us-central1"
+  zone                = "us-central1-a"
+  availability_type   = "REGIONAL"
+  database_version    = "MYSQL_5_7"
+  vpc_network         = "projects/example-prod-networks/global/networks/network"
+  tier                = "db-n1-standard-1"
+  user_name           = "admin"
+  user_password       = data.google_secret_manager_secret_version.db_password.secret_data
+  deletion_protection = false
   user_labels = {
     env  = "prod"
     type = "no-phi"
@@ -123,7 +135,7 @@ module "healthcare_dataset" {
     {
       name = "dicom-store"
       notification_config = {
-        pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
+        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
       labels = {
         env  = "prod"
@@ -141,12 +153,12 @@ module "healthcare_dataset" {
       disable_resource_versioning   = false
       enable_history_import         = false
       notification_config = {
-        pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
+        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
       stream_configs = [
         {
           bigquery_destination = {
-            dataset_uri = "bq://example-prod-data.dataset_id"
+            dataset_uri = "bq://example-prod-data.${module.one_billion_ms_dataset.bigquery_dataset.dataset_id}"
             schema_config = {
               recursive_structure_depth = 3
 
@@ -176,7 +188,7 @@ module "healthcare_dataset" {
       name = "hl7-store"
       notification_configs = [
         {
-          pubsub_topic = "projects/example-prod-apps/topics/${module.topic.topic}"
+          pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
         },
       ]
       parser_config = {
@@ -240,11 +252,11 @@ module "topic" {
   ]
 }
 
-module "bucket" {
+module "example_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "bucket"
+  name       = "example-bucket"
   project_id = module.project.project_id
   location   = "us-central1"
 
@@ -262,15 +274,5 @@ module "bucket" {
         with_state = "ANY"
       }
     }
-  ]
-  retention_policy = {
-    is_locked        = false
-    retention_period = 86400
-  }
-  iam_members = [
-    {
-      member = "group:example-data-viewers@example.com"
-      role   = "roles/storage.objectViewer"
-    },
   ]
 }
