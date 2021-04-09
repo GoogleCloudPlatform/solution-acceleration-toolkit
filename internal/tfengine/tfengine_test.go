@@ -64,10 +64,10 @@ func runPlanOnDeployments(t *testing.T, dir string) {
 
 		// Skip these dirs as they use data sources that are not available until dependencies have been deployed.
 		skipDirs := map[string]bool{
-			"cicd":       true,
-			"kubernetes": true,
-			"monitor":    true,
-			"modules":    true, // modules are called by envs
+			"cicd":         true,
+			"kubernetes":   true,
+			"monitor":      true,
+			"project_data": true,
 		}
 
 		if !info.IsDir() {
