@@ -391,7 +391,7 @@ EOF
             with_state = "ANY"
           }
         }]
-        # Skip for integration tests.
+        # This is skipped for integration tests so the resource can be destroyed afterwards, uncomment when writing a production template.
         # retention_policy = {
         #   retention_period = 86400 # 1 day.
         # }

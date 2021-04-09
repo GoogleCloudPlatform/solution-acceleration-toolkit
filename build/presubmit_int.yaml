@@ -20,7 +20,7 @@ timeout: 3600s
 
 options:
   env: ["GOPATH=/go"]
-  machineType: "N1_HIGHCPU_32"
+  machineType: "N1_HIGHCPU_8"
 
 steps:
 - name: "${_CFT_TOOLS_CONTAINER}"
@@ -36,9 +36,10 @@ steps:
   id: Terraform Engine integration tests
   env:
   - "RUN_INTEGRATION_TEST=true"
-  - "BILLING_ACCOUNT=$_BILLING_ACCOUNT"
-  - "FOLDER_ID=$_FOLDER_ID"
-  - "DOMAIN=$_DOMAIN"
+  # These values are configured in the Cloud Build Trigger as substitutions.
+  - "BILLING_ACCOUNT=${_BILLING_ACCOUNT}"
+  - "FOLDER_ID=${_FOLDER_ID}"
+  - "DOMAIN=${_DOMAIN}"
 
 - name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "bash"

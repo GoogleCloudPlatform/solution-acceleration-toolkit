@@ -15,7 +15,7 @@
 // Prerequisites:
 //  - The terraform binary must be available in $PATH.
 //  - The environment variable RUN_INTEGRATION_TEST must be set to "true".
-//  - The environment variables BILLING_ACCOUNT and FOLDER_ID must be set.
+//  - The environment variables BILLING_ACCOUNT, FOLDER_ID and DOMAIN must be set.
 //  - The runner (e.g. authenticated local user or service account) must have
 //    the following roles:
 //    - `roles/resourcemanager.projectCreator` on the folder
