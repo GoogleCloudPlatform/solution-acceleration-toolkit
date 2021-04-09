@@ -40,9 +40,3 @@ steps:
   - "BILLING_ACCOUNT=${_BILLING_ACCOUNT}"
   - "FOLDER_ID=${_FOLDER_ID}"
   - "DOMAIN=${_DOMAIN}"
-
-- name: "${_CFT_TOOLS_CONTAINER}"
-  entrypoint: "bash"
-  args: ["tests/policygen/integration_test.sh"]
-  waitFor: ["-"]
-  id: Policy Generator integration tests
