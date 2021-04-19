@@ -34,6 +34,6 @@ steps:
 
   - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:3a3b2cf77a1096c56bd76c3466d7f2a584132396097944a7725e996fce76d5cc"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "validate"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -backend=false", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate

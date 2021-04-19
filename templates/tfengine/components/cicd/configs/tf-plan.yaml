@@ -29,7 +29,7 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "plan -lock=false -out=plan.tfplan"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -lock=false", "-a", "plan -lock=false -out=plan.tfplan"]
     dir: "${_TERRAFORM_ROOT}"
     id: Speculative plan
 
