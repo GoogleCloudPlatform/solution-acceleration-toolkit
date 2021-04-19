@@ -72,15 +72,19 @@ in [./configs](./configs) directory to point to your container.
 Two presubmit and one postsubmit triggers are created by default.
 
 * \[Presubmit\] `tf-validate`: Perform Terraform format and syntax check.
+  * It does not access Terraform remote state.
 * \[Presubmit\] `tf-plan`: Generate speculative plans to show a set of
     potential changes if the pending config changes are deployed.
+  * It accesses Terraform remote state but does not lock it.
   * This also performs a non-blocking check for resource deletions. These
         are worth reviewing, as deletions are potentially destructive.
 * \[Postsubmit\] `tf-apply`: Apply the terraform configs that are checked into
-    the config source repo. This trigger is only applicable post-submit. When
-    this trigger is set in the Terraform engine config, the Cloud Build service
-    account is given broader permissions to be able to make changes to the
-    infrastructure.
+    the config source repo.
+  * It accesses Terraform remote state and locks it.
+  * This trigger is only applicable post-submit.
+  * When this trigger is set in the Terraform engine config, the Cloud Build
+        service account is given broader permissions to be able to make changes
+        to the infrastructure.
 
 Every new push to the Pull Request at the configured branches automatically
 triggers presubmit runs. To manually re-trigger CI jobs, comment `/gcbrun` in

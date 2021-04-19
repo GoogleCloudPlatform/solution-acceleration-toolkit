@@ -35,6 +35,6 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "plan", "-a", "apply -auto-approve"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init", "-a", "plan", "-a", "apply -auto-approve"]
     dir: "${_TERRAFORM_ROOT}"
     id: Apply

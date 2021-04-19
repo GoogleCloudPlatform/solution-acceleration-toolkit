@@ -35,6 +35,6 @@ steps:
 
   - name: "{{$cft}}"
     entrypoint: bash
-    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "validate"]
+    args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -backend=false", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate

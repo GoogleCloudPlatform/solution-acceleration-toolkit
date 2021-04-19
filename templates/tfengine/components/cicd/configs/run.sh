@@ -40,7 +40,6 @@ IFS=' ' read -r -a DIRS <<< "${DIRS}"
 for mod in "${DIRS[@]}"
 do
     cd "${ROOT}"/"${mod}"
-    terraform init
     for action in "${ACTIONS[@]}"
     do
       # Convert action string to array as it can have multiple arguments.
