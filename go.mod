@@ -7,7 +7,7 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.5
-	github.com/hashicorp/go-getter/v2 v2.0.0
+	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/go-version v1.3.0
 	github.com/hashicorp/hcl/v2 v2.10.0
 	github.com/hashicorp/terraform v0.15.1
