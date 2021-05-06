@@ -41,6 +41,7 @@ type Options struct {
 	Format          bool
 	AddLicenses     bool
 	CacheDir        string
+	ShowUnmanaged   bool
 	DeleteUnmanaged bool
 
 	// Leave empty to generate all templates.
@@ -100,9 +101,11 @@ func Run(confPath, outPath string, opts *Options) error {
 		}
 	}
 
-	// Always show unmanaged files but control deletion via flag.
-	if err := findUnmanaged(tmpDir, outPath, opts.DeleteUnmanaged); err != nil {
-		errs = append(errs, err.Error())
+	// Show unmanaged files and optionally control deletion via flag.
+	if opts.ShowUnmanaged {
+		if err := findUnmanaged(tmpDir, outPath, opts.DeleteUnmanaged); err != nil {
+			errs = append(errs, err.Error())
+		}
 	}
 
 	if err := copy.Copy(tmpDir, outPath); err != nil {
