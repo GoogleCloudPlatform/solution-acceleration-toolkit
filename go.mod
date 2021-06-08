@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/go-getter v1.5.3
 	github.com/hashicorp/go-version v1.3.0
 	github.com/hashicorp/hcl/v2 v2.10.0
-	github.com/hashicorp/terraform v0.15.3
+	github.com/hashicorp/terraform v1.0.0
 	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/otiai10/copy v1.6.0
