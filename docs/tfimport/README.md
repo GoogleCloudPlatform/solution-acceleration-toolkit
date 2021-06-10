@@ -18,7 +18,7 @@ Download a pre-built
 [tfimport binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/):
 
 ```shell
-VERSION=v0.2.0
+VERSION=v0.8.0
 wget -O /usr/local/bin/tfimport https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfimport_${VERSION}_linux-amd64
 chmod +x /usr/local/bin/tfimport
 ```
