@@ -65,7 +65,7 @@ validate and deploy Terraform configs. If you would like to use a different
 container for production deployment, you can modify the Cloud Build YAML files
 in [./configs](./configs) directory to point to your container.
 
-We leverage Cloud Container Registry's Vulnerability scanning feature to detect
+We leverage Google Container Registry's Vulnerability scanning feature to detect
 potential security risks in this container, and
 [None](https://console.cloud.google.com/gcr/images/cloud-foundation-cicd/global/cft/developer-tools-light@sha256:d881ce4ff2a73fa0877dd357af798a431a601b2ccfe5a140837bcb883cd3f011/details?tab=vulnz)
 is reported.
