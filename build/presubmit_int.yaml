@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Terraform version used is 0.14.8.
+# Terraform version used is 1.0.1.
 substitutions:
-  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:8b0d85766044b0e4701729f9e70ee78dcecdb8688bd86915eb2a1cb00580ba1e"
+  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools@sha256:22113ceabae0cccfc8eaeb3a9521a0950fa75e2fe38777f47c3d32f071cc7834"
 
 timeout: 3600s
 
