@@ -67,7 +67,7 @@ in [./configs](./configs) directory to point to your container.
 
 We leverage Google Container Registry's Vulnerability scanning feature to detect
 potential security risks in this container, and
-[None](https://console.cloud.google.com/gcr/images/cloud-foundation-cicd/global/cft/developer-tools-light@sha256:d881ce4ff2a73fa0877dd357af798a431a601b2ccfe5a140837bcb883cd3f011/details?tab=vulnz)
+[None](https://console.cloud.google.com/gcr/images/cloud-foundation-cicd/global/cft/developer-tools-light@sha256:7c40255f4df73cca81c943456bf1ebe6c58da455a24d90b5d7d9964e97bf5646/details?tab=vulnz)
 is reported.
 
 ## Features
