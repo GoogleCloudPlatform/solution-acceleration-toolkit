@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC
+// Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import (
 	"strings"
 )
 
-var license = []byte(`# Copyright 2020 Google LLC
+var license = []byte(`# Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ func writeLicense(path string, fmode os.FileMode) error {
 		return err
 	}
 
-	if bytes.Contains(b, []byte("Copyright 2020 Google LLC")) {
+	if bytes.Contains(b, []byte("Copyright 2021 Google LLC")) {
 		return nil
 	}
 
