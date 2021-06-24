@@ -123,6 +123,7 @@ func massageSchema(s *schema) {
 
 	for _, prop := range s.Properties {
 		prop.Description = strings.TrimSpace(lstrip(prop.Description))
+		prop.Pattern = strings.ReplaceAll(prop.Pattern, "|", `\|`)
 	}
 }
 

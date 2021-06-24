@@ -7,7 +7,7 @@
 | Property | Description | Type | Required | Default | Pattern |
 | -------- | ----------- | ---- | -------- | ------- | ------- |
 | parent_id | ID of parent GCP resource to apply the policy        Can be one of the organization ID or folder ID according to parent_type. | string | false | - | - |
-| parent_type | Type of parent GCP resource to apply the policy        Can be one of 'organization' or 'folder'. | string | false | - | ^organization|folder$ |
+| parent_type | Type of parent GCP resource to apply the policy        Can be one of 'organization' or 'folder'. | string | false | - | ^organization\|folder$ |
 | project | Config for the project. | object | true | - | - |
 | project.api_identities | The list of service identities (Google Managed service account for the API) to            force-create for the project (e.g. in order to grant additional roles).            APIs in this list will automatically be appended to `apis`.            Not including the API in this list will follow the default behaviour for identity            creation (which is usually when the first resource using the API is created).            Any roles (e.g. service agent role) must be explicitly listed.            See <https://cloud.google.com/iam/docs/understanding-roles#service-agent-roles-roles>            for a list of related roles. | array(object) | false | - | - |
 | project.api_identities.api | - | string | false | - | - |
