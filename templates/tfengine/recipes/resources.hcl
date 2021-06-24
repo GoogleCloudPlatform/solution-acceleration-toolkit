@@ -827,7 +827,7 @@ schema = {
                   type        = "string"
                 }
                 labels = {
-                  description = "Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels>"
+                  description = "Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels>."
                   type        = "object"
                   patternProperties = {
                     ".+" = { type = "string" }

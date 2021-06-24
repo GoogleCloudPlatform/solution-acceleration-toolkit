@@ -101,7 +101,7 @@ schema = {
         <https://cloud.google.com/logging/docs/view/query-library> for query syntax.
         Need to escape \ and " to preserve them in the final filter strings.
         See example usages under "examples/tfengine/".
-        Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
+        Logs with filter `"logName:\"logs/cloudaudit.googleapis.com\""` is always enabled.
       EOF
       type        = "array"
       items = {

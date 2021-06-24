@@ -24,23 +24,10 @@ var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 <!-- These files are auto generated -->
 
 ## Properties
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 {{- range $name, $_ := .Properties}}
-
-### {{$name}}
-
-{{- if .Description}}
-
-{{.Description}}
-{{- end}}
-
-{{- if .Type}}
-
-Type: {{.Type}}
-{{- end}}
-
-{{- if .Pattern}}
-
-Pattern: {{.Pattern}}
-{{- end}}
+| {{$name}} | {{or .Description "-"}} | {{or .Type "-"}} | {{.RequiredByParent}} | {{or .Default "-"}} | {{or .Pattern "-"}} |
 {{- end}}
 `))
