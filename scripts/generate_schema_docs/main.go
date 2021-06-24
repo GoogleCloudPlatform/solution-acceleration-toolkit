@@ -130,7 +130,7 @@ func massageSchema(s *schema) {
 // flag indicating that field is listed as required at the previous level
 func addRequiredByParent(props map[string]*property, requiredFieldsByParent map[string]bool) {
 	for name, prop := range props {
-		if requiredFieldsByParent[name] {
+		if _, ok := requiredFieldsByParent[name]; ok {
 			prop.RequiredByParent = true
 		}
 		switch prop.Type {
