@@ -118,11 +118,36 @@ func schemaFromHCL(b []byte) (*schema, error) {
 func massageSchema(s *schema) {
 	props := s.Properties
 	s.Properties = make(map[string]*property, len(props))
+	addRequiredByParent(props, requiredToMap(s.Required))
 	flattenObjects(s, props, "")
 
 	for _, prop := range s.Properties {
 		prop.Description = strings.TrimSpace(lstrip(prop.Description))
 	}
+}
+
+// addRequiredByParent traverses the schema and adds a requiredByParent
+// flag indicating that field is listed as required at the previous level
+func addRequiredByParent(props map[string]*property, requiredFieldsByParent map[string]bool) {
+	for name, prop := range props {
+		if requiredFieldsByParent[name] == true {
+			prop.RequiredByParent = true
+		}
+		switch prop.Type {
+		case "object":
+			addRequiredByParent(prop.Properties, requiredToMap(prop.Required))
+		case "array":
+			addRequiredByParent(prop.Items.Properties, requiredToMap(prop.Items.Required))
+		}
+	}
+}
+
+func requiredToMap(required []string) map[string]bool {
+	requiredMap := make(map[string]bool)
+	for _, field := range required {
+		requiredMap[field] = true
+	}
+	return requiredMap
 }
 
 // flattenObjects will add the properties of all objects to the top level schema.
@@ -143,11 +168,12 @@ func flattenObjects(s *schema, props map[string]*property, prefix string) {
 // lstrip trims left space from all lines.
 func lstrip(s string) string {
 	var b strings.Builder
-	for _, line := range strings.Split(s, "\n") {
+	strings.ReplaceAll(s, "\n", "")
+	for _, line := range strings.Split(s, "\n\n") {
 		b.WriteString(strings.TrimLeft(line, " "))
-		b.WriteRune('\n')
+		b.WriteString("<br><br>")
 	}
-	return b.String()
+	return strings.ReplaceAll(b.String(), "\n", "")
 }
 
 func writeSchema(b []byte, outPath string) error {

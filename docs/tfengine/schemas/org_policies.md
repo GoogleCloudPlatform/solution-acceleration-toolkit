@@ -3,63 +3,13 @@
 <!-- These files are auto generated -->
 
 ## Properties
-
-### allowed_ip_forwarding_vms
-
-See templates/policygen/org_policies/variables.tf.
-If not specified, default to allow all.
-
-Type: array(string)
-
-### allowed_policy_member_customer_ids
-
-See templates/policygen/org_policies/variables.tf. Must be specified to restrict
-domain members that can be assigned IAM roles. Obtain the ID by following
-<https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>.
-
-Type: array(string)
-
-### allowed_public_vms
-
-See templates/policygen/org_policies/variables.tf.
-If not specified, default to deny all.
-
-Type: array(string)
-
-### allowed_shared_vpc_host_projects
-
-See templates/policygen/org_policies/variables.tf.
-If not specified, default to allow all.
-
-Type: array(string)
-
-### allowed_trusted_image_projects
-
-See templates/policygen/org_policies/variables.tf.
-If not specified, default to allow all.
-
-Type: array(string)
-
-### output_path
-
-For internal use. Default state path prefix for Terraform Engine deployments.
-
-Type: string
-
-### parent_id
-
-ID of parent GCP resource to apply the policy: can be one of the organization ID,
-folder ID, or project ID according to parent_type.
-
-Type: string
-
-Pattern: ^[0-9]{8,25}$
-
-### parent_type
-
-Type of parent GCP resource to apply the policy: can be one of "organization",
-"folder", or "project".
-
-Type: string
-
-Pattern: ^organization|folder|project$
+| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
+| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+| allowed_ip_forwarding_vms | See templates/policygen/org_policies/variables.tf.        If not specified, default to allow all.<br><br> | array(string) | false | - | - |
+| allowed_policy_member_customer_ids | See templates/policygen/org_policies/variables.tf. Must be specified to restrict        domain members that can be assigned IAM roles. Obtain the ID by following        <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>.<br><br> | array(string) | true | - | - |
+| allowed_public_vms | See templates/policygen/org_policies/variables.tf.        If not specified, default to deny all.<br><br> | array(string) | false | - | - |
+| allowed_shared_vpc_host_projects | See templates/policygen/org_policies/variables.tf.        If not specified, default to allow all.<br><br> | array(string) | false | - | - |
+| allowed_trusted_image_projects | See templates/policygen/org_policies/variables.tf.        If not specified, default to allow all.<br><br> | array(string) | false | - | - |
+| output_path | For internal use. Default state path prefix for Terraform Engine deployments.<br><br> | string | false | - | - |
+| parent_id | ID of parent GCP resource to apply the policy: can be one of the organization ID,        folder ID, or project ID according to parent_type.<br><br> | string | false | - | ^[0-9]{8,25}$ |
+| parent_type | Type of parent GCP resource to apply the policy: can be one of "organization",        "folder", or "project".<br><br> | string | false | - | ^organization|folder|project$ |
