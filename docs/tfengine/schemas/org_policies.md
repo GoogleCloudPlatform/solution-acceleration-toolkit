@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | allowed_ip_forwarding_vms | See templates/policygen/org_policies/variables.tf.        If not specified, default to allow all. | array(string) | false | - | - |
 | allowed_policy_member_customer_ids | See templates/policygen/org_policies/variables.tf. Must be specified to restrict        domain members that can be assigned IAM roles. Obtain the ID by following        <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>. | array(string) | true | - | - |
 | allowed_public_vms | See templates/policygen/org_policies/variables.tf.        If not specified, default to deny all. | array(string) | false | - | - |

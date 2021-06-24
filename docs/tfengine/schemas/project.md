@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | parent_id | ID of parent GCP resource to apply the policy        Can be one of the organization ID or folder ID according to parent_type. | string | false | - | - |
 | parent_type | Type of parent GCP resource to apply the policy        Can be one of 'organization' or 'folder'. | string | false | - | ^organization|folder$ |
 | project | Config for the project. | object | true | - | - |

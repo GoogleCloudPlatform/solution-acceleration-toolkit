@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | data | Global set of key-value pairs to pass to all templates.      It will be merged with data set in the templates. | object | false | - | - |
 | schema | Schema the data for this template must adhere to. Typically only set in recipes. | object | false | - | - |
 | template | Templates the engine will parse and fill in with values from data.<br><br>Templates use the [Go templating engine](https://golang.org/pkg/text/template/).<br><br>Template maintainers can use several      [helper template funcs](../../template/funcmap.go). | array(object) | false | - | - |

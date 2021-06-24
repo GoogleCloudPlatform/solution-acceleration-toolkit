@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | folders | Folders to create. | array(object) | true | - | - |
 | folders.display_name | Name of folder. | string | true | - | - |
 | folders.parent | Parent of folder. | string | false | - | - |

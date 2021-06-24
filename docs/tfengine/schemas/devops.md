@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | admins_group | Group which will be given admin access to the folder or organization.        It will be created if 'exists' is false. | object | true | - | - |
 | admins_group.customer_id | Customer ID of the organization to create the group in.            See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>            for how to obtain it. | string | false | - | - |
 | admins_group.description | Description of the group. | string | false | - | - |

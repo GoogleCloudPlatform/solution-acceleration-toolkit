@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | state_bucket | State bucket to use for GCS backend. | string | false | - | - |
 | state_path_prefix | Object path prefix for GCS backend. Defaults to the template's output_path. | string | false | - | - |
 | terraform_addons | Extra addons to set in the deployment. | object | false | - | - |

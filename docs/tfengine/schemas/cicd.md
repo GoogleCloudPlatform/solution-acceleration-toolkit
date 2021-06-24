@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | build_editors | IAM members to grant `cloudbuild.builds.editor` role in the devops project        to see CICD results. | array(string) | false | - | - |
 | build_viewers | IAM members to grant `cloudbuild.builds.viewer` role in the devops project        to see CICD results. | array(string) | false | - | - |
 | cloud_source_repository | Config for Google Cloud Source Repository.<br><br>IMPORTANT: Cloud Source Repositories does not support code review or        presubmit runs. If you set both plan and apply to run at the same time,        they will conflict and may error out. To get around this, for 'shared'        and 'prod' environment, set 'apply' trigger to not 'run_on_push',        and for other environments, do not specify the 'plan' trigger block        and let 'apply' trigger 'run_on_push'. | object | false | - | - |

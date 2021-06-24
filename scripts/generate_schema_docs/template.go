@@ -24,8 +24,9 @@ var tmpl = template.Must(template.New("").Parse(`# {{.Title}}
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 {{- range $name, $_ := .Properties}}
 | {{$name}} | {{or .Description "-"}} | {{or .Type "-"}} | {{.RequiredByParent}} | {{or .Default "-"}} | {{or .Pattern "-"}} |
 {{- end}}

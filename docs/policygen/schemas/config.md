@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | forseti_policies | Key value pairs configure Forseti Policy Library constraints. | object | false | - | - |
 | forseti_policies.allowed_policy_member_domains | The list of domains to allow users from, e.g. example.com | array(string) | false | - | - |
 | forseti_policies.targets | List of targets to apply the policies, e.g. organizations/**,          organizations/123/folders/456. | array(string) | true | - | - |

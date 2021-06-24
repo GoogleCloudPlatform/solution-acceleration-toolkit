@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | bastion_hosts | [Module](https://github.com/terraform-google-modules/terraform-google-bastion-host) | array(object) | false | - | - |
 | bastion_hosts.compute_region | Region to create bastion host in. Can be defined in global data block. | string | false | - | - |
 | bastion_hosts.compute_zone | Zone to create bastion host in. Can be defined in global data block. | string | false | - | - |
@@ -130,7 +131,7 @@
 | healthcare_datasets.consent_stores.iam_members | IAM member to grant access for. | array(object) | false | - | - |
 | healthcare_datasets.consent_stores.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | healthcare_datasets.consent_stores.iam_members.role | IAM role to grant. | string | true | - | - |
-| healthcare_datasets.consent_stores.labels | Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels | object | false | - | - |
+| healthcare_datasets.consent_stores.labels | Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels>. | object | false | - | - |
 | healthcare_datasets.consent_stores.name | Name of consent store. | string | true | - | - |
 | healthcare_datasets.dicom_stores | Dicom stores to create. | array(object) | false | - | - |
 | healthcare_datasets.dicom_stores.iam_members | IAM member to grant access for. | array(object) | false | - | - |

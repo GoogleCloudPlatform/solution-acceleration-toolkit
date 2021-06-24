@@ -3,8 +3,9 @@
 <!-- These files are auto generated -->
 
 ## Properties
-| Property 	| Description 						| Type 	   			   | Required			   		   | Default             | Pattern 			 			 |
-| --------- | ----------------------- | ---------------- | --------------------- | ------------------- | ------------------- |
+
+| Property | Description | Type | Required | Default | Pattern |
+| -------- | ----------- | ---- | -------- | ------- | ------- |
 | cloud_sql_region | Location of cloud sql instances. | string | false | - | - |
 | compute_region | Location of compute instances. | string | false | - | - |
 | forseti | Config for the Forseti instance. | object | false | - | - |
