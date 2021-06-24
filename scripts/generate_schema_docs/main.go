@@ -130,7 +130,7 @@ func massageSchema(s *schema) {
 // flag indicating that field is listed as required at the previous level
 func addRequiredByParent(props map[string]*property, requiredFieldsByParent map[string]bool) {
 	for name, prop := range props {
-		if requiredFieldsByParent[name] == true {
+		if requiredFieldsByParent[name] {
 			prop.RequiredByParent = true
 		}
 		switch prop.Type {
@@ -143,7 +143,7 @@ func addRequiredByParent(props map[string]*property, requiredFieldsByParent map[
 }
 
 func requiredToMap(required []string) map[string]bool {
-	requiredMap := make(map[string]bool)
+	requiredMap := make(map[string]bool, len(required))
 	for _, field := range required {
 		requiredMap[field] = true
 	}
@@ -168,12 +168,13 @@ func flattenObjects(s *schema, props map[string]*property, prefix string) {
 // lstrip trims left space from all lines.
 func lstrip(s string) string {
 	var b strings.Builder
-	strings.ReplaceAll(s, "\n", "")
 	for _, line := range strings.Split(s, "\n\n") {
 		b.WriteString(strings.TrimLeft(line, " "))
 		b.WriteString("<br><br>")
 	}
-	return strings.ReplaceAll(b.String(), "\n", "")
+	result := b.String()
+	result = strings.TrimRight(result, "<br>")
+	return strings.ReplaceAll(result, "\n", "")
 }
 
 func writeSchema(b []byte, outPath string) error {
