@@ -10,7 +10,7 @@
 | parent_type | Type of parent GCP resource to apply the policy        Can be one of 'organization' or 'folder'. | string | false | - | ^organization\|folder$ |
 | project | Config for the project. | object | true | - | - |
 | project.api_identities | The list of service identities (Google Managed service account for the API) to            force-create for the project (e.g. in order to grant additional roles).            APIs in this list will automatically be appended to `apis`.            Not including the API in this list will follow the default behaviour for identity            creation (which is usually when the first resource using the API is created).            Any roles (e.g. service agent role) must be explicitly listed.            See <https://cloud.google.com/iam/docs/understanding-roles#service-agent-roles-roles>            for a list of related roles. | array(object) | false | - | - |
-| project.api_identities.api | The API to apply the roles to. Example: healthcare.googleapis.com | string | false | - | - |
+| project.api_identities.api | The API whose default Service Agent will be force-created and granted the role. Example: healthcare.googleapis.com. | string | false | - | - |
 | project.api_identities.roles | Roles to granted to the API Service Agent. | array(string) | false | - | - |
 | project.apis | APIs to enable in the project. | array(string) | false | - | - |
 | project.exists | Whether this project exists. Defaults to 'false'. | boolean | false | - | - |

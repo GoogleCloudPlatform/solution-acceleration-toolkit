@@ -84,7 +84,7 @@ schema = {
             properties = {
               api = {
                 type = "string"
-                description = "The API to apply the roles to. Example: healthcare.googleapis.com"
+                description = "The API whose default Service Agent will be force-created and granted the role. Example: healthcare.googleapis.com."
               }
               roles = {
                 description = "Roles to granted to the API Service Agent."
