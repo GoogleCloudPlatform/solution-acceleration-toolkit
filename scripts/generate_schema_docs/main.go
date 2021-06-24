@@ -142,6 +142,7 @@ func addRequiredByParent(props map[string]*property, requiredFieldsByParent map[
 	}
 }
 
+// requiredToMap converts a required array to a map of booleans
 func requiredToMap(required []string) map[string]bool {
 	requiredMap := make(map[string]bool, len(required))
 	for _, field := range required {
