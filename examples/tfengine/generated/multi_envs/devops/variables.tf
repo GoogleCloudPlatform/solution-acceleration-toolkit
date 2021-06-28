@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-{{if not (get .admins_group "exists" false)}}
+
 variable "admins_group" {
   type = object({
     customer_id  = string
@@ -24,7 +24,6 @@ variable "admins_group" {
   })
   description = "Group which will be given admin access to the folder or organization."
 }
-{{- end}}
 
 variable "billing_account" {
   type        = string
