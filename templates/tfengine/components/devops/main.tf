@@ -30,7 +30,7 @@ terraform {
   }
 {{- if get . "enable_gcs_backend"}}
   backend "gcs" {
-    bucket = "{{.state_bucket}}"
+    bucket = var.state_bucket
     prefix = "devops"
   }
 {{- end}}
@@ -41,7 +41,7 @@ terraform {
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
-  billing_project       = "{{.project.project_id}}"
+  billing_project       = var.project.project_id
 }
 {{- end}}
 
@@ -50,26 +50,20 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.2.2"
 
-  name            = "{{.project.project_id}}"
+  name            = var.project.project_id
   {{- if eq .parent_type "organization"}}
-  org_id          = "{{.parent_id}}"
+  org_id          = var.parent_id
   {{- else}}
   org_id          = ""
-  folder_id       = "{{.parent_id}}"
+  folder_id       = var.parent_id
   {{- end}}
-  billing_account = "{{.billing_account}}"
+  billing_account = var.billing_account
   lien            = {{get . "enable_lien" true}}
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
-  activate_apis = [
-    "cloudbuild.googleapis.com",
-    "cloudidentity.googleapis.com",
-    {{range get . "project.apis" -}}
-    "{{.}}",
-    {{end -}}
-  ]
+  activate_apis = var.project.apis
 }
 
 # Terraform state bucket, hosted in the devops project.
@@ -77,9 +71,9 @@ module "state_bucket" {
 source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "{{.state_bucket}}"
+  name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "{{.storage_location}}"
+  location   = var.storage_location
 }
 
 {{- if not (get .project.owners_group "exists" false)}}
@@ -89,17 +83,21 @@ module "owners_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id = "{{.project.owners_group.id}}"
-  customer_id = "{{.project.owners_group.customer_id}}"
-  {{- if has .project.owners_group "display_name"}}
-  display_name = "{{.project.owners_group.display_name}}"
-  {{- else}}
-  display_name = "{{regexReplaceAll "@.*" .project.owners_group.id ""}}"
+  id = var.project.owners_group.id
+  customer_id = var.project.owners_group.customer_id
+  display_name = var.project.owners_group.display_name
+  {{- if has .project.owners_group "description"}}
+  description = var.project.owners_group.description
   {{- end}}
-  {{hclField .project.owners_group "description" -}}
-  {{hclField .project.owners_group "owners" -}}
-  {{hclField .project.owners_group "managers" -}}
-  {{hclField .project.owners_group "members" -}}
+  {{- if has .project.owners_group "owners"}}
+  owners = var.project.owners_group.owners
+  {{- end}}
+  {{- if has .project.owners_group "managers"}}
+  managers = var.project.owners_group.managers
+  {{- end}}
+  {{- if has .project.owners_group "members"}}
+  members = var.project.owners_group.members
+  {{- end}}
   depends_on = [
     module.project
   ]
@@ -120,7 +118,7 @@ resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
   {{- if get .project.owners_group "exists" false}}
-  members = ["group:{{.project.owners_group.id}}"]
+  members = ["group:${var.project.owners_group.id}"]
   {{- else}}
   members = ["group:${module.owners_group.id}"]
   depends_on = [time_sleep.owners_wait]
@@ -134,17 +132,21 @@ module "admins_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id = "{{.admins_group.id}}"
-  customer_id = "{{.admins_group.customer_id}}"
-  {{- if has .admins_group "display_name"}}
-  display_name = "{{.admins_group.display_name}}"
-  {{- else}}
-  display_name = "{{regexReplaceAll "@.*" .admins_group.id ""}}"
+  id = var.admins_group.id
+  customer_id = var.admins_group.customer_id
+  display_name = var.admins_group.display_name
+  {{- if has .admins_group "description"}}
+  description = var.admins_group.description
   {{- end}}
-  {{hclField .admins_group "description" -}}
-  {{hclField .admins_group "owners" -}}
-  {{hclField .admins_group "managers" -}}
-  {{hclField .admins_group "members" -}}
+  {{- if has .admins_group "owners"}}
+  owners = var.admins_group.owners
+  {{- end}}
+  {{- if has .admins_group "managers"}}
+  managers = var.admins_group.managers
+  {{- end}}
+  {{- if has .admins_group "members"}}
+  members = var.admins_group.members
+  {{- end}}
   depends_on = [
     module.project
   ]
@@ -163,13 +165,13 @@ resource "time_sleep" "admins_wait" {
 # Admin permission at {{.parent_type}} level.
 resource "google_{{.parent_type}}_iam_member" "admin" {
   {{- if eq .parent_type "organization"}}
-  org_id = "{{.parent_id}}"
+  org_id = var.parent_id
   {{- else}}
-  folder = "folders/{{.parent_id}}"
+  folder = var.parent_id
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
   {{- if get .admins_group "exists" false}}
-  member = "group:{{.admins_group.id}}"
+  member = "group:${var.admins_group.id}"
   {{- else}}
   member = "group:${module.admins_group.id}"
   depends_on = [time_sleep.admins_wait]

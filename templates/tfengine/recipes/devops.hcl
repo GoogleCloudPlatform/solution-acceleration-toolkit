@@ -126,6 +126,10 @@ schema = {
             all resources managed by the CICD must be listed here
             (even if the resources themselves are in different projects).
           EOF
+          type        = "array"
+          items = {
+            type = "string"
+          }
         }
       }
     }
