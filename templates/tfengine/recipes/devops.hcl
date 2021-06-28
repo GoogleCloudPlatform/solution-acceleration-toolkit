@@ -75,6 +75,7 @@ schema = {
             exists = {
               description = "Whether or not the group exists already. Default to 'false'."
               type        = "boolean"
+              default     = "false"
             }
             customer_id = {
               description = <<EOF
@@ -159,6 +160,7 @@ schema = {
         exists = {
           description = "Whether or not the group exists already. Default to 'false'."
           type        = "boolean"
+          default     = "false"
         }
         customer_id = {
           description = <<EOF
@@ -218,6 +220,7 @@ schema = {
         module.
       EOF
       type        = "boolean"
+      default     = "false"
     }
   }
 }
