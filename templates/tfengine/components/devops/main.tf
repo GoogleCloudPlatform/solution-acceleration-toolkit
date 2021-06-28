@@ -58,7 +58,7 @@ module "project" {
   folder_id       = var.parent_id
   {{- end}}
   billing_account = var.billing_account
-  lien            = {{get . "enable_lien" true}}
+  lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create an additional project service account to be used for Compute Engine.
