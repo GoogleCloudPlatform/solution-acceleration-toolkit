@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-{{if not (get .admins_group "exists" false)}}
+{{if not (get .admins_group "exists")}}
 variable "admins_group" {
   type = object({
     customer_id  = string
@@ -57,7 +57,7 @@ variable "project" {
   description = "Config for the project to host devops resources such as remote state and CICD."
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project.project_id))
-    error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens.  It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects"
+    error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects"
   }
 }
 
