@@ -66,7 +66,7 @@ resource "google_project_iam_binding" "devops_owners" {
 
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder = var.parent_id
+  folder = "folder/${var.parent_id}"
   role   = "roles/resourcemanager.folderAdmin"
   member = "group:${var.admins_group.id}"
 }

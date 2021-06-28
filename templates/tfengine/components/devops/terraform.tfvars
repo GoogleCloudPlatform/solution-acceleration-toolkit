@@ -11,17 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+{{$missing_admins_group := not (get .admins_group "exists")}}
 admins_group = {
-  {{- if not (get .admins_group "exists" false)}}
+  {{- if $missing_admins_group}}
   customer_id  = "{{.admins_group.customer_id}}"
   {{- end -}}
-  {{hclField .admins_group "description" -}}
-  {{- if has .admins_group "display_name"}}
-  display_name = "{{.admins_group.display_name}}"
-  {{- else}}
-  display_name = "{{regexReplaceAll "@.*" .admins_group.id ""}}"
-  {{- end}}
+  {{hclField .admins_group "description"}}
+  display_name = "{{get .admins_group "display_name" (regexReplaceAll "@.*" .admins_group.id "")}}"
   id           = "{{.admins_group.id}}"
   {{hclField .admins_group "owners" -}}
   {{hclField .admins_group "managers" -}}
@@ -38,7 +34,8 @@ project = {
     {{end -}}
   ]
   owners_group = {
-    {{- if or (not (get .admins_group "exists" false)) (not (get .project.owners_group "exists" false))}}
+    {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
+    {{- if or $missing_admins_group $missing_project_owners_group}}
     customer_id  = "{{.project.owners_group.customer_id}}"
     {{- end -}}
     {{hclField .project.owners_group "description" -}}
