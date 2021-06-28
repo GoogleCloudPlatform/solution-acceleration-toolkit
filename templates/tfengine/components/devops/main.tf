@@ -86,18 +86,10 @@ module "owners_group" {
   id = var.project.owners_group.id
   customer_id = var.project.owners_group.customer_id
   display_name = var.project.owners_group.display_name
-  {{- if has .project.owners_group "description"}}
-  description = var.project.owners_group.description
-  {{- end}}
-  {{- if has .project.owners_group "owners"}}
-  owners = var.project.owners_group.owners
-  {{- end}}
-  {{- if has .project.owners_group "managers"}}
-  managers = var.project.owners_group.managers
-  {{- end}}
-  {{- if has .project.owners_group "members"}}
-  members = var.project.owners_group.members
-  {{- end}}
+  description = try(var.project.owners_group.description, null)
+  owners = try(var.project.owners_group.owners, null)
+  managers = try(var.project.owners_group.managers, null)
+  members = try(var.project.owners_group.members, null)
   depends_on = [
     module.project
   ]
@@ -135,18 +127,10 @@ module "admins_group" {
   id = var.admins_group.id
   customer_id = var.admins_group.customer_id
   display_name = var.admins_group.display_name
-  {{- if has .admins_group "description"}}
-  description = var.admins_group.description
-  {{- end}}
-  {{- if has .admins_group "owners"}}
-  owners = var.admins_group.owners
-  {{- end}}
-  {{- if has .admins_group "managers"}}
-  managers = var.admins_group.managers
-  {{- end}}
-  {{- if has .admins_group "members"}}
-  members = var.admins_group.members
-  {{- end}}
+  description = try(var.admins_group.description, null)
+  owners = try(var.admins_group.owners, null)
+  managers = try(var.admins_group.managers, null)
+  members = try(var.admins_group.members, null)
   depends_on = [
     module.project
   ]
