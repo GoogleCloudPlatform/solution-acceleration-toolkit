@@ -119,7 +119,7 @@ resource "time_sleep" "owners_wait" {
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  {{- if get .project.owners_group "exists" false}}
+  {{- if not $missing_project_owners_group}}
   members = ["group:${var.project.owners_group.id}"]
   {{- else}}
   members = ["group:${module.owners_group.id}"]
@@ -172,7 +172,7 @@ resource "google_{{.parent_type}}_iam_member" "admin" {
   folder = "folders/${var.parent_id}"
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
-  {{- if get .admins_group "exists" false}}
+  {{- if not $missing_project_owners_group}}
   member = "group:${var.admins_group.id}"
   {{- else}}
   member = "group:${module.admins_group.id}"

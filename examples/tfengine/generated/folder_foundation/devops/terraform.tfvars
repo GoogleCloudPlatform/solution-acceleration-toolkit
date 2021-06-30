@@ -13,8 +13,7 @@
 # limitations under the License.
 
 admins_group = {
-  id           = "example-folder-admins@example.com"
-  display_name = "example-folder-admins"
+  id = "example-folder-admins@example.com"
 }
 billing_account = "000-000-000"
 parent_id       = "12345678"
@@ -24,8 +23,7 @@ project = {
     "cloudidentity.googleapis.com",
   ]
   owners_group = {
-    id           = "example-devops-owners@example.com"
-    display_name = "example-devops-owners"
+    id = "example-devops-owners@example.com"
   }
   project_id = "example-devops"
 }

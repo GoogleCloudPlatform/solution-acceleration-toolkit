@@ -14,14 +14,13 @@
 {{$missing_admins_group := not (get .admins_group "exists")}}
 variable "admins_group" {
   type = object({
+    id           = string
     {{- if $missing_admins_group}}
     customer_id  = string
     display_name = string
-    {{- end}}
     {{- if has .admins_group "description"}}
     description  = string
     {{- end}}
-    id           = string
     {{- if has .admins_group "owners"}}
     owners       = list(string)
     {{- end}}
@@ -30,6 +29,7 @@ variable "admins_group" {
     {{- end}}
     {{- if has .admins_group "members"}}
     members      = list(string)
+    {{- end}}
     {{- end}}
   })
   description = "Group which will be given admin access to the folder or organization."
@@ -55,15 +55,14 @@ variable "project" {
   type = object({
     apis = list(string)
     owners_group = object({
+      id           = string
       {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
-      {{if $missing_project_owners_group -}}
+      {{- if $missing_project_owners_group}}
       customer_id  = string
       display_name = string
-      {{- end}}
       {{- if has .project.owners_group "description"}}
       description  = string
       {{- end}}
-      id           = string
       {{- if has .project.owners_group "owners"}}
       owners       = list(string)
       {{- end}}
@@ -72,6 +71,7 @@ variable "project" {
       {{- end}}
       {{- if has .project.owners_group "members"}}
       members      = list(string)
+      {{- end}}
       {{- end}}
     })
     project_id = string
