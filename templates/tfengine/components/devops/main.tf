@@ -172,7 +172,7 @@ resource "google_{{.parent_type}}_iam_member" "admin" {
   folder = "folders/${var.parent_id}"
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
-  {{- if not $missing_project_owners_group}}
+  {{- if not $missing_admins_group}}
   member = "group:${var.admins_group.id}"
   {{- else}}
   member = "group:${module.admins_group.id}"
