@@ -36,7 +36,9 @@ terraform {
 {{- end}}
 }
 
-{{- if or (not (get .admins_group "exists" false)) (not (get .project.owners_group "exists" false))}}
+{{- $missing_admins_group := not (get .admins_group "exists")}}
+{{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
+{{- if or $missing_admins_group $missing_project_owners_group}}
 
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
@@ -76,7 +78,7 @@ source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   location   = var.storage_location
 }
 
-{{- if not (get .project.owners_group "exists" false)}}
+{{- if $missing_project_owners_group}}
 
 # Devops project owners group.
 module "owners_group" {
@@ -125,7 +127,7 @@ resource "google_project_iam_binding" "devops_owners" {
   {{- end}}
 }
 
-{{- if not (get .admins_group "exists" false)}}
+{{- if $missing_admins_group}}
 
 # Admins group for at {{.parent_type}} level.
 module "admins_group" {
