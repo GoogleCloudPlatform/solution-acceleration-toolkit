@@ -33,7 +33,7 @@ terraform {
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
-  billing_project       = "example-devops"
+  billing_project       = var.project.project_id
 }
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
@@ -41,19 +41,16 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.2.2"
 
-  name            = "example-devops"
+  name            = var.project.project_id
   org_id          = ""
-  folder_id       = "12345678"
-  billing_account = "000-000-000"
+  folder_id       = var.parent_id
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
-  activate_apis = [
-    "cloudbuild.googleapis.com",
-    "cloudidentity.googleapis.com",
-  ]
+  activate_apis     = var.project.apis
 }
 
 # Terraform state bucket, hosted in the devops project.
@@ -61,9 +58,9 @@ module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "example-terraform-state"
+  name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "us-central1"
+  location   = var.storage_location
 }
 
 # Devops project owners group.
@@ -71,10 +68,10 @@ module "owners_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id           = "example-devops-owners@example.com"
-  customer_id  = "c12345678"
-  display_name = "example-devops-owners"
-  owners       = ["user1@example.com"]
+  id           = var.project.owners_group.id
+  customer_id  = var.project.owners_group.customer_id
+  display_name = var.project.owners_group.display_name
+  owners       = var.project.owners_group.owners
   depends_on = [
     module.project
   ]
@@ -102,10 +99,10 @@ module "admins_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.1"
 
-  id           = "example-folder-admins@example.com"
-  customer_id  = "c12345678"
-  display_name = "Example Folder Admins Group"
-  owners       = ["user1@example.com"]
+  id           = var.admins_group.id
+  customer_id  = var.admins_group.customer_id
+  display_name = var.admins_group.display_name
+  owners       = var.admins_group.owners
   depends_on = [
     module.project
   ]
@@ -122,7 +119,7 @@ resource "time_sleep" "admins_wait" {
 
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder     = "folders/12345678"
+  folder     = "folders/${var.parent_id}"
   role       = "roles/resourcemanager.folderAdmin"
   member     = "group:${module.admins_group.id}"
   depends_on = [time_sleep.admins_wait]

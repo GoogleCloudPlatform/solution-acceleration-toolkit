@@ -75,6 +75,7 @@ schema = {
             exists = {
               description = "Whether or not the group exists already. Default to 'false'."
               type        = "boolean"
+              default     = "false"
             }
             customer_id = {
               description = <<EOF
@@ -126,6 +127,10 @@ schema = {
             all resources managed by the CICD must be listed here
             (even if the resources themselves are in different projects).
           EOF
+          type        = "array"
+          items = {
+            type = "string"
+          }
         }
       }
     }
@@ -155,6 +160,7 @@ schema = {
         exists = {
           description = "Whether or not the group exists already. Default to 'false'."
           type        = "boolean"
+          default     = "false"
         }
         customer_id = {
           description = <<EOF
@@ -214,6 +220,7 @@ schema = {
         module.
       EOF
       type        = "boolean"
+      default     = "false"
     }
   }
 }

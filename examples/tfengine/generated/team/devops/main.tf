@@ -35,25 +35,16 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 10.2.2"
 
-  name            = "example-prod-devops"
+  name            = var.project.project_id
   org_id          = ""
-  folder_id       = "12345678"
-  billing_account = "000-000-000"
+  folder_id       = var.parent_id
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
   # Do not create an additional project service account to be used for Compute Engine.
   create_project_sa = false
-  activate_apis = [
-    "cloudbuild.googleapis.com",
-    "cloudidentity.googleapis.com",
-    "container.googleapis.com",
-    "dns.googleapis.com",
-    "healthcare.googleapis.com",
-    "iap.googleapis.com",
-    "pubsub.googleapis.com",
-    "secretmanager.googleapis.com",
-  ]
+  activate_apis     = var.project.apis
 }
 
 # Terraform state bucket, hosted in the devops project.
@@ -61,21 +52,21 @@ module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
 
-  name       = "example-terraform-state"
+  name       = var.state_bucket
   project_id = module.project.project_id
-  location   = "us-central1"
+  location   = var.storage_location
 }
 
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = ["group:example-devops-owners@example.com"]
+  members = ["group:${var.project.owners_group.id}"]
 }
 
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder = "folders/12345678"
+  folder = "folders/${var.parent_id}"
   role   = "roles/resourcemanager.folderAdmin"
-  member = "group:example-team-admins@example.com"
+  member = "group:${var.admins_group.id}"
 }
