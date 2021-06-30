@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "admins_group" {
+  type = object({
+    description  = string
+    display_name = string
+    id           = string
+    owners       = list(string)
+    managers     = list(string)
+    members      = list(string)
+  })
+  description = "Group which will be given admin access to the folder or organization."
+}
 
 variable "billing_account" {
   type        = string

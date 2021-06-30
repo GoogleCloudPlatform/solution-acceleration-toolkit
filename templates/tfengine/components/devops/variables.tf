@@ -11,10 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-{{if not (get .admins_group "exists")}}
+{{$missing_admins_group := not (get .admins_group "exists")}}
 variable "admins_group" {
   type = object({
+    {{- if $missing_admins_group}}
     customer_id  = string
+    {{- end}}
     description  = string
     display_name = string
     id           = string
@@ -24,7 +26,6 @@ variable "admins_group" {
   })
   description = "Group which will be given admin access to the folder or organization."
 }
-{{- end}}
 
 variable "billing_account" {
   type        = string

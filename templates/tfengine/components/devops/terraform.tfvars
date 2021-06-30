@@ -23,8 +23,8 @@ admins_group = {
   {{hclField .admins_group "managers" -}}
   {{hclField .admins_group "members" -}}
 }
-billing_account = "{{.billing_account}}"
-parent_id = "{{.parent_id}}"
+{{hclField . "billing_account" -}}
+{{hclField . "parent_id" -}}
 project = {
   apis = [
     "cloudbuild.googleapis.com",
@@ -37,13 +37,9 @@ project = {
     {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
     {{- if or $missing_admins_group $missing_project_owners_group}}
     customer_id  = "{{.project.owners_group.customer_id}}"
-    {{- end -}}
-    {{hclField .project.owners_group "description" -}}
-    {{- if has .project.owners_group "display_name"}}
-    display_name = "{{.project.owners_group.display_name}}"
-    {{- else}}
-    display_name = "{{regexReplaceAll "@.*" .project.owners_group.id ""}}"
     {{- end}}
+    {{hclField .project.owners_group "description" -}}
+    display_name = "{{get .project.owners_group "display_name" (regexReplaceAll "@.*" .project.owners_group.id "")}}"
     id           = "{{.project.owners_group.id}}"
     {{hclField .project.owners_group "owners" -}}
     {{hclField .project.owners_group "managers" -}}
@@ -51,5 +47,5 @@ project = {
   }
   project_id = "{{.project.project_id}}"
 }
-storage_location = "{{.storage_location}}"
-state_bucket = "{{.state_bucket}}"
+{{hclField . "storage_location" -}}
+{{hclField . "state_bucket" -}}
