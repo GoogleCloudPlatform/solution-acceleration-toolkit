@@ -13,15 +13,15 @@
 # limitations under the License.
 {{$missing_admins_group := not (get .admins_group "exists")}}
 admins_group = {
-  {{- if $missing_admins_group}}
-  customer_id  = "{{.admins_group.customer_id}}"
-  {{- end -}}
-  {{hclField .admins_group "description"}}
-  display_name = "{{get .admins_group "display_name" (regexReplaceAll "@.*" .admins_group.id "")}}"
   id           = "{{.admins_group.id}}"
+  display_name = "{{get .admins_group "display_name" (regexReplaceAll "@.*" .admins_group.id "")}}"
+  {{if $missing_admins_group -}}
+  customer_id  = "{{.admins_group.customer_id}}"
+  {{hclField .admins_group "description" -}}
   {{hclField .admins_group "owners" -}}
   {{hclField .admins_group "managers" -}}
   {{hclField .admins_group "members" -}}
+  {{- end -}}
 }
 billing_account = "{{.billing_account}}"
 parent_id = "{{.parent_id}}"

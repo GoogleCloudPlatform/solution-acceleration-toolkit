@@ -13,9 +13,9 @@
 # limitations under the License.
 
 admins_group = {
-  customer_id  = "c12345678"
-  display_name = "Example Folder Admins Group"
   id           = "example-folder-admins@example.com"
+  display_name = "Example Folder Admins Group"
+  customer_id  = "c12345678"
   owners       = ["user1@example.com"]
 }
 billing_account = "000-000-000"

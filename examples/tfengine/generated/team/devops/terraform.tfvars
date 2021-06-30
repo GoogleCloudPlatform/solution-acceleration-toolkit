@@ -13,8 +13,8 @@
 # limitations under the License.
 
 admins_group = {
-  display_name = "example-team-admins"
   id           = "example-team-admins@example.com"
+  display_name = "example-team-admins"
 }
 billing_account = "000-000-000"
 parent_id       = "12345678"
