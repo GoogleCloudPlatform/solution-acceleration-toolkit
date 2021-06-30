@@ -169,7 +169,7 @@ resource "google_{{.parent_type}}_iam_member" "admin" {
   {{- if eq .parent_type "organization"}}
   org_id = var.parent_id
   {{- else}}
-  folder = "folder/${var.parent_id}"
+  folder = "folders/${var.parent_id}"
   {{- end}}
   role   = "roles/resourcemanager.{{.parent_type}}Admin"
   {{- if get .admins_group "exists" false}}

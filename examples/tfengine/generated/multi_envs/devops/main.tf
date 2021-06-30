@@ -119,7 +119,7 @@ resource "time_sleep" "admins_wait" {
 
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder     = "folder/${var.parent_id}"
+  folder     = "folders/${var.parent_id}"
   role       = "roles/resourcemanager.folderAdmin"
   member     = "group:${module.admins_group.id}"
   depends_on = [time_sleep.admins_wait]
