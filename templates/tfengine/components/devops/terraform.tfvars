@@ -35,15 +35,15 @@ project = {
   ]
   {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
   owners_group = {
+    id           = "{{.project.owners_group.id}}"
+    display_name = "{{get .project.owners_group "display_name" (regexReplaceAll "@.*" .project.owners_group.id "")}}"
     {{if $missing_project_owners_group -}}
     customer_id  = "{{.project.owners_group.customer_id}}"
-    display_name = "{{get .project.owners_group "display_name" (regexReplaceAll "@.*" .project.owners_group.id "")}}"
-    {{- end}}
     {{hclField .project.owners_group "description" -}}
-    id           = "{{.project.owners_group.id}}"
     {{hclField .project.owners_group "owners" -}}
     {{hclField .project.owners_group "managers" -}}
     {{hclField .project.owners_group "members" -}}
+    {{- end -}}
   }
   project_id = "{{.project.project_id}}"
 }

@@ -24,8 +24,8 @@ project = {
     "cloudidentity.googleapis.com",
   ]
   owners_group = {
-
-    id = "example-devops-owners@example.com"
+    id           = "example-devops-owners@example.com"
+    display_name = "example-devops-owners"
   }
   project_id = "example-devops"
 }
