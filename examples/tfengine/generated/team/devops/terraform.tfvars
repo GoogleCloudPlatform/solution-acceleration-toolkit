@@ -29,7 +29,10 @@ project = {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
   ]
+  owners_group = {
 
+    id = "example-devops-owners@example.com"
+  }
   project_id = "example-prod-devops"
 }
 storage_location = "us-central1"
