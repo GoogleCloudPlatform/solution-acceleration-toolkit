@@ -40,9 +40,8 @@ variable "project" {
   type = object({
     apis = list(string)
     owners_group = object({
-      customer_id  = string
-      display_name = string
-      id           = string
+      customer_id = string
+
     })
     project_id = string
   })

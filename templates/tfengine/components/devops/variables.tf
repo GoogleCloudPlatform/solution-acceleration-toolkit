@@ -59,8 +59,11 @@ variable "project" {
       {{- if has . "description"}}
       description  = string
       {{- end}}
+      {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
+      {{if $missing_project_owners_group -}}
       display_name = string
       id           = string
+      {{- end}}
       {{- if has . "owners"}}
       owners       = list(string)
       {{- end}}
