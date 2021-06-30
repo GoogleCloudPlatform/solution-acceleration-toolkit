@@ -30,7 +30,7 @@ terraform {
   }
 {{- if get . "enable_gcs_backend"}}
   backend "gcs" {
-    bucket = var.state_bucket
+    bucket = "{{.state_bucket}}"
     prefix = "devops"
   }
 {{- end}}
