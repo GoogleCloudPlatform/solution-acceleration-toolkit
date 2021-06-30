@@ -14,12 +14,8 @@
 
 variable "admins_group" {
   type = object({
-    description  = string
     display_name = string
     id           = string
-    owners       = list(string)
-    managers     = list(string)
-    members      = list(string)
   })
   description = "Group which will be given admin access to the folder or organization."
 }
@@ -45,12 +41,8 @@ variable "project" {
     apis = list(string)
     owners_group = object({
       customer_id  = string
-      description  = string
       display_name = string
       id           = string
-      owners       = list(string)
-      managers     = list(string)
-      members      = list(string)
     })
     project_id = string
   })

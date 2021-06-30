@@ -23,10 +23,7 @@ project = {
     "cloudbuild.googleapis.com",
     "cloudidentity.googleapis.com",
   ]
-  owners_group = {
-    display_name = "example-devops-owners"
-    id           = "example-devops-owners@example.com"
-  }
+
   project_id = "example-devops"
 }
 storage_location = "us-central1"

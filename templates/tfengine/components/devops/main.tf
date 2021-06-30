@@ -86,10 +86,10 @@ module "owners_group" {
   id = var.project.owners_group.id
   customer_id = var.project.owners_group.customer_id
   display_name = var.project.owners_group.display_name
-  description = try(var.project.owners_group.description, null)
-  owners = try(var.project.owners_group.owners, null)
-  managers = try(var.project.owners_group.managers, null)
-  members = try(var.project.owners_group.members, null)
+  description = var.project.owners_group.description
+  owners = var.project.owners_group.owners
+  managers = var.project.owners_group.managers
+  members = var.project.owners_group.members
   depends_on = [
     module.project
   ]
@@ -127,10 +127,10 @@ module "admins_group" {
   id = var.admins_group.id
   customer_id = var.admins_group.customer_id
   display_name = var.admins_group.display_name
-  description = try(var.admins_group.description, null)
-  owners = try(var.admins_group.owners, null)
-  managers = try(var.admins_group.managers, null)
-  members = try(var.admins_group.members, null)
+  description = var.admins_group.description
+  owners = var.admins_group.owners
+  managers = var.admins_group.managers
+  members = var.admins_group.members
   depends_on = [
     module.project
   ]

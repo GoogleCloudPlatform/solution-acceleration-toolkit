@@ -17,12 +17,20 @@ variable "admins_group" {
     {{- if $missing_admins_group}}
     customer_id  = string
     {{- end}}
+    {{- if has . "description"}}
     description  = string
+    {{- end}}
     display_name = string
     id           = string
+    {{- if has . "owners"}}
     owners       = list(string)
+    {{- end}}
+    {{- if has . "managers"}}
     managers     = list(string)
+    {{- end}}
+    {{- if has . "members"}}
     members      = list(string)
+    {{- end}}
   })
   description = "Group which will be given admin access to the folder or organization."
 }
@@ -48,12 +56,20 @@ variable "project" {
     apis = list(string)
     owners_group = object({
       customer_id  = string
+      {{- if has . "description"}}
       description  = string
+      {{- end}}
       display_name = string
       id           = string
+      {{- if has . "owners"}}
       owners       = list(string)
+      {{- end}}
+      {{- if has . "managers"}}
       managers     = list(string)
+      {{- end}}
+      {{- if has . "members"}}
       members      = list(string)
+      {{- end}}
     })
     project_id = string
   })
