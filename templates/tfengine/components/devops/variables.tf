@@ -16,11 +16,11 @@ variable "admins_group" {
   type = object({
     {{- if $missing_admins_group}}
     customer_id  = string
+    display_name = string
     {{- end}}
     {{- if has .admins_group "description"}}
     description  = string
     {{- end}}
-    display_name = string
     id           = string
     {{- if has .admins_group "owners"}}
     owners       = list(string)

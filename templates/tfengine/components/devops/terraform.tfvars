@@ -14,8 +14,8 @@
 {{$missing_admins_group := not (get .admins_group "exists")}}
 admins_group = {
   id           = "{{.admins_group.id}}"
-  display_name = "{{get .admins_group "display_name" (regexReplaceAll "@.*" .admins_group.id "")}}"
   {{if $missing_admins_group -}}
+  display_name = "{{get .admins_group "display_name" (regexReplaceAll "@.*" .admins_group.id "")}}"
   customer_id  = "{{.admins_group.customer_id}}"
   {{hclField .admins_group "description" -}}
   {{hclField .admins_group "owners" -}}
@@ -36,8 +36,8 @@ project = {
   {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
   owners_group = {
     id           = "{{.project.owners_group.id}}"
-    display_name = "{{get .project.owners_group "display_name" (regexReplaceAll "@.*" .project.owners_group.id "")}}"
     {{if $missing_project_owners_group -}}
+    display_name = "{{get .project.owners_group "display_name" (regexReplaceAll "@.*" .project.owners_group.id "")}}"
     customer_id  = "{{.project.owners_group.customer_id}}"
     {{hclField .project.owners_group "description" -}}
     {{hclField .project.owners_group "owners" -}}
