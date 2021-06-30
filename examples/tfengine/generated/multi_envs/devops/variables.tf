@@ -17,6 +17,7 @@ variable "admins_group" {
     customer_id  = string
     display_name = string
     id           = string
+    owners       = list(string)
   })
   description = "Group which will be given admin access to the folder or organization."
 }
@@ -44,6 +45,7 @@ variable "project" {
       customer_id  = string
       display_name = string
       id           = string
+      owners       = list(string)
     })
     project_id = string
   })

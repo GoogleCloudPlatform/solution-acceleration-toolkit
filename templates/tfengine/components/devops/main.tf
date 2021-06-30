@@ -135,17 +135,17 @@ module "admins_group" {
   id = var.admins_group.id
   customer_id = var.admins_group.customer_id
   display_name = var.admins_group.display_name
-  {{- if has .project.owners_group "description"}}
-  description = var.project.owners_group.description
+  {{- if has .admins_group "description"}}
+  description = var.admins_group.description
   {{- end }}
-  {{- if has .project.owners_group "owners"}}
-  owners = var.project.owners_group.owners
+  {{- if has .admins_group "owners"}}
+  owners = var.admins_group.owners
   {{- end }}
-  {{- if has .project.owners_group "managers"}}
-  managers = var.project.owners_group.managers
+  {{- if has .admins_group "managers"}}
+  managers = var.admins_group.managers
   {{- end }}
-  {{- if has .project.owners_group "members"}}
-  members = var.project.owners_group.members
+  {{- if has .admins_group "members"}}
+  members = var.admins_group.members
   {{- end }}
   depends_on = [
     module.project

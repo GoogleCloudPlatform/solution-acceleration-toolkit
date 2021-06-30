@@ -17,18 +17,18 @@ variable "admins_group" {
     {{- if $missing_admins_group}}
     customer_id  = string
     {{- end}}
-    {{- if has . "description"}}
+    {{- if has .admins_group "description"}}
     description  = string
     {{- end}}
     display_name = string
     id           = string
-    {{- if has . "owners"}}
+    {{- if has .admins_group "owners"}}
     owners       = list(string)
     {{- end}}
-    {{- if has . "managers"}}
+    {{- if has .admins_group "managers"}}
     managers     = list(string)
     {{- end}}
-    {{- if has . "members"}}
+    {{- if has .admins_group "members"}}
     members      = list(string)
     {{- end}}
   })
@@ -55,22 +55,22 @@ variable "project" {
   type = object({
     apis = list(string)
     owners_group = object({
-      customer_id  = string
-      {{- if has . "description"}}
-      description  = string
-      {{- end}}
       {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
       {{if $missing_project_owners_group -}}
+      customer_id  = string
       display_name = string
-      id           = string
       {{- end}}
-      {{- if has . "owners"}}
+      {{- if has .project.owners_group "description"}}
+      description  = string
+      {{- end}}
+      id           = string
+      {{- if has .project.owners_group "owners"}}
       owners       = list(string)
       {{- end}}
-      {{- if has . "managers"}}
+      {{- if has .project.owners_group "managers"}}
       managers     = list(string)
       {{- end}}
-      {{- if has . "members"}}
+      {{- if has .project.owners_group "members"}}
       members      = list(string)
       {{- end}}
     })

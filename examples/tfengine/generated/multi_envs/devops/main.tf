@@ -102,7 +102,7 @@ module "admins_group" {
   id           = var.admins_group.id
   customer_id  = var.admins_group.customer_id
   display_name = var.admins_group.display_name
-  owners       = var.project.owners_group.owners
+  owners       = var.admins_group.owners
   depends_on = [
     module.project
   ]
