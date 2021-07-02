@@ -78,7 +78,7 @@ module "project" {
 
 module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.5.0"
+  version = "~> 5.2.0"
 
   dataset_id                  = "1billion_ms_dataset"
   project_id                  = module.project.project_id
