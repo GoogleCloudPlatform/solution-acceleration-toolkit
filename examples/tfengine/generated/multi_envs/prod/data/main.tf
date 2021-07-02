@@ -58,7 +58,7 @@ module "project" {
 
 module "example_bucket_prod" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 2.0"
 
   name       = "example-bucket-prod"
   project_id = module.project.project_id
