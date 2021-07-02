@@ -36,7 +36,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.3.0"
+  version = "~> 11.0.0"
 
   name            = "example-prod-apps"
   org_id          = ""
@@ -204,7 +204,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.1.0"
+  version = "~> 15.0.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
@@ -243,7 +243,7 @@ module "gke_cluster" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.4.0"
+  version = "~> 7.2.0"
 
   projects = [module.project.project_id]
   mode     = "additive"

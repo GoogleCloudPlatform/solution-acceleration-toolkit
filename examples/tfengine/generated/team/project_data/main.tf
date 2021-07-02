@@ -38,7 +38,7 @@ data "google_secret_manager_secret_version" "db_password" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.3.0"
+  version = "~> 11.0.0"
 
   name            = "example-prod-data"
   org_id          = ""
@@ -78,7 +78,7 @@ module "project" {
 
 module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 4.5.0"
+  version = "~> 5.2.0"
 
   dataset_id                  = "1billion_ms_dataset"
   project_id                  = module.project.project_id
@@ -92,7 +92,7 @@ module "one_billion_ms_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.5.0"
+  version = "~> 6.0.0"
 
   name                = "sql-instance"
   project_id          = module.project.project_id
@@ -213,7 +213,7 @@ EOF
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 6.4.0"
+  version = "~> 7.2.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
@@ -227,7 +227,7 @@ module "project_iam_members" {
 
 module "topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 1.9.0"
+  version = "~> 2.0.0"
 
   topic      = "topic"
   project_id = module.project.project_id
@@ -254,7 +254,7 @@ module "topic" {
 
 module "example_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 2.0"
 
   name       = "example-bucket"
   project_id = module.project.project_id
