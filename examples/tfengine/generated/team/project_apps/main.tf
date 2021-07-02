@@ -204,7 +204,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 15.0.0"
+  version = "~> 13.1.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
