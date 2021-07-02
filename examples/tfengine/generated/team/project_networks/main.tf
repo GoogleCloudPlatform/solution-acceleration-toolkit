@@ -141,7 +141,7 @@ module "cloud_sql_private_service_access_network" {
 
 module "router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 0.4.0"
+  version = "~> 1.1.0"
 
   name    = "router"
   project = module.project.project_id
