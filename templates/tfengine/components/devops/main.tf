@@ -48,7 +48,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.2.2"
+  version = "~> 10.3.0"
 
   name            = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
@@ -87,7 +87,7 @@ source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
 # Devops project owners group.
 module "owners_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.2"
 
   id = "{{.project.owners_group.id}}"
   customer_id = "{{.project.owners_group.customer_id}}"
@@ -132,7 +132,7 @@ resource "google_project_iam_binding" "devops_owners" {
 # Admins group for at {{.parent_type}} level.
 module "admins_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.1"
+  version = "~> 0.2"
 
   id = "{{.admins_group.id}}"
   customer_id = "{{.admins_group.customer_id}}"
