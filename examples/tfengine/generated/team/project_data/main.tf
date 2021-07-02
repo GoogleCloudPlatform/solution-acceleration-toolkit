@@ -92,7 +92,7 @@ module "one_billion_ms_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.5.0"
+  version = "~> 6.0.0"
 
   name                = "sql-instance"
   project_id          = module.project.project_id
