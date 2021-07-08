@@ -49,8 +49,6 @@ variable "parent_id" {
   }
 }
 
-# TODO(ernestognw): Test with private catalog and validate it 
-# accepts nested data structures
 variable "project" {
   type = object({
     apis = list(string)
