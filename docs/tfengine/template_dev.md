@@ -78,17 +78,78 @@ developers.
     }
     ```
 
-1. Data blocks in templates follow a Tree structure. Values in the `data` block
-    from an upper level template are passed down to its child templates and made
-    available. There is no need to repeat those values in the `data` block in
-    child templates unless you would like to override them. For example, all
-    values specified in the top level template
-    [here](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/team.hcl#L17)
-    are passed down and made available to child templates
-    [root.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl),
-    [foundation.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/foundation.hcl)
+1. `data` maps can be specified either
+    [inside](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/team.hcl#L17)
+    or
+    [outside](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/team.hcl#L15)
+    a `template` block.
+
+    In both cases, values in the `data` maps from an upper level template are
+    passed down to its child template and made available. There is no need to
+    repeat data values in child templates unless you would like to override
+    them. For example, all data values specified in the top level template
+    [here](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/team.hcl#L17)
+    are passed down and made available to its child templates
+    [root.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/root.hcl),
+    [foundation.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/foundation.hcl)
     and
-    [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/team.hcl).
+    [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/team.hcl).
+
+    However, in the two cases, the `data` maps' value overriding precedence are
+    different, which follows the 3 rules below:
+
+    1. Values spcified in the `data` maps **inside** the `template` block take
+        higher precedence over values spcified in the `data` maps **outside**
+        the `template` block.
+    1. For `data` maps **inside** the `template` block, values specified in
+        child templates take higher precedence over values specified in parent
+        templates.
+    1. For `data` maps **outside** the `template` block, values specified in
+        parent templates take higher precedence over values specified in child
+        templates.
+
+    Consider the following example scenario:
+
+    ```hcl
+    # main.hcl
+    data = {
+      bigquery_location = "A"
+    }
+
+    template "root" {
+      recipe_path = "./modules/root.hcl"
+      data = {
+        bigquery_location = "B"
+      }
+    }
+    ```
+
+    ```hcl
+    # modules/root.hcl
+    data = {
+      bigquery_location = "C"
+    }
+
+    # The actual template that consumes bigquery_location.
+    template "bigquery" {
+      recipe_path = "./bigquery.hcl"
+      data = {
+        bigquery_location   = "D"
+      }
+    }
+    ```
+
+    ```hcl
+    # modules/bigquery.hcl
+    resource "google_bigquery_dataset" "dataset" {
+      dataset_id                  = "example_dataset"
+      location                    = "{{.bigquery_location}}"
+    }
+    ```
+
+    The 4 locations specified will have the following precedence, from high to
+    low: `D > B > A > C`. And the final value for `bigquery_location` will be
+    `D`.
 
 1. [Custom schemas](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L15)
     with additional variable
