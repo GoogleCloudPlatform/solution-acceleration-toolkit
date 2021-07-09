@@ -40,7 +40,7 @@ developers.
     `resource_name` field is not specified for a resource
     ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/foundation.hcl#L62)),
     then the underlying Terraform module or Terraform resource in the generated
-    Terraform configs will be automatically named from the resource's uniqie
+    Terraform configs will be automatically named from the resource's unique
     identifier (bucket's name, network's name, group's id, etc)
     ([example](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/generated/team/groups/main.tf#L43)).
     All non-alphanumeric characters will be converted to `_`, such as `-`, `.`,
@@ -89,16 +89,17 @@ developers.
     repeat data values in child templates unless you would like to override
     them. For example, all data values specified in the top level template
     [here](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/team.hcl#L17)
-    are passed down and made available to its child templates
-    [root.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/root.hcl),
+    are passed down and made available to its child template
+    [root.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/root.hcl)
+    as well as transitive child templates
     [foundation.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/foundation.hcl)
     and
     [team.hcl](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/c27ddc3f1b629f77a70e7b53908882a7e4c94f42/examples/tfengine/modules/team.hcl).
 
-    However, in the two cases, the `data` maps' value overriding precedence are
+    However, in the two cases, the `data` maps' value overriding precedence is
     different, which follows the 3 rules below:
 
-    1. Values spcified in the `data` maps **inside** the `template` block take
+    1. Values specified in the `data` maps **inside** the `template` block take
         higher precedence over values spcified in the `data` maps **outside**
         the `template` block.
     1. For `data` maps **inside** the `template` block, values specified in
@@ -149,7 +150,12 @@ developers.
 
     The 4 locations specified will have the following precedence, from high to
     low: `D > B > A > C`. And the final value for `bigquery_location` will be
-    `D`.
+    `D`. To explain in detail:
+
+    1. From rule #1, `B` and `D` take higher precedence over `A` and `C`. So
+        `(B, D) > (A, C)`.
+    1. From rule #2, `D` takes higher precedence over `B`. So `D > B > (A, C)`.
+    1. From rule #3, `A` takes higher precedence over `C`. So `D > B > A > C`.
 
 1. [Custom schemas](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/blob/dd2464e1a293b0bc549ef34d0c73787e798e88ba/examples/tfengine/modules/root.hcl#L15)
     with additional variable
