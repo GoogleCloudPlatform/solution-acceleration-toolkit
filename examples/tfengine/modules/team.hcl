@@ -48,6 +48,20 @@ template "project_secrets" {
       ]
     }
     terraform_addons = {
+      providers = [
+        {
+          name = "google",
+          version_constraints = ">=3.0, <= 3.71"
+        },
+        {
+          name = "google-beta",
+          version_constraints = "~>3.50"
+        },
+        {
+          name = "null",
+          version_constraints = "~> 3.0"
+        }
+      ]
       raw_config = <<EOF
 resource "random_password" "db" {
   length = 16
