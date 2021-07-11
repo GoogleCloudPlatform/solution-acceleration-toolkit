@@ -12,6 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+build_editors   = [
+  {{- if has . "build_editors"}}
+  {{- range .build_editors}}
+  "{{.}}",
+  {{- end}}
+  {{- end}}
+]
+build_viewers   = [
+  {{- if has . "build_viewers"}}
+  {{- range .build_viewers}}
+  "{{.}}",
+  {{- end}}
+  {{- end}}
+]
 billing_account = "{{.billing_account}}"
 project_id      = "{{.project_id}}"
 state_bucket    = "{{.state_bucket}}"

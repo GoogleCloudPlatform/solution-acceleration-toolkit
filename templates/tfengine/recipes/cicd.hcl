@@ -91,6 +91,7 @@ schema = {
         to see CICD results.
       EOF
       type        = "array"
+      default     = "[]"
       items = {
         type = "string"
       }
@@ -101,6 +102,7 @@ schema = {
         to see CICD results.
       EOF
       type        = "array"
+      default     = "[]"
       items = {
         type = "string"
       }

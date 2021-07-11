@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "build_editors" {
+  type = list(string)
+}
+
+variable "build_viewers" {
+  type = list(string)
+}
+
 variable "billing_account" {
   type = string
 }

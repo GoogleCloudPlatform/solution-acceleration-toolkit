@@ -89,12 +89,10 @@ resource "google_project_service" "services" {
 
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
-  for_each = toset([
-    "group:example-cicd-viewers@example.com",
-  ])
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.viewer"
-  member  = each.value
+  for_each = toset(var.build_viewers)
+  project  = var.project_id
+  role     = "roles/cloudbuild.builds.viewer"
+  member   = each.value
   depends_on = [
     google_project_service.services,
   ]
@@ -102,12 +100,10 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
 
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
-  for_each = toset([
-    "group:example-cicd-editors@example.com",
-  ])
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.editor"
-  member  = each.value
+  for_each = toset(var.build_editors)
+  project  = var.project_id
+  role     = "roles/cloudbuild.builds.editor"
+  member   = each.value
   depends_on = [
     google_project_service.services,
   ]
@@ -116,10 +112,12 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
 # IAM permissions to allow approvers and contributors to view logs.
 # https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
 resource "google_project_iam_member" "cloudbuild_logs_viewers" {
-  for_each = toset([
-    "group:example-cicd-viewers@example.com",
-    "group:example-cicd-editors@example.com",
-  ])
+  for_each = toset(
+    concat(
+      var.build_editors,
+      var.build_viewers
+    )
+  )
   project = var.project_id
   role    = "roles/viewer"
   member  = each.value
