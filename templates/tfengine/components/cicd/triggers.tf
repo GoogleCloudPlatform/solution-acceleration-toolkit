@@ -63,7 +63,7 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "{{$terraform_root}}"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = "{{$managed_dirs}}"
   }
 
@@ -108,7 +108,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "{{$terraform_root}}"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = "{{$managed_dirs}}"
   }
 
@@ -177,7 +177,7 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "{{$terraform_root}}"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = "{{$managed_dirs}}"
   }
 
@@ -222,7 +222,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "{{$terraform_root}}"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = "{{$managed_dirs}}"
   }
 
@@ -291,7 +291,7 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-apply.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "{{$terraform_root}}"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = "{{$managed_dirs}}"
   }
 

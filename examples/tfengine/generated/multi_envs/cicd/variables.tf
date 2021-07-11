@@ -45,3 +45,7 @@ variable "state_bucket" {
   type        = string
   description = "Name of the Terraform state bucket."
 }
+
+variable "terraform_root" {
+  type = string
+}

@@ -35,7 +35,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "terraform"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
   }
 
@@ -65,7 +65,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "terraform"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
   }
 
@@ -98,7 +98,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "terraform"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
   }
 
@@ -151,7 +151,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = "terraform"
+    _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
   }
 
