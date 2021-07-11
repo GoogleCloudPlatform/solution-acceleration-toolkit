@@ -55,7 +55,7 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   }
   {{- else if has $ "cloud_source_repository" -}}
   trigger_template {
-    repo_name   = "{{$.cloud_source_repository.name}}"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
@@ -100,7 +100,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   }
   {{- else if has $ "cloud_source_repository" -}}
   trigger_template {
-    repo_name   = "{{$.cloud_source_repository.name}}"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
@@ -169,7 +169,7 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   }
   {{- else if has $ "cloud_source_repository" -}}
   trigger_template {
-    repo_name   = "{{$.cloud_source_repository.name}}"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
@@ -214,7 +214,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   }
   {{- else if has $ "cloud_source_repository" -}}
   trigger_template {
-    repo_name   = "{{$.cloud_source_repository.name}}"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
@@ -283,7 +283,7 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   }
   {{- else if has $ "cloud_source_repository" -}}
   trigger_template {
-    repo_name   = "{{$.cloud_source_repository.name}}"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}

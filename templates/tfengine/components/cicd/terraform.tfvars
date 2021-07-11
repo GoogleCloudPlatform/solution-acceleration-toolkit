@@ -26,6 +26,25 @@ build_viewers   = [
   {{- end}}
   {{- end}}
 ]
+{{- if has . "cloud_source_repository"}}
+cloud_source_repostory = {
+  name = "{{.cloud_source_repository.name}}"
+  {{- if has .cloud_source_repository "readers"}}
+  readers = [
+    {{- range .cloud_source_repository.readers}}
+    "{{.}}",
+    {{- end}}
+  ]
+  {{- end}}
+  {{- if has .cloud_source_repository "readers"}}
+  writers = [
+    {{- range .cloud_source_repository.writers}}
+    "{{.}}",
+    {{- end}}
+  ]
+  {{- end}}
+}
+{{- end}}
 billing_account = "{{.billing_account}}"
 project_id      = "{{.project_id}}"
 state_bucket    = "{{.state_bucket}}"

@@ -25,7 +25,7 @@ resource "google_cloudbuild_trigger" "validate_shared" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^shared$"
   }
 
@@ -53,7 +53,7 @@ resource "google_cloudbuild_trigger" "plan_shared" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^shared$"
   }
 
@@ -82,7 +82,7 @@ resource "google_cloudbuild_trigger" "apply_shared" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^shared$"
   }
 
@@ -112,7 +112,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^dev$"
   }
 
@@ -140,7 +140,7 @@ resource "google_cloudbuild_trigger" "apply_dev" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^dev$"
   }
 
@@ -170,7 +170,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^main$"
   }
 
@@ -198,7 +198,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^main$"
   }
 
@@ -227,7 +227,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   ]
 
   trigger_template {
-    repo_name   = "example"
+    repo_name   = var.cloud_source_repository.name
     branch_name = "^main$"
   }
 

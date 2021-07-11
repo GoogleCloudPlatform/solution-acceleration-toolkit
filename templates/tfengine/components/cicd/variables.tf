@@ -24,6 +24,21 @@ variable "billing_account" {
   type = string
 }
 
+{{- if has . "cloud_source_repository"}}
+
+variable "cloud_source_repository" {
+  type = object({
+    name = string
+    {{- if has .cloud_source_repository "readers"}}
+    readers = list(string)
+    {{- end}}
+    {{- if has .cloud_source_repository "writers"}}
+    writers = list(string)
+    {{- end}}
+  })
+}
+{{- end}}
+
 variable "project_id" {
   description = "Project ID of the devops project to host CI/CD resources"
   type        = string

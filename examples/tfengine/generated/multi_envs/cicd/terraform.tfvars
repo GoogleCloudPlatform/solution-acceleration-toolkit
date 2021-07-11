@@ -18,6 +18,15 @@ build_editors = [
 build_viewers = [
   "group:example-cicd-viewers@example.com",
 ]
+cloud_source_repostory = {
+  name = "example"
+  readers = [
+    "group:example-source-readers@example.com",
+  ]
+  writers = [
+    "group:example-source-writers@example.com",
+  ]
+}
 billing_account = "000-000-000"
 project_id      = "example-devops"
 state_bucket    = "example-terraform-state"

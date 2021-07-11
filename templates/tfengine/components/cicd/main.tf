@@ -155,7 +155,7 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
 # Create the Cloud Source Repository.
 resource "google_sourcerepo_repository" "configs" {
   project  = var.project_id
-  name     = "{{.cloud_source_repository.name}}"
+  name     = var.cloud_source_repository.name
   depends_on = [
     google_project_service.services,
   ]
@@ -164,11 +164,7 @@ resource "google_sourcerepo_repository" "configs" {
 {{- if has .cloud_source_repository "readers"}}
 
 resource "google_sourcerepo_repository_iam_member" "readers" {
-  for_each = toset([
-    {{- range .cloud_source_repository.readers}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.cloud_source_repository.readers)
   project = var.project_id
   repository = google_sourcerepo_repository.configs.name
   role = "roles/source.reader"
@@ -179,11 +175,7 @@ resource "google_sourcerepo_repository_iam_member" "readers" {
 {{- if has .cloud_source_repository "writers"}}
 
 resource "google_sourcerepo_repository_iam_member" "writers" {
-  for_each = toset([
-    {{- range .cloud_source_repository.writers}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.cloud_source_repository.writers)
   project = var.project_id
   repository = google_sourcerepo_repository.configs.name
   role = "roles/source.writer"
