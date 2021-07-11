@@ -131,6 +131,7 @@ schema = {
         Whether or not to grant automation service account the billing.user role.
         Default to true.
       EOF
+      default     = "true"
       type        = "boolean"
     }
     envs = {
