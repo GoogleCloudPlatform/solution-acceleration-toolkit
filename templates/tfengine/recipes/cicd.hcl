@@ -30,6 +30,10 @@ schema = {
       description          = "Config for GitHub Cloud Build triggers."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "owner",
+        "name"
+      ]
       properties = {
         owner = {
           description = "GitHub repo owner."

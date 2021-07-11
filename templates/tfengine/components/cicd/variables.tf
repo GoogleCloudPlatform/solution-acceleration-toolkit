@@ -39,6 +39,16 @@ variable "cloud_source_repository" {
 }
 {{- end}}
 
+{{- if has . "github"}}
+
+variable "github" {
+  type = object({
+    owner = string
+    name = string
+  })
+}
+{{- end}}
+
 variable "project_id" {
   description = "Project ID of the devops project to host CI/CD resources"
   type        = string

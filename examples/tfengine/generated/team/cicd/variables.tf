@@ -24,6 +24,13 @@ variable "billing_account" {
   type = string
 }
 
+variable "github" {
+  type = object({
+    owner = string
+    name  = string
+  })
+}
+
 variable "project_id" {
   description = "Project ID of the devops project to host CI/CD resources"
   type        = string

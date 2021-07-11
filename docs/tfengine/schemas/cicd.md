@@ -27,8 +27,8 @@
 | envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch.                    Default to true. | boolean | false | - | - |
 | envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule.                    The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)                    at Eastern Standard Time (EST). Default to none. | string | false | - | - |
 | github | Config for GitHub Cloud Build triggers. | object | false | - | - |
-| github.name | GitHub repo name. | string | false | - | - |
-| github.owner | GitHub repo owner. | string | false | - | - |
+| github.name | GitHub repo name. | string | true | - | - |
+| github.owner | GitHub repo owner. | string | true | - | - |
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role.        Default to true. | boolean | false | - | - |
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler        job (or the App Engine App behind the sceneces) resides. Must be specified if        any triggers are configured to be run on schedule. | string | true | - | - |

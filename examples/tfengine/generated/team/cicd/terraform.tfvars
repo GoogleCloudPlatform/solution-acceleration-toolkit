@@ -18,6 +18,10 @@ build_editors = [
 build_viewers = [
   "group:example-cicd-viewers@example.com",
 ]
+github = {
+  owner = "GoogleCloudPlatform"
+  name  = "example"
+}
 billing_account = "000-000-000"
 project_id      = "example-prod-devops"
 state_bucket    = "example-terraform-state"

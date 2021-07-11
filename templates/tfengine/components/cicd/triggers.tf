@@ -47,8 +47,8 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
 
   {{if has $ "github" -}}
   github {
-    owner = "{{$.github.owner}}"
-    name  = "{{$.github.name}}"
+    owner = var.github.owner
+    name  = var.github.name
     pull_request {
       branch = "^{{.branch_name}}$"
     }
@@ -92,8 +92,8 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
 
   {{if has $ "github" -}}
   github {
-    owner = "{{$.github.owner}}"
-    name  = "{{$.github.name}}"
+    owner = var.github.owner
+    name  = var.github.name
     push {
       branch = "^{{.branch_name}}$"
     }
@@ -161,8 +161,8 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
 
   {{if has $ "github" -}}
   github {
-    owner = "{{$.github.owner}}"
-    name  = "{{$.github.name}}"
+    owner = var.github.owner
+    name  = var.github.name
     pull_request {
       branch = "^{{.branch_name}}$"
     }
@@ -206,8 +206,8 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
 
   {{if has $ "github" -}}
   github {
-    owner = "{{$.github.owner}}"
-    name  = "{{$.github.name}}"
+    owner = var.github.owner
+    name  = var.github.name
     push {
       branch = "^{{.branch_name}}$"
     }
@@ -275,8 +275,8 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
 
   {{if has $ "github" -}}
   github {
-    owner = "{{$.github.owner}}"
-    name  = "{{$.github.name}}"
+    owner = var.github.owner
+    name  = var.github.name
     push {
       branch = "^{{.branch_name}}$"
     }

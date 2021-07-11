@@ -45,6 +45,12 @@ cloud_source_repostory = {
   {{- end}}
 }
 {{- end}}
+{{- if has . "github"}}
+github = {
+  owner = "{{.github.owner}}"
+  name = "{{.github.name}}"
+}
+{{- end}}
 billing_account = "{{.billing_account}}"
 project_id      = "{{.project_id}}"
 state_bucket    = "{{.state_bucket}}"
