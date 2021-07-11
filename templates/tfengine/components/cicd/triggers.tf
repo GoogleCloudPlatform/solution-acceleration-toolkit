@@ -123,7 +123,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
 resource "google_cloud_scheduler_job" "validate_scheduler_{{.name}}" {
   project   = var.project_id
   name      = "validate-scheduler-{{.name}}"
-  region    = "{{$.scheduler_region}}"
+  region    = var.scheduler_region
   schedule  = "{{.triggers.validate.run_on_schedule}}"
   time_zone = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"
@@ -237,7 +237,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
 resource "google_cloud_scheduler_job" "plan_scheduler_{{.name}}" {
   project   = var.project_id
   name      = "plan-scheduler-{{.name}}"
-  region    = "{{$.scheduler_region}}"
+  region    = var.scheduler_region
   schedule  = "{{.triggers.plan.run_on_schedule}}"
   time_zone = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"
@@ -308,7 +308,7 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
 resource "google_cloud_scheduler_job" "apply_scheduler_{{.name}}" {
   project   = var.project_id
   name      = "apply-scheduler-{{.name}}"
-  region    = "{{$.scheduler_region}}"
+  region    = var.scheduler_region
   schedule  = "{{.triggers.apply.run_on_schedule}}"
   time_zone = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"

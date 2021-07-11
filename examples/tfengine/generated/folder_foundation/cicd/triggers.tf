@@ -110,7 +110,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
 resource "google_cloud_scheduler_job" "plan_scheduler_prod" {
   project          = var.project_id
   name             = "plan-scheduler-prod"
-  region           = "us-east1"
+  region           = var.scheduler_region
   schedule         = "0 12 * * *"
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
   attempt_deadline = "60s"

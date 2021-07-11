@@ -51,6 +51,7 @@ github = {
   name = "{{.github.name}}"
 }
 {{- end}}
-billing_account = "{{.billing_account}}"
-project_id      = "{{.project_id}}"
-state_bucket    = "{{.state_bucket}}"
+billing_account   = "{{.billing_account}}"
+project_id        = "{{.project_id}}"
+scheduler_region  = "{{.scheduler_region}}"
+state_bucket      = "{{.state_bucket}}"

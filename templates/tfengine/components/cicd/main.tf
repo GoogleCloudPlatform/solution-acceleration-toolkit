@@ -200,7 +200,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 # App Engine app cannot be destroyed once created, therefore always create it.
 resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   project     = var.project_id
-  location_id = "{{.scheduler_region}}"
+  location_id = var.scheduler_region
   depends_on = [
     google_project_service.services,
   ]

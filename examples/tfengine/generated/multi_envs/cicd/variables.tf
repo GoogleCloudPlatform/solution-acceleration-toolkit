@@ -33,11 +33,15 @@ variable "cloud_source_repository" {
 }
 
 variable "project_id" {
-  description = "Project ID of the devops project to host CI/CD resources"
   type        = string
+  description = "Project ID of the devops project to host CI/CD resources."
+}
+
+variable "scheduler_region" {
+  type = string
 }
 
 variable "state_bucket" {
-  description = "Name of the Terraform state bucket"
   type        = string
+  description = "Name of the Terraform state bucket."
 }

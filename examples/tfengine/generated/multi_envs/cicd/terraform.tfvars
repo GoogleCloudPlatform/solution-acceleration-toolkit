@@ -27,6 +27,7 @@ cloud_source_repostory = {
     "group:example-source-writers@example.com",
   ]
 }
-billing_account = "000-000-000"
-project_id      = "example-devops"
-state_bucket    = "example-terraform-state"
+billing_account  = "000-000-000"
+project_id       = "example-devops"
+scheduler_region = "us-east1"
+state_bucket     = "example-terraform-state"

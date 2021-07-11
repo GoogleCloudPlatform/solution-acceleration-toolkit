@@ -22,6 +22,7 @@ github = {
   owner = "GoogleCloudPlatform"
   name  = "example"
 }
-billing_account = "000-000-000"
-project_id      = "example-prod-devops"
-state_bucket    = "example-terraform-state"
+billing_account  = "000-000-000"
+project_id       = "example-prod-devops"
+scheduler_region = "us-east1"
+state_bucket     = "example-terraform-state"
