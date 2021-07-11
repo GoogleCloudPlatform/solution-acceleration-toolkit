@@ -14,9 +14,46 @@
 
 
 variable "folder" {
-  type = string
+  type        = string
+  description = "ID of the folder to apply the configuration."
+  validation {
+    condition     = can(regex("^[0-9]{8,25}$", var.folder))
+    error_message = "The folder must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your folder id."
+  }
 }
 
 variable "auditors_group" {
-  type = string
+  type        = string
+  description = "This group will be granted viewer access to the audit log dataset and bucket as well as security reviewer permission on the root resource specified."
+}
+
+variable "filter" {
+  type        = list(string)
+  description = "Filters for log collection and export concatenated by \"OR\" operator. Refer to https://cloud.google.com/logging/docs/view/query-library for query syntax."
+}
+
+variable "bigquery_location" {
+  type        = string
+  description = "Location of logs bigquery dataset."
+}
+
+variable "logs_bigquery_dataset" {
+  type = object({
+    dataset_id = string
+    sink_name  = string
+  })
+  description = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
+}
+
+variable "logs_storage_bucket" {
+  type = object({
+    name      = string
+    sink_name = string
+  })
+  description = "GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements."
+}
+
+variable "storage_location" {
+  type        = string
+  description = "	Location of logs storage bucket."
 }

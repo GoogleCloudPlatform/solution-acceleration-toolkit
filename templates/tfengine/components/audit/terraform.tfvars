@@ -12,9 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{if eq .parent_type "organization" -}}
-org_id          = "{{.parent_id}}"
-{{- else}}
-folder          = "folders/{{.parent_id}}"
+{{- $filter := `logName:\"logs/cloudaudit.googleapis.com\"`}}
+{{- range get . "additional_filters"}}
+{{- $filter = printf "%s OR %s" $filter .}}
 {{- end}}
-auditors_group  = "{{.auditors_group}}"
+
+{{if eq .parent_type "organization" -}}
+org_id = "{{.parent_id}}"
+{{- else}}
+folder = "folders/{{.parent_id}}"
+{{- end}}
+auditors_group = "{{.auditors_group}}"
+filter = "{{$filter}}"
+bigquery_location ="{{.bigquery_location}}"
+logs_bigquery_dataset = {
+  dataset_id = "{{.logs_bigquery_dataset.dataset_id}}"
+  sink_name = "{{get .logs_bigquery_dataset "sink_name" "bigquery-audit-logs-sink"}}"
+}
+logs_storage_bucket = {
+  name = "{{.logs_storage_bucket.name}}"
+  sink_name = "{{get .logs_storage_bucket "sink_name" "storage-audit-logs-sink"}}"
+}
+storage_location = "{{.storage_location}}"

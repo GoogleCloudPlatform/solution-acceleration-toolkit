@@ -71,9 +71,9 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.1.0"
 
-  log_sink_name          = "bigquery-audit-logs-sink"
+  log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = module.bigquery_destination.destination_uri
-  filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter                 = var.filter
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
   unique_writer_identity = true
@@ -84,9 +84,9 @@ module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
   version = "~> 5.1.0"
 
-  dataset_name             = "1yr_org_audit_logs"
+  dataset_name             = var.logs_bigquery_dataset.dataset_id
   project_id               = module.project.project_id
-  location                 = "us-east1"
+  location                 = var.bigquery_location
   log_sink_writer_identity = module.bigquery_export.writer_identity
   expiration_days          = 365
 }
@@ -95,9 +95,9 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.1.0"
 
-  log_sink_name          = "storage-audit-logs-sink"
+  log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = module.storage_destination.destination_uri
-  filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
+  filter                 = var.filter
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
   unique_writer_identity = true
@@ -111,9 +111,9 @@ module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
   version = "~> 5.1.0"
 
-  storage_bucket_name      = "7yr-org-audit-logs"
+  storage_bucket_name      = var.logs_storage_bucket.name
   project_id               = module.project.project_id
-  location                 = "us-central1"
+  location                 = var.storage_location
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
   expiration_days          = 7 * 365

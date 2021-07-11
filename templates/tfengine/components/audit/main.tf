@@ -19,11 +19,6 @@ limitations under the License. */ -}}
   {{- $parent_var = "var.folder"}}
 {{- end}}
 
-{{- $filter := `logName:\"logs/cloudaudit.googleapis.com\"`}}
-{{- range get . "additional_filters"}}
-{{- $filter = printf "%s OR %s" $filter .}}
-{{- end}}
-
 # IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_{{.parent_type}}_iam_audit_config" "config" {
   {{$parent_field}} = {{$parent_var}}
@@ -44,9 +39,9 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.1.0"
 
-  log_sink_name          = "{{get .logs_bigquery_dataset "sink_name" "bigquery-audit-logs-sink"}}"
+  log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = "${module.bigquery_destination.destination_uri}"
-  filter                 = "{{$filter}}"
+  filter                 = var.filter
   parent_resource_type   = "{{.parent_type}}"
   parent_resource_id     = {{$parent_var}}
   unique_writer_identity = true
@@ -57,9 +52,9 @@ module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
   version = "~> 5.1.0"
 
-  dataset_name             = "{{.logs_bigquery_dataset.dataset_id}}"
+  dataset_name             = var.logs_bigquery_dataset.dataset_id
   project_id               = module.project.project_id
-  location                 = "{{.bigquery_location}}"
+  location                 = var.bigquery_location
   log_sink_writer_identity = "${module.bigquery_export.writer_identity}"
   expiration_days          = 365
 }
@@ -68,9 +63,9 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 5.1.0"
 
-  log_sink_name          = "{{get .logs_storage_bucket "sink_name" "storage-audit-logs-sink"}}"
+  log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = "${module.storage_destination.destination_uri}"
-  filter                 = "{{$filter}}"
+  filter                 = var.filter
   parent_resource_type   = "{{.parent_type}}"
   parent_resource_id     = {{$parent_var}}
   unique_writer_identity = true
@@ -84,9 +79,9 @@ module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
   version = "~> 5.1.0"
 
-  storage_bucket_name      = "{{.logs_storage_bucket.name}}"
+  storage_bucket_name      = var.logs_storage_bucket.name
   project_id               = module.project.project_id
-  location                 = "{{.storage_location}}"
+  location                 = var.storage_location
   log_sink_writer_identity = "${module.storage_export.writer_identity}"
   storage_class            = "COLDLINE"
   expiration_days          = 7 * 365
