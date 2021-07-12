@@ -157,6 +157,10 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
 
 	data := make(map[string]interface{})
+
+	// Make the schema available.
+	data["__schema__"] = conf.Schema
+
 	if err := template.MergeData(data, conf.Data); err != nil {
 		return err
 	}
