@@ -12,12 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{- $hasGoogle := false}}
+{{- $hasGoogleBeta := false}}
+{{- $hasKubernetes := false}}
+
 terraform {
   required_version = ">=0.14"
   required_providers {
+{{if has . "providers" -}}
+  {{range .providers -}}
+    {{.name}} = "{{.version_constraints}}"
+    {{if or (eq .name "google") (eq .name "hashicorp/google") -}}
+      {{$hasGoogle = true -}}
+    {{end -}}
+    {{if or (eq .name "google-beta") (eq .name "hashicorp/google-beta") -}}
+      {{$hasGoogleBeta = true -}}
+    {{end -}}
+    {{if or (eq .name "kubernetes") (eq .name "hashicorp/kubernetes") -}}
+      {{$hasKubernetes = true -}}
+    {{end -}}
+  {{end -}}
+{{end -}}
+    {{if not $hasGoogle -}}
     google      = "~> 3.0"
+    {{end -}}
+    {{if not $hasGoogleBeta -}}
     google-beta = "~> 3.0"
+    {{end -}}
+    {{if not $hasKubernetes -}}
     kubernetes  = "~> 1.0"
+    {{end -}}
   }
   backend "gcs" {
     bucket = "{{.state_bucket}}"
