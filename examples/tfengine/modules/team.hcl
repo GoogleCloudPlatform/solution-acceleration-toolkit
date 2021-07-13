@@ -442,6 +442,40 @@ EOF
   }
 }
 
+# IAM bindings - adding storage admin permissions to a service account.
+template "project_iam" {
+  recipe_path = "{{.recipes}}/project.hcl"
+  output_path = "./project_iam"
+  data = {
+    project = {
+      project_id = "{{.prefix}}-{{.env}}-iam"
+      // exists     = false
+    }
+    iam_bindings = [{
+      parent_type = "storage_bucket"
+      parent_ids = [
+        "{{.prefix}}-bucket",
+      ]
+      bindings = {
+        "roles/storage.admin" = [
+          "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        ]
+      }
+    },
+    {
+      parent_type = "project"
+      parent_ids = [
+        "{{.prefix}}-{{.env}}-data",
+      ]
+      bindings = {
+        "roles/browser" = [
+          "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        ]
+      }
+    }]
+  }
+}
+
 # Kubernetes Terraform deployment. This should be deployed after the GKE Cluster has been deployed.
 template "kubernetes" {
   recipe_path = "{{.recipes}}/deployment.hcl"

@@ -140,6 +140,7 @@ template "cicd" {
           "project_networks",
           "project_apps",
           "project_data",
+          "projetc_iam",
         ]
       }
     ]
