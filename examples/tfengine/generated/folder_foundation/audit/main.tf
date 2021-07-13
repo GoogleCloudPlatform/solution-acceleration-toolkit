@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.2.2"
+  version = "~> 11.1.0"
 
   name            = "example-audit"
   org_id          = ""
@@ -70,7 +70,7 @@ resource "google_folder_iam_audit_config" "config" {
 
 module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 5.1.0"
+  version = "~> 6.0.0"
 
   log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = module.bigquery_destination.destination_uri
@@ -83,7 +83,7 @@ module "bigquery_export" {
 
 module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
-  version = "~> 5.1.0"
+  version = "~> 6.0.0"
 
   dataset_name             = var.logs_bigquery_dataset.dataset_id
   project_id               = module.project.project_id
@@ -94,7 +94,7 @@ module "bigquery_destination" {
 
 module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 5.1.0"
+  version = "~> 6.0.0"
 
   log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = module.storage_destination.destination_uri
@@ -110,7 +110,7 @@ module "storage_export" {
 // and set the actual expiry to be greater than this amount (7 years).
 module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
-  version = "~> 5.1.0"
+  version = "~> 6.0.0"
 
   storage_bucket_name      = var.logs_storage_bucket.name
   project_id               = module.project.project_id

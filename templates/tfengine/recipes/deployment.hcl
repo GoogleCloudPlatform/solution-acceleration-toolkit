@@ -37,6 +37,31 @@ schema = {
           EOF
           type        = "string"
         }
+        providers = {
+          description = "Custom provider and version constraints."
+          type = "array"
+          items = {
+            type                 = "object"
+            additionalProperties = false
+            required = [
+              "name",
+              "version_constraints",
+            ]
+            properties = {
+              name = {
+                description = "Name of provider, e.g. google, google-beta."
+                type        = "string"
+              }
+              version_constraints = {
+                description = <<EOF
+                  Provider version constraints,e.g. ">= 1.2.0, < 2.0.0".
+                  Follow <https://www.terraform.io/docs/language/expressions/version-constraints.html> for syntax.
+                EOF
+                type        = "string"
+              }
+            }
+          }
+        }
         vars = {
           description = "Additional vars to set in the deployment in variables.tf."
           type = "array"
