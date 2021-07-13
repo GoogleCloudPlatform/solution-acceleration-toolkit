@@ -144,6 +144,12 @@ schema = {
         See [resources.md](./resources.md) for schema.
       EOF
     }
+    iam_bindings = {
+      description = <<EOF
+        IAM bindings for this or other projects.
+        See [iam_bindings.md](./iam_bindings.md) for schema.
+      EOF
+    }
     terraform_addons = {
       description = <<EOF
         Additional Terraform configuration for the project deployment.
@@ -170,5 +176,11 @@ template "resources" {
   flatten {
     key = "resources"
   }
+}
+{{end}}
+
+{{if has . "iam_bindings"}}
+template "iam_bindings" {
+  recipe_path = "./iam_bindings.hcl"
 }
 {{end}}
