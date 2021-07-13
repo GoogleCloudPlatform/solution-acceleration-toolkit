@@ -27,9 +27,15 @@ variable "auditors_group" {
   description = "This group will be granted viewer access to the audit log dataset and bucket as well as security reviewer permission on the root resource specified."
 }
 
-variable "filter" {
-  type        = list(string)
-  description = "Filters for log collection and export concatenated by \"OR\" operator. Refer to https://cloud.google.com/logging/docs/view/query-library for query syntax."
+variable "additional_filters" {
+  type        = string
+  description = <<EOF
+    Additional filters for log collection and export. 
+    List entries will be concatenated by "OR" operator. 
+    Refer to https://cloud.google.com/logging/docs/view/query-library for query syntax. Need to escape \ and " to preserve them in the final filter strings. 
+    See example usages under "examples/tfengine/".
+    Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
+  EOF
 }
 
 variable "bigquery_location" {

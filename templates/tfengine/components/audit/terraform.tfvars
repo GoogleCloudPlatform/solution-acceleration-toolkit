@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{- $filter := `logName:\"logs/cloudaudit.googleapis.com\"`}}
+{{- $additional_filters := ``}}
 {{- range get . "additional_filters"}}
-{{- $filter = printf "%s OR %s" $filter .}}
+{{- $additional_filters = printf "%s OR %s" $additional_filters .}}
 {{- end}}
 
 {{if eq .parent_type "organization" -}}
@@ -23,7 +23,7 @@ org_id = "{{.parent_id}}"
 folder = "folders/{{.parent_id}}"
 {{- end}}
 auditors_group = "{{.auditors_group}}"
-filter = "{{$filter}}"
+additional_filters = "{{$additional_filters}}"
 bigquery_location ="{{.bigquery_location}}"
 logs_bigquery_dataset = {
   dataset_id = "{{.logs_bigquery_dataset.dataset_id}}"
