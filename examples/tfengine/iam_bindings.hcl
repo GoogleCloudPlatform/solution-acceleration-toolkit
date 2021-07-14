@@ -39,7 +39,7 @@ template "iam_bindings" {
         "roles/storage.legacyBucketReader" = [
           "serviceAccount:example-sa@example.iam.gserviceaccount.com",
           "group:example-group@example.com",
-          "user:exampleuser@example.com"
+          "user:example-user@example.com"
         ]
         "roles/storage.legacyBucketWriter" = [
           "serviceAccount:example-sa@example.iam.gserviceaccount.com",
