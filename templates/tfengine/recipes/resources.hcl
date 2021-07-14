@@ -1523,7 +1523,7 @@ template "healthcare_datasets" {
 
 {{if has . "iam_members"}}
 template "iam_members" {
-  component_path = "../components/resources/iam_members"
+  component_path = "../components/resources/project_iam_members"
 }
 {{end}}
 
