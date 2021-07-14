@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-build_editors = [
-  "group:example-cicd-editors@example.com",
-]
-build_viewers = [
-  "group:example-cicd-viewers@example.com",
-]
+build_editors = ["group:example-cicd-editors@example.com"]
+
+build_viewers = ["group:example-cicd-viewers@example.com"]
+
 cloud_source_repostory = {
   name = "example"
   readers = [

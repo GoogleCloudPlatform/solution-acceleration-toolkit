@@ -12,20 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-build_editors   = [
-  {{- if has . "build_editors"}}
-  {{- range .build_editors}}
-  "{{.}}",
-  {{- end}}
-  {{- end}}
-]
-build_viewers   = [
-  {{- if has . "build_viewers"}}
-  {{- range .build_viewers}}
-  "{{.}}",
-  {{- end}}
-  {{- end}}
-]
+{{hclField . "build_editors"}}
+{{hclField . "build_viewers"}}
 {{- if has . "cloud_source_repository"}}
 cloud_source_repostory = {
   name = "{{.cloud_source_repository.name}}"

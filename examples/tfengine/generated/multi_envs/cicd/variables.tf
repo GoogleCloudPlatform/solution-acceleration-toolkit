@@ -15,11 +15,13 @@
 variable "build_editors" {
   type        = list(string)
   description = "IAM members to grant cloudbuild.builds.editor role in the devops project to see CICD results."
+  default     = []
 }
 
 variable "build_viewers" {
   type        = list(string)
   description = "IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results."
+  default     = []
 }
 
 variable "billing_account" {
