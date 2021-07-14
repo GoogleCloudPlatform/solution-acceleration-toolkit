@@ -36,12 +36,12 @@ template "iam_bindings" {
         "example-bucket",
       ]
       bindings = {
-        "roles/storage.legacyBucketReader" = [
+        "roles/storage.objectViewer" = [
           "serviceAccount:example-sa@example.iam.gserviceaccount.com",
           "group:example-group@example.com",
           "user:example-user@example.com"
         ]
-        "roles/storage.legacyBucketWriter" = [
+        "roles/storage.objectCreator" = [
           "serviceAccount:example-sa@example.iam.gserviceaccount.com",
         ]
       }
