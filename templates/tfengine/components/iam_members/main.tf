@@ -12,8 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range $index, $value := get . "iam_bindings"}}
-module "{{resourceName . "parent_type"}}_iam_bindings_{{$index}}" {
+{{range $index, $value := get . "iam_members"}}
+module "{{resourceName . "parent_type"}}_iam_members_{{$index}}" {
   {{- if eq .parent_type "storage_bucket"}}
   source = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
   storage_buckets = [

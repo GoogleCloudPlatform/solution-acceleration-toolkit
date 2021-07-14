@@ -22,11 +22,11 @@ data = {
   storage_location = "us-central1"
 }
 
-template "iam_bindings" {
-  recipe_path = "{{$recipes}}/iam_bindings.hcl"
-  output_path = "./iam_bindings"
+template "iam_members" {
+  recipe_path = "{{$recipes}}/iam_members.hcl"
+  output_path = "./iam_members"
   data = {
-    iam_bindings = [{
+    iam_members = [{
       parent_type = "storage_bucket"
       parent_ids = [
         "example-bucket",

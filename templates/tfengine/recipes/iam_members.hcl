@@ -19,7 +19,7 @@ schema = {
       description = "Bucket to store remote state."
       type        = "string"
     }
-    iam_bindings = {
+    iam_members = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-iam)"
       type        = "array"
       items = {
@@ -61,8 +61,8 @@ schema = {
   }
 }
 
-{{if has . "iam_bindings"}}
-template "iam_bindings" {
-  component_path = "../components/iam_bindings"
+{{if has . "iam_members"}}
+template "iam_members" {
+  component_path = "../components/iam_members"
 }
 {{end}}
