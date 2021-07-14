@@ -13,11 +13,13 @@
 # limitations under the License.
 
 variable "build_editors" {
-  type = list(string)
+  type        = list(string)
+  description = "IAM members to grant cloudbuild.builds.editor role in the devops project to see CICD results."
 }
 
 variable "build_viewers" {
-  type = list(string)
+  type        = list(string)
+  description = "IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results."
 }
 
 variable "billing_account" {
@@ -47,6 +49,7 @@ variable "envs" {
       })
     })
   }))
+  description = "Config block for per-environment resources."
 }
 
 variable "github" {
@@ -54,15 +57,17 @@ variable "github" {
     owner = string
     name  = string
   })
+  description = "Config for GitHub Cloud Build triggers."
 }
 
 variable "project_id" {
   type        = string
-  description = "Project ID of the devops project to host CI/CD resources."
+  description = "ID of project to deploy CICD in."
 }
 
 variable "scheduler_region" {
-  type = string
+  type        = string
+  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
 }
 
 variable "state_bucket" {
@@ -71,7 +76,10 @@ variable "state_bucket" {
 }
 
 variable "terraform_root" {
-  type = string
+  type        = string
+  description = <<EOF
+    Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/".
+  EOF
 }
 
 variable "terraform_root_prefix" {

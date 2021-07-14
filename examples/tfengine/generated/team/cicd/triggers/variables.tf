@@ -12,20 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "create_module" {
-  type = boolean
-}
-
 variable "branch_name" {
-  type = string
+  type        = string
+  description = <<EOF
+    Name of the branch to set the Cloud Build Triggers to monitor.
+    Regex is not supported to enforce a 1:1 mapping from a branch to a GCP environment.
+  EOF
 }
 
 variable "managed_dirs" {
-  type = list(string)
+  type        = list(string)
+  description = <<EOF
+    List of root modules managed by the CICD relative to terraform_root.
+
+    NOTE: The modules will be deployed in the given order. If a module depends on another module, it should show up after it in this list.
+
+    NOTE: The CICD has permission to update APIs within its own project. Thus, you can list the devops module as one of the managed modules. Other changes to the devops project or CICD pipelines must be deployed manually.
+  EOF
 }
 
 variable "name" {
-  type = string
+  type        = string
+  description = "Name of the environment."
 }
 
 variable "triggers" {
@@ -46,6 +54,7 @@ variable "triggers" {
       run_on_schedule = string
     })
   })
+  description = "Config block for the CICD Cloud Build triggers."
 }
 
 variable "github" {
@@ -53,19 +62,24 @@ variable "github" {
     owner = string
     name  = string
   })
+  description = "Config for GitHub Cloud Build triggers."
 }
 
 variable "project_id" {
   type        = string
-  description = "Project ID of the devops project to host CI/CD resources."
+  description = "ID of project to deploy CICD in."
 }
 
 variable "scheduler_region" {
-  type = string
+  type        = string
+  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
 }
 
 variable "terraform_root" {
-  type = string
+  type        = string
+  description = <<EOF
+    Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/".
+  EOF
 }
 
 variable "terraform_root_prefix" {

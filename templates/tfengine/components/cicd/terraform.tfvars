@@ -59,21 +59,21 @@ envs = [
         validate = {
           skip = {{not (has .triggers "validate")}}
           {{- if has .triggers "validate"}}
-          run_on_push = {{get .triggers.validate "run_on_push" false}}
+          run_on_push = {{get .triggers.validate "run_on_push" true}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
           {{- end}}
         }
         plan = {
           skip = {{not (has .triggers "plan")}}
           {{- if has .triggers "plan"}}
-          run_on_push = {{get .triggers.plan "run_on_push" false}}
+          run_on_push = {{get .triggers.plan "run_on_push" true}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
           {{- end}}
         }
         apply = {
           skip = {{not (has .triggers "apply")}}
           {{- if has .triggers "apply"}}
-          run_on_push = {{get .triggers.apply "run_on_push" false}}
+          run_on_push = {{get .triggers.apply "run_on_push" true}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
           {{- end}}
         }

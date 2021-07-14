@@ -24,8 +24,8 @@
 | envs.triggers.plan.run_on_push | Whether or not to be automatically triggered from a PR/push to branch.                    Default to true. | boolean | false | - | - |
 | envs.triggers.plan.run_on_schedule | Whether or not to be automatically triggered according a specified schedule.                    The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)                    at Eastern Standard Time (EST). Default to none. | string | false | - | - |
 | envs.triggers.validate | Config block for the presubmit validation Cloud Build trigger. If specified, create                the trigger and grant the Cloud Build Service Account necessary permissions to                perform the build. | object | false | - | - |
-| envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch.                    Default to true. | boolean | false | - | - |
-| envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule.                    The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)                    at Eastern Standard Time (EST). Default to none. | string | false | - | - |
+| envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch. | boolean | false | true | - |
+| envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule.                    The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)                    at Eastern Standard Time (EST). | string | false | - | - |
 | github | Config for GitHub Cloud Build triggers. | object | false | - | - |
 | github.name | GitHub repo name. | string | true | - | - |
 | github.owner | GitHub repo owner. | string | true | - | - |
