@@ -23,13 +23,9 @@ data = {
 }
 
 template "iam_bindings" {
-  recipe_path = "{{$recipes}}/project.hcl"
+  recipe_path = "{{$recipes}}/iam_bindings.hcl"
   output_path = "./iam_bindings"
   data = {
-    project = {
-      project_id = "example-iam"
-      exists     = false
-    }
     iam_bindings = [{
       parent_type = "storage_bucket"
       parent_ids = [

@@ -444,13 +444,9 @@ EOF
 
 # IAM bindings - adding storage admin permissions to a service account.
 template "project_iam" {
-  recipe_path = "{{.recipes}}/project.hcl"
+  recipe_path = "{{.recipes}}/iam_bindings.hcl"
   output_path = "./project_iam"
   data = {
-    project = {
-      project_id = "{{.prefix}}-{{.env}}-iam"
-      // exists     = false
-    }
     iam_bindings = [{
       parent_type = "storage_bucket"
       parent_ids = [
