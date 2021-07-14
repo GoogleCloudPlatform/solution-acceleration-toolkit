@@ -41,7 +41,7 @@ module "bigquery_export" {
 
   log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = "${module.bigquery_destination.destination_uri}"
-  filter                 = join(" OR ", concat("logName:\"logs/cloudaudit.googleapis.com\"", var.additional_filters))
+  filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
   parent_resource_type   = "{{.parent_type}}"
   parent_resource_id     = {{$parent_var}}
   unique_writer_identity = true
@@ -65,7 +65,7 @@ module "storage_export" {
 
   log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = "${module.storage_destination.destination_uri}"
-  filter                 = join(" OR ", concat("logName:\"logs/cloudaudit.googleapis.com\"", var.additional_filters))
+  filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
   parent_resource_type   = "{{.parent_type}}"
   parent_resource_id     = {{$parent_var}}
   unique_writer_identity = true
