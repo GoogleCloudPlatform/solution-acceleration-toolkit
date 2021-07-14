@@ -27,7 +27,7 @@ schema = {
         additionalProperties = false
         required = [
           "parent_type",
-          "parent_id",
+          "parent_ids",
           "bindings"
         ]
         properties = {
