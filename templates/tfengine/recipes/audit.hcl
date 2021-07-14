@@ -120,6 +120,7 @@ schema = {
       items = {
         type = "string"
       }
+      default = "[]"
     }
   }
 }

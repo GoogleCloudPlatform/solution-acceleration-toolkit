@@ -38,7 +38,7 @@ variable "auditors_group" {
 }
 
 variable "additional_filters" {
-  type = string
+  type = list(string)
   description = <<EOF
     Additional filters for log collection and export. 
     List entries will be concatenated by "OR" operator. 
@@ -46,6 +46,7 @@ variable "additional_filters" {
     See example usages under "examples/tfengine/".
     Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
   EOF
+  default = []
 }
 
 variable "bigquery_location" {

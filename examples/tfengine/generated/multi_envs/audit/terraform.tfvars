@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-folder             = "folders/12345678"
-auditors_group     = "example-auditors@example.com"
-additional_filters = " OR logName=\"logs/forseti\" OR logName=\"logs/application\""
-bigquery_location  = "us-east1"
+folder         = "folders/12345678"
+auditors_group = "example-auditors@example.com"
+additional_filters = [
+  "logName=\"logs/forseti\"",
+  "logName=\"logs/application\"",
+]
+bigquery_location = "us-east1"
 logs_bigquery_dataset = {
   dataset_id = "1yr_folder_audit_logs"
   sink_name  = "example-bigquery-audit-logs-sink"
