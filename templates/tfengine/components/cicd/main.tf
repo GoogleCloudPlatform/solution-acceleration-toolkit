@@ -274,3 +274,24 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
     google_project_service.services,
   ]
 }
+
+# Create Google Cloud Build triggers for specified environments
+module "triggers" {
+  for_each = var.envs
+  source  = "./triggers"
+
+  branch_name             = each.value.branch_name
+  managed_dirs            = each.value.managed_dirs
+  name                    = each.value.name
+  triggers                = each.value.triggers
+  {{- if has . "cloud_source_repository"}}
+  cloud_source_repository = var.cloud_source_repository
+  {{- end}}
+  {{- if has . "github"}}
+  github                  = var.github
+  {{- end}}
+  project_id              = var.project_id
+  scheduler_region        = var.scheduler_region
+  terraform_root          = var.terraform_root
+  terraform_root_prefix   = var.terraform_root_prefix
+}

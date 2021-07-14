@@ -18,12 +18,37 @@ build_editors = [
 build_viewers = [
   "group:example-cicd-viewers@example.com",
 ]
+envs = [
+  {
+    branch_name  = "main"
+    managed_dirs = ""
+    name         = "prod"
+    triggers = {
+      validate = {
+        skip            = false
+        run_on_push     = false
+        run_on_schedule = ""
+      }
+      plan = {
+        skip            = false
+        run_on_push     = false
+        run_on_schedule = "0 12 * * *"
+      }
+      apply = {
+        skip            = false
+        run_on_push     = false
+        run_on_schedule = ""
+      }
+    }
+  },
+]
 github = {
   owner = "GoogleCloudPlatform"
   name  = "example"
 }
-billing_account  = "000-000-000"
-project_id       = "example-devops"
-scheduler_region = "us-east1"
-state_bucket     = "example-terraform-state"
-terraform_root   = "terraform"
+billing_account       = "000-000-000"
+project_id            = "example-devops"
+scheduler_region      = "us-east1"
+state_bucket          = "example-terraform-state"
+terraform_root        = "terraform"
+terraform_root_prefix = "terraform/"

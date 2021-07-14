@@ -32,6 +32,31 @@ variable "cloud_source_repository" {
   })
 }
 
+variable "envs" {
+  type = list(object({
+    branch_name  = string
+    managed_dirs = list(string)
+    name         = string
+    triggers = object({
+      apply = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+      plan = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+      validate = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+    })
+  }))
+}
+
 variable "project_id" {
   type        = string
   description = "Project ID of the devops project to host CI/CD resources."
@@ -47,5 +72,9 @@ variable "state_bucket" {
 }
 
 variable "terraform_root" {
+  type = string
+}
+
+variable "terraform_root_prefix" {
   type = string
 }
