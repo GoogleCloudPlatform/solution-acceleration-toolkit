@@ -14,36 +14,32 @@ limitations under the License. */ -}}
 
 {{range $index, $value := get . "iam_members"}}
 module "{{resourceName . "parent_type"}}_iam_members_{{$index}}" {
+  source = "terraform-google-modules/iam/google//modules/{{.parent_type}}s_iam"
   {{- if eq .parent_type "storage_bucket"}}
-  source = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
   storage_buckets = [
     {{- range .parent_ids}}
     "{{.}}",
     {{- end}}
   ]
   {{- else if eq .parent_type "project"}}
-  source = "terraform-google-modules/iam/google//modules/projects_iam"
   projects = [
     {{- range .parent_ids}}
     "{{.}}",
     {{- end}}
   ]
   {{- else if eq .parent_type "organization"}}
-  source = "terraform-google-modules/iam/google//modules/organizations_iam"
   organizations = [
     {{- range .parent_ids}}
     "{{.}}",
     {{- end}}
   ]
   {{- else if eq .parent_type "folder"}}
-  source = "terraform-google-modules/iam/google//modules/folders_iam"
   folders = [
     {{- range .parent_ids}}
     "{{.}}",
     {{- end}}
   ]
   {{- else if eq .parent_type "billing_account"}}
-  source = "terraform-google-modules/iam/google//modules/billing_accounts_iam"
   billing_account_ids = [
     {{- range .parent_ids}}
     "{{.}}",
