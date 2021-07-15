@@ -6,7 +6,6 @@
 
 | Property | Description | Type | Required | Default | Pattern |
 | -------- | ----------- | ---- | -------- | ------- | ------- |
-| iam_bindings | IAM bindings for this or other projects.        See [iam_bindings.md](./iam_bindings.md) for schema. | - | false | - | - |
 | parent_id | ID of parent GCP resource to apply the policy        Can be one of the organization ID or folder ID according to parent_type. | string | false | - | - |
 | parent_type | Type of parent GCP resource to apply the policy        Can be one of 'organization' or 'folder'. | string | false | - | ^organization\|folder$ |
 | project | Config for the project. | object | true | - | - |

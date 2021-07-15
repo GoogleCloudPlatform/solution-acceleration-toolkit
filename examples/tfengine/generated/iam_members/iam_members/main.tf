@@ -21,7 +21,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "project_iam"
+    prefix = "iam_members"
   }
 }
 
