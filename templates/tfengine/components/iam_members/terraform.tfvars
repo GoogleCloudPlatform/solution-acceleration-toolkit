@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{range $k, $v := get . "iam_members"}}
-  {{$k}}_iam_members = {
-    {{range $index, $element := $v}}
+{{range $resource, $members := get . "iam_members"}}
+  {{$resource}}_iam_members = {
+    {{range $index, $element := $members}}
       {{$index}} = {
         parent_ids = {{hcl (get . "parent_ids")}}
         bindings = {
