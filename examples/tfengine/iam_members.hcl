@@ -63,6 +63,22 @@ template "iam_members" {
           ]
         }
       }]
+      "folder" = [{
+        parent_ids = [
+          "example-folder-one", 
+          "example-folder-two",
+        ]
+        bindings = {
+          "roles/storage.objectViewer" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            "group:example-group@example.com",
+            "user:example-user@example.com"
+          ]
+          "roles/storage.objectCreator" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+          ]
+        }
+      }]
     }
   }
 }
