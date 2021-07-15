@@ -61,5 +61,5 @@ variable "logs_storage_bucket" {
 
 variable "storage_location" {
   type        = string
-  description = "	Location of logs storage bucket."
+  description = "Location of logs storage bucket."
 }
