@@ -12,39 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-storage_bucket_iam_members = {
-
-  0 = {
-    bindings = {
-      "roles/storage.admin" = [
-        "serviceAccount:runner@example-prod-apps.iam.gserviceaccount.com",
-      ],
-    }
-    parent_ids = [
-      "example-bucket",
-    ]
-  },
-}
 
 project_iam_members = {
 
   0 = {
+    parent_ids = ["example-prod-data"]
     bindings = {
       "roles/browser" = [
         "serviceAccount:runner@example-prod-apps.iam.gserviceaccount.com",
       ],
     }
-    parent_ids = [
-      "example-prod-data",
-    ]
   },
 }
 
-folder_iam_members = {
-}
+storage_bucket_iam_members = {
 
-organization_iam_members = {
-}
-
-service_account_iam_members = {
+  0 = {
+    parent_ids = ["example-bucket"]
+    bindings = {
+      "roles/storage.admin" = [
+        "serviceAccount:runner@example-prod-apps.iam.gserviceaccount.com",
+      ],
+    }
+  },
 }

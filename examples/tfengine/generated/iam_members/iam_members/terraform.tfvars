@@ -12,9 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-storage_bucket_iam_members = {
+
+folder_iam_members = {
 
   0 = {
+    parent_ids = [
+      "example-folder-one",
+      "example-folder-two",
+    ]
     bindings = {
       "roles/storage.objectCreator" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",
@@ -25,41 +30,37 @@ storage_bucket_iam_members = {
         "user:example-user@example.com",
       ],
     }
-    parent_ids = [
-      "example-bucket",
-    ]
   },
 }
 
 project_iam_members = {
 
   0 = {
+    parent_ids = [
+      "example-project-one",
+      "example-project-two",
+    ]
     bindings = {
       "roles/compute.networkAdmin" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",
       ],
     }
-    parent_ids = [
-      "example-project-one",
-      "example-project-two",
-    ]
   },
 
   1 = {
+    parent_ids = ["example-project-one"]
     bindings = {
       "roles/compute.loadBalancerAdmin" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",
       ],
     }
-    parent_ids = [
-      "example-project-one",
-    ]
   },
 }
 
-folder_iam_members = {
+storage_bucket_iam_members = {
 
   0 = {
+    parent_ids = ["example-bucket"]
     bindings = {
       "roles/storage.objectCreator" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",
@@ -70,15 +71,5 @@ folder_iam_members = {
         "user:example-user@example.com",
       ],
     }
-    parent_ids = [
-      "example-folder-one",
-      "example-folder-two",
-    ]
   },
-}
-
-organization_iam_members = {
-}
-
-service_account_iam_members = {
 }
