@@ -15,3 +15,17 @@
 
 folder         = "folders/12345678"
 auditors_group = "example-auditors@example.com"
+additional_filters = [
+  "logName:\"logs/forseti\"",
+  "logName:\"logs/application\"",
+]
+bigquery_location = "us-east1"
+logs_bigquery_dataset = {
+  dataset_id = "1yr_folder_audit_logs"
+  sink_name  = "example-bigquery-audit-logs-sink"
+}
+logs_storage_bucket = {
+  name      = "7yr-folder-audit-logs"
+  sink_name = "example-storage-audit-logs-sink"
+}
+storage_location = "us-central1"

@@ -72,9 +72,9 @@ module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 6.0.0"
 
-  log_sink_name          = "example-bigquery-audit-logs-sink"
+  log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = module.bigquery_destination.destination_uri
-  filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
+  filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
   parent_resource_type   = "folder"
   parent_resource_id     = var.folder
   unique_writer_identity = true
@@ -85,9 +85,9 @@ module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
   version = "~> 6.0.0"
 
-  dataset_name             = "1yr_folder_audit_logs"
+  dataset_name             = var.logs_bigquery_dataset.dataset_id
   project_id               = module.project.project_id
-  location                 = "us-east1"
+  location                 = var.bigquery_location
   log_sink_writer_identity = module.bigquery_export.writer_identity
   expiration_days          = 365
 }
@@ -96,9 +96,9 @@ module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
   version = "~> 6.0.0"
 
-  log_sink_name          = "example-storage-audit-logs-sink"
+  log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = module.storage_destination.destination_uri
-  filter                 = "logName:\"logs/cloudaudit.googleapis.com\" OR logName=\"logs/forseti\" OR logName=\"logs/application\""
+  filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
   parent_resource_type   = "folder"
   parent_resource_id     = var.folder
   unique_writer_identity = true
@@ -112,9 +112,9 @@ module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
   version = "~> 6.0.0"
 
-  storage_bucket_name      = "7yr-folder-audit-logs"
+  storage_bucket_name      = var.logs_storage_bucket.name
   project_id               = module.project.project_id
-  location                 = "us-central1"
+  location                 = var.storage_location
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
   expiration_days          = 7 * 365

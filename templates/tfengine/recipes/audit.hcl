@@ -15,6 +15,11 @@
 schema = {
   title                = "Audit Recipe"
   additionalProperties = false
+  required = [
+    "auditors_group",
+    "logs_bigquery_dataset",
+    "logs_storage_bucket"
+  ]
   properties = {
     parent_type = {
       description = <<EOF
@@ -48,6 +53,9 @@ schema = {
       description          = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "dataset_id"
+      ]
       properties = {
         dataset_id = {
           description = "ID of Bigquery Dataset."
@@ -55,9 +63,10 @@ schema = {
         }
         sink_name = {
           description = <<EOF
-            Name of the logs sink, default to "bigquery-audit-logs-sink".
+            Name of the logs sink.
           EOF
           type        = "string"
+          default     = "bigquery-audit-logs-sink"
         }
       }
     }
@@ -65,6 +74,9 @@ schema = {
       description          = "GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "name"
+      ]
       properties = {
         name = {
           description = "Name of GCS bucket."
@@ -72,9 +84,10 @@ schema = {
         }
         sink_name = {
           description = <<EOF
-            Name of the logs sink, default to "storage-audit-logs-sink".
+            Name of the logs sink.
           EOF
           type        = "string"
+          default     = "storage-audit-logs-sink"
         }
       }
     }
@@ -107,6 +120,7 @@ schema = {
       items = {
         type = "string"
       }
+      default = "[]"
     }
   }
 }
