@@ -447,28 +447,28 @@ template "project_iam" {
   recipe_path = "{{.recipes}}/iam_members.hcl"
   output_path = "./project_iam"
   data = {
-    iam_members = [{
-      parent_type = "storage_bucket"
-      parent_ids = [
-        "{{.prefix}}-bucket",
-      ]
-      bindings = {
-        "roles/storage.admin" = [
-          "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+    iam_members = {
+      "storage_bucket" = [{
+        parent_ids = [
+          "{{.prefix}}-bucket",
         ]
-      }
-    },
-    {
-      parent_type = "project"
-      parent_ids = [
-        "{{.prefix}}-{{.env}}-data",
-      ]
-      bindings = {
-        "roles/browser" = [
-          "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        bindings = {
+          "roles/storage.admin" = [
+            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+      }]
+      "project" = [{
+        parent_ids = [
+          "{{.prefix}}-{{.env}}-data",
         ]
-      }
-    }]
+        bindings = {
+          "roles/browser" = [
+            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+      }]
+    }
   }
 }
 
