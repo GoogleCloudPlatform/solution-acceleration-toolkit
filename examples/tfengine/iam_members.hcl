@@ -26,44 +26,43 @@ template "iam_members" {
   recipe_path = "{{$recipes}}/iam_members.hcl"
   output_path = "./iam_members"
   data = {
-    iam_members = [{
-      parent_type = "storage_bucket"
-      parent_ids = [
-        "example-bucket",
-      ]
-      bindings = {
-        "roles/storage.objectViewer" = [
-          "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-          "group:example-group@example.com",
-          "user:example-user@example.com"
+    iam_members = {
+      "storage_bucket" = [{
+        parent_ids = [
+          "example-bucket",
         ]
-        "roles/storage.objectCreator" = [
-          "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+        bindings = {
+          "roles/storage.objectViewer" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            "group:example-group@example.com",
+            "user:example-user@example.com"
+          ]
+          "roles/storage.objectCreator" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+          ]
+        }
+      }]
+      "project" = [{
+        parent_ids = [
+          "example-project-one",
+          "example-project-two",
         ]
-      }
-    },
-    {
-      parent_type = "project"
-      parent_ids = [
-        "example-project-one",
-        "example-project-two",
-      ]
-      bindings = {
-        "roles/compute.networkAdmin" = [
-          "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+        bindings = {
+          "roles/compute.networkAdmin" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+          ]
+        }
+      },
+      {
+        parent_ids = [
+          "example-project-one"
         ]
-      }
-    },
-    {
-      parent_type = "project"
-      parent_ids = [
-        "example-project-one"
-      ]
-      bindings = {
-        "roles/compute.loadBalancerAdmin" = [
-          "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-        ]
-      }
-    }]
+        bindings = {
+          "roles/compute.loadBalancerAdmin" = [
+            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+          ]
+        }
+      }]
+    }
   }
 }

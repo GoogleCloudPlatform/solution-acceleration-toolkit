@@ -15,42 +15,37 @@
 schema = {
   title                = "Recipe for iam bindings"
   properties = {
-    state_bucket = {
-      description = "Bucket to store remote state."
-      type        = "string"
-    }
     iam_members = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-iam)"
-      type        = "array"
-      items = {
-        type                 = "object"
-        additionalProperties = false
-        required = [
-          "parent_type",
-          "parent_ids",
-          "bindings"
-        ]
-        properties = {
-          parent_type = {
-            description = "Type of the resource to assign the bindings."
-            type        = "string"
-            pattern     = "^storage_bucket|project|organization|folder|billing_account$"
-          }
-          parent_ids = {
-            description = "Ids of the parent to assign the bindings."
-            type        = "array"
-            items       = {
-              type = "string"
-            }
-          }
-          bindings = {
-            description = "Map of IAM role to list of members to grant access to the role."
-            type  = "object"
-            patternProperties = {
-              ".+" = {
-                type  = "array" 
-                items = {
+      type                 = "object"
+      additionalProperties = false
+      patternProperties = {
+        "^storage_bucket|project|organization|folder|billing_account$": {
+          type = "array"
+          items = {
+            type = "object"
+            required = [
+              "parent_ids",
+              "bindings"
+            ]
+            properties = {
+              parent_ids = {
+                description = "Ids of the parent to assign the bindings."
+                type        = "array"
+                items       = {
                   type = "string"
+                }
+              }
+              bindings = {
+                description = "Map of IAM role to list of members to grant access to the role."
+                type  = "object"
+                patternProperties = {
+                  ".+" = {
+                    type  = "array" 
+                    items = {
+                      type = "string"
+                    }
+                  }
                 }
               }
             }
@@ -59,6 +54,10 @@ schema = {
       }
     }
   }
+}
+
+template "deployment" {
+  recipe_path = "./deployment.hcl"
 }
 
 {{if has . "iam_members"}}

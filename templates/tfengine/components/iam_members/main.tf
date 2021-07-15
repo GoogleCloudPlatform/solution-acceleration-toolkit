@@ -12,50 +12,43 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range $index, $value := get . "iam_members"}}
-module "{{resourceName . "parent_type"}}_iam_members_{{$index}}" {
-  source = "terraform-google-modules/iam/google//modules/{{.parent_type}}s_iam"
-  {{- if eq .parent_type "storage_bucket"}}
-  storage_buckets = [
-    {{- range .parent_ids}}
-    "{{.}}",
-    {{- end}}
-  ]
-  {{- else if eq .parent_type "project"}}
-  projects = [
-    {{- range .parent_ids}}
-    "{{.}}",
-    {{- end}}
-  ]
-  {{- else if eq .parent_type "organization"}}
-  organizations = [
-    {{- range .parent_ids}}
-    "{{.}}",
-    {{- end}}
-  ]
-  {{- else if eq .parent_type "folder"}}
-  folders = [
-    {{- range .parent_ids}}
-    "{{.}}",
-    {{- end}}
-  ]
-  {{- else if eq .parent_type "billing_account"}}
-  billing_account_ids = [
-    {{- range .parent_ids}}
-    "{{.}}",
-    {{- end}}
-  ]
-  {{- end}}
+module "storage_bucket_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
   mode = "additive"
-
-  bindings = {
-    {{range $role, $members := .bindings -}}
-    "{{$role}}" = [
-      {{range $members -}}
-      "{{.}}",
-      {{end -}}
-    ],
-    {{end -}}
-  }
+  for_each = var.storage_bucket_iam_members
+  storage_buckets = each.value.parent_ids
+  bindings = each.value.bindings
 }
-{{end -}}
+
+module "project_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/projects_iam"
+  mode = "additive"
+  for_each = var.project_iam_members
+  projects = each.value.parent_ids
+  bindings = each.value.bindings
+}
+
+
+module "folder_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/folders_iam"
+  mode = "additive"
+  for_each = var.folder_iam_members
+  folders = each.value.parent_ids
+  bindings = each.value.bindings
+}
+
+module "organization_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/organizations_iam"
+  mode = "additive"
+  for_each = var.organization_iam_members
+  organizations = each.value.parent_ids
+  bindings = each.value.bindings
+}
+
+module "service_account_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/service_accounts_iam"
+  mode = "additive"
+  for_each = var.service_account_iam_members
+  service_accounts = each.value.parent_ids
+  bindings = each.value.bindings
+}
