@@ -29,5 +29,5 @@ variable "organization_iam_members" {
 }
 
 variable "service_account_iam_members" {
-  description = "IAM members for service_accoun"
+  description = "IAM members for service_account"
 }
