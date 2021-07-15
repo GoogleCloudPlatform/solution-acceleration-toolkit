@@ -16,8 +16,8 @@
 folder         = "folders/12345678"
 auditors_group = "example-auditors@example.com"
 additional_filters = [
-  "logName=\"logs/forseti\"",
-  "logName=\"logs/application\"",
+  "logName:\"logs/forseti\"",
+  "logName:\"logs/application\"",
 ]
 bigquery_location = "us-east1"
 logs_bigquery_dataset = {

@@ -191,8 +191,8 @@ template "audit" {
     }
     additional_filters = [
       # Need to escape \ and " to preserve them in the final filter strings.
-      "logName=\\\"logs/forseti\\\"",
-      "logName=\\\"logs/application\\\"",
+      "logName:\\\"logs/forseti\\\"",
+      "logName:\\\"logs/application\\\"",
     ]
   }
 }
