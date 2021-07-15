@@ -28,7 +28,7 @@ template "iam_members" {
   data = {
     iam_members = {
       "storage_bucket" = [{
-        parent_ids = [
+        parent_ids = [ # storage bucket names
           "example-bucket",
         ]
         bindings = {
@@ -43,7 +43,7 @@ template "iam_members" {
         }
       }]
       "project" = [{
-        parent_ids = [
+        parent_ids = [ # project ids
           "example-project-one",
           "example-project-two",
         ]
@@ -54,7 +54,7 @@ template "iam_members" {
         }
       },
       {
-        parent_ids = [
+        parent_ids = [ # project ids
           "example-project-one"
         ]
         bindings = {
@@ -64,8 +64,8 @@ template "iam_members" {
         }
       }]
       "folder" = [{
-        parent_ids = [
-          "example-folder-one", 
+        parent_ids = [ # folder ids
+          "example-folder-one",
           "example-folder-two",
         ]
         bindings = {
