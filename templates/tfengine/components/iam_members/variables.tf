@@ -14,20 +14,25 @@
 
 variable "storage_bucket_iam_members" {
   description = "IAM members for sotrage_buckets"
+  default = {}
 }
 
 variable "project_iam_members" {
   description = "IAM members for project"
+  default = {}
 }
 
 variable "folder_iam_members" {
   description = "IAM members for folder"
+  default = {}
 }
 
 variable "organization_iam_members" {
   description = "IAM members for organization"
+  default = {}
 }
 
 variable "service_account_iam_members" {
   description = "IAM members for service_account"
+  default = {}
 }

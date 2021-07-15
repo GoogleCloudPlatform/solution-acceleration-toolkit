@@ -12,142 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-storage_bucket_iam_members = {
-  {{- if has .iam_members "storage_bucket"}}
-  {{range $index, $value := get . "iam_members.storage_bucket"}}
-  {{$index}} = {
-    bindings = {
-      {{range $role, $members := .bindings -}}
-      "{{$role}}" = [
-        {{range $members -}}
-        "{{.}}",
-        {{end -}}
-      ],
-      {{end -}}
-    }
-    parent_ids = [
-      {{- range .parent_ids}}
-      "{{.}}",
-      {{- end}}
-    ]
-  },
-  {{else -}}
-  {
-    bindings = {}
-    parent_ids = []
-  },
-  {{end -}}
-  {{end -}}
-}
-
-project_iam_members = {
-  {{- if has .iam_members "project"}}
-  {{range $index, $value := get . "iam_members.project"}}
-  {{$index}} = {
-    bindings = {
-      {{range $role, $members := .bindings -}}
-      "{{$role}}" = [
-        {{range $members -}}
-        "{{.}}",
-        {{end -}}
-      ],
-      {{end -}}
-    }
-    parent_ids = [
-      {{- range .parent_ids}}
-      "{{.}}",
-      {{- end}}
-    ]
-  },
-  {{else -}}
-  {
-    bindings = {}
-    parent_ids = []
-  },
-  {{end -}}
-  {{end -}}
-}
-
-folder_iam_members = {
-  {{if has .iam_members "folder" -}}
-  {{range $index, $value := get . "iam_members.folder"}}
-  {{$index}} = {
-    bindings = {
-      {{range $role, $members := .bindings -}}
-      "{{$role}}" = [
-        {{range $members -}}
-        "{{.}}",
-        {{end -}}
-      ],
-      {{end -}}
-    }
-    parent_ids = [
-      {{- range .parent_ids}}
-      "{{.}}",
-      {{- end}}
-    ]
-  },
-  {{else -}}
-  {
-    bindings = {}
-    parent_ids = []
-  },
-  {{end -}}
-  {{end -}}
-}
-
-organization_iam_members = {
-  {{if has .iam_members "organization" -}}
-  {{range $index, $value := get . "iam_members.organization"}}
-  {{$index}} = {
-    bindings = {
-      {{range $role, $members := .bindings -}}
-      "{{$role}}" = [
-        {{range $members -}}
-        "{{.}}",
-        {{end -}}
-      ],
-      {{end -}}
-    }
-    parent_ids = [
-      {{- range .parent_ids}}
-      "{{.}}",
-      {{- end}}
-    ]
-  },
-  {{else -}}
-  {
-    bindings = {}
-    parent_ids = []
-  },
-  {{end -}}
-  {{end -}}
-}
-
-service_account_iam_members = {
-  {{if has .iam_members "service_account" -}}
-  {{range $index, $value := get . "iam_members.service_account"}}
-  {{$index}} = {
-    bindings = {
-      {{range $role, $members := .bindings -}}
-      "{{$role}}" = [
-        {{range $members -}}
-        "{{.}}",
-        {{end -}}
-      ],
-      {{end -}}
-    }
-    parent_ids = [
-      {{- range .parent_ids}}
-      "{{.}}",
-      {{- end}}
-    ]
-  },
-  {{else -}}
-  {
-    bindings = {}
-    parent_ids = []
-  },
-  {{end -}}
-  {{end -}}
-}
+{{range $k, $v := get . "iam_members"}}
+  {{$k}}_iam_members = {
+    {{range $index, $element := $v}}
+      {{$index}} = {
+        parent_ids = {{hcl (get . "parent_ids")}}
+        bindings = {
+          {{range $role, $members := .bindings -}}
+            "{{$role}}" = [
+              {{range $members -}}
+              "{{.}}",
+              {{end -}}
+            ],
+          {{end -}}
+        }
+      },
+    {{end -}}
+  }
+{{end -}}
