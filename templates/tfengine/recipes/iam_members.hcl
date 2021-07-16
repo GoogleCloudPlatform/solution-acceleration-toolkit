@@ -13,7 +13,7 @@
 # limitations under the License.
 
 schema = {
-  title                = "Recipe for iam bindings"
+  title                = "IAM members recipe"
   properties = {
     iam_members = {
       description = <<EOF
@@ -21,10 +21,10 @@ schema = {
         
         parent_id should be the following for each type of resource:
         project: project IDs.
-        storage_bucket : Storage bucket names.
+        storage_bucket : storage bucket names.
         folder: folder IDs.
         billing_account: billing_account IDs.
-        organization: organizations.
+        organization: organization IDs.
       EOF
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-iam)"
       type                 = "object"
@@ -41,12 +41,12 @@ schema = {
             properties = {
               # parent_id should be the following for each type of resource:
               # project: project IDs.
-              # storage_bucket : Storage bucket names.
+              # storage_bucket : storage bucket names.
               # folder: folder IDs.
               # billing_account: billing_account IDs.
-              # organization: organizations.
+              # organization: organization IDs.
               parent_ids = {
-                description = "Ids of the parent to assign the bindings."
+                description = "IDs of the parent to assign the bindings."
                 type        = "array"
                 items       = {
                   type = "string"

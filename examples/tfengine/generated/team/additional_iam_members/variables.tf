@@ -13,26 +13,26 @@
 # limitations under the License.
 
 variable "storage_bucket_iam_members" {
-  description = "IAM members for sotrage_buckets"
+  description = "IAM members for sotrage buckets."
   default     = {}
 }
 
 variable "project_iam_members" {
-  description = "IAM members for project"
+  description = "IAM members for projects."
   default     = {}
 }
 
 variable "folder_iam_members" {
-  description = "IAM members for folder"
+  description = "IAM members for folders."
   default     = {}
 }
 
 variable "organization_iam_members" {
-  description = "IAM members for organization"
+  description = "IAM members for organizations."
   default     = {}
 }
 
 variable "service_account_iam_members" {
-  description = "IAM members for service_account"
+  description = "IAM members for service accounts."
   default     = {}
 }

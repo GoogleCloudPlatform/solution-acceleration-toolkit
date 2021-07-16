@@ -442,10 +442,10 @@ EOF
   }
 }
 
-# IAM bindings - adding storage admin permissions to a service account.
-template "project_iam" {
+# Additional IAM permissions for the runner service account.
+template "additional_iam_members" {
   recipe_path = "{{.recipes}}/iam_members.hcl"
-  output_path = "./project_iam"
+  output_path = "./additional_iam_members"
   data = {
     iam_members = {
       "storage_bucket" = [{
