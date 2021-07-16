@@ -27,58 +27,64 @@ template "iam_members" {
   output_path = "./iam_members"
   data = {
     iam_members = {
-      "storage_bucket" = [{
-        resource_ids = [
-          "example-bucket",
-        ]
-        bindings = {
-          "roles/storage.objectViewer" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-            "group:example-group@example.com",
-            "user:example-user@example.com"
+      "storage_bucket" = [
+        {
+          resource_ids = [
+            "example-bucket",
           ]
-          "roles/storage.objectCreator" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-          ]
+          bindings = {
+            "roles/storage.objectViewer" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+              "group:example-group@example.com",
+              "user:example-user@example.com"
+            ]
+            "roles/storage.objectCreator" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            ]
+          }
         }
-      }]
-      "project" = [{
-        resource_ids = [
-          "example-project-one",
-          "example-project-two",
-        ]
-        bindings = {
-          "roles/compute.networkAdmin" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+      ]
+      "project" = [
+        {
+          resource_ids = [
+            "example-project-one",
+            "example-project-two",
           ]
+          bindings = {
+            "roles/compute.networkAdmin" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            ]
+          }
+        },
+        {
+          resource_ids = [
+            "example-project-one"
+          ]
+          bindings = {
+            "roles/compute.loadBalancerAdmin" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            ]
+          }
         }
-      },
-      {
-        resource_ids = [
-          "example-project-one"
-        ]
-        bindings = {
-          "roles/compute.loadBalancerAdmin" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+      ]
+      "folder" = [
+        {
+          resource_ids = [
+            "example-folder-one",
+            "example-folder-two",
           ]
+          bindings = {
+            "roles/storage.objectViewer" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+              "group:example-group@example.com",
+              "user:example-user@example.com"
+            ]
+            "roles/storage.objectCreator" = [
+              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+            ]
+          }
         }
-      }]
-      "folder" = [{
-        resource_ids = [
-          "example-folder-one",
-          "example-folder-two",
-        ]
-        bindings = {
-          "roles/storage.objectViewer" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-            "group:example-group@example.com",
-            "user:example-user@example.com"
-          ]
-          "roles/storage.objectCreator" = [
-            "serviceAccount:example-sa@example.iam.gserviceaccount.com",
-          ]
-        }
-      }]
+      ]
     }
   }
 }
