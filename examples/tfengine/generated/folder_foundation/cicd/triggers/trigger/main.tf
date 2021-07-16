@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_cloudbuild_trigger" "on_push" {
+resource "google_cloudbuild_trigger" "trigger" {
   count       = var.skip ? 0 : 1
-  disabled    = var.run_on_push
+  disabled    = !var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-${var.trigger_type}-${var.name}"
-  description = "Terraform ${var.trigger_type} job triggered on push event."
+  name        = var.name
+  description = var.description
 
   included_files = [
     "${var.terraform_root_prefix}**",
@@ -27,8 +27,17 @@ resource "google_cloudbuild_trigger" "on_push" {
   github {
     owner = var.github.owner
     name  = var.github.name
-    pull_request {
-      branch = "^${var.branch_name}$"
+    dynamic "push" {
+      for_each = var.push
+      content {
+        branch = "^${push.value["branch_name"]}$"
+      }
+    }
+    dynamic "pull_request" {
+      for_each = var.pull_request
+      content {
+        branch = "^${pull_request.value["branch_name"]}$"
+      }
     }
   }
 
@@ -41,62 +50,5 @@ resource "google_cloudbuild_trigger" "on_push" {
 
   depends_on = [
     google_project_service.services,
-  ]
-}
-
-# Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
-resource "google_cloudbuild_trigger" "scheduled" {
-  count = (!var.skip && var.run_on_schedule != "") ? 1 : 0
-  # Always disabled on push to branch.
-  disabled    = true
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-${var.trigger_type}-scheduled-${var.name}"
-  description = "Terraform ${var.trigger_type} job triggered on schedule."
-
-  included_files = [
-    "${var.terraform_root_prefix}**",
-  ]
-
-  github {
-    owner = var.github.owner
-    name  = var.github.name
-    push {
-      branch = "^${var.branch_name}$"
-    }
-  }
-
-  filename = "${var.terraform_root_prefix}cicd/configs/${var.filename}"
-
-  substitutions = {
-    _TERRAFORM_ROOT = var.terraform_root
-    _MANAGED_DIRS   = var.managed_dirs
-  }
-
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-resource "google_cloud_scheduler_job" "scheduler_job" {
-  count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
-  project          = var.project_id
-  name             = "${var.trigger_type}-scheduler-${var.name}"
-  region           = var.scheduler_region
-  schedule         = var.run_on_schedule
-  time_zone        = "America/New_York" # Eastern Standard Time (EST)
-  attempt_deadline = "60s"
-  http_target {
-    http_method = "POST"
-    oauth_token {
-      scope                 = "https://www.googleapis.com/auth/cloud-platform"
-      service_account_email = google_service_account.cloudbuild_scheduler_sa.email
-    }
-    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.scheduled}:run"
-    body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
-  }
-  depends_on = [
-    google_project_service.services,
-    google_app_engine_application.cloudbuild_scheduler_app,
   ]
 }

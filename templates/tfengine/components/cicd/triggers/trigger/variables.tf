@@ -12,27 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "trigger_type" {
-  type = string
-  description = <<EOF
-    Trigger type used as suffix for naming purposes.
-    It can be 'validate', 'plan', or 'apply'.
-  EOF
-}
-
 variable "filename" { 
   type = string
   description = <<EOF
     Name of the configuration file to execute on trigger.
     It should be located under ${var.terraform_root_prefix}/cicd/configs.
-  EOF
-}
-
-variable "branch_name" {
-  type = string
-  description = <<EOF
-    Name of the branch to set the Cloud Build Triggers to monitor.
-    Regex is not supported to enforce a 1:1 mapping from a branch to a GCP environment.
   EOF
 }
 
@@ -49,7 +33,12 @@ variable "managed_dirs" {
 
 variable "name" {
   type = string
-  description = "Name of the environment."
+  description = "Name of the trigger."
+}
+
+variable "description" {
+  type = string
+  description = "Description of the trigger."
 }
 
 variable "skip" {
@@ -60,11 +49,6 @@ variable "skip" {
 variable "run_on_push" {
   type = boolean
   description = "Whether or not to be automatically triggered from a PR/push to branch."
-}
-
-variable "run_on_schedule" {
-  type = string
-  description = "Whether or not to be automatically triggered according a specified schedule. The schedule is specified using unix-cron format at Eastern Standard Time (EST)."
 }
 
 {{- if has . "cloud_source_repository"}}
@@ -97,11 +81,6 @@ variable "github" {
 variable "project_id" {
   type        = string
   description = "ID of project to deploy CICD in."
-}
-
-variable "scheduler_region" {
-  type        = string
-  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
 }
 
 variable "terraform_root" {

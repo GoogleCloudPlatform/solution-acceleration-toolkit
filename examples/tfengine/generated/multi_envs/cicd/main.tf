@@ -213,20 +213,3 @@ module "triggers" {
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
 }
-
-module "validate_triggers" {
-  for_each = var.envs
-  source   = "./trigger"
-
-  branch_name             = var.branch_name
-  managed_dirs            = var.managed_dirs
-  name                    = var.name
-  skip                    = var.triggers.validate.skip
-  run_on_push             = var.triggers.validate.run_on_push
-  run_on_schedule         = var.triggers.validate.run_on_schedule
-  cloud_source_repository = var.cloud_source_repository
-  project_id              = var.project_id
-  scheduler_region        = var.scheduler_region
-  terraform_root          = var.terraform_root
-  terraform_root_prefix   = var.terraform_root_prefix
-}

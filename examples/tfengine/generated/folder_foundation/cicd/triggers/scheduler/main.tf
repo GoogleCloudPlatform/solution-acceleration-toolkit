@@ -12,42 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_cloudbuild_trigger" "apply_env" {
-  count       = var.skip ? 0 : 1
-  disabled    = var.run_on_push
-  provider    = google-beta
-  project     = var.project_id
-  name        = "tf-apply-${var.name}"
-  description = "Terraform apply job triggered on push event and/or schedule."
-
-  included_files = [
-    "${var.terraform_root_prefix}**",
-  ]
-
-  github {
-    owner = var.github.owner
-    name  = var.github.name
-    push {
-      branch = "^${var.branch_name}$"
-    }
-  }
-
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-apply.yaml"
-
-  substitutions = {
-    _TERRAFORM_ROOT = var.terraform_root
-    _MANAGED_DIRS   = var.managed_dirs
-  }
-
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-resource "google_cloud_scheduler_job" "apply_scheduler_env" {
-  count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
+resource "google_cloud_scheduler_job" "scheduler_job" {
+  count            = var.skip ? 0 : 1
   project          = var.project_id
-  name             = "apply-scheduler-${var.name}"
+  name             = var.name
   region           = var.scheduler_region
   schedule         = var.run_on_schedule
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
@@ -58,7 +26,7 @@ resource "google_cloud_scheduler_job" "apply_scheduler_env" {
       scope                 = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = google_service_account.cloudbuild_scheduler_sa.email
     }
-    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply_env.id}:run"
+    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.scheduled}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
   depends_on = [
