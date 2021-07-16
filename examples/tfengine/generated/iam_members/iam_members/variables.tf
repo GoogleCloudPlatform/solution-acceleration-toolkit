@@ -13,7 +13,7 @@
 # limitations under the License.
 
 variable "storage_bucket_iam_members" {
-  description = "IAM members for sotrage buckets."
+  description = "IAM members for storage buckets."
   default     = {}
 }
 
@@ -29,10 +29,5 @@ variable "folder_iam_members" {
 
 variable "organization_iam_members" {
   description = "IAM members for organizations."
-  default     = {}
-}
-
-variable "service_account_iam_members" {
-  description = "IAM members for service accounts."
   default     = {}
 }
