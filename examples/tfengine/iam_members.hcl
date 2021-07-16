@@ -15,11 +15,7 @@
 # {{$recipes := "../../templates/tfengine/recipes"}}
 
 data = {
-  parent_type      = "folder" # One of `organization` or `folder`.
-  parent_id        = "12345678"
-  billing_account  = "000-000-000"
   state_bucket     = "example-terraform-state"
-  storage_location = "us-central1"
 }
 
 template "iam_members" {
