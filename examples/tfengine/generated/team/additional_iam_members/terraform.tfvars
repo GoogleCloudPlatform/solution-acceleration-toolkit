@@ -14,7 +14,6 @@
 
 
 project_iam_members = [
-
   {
     resource_ids = ["example-prod-data"]
     bindings = {
@@ -26,7 +25,6 @@ project_iam_members = [
 ]
 
 storage_bucket_iam_members = [
-
   {
     resource_ids = ["example-bucket"]
     bindings = {

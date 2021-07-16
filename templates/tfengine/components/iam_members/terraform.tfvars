@@ -14,7 +14,7 @@
 
 {{range $resource, $members := get . "iam_members"}}
   {{$resource}}_iam_members = [
-    {{range $index, $element := $members}}
+    {{range $index, $element := $members -}}
       {
         resource_ids = {{hcl .resource_ids}}
         bindings = {

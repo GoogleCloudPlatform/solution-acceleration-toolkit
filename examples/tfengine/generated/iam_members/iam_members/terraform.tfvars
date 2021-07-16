@@ -14,7 +14,6 @@
 
 
 folder_iam_members = [
-
   {
     resource_ids = [
       "example-folder-one",
@@ -34,7 +33,6 @@ folder_iam_members = [
 ]
 
 project_iam_members = [
-
   {
     resource_ids = [
       "example-project-one",
@@ -46,7 +44,6 @@ project_iam_members = [
       ],
     }
   },
-
   {
     resource_ids = ["example-project-one"]
     bindings = {
@@ -58,7 +55,6 @@ project_iam_members = [
 ]
 
 storage_bucket_iam_members = [
-
   {
     resource_ids = ["example-bucket"]
     bindings = {
