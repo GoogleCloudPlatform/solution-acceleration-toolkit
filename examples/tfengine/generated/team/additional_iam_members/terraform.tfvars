@@ -13,9 +13,9 @@
 # limitations under the License.
 
 
-project_iam_members = {
+project_iam_members = [
 
-  0 = {
+  {
     resource_ids = ["example-prod-data"]
     bindings = {
       "roles/browser" = [
@@ -23,11 +23,11 @@ project_iam_members = {
       ],
     }
   },
-}
+]
 
-storage_bucket_iam_members = {
+storage_bucket_iam_members = [
 
-  0 = {
+  {
     resource_ids = ["example-bucket"]
     bindings = {
       "roles/storage.admin" = [
@@ -35,4 +35,4 @@ storage_bucket_iam_members = {
       ],
     }
   },
-}
+]

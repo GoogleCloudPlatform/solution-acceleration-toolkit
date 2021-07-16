@@ -13,9 +13,9 @@
 # limitations under the License.
 
 {{range $resource, $members := get . "iam_members"}}
-  {{$resource}}_iam_members = {
+  {{$resource}}_iam_members = [
     {{range $index, $element := $members}}
-      {{$index}} = {
+      {
         resource_ids = {{hcl .resource_ids}}
         bindings = {
           {{range $role, $members := .bindings -}}
@@ -28,5 +28,5 @@
         }
       },
     {{end -}}
-  }
+  ]
 {{end -}}

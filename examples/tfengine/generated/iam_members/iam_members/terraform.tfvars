@@ -13,9 +13,9 @@
 # limitations under the License.
 
 
-folder_iam_members = {
+folder_iam_members = [
 
-  0 = {
+  {
     resource_ids = [
       "example-folder-one",
       "example-folder-two",
@@ -31,11 +31,11 @@ folder_iam_members = {
       ],
     }
   },
-}
+]
 
-project_iam_members = {
+project_iam_members = [
 
-  0 = {
+  {
     resource_ids = [
       "example-project-one",
       "example-project-two",
@@ -47,7 +47,7 @@ project_iam_members = {
     }
   },
 
-  1 = {
+  {
     resource_ids = ["example-project-one"]
     bindings = {
       "roles/compute.loadBalancerAdmin" = [
@@ -55,11 +55,11 @@ project_iam_members = {
       ],
     }
   },
-}
+]
 
-storage_bucket_iam_members = {
+storage_bucket_iam_members = [
 
-  0 = {
+  {
     resource_ids = ["example-bucket"]
     bindings = {
       "roles/storage.objectCreator" = [
@@ -72,4 +72,4 @@ storage_bucket_iam_members = {
       ],
     }
   },
-}
+]
