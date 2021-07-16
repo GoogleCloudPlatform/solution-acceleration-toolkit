@@ -31,8 +31,3 @@ variable "organization_iam_members" {
   description = "IAM members for organizations."
   default = {}
 }
-
-variable "service_account_iam_members" {
-  description = "IAM members for service accounts."
-  default = {}
-}

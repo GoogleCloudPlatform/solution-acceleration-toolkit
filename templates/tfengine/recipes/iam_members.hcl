@@ -20,7 +20,7 @@ schema = {
       type                 = "object"
       additionalProperties = false
       patternProperties = {
-        "^storage_bucket|project|organization|folder|billing_account$": {
+        "^storage_bucket|project|organization|folder$": {
           type = "array"
           items = {
             type = "object"
@@ -37,7 +37,6 @@ schema = {
                     project: project IDs. e.g. [example_project_id]
                     storage_bucket : storage bucket names. e.g. [example_bucket_one, example_bucket_two]
                     folder: folder IDs. e.g. [12345678]
-                    billing_account: billing_account IDs.
                     organization: organizations IDs. e.g [12345678]
                 EOF
                 type        = "array"

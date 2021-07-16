@@ -44,11 +44,3 @@ module "organization_iam_members" {
   organizations = each.value.parent_ids
   bindings = each.value.bindings
 }
-
-module "service_account_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/service_accounts_iam"
-  mode = "additive"
-  for_each = var.service_account_iam_members
-  service_accounts = each.value.parent_ids
-  bindings = each.value.bindings
-}
