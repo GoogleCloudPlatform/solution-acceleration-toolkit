@@ -69,8 +69,6 @@ template "deployment" {
   recipe_path = "./deployment.hcl"
 }
 
-{{if has . "iam_members"}}
 template "iam_members" {
   component_path = "../components/iam_members"
 }
-{{end}}
