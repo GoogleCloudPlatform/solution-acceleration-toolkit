@@ -13,21 +13,37 @@
 # limitations under the License.
 
 variable "storage_bucket_iam_members" {
-  description = "IAM members for storage buckets."
-  default = {}
+  description = "IAM members for storage buckets. Assigns IAM bindings to a list of storage bucket names."
+  default     = {}
+  type        = map(object({
+    resource_ids = list(string)
+    bindings     = map(list(string))
+  }))
 }
 
 variable "project_iam_members" {
-  description = "IAM members for projects."
-  default = {}
+  description = "IAM members for projects. Assigns IAM bindings to a list of project IDs."
+  default     = {}
+  type        = map(object({
+    resource_ids = list(string)
+    bindings     = map(list(string))
+  }))
 }
 
 variable "folder_iam_members" {
-  description = "IAM members for folders."
-  default = {}
+  description = "IAM members for folders. Assigns IAM bindings to a list of folder IDs."
+  default     = {}
+  type        = map(object({
+    resource_ids = list(string)
+    bindings     = map(list(string))
+  }))
 }
 
 variable "organization_iam_members" {
-  description = "IAM members for organizations."
-  default = {}
+  description = "IAM members for organizations. Assigns IAM bindings to a list of organization IDs."
+  default     = {}
+  type        = map(object({
+    resource_ids = list(string)
+    bindings     = map(list(string))
+  }))
 }

@@ -31,7 +31,7 @@ schema = {
             properties = {
               resource_ids = {
                 description = <<EOF
-                  ID of the resources to assign the bindings.
+                  ID of resources to assign the bindings.
 
                   Should be the following for each resource type:
                     project: project IDs. e.g. [example_project_id]
