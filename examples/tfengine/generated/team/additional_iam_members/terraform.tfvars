@@ -16,7 +16,7 @@
 project_iam_members = {
 
   0 = {
-    parent_ids = ["example-prod-data"]
+    resource_ids = ["example-prod-data"]
     bindings = {
       "roles/browser" = [
         "serviceAccount:runner@example-prod-apps.iam.gserviceaccount.com",
@@ -28,7 +28,7 @@ project_iam_members = {
 storage_bucket_iam_members = {
 
   0 = {
-    parent_ids = ["example-bucket"]
+    resource_ids = ["example-bucket"]
     bindings = {
       "roles/storage.admin" = [
         "serviceAccount:runner@example-prod-apps.iam.gserviceaccount.com",

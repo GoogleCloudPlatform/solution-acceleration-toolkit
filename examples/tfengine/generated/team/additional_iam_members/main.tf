@@ -29,7 +29,7 @@ module "storage_bucket_iam_members" {
   source          = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
   mode            = "additive"
   for_each        = var.storage_bucket_iam_members
-  storage_buckets = each.value.parent_ids
+  storage_buckets = each.value.resource_ids
   bindings        = each.value.bindings
 }
 
@@ -37,7 +37,7 @@ module "project_iam_members" {
   source   = "terraform-google-modules/iam/google//modules/projects_iam"
   mode     = "additive"
   for_each = var.project_iam_members
-  projects = each.value.parent_ids
+  projects = each.value.resource_ids
   bindings = each.value.bindings
 }
 
@@ -46,7 +46,7 @@ module "folder_iam_members" {
   source   = "terraform-google-modules/iam/google//modules/folders_iam"
   mode     = "additive"
   for_each = var.folder_iam_members
-  folders  = each.value.parent_ids
+  folders  = each.value.resource_ids
   bindings = each.value.bindings
 }
 
@@ -54,6 +54,6 @@ module "organization_iam_members" {
   source        = "terraform-google-modules/iam/google//modules/organizations_iam"
   mode          = "additive"
   for_each      = var.organization_iam_members
-  organizations = each.value.parent_ids
+  organizations = each.value.resource_ids
   bindings      = each.value.bindings
 }

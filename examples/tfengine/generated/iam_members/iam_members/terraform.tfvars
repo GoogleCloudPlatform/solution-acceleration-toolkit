@@ -16,7 +16,7 @@
 folder_iam_members = {
 
   0 = {
-    parent_ids = [
+    resource_ids = [
       "example-folder-one",
       "example-folder-two",
     ]
@@ -36,7 +36,7 @@ folder_iam_members = {
 project_iam_members = {
 
   0 = {
-    parent_ids = [
+    resource_ids = [
       "example-project-one",
       "example-project-two",
     ]
@@ -48,7 +48,7 @@ project_iam_members = {
   },
 
   1 = {
-    parent_ids = ["example-project-one"]
+    resource_ids = ["example-project-one"]
     bindings = {
       "roles/compute.loadBalancerAdmin" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",
@@ -60,7 +60,7 @@ project_iam_members = {
 storage_bucket_iam_members = {
 
   0 = {
-    parent_ids = ["example-bucket"]
+    resource_ids = ["example-bucket"]
     bindings = {
       "roles/storage.objectCreator" = [
         "serviceAccount:example-sa@example.iam.gserviceaccount.com",

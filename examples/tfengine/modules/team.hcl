@@ -449,7 +449,7 @@ template "additional_iam_members" {
   data = {
     iam_members = {
       "storage_bucket" = [{
-        parent_ids = [
+        resource_ids = [
           "{{.prefix}}-bucket",
         ]
         bindings = {
@@ -459,7 +459,7 @@ template "additional_iam_members" {
         }
       }]
       "project" = [{
-        parent_ids = [
+        resource_ids = [
           "{{.prefix}}-{{.env}}-data",
         ]
         bindings = {

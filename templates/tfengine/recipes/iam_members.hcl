@@ -25,13 +25,13 @@ schema = {
           items = {
             type = "object"
             required = [
-              "parent_ids",
+              "resource_ids",
               "bindings"
             ]
             properties = {
-              parent_ids = {
+              resource_ids = {
                 description = <<EOF
-                  ID of the parents to assign the bindings.
+                  ID of the resources to assign the bindings.
 
                   Should be the following for each resource type:
                     project: project IDs. e.g. [example_project_id]
