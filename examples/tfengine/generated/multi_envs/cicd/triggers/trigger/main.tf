@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_cloudbuild_trigger" "validate_env" {
+resource "google_cloudbuild_trigger" "on_push" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-${var.name}"
-  description = "Terraform validate job triggered on push event."
+  name        = "tf-${var.trigger_type}-${var.name}"
+  description = "Terraform ${var.trigger_type} job triggered on push event."
 
   included_files = [
     "${var.terraform_root_prefix}**",
@@ -29,7 +29,7 @@ resource "google_cloudbuild_trigger" "validate_env" {
     branch_name = "^${var.branch_name}$"
   }
 
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${var.terraform_root_prefix}cicd/configs/${var.filename}"
 
   substitutions = {
     _TERRAFORM_ROOT = var.terraform_root
@@ -43,14 +43,14 @@ resource "google_cloudbuild_trigger" "validate_env" {
 }
 
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
-resource "google_cloudbuild_trigger" "validate_scheduled_env" {
+resource "google_cloudbuild_trigger" "scheduled" {
   count = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   # Always disabled on push to branch.
   disabled    = true
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-scheduled-${var.name}"
-  description = "Terraform validate job triggered on schedule."
+  name        = "tf-${var.trigger_type}-scheduled-${var.name}"
+  description = "Terraform ${var.trigger_type} job triggered on schedule."
 
   included_files = [
     "${var.terraform_root_prefix}**",
@@ -61,7 +61,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
     branch_name = "^${var.branch_name}$"
   }
 
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${var.terraform_root_prefix}cicd/configs/${var.filename}"
 
   substitutions = {
     _TERRAFORM_ROOT = var.terraform_root
@@ -74,10 +74,10 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
   ]
 }
 
-resource "google_cloud_scheduler_job" "validate_scheduler_env" {
+resource "google_cloud_scheduler_job" "scheduler_job" {
   count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project          = var.project_id
-  name             = "validate-scheduler-${var.name}"
+  name             = "${var.trigger_type}-scheduler-${var.name}"
   region           = var.scheduler_region
   schedule         = var.run_on_schedule
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
@@ -88,7 +88,7 @@ resource "google_cloud_scheduler_job" "validate_scheduler_env" {
       scope                 = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = google_service_account.cloudbuild_scheduler_sa.email
     }
-    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled_env}:run"
+    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.scheduled}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
   depends_on = [

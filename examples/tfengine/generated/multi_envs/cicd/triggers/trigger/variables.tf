@@ -12,6 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "trigger_type" {
+  type        = string
+  description = <<EOF
+    Trigger type used as suffix for naming purposes.
+    It can be 'validate', 'plan', or 'apply'.
+  EOF
+}
+
+variable "filename" {
+  type        = string
+  description = <<EOF
+    Name of the configuration file to execute on trigger.
+    It should be located under ${var.terraform_root_prefix}/cicd/configs.
+  EOF
+}
+
 variable "branch_name" {
   type        = string
   description = <<EOF
@@ -51,12 +67,17 @@ variable "run_on_schedule" {
   description = "Whether or not to be automatically triggered according a specified schedule. The schedule is specified using unix-cron format at Eastern Standard Time (EST)."
 }
 
-variable "github" {
+variable "cloud_source_repository" {
   type = object({
-    owner = string
-    name  = string
+    name = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = <<EOF
+    Config for Google Cloud Source Repository.
+
+    IMPORTANT: Cloud Source Repositories does not support code review or presubmit runs. 
+    If you set both plan and apply to run at the same time, they will conflict and may error out. 
+    To get around this, for 'shared' and 'prod' environment, set 'apply' trigger to not 'run_on_push', and for other environments, do not specify the 'plan' trigger block and let 'apply' trigger 'run_on_push'.
+  EOF 
 }
 
 variable "project_id" {

@@ -12,6 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "trigger_type" {
+  type        = string
+  description = <<EOF
+    Trigger type used as suffix for naming purposes.
+    It can be 'validate', 'plan', or 'apply'.
+  EOF
+}
+
+variable "filename" {
+  type        = string
+  description = <<EOF
+    Name of the configuration file to execute on trigger.
+    It should be located under ${var.terraform_root_prefix}/cicd/configs.
+  EOF
+}
+
 variable "branch_name" {
   type        = string
   description = <<EOF

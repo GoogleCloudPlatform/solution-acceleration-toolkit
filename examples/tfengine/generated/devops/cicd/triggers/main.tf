@@ -13,7 +13,10 @@
 # limitations under the License.
 
 module "validate_triggers" {
-  source = "./validate"
+  source = "./trigger"
+
+  trigger_type = "validate"
+  filename     = "tf-validate.yaml"
 
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
@@ -29,7 +32,10 @@ module "validate_triggers" {
 }
 
 module "plan_triggers" {
-  source = "./plan"
+  source = "./trigger"
+
+  trigger_type = "plan"
+  filename     = "tf-plan.yaml"
 
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
