@@ -13,7 +13,7 @@
 # limitations under the License.
 
 variable "storage_bucket_iam_members" {
-  description = "IAM members for storage buckets. Assigns IAM bindings to a list of storage bucket names."
+  description = "IAM members for storage buckets. Assigns additional non-authoritative IAM bindings to a list of storage buckets."
   default     = []
   type = list(object({
     resource_ids = list(string)
@@ -22,7 +22,7 @@ variable "storage_bucket_iam_members" {
 }
 
 variable "project_iam_members" {
-  description = "IAM members for projects. Assigns IAM bindings to a list of project IDs."
+  description = "IAM members for projects. Assigns additional non-authoritative IAM bindings to a list of projects."
   default     = []
   type = list(object({
     resource_ids = list(string)
@@ -31,7 +31,7 @@ variable "project_iam_members" {
 }
 
 variable "folder_iam_members" {
-  description = "IAM members for folders. Assigns IAM bindings to a list of folder IDs."
+  description = "IAM members for folders. Assigns additional non-authoritative IAM bindings to a list of folders."
   default     = []
   type = list(object({
     resource_ids = list(string)
@@ -40,7 +40,7 @@ variable "folder_iam_members" {
 }
 
 variable "organization_iam_members" {
-  description = "IAM members for organizations. Assigns IAM bindings to a list of organization IDs."
+  description = "IAM members for organizations. Assigns additional non-authoritative IAM bindings to a list of organizations."
   default     = []
   type = list(object({
     resource_ids = list(string)
