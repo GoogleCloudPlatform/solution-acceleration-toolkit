@@ -16,7 +16,7 @@
   {{$resource}}_iam_members = {
     {{range $index, $element := $members}}
       {{$index}} = {
-        resource_ids = {{hcl (get . "resource_ids")}}
+        resource_ids = {{hcl .resource_ids}}
         bindings = {
           {{range $role, $members := .bindings -}}
             "{{$role}}" = [
