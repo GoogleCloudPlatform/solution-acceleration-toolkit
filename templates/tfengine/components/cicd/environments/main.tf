@@ -80,6 +80,7 @@ module "validate_scheduler" {
   scheduler_region        = var.scheduler_region
   run_on_schedule         = var.triggers.validate.run_on_schedule
   branch_name             = var.branch_name
+  trigger_id              = validate_scheduled.id
 }
 
 # ================== plan triggers ==================
@@ -150,6 +151,7 @@ module "plan_scheduler" {
   scheduler_region        = var.scheduler_region
   run_on_schedule         = var.triggers.plan.run_on_schedule
   branch_name             = var.branch_name
+  trigger_id              = plan_scheduled.id
 }
 
 # ================== apply triggers ==================
@@ -193,4 +195,5 @@ module "apply_scheduler" {
   scheduler_region        = var.scheduler_region
   run_on_schedule         = var.triggers.apply.run_on_schedule
   branch_name             = var.branch_name
+  trigger_id              = apply_on_push_and_or_scheduled.id
 }

@@ -52,3 +52,8 @@ variable "branch_name" {
     Regex is not supported to enforce a 1:1 mapping from a branch to a GCP environment.
   EOF
 }
+
+variable "trigger_id" {
+  type = string
+  description = "ID of the google cloud build trigger to call."
+}
