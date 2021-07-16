@@ -16,16 +16,6 @@ schema = {
   title                = "IAM members recipe"
   properties = {
     iam_members = {
-      description = <<EOF
-        [Module](https://github.com/terraform-google-modules/terraform-google-iam)
-        
-        parent_id should be the following for each type of resource:
-        project: project IDs.
-        storage_bucket : storage bucket names.
-        folder: folder IDs.
-        billing_account: billing_account IDs.
-        organization: organization IDs.
-      EOF
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-iam)"
       type                 = "object"
       additionalProperties = false
@@ -39,14 +29,17 @@ schema = {
               "bindings"
             ]
             properties = {
-              # parent_id should be the following for each type of resource:
-              # project: project IDs.
-              # storage_bucket : storage bucket names.
-              # folder: folder IDs.
-              # billing_account: billing_account IDs.
-              # organization: organization IDs.
               parent_ids = {
-                description = "IDs of the parent to assign the bindings."
+                description = <<EOF
+                  ID of the parents to assign the bindings.
+
+                  Should be the following for each resource type:
+                    project: project IDs. e.g. [example_project_id]
+                    storage_bucket : storage bucket names. e.g. [example_bucket_one, example_bucket_two]
+                    folder: folder IDs. e.g. [12345678]
+                    billing_account: billing_account IDs.
+                    organization: organizations IDs. e.g [12345678]
+                EOF
                 type        = "array"
                 items       = {
                   type = "string"
