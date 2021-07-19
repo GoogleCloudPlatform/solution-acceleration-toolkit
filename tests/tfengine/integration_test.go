@@ -45,6 +45,7 @@ var dirsToDeploy = []string{
 	"project_networks",
 	"project_apps",
 	"project_data",
+	"additional_iam_members",
 }
 
 func TestFullDeployment(t *testing.T) {

@@ -442,6 +442,36 @@ EOF
   }
 }
 
+# Additional IAM permissions for the runner service account.
+template "additional_iam_members" {
+  recipe_path = "{{.recipes}}/iam_members.hcl"
+  output_path = "./additional_iam_members"
+  data = {
+    iam_members = {
+      "storage_bucket" = [{
+        resource_ids = [
+          "{{.prefix}}-bucket",
+        ]
+        bindings = {
+          "roles/storage.admin" = [
+            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+      }]
+      "project" = [{
+        resource_ids = [
+          "{{.prefix}}-{{.env}}-data",
+        ]
+        bindings = {
+          "roles/browser" = [
+            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+      }]
+    }
+  }
+}
+
 # Kubernetes Terraform deployment. This should be deployed after the GKE Cluster has been deployed.
 template "kubernetes" {
   recipe_path = "{{.recipes}}/deployment.hcl"
