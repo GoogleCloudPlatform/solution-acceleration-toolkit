@@ -12,6 +12,80 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-billing_account = "{{.billing_account}}"
-project_id      = "{{.project_id}}"
-state_bucket    = "{{.state_bucket}}"
+{{hclField . "build_editors"}}
+{{hclField . "build_viewers"}}
+{{- if has . "cloud_source_repository"}}
+cloud_source_repostory = {
+  name = "{{.cloud_source_repository.name}}"
+  {{- if has .cloud_source_repository "readers"}}
+  readers = [
+    {{- range .cloud_source_repository.readers}}
+    "{{.}}",
+    {{- end}}
+  ]
+  {{- end}}
+  {{- if has .cloud_source_repository "readers"}}
+  writers = [
+    {{- range .cloud_source_repository.writers}}
+    "{{.}}",
+    {{- end}}
+  ]
+  {{- end}}
+}
+{{- end}}
+envs = [
+  {{- range get . "envs" -}}
+  {{- $managed_dirs := ""}}
+  {{- range .managed_dirs}}
+  {{- $managed_dirs = trimSpace (printf "%s %s" $managed_dirs .)}}
+  {{- end}}
+  {
+    branch_name = "{{.branch_name}}"
+    managed_dirs = "{{$managed_dirs}}"
+    name = "{{.name}}"
+    triggers = {
+        validate = {
+          skip = {{not (has .triggers "validate")}}
+          {{- if has .triggers "validate"}}
+          run_on_push = {{get .triggers.validate "run_on_push" true}}
+          run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
+          {{- end}}
+        }
+        plan = {
+          skip = {{not (has .triggers "plan")}}
+          {{- if has .triggers "plan"}}
+          run_on_push = {{get .triggers.plan "run_on_push" true}}
+          run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
+          {{- end}}
+        }
+        apply = {
+          skip = {{not (has .triggers "apply")}}
+          {{- if has .triggers "apply"}}
+          run_on_push = {{get .triggers.apply "run_on_push" true}}
+          run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
+          {{- end}}
+        }
+    }
+  },
+  {{- end}}
+]
+{{- if has . "github"}}
+github = {
+  owner = "{{.github.owner}}"
+  name = "{{.github.name}}"
+}
+{{- end}}
+billing_account   = "{{.billing_account}}"
+project_id        = "{{.project_id}}"
+scheduler_region  = "{{.scheduler_region}}"
+state_bucket      = "{{.state_bucket}}"
+terraform_root    = "{{.terraform_root}}"
+{{- $terraform_root := .terraform_root}}
+{{- if eq $terraform_root "/"}}
+  {{- $terraform_root = "."}}
+{{- end}}
+{{- $terraform_root_prefix := printf "%s/" $terraform_root}}
+{{- if eq $terraform_root "."}}
+  {{- $terraform_root_prefix = ""}}
+{{- end}}
+terraform_root_prefix = "{{$terraform_root_prefix}}"
