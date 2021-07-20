@@ -119,8 +119,8 @@ func massageSchema(s *schema) {
 	props := s.Properties
 	s.Properties = make(map[string]*property, len(props))
 	addRequiredByParent(props, requiredToMap(s.Required))
-	flattenObjects(s, props, "")
-	flattenObjects(s, s.PatternProperties, "")
+	flattenObjects(s, props, "", false)
+	flattenObjects(s, s.PatternProperties, "", true)
 
 	for _, prop := range s.Properties {
 		prop.Description = strings.TrimSpace(lstrip(prop.Description))
@@ -154,22 +154,23 @@ func requiredToMap(required []string) map[string]bool {
 }
 
 // flattenObjects will add the properties of all objects to the top level schema.
-func flattenObjects(s *schema, props map[string]*property, prefix string) {
+func flattenObjects(s *schema, props map[string]*property, prefix string, nameIsPattern bool) {
 	for name, prop := range props {
-		// Escape | characters.
-		// This can happen with patternProperties.
-		name = strings.ReplaceAll(name, "|", "\\|")
+		if nameIsPattern {
+			prop.Pattern = name
+			name = "*pattern*"
+		}
 
 		name = prefix + name
 		s.Properties[name] = prop
 		switch prop.Type {
 		case "object":
-			flattenObjects(s, prop.Properties, name+".")
-			flattenObjects(s, prop.PatternProperties, name+".")
+			flattenObjects(s, prop.Properties, name+".", false)
+			flattenObjects(s, prop.PatternProperties, name+".", true)
 		case "array":
 			prop.Type = fmt.Sprintf("array(%s)", prop.Items.Type)
-			flattenObjects(s, prop.Items.Properties, name+".")
-			flattenObjects(s, prop.Items.PatternProperties, name+".")
+			flattenObjects(s, prop.Items.Properties, name+".", false)
+			flattenObjects(s, prop.Items.PatternProperties, name+".", true)
 		}
 	}
 }

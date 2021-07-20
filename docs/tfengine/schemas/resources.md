@@ -12,7 +12,7 @@
 | bastion_hosts.image_family | Family of compute image to use. | string | false | - | - |
 | bastion_hosts.image_project | Project of compute image to use. | string | false | - | - |
 | bastion_hosts.labels | Labels to set on the host. | object | false | - | - |
-| bastion_hosts.labels..+ | - | string | false | - | - |
+| bastion_hosts.labels.*pattern* | - | string | false | - | .+ |
 | bastion_hosts.members | Members who can access the bastion host. | array(string) | true | - | - |
 | bastion_hosts.name | Name of bastion host. | string | true | - | - |
 | bastion_hosts.network | Name of the bastion host's network. | string | true | - | - |
@@ -30,7 +30,7 @@
 | bigquery_datasets.dataset_id | ID of bigquery dataset. | string | true | - | - |
 | bigquery_datasets.default_table_expiration_ms | Expiration in milliseconds. | integer | false | - | - |
 | bigquery_datasets.labels | Labels to set on the dataset. | object | false | - | - |
-| bigquery_datasets.labels..+ | - | string | false | - | - |
+| bigquery_datasets.labels.*pattern* | - | string | false | - | .+ |
 | bigquery_datasets.resource_name | Override for Terraform resource name.              If unset, defaults to normalized dataset_id.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | binary_authorization | A policy for container image binary authorization. | object | false | - | - |
 | binary_authorization.admission_whitelist_patterns | A whitelist of image patterns to exclude from admission rules. | array(object) | false | - | - |
@@ -40,7 +40,7 @@
 | cloud_sql_instances.cloud_sql_zone | Zone to reate cloud sql instance in. Can be defined in global data block. | string | false | - | - |
 | cloud_sql_instances.deletion_protection | Used to block Terraform from deleting a SQL Instance. Defaults to true. | boolean | false | - | - |
 | cloud_sql_instances.labels | Labels to set on the instance. | object | false | - | - |
-| cloud_sql_instances.labels..+ | - | string | false | - | - |
+| cloud_sql_instances.labels.*pattern* | - | string | false | - | .+ |
 | cloud_sql_instances.name | Name of the cloud sql instance. | string | true | - | - |
 | cloud_sql_instances.network | Name of the network. | string | false | - | - |
 | cloud_sql_instances.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
@@ -62,7 +62,7 @@
 | compute_instance_templates.instances.name | Name of instance. | string | true | - | - |
 | compute_instance_templates.instances.resource_name | Override for Terraform resource name.                    If unset, defaults to normalized name.                    Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | compute_instance_templates.labels | Labels to set on the instance template. | object | false | - | - |
-| compute_instance_templates.labels..+ | - | string | false | - | - |
+| compute_instance_templates.labels.*pattern* | - | string | false | - | .+ |
 | compute_instance_templates.metadata | Metadata to set on the instance template. | object | false | - | - |
 | compute_instance_templates.name_prefix | Name prefix of the instance template. | string | true | - | - |
 | compute_instance_templates.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
@@ -111,7 +111,7 @@
 | gke_clusters.ip_range_services_name | Name of the secondary subnet range to use for services. | string | false | - | - |
 | gke_clusters.istio | Whether or not to enable Istio addon. | boolean | false | - | - |
 | gke_clusters.labels | Labels to set on the cluster. | object | false | - | - |
-| gke_clusters.labels..+ | - | string | false | - | - |
+| gke_clusters.labels.*pattern* | - | string | false | - | .+ |
 | gke_clusters.master_authorized_networks | List of master authorized networks. If none are provided, disallow external              access (except the cluster node IPs, which GKE automatically allows). | array(object) | false | - | - |
 | gke_clusters.master_authorized_networks.cidr_block | CIDR block of the master authorized network. | string | true | - | - |
 | gke_clusters.master_authorized_networks.display_name | Display name of the master authorized network. | string | true | - | - |
@@ -137,14 +137,14 @@
 | healthcare_datasets.consent_stores.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | healthcare_datasets.consent_stores.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.consent_stores.labels | Labels to set on the consent store. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_consent_store#labels>. | object | false | - | - |
-| healthcare_datasets.consent_stores.labels..+ | - | string | false | - | - |
+| healthcare_datasets.consent_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.consent_stores.name | Name of consent store. | string | true | - | - |
 | healthcare_datasets.dicom_stores | Dicom stores to create. | array(object) | false | - | - |
 | healthcare_datasets.dicom_stores.iam_members | IAM member to grant access for. | array(object) | false | - | - |
 | healthcare_datasets.dicom_stores.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | healthcare_datasets.dicom_stores.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.dicom_stores.labels | Labels to set on the DICOM store. | object | false | - | - |
-| healthcare_datasets.dicom_stores.labels..+ | - | string | false | - | - |
+| healthcare_datasets.dicom_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.dicom_stores.name | Name of dicom store. | string | true | - | - |
 | healthcare_datasets.dicom_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>. | object | false | - | - |
 | healthcare_datasets.fhir_stores | FHIR stores to create. | array(object) | false | - | - |
@@ -156,7 +156,7 @@
 | healthcare_datasets.fhir_stores.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | healthcare_datasets.fhir_stores.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.fhir_stores.labels | Labels to set on the FHIR store. | object | false | - | - |
-| healthcare_datasets.fhir_stores.labels..+ | - | string | false | - | - |
+| healthcare_datasets.fhir_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.fhir_stores.name | Name of FHIR store. | string | true | - | - |
 | healthcare_datasets.fhir_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>. | object | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>. | array(object) | false | - | - |
@@ -173,7 +173,7 @@
 | healthcare_datasets.hl7_v2_stores.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | healthcare_datasets.hl7_v2_stores.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.hl7_v2_stores.labels | Labels to set on the HL7 V2 store. | object | false | - | - |
-| healthcare_datasets.hl7_v2_stores.labels..+ | - | string | false | - | - |
+| healthcare_datasets.hl7_v2_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.hl7_v2_stores.name | Name of Hl7 V2 store. | string | true | - | - |
 | healthcare_datasets.hl7_v2_stores.notification_configs | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#notification_configs>. | array(object) | false | - | - |
 | healthcare_datasets.hl7_v2_stores.parser_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#parser_config>. | object | false | - | - |
@@ -188,7 +188,7 @@
 | iam_members | Map of IAM role to list of members to grant access to the role. | object | false | - | - |
 | pubsub_topics | [Module](https://github.com/terraform-google-modules/terraform-google-pubsub) | array() | false | - | - |
 | pubsub_topics.labels | Labels to set on the topic. | object | false | - | - |
-| pubsub_topics.labels..+ | - | string | false | - | - |
+| pubsub_topics.labels.*pattern* | - | string | false | - | .+ |
 | pubsub_topics.name | Name of the topic. | string | true | - | - |
 | pubsub_topics.pull_subscriptions | Pull subscriptions on the topic. | array(object) | false | - | - |
 | pubsub_topics.pull_subscriptions.ack_deadline_seconds | Deadline to wait for acknowledgement. | integer | false | - | - |
@@ -214,7 +214,7 @@
 | storage_buckets.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | storage_buckets.iam_members.role | IAM role to grant. | string | true | - | - |
 | storage_buckets.labels | Labels to set on the bucket. | object | false | - | - |
-| storage_buckets.labels..+ | - | string | false | - | - |
+| storage_buckets.labels.*pattern* | - | string | false | - | .+ |
 | storage_buckets.lifecycle_rules | Lifecycle rules configuration for the bucket. | array(object) | false | - | - |
 | storage_buckets.lifecycle_rules.action | The Lifecycle Rule's action configuration. | object | false | - | - |
 | storage_buckets.lifecycle_rules.action.storage_class | (Required if action type is SetStorageClass)                        The target Storage Class of objects affected by this Lifecycle Rule. | string | false | - | - |
