@@ -32,7 +32,7 @@ schema = {
       description = <<EOF
         ID of parent GCP resource to apply the policy.
         Can be one of the organization ID or folder ID according to parent_type.
-        See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to learn more about resource hierarchy.
+        See <https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy> to learn more about resource hierarchy.
       EOF
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
