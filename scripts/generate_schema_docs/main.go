@@ -120,6 +120,7 @@ func massageSchema(s *schema) {
 	s.Properties = make(map[string]*property, len(props))
 	addRequiredByParent(props, requiredToMap(s.Required))
 	flattenObjects(s, props, "")
+	flattenObjects(s, s.PatternProperties, "")
 
 	for _, prop := range s.Properties {
 		prop.Description = strings.TrimSpace(lstrip(prop.Description))
@@ -160,9 +161,11 @@ func flattenObjects(s *schema, props map[string]*property, prefix string) {
 		switch prop.Type {
 		case "object":
 			flattenObjects(s, prop.Properties, name+".")
+			flattenObjects(s, prop.PatternProperties, name+".")
 		case "array":
 			prop.Type = fmt.Sprintf("array(%s)", prop.Items.Type)
 			flattenObjects(s, prop.Items.Properties, name+".")
+			flattenObjects(s, prop.Items.PatternProperties, name+".")
 		}
 	}
 }

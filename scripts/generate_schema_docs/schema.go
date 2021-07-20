@@ -19,6 +19,7 @@ type schema struct {
 	Title                string               `json:"title"`
 	AdditionalProperties bool                 `json:"additionalProperties"`
 	Properties           map[string]*property `json:"properties"`
+	PatternProperties    map[string]*property `json:"patternProperties"`
 	Required             []string             `json:"required"`
 }
 
@@ -28,6 +29,7 @@ type property struct {
 	Pattern              string               `json:"pattern"`
 	AdditionalProperties bool                 `json:"additionalProperties"`
 	Properties           map[string]*property `json:"properties"`
+	PatternProperties    map[string]*property `json:"patternProperties"`
 	Items                *property            `json:"items"`
 	Required             []string             `json:"required"`
 	RequiredByParent     bool                 `json:"requiredByParent"`
