@@ -156,6 +156,10 @@ func requiredToMap(required []string) map[string]bool {
 // flattenObjects will add the properties of all objects to the top level schema.
 func flattenObjects(s *schema, props map[string]*property, prefix string) {
 	for name, prop := range props {
+		// Escape | characters.
+		// This can happen with patternProperties.
+		name = strings.ReplaceAll(name, "|", "\\|")
+
 		name = prefix + name
 		s.Properties[name] = prop
 		switch prop.Type {
