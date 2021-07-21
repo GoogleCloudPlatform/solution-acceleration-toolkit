@@ -22,6 +22,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -159,6 +160,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	data := make(map[string]interface{})
 
 	// Make the schema available.
+	trimDescriptions(conf.Schema)
 	data["__schema__"] = conf.Schema
 
 	if err := template.MergeData(data, conf.Data); err != nil {
@@ -335,4 +337,35 @@ func findUnmanaged(generatedDir, outputDir string, deleteFiles bool) error {
 	}
 
 	return nil
+}
+
+// trimDescriptions remove tabs and extra space from schema descriptions
+// so they can be used during rendering without unexpected gaps between lines.
+func trimDescriptions(schema map[string]interface{}) {
+	val := reflect.ValueOf(schema)
+
+	for _, key := range val.MapKeys() {
+		v := val.MapIndex(key)
+
+		switch t := v.Interface().(type) {
+		case map[string]interface{}:
+			trimDescriptions(t)
+		case string:
+			if key.String() == "description" {
+				description := v.Interface().(string)
+				trimmedDescription := strings.TrimSpace(leftTrim(description))
+				schema["description"] = trimmedDescription
+			}
+		}
+	}
+}
+
+// leftTrim trims leading space from every line.
+func leftTrim(s string) string {
+	var b strings.Builder
+	for _, line := range strings.Split(s, "\n") {
+		b.WriteString(strings.TrimLeft(line, " "))
+		b.WriteRune('\n')
+	}
+	return b.String()
 }

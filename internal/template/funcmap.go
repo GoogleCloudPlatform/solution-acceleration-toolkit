@@ -24,17 +24,18 @@ import (
 )
 
 var funcMap = map[string]interface{}{
-	"get":             get,
-	"has":             has,
-	"hcl":             hcl,
-	"hclField":        hclField,
-	"merge":           merge,
-	"replace":         replace,
-	"resourceName":    resourceName,
-	"now":             time.Now,
-	"trimSpace":       strings.TrimSpace,
-	"regexReplaceAll": regexReplaceAll,
-	"makeSlice":       makeSlice,
+	"get":               get,
+	"has":               has,
+	"hcl":               hcl,
+	"hclField":          hclField,
+	"merge":             merge,
+	"replace":           replace,
+	"resourceName":      resourceName,
+	"now":               time.Now,
+	"trimSpace":         strings.TrimSpace,
+	"regexReplaceAll":   regexReplaceAll,
+	"makeSlice":         makeSlice,
+	"schemaDescription": schemaDescription,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -144,4 +145,14 @@ func regexReplaceAll(regex string, s string, repl string) (string, error) {
 // makeSlice combines the arguments into an array and returns the array.
 func makeSlice(args ...interface{}) []interface{} {
 	return args
+}
+
+// schemaDescription returns a heredoc or single line string
+// according to the description provided format.
+func schemaDescription(s string) string {
+	if strings.Contains(s, "\n") {
+		return fmt.Sprintf("<<EOF\n%s\nEOF", s)
+	}
+
+	return fmt.Sprintf(`"%s"`, s)
 }
