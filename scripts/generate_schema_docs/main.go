@@ -174,9 +174,14 @@ func lstrip(s string) string {
 		b.WriteString(strings.TrimLeft(line, " "))
 		b.WriteString("<br><br>")
 	}
-	result := b.String()
-	result = strings.TrimRight(result, "<br>")
-	return strings.ReplaceAll(result, "\n", "")
+	formattedBreaklines := b.String()
+	formattedBreaklines = strings.TrimRight(formattedBreaklines, "<br>")
+	var result string
+	for _, line := range strings.Split(formattedBreaklines, "\n") {
+		result += strings.TrimLeft(line, " ")
+		result += " "
+	}
+	return result
 }
 
 func writeSchema(b []byte, outPath string) error {
