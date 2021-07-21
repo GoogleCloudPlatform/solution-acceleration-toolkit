@@ -31,6 +31,7 @@ module "validate_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
+  service_account_email   = var.service_account_email
 }
 
 module "plan_triggers" {
@@ -52,6 +53,7 @@ module "plan_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
+  service_account_email   = var.service_account_email
 }
 
 module "apply_triggers" {
@@ -73,4 +75,5 @@ module "apply_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
+  service_account_email   = var.service_account_email
 }
