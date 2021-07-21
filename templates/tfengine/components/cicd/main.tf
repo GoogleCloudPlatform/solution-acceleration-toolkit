@@ -288,6 +288,7 @@ module "triggers" {
   {{- end}}
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
+  // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
   service_account_email   = "${google_service_account.cloudbuild_scheduler_sa.email}"
