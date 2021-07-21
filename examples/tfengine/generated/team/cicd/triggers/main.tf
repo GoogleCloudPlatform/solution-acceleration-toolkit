@@ -17,7 +17,7 @@ module "validate_triggers" {
 
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
-  name                  = var.name
+  name                  = var.env
   skip                  = var.triggers.validate.skip
   run_on_push           = var.triggers.validate.run_on_push
   run_on_schedule       = var.triggers.validate.run_on_schedule
@@ -33,7 +33,7 @@ module "plan_triggers" {
 
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
-  name                  = var.name
+  name                  = var.env
   skip                  = var.triggers.plan.skip
   run_on_push           = var.triggers.plan.run_on_push
   run_on_schedule       = var.triggers.plan.run_on_schedule
@@ -49,7 +49,7 @@ module "apply_triggers" {
 
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
-  name                  = var.name
+  name                  = var.env
   skip                  = var.triggers.apply.skip
   run_on_push           = var.triggers.apply.run_on_push
   run_on_schedule       = var.triggers.apply.run_on_schedule

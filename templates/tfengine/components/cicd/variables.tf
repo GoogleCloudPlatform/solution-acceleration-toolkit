@@ -50,6 +50,17 @@ variable "cloud_source_repository" {
 }
 {{- end}}
 
+{{- if has . "github"}}
+
+variable "github" {
+  type = object({
+    owner = string
+    name = string
+  })
+  description = "Config for GitHub Cloud Build triggers."
+}
+{{- end}}
+
 variable "envs" {
   type = list(object({
     branch_name = string 
@@ -75,17 +86,6 @@ variable "envs" {
   }))
   description = "Config block for per-environment resources."
 }
-
-{{- if has . "github"}}
-
-variable "github" {
-  type = object({
-    owner = string
-    name = string
-  })
-  description = "Config for GitHub Cloud Build triggers."
-}
-{{- end}}
 
 variable "project_id" {
   type        = string

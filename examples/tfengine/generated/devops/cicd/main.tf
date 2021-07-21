@@ -200,9 +200,9 @@ module "triggers" {
   for_each = var.envs
   source   = "./triggers"
 
+  env                   = each.value.name
   branch_name           = each.value.branch_name
   managed_dirs          = each.value.managed_dirs
-  name                  = each.value.name
   triggers              = each.value.triggers
   github                = var.github
   project_id            = var.project_id

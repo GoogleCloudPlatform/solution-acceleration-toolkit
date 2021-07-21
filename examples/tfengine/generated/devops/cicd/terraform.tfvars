@@ -16,6 +16,10 @@ build_editors = ["group:example-cicd-editors@example.com"]
 
 build_viewers = ["group:example-cicd-viewers@example.com"]
 
+github = {
+  owner = "GoogleCloudPlatform"
+  name  = "example"
+}
 envs = [
   {
     branch_name  = "main"
@@ -40,10 +44,6 @@ envs = [
     }
   },
 ]
-github = {
-  owner = "GoogleCloudPlatform"
-  name  = "example"
-}
 billing_account       = "000-000-000"
 project_id            = "example-devops"
 scheduler_region      = "us-east1"

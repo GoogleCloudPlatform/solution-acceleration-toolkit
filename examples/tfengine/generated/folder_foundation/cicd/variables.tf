@@ -28,6 +28,14 @@ variable "billing_account" {
   type = string
 }
 
+variable "github" {
+  type = object({
+    owner = string
+    name  = string
+  })
+  description = "Config for GitHub Cloud Build triggers."
+}
+
 variable "envs" {
   type = list(object({
     branch_name  = string
@@ -52,14 +60,6 @@ variable "envs" {
     })
   }))
   description = "Config block for per-environment resources."
-}
-
-variable "github" {
-  type = object({
-    owner = string
-    name  = string
-  })
-  description = "Config for GitHub Cloud Build triggers."
 }
 
 variable "project_id" {
