@@ -95,8 +95,4 @@ resource "google_cloud_scheduler_job" "validate_scheduler_env" {
     uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled_env}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
-  depends_on = [
-    google_project_service.services,
-    google_app_engine_application.cloudbuild_scheduler_app,
-  ]
 }

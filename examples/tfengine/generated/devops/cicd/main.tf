@@ -209,4 +209,9 @@ module "triggers" {
   scheduler_region      = var.scheduler_region
   terraform_root        = var.terraform_root
   terraform_root_prefix = var.terraform_root_prefix
+
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+  ]
 }
