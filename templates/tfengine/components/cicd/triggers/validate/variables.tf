@@ -38,7 +38,7 @@ variable "env" {
 
 variable "skip" {
   type = boolean
-  description = "Whether or not create module resources."
+  description = "Whether or not create trigger resources."
 }
 
 variable "run_on_push" {
