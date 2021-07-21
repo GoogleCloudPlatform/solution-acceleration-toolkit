@@ -31,8 +31,7 @@ schema = {
     }
     parent_id = {
       description = <<EOF
-        ID of parent GCP resource to apply the policy.
-        Can be one of the organization ID or folder ID according to parent_type.
+        ID of the parent GCP resource to apply the configuration.
       EOF
       type        = "string"
       pattern     = "^[0-9]{8,25}$"

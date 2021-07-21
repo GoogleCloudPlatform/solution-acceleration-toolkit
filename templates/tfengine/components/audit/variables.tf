@@ -12,21 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{$props := .__schema__.properties -}}
 {{if eq .parent_type "organization" -}}
 variable "org_id" {
   type = string
-  description = "ID of the organization to apply the configuration."
+  description = {{schemaDescription $props.parent_id.description}}
   validation {
-    condition     = can(regex("^[0-9]{8,25}$", var.org_id))
+    condition     = can(regex("{{$props.parent_id.pattern}}", var.org_id))
     error_message = "The org_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization id."
   }
 }
-{{- else}}
+{{- else -}}
 variable "folder" {
   type = string
-  description = "ID of the folder to apply the configuration."
+  description = {{schemaDescription $props.parent_id.description}}
   validation {
-    condition     = can(regex("^folders/[0-9]{8,25}$", var.folder))
+    condition     = can(regex("{{replace $props.parent_id.pattern "^" "^folders/"}}", var.folder))
     error_message = "The folder must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your folder id."
   }
 }
@@ -34,24 +35,18 @@ variable "folder" {
 
 variable "auditors_group" {
   type = string
-  description = "This group will be granted viewer access to the audit log dataset and bucket as well as security reviewer permission on the root resource specified."
+  description = {{schemaDescription $props.auditors_group.description}}
 }
 
 variable "additional_filters" {
   type = list(string)
-  description = <<EOF
-    Additional filters for log collection and export. 
-    List entries will be concatenated by "OR" operator. 
-    Refer to https://cloud.google.com/logging/docs/view/query-library for query syntax. Need to escape \ and " to preserve them in the final filter strings. 
-    See example usages under "examples/tfengine/".
-    Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
-  EOF
-  default = []
+  description = {{schemaDescription $props.additional_filters.description}}
+  default = {{$props.additional_filters.default}}
 }
 
 variable "bigquery_location" {
   type = string
-  description = "Location of logs bigquery dataset."
+  description = {{schemaDescription $props.bigquery_location.description}}
 }
 
 variable "logs_bigquery_dataset" {
@@ -59,7 +54,7 @@ variable "logs_bigquery_dataset" {
     dataset_id = string
     sink_name = string
   })
-  description = "Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity."
+  description = {{schemaDescription $props.logs_bigquery_dataset.description}}
 }
 
 variable "logs_storage_bucket" {
@@ -67,10 +62,10 @@ variable "logs_storage_bucket" {
     name = string
     sink_name = string
   })
-  description = "GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements."
+  description = {{schemaDescription $props.logs_storage_bucket.description}}
 }
 
 variable "storage_location" {
   type = string
-  description = "Location of logs storage bucket."
+  description = {{schemaDescription $props.storage_location.description}}
 }
