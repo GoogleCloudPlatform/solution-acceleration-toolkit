@@ -12,6 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+billing_account   = "{{.billing_account}}"
+project_id        = "{{.project_id}}"
+scheduler_region  = "{{.scheduler_region}}"
+state_bucket      = "{{.state_bucket}}"
+terraform_root    = "{{.terraform_root}}"
+{{- $terraform_root := .terraform_root}}
+{{- if eq $terraform_root "/"}}
+  {{- $terraform_root = "."}}
+{{- end}}
+{{- $terraform_root_prefix := printf "%s/" $terraform_root}}
+{{- if eq $terraform_root "."}}
+  {{- $terraform_root_prefix = ""}}
+{{- end}}
+terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{hclField . "build_editors"}}
 {{hclField . "build_viewers"}}
 {{- if has . "cloud_source_repository"}}
@@ -75,17 +89,3 @@ envs = [
   },
   {{- end}}
 ]
-billing_account   = "{{.billing_account}}"
-project_id        = "{{.project_id}}"
-scheduler_region  = "{{.scheduler_region}}"
-state_bucket      = "{{.state_bucket}}"
-terraform_root    = "{{.terraform_root}}"
-{{- $terraform_root := .terraform_root}}
-{{- if eq $terraform_root "/"}}
-  {{- $terraform_root = "."}}
-{{- end}}
-{{- $terraform_root_prefix := printf "%s/" $terraform_root}}
-{{- if eq $terraform_root "."}}
-  {{- $terraform_root_prefix = ""}}
-{{- end}}
-terraform_root_prefix = "{{$terraform_root_prefix}}"
