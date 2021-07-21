@@ -58,7 +58,6 @@ schema = {
         owners_group = {
           description          = <<EOF
             Group which will be given owner access to the project.
-            It will be created if 'exists' is false.
             NOTE: By default, the creating user will be the owner of the project.
             However, this group will own the project going forward. Make sure to include
             yourselve in the group,
@@ -74,7 +73,7 @@ schema = {
               type        = "string"
             }
             exists = {
-              description = "Whether or not the group exists already. Default to 'false'."
+              description = "Whether or not the group exists already. It will be created if not."
               type        = "boolean"
               default     = "false"
             }
@@ -146,7 +145,6 @@ schema = {
     admins_group = {
       description          = <<EOF
         Group which will be given admin access to the folder or organization.
-        It will be created if 'exists' is false.
       EOF
       type                 = "object"
       additionalProperties = false
@@ -159,7 +157,7 @@ schema = {
           type        = "string"
         }
         exists = {
-          description = "Whether or not the group exists already. Default to 'false'."
+          description = "Whether or not the group exists already. It will be created if not."
           type        = "boolean"
           default     = "false"
         }

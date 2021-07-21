@@ -19,10 +19,7 @@ variable "admins_group" {
     display_name = string
     owners       = list(string)
   })
-  description = <<EOF
-Group which will be given admin access to the folder or organization.
-It will be created if 'exists' is false.
-EOF
+  description = "Group which will be given admin access to the folder or organization."
 }
 
 variable "billing_account" {
