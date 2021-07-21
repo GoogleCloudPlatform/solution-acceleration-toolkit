@@ -45,13 +45,6 @@ resource "google_cloudbuild_trigger" "validate_env" {
     _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = var.managed_dirs
   }
-
-  depends_on = [
-    google_project_service.services,
-{{- if has $ "cloud_source_repository"}}
-    google_sourcerepo_repository.configs,
-{{- end}}
-  ]
 }
 
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
@@ -89,13 +82,6 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
     _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS = var.managed_dirs
   }
-
-  depends_on = [
-    google_project_service.services,
-{{- if has $ "cloud_source_repository"}}
-    google_sourcerepo_repository.configs,
-{{- end}}
-  ]
 }
 
 resource "google_cloud_scheduler_job" "validate_scheduler_env" {

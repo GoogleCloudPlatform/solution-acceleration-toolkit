@@ -294,5 +294,8 @@ module "triggers" {
   depends_on = [
     google_project_service.services,
     google_app_engine_application.cloudbuild_scheduler_app,
+    {{- if has $ "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+    {{- end}}
   ]
 }
