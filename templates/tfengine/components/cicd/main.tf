@@ -273,6 +273,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
 # Create Google Cloud Build triggers for specified environments
 module "triggers" {
   for_each = var.envs
+  // TODO(ernestognw): Merge triggers to simplify resources #956
   source  = "./triggers"
 
   env                     = each.value.name
@@ -289,7 +290,7 @@ module "triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
-  
+
   depends_on = [
     google_project_service.services,
     google_app_engine_application.cloudbuild_scheduler_app,
