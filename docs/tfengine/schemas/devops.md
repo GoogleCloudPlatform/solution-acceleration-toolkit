@@ -10,7 +10,7 @@
 | admins_group.customer_id | Customer ID of the organization to create the group in.            See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>            for how to obtain it. | string | false | - | - |
 | admins_group.description | Description of the group. | string | false | - | - |
 | admins_group.display_name | Display name of the group. | string | false | - | - |
-| admins_group.exists | Whether or not the group exists already. Default to 'false'. | boolean | false | false | - |
+| admins_group.exists | Whether or not the group exists already. It will be created if not. | boolean | false | false | - |
 | admins_group.id | Email address of the group. | string | true | - | - |
 | admins_group.owners | Owners of the group. | array(string) | false | - | - |
 | billing_account | ID of billing account to attach to this project. | string | false | - | - |
@@ -23,7 +23,7 @@
 | project.owners_group.customer_id | Customer ID of the organization to create the group in.                See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>                for how to obtain it. | string | false | - | - |
 | project.owners_group.description | Description of the group. | string | false | - | - |
 | project.owners_group.display_name | Display name of the group. | string | false | - | - |
-| project.owners_group.exists | Whether or not the group exists already. Default to 'false'. | boolean | false | false | - |
+| project.owners_group.exists | Whether or not the group exists already. It will be created if not. | boolean | false | false | - |
 | project.owners_group.id | Email address of the group. | string | true | - | - |
 | project.owners_group.owners | Owners of the group. | array(string) | false | - | - |
 | project.project_id | ID of project. | string | true | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
