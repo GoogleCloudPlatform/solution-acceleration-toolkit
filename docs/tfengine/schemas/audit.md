@@ -15,7 +15,7 @@
 | logs_storage_bucket | GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements. | object | true | - | - |
 | logs_storage_bucket.name | Name of GCS bucket. | string | true | - | - |
 | logs_storage_bucket.sink_name | Name of the logs sink. | string | false | storage-audit-logs-sink | - |
-| parent_id | ID of parent GCP resource to apply the policy.        Can be one of the organization ID or folder ID according to parent_type. | string | false | - | ^[0-9]{8,25}$ |
+| parent_id | ID of the parent GCP resource to apply the configuration. | string | false | - | ^[0-9]{8,25}$ |
 | parent_type | Type of parent GCP resource to apply the policy.        Must be one of 'organization' or 'folder'." | string | false | - | ^organization\|folder$ |
 | project | Config of project to host auditing resources | object | false | - | - |
 | project.project_id | ID of project. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |

@@ -14,10 +14,7 @@
 
 variable "folder" {
   type        = string
-  description = <<EOF
-ID of parent GCP resource to apply the policy.
-Can be one of the organization ID or folder ID according to parent_type.
-EOF
+  description = "ID of the parent GCP resource to apply the configuration."
   validation {
     condition     = can(regex("^folders/[0-9]{8,25}$", var.folder))
     error_message = "The folder must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your folder id."
