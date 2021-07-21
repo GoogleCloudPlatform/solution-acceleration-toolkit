@@ -17,7 +17,7 @@ resource "google_cloudbuild_trigger" "validate_env" {
   disabled    = var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-${var.name}"
+  name        = "tf-validate-${var.env}"
   description = "Terraform validate job triggered on push event."
 
   included_files = [
@@ -51,7 +51,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
   disabled    = true
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-scheduled-${var.name}"
+  name        = "tf-validate-scheduled-${var.env}"
   description = "Terraform validate job triggered on schedule."
 
   included_files = [
@@ -81,7 +81,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
 resource "google_cloud_scheduler_job" "validate_scheduler_env" {
   count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project          = var.project_id
-  name             = "validate-scheduler-${var.name}"
+  name             = "validate-scheduler-${var.env}"
   region           = var.scheduler_region
   schedule         = var.run_on_schedule
   time_zone        = "America/New_York" # Eastern Standard Time (EST)

@@ -17,7 +17,7 @@ resource "google_cloudbuild_trigger" "plan_env" {
   disabled    = var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-plan-${var.name}"
+  name        = "tf-plan-${var.env}"
   description = "Terraform plan job triggered on push event."
 
   included_files = [
@@ -49,7 +49,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_env" {
   disabled    = true
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-plan-scheduled-${var.name}"
+  name        = "tf-plan-scheduled-${var.env}"
   description = "Terraform plan job triggered on schedule."
 
   included_files = [
@@ -77,7 +77,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_env" {
 resource "google_cloud_scheduler_job" "plan_scheduler_env" {
   count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project          = var.project_id
-  name             = "plan-scheduler-${var.name}"
+  name             = "plan-scheduler-${var.env}"
   region           = var.scheduler_region
   schedule         = var.run_on_schedule
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
