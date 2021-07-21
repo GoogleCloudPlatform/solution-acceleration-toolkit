@@ -196,7 +196,8 @@ resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
 # Create Google Cloud Build triggers for specified environments
 module "triggers" {
   for_each = var.envs
-  source   = "./triggers"
+  // TODO(ernestognw): Merge triggers to simplify resources #956
+  source = "./triggers"
 
   env                   = each.value.name
   branch_name           = each.value.branch_name
@@ -207,6 +208,7 @@ module "triggers" {
   scheduler_region      = var.scheduler_region
   terraform_root        = var.terraform_root
   terraform_root_prefix = var.terraform_root_prefix
+  service_account_email = google_service_account.cloudbuild_scheduler_sa.email
 
   depends_on = [
     google_project_service.services,

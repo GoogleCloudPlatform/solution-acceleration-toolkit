@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_cloudbuild_trigger" "apply_env" {
+resource "google_cloudbuild_trigger" "apply" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
   provider    = google-beta
@@ -35,14 +35,9 @@ resource "google_cloudbuild_trigger" "apply_env" {
     _TERRAFORM_ROOT = var.terraform_root
     _MANAGED_DIRS   = var.managed_dirs
   }
-
-  depends_on = [
-    google_project_service.services,
-    google_sourcerepo_repository.configs,
-  ]
 }
 
-resource "google_cloud_scheduler_job" "apply_scheduler_env" {
+resource "google_cloud_scheduler_job" "apply_scheduler" {
   count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project          = var.project_id
   name             = "apply-scheduler-${var.env}"
@@ -54,9 +49,9 @@ resource "google_cloud_scheduler_job" "apply_scheduler_env" {
     http_method = "POST"
     oauth_token {
       scope                 = "https://www.googleapis.com/auth/cloud-platform"
-      service_account_email = google_service_account.cloudbuild_scheduler_sa.email
+      service_account_email = var.service_account_email
     }
-    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply_env.id}:run"
+    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply.id}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
 }

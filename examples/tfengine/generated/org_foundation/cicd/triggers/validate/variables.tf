@@ -38,7 +38,7 @@ variable "env" {
 
 variable "skip" {
   type        = boolean
-  description = "Whether or not create module resources."
+  description = "Whether or not create trigger resources."
 }
 
 variable "run_on_push" {
@@ -78,4 +78,9 @@ variable "terraform_root" {
 
 variable "terraform_root_prefix" {
   type = string
+}
+
+variable "service_account_email" {
+  type        = string
+  description = "Email of the cloud scheduler service account."
 }
