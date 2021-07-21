@@ -112,7 +112,7 @@ resource "google_cloud_scheduler_job" "plan_scheduler_env" {
       scope = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = "${google_service_account.cloudbuild_scheduler_sa.email}"
     }
-    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.plan_scheduled_env}.id}:run"
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.plan_scheduled_env.id}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
 }
