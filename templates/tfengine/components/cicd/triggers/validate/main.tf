@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "google_cloudbuild_trigger" "validate_env" {
+resource "google_cloudbuild_trigger" "validate" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
   provider    = google-beta
@@ -48,7 +48,7 @@ resource "google_cloudbuild_trigger" "validate_env" {
 }
 
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
-resource "google_cloudbuild_trigger" "validate_scheduled_env" {
+resource "google_cloudbuild_trigger" "validate_scheduled" {
   count       = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   # Always disabled on push to branch.
   disabled    = true
@@ -84,7 +84,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled_env" {
   }
 }
 
-resource "google_cloud_scheduler_job" "validate_scheduler_env" {
+resource "google_cloud_scheduler_job" "validate_scheduler" {
   count     = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project   = var.project_id
   name      = "validate-scheduler-${var.env}"
@@ -98,7 +98,7 @@ resource "google_cloud_scheduler_job" "validate_scheduler_env" {
       scope = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = "${google_service_account.cloudbuild_scheduler_sa.email}"
     }
-    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled_env.id}:run"
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled.id}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
 }
