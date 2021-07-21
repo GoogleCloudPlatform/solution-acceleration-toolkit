@@ -199,13 +199,14 @@ module "triggers" {
   // TODO(ernestognw): Merge triggers to simplify resources #956
   source = "./triggers"
 
-  env                   = each.value.name
-  branch_name           = each.value.branch_name
-  managed_dirs          = each.value.managed_dirs
-  triggers              = each.value.triggers
-  github                = var.github
-  project_id            = var.project_id
-  scheduler_region      = var.scheduler_region
+  env              = each.value.name
+  branch_name      = each.value.branch_name
+  managed_dirs     = each.value.managed_dirs
+  triggers         = each.value.triggers
+  github           = var.github
+  project_id       = var.project_id
+  scheduler_region = var.scheduler_region
+  // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
   terraform_root        = var.terraform_root
   terraform_root_prefix = var.terraform_root_prefix
   service_account_email = google_service_account.cloudbuild_scheduler_sa.email

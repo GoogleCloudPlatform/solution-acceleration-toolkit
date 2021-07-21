@@ -211,9 +211,10 @@ module "triggers" {
   cloud_source_repository = var.cloud_source_repository
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
-  terraform_root          = var.terraform_root
-  terraform_root_prefix   = var.terraform_root_prefix
-  service_account_email   = google_service_account.cloudbuild_scheduler_sa.email
+  // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
+  terraform_root        = var.terraform_root
+  terraform_root_prefix = var.terraform_root_prefix
+  service_account_email = google_service_account.cloudbuild_scheduler_sa.email
 
   depends_on = [
     google_project_service.services,

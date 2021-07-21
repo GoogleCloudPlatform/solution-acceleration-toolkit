@@ -38,7 +38,7 @@ variable "env" {
 
 variable "skip" {
   type        = boolean
-  description = "Whether or not create trigger resources."
+  description = "Whether or not to skip creating trigger resources."
 }
 
 variable "run_on_push" {
@@ -77,10 +77,14 @@ variable "terraform_root" {
 }
 
 variable "terraform_root_prefix" {
-  type = string
+  type        = string
+  description = <<EOF
+    Path of the directory relative to the repo root containing the Terraform configs. 
+    It includes ending "/" when terraform root is not "."
+  EOF
 }
 
 variable "service_account_email" {
   type        = string
-  description = "Email of the cloud scheduler service account."
+  description = "Email of the Cloud Scheduler service account."
 }
