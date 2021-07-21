@@ -32,6 +32,7 @@ schema = {
       description = <<EOF
         ID of parent GCP resource to apply the policy.
         Can be one of the organization ID or folder ID according to parent_type.
+        See <https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy> to learn more about resource hierarchy.
       EOF
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
@@ -57,7 +58,6 @@ schema = {
         owners_group = {
           description          = <<EOF
             Group which will be given owner access to the project.
-            It will be created if 'exists' is false.
             NOTE: By default, the creating user will be the owner of the project.
             However, this group will own the project going forward. Make sure to include
             yourselve in the group,
@@ -73,7 +73,7 @@ schema = {
               type        = "string"
             }
             exists = {
-              description = "Whether or not the group exists already. Default to 'false'."
+              description = "Whether or not the group exists already. It will be created if not."
               type        = "boolean"
               default     = "false"
             }
@@ -145,7 +145,6 @@ schema = {
     admins_group = {
       description          = <<EOF
         Group which will be given admin access to the folder or organization.
-        It will be created if 'exists' is false.
       EOF
       type                 = "object"
       additionalProperties = false
@@ -158,7 +157,7 @@ schema = {
           type        = "string"
         }
         exists = {
-          description = "Whether or not the group exists already. Default to 'false'."
+          description = "Whether or not the group exists already. It will be created if not."
           type        = "boolean"
           default     = "false"
         }

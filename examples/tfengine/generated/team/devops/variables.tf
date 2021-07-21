@@ -21,12 +21,16 @@ variable "admins_group" {
 
 variable "billing_account" {
   type        = string
-  description = "ID of billing account to attach to this project."
+  description = "ID of billing account to associate projects with."
 }
 
 variable "parent_id" {
   type        = string
-  description = "ID of parent GCP resource to apply the policy. Can be one of the organization ID or folder ID according to parent_type. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to learn more about resource hierarchy."
+  description = <<EOF
+ID of parent GCP resource to apply the policy.
+Can be one of the organization ID or folder ID according to parent_type.
+See <https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy> to learn more about resource hierarchy.
+EOF
   validation {
     condition     = can(regex("^[0-9]{8,25}$", var.parent_id))
     error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
@@ -50,7 +54,7 @@ variable "project" {
 
 variable "state_bucket" {
   type        = string
-  description = "Name of Terraform remote state bucket."
+  description = "Name of the state bucket."
 }
 
 variable "storage_location" {
