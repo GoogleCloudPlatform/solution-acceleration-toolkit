@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 variable "folder" {
   type        = string
-  description = "ID of the folder to apply the configuration."
+  description = "ID of the parent GCP resource to apply the configuration."
   validation {
     condition     = can(regex("^folders/[0-9]{8,25}$", var.folder))
     error_message = "The folder must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your folder id."
@@ -24,18 +23,23 @@ variable "folder" {
 
 variable "auditors_group" {
   type        = string
-  description = "This group will be granted viewer access to the audit log dataset and bucket as well as security reviewer permission on the root resource specified."
+  description = <<EOF
+This group will be granted viewer access to the audit log dataset and
+bucket as well as security reviewer permission on the root resource
+specified.
+EOF
 }
 
 variable "additional_filters" {
   type        = list(string)
   description = <<EOF
-    Additional filters for log collection and export. 
-    List entries will be concatenated by "OR" operator. 
-    Refer to https://cloud.google.com/logging/docs/view/query-library for query syntax. Need to escape \ and " to preserve them in the final filter strings. 
-    See example usages under "examples/tfengine/".
-    Logs with filter "logName:\"logs/cloudaudit.googleapis.com\"" is always enabled.
-  EOF
+Additional filters for log collection and export. List entries will be
+concatenated by "OR" operator. Refer to
+<https://cloud.google.com/logging/docs/view/query-library> for query syntax.
+Need to escape \ and " to preserve them in the final filter strings.
+See example usages under "examples/tfengine/".
+Logs with filter `"logName:\"logs/cloudaudit.googleapis.com\""` is always enabled.
+EOF
   default     = []
 }
 
