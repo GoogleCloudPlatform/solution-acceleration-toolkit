@@ -17,7 +17,7 @@ resource "google_cloudbuild_trigger" "apply_env" {
   disabled    = var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-apply-${var.name}"
+  name        = "tf-apply-${var.env}"
   description = "Terraform apply job triggered on push event and/or schedule."
 
   included_files = [
@@ -57,7 +57,7 @@ resource "google_cloudbuild_trigger" "apply_env" {
 resource "google_cloud_scheduler_job" "apply_scheduler_env" {
   count     = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project   = var.project_id
-  name      = "apply-scheduler-${var.name}"
+  name      = "apply-scheduler-${var.env}"
   region    = var.scheduler_region
   schedule  = var.run_on_schedule
   time_zone = "America/New_York" # Eastern Standard Time (EST)

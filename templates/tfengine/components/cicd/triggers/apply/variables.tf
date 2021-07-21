@@ -31,7 +31,7 @@ variable "managed_dirs" {
   EOF
 }
 
-variable "name" {
+variable "env" {
   type = string
   description = "Name of the environment."
 }
