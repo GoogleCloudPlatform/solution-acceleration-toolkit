@@ -272,7 +272,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
 
 # Create Google Cloud Build triggers for specified environments
 module "triggers" {
-  for_each = var.envs
+  for_each = {for env in var.envs:  env.name => env}
   // TODO(ernestognw): Merge triggers to simplify resources #956
   source  = "./triggers"
 
@@ -291,7 +291,9 @@ module "triggers" {
   // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
   terraform_root          = var.terraform_root
   terraform_root_prefix   = var.terraform_root_prefix
+  {{- if $hasScheduledJobs}}
   service_account_email   = "${google_service_account.cloudbuild_scheduler_sa.email}"
+  {{- end}}
 
   depends_on = [
     google_project_service.services,

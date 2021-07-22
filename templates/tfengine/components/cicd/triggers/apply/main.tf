@@ -61,7 +61,7 @@ resource "google_cloud_scheduler_job" "apply_scheduler" {
       scope = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = var.service_account_email
     }
-    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply.id}:run"
+    uri = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.apply[0].id}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
 }
