@@ -66,7 +66,7 @@ envs = [
       }
       plan = {
         skip            = true
-        run_on_push     = true
+        run_on_push     = false
         run_on_schedule = ""
       }
       apply = {
