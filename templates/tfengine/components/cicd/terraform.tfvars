@@ -38,7 +38,7 @@ cloud_source_repostory = {
     {{- end}}
   ]
   {{- end}}
-  {{- if has .cloud_source_repository "readers"}}
+  {{- if has .cloud_source_repository "writers"}}
   writers = [
     {{- range .cloud_source_repository.writers}}
     "{{.}}",
