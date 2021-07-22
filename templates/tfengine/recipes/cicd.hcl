@@ -30,6 +30,10 @@ schema = {
       description          = "Config for GitHub Cloud Build triggers."
       type                 = "object"
       additionalProperties = false
+      required = [
+        "owner",
+        "name"
+      ]
       properties = {
         owner = {
           description = "GitHub repo owner."
@@ -91,6 +95,7 @@ schema = {
         to see CICD results.
       EOF
       type        = "array"
+      default     = "[]"
       items = {
         type = "string"
       }
@@ -101,6 +106,7 @@ schema = {
         to see CICD results.
       EOF
       type        = "array"
+      default     = "[]"
       items = {
         type = "string"
       }
@@ -125,6 +131,7 @@ schema = {
         Whether or not to grant automation service account the billing.user role.
         Default to true.
       EOF
+      default     = "true"
       type        = "boolean"
     }
     envs = {
@@ -191,17 +198,18 @@ schema = {
                   run_on_push = {
                     description = <<EOF
                     Whether or not to be automatically triggered from a PR/push to branch.
-                    Default to true.
                   EOF
                     type        = "boolean"
+                    default     = "true"
                   }
                   run_on_schedule = {
                     description = <<EOF
                     Whether or not to be automatically triggered according a specified schedule.
                     The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
-                    at Eastern Standard Time (EST). Default to none.
+                    at Eastern Standard Time (EST).
                   EOF
                     type        = "string"
+                    default     = ""
                   }
                 }
               }

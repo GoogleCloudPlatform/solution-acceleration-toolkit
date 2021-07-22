@@ -109,11 +109,7 @@ resource "google_project_service" "services" {
 
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
-  for_each = toset([
-    {{- range .build_viewers}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.build_viewers)
   project  = var.project_id
   role     = "roles/cloudbuild.builds.viewer"
   member   = each.value
@@ -127,11 +123,7 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
 
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
-  for_each = toset([
-    {{- range .build_editors}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.build_editors)
   project  = var.project_id
   role     = "roles/cloudbuild.builds.editor"
   member   = each.value
@@ -144,18 +136,7 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
 # IAM permissions to allow approvers and contributors to view logs.
 # https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
 resource "google_project_iam_member" "cloudbuild_logs_viewers" {
-  for_each = toset([
-    {{- if has . "build_viewers"}}
-    {{- range .build_viewers}}
-    "{{.}}",
-    {{- end}}
-    {{- end}}
-    {{- if has . "build_editors"}}
-    {{- range .build_editors}}
-    "{{.}}",
-    {{- end}}
-    {{- end}}
-  ])
+  for_each = toset(concat(var.build_editors, var.build_viewers))
   project  = var.project_id
   role     = "roles/viewer"
   member   = each.value
@@ -169,7 +150,7 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
 # Create the Cloud Source Repository.
 resource "google_sourcerepo_repository" "configs" {
   project  = var.project_id
-  name     = "{{.cloud_source_repository.name}}"
+  name     = var.cloud_source_repository.name
   depends_on = [
     google_project_service.services,
   ]
@@ -178,11 +159,7 @@ resource "google_sourcerepo_repository" "configs" {
 {{- if has .cloud_source_repository "readers"}}
 
 resource "google_sourcerepo_repository_iam_member" "readers" {
-  for_each = toset([
-    {{- range .cloud_source_repository.readers}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.cloud_source_repository.readers)
   project = var.project_id
   repository = google_sourcerepo_repository.configs.name
   role = "roles/source.reader"
@@ -193,11 +170,7 @@ resource "google_sourcerepo_repository_iam_member" "readers" {
 {{- if has .cloud_source_repository "writers"}}
 
 resource "google_sourcerepo_repository_iam_member" "writers" {
-  for_each = toset([
-    {{- range .cloud_source_repository.writers}}
-    "{{.}}",
-    {{- end}}
-  ])
+  for_each = toset(var.cloud_source_repository.writers)
   project = var.project_id
   repository = google_sourcerepo_repository.configs.name
   role = "roles/source.writer"
@@ -222,7 +195,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
 # App Engine app cannot be destroyed once created, therefore always create it.
 resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   project     = var.project_id
-  location_id = "{{.scheduler_region}}"
+  location_id = var.scheduler_region
   depends_on = [
     google_project_service.services,
   ]
@@ -294,5 +267,37 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
   member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
+  ]
+}
+
+# Create Google Cloud Build triggers for specified environments
+module "triggers" {
+  for_each = var.envs
+  // TODO(ernestognw): Merge triggers to simplify resources #956
+  source  = "./triggers"
+
+  env                     = each.value.name
+  branch_name             = each.value.branch_name
+  managed_dirs            = each.value.managed_dirs
+  triggers                = each.value.triggers
+  {{- if has . "cloud_source_repository"}}
+  cloud_source_repository = var.cloud_source_repository
+  {{- end}}
+  {{- if has . "github"}}
+  github                  = var.github
+  {{- end}}
+  project_id              = var.project_id
+  scheduler_region        = var.scheduler_region
+  // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
+  terraform_root          = var.terraform_root
+  terraform_root_prefix   = var.terraform_root_prefix
+  service_account_email   = "${google_service_account.cloudbuild_scheduler_sa.email}"
+
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+    {{- if has $ "cloud_source_repository"}}
+    google_sourcerepo_repository.configs,
+    {{- end}}
   ]
 }

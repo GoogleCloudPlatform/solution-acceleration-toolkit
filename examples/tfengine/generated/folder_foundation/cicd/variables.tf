@@ -12,16 +12,82 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "build_editors" {
+  type        = list(string)
+  description = "IAM members to grant cloudbuild.builds.editor role in the devops project to see CICD results."
+  default     = []
+}
+
+variable "build_viewers" {
+  type        = list(string)
+  description = "IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results."
+  default     = []
+}
+
 variable "billing_account" {
   type = string
 }
 
+variable "github" {
+  type = object({
+    owner = string
+    name  = string
+  })
+  description = "Config for GitHub Cloud Build triggers."
+}
+
+variable "envs" {
+  type = list(object({
+    branch_name  = string
+    managed_dirs = list(string)
+    name         = string
+    triggers = object({
+      apply = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+      plan = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+      validate = object({
+        skip            = boolean
+        run_on_push     = boolean
+        run_on_schedule = string
+      })
+    })
+  }))
+  description = "Config block for per-environment resources."
+}
+
 variable "project_id" {
-  description = "Project ID of the devops project to host CI/CD resources"
   type        = string
+  description = "ID of project to deploy CICD in."
+}
+
+variable "scheduler_region" {
+  type        = string
+  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
 }
 
 variable "state_bucket" {
-  description = "Name of the Terraform state bucket"
   type        = string
+  description = "Name of the Terraform state bucket."
+}
+
+variable "terraform_root" {
+  type        = string
+  description = <<EOF
+    Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/".
+  EOF
+}
+
+variable "terraform_root_prefix" {
+  type        = string
+  description = <<EOF
+    Path of the directory relative to the repo root containing the Terraform configs. 
+    It includes ending "/" when terraform root is not "."
+  EOF
 }
