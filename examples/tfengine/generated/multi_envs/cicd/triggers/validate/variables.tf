@@ -21,7 +21,7 @@ variable "branch_name" {
 }
 
 variable "managed_dirs" {
-  type        = list(string)
+  type        = string
   description = <<EOF
     List of root modules managed by the CICD relative to terraform_root.
 
@@ -37,12 +37,12 @@ variable "env" {
 }
 
 variable "skip" {
-  type        = boolean
+  type        = bool
   description = "Whether or not to skip creating trigger resources."
 }
 
 variable "run_on_push" {
-  type        = boolean
+  type        = bool
   description = "Whether or not to be automatically triggered from a PR/push to branch."
 }
 

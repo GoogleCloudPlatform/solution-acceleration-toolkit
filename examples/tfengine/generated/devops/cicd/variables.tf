@@ -39,22 +39,22 @@ variable "github" {
 variable "envs" {
   type = list(object({
     branch_name  = string
-    managed_dirs = list(string)
+    managed_dirs = string
     name         = string
     triggers = object({
       apply = object({
-        skip            = boolean
-        run_on_push     = boolean
+        skip            = bool
+        run_on_push     = bool
         run_on_schedule = string
       })
       plan = object({
-        skip            = boolean
-        run_on_push     = boolean
+        skip            = bool
+        run_on_push     = bool
         run_on_schedule = string
       })
       validate = object({
-        skip            = boolean
-        run_on_push     = boolean
+        skip            = bool
+        run_on_push     = bool
         run_on_schedule = string
       })
     })

@@ -195,7 +195,7 @@ resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
 
 # Create Google Cloud Build triggers for specified environments
 module "triggers" {
-  for_each = var.envs
+  for_each = { for env in var.envs : env.name => env }
   // TODO(ernestognw): Merge triggers to simplify resources #956
   source = "./triggers"
 
