@@ -29,7 +29,7 @@ terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{hclField . "build_editors"}}
 {{hclField . "build_viewers"}}
 {{- if has . "cloud_source_repository"}}
-cloud_source_repostory = {
+cloud_source_repository = {
   name = "{{.cloud_source_repository.name}}"
   {{- if has .cloud_source_repository "readers"}}
   readers = [
@@ -38,7 +38,7 @@ cloud_source_repostory = {
     {{- end}}
   ]
   {{- end}}
-  {{- if has .cloud_source_repository "readers"}}
+  {{- if has .cloud_source_repository "writers"}}
   writers = [
     {{- range .cloud_source_repository.writers}}
     "{{.}}",
@@ -69,6 +69,9 @@ envs = [
           {{- if has .triggers "validate"}}
           run_on_push = {{get .triggers.validate "run_on_push" true}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
+          {{- else}}
+          run_on_push = false
+          run_on_schedule = ""
           {{- end}}
         }
         plan = {
@@ -76,6 +79,9 @@ envs = [
           {{- if has .triggers "plan"}}
           run_on_push = {{get .triggers.plan "run_on_push" true}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
+          {{- else}}
+          run_on_push = false
+          run_on_schedule = ""
           {{- end}}
         }
         apply = {
@@ -83,6 +89,9 @@ envs = [
           {{- if has .triggers "apply"}}
           run_on_push = {{get .triggers.apply "run_on_push" true}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
+          {{- else}}
+          run_on_push = false
+          run_on_schedule = ""
           {{- end}}
         }
     }

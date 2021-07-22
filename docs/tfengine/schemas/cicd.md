@@ -14,7 +14,7 @@
 | cloud_source_repository.writers | IAM members to allow writing to the repo. | array(string) | false | - | - |
 | envs | Config block for per-environment resources. | array(object) | true | - | - |
 | envs.branch_name | Name of the branch to set the Cloud Build Triggers to monitor.            Regex is not supported to enforce a 1:1 mapping from a branch to a GCP            environment. | string | true | - | - |
-| envs.managed_dirs | List of root modules managed by the CICD relative to `terraform_root`.<br><br>NOTE: The modules will be deployed in the given order. If a module            depends on another module, it should show up after it in this list.<br><br>NOTE: The CICD has permission to update APIs within its own project.            Thus, you can list the devops module as one of the managed modules.            Other changes to the devops project or CICD pipelines must be deployed            manually. | array(string) | false | - | - |
+| envs.managed_dirs | List of root modules managed by the CICD relative to `terraform_root`.<br><br>NOTE: The modules will be deployed in the given order. If a module            depends on another module, it should show up after it in this list. | array(string) | false | - | - |
 | envs.name | Name of the environment. | string | true | - | - |
 | envs.triggers | Config block for the CICD Cloud Build triggers. | object | true | - | - |
 | envs.triggers.apply | Config block for the postsubmit apply/deployyemt Cloud Build trigger.                If specified,create the trigger and grant the Cloud Build Service Account                necessary permissions to perform the build. | object | false | - | - |

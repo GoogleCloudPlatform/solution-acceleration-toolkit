@@ -22,7 +22,7 @@ build_editors         = ["group:example-cicd-editors@example.com"]
 
 build_viewers = ["group:example-cicd-viewers@example.com"]
 
-cloud_source_repostory = {
+cloud_source_repository = {
   name = "example"
   readers = [
     "group:example-source-readers@example.com",
@@ -65,7 +65,9 @@ envs = [
         run_on_schedule = ""
       }
       plan = {
-        skip = true
+        skip            = true
+        run_on_push     = false
+        run_on_schedule = ""
       }
       apply = {
         skip            = false

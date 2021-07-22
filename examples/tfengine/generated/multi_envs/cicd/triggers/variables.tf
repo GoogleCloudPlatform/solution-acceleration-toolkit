@@ -21,7 +21,7 @@ variable "branch_name" {
 }
 
 variable "managed_dirs" {
-  type        = list(string)
+  type        = string
   description = <<EOF
     List of root modules managed by the CICD relative to terraform_root.
 
@@ -39,18 +39,18 @@ variable "env" {
 variable "triggers" {
   type = object({
     apply = object({
-      skip            = boolean
-      run_on_push     = boolean
+      skip            = bool
+      run_on_push     = bool
       run_on_schedule = string
     })
     plan = object({
-      skip            = boolean
-      run_on_push     = boolean
+      skip            = bool
+      run_on_push     = bool
       run_on_schedule = string
     })
     validate = object({
-      skip            = boolean
-      run_on_push     = boolean
+      skip            = bool
+      run_on_push     = bool
       run_on_schedule = string
     })
   })
@@ -98,4 +98,5 @@ variable "terraform_root_prefix" {
 variable "service_account_email" {
   type        = string
   description = "Email of the Cloud Scheduler service account."
+  default     = ""
 }
