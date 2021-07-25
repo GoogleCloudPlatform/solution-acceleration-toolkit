@@ -47,3 +47,12 @@ variable "organization_iam_members" {
     bindings     = map(list(string))
   }))
 }
+
+variable "service_account_iam_members" {
+  description = "IAM members for service accounts. Assigns additional non-authoritative IAM bindings to a list of service accounts."
+  default     = []
+  type        = list(object({
+    resource_ids = list(string)
+    bindings     = map(list(string))
+  }))
+}

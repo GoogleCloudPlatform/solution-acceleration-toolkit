@@ -20,7 +20,7 @@ schema = {
       type                 = "object"
       additionalProperties = false
       patternProperties = {
-        "^storage_bucket|project|organization|folder$": {
+        "^storage_bucket|project|organization|folder|service_account$": {
           type = "array"
           items = {
             type = "object"
@@ -35,9 +35,10 @@ schema = {
 
                   Should be the following for each resource type:
                     project: project IDs. e.g. [example_project_id]
-                    storage_bucket : storage bucket names. e.g. [example_bucket_one, example_bucket_two]
+                    storage_bucket: storage bucket names. e.g. [example_bucket_one, example_bucket_two]
                     folder: folder IDs. e.g. [12345678]
                     organization: organizations IDs. e.g [12345678]
+                    service_account: service account IDs. e.g [example-sa@example.iam.gserviceaccount.com]
                 EOF
                 type        = "array"
                 items       = {
