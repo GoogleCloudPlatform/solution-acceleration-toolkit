@@ -474,7 +474,7 @@ template "additional_iam_members" {
         ]
         bindings = {
           "roles/iam.serviceAccountKeyAdmin" = [
-            "user:user1@{{.domain}}"
+            "group:{{.prefix}}-team-admins@{{.domain}}"
           ]
         }
         project_id = "{{.prefix}}-{{.env}}-apps"

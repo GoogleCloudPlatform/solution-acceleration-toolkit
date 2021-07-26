@@ -29,7 +29,7 @@ service_account_iam_members = [
     resource_ids = ["runner@example-prod-apps.iam.gserviceaccount.com"]
     bindings = {
       "roles/iam.serviceAccountKeyAdmin" = [
-        "user:user1@example.com",
+        "group:example-team-admins@example.com",
       ],
     }
     project_id = "example-prod-apps"
