@@ -26,6 +26,7 @@
             ],
           {{end -}}
         }
+        {{hclField . "project_id" -}}
       },
     {{end -}}
   ]
