@@ -65,4 +65,5 @@ module "service_account_iam_members" {
   }
   service_accounts = each.value.resource_ids
   bindings = each.value.bindings
+  project = each.value.project
 }

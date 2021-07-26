@@ -38,7 +38,7 @@ schema = {
                     storage_bucket: storage bucket names. e.g. [example_bucket_one, example_bucket_two]
                     folder: folder IDs. e.g. [12345678]
                     organization: organizations IDs. e.g [12345678]
-                    service_account: service account IDs. e.g [example-sa@example.iam.gserviceaccount.com]
+                    service_account: service account emails. e.g [example-sa@example.iam.gserviceaccount.com]
                 EOF
                 type        = "array"
                 items       = {
@@ -56,6 +56,15 @@ schema = {
                     }
                   }
                 }
+              }
+              project = {
+                description = <<EOF
+                  Project ID to add the IAM policies/bindings
+
+                  This is required for service accounts.
+                  Not assigning this leads to errors when planing or applying terraform configs.
+                EOF
+                type  = "string"
               }
             }
           }

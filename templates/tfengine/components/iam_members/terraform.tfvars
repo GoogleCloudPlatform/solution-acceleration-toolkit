@@ -26,6 +26,9 @@
             ],
           {{end -}}
         }
+        {{if has . "project" -}}
+        project = {{hcl .project}}
+        {{end -}}
       },
     {{end -}}
   ]
