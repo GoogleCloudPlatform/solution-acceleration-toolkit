@@ -204,7 +204,7 @@ template "project_apps" {
         display_name = "Service Account"
       },
       {
-        account_id   = "iam_tester"
+        account_id   = "iam-tester"
         description  = "Service Account"
         display_name = "Service Account"
       }]
@@ -479,7 +479,7 @@ template "additional_iam_members" {
         ]
         bindings = {
           "roles/iam.serviceAccountKeyAdmin" = [
-            "serviceAccount:iam_tester@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+            "serviceAccount:iam-tester@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
           ]
         }
         project_id = "{{.prefix}}-{{.env}}-apps"

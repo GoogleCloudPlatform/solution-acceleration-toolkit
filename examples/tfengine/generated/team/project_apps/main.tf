@@ -265,7 +265,7 @@ resource "google_service_account" "runner" {
 }
 
 resource "google_service_account" "iam_tester" {
-  account_id   = "iam_tester"
+  account_id   = "iam-tester"
   display_name = "Service Account"
 
   description = "Service Account"
