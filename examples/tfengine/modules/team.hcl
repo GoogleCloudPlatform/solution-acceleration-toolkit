@@ -474,10 +474,10 @@ template "additional_iam_members" {
         ]
         bindings = {
           "roles/iam.serviceAccountKeyAdmin" = [
-            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+            "user:user1@{{.domain}}"
           ]
         }
-        project = "{{.prefix}}-{{.env}}-apps"
+        project_id = "{{.prefix}}-{{.env}}-apps"
       }]
     }
   }

@@ -88,10 +88,12 @@ template "iam_members" {
           ]
           bindings = {
             "roles/iam.serviceAccountKeyAdmin" = [
-              "serviceAccount:example-sa@example.iam.gserviceaccount.com",
+              "serviceAccount:example-sa-two@example.iam.gserviceaccount.com",
+              "group:example-group@example.com",
+              "user:example-user@example.com"
             ]
           }
-          project = "example"
+          project_id = "example"
         }
       ]
     }

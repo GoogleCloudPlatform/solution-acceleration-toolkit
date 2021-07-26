@@ -57,12 +57,10 @@ schema = {
                   }
                 }
               }
-              project = {
+              project_id = {
                 description = <<EOF
-                  Project ID to add the IAM policies/bindings
-
-                  This is required for service accounts.
-                  Not assigning this leads to errors when planing or applying terraform configs.
+                  ID of the project where the resources belong.
+                  Currently only required when the resource type is service account.
                 EOF
                 type  = "string"
               }

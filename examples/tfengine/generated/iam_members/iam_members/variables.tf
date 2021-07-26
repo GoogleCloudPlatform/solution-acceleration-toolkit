@@ -54,6 +54,6 @@ variable "service_account_iam_members" {
   type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
-    project      = string
+    project_id   = string
   }))
 }
