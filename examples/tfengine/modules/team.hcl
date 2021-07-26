@@ -202,6 +202,11 @@ template "project_apps" {
         account_id   = "runner"
         description  = "Service Account"
         display_name = "Service Account"
+      },
+      {
+        account_id   = "iam_tester"
+        description  = "Service Account"
+        display_name = "Service Account"
       }]
       compute_instance_templates = [{
         name_prefix        = "instance-template"
@@ -474,7 +479,7 @@ template "additional_iam_members" {
         ]
         bindings = {
           "roles/iam.serviceAccountKeyAdmin" = [
-            "group:{{.prefix}}-team-admins@{{.domain}}"
+            "serviceAccount:iam_tester@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
           ]
         }
         project_id = "{{.prefix}}-{{.env}}-apps"

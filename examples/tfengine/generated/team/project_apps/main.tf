@@ -263,3 +263,12 @@ resource "google_service_account" "runner" {
 
   project = module.project.project_id
 }
+
+resource "google_service_account" "iam_tester" {
+  account_id   = "iam_tester"
+  display_name = "Service Account"
+
+  description = "Service Account"
+
+  project = module.project.project_id
+}
