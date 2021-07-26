@@ -91,7 +91,7 @@ template "iam_members" {
               "serviceAccount:example-sa@example.iam.gserviceaccount.com",
             ]
           }
-          project =  "example"
+          project = "example"
         }
       ]
     }

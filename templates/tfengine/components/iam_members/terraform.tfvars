@@ -26,9 +26,7 @@
             ],
           {{end -}}
         }
-        {{if has . "project" -}}
-        project = {{hcl .project}}
-        {{end -}}
+        {{hclField . "project" -}}
       },
     {{end -}}
   ]

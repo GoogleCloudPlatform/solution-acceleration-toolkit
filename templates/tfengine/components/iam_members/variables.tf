@@ -15,7 +15,7 @@
 variable "storage_bucket_iam_members" {
   description = "IAM members for storage buckets. Assigns additional non-authoritative IAM bindings to a list of storage buckets."
   default     = []
-  type        = list(object({
+  type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
   }))
@@ -24,7 +24,7 @@ variable "storage_bucket_iam_members" {
 variable "project_iam_members" {
   description = "IAM members for projects. Assigns additional non-authoritative IAM bindings to a list of projects."
   default     = []
-  type        = list(object({
+  type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
   }))
@@ -33,7 +33,7 @@ variable "project_iam_members" {
 variable "folder_iam_members" {
   description = "IAM members for folders. Assigns additional non-authoritative IAM bindings to a list of folders."
   default     = []
-  type        = list(object({
+  type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
   }))
@@ -42,7 +42,7 @@ variable "folder_iam_members" {
 variable "organization_iam_members" {
   description = "IAM members for organizations. Assigns additional non-authoritative IAM bindings to a list of organizations."
   default     = []
-  type        = list(object({
+  type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
   }))
@@ -51,7 +51,7 @@ variable "organization_iam_members" {
 variable "service_account_iam_members" {
   description = "IAM members for service accounts. Assigns additional non-authoritative service account roles (e.g. roles/iam.serviceAccountUser) to a list of service accounts."
   default     = []
-  type        = list(object({
+  type = list(object({
     resource_ids = list(string)
     bindings     = map(list(string))
     project      = string

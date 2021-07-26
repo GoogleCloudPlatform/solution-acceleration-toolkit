@@ -14,18 +14,18 @@ limitations under the License. */ -}}
 
 module "storage_bucket_iam_members" {
   source = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
-  mode = "additive"
+  mode   = "additive"
   for_each = {
     for idx, member in var.storage_bucket_iam_members :
     idx => member
   }
   storage_buckets = each.value.resource_ids
-  bindings = each.value.bindings
+  bindings        = each.value.bindings
 }
 
 module "project_iam_members" {
   source = "terraform-google-modules/iam/google//modules/projects_iam"
-  mode = "additive"
+  mode   = "additive"
   for_each = {
     for idx, member in var.project_iam_members :
     idx => member
@@ -36,34 +36,34 @@ module "project_iam_members" {
 
 module "folder_iam_members" {
   source = "terraform-google-modules/iam/google//modules/folders_iam"
-  mode = "additive"
+  mode   = "additive"
   for_each = {
     for idx, member in var.folder_iam_members :
     idx => member
   }
-  folders = each.value.resource_ids
+  folders  = each.value.resource_ids
   bindings = each.value.bindings
 }
 
 module "organization_iam_members" {
   source = "terraform-google-modules/iam/google//modules/organizations_iam"
-  mode = "additive"
+  mode   = "additive"
   for_each = {
     for idx, member in var.organization_iam_members :
     idx => member
   }
   organizations = each.value.resource_ids
-  bindings = each.value.bindings
+  bindings      = each.value.bindings
 }
 
 module "service_account_iam_members" {
   source = "terraform-google-modules/iam/google//modules/service_accounts_iam"
-  mode = "additive"
+  mode   = "additive"
   for_each = {
     for idx, member in var.service_account_iam_members :
     idx => member
   }
   service_accounts = each.value.resource_ids
-  bindings = each.value.bindings
-  project = each.value.project
+  bindings         = each.value.bindings
+  project          = each.value.project
 }
