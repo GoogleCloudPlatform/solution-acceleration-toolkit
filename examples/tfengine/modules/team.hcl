@@ -468,6 +468,17 @@ template "additional_iam_members" {
           ]
         }
       }]
+      "service_account" = [{
+        resource_ids = [
+          "runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com",
+        ]
+        bindings = {
+          "roles/iam.serviceAccountKeyAdmin" = [
+            "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+        project = "{{.prefix}}-{{.env}}-apps"
+      }]
     }
   }
 }
