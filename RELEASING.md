@@ -46,7 +46,7 @@ latest versions of everything.
 
 ### Frequency
 
-We strive to make a release at least once a month, containing accumulated changes since the last release. We may make
+We strive to make a release as frequently as possible, containing accumulated changes since the last release. We may make
 out-of-band releases any time as needed. We will bump the MAJOR/MINOR/PATCH versions as needed, without guarantees on
 when the MINOR or MAJOR versions will be bumped.
 
