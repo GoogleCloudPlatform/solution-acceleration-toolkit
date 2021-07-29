@@ -46,7 +46,8 @@ latest versions of everything.
 
 ### Frequency
 
-We release an unstable version after each commit via an automated release flow. This release may include breaking changes. We may make versioned releases any time as needed. The MAJOR/MINOR/PATCH versions are updated as needed.
+We release an unstable version after each commit via an automated release flow. This release may include breaking changes.
+We may make versioned releases any time as needed. The MAJOR/MINOR/PATCH versions are updated as needed.
 
 ### Caveat about versions
 
