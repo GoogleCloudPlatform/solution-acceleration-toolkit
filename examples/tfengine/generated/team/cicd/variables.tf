@@ -14,13 +14,19 @@
 
 variable "build_editors" {
   type        = list(string)
-  description = "IAM members to grant cloudbuild.builds.editor role in the devops project to see CICD results."
+  description = <<EOF
+IAM members to grant `cloudbuild.builds.editor` role in the devops project
+to see CICD results.
+EOF
   default     = []
 }
 
 variable "build_viewers" {
   type        = list(string)
-  description = "IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results."
+  description = <<EOF
+IAM members to grant `cloudbuild.builds.viewer` role in the devops project
+to see CICD results.
+EOF
   default     = []
 }
 
@@ -65,11 +71,21 @@ variable "envs" {
 variable "project_id" {
   type        = string
   description = "ID of project to deploy CICD in."
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project_id))
+    error_message = <<EOF
+      The project_id must be valid. The project ID must be a unique string of 6 to 30 lowercase letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects#before_you_begin for more information about project id format
+    EOF
+  }
 }
 
 variable "scheduler_region" {
   type        = string
-  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
+  description = <<EOF
+[Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
+job (or the App Engine App behind the sceneces) resides. Must be specified if
+any triggers are configured to be run on schedule.
+EOF
 }
 
 variable "state_bucket" {
@@ -80,8 +96,9 @@ variable "state_bucket" {
 variable "terraform_root" {
   type        = string
   description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/".
-  EOF
+Path of the directory relative to the repo root containing the Terraform configs.
+Do not include ending "/".
+EOF
 }
 
 variable "terraform_root_prefix" {
