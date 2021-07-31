@@ -149,6 +149,7 @@ schema = {
         Additional Terraform configuration for the project deployment.
         For schema see ./deployment.hcl.
       EOF
+      additionalProperties = false
     }
   }
 }
