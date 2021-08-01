@@ -41,6 +41,14 @@ schema = {
         Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type    = "string"
+      # TODO(ernestognw): Find an alternative to keep this in multi_envs
+      # It uses an output that breaks this pattern
+      # pattern = "^[0-9]{8,25}$"
+      pattern = ""
+    }
+    billing_account = {
+      description = "ID of billing account to attach to this project."
+      type        = "string"
     }
     project = {
       description          = "Config for the project."
@@ -56,8 +64,9 @@ schema = {
           pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
         }
         exists = {
-          description = "Whether this project exists. Defaults to 'false'."
+          description = "Whether this project exists."
           type        = "boolean"
+          default     = "false"
         }
         apis = {
           description = "APIs to enable in the project."
@@ -65,6 +74,7 @@ schema = {
           items = {
             type = "string"
           }
+          default = "[]"
         }
         api_identities = {
           description = <<EOF
@@ -78,7 +88,12 @@ schema = {
             for a list of related roles.
           EOF
           type        = "array"
+          default     = "[]"
           items = {
+            required = [
+              "api",
+              "roles"
+            ]
             type = "object"
             additionalProperties = false
             properties = {
@@ -97,8 +112,9 @@ schema = {
           }
         }
         is_shared_vpc_host = {
-          description = "Whether this project is a shared VPC host. Defaults to 'false'."
+          description = "Whether this project is a shared VPC host."
           type        = "boolean"
+          default     = "false"
         }
         shared_vpc_attachment = {
           description          = "If set, treats this project as a shared VPC service project."
@@ -116,6 +132,7 @@ schema = {
             subnets = {
               description = "Subnets within the host project to grant this project access to."
               type        = "array"
+              default     = "[]"
               items = {
                 type                 = "object"
                 additionalProperties = false

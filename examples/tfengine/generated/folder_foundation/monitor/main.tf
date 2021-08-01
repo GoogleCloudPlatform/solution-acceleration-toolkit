@@ -25,6 +25,16 @@ terraform {
   }
 }
 
+module "existing_project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 11.1.0"
+
+  count = var.exists ? 1 : 0
+
+  project_id    = var.project_id
+  activate_apis = var.apis
+}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -32,10 +42,12 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "example-monitor"
-  org_id          = ""
-  folder_id       = "12345678"
-  billing_account = "000-000-000"
+  count = var.exists ? 0 : 1
+
+  name            = var.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
@@ -46,8 +58,13 @@ module "project" {
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
 
-  svpc_host_project_id = "example-prod-networks"
-  activate_apis        = ["compute.googleapis.com"]
+  enable_shared_vpc_host_project = var.is_shared_vpc_host
+
+  svpc_host_project_id = var.shared_vpc_attachment.host_project_id
+  shared_vpc_subnets   = var.shared_vpc_attachment.subnets
+  activate_apis        = var.apis
+
+  activate_api_identities = var.api_identities
 }
 
 

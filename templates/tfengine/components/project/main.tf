@@ -9,15 +9,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{- if get . "exists"}}
-module "project" {
+module "existing_project" {
   source = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  project_id =  "{{.project_id}}"
-  activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
+  count = var.exists ? 1 : 0
+
+  project_id =  var.project_id
+  activate_apis = var.apis
 }
-{{- else -}}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -25,14 +26,12 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "{{.project_id}}"
-  {{- if eq .parent_type "organization"}}
-  org_id          = "{{.parent_id}}"
-  {{- else}}
-  org_id          = ""
-  folder_id       = "{{.parent_id}}"
-  {{- end}}
-  billing_account = "{{.billing_account}}"
+  count = var.exists ? 0 : 1
+
+  name            = var.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
@@ -43,26 +42,11 @@ module "project" {
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
 
-  {{- if get . "is_shared_vpc_host"}}
-  enable_shared_vpc_host_project = true
-  {{- end}}
+  enable_shared_vpc_host_project = var.is_shared_vpc_host
 
-  {{- if has . "shared_vpc_attachment"}}
-  {{$host := get .shared_vpc_attachment "host_project_id"}}
-  svpc_host_project_id = "{{$host}}"
-  {{- if has . "shared_vpc_attachment.subnets"}}
-  shared_vpc_subnets = [
-    {{- range get . "shared_vpc_attachment.subnets"}}
-    {{- $region := get . "compute_region" $.compute_region}}
-    "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
-    {{- end}}
-  ]
-  {{- end}}
-  {{- end}}
-  activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
+  svpc_host_project_id = var.shared_vpc_attachment.host_project_id
+  shared_vpc_subnets = var.shared_vpc_attachment.subnets
+  activate_apis = var.apis
 
-  {{- if has . "api_identities"}}
-  activate_api_identities = {{hcl .api_identities}}
-  {{end}}
+  activate_api_identities = var.api_identities
 }
-{{- end}}
