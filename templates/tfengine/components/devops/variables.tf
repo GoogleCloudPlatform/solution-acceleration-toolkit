@@ -12,28 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 {{$props := .__schema__.properties -}}
-{{$missing_admins_group := not (get .admins_group "exists")}}
+{{$adminsGroupProps := $props.admins_group.properties -}}
+{{$projectProps := $props.project.properties -}}
+{{$projectOwnersGroupProps := $projectProps.owners_group.properties -}}
 variable "admins_group" {
   type = object({
-    id           = string
-    {{- if $missing_admins_group}}
     customer_id  = string
-    display_name = string
-    {{- if has .admins_group "description"}}
     description  = string
-    {{- end}}
-    {{- if has .admins_group "owners"}}
+    display_name = string
+    exists       = string
+    id           = string
     owners       = list(string)
-    {{- end}}
-    {{- if has .admins_group "managers"}}
     managers     = list(string)
-    {{- end}}
-    {{- if has .admins_group "members"}}
     members      = list(string)
-    {{- end}}
-    {{- end}}
   })
-  description = {{schemaDescription $props.admins_group.description}}
+  description = <<EOF
+    {{$props.admins_group.description}}
+
+    * customer_id = {{$adminsGroupProps.customer_id.description}}
+    * description = {{$adminsGroupProps.description.description}}
+    * display_name = {{$adminsGroupProps.display_name.description}}
+    * exists = {{$adminsGroupProps.exists.description}}
+    * id = {{$adminsGroupProps.id.description}}
+    * owners = {{$adminsGroupProps.owners.description}}
+  EOF
 }
 
 variable "billing_account" {
@@ -50,32 +52,42 @@ variable "parent_id" {
   }
 }
 
+variable "parent_type" {
+  type        = string
+  description = {{schemaDescription $props.parent_type.description}}
+  validation {
+    condition     = can(regex("{{$props.parent_type.pattern}}", var.parent_type))
+    error_message = "The parent_type must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
+}
+
 variable "project" {
   type = object({
     apis = list(string)
     owners_group = object({
-      id           = string
-      {{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
-      {{- if $missing_project_owners_group}}
       customer_id  = string
-      display_name = string
-      {{- if has .project.owners_group "description"}}
       description  = string
-      {{- end}}
-      {{- if has .project.owners_group "owners"}}
+      display_name = string
+      exists       = string
+      id           = string
       owners       = list(string)
-      {{- end}}
-      {{- if has .project.owners_group "managers"}}
       managers     = list(string)
-      {{- end}}
-      {{- if has .project.owners_group "members"}}
       members      = list(string)
-      {{- end}}
-      {{- end}}
     })
     project_id = string
   })
-  description = {{schemaDescription $props.project.description}}
+  description = <<EOF
+    {{$props.project.description}}
+
+    * apis = {{$projectProps.apis.description}}
+    * owners_group = {{$projectProps.owners_group.description}}
+    ** customer_id {{$projectOwnersGroupProps.customer_id.description}}
+    ** description {{$projectOwnersGroupProps.description.description}}
+    ** display_name {{$projectOwnersGroupProps.display_name.description}}
+    ** exists {{$projectOwnersGroupProps.exists.description}}
+    ** id {{$projectOwnersGroupProps.id.description}}
+    ** owners {{$projectOwnersGroupProps.owners.description}}s
+  EOF
   validation {
     condition     = can(regex("{{replace $props.project.properties.project_id.pattern "\\" ""}}", var.project.project_id))
     error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."

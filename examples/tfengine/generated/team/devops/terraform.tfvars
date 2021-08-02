@@ -11,9 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 admins_group = {
-  id = "example-team-admins@example.com"
+  customer_id  = ""
+  description  = ""
+  display_name = "example-team-admins"
+  exists       = true
+  id           = "example-team-admins@example.com"
+  owners       = []
+  managers     = []
+  members      = []
 }
 billing_account = "000-000-000"
 parent_id       = "12345678"
@@ -29,7 +35,14 @@ project = {
     "secretmanager.googleapis.com",
   ]
   owners_group = {
-    id = "example-devops-owners@example.com"
+    customer_id  = ""
+    description  = ""
+    display_name = "example-devops-owners"
+    exists       = true
+    id           = "example-devops-owners@example.com"
+    owners       = []
+    managers     = []
+    members      = []
   }
   project_id = "example-prod-devops"
 }

@@ -28,24 +28,19 @@ terraform {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
   }
-{{- if get . "enable_gcs_backend"}}
+  {{- if get . "enable_gcs_backend"}}
   backend "gcs" {
     bucket = "{{.state_bucket}}"
     prefix = "devops"
   }
-{{- end}}
+  {{- end}}
 }
-
-{{- $missing_admins_group := not (get .admins_group "exists")}}
-{{- $missing_project_owners_group := not (get .project.owners_group "exists")}}
-{{- if or $missing_admins_group $missing_project_owners_group}}
 
 # Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
 provider "google-beta" {
   user_project_override = true
   billing_project       = var.project.project_id
 }
-{{- end}}
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
@@ -53,12 +48,8 @@ module "project" {
   version = "~> 11.1.0"
 
   name            = var.project.project_id
-  {{- if eq .parent_type "organization"}}
-  org_id          = var.parent_id
-  {{- else}}
-  org_id          = ""
-  folder_id       = var.parent_id
-  {{- end}}
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
   billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
@@ -78,28 +69,20 @@ source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   location   = var.storage_location
 }
 
-{{- if $missing_project_owners_group}}
-
 # Devops project owners group.
 module "owners_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.2"
 
+  count = var.project.owners_group.exists ? 1 : 0
+
   id = var.project.owners_group.id
   customer_id = var.project.owners_group.customer_id
   display_name = var.project.owners_group.display_name
-  {{- if has .project.owners_group "description"}}
   description = var.project.owners_group.description
-  {{- end }}
-  {{- if has .project.owners_group "owners"}}
   owners = var.project.owners_group.owners
-  {{- end }}
-  {{- if has .project.owners_group "managers"}}
   managers = var.project.owners_group.managers
-  {{- end }}
-  {{- if has .project.owners_group "members"}}
   members = var.project.owners_group.members
-  {{- end }}
   depends_on = [
     module.project
   ]
@@ -108,47 +91,35 @@ module "owners_group" {
 # The group is not ready for IAM bindings right after creation. Wait for
 # a while before it is used.
 resource "time_sleep" "owners_wait" {
+  count = var.project.owners_group.exists ? 1 : 0
   depends_on = [
     module.owners_group,
   ]
   create_duration = "15s"
 }
-{{- end}}
 
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  {{- if not $missing_project_owners_group}}
-  members = ["group:${var.project.owners_group.id}"]
-  {{- else}}
-  members = ["group:${module.owners_group.id}"]
+  members = ["group:${var.project.exists ? var.project.owners_group.id : module.owners_group.id}"]
   depends_on = [time_sleep.owners_wait]
-  {{- end}}
 }
 
-{{- if $missing_admins_group}}
-
-# Admins group for at {{.parent_type}} level.
+# Admins group at parent level.
 module "admins_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.2"
 
+  count = var.admins_group.exists ? 1 : 0
+
   id = var.admins_group.id
   customer_id = var.admins_group.customer_id
   display_name = var.admins_group.display_name
-  {{- if has .admins_group "description"}}
   description = var.admins_group.description
-  {{- end }}
-  {{- if has .admins_group "owners"}}
   owners = var.admins_group.owners
-  {{- end }}
-  {{- if has .admins_group "managers"}}
   managers = var.admins_group.managers
-  {{- end }}
-  {{- if has .admins_group "members"}}
   members = var.admins_group.members
-  {{- end }}
   depends_on = [
     module.project
   ]
@@ -157,25 +128,25 @@ module "admins_group" {
 # The group is not ready for IAM bindings right after creation. Wait for
 # a while before it is used.
 resource "time_sleep" "admins_wait" {
+  count = var.admins_group.exists ? 1 : 0
   depends_on = [
     module.admins_group,
   ]
   create_duration = "15s"
 }
-{{- end}}
 
-# Admin permission at {{.parent_type}} level.
-resource "google_{{.parent_type}}_iam_member" "admin" {
-  {{- if eq .parent_type "organization"}}
-  org_id = var.parent_id
-  {{- else}}
-  folder = "folders/${var.parent_id}"
-  {{- end}}
-  role   = "roles/resourcemanager.{{.parent_type}}Admin"
-  {{- if not $missing_admins_group}}
-  member = "group:${var.admins_group.id}"
-  {{- else}}
-  member = "group:${module.admins_group.id}"
+resource "google_organization_iam_member" "admin" {
+  count   = var.parent_type == "organization" ? 1 : 0
+  org_id  = var.parent_id
+  role   = "roles/resourcemanager.organizationAdmin"
+  member = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group.id}"
   depends_on = [time_sleep.admins_wait]
-  {{- end}}
+}
+
+resource "google_folder_iam_member" "admin" {
+  count   = var.parent_type == "folder" ? 1 : 0
+  folder  = "folders/${var.parent_id}"
+  role   = "roles/resourcemanager.folderAdmin"
+  member = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group.id}"
+  depends_on = [time_sleep.admins_wait]
 }
