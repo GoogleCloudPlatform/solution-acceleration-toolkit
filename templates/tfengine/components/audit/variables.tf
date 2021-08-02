@@ -13,35 +13,17 @@
 # limitations under the License.
 
 {{$props := .__schema__.properties -}}
-{{if eq .parent_type "organization" -}}
-variable "org_id" {
-  type = string
-  description = {{schemaDescription $props.parent_id.description}}
-  validation {
-    condition     = can(regex("{{$props.parent_id.pattern}}", var.org_id))
-    error_message = "The org_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization id."
-  }
-}
-{{- else -}}
-variable "folder" {
-  type = string
-  description = {{schemaDescription $props.parent_id.description}}
-  validation {
-    condition     = can(regex("{{replace $props.parent_id.pattern "^" "^folders/"}}", var.folder))
-    error_message = "The folder must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your folder id."
-  }
-}
-{{- end}}
-
-variable "auditors_group" {
-  type = string
-  description = {{schemaDescription $props.auditors_group.description}}
-}
-
+{{$logsBigQueryProps := $props.logs_bigquery_dataset.properties -}}
+{{$logsStorageProps := $props.logs_storage_bucket.properties -}}
 variable "additional_filters" {
   type = list(string)
   description = {{schemaDescription $props.additional_filters.description}}
   default = {{$props.additional_filters.default}}
+}
+
+variable "auditors_group" {
+  type = string
+  description = {{schemaDescription $props.auditors_group.description}}
 }
 
 variable "bigquery_location" {
@@ -54,7 +36,12 @@ variable "logs_bigquery_dataset" {
     dataset_id = string
     sink_name = string
   })
-  description = {{schemaDescription $props.logs_bigquery_dataset.description}}
+  description = <<EOF
+    {{$props.logs_bigquery_dataset.description}}
+
+    * dataset_id = {{$logsBigQueryProps.dataset_id.description}}
+    * sink_name = {{$logsBigQueryProps.sink_name.description}}
+  EOF
 }
 
 variable "logs_storage_bucket" {
@@ -62,7 +49,30 @@ variable "logs_storage_bucket" {
     name = string
     sink_name = string
   })
-  description = {{schemaDescription $props.logs_storage_bucket.description}}
+  description = <<EOF
+    {{$props.logs_storage_bucket.description}}
+
+    * name = {{$logsStorageProps.name.description}}
+    * sink_name = {{$logsStorageProps.sink_name.description}}
+  EOF
+}
+
+variable "parent_id" {
+  type        = string
+  description = {{schemaDescription $props.parent_id.description}}
+  validation {
+    condition     = can(regex("{{$props.parent_id.pattern}}", var.parent_id))
+    error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
+}
+
+variable "parent_type" {
+  type        = string
+  description = {{schemaDescription $props.parent_type.description}}
+  validation {
+    condition     = can(regex("{{$props.parent_type.pattern}}", var.parent_type))
+    error_message = "The parent_type must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
 }
 
 variable "storage_location" {
