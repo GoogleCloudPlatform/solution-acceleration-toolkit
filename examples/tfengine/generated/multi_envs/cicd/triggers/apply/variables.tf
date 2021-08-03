@@ -47,6 +47,7 @@ variable "run_on_push" {
 Whether or not to be automatically triggered from a PR/push to branch.
 Default to true.
 EOF
+  default     = true
 }
 
 variable "run_on_schedule" {
@@ -56,6 +57,7 @@ Whether or not to be automatically triggered according a specified schedule.
 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
 at Eastern Standard Time (EST). Default to none.
 EOF
+  default     = ""
 }
 
 variable "cloud_source_repository" {

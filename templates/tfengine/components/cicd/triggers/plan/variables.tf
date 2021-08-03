@@ -37,12 +37,14 @@ variable "skip" {
 
 variable "run_on_push" {
   type = bool
-  description = {{schemaDescription $triggerProps.apply.properties.run_on_push.description}}
+  description = {{schemaDescription $triggerProps.plan.properties.run_on_push.description}}
+  default     = {{$triggerProps.plan.properties.run_on_push.default}}
 }
 
 variable "run_on_schedule" {
   type = string
-  description = {{schemaDescription $triggerProps.apply.properties.run_on_schedule.description}}
+  description = {{schemaDescription $triggerProps.plan.properties.run_on_schedule.description}}
+  default     = {{$triggerProps.plan.properties.run_on_schedule.default}}
 }
 
 {{- if has . "cloud_source_repository"}}
