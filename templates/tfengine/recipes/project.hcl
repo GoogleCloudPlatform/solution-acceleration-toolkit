@@ -149,6 +149,14 @@ schema = {
         Additional Terraform configuration for the project deployment.
         For schema see ./deployment.hcl.
       EOF
+      type = "object"
+      properties = {
+        raw_config = {}
+	providers = {}
+	vars = {}
+	outputs = {}
+	states = {}
+      }
       additionalProperties = false
     }
   }
