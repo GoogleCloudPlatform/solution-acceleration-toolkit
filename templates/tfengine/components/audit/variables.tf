@@ -39,6 +39,8 @@ variable "logs_bigquery_dataset" {
   description = <<EOF
     {{$props.logs_bigquery_dataset.description}}
 
+    Fields:
+
     * dataset_id = {{$logsBigQueryProps.dataset_id.description}}
     * sink_name = {{$logsBigQueryProps.sink_name.description}}
   EOF
@@ -51,6 +53,8 @@ variable "logs_storage_bucket" {
   })
   description = <<EOF
     {{$props.logs_storage_bucket.description}}
+
+    Fields:
 
     * name = {{$logsStorageProps.name.description}}
     * sink_name = {{$logsStorageProps.sink_name.description}}

@@ -47,6 +47,8 @@ variable "logs_bigquery_dataset" {
   description = <<EOF
     Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity.
 
+    Fields:
+
     * dataset_id = ID of Bigquery Dataset.
     * sink_name = Name of the logs sink.
   EOF
@@ -59,6 +61,8 @@ variable "logs_storage_bucket" {
   })
   description = <<EOF
     GCS bucket to host audit logs for 7 years. Useful for HIPAA audit log retention requirements.
+
+    Fields:
 
     * name = Name of GCS bucket.
     * sink_name = Name of the logs sink.
