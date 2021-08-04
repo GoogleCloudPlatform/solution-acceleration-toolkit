@@ -12,16 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{$props := .__schema__.properties -}}
 variable "build_editors" {
   type = list(string)
-  description = "IAM members to grant cloudbuild.builds.editor role in the devops project to see CICD results."
-  default = []
+  description = {{schemaDescription $props.build_editors.description}}
+  default = {{$props.build_editors.default}}
 }
 
 variable "build_viewers" {
   type = list(string)
-  description = "IAM members to grant cloudbuild.builds.viewer role in the devops project to see CICD results."
-  default = []
+  description = {{schemaDescription $props.build_viewers.description}}
+  default = {{$props.build_viewers.default}}
 }
 
 variable "billing_account" {
@@ -40,13 +41,7 @@ variable "cloud_source_repository" {
     writers = list(string)
     {{- end}}
   })
-  description = <<EOF
-    Config for Google Cloud Source Repository.
-
-    IMPORTANT: Cloud Source Repositories does not support code review or presubmit runs. 
-    If you set both plan and apply to run at the same time, they will conflict and may error out. 
-    To get around this, for 'shared' and 'prod' environment, set 'apply' trigger to not 'run_on_push', and for other environments, do not specify the 'plan' trigger block and let 'apply' trigger 'run_on_push'.
-  EOF 
+  description = {{schemaDescription $props.cloud_source_repository.description}}
 }
 {{- end}}
 
@@ -57,7 +52,7 @@ variable "github" {
     owner = string
     name = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = {{schemaDescription $props.github.description}}
 }
 {{- end}}
 
@@ -84,17 +79,21 @@ variable "envs" {
       })
     })
   }))
-  description = "Config block for per-environment resources."
+  description = {{schemaDescription $props.envs.description}}
 }
 
 variable "project_id" {
   type        = string
-  description = "ID of project to deploy CICD in."
+  description = {{schemaDescription $props.project_id.description}}
+  validation {
+    condition     = can(regex("{{replace $props.project_id.pattern "\\" ""}}", var.project_id))
+    error_message = "The project_id must be valid. The project ID must be a unique string of 6 to 30 lowercase letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects#before_you_begin for more information about project id format."
+  }
 }
 
 variable "scheduler_region" {
   type        = string
-  description = "Region where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule."
+  description = {{schemaDescription $props.scheduler_region.description}}
 }
 
 variable "state_bucket" {
@@ -104,9 +103,7 @@ variable "state_bucket" {
 
 variable "terraform_root" {
   type = string
-  description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/".
-  EOF
+  description = {{schemaDescription $props.terraform_root.description}}
 }
 
 variable "terraform_root_prefix" {
