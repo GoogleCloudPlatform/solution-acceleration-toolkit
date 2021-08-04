@@ -25,6 +25,8 @@ variable "admins_group" {
   description = <<EOF
     Group which will be given admin access to the folder or organization.
 
+    Fields:
+
     * customer_id = Customer ID of the organization to create the group in.
 See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
 for how to obtain it.
@@ -84,6 +86,8 @@ variable "project" {
   description = <<EOF
     Config for the project to host devops resources such as remote state and CICD.
 
+    Fields:
+
     * apis = List of APIs enabled in the devops project.
 
 NOTE: If a CICD is deployed within this project, then the APIs of
@@ -101,6 +105,7 @@ for how to obtain it.
     ** exists Whether or not the group exists already. It will be created if not.
     ** id Email address of the group.
     ** owners Owners of the group.s
+    * project_id ID of project.s
   EOF
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project.project_id))

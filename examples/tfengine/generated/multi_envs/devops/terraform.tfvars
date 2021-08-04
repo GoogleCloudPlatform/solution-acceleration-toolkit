@@ -34,9 +34,13 @@ project = {
     display_name = "example-devops-owners"
     exists       = false
     id           = "example-devops-owners@example.com"
-    owners       = ["user1@example.com", ]
-    managers     = []
-    members      = []
+    owners = [
+      "user1@example.com",
+    ]
+    managers = [
+    ]
+    members = [
+    ]
   }
   project_id = "example-devops"
 }

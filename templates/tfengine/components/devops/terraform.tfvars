@@ -40,9 +40,21 @@ project = {
     display_name = "{{get .project.owners_group "display_name" $default_project_owners_group_display_name}}"
     exists       = {{get .project.owners_group "exists" false}}
     id           = "{{.project.owners_group.id}}"
-    owners       = [{{range get . "project.owners_group.owners"}}"{{.}}",{{end}}]
-    managers       = [{{range get . "project.owners_group.managers"}}"{{.}}",{{end}}]
-    members       = [{{range get . "project.owners_group.members"}}"{{.}}",{{end}}]
+    owners       = [
+      {{- range get . "project.owners_group.owners"}}
+      "{{.}}",
+      {{- end}}
+    ]
+    managers       = [
+      {{- range get . "project.owners_group.managers"}}
+      "{{.}}",
+      {{- end}}
+    ]
+    members       = [
+      {{- range get . "project.owners_group.members"}}
+      "{{.}}",
+      {{- end}}
+    ]
   }
   project_id = "{{.project.project_id}}"
 }
