@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{$props := .__schema__.properties -}}
+{{$envProps := $props.envs.items.properties -}}
+{{$triggerProps := $envProps.triggers.properties -}}
 billing_account   = "{{.billing_account}}"
 project_id        = "{{.project_id}}"
 scheduler_region  = "{{.scheduler_region}}"
@@ -67,7 +70,7 @@ envs = [
         validate = {
           skip = {{not (has .triggers "validate")}}
           {{- if has .triggers "validate"}}
-          run_on_push = {{get .triggers.validate "run_on_push" true}}
+          run_on_push = {{get .triggers.validate "run_on_push" $triggerProps.validate.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
           {{- else}}
           run_on_push = false
@@ -77,7 +80,7 @@ envs = [
         plan = {
           skip = {{not (has .triggers "plan")}}
           {{- if has .triggers "plan"}}
-          run_on_push = {{get .triggers.plan "run_on_push" true}}
+          run_on_push = {{get .triggers.plan "run_on_push" $triggerProps.plan.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
           {{- else}}
           run_on_push = false
@@ -87,7 +90,7 @@ envs = [
         apply = {
           skip = {{not (has .triggers "apply")}}
           {{- if has .triggers "apply"}}
-          run_on_push = {{get .triggers.apply "run_on_push" true}}
+          run_on_push = {{get .triggers.apply "run_on_push" $triggerProps.apply.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
           {{- else}}
           run_on_push = false
