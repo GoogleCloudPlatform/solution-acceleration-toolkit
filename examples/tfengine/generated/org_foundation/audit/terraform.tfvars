@@ -29,7 +29,7 @@ apis = [
 
 
 shared_vpc_attachment = {
-  host_project_id = "<no value>"
+  host_project_id = ""
   subnets = [
   ]
 }

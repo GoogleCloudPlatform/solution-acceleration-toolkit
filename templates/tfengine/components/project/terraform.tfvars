@@ -21,7 +21,7 @@
 {{hclField . "is_shared_vpc_host"}}
 {{hclField . "api_identities"}}
 shared_vpc_attachment = {
-  {{- $host := get . "shared_vpc_attachment.host_project_id"}}
+  {{- $host := get . "shared_vpc_attachment.host_project_id" ""}}
   host_project_id = "{{$host}}"
   subnets = [
     {{- range get . "shared_vpc_attachment.subnets"}}

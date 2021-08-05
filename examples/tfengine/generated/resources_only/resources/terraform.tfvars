@@ -26,7 +26,7 @@ billing_account = "000-000-000"
 
 
 shared_vpc_attachment = {
-  host_project_id = "<no value>"
+  host_project_id = ""
   subnets = [
   ]
 }

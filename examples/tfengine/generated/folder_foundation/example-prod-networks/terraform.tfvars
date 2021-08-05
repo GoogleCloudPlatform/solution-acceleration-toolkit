@@ -27,7 +27,7 @@ is_shared_vpc_host = true
 
 
 shared_vpc_attachment = {
-  host_project_id = "<no value>"
+  host_project_id = ""
   subnets = [
   ]
 }
