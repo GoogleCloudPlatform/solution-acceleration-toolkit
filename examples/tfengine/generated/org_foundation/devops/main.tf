@@ -68,7 +68,7 @@ module "owners_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.2"
 
-  count = var.project.owners_group.exists ? 1 : 0
+  count = var.project.owners_group.exists ? 0 : 1
 
   id           = var.project.owners_group.id
   customer_id  = var.project.owners_group.customer_id
@@ -85,7 +85,7 @@ module "owners_group" {
 # The group is not ready for IAM bindings right after creation. Wait for
 # a while before it is used.
 resource "time_sleep" "owners_wait" {
-  count = var.project.owners_group.exists ? 1 : 0
+  count = var.project.owners_group.exists ? 0 : 1
   depends_on = [
     module.owners_group,
   ]

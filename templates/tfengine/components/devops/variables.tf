@@ -85,13 +85,13 @@ variable "project" {
 
     * apis = {{$projectProps.apis.description}}
     * owners_group = {{$projectProps.owners_group.description}}
-    ** customer_id {{$projectOwnersGroupProps.customer_id.description}}
-    ** description {{$projectOwnersGroupProps.description.description}}
-    ** display_name {{$projectOwnersGroupProps.display_name.description}}
-    ** exists {{$projectOwnersGroupProps.exists.description}}
-    ** id {{$projectOwnersGroupProps.id.description}}
-    ** owners {{$projectOwnersGroupProps.owners.description}}s
-    * project_id {{$projectProps.project_id.description}}s
+    ** customer_id = {{$projectOwnersGroupProps.customer_id.description}}
+    ** description = {{$projectOwnersGroupProps.description.description}}
+    ** display_name = {{$projectOwnersGroupProps.display_name.description}}
+    ** exists = {{$projectOwnersGroupProps.exists.description}}
+    ** id = {{$projectOwnersGroupProps.id.description}}
+    ** owners = {{$projectOwnersGroupProps.owners.description}}
+    * project_id = {{$projectProps.project_id.description}}
   EOF
   validation {
     condition     = can(regex("{{replace $props.project.properties.project_id.pattern "\\" ""}}", var.project.project_id))

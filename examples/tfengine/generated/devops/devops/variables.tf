@@ -97,15 +97,15 @@ all resources managed by the CICD must be listed here
 NOTE: By default, the creating user will be the owner of the project.
 However, this group will own the project going forward. Make sure to include
 yourselve in the group,
-    ** customer_id Customer ID of the organization to create the group in.
+    ** customer_id = Customer ID of the organization to create the group in.
 See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
 for how to obtain it.
-    ** description Description of the group.
-    ** display_name Display name of the group.
-    ** exists Whether or not the group exists already. It will be created if not.
-    ** id Email address of the group.
-    ** owners Owners of the group.s
-    * project_id ID of project.s
+    ** description = Description of the group.
+    ** display_name = Display name of the group.
+    ** exists = Whether or not the group exists already. It will be created if not.
+    ** id = Email address of the group.
+    ** owners = Owners of the group.
+    * project_id = ID of project.
   EOF
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project.project_id))
