@@ -47,6 +47,8 @@ variable "api_identities" {
   description = <<EOF
     {{$projectProps.api_identities.description}}
 
+    Fields:
+
     * api = {{$apiIdentitiesProps.api.description}}
     * roles = {{$apiIdentitiesProps.roles.description}}
   EOF
@@ -92,6 +94,8 @@ variable "shared_vpc_attachment" {
   description = <<EOF
     {{$projectProps.shared_vpc_attachment.description}}
     
+    Fields:
+
     * host_project_id = {{$sharedVpcProps.host_project_id.description}} 
     * subnets = {{$sharedVpcProps.subnets.description}} 
   EOF

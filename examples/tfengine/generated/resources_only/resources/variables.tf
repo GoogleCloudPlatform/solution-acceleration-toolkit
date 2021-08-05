@@ -56,6 +56,8 @@ Any roles (e.g. service agent role) must be explicitly listed.
 See <https://cloud.google.com/iam/docs/understanding-roles#service-agent-roles-roles>
 for a list of related roles.
 
+    Fields:
+
     * api = The API whose default Service Agent will be force-created and granted the roles. Example: healthcare.googleapis.com.
     * roles = Roles to granted to the API Service Agent.
   EOF
@@ -101,6 +103,8 @@ variable "shared_vpc_attachment" {
   description = <<EOF
     If set, treats this project as a shared VPC service project.
     
+    Fields:
+
     * host_project_id = ID of host project to connect this project to. 
     * subnets = Subnets within the host project to grant this project access to. 
   EOF
