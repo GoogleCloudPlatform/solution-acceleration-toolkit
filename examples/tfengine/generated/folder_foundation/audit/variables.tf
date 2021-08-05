@@ -86,7 +86,7 @@ Must be one of 'organization' or 'folder'."
 EOF
   validation {
     condition     = can(regex("^organization|folder$", var.parent_type))
-    error_message = "The parent_type must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+    error_message = "The parent_type must be valid. Should be either folder or organization."
   }
 }
 

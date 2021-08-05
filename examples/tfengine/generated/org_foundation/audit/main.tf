@@ -49,7 +49,7 @@ module "project" {
     "logging.googleapis.com",
   ]
 }
-# IAM Organization Audit log configs to enable collection of all possible audit logs.
+# Organization IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
   count = var.parent_type == "organization" ? 1 : 0
 
@@ -67,7 +67,7 @@ resource "google_organization_iam_audit_config" "config" {
   }
 }
 
-# IAM Folder Audit log configs to enable collection of all possible audit logs.
+# Folder IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_folder_iam_audit_config" "config" {
   count = var.parent_type == "folder" ? 1 : 0
 
@@ -151,7 +151,7 @@ resource "google_project_iam_member" "logs_viewers_auditors" {
   member  = "group:${var.auditors_group}"
 }
 
-# IAM organization permissions to grant log Auditors iam.securityReviewer role to view the logs.
+# Organization IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
 resource "google_organization_iam_member" "security_reviewer_auditors" {
   count = var.parent_type == "organization" ? 1 : 0
 
@@ -160,7 +160,7 @@ resource "google_organization_iam_member" "security_reviewer_auditors" {
   member = "group:${var.auditors_group}"
 }
 
-# IAM folder permissions to grant log Auditors iam.securityReviewer role to view the logs.
+# Folder IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
 resource "google_folder_iam_member" "security_reviewer_auditors" {
   count = var.parent_type == "folder" ? 1 : 0
 
