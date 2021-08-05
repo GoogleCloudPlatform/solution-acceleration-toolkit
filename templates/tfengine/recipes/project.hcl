@@ -41,8 +41,7 @@ schema = {
         Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type    = "string"
-      # TODO(ernestognw): Find an alternative to keep this in multi_envs
-      # It uses an output that breaks this pattern
+      # TODO(#987): Uncomment with correct pattern when solved
       # pattern = "^[0-9]{8,25}$"
       pattern = ""
     }
