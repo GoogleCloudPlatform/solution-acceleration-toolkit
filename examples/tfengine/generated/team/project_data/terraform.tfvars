@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-project_id      = "example-prod-data"
-parent_type     = "folder"
-parent_id       = "12345678"
+project_id = "example-prod-data"
+
+parent_type = "folder"
+
+parent_id = "12345678"
+
 billing_account = "000-000-000"
+
 apis = [
   "bigquery.googleapis.com",
   "compute.googleapis.com",

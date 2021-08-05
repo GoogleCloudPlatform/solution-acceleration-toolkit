@@ -14,10 +14,14 @@
 
 exists = true
 
-project_id      = "example-prod-project"
-parent_type     = "folder"
-parent_id       = "12345678"
+project_id = "example-prod-project"
+
+parent_type = "folder"
+
+parent_id = "12345678"
+
 billing_account = "000-000-000"
+
 
 
 

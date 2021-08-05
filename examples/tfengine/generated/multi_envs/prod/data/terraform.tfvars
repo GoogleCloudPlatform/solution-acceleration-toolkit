@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-project_id      = "example-data-prod"
-parent_type     = "folder"
-parent_id       = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
+project_id = "example-data-prod"
+
+parent_type = "folder"
+
+parent_id = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
+
 billing_account = "000-000-000"
-apis            = ["compute.googleapis.com"]
+
+apis = ["compute.googleapis.com"]
 
 is_shared_vpc_host = true
 

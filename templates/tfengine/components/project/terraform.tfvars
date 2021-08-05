@@ -13,10 +13,10 @@
 # limitations under the License.
 
 {{hclField . "exists"}}
-project_id = "{{.project_id}}"
-parent_type = "{{.parent_type}}"
-parent_id = "{{.parent_id}}"
-billing_account = "{{.billing_account}}" 
+{{hclField . "project_id"}}
+{{hclField . "parent_type"}}
+{{hclField . "parent_id"}}
+{{hclField . "billing_account"}}
 {{hclField . "apis"}}
 {{hclField . "is_shared_vpc_host"}}
 {{hclField . "api_identities"}}

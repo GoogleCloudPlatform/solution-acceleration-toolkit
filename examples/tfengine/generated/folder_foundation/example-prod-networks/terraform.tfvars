@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-project_id      = "example-prod-networks"
-parent_type     = "folder"
-parent_id       = "12345678"
+project_id = "example-prod-networks"
+
+parent_type = "folder"
+
+parent_id = "12345678"
+
 billing_account = "000-000-000"
-apis            = ["compute.googleapis.com"]
+
+apis = ["compute.googleapis.com"]
 
 is_shared_vpc_host = true
 
