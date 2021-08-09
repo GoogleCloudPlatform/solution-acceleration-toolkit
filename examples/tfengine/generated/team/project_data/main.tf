@@ -33,16 +33,6 @@ data "google_secret_manager_secret_version" "db_password" {
   project = "example-prod-secrets"
 }
 
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
