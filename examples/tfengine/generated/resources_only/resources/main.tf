@@ -30,8 +30,6 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  count = var.exists ? 1 : 0
-
   project_id    = var.project_id
   activate_apis = var.apis
 }

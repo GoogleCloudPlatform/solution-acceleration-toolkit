@@ -39,8 +39,6 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  count = var.exists ? 0 : 1
-
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
   folder_id       = var.parent_type == "folder" ? var.parent_id : ""
