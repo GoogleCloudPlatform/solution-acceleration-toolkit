@@ -87,10 +87,11 @@ variable "shared_vpc_attachment" {
     host_project_id = string
     subnets = list(string)
   })
-  validation {
-    condition     = can(regex("{{replace $sharedVpcProps.host_project_id.pattern "\\" ""}}", var.shared_vpc_attachment.host_project_id))
-    error_message = "Invalid shared_vpc_attachment.host_project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
-  }
+  # TODO(#987): Uncomment when terraformPattern is implemented for this field
+  # validation {
+  #   condition     = can(regex("{{replace $sharedVpcProps.host_project_id.pattern "\\" ""}}", var.shared_vpc_attachment.host_project_id))
+  #   error_message = "Invalid shared_vpc_attachment.host_project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
+  # }
   description = <<EOF
     {{$projectProps.shared_vpc_attachment.description}}
     
