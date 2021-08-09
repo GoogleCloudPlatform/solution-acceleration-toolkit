@@ -25,12 +25,24 @@ terraform {
   }
 }
 
+module "existing_project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 11.1.0"
+
+  count = var.exists ? 1 : 0
+
+  project_id    = var.project_id
+  activate_apis = var.apis
+}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
+
+  count = var.exists ? 0 : 1
 
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
@@ -60,7 +72,7 @@ module "example_network" {
   version = "~> 3.3.0"
 
   network_name = "example-network"
-  project_id   = module.project.project_id
+  project_id   = var.project_id
 
   subnets = [
     {
@@ -78,7 +90,7 @@ module "forseti_router" {
   version = "~> 1.1.0"
 
   name    = "forseti-router"
-  project = module.project.project_id
+  project = var.project_id
   region  = "us-central1"
   network = module.example_network.network.network.self_link
 
