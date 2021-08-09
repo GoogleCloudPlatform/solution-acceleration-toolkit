@@ -234,12 +234,14 @@ template "project_data_dev" {
         }
       }]
     }
-    terraform_addons = {
-      states = [
-        {
-          prefix = "folders"
-        }
-      ]
+    deployment = {
+      terraform_addons = {
+        states = [
+          {
+            prefix = "folders"
+          }
+        ]
+      }
     }
   }
 }
@@ -267,12 +269,14 @@ template "project_data_prod" {
         }
       }]
     }
-    terraform_addons = {
-      states = [
-        {
-          prefix = "folders"
-        }
-      ]
+    deployment = {
+      terraform_addons = {
+        states = [
+          {
+            prefix = "folders"
+          }
+        ]
+      }
     }
   }
 }

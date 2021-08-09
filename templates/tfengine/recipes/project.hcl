@@ -144,23 +144,23 @@ schema = {
         See [resources.md](./resources.md) for schema.
       EOF
     }
-    terraform_addons = {
+    deployment = {
       description = <<EOF
-        Additional Terraform configuration for the project deployment.
-        For schema see ./deployment.hcl.
+        Resources in this project.
+        See [resources.md](./resources.md) for schema.
       EOF
-      type = "object"
-      patternProperties = {
-        "^raw_config|providers|vars|outputs|states$" = {}
-      }
-      additionalProperties = false
     }
   }
 }
 
+{{if has . "deployment"}}
 template "deployment" {
-  recipe_path = "./deployment.hcl"
+  recipe_path="./deployment.hcl"
+  flatten {
+    key = "deployment"
+  }
 }
+{{end}}
 
 template "project" {
   component_path = "../components/project"

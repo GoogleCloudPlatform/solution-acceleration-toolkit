@@ -47,27 +47,29 @@ template "project_secrets" {
         },
       ]
     }
-    terraform_addons = {
-      providers = [
-        {
-          name = "google",
-          version_constraints = ">=3.0, <= 3.71"
-        },
-        {
-          name = "google-beta",
-          version_constraints = "~>3.50"
-        },
-        {
-          name = "null",
-          version_constraints = "~> 3.0"
-        }
-      ]
-      raw_config = <<EOF
-resource "random_password" "db" {
-  length = 16
-  special = true
-}
-EOF
+    deployment = {
+      terraform_addons = {
+        providers = [
+          {
+            name = "google",
+            version_constraints = ">=3.0, <= 3.71"
+          },
+          {
+            name = "google-beta",
+            version_constraints = "~>3.50"
+          },
+          {
+            name = "null",
+            version_constraints = "~> 3.0"
+          }
+        ]
+        raw_config = <<EOF
+          resource "random_password" "db" {
+            length = 16
+            special = true
+          }
+        EOF
+      }
     }
   }
 }
@@ -251,14 +253,16 @@ template "project_apps" {
         }]
       }]
     }
-    terraform_addons = {
+    deployment = {
+      terraform_addons = {
       raw_config = <<EOF
-resource "google_compute_address" "static" {
-  name    = "static-ipv4-address"
-  project = module.project.project_id
-  region  = "{{.default_location}}"
-}
-EOF
+        resource "google_compute_address" "static" {
+          name    = "static-ipv4-address"
+          project = module.project.project_id
+          region  = "{{.default_location}}"
+        }
+      EOF
+      }
     }
   }
 }
@@ -433,16 +437,18 @@ EOF
         ]
       }]
     }
-    terraform_addons = {
-      raw_config = <<EOF
-# The secret project must be deployed first so this value is available.
-data "google_secret_manager_secret_version" "db_password" {
-  provider = google-beta
+    deployment = {
+      terraform_addons = {
+        raw_config = <<EOF
+        # The secret project must be deployed first so this value is available.
+        data "google_secret_manager_secret_version" "db_password" {
+          provider = google-beta
 
-  secret  = "auto-sql-db-password"
-  project = "{{.prefix}}-{{.env}}-secrets"
-}
-EOF
+          secret  = "auto-sql-db-password"
+          project = "{{.prefix}}-{{.env}}-secrets"
+        }
+        EOF
+      }
     }
   }
 }
