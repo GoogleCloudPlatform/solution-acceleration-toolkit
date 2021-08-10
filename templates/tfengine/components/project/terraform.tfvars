@@ -26,7 +26,7 @@ shared_vpc_attachment = {
   {{- $host := get . "shared_vpc_attachment.host_project_id" ""}}
   host_project_id = "{{$host}}"
   subnets = [
-    {{- range get . "shared_vpc_attachment.subnets"}}
+    {{- range get . "shared_vpc_attachment.subnets" nil}}
     {{- $region := get . "compute_region" $.compute_region}}
     "projects/{{$host}}/regions/{{$region}}/subnetworks/{{.name}}",
     {{- end}}
