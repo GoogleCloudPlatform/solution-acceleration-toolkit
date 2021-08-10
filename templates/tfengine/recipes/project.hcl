@@ -164,7 +164,6 @@ schema = {
   }
 }
 
-
 template "deployment" {
   recipe_path = "./deployment.hcl"
   {{if has . "terraform_addons"}}
