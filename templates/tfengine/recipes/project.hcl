@@ -149,12 +149,29 @@ schema = {
         Additional Terraform configuration for the project deployment.
         For schema see ./deployment.hcl.
       EOF
+      type = "object"
+      // List top level attributes so they are validated as part of the "project.hcl" recipe schema.
+      // Inner attributes are validated in the "deployment.hcl" recipe.
+      properties = {
+        raw_config = {}
+        providers = {}
+        vars = {}
+        outputs = {}
+        states = {}
+      }
+      additionalProperties = false
     }
   }
 }
 
+
 template "deployment" {
   recipe_path = "./deployment.hcl"
+  {{if has . "terraform_addons"}}
+  flatten {
+    key = "terraform_addons"
+  }
+  {{end}}
 }
 
 template "project" {

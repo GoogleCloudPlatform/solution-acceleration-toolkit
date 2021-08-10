@@ -24,4 +24,9 @@
 | resources | Resources in this project. See [resources.md](./resources.md) for schema. | - | false | - | - |
 | state_bucket | Bucket to store remote state. | string | false | - | - |
 | state_path_prefix | Path within bucket to store state. Defaults to the template's output_path. | string | false | - | - |
-| terraform_addons | Additional Terraform configuration for the project deployment. For schema see ./deployment.hcl. | - | false | - | - |
+| terraform_addons | Additional Terraform configuration for the project deployment. For schema see ./deployment.hcl. | object | false | - | - |
+| terraform_addons.outputs | - | - | false | - | - |
+| terraform_addons.providers | - | - | false | - | - |
+| terraform_addons.raw_config | - | - | false | - | - |
+| terraform_addons.states | - | - | false | - | - |
+| terraform_addons.vars | - | - | false | - | - |

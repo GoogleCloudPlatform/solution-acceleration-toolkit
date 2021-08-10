@@ -155,7 +155,11 @@ template "terraform" {
   {{end}}
 }
 
-{{if has . "terraform_addons.vars"}}
+// The key "terraform_addons" could be flattened at one level above
+// where "deployment.hcl" recipe is used, e.g. "project.hcl".
+// "deployment.hcl" can also be directly used, in which case "terraform_addons"
+// is not flattened.
+{{if or (has . "vars") (has . "terraform_addons.vars")}}
 template "vars" {
   component_path = "../components/terraform/variables"
   {{if has . "terraform_addons"}}
@@ -166,7 +170,11 @@ template "vars" {
 }
 {{end}}
 
-{{if has . "terraform_addons.outputs"}}
+// The key "terraform_addons" could be flattened at one level above
+// where "deployment.hcl" recipe is used, e.g. "project.hcl".
+// "deployment.hcl" can also be directly used, in which case "terraform_addons"
+// is not flattened.
+{{if or (has . "outputs") (has . "terraform_addons.outputs")}}
 template "outputs" {
   component_path = "../components/terraform/outputs"
   {{if has . "terraform_addons"}}
@@ -177,7 +185,11 @@ template "outputs" {
 }
 {{end}}
 
-{{if has . "terraform_addons.states"}}
+// The key "terraform_addons" could be flattened at one level above
+// where "deployment.hcl" recipe is used, e.g. "project.hcl".
+// "deployment.hcl" can also be directly used, in which case "terraform_addons"
+// is not flattened.
+{{if or (has . "states") (has . "terraform_addons.states")}}
 template "states" {
   component_path = "../components/terraform/states"
   {{if has . "terraform_addons"}}
