@@ -219,7 +219,7 @@ template "project_data_dev" {
   output_path = "./dev/data"
   data = {
     parent_type = "folder"
-    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"dev\"]}"
+    parent_id   = "data.terraform_remote_state.folders.outputs.folder_ids[\"dev\"]"
     project = {
       project_id = "example-data-dev"
       apis = [
@@ -251,7 +251,7 @@ template "project_data_prod" {
   output_path = "./prod/data"
   data = {
     parent_type = "folder"
-    parent_id   = "$${data.terraform_remote_state.folders.outputs.folder_ids[\"prod\"]}"
+    parent_id   = "data.terraform_remote_state.folders.outputs.folder_ids[\"prod\"]"
     project = {
       project_id         = "example-data-prod"
       is_shared_vpc_host = true

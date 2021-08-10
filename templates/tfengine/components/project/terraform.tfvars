@@ -15,7 +15,9 @@
 {{hclField . "exists"}}
 {{hclField . "project_id"}}
 {{hclField . "parent_type"}}
+{{if not (isDotNotation .parent_id) -}}
 {{hclField . "parent_id"}}
+{{- end}}
 {{hclField . "billing_account"}}
 {{hclField . "apis"}}
 {{hclField . "is_shared_vpc_host"}}

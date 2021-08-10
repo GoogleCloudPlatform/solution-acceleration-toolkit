@@ -17,7 +17,6 @@ project_id = "example-data-dev"
 
 parent_type = "folder"
 
-parent_id = data.terraform_remote_state.folders.outputs.folder_ids["dev"]
 
 billing_account = "000-000-000"
 

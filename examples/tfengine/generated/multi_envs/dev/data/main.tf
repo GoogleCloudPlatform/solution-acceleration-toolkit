@@ -52,8 +52,8 @@ module "project" {
   count = var.exists ? 0 : 1
 
   name            = var.project_id
-  org_id          = var.parent_type == "organization" ? var.parent_id : ""
-  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  org_id          = var.parent_type == "organization" ? data.terraform_remote_state.folders.outputs.folder_ids["dev"] : ""
+  folder_id       = var.parent_type == "folder" ? data.terraform_remote_state.folders.outputs.folder_ids["dev"] : ""
   billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.

@@ -29,8 +29,13 @@ module "project" {
   count = var.exists ? 0 : 1
 
   name            = var.project_id
+  {{if isDotNotation .parent_id -}}
+  org_id          = var.parent_type == "organization" ? {{.parent_id}} : ""
+  folder_id       = var.parent_type == "folder" ? {{.parent_id}} : ""
+  {{- else -}}
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
   folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  {{- end}}
   billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.

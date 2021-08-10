@@ -36,6 +36,7 @@ var funcMap = map[string]interface{}{
 	"regexReplaceAll":   regexReplaceAll,
 	"makeSlice":         makeSlice,
 	"schemaDescription": schemaDescription,
+	"isDotNotation":     isDotNotation,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -155,4 +156,13 @@ func schemaDescription(s string) string {
 	}
 
 	return fmt.Sprintf(`"%s"`, s)
+}
+
+// isDotNotation returns if a string is a reference to another
+// resource or module. It is used to conditional render variables
+// when these are not actual variables but references
+func isDotNotation(s string) (bool, error) {
+	// Accepts complex dot notation such as:
+	// - data["foo"][123].bar["baz"].foo
+	return regexp.MatchString("^([\\w]+(\\[((\"\\w+\")|\\d+)\\])*\\.[\\w]+(\\[((\"\\w+\")|\\d+)\\])*)+$", s)
 }
