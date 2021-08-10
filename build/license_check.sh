@@ -21,7 +21,7 @@ go version
 
 # Install license headers checker.
 # Switch directories to avoid changing go.mod and go.sum files (see https://stackoverflow.com/a/57313319).
-(cd / && go get -u github.com/google/addlicense)
+(cd / && go install github.com/google/addlicense@latest)
 
 # Check for missing license headers
 missing="$(addlicense -check .)"
