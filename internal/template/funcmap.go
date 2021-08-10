@@ -162,6 +162,10 @@ func schemaDescription(s string) string {
 // resource or module. It is used to conditional render variables
 // when these are not actual variables but references
 func isDotNotation(s string) (bool, error) {
+	// Parts:
+	// [\w]+									-> Starts with a word
+	// (\[((\"\w+\")|\d+)\])* -> Might be followed by map/array notation several times
+	// \.											-> Has a point in between
 	// Accepts complex dot notation such as:
 	// - data["foo"][123].bar["baz"].foo
 	return regexp.MatchString("^([\\w]+(\\[((\"\\w+\")|\\d+)\\])*\\.[\\w]+(\\[((\"\\w+\")|\\d+)\\])*)+$", s)
