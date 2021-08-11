@@ -53,7 +53,7 @@ module "bigquery_destination" {
   version = "~> 6.0.0"
 
   dataset_name             = var.logs_bigquery_dataset.dataset_id
-  project_id               = module.project[0].project_id
+  project_id               = module.project.project_id
   location                 = var.bigquery_location
   log_sink_writer_identity = "${module.bigquery_export.writer_identity}"
   expiration_days          = 365
@@ -80,7 +80,7 @@ module "storage_destination" {
   version = "~> 6.0.0"
 
   storage_bucket_name      = var.logs_storage_bucket.name
-  project_id               = module.project[0].project_id
+  project_id               = module.project.project_id
   location                 = var.storage_location
   log_sink_writer_identity = "${module.storage_export.writer_identity}"
   storage_class            = "COLDLINE"
@@ -96,7 +96,7 @@ resource "google_project_iam_member" "logs_viewers_auditors" {
     "roles/bigquery.user",
     "roles/storage.objectViewer",
   ])
-  project = module.project[0].project_id
+  project = module.project.project_id
   role    = each.key
   member  = "group:${var.auditors_group}"
 }

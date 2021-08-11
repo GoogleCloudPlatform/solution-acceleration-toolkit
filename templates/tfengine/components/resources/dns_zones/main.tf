@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 3.1.0"
 
   name       = "{{.name}}"
-  project_id = var.exists ? var.project_id : module.project[0].project_id
+  project_id = var.exists ? var.project_id : module.project.project_id
   domain     = "{{.domain}}"
   type       = "{{.type}}"
 

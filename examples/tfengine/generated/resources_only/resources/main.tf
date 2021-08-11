@@ -25,16 +25,6 @@ terraform {
   }
 }
 
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -42,8 +32,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  count = var.exists ? 0 : 1
-
+  project_id      = var.exists ? var.project_id : ""
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
   folder_id       = var.parent_type == "folder" ? var.parent_id : ""
@@ -64,7 +53,7 @@ module "project" {
   shared_vpc_subnets   = var.shared_vpc_attachment.subnets
   activate_apis        = var.apis
 
-  activate_api_identities = var.api_identities
+  activate_api_identities = var.exists ? [] : var.api_identities
 }
 
 module "one_billion_ms_example_dataset" {
@@ -72,7 +61,7 @@ module "one_billion_ms_example_dataset" {
   version = "~> 4.5.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
-  project_id                  = var.exists ? var.project_id : module.project[0].project_id
+  project_id                  = var.exists ? var.project_id : module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
   access = [
@@ -96,7 +85,7 @@ module "example_healthcare_dataset" {
   version = "~> 2.1.0"
 
   name     = "example-healthcare-dataset"
-  project  = var.exists ? var.project_id : module.project[0].project_id
+  project  = var.exists ? var.project_id : module.project.project_id
   location = "us-central1"
 
   iam_members = [
@@ -151,7 +140,7 @@ resource "google_service_account" "example_sa" {
 
   description = "Example Service Account"
 
-  project = var.exists ? var.project_id : module.project[0].project_id
+  project = var.exists ? var.project_id : module.project.project_id
 }
 
 module "example_prod_bucket" {
@@ -159,7 +148,7 @@ module "example_prod_bucket" {
   version = "~> 1.4"
 
   name       = "example-prod-bucket"
-  project_id = var.exists ? var.project_id : module.project[0].project_id
+  project_id = var.exists ? var.project_id : module.project.project_id
   location   = "us-central1"
 
   labels = {

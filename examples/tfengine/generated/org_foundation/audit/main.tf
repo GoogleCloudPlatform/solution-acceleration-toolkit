@@ -25,16 +25,6 @@ terraform {
   }
 }
 
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -42,8 +32,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  count = var.exists ? 0 : 1
-
+  project_id      = var.exists ? var.project_id : ""
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
   folder_id       = var.parent_type == "folder" ? var.parent_id : ""
@@ -64,7 +53,7 @@ module "project" {
   shared_vpc_subnets   = var.shared_vpc_attachment.subnets
   activate_apis        = var.apis
 
-  activate_api_identities = var.api_identities
+  activate_api_identities = var.exists ? [] : var.api_identities
 }
 
 
@@ -102,7 +91,7 @@ module "bigquery_destination" {
   version = "~> 6.0.0"
 
   dataset_name             = var.logs_bigquery_dataset.dataset_id
-  project_id               = module.project[0].project_id
+  project_id               = module.project.project_id
   location                 = var.bigquery_location
   log_sink_writer_identity = module.bigquery_export.writer_identity
   expiration_days          = 365
@@ -129,7 +118,7 @@ module "storage_destination" {
   version = "~> 6.0.0"
 
   storage_bucket_name      = var.logs_storage_bucket.name
-  project_id               = module.project[0].project_id
+  project_id               = module.project.project_id
   location                 = var.storage_location
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
@@ -145,7 +134,7 @@ resource "google_project_iam_member" "logs_viewers_auditors" {
     "roles/bigquery.user",
     "roles/storage.objectViewer",
   ])
-  project = module.project[0].project_id
+  project = module.project.project_id
   role    = each.key
   member  = "group:${var.auditors_group}"
 }
