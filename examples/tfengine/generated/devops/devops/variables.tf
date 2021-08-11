@@ -62,10 +62,11 @@ variable "parent_type" {
 Type of parent GCP resource to apply the policy.
 Must be one of 'organization' or 'folder'.
 EOF
-  validation {
-    condition     = can(regex("^organization|folder$", var.parent_type))
-    error_message = "The parent_type must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
-  }
+  # TODO(#987): Uncomment when terraformPattern is implemented for this field
+  # validation {
+  #   condition     = can(regex("^organization|folder$", var.parent_type))
+  #   error_message = "The parent_type must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  # }
 }
 
 variable "project" {
