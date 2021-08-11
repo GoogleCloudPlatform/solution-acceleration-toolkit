@@ -87,7 +87,7 @@ module "owners_group" {
 resource "time_sleep" "owners_wait" {
   count = var.project.owners_group.exists ? 0 : 1
   depends_on = [
-    module.owners_group,
+    module.owners_group[0],
   ]
   create_duration = "15s"
 }
@@ -96,7 +96,7 @@ resource "time_sleep" "owners_wait" {
 resource "google_project_iam_binding" "devops_owners" {
   project    = module.project.project_id
   role       = "roles/owner"
-  members    = ["group:${var.project.owners_group.exists ? var.project.owners_group.id : module.owners_group.id}"]
+  members    = ["group:${var.project.owners_group.exists ? var.project.owners_group.id : module.owners_group[0].id}"]
   depends_on = [time_sleep.owners_wait]
 }
 
@@ -124,7 +124,7 @@ module "admins_group" {
 resource "time_sleep" "admins_wait" {
   count = var.admins_group.exists ? 1 : 0
   depends_on = [
-    module.admins_group,
+    module.admins_group[0],
   ]
   create_duration = "15s"
 }
@@ -133,7 +133,7 @@ resource "google_organization_iam_member" "admin" {
   count      = var.parent_type == "organization" ? 1 : 0
   org_id     = var.parent_id
   role       = "roles/resourcemanager.organizationAdmin"
-  member     = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group.id}"
+  member     = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group[0].id}"
   depends_on = [time_sleep.admins_wait]
 }
 
@@ -141,6 +141,6 @@ resource "google_folder_iam_member" "admin" {
   count      = var.parent_type == "folder" ? 1 : 0
   folder     = "folders/${var.parent_id}"
   role       = "roles/resourcemanager.folderAdmin"
-  member     = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group.id}"
+  member     = "group:${var.admins_group.exists ? var.admins_group.id : module.admins_group[0].id}"
   depends_on = [time_sleep.admins_wait]
 }
