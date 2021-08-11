@@ -79,7 +79,7 @@ module "example_bucket_prod" {
   version = "~> 1.4"
 
   name       = "example-bucket-prod"
-  project_id = var.project_id
+  project_id = var.exists ? var.project_id : module.project[0].project_id
   location   = "us-central1"
 
   labels = {

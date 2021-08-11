@@ -72,9 +72,9 @@ module "bastion_vm" {
   version = "~> 3.2.0"
 
   name         = "bastion-vm"
-  project      = var.project_id
+  project      = var.exists ? var.project_id : module.project[0].project_id
   zone         = "us-central1-a"
-  host_project = var.project_id
+  host_project = var.exists ? var.project_id : module.project[0].project_id
   network      = module.network.network.network.self_link
   subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
   members      = ["serviceAccount:${google_service_account.bastion_accessor.email}"]
@@ -102,7 +102,7 @@ module "network" {
   version = "~> 3.3.0"
 
   network_name = "network"
-  project_id   = var.project_id
+  project_id   = var.exists ? var.project_id : module.project[0].project_id
 
   subnets = [
     {
@@ -144,7 +144,7 @@ module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 4.5.0"
 
-  project_id  = var.project_id
+  project_id  = var.exists ? var.project_id : module.project[0].project_id
   vpc_network = module.network.network_name
   depends_on = [
     module.project
@@ -156,7 +156,7 @@ module "router" {
   version = "~> 1.1.0"
 
   name    = "router"
-  project = var.project_id
+  project = var.exists ? var.project_id : module.project[0].project_id
   region  = "us-central1"
   network = module.network.network.network.self_link
 
@@ -182,5 +182,5 @@ resource "google_service_account" "bastion_accessor" {
 
   description = "Placeholder service account to use as members who can access the bastion host."
 
-  project = var.project_id
+  project = var.exists ? var.project_id : module.project[0].project_id
 }

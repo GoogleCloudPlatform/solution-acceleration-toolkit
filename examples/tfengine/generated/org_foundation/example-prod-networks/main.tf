@@ -72,7 +72,7 @@ module "example_network" {
   version = "~> 3.3.0"
 
   network_name = "example-network"
-  project_id   = var.project_id
+  project_id   = var.exists ? var.project_id : module.project[0].project_id
 
   subnets = [
     {
@@ -90,7 +90,7 @@ module "forseti_router" {
   version = "~> 1.1.0"
 
   name    = "forseti-router"
-  project = var.project_id
+  project = var.exists ? var.project_id : module.project[0].project_id
   region  = "us-central1"
   network = module.example_network.network.network.self_link
 
