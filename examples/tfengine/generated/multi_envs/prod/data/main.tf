@@ -37,7 +37,7 @@ data "terraform_remote_state" "folders" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 
 module "project" {
-  source  = "terraform-google-modules/zaproject-factory/google"
+  source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
   project_id      = var.exists ? var.project_id : ""

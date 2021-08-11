@@ -17,7 +17,7 @@ limitations under the License. */ -}}
   {{- $submodule = "//modules/project_services"}}
 {{- end}}
 module "project" {
-  source  = "terraform-google-modules/zaproject-factory/google{{$submodule}}"
+  source  = "terraform-google-modules/project-factory/google{{$submodule}}"
   version = "~> 11.1.0"
 
   project_id      = var.exists ? var.project_id : ""
