@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 
 module "project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_service"
+  source  = "terraform-google-modules/zaproject-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
   project_id      = var.exists ? var.project_id : ""
