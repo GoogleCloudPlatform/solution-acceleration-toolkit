@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-folder         = "folders/12345678"
+parent_id      = "12345678"
+parent_type    = "folder"
 auditors_group = "example-auditors@example.com"
 additional_filters = [
   "logName:\"logs/forseti\"",

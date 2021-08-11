@@ -49,11 +49,29 @@ module "project" {
     "logging.googleapis.com",
   ]
 }
-
-
-# IAM Audit log configs to enable collection of all possible audit logs.
+# Organization IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
-  org_id  = var.org_id
+  count = var.parent_type == "organization" ? 1 : 0
+
+  org_id  = var.parent_id
+  service = "allServices"
+
+  audit_log_config {
+    log_type = "DATA_READ"
+  }
+  audit_log_config {
+    log_type = "DATA_WRITE"
+  }
+  audit_log_config {
+    log_type = "ADMIN_READ"
+  }
+}
+
+# Folder IAM Audit log configs to enable collection of all possible audit logs.
+resource "google_folder_iam_audit_config" "config" {
+  count = var.parent_type == "folder" ? 1 : 0
+
+  folder  = "folder/${var.parent_id}"
   service = "allServices"
 
   audit_log_config {
@@ -74,8 +92,8 @@ module "bigquery_export" {
   log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = module.bigquery_destination.destination_uri
   filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
-  parent_resource_type   = "organization"
-  parent_resource_id     = var.org_id
+  parent_resource_type   = var.parent_type
+  parent_resource_id     = var.parent_id
   unique_writer_identity = true
   include_children       = true
 }
@@ -98,8 +116,8 @@ module "storage_export" {
   log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = module.storage_destination.destination_uri
   filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
-  parent_resource_type   = "organization"
-  parent_resource_id     = var.org_id
+  parent_resource_type   = var.parent_type
+  parent_resource_id     = var.parent_id
   unique_writer_identity = true
   include_children       = true
 }
@@ -133,9 +151,20 @@ resource "google_project_iam_member" "logs_viewers_auditors" {
   member  = "group:${var.auditors_group}"
 }
 
-# IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
+# Organization IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
 resource "google_organization_iam_member" "security_reviewer_auditors" {
-  org_id = var.org_id
+  count = var.parent_type == "organization" ? 1 : 0
+
+  org_id = var.parent_id
+  role   = "roles/iam.securityReviewer"
+  member = "group:${var.auditors_group}"
+}
+
+# Folder IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
+resource "google_folder_iam_member" "security_reviewer_auditors" {
+  count = var.parent_type == "folder" ? 1 : 0
+
+  folder = "folder/${var.parent_id}"
   role   = "roles/iam.securityReviewer"
   member = "group:${var.auditors_group}"
 }

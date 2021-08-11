@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-org_id            = "12345678"
+parent_id         = "12345678"
+parent_type       = "organization"
 auditors_group    = "example-auditors@example.com"
 bigquery_location = "us-east1"
 logs_bigquery_dataset = {

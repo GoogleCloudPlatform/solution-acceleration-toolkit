@@ -12,11 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{if eq .parent_type "organization" -}}
-org_id = "{{.parent_id}}"
-{{- else}}
-folder = "folders/{{.parent_id}}"
-{{- end}}
+parent_id = "{{.parent_id}}"
+parent_type = "{{.parent_type}}"
 auditors_group = "{{.auditors_group}}"
 {{hclField . "additional_filters" -}}
 bigquery_location ="{{.bigquery_location}}"
