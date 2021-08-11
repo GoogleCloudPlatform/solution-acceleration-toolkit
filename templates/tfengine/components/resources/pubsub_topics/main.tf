@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 1.9.0"
 
   topic        = "{{.name}}"
-  project_id   = var.exists ? var.project_id : module.project.project_id
+  project_id   = module.project.project_id
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}
   topic_labels = {
