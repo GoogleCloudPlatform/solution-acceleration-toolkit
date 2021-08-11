@@ -105,7 +105,7 @@ module "admins_group" {
   source  = "terraform-google-modules/group/google"
   version = "~> 0.2"
 
-  count = var.admins_group.exists ? 1 : 0
+  count = var.admins_group.exists ? 0 : 1
 
   id           = var.admins_group.id
   customer_id  = var.admins_group.customer_id
@@ -122,7 +122,7 @@ module "admins_group" {
 # The group is not ready for IAM bindings right after creation. Wait for
 # a while before it is used.
 resource "time_sleep" "admins_wait" {
-  count = var.admins_group.exists ? 1 : 0
+  count = var.admins_group.exists ? 0 : 1
   depends_on = [
     module.admins_group[0],
   ]

@@ -18,9 +18,21 @@ admins_group = {
   display_name = "{{get . "admins_group.display_name" $default_admins_group_display_name}}"
   exists       = {{get .admins_group "exists" false}}
   id           = "{{.admins_group.id}}"
-  owners       = [{{range get . "admins_group.owners"}}"{{.}}",{{end}}]
-  managers       = [{{range get . "admins_group.managers"}}"{{.}}",{{end}}]
-  members       = [{{range get . "admins_group.members"}}"{{.}}",{{end}}]
+  owners       = [
+    {{- range get . "admins_group.owners"}}
+    "{{.}}",
+    {{- end}}
+  ]
+  managers     = [
+    {{- range get . "admins_group.managers"}}
+    "{{.}}",
+    {{- end}}
+  ]
+  members      = [
+    {{- range get . "admins_group.members"}}
+    "{{.}}",
+    {{- end}}
+  ]
 }
 billing_account = "{{.billing_account}}"
 parent_id = "{{.parent_id}}"
@@ -45,12 +57,12 @@ project = {
       "{{.}}",
       {{- end}}
     ]
-    managers       = [
+    managers     = [
       {{- range get . "project.owners_group.managers"}}
       "{{.}}",
       {{- end}}
     ]
-    members       = [
+    members      = [
       {{- range get . "project.owners_group.members"}}
       "{{.}}",
       {{- end}}

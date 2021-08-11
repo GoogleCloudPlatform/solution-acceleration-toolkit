@@ -17,9 +17,13 @@ admins_group = {
   display_name = "Example Folder Admins Group"
   exists       = false
   id           = "example-folder-admins@example.com"
-  owners       = ["user1@example.com", ]
-  managers     = []
-  members      = []
+  owners = [
+    "user1@example.com",
+  ]
+  managers = [
+  ]
+  members = [
+  ]
 }
 billing_account = "000-000-000"
 parent_id       = "12345678"
