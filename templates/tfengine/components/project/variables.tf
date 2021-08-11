@@ -62,12 +62,6 @@ variable "apis" {
   default     = {{$projectProps.apis.default}}
 }
 
-variable "exists" {
-  type        = bool
-  description = {{schemaDescription $projectProps.exists.description}}
-  default     = {{$projectProps.exists.default}}
-}
-
 variable "is_shared_vpc_host" {
   type        = bool
   description = {{schemaDescription $projectProps.is_shared_vpc_host.description}}

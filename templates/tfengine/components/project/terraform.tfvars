@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{hclField . "exists"}}
 {{hclField . "project_id"}}
 {{hclField . "parent_type"}}
 {{if not (isDotNotation .parent_id) -}}
