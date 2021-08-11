@@ -68,12 +68,6 @@ variable "apis" {
   default     = []
 }
 
-variable "exists" {
-  type        = bool
-  description = "Whether this project exists."
-  default     = false
-}
-
 variable "is_shared_vpc_host" {
   type        = bool
   description = "Whether this project is a shared VPC host."

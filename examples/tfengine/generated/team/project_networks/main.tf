@@ -28,12 +28,10 @@ terraform {
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
-
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  project_id      = var.exists ? var.project_id : ""
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
   folder_id       = var.parent_type == "folder" ? var.parent_id : ""
@@ -54,7 +52,7 @@ module "project" {
   shared_vpc_subnets   = var.shared_vpc_attachment.subnets
   activate_apis        = var.apis
 
-  activate_api_identities = var.exists ? [] : var.api_identities
+  activate_api_identities = var.api_identities
 }
 
 module "bastion_vm" {

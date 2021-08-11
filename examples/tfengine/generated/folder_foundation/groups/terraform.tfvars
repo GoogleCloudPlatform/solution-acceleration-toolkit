@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-exists = true
-
 project_id = "example-devops"
 
 parent_type = "folder"

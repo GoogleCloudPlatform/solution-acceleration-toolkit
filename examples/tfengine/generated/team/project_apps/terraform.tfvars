@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 project_id = "example-prod-apps"
 
 parent_type = "folder"
