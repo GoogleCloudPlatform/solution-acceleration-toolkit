@@ -25,12 +25,24 @@ terraform {
   }
 }
 
+module "existing_project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 11.1.0"
+
+  count = var.exists ? 1 : 0
+
+  project_id    = var.project_id
+  activate_apis = var.apis
+}
+
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
+
+  count = var.exists ? 0 : 1
 
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
@@ -60,9 +72,9 @@ module "bastion_vm" {
   version = "~> 3.2.0"
 
   name         = "bastion-vm"
-  project      = module.project.project_id
+  project      = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   zone         = "us-central1-a"
-  host_project = module.project.project_id
+  host_project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   network      = module.network.network.network.self_link
   subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
   members      = ["serviceAccount:${google_service_account.bastion_accessor.email}"]
@@ -90,7 +102,7 @@ module "network" {
   version = "~> 3.3.0"
 
   network_name = "network"
-  project_id   = module.project.project_id
+  project_id   = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
 
   subnets = [
     {
@@ -132,7 +144,7 @@ module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
   version = "~> 4.5.0"
 
-  project_id  = module.project.project_id
+  project_id  = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   vpc_network = module.network.network_name
   depends_on = [
     module.project
@@ -144,7 +156,7 @@ module "router" {
   version = "~> 1.1.0"
 
   name    = "router"
-  project = module.project.project_id
+  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   region  = "us-central1"
   network = module.network.network.network.self_link
 
@@ -170,5 +182,5 @@ resource "google_service_account" "bastion_accessor" {
 
   description = "Placeholder service account to use as members who can access the bastion host."
 
-  project = module.project.project_id
+  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
 }

@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 2.1.0"
 
   name     = "{{.name}}"
-  project  = module.project.project_id
+  project  = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   location = "{{get . "healthcare_location" $.healthcare_location}}"
 
   {{hclField . "iam_members" -}}

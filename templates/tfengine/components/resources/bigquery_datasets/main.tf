@@ -18,7 +18,7 @@ module "{{resourceName . "dataset_id"}}" {
   version = "~> 4.5.0"
 
   dataset_id = "{{.dataset_id}}"
-  project_id = module.project.project_id
+  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   location   = "{{get . "bigquery_location" $.bigquery_location}}"
   {{hclField . "default_table_expiration_ms" -}}
 

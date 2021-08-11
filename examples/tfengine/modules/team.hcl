@@ -250,7 +250,7 @@ template "project_apps" {
       raw_config = <<EOF
 resource "google_compute_address" "static" {
   name    = "static-ipv4-address"
-  project = module.project.project_id
+  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
   region  = "{{.default_location}}"
 }
 EOF
