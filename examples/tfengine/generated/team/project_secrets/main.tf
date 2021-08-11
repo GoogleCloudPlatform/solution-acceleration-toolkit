@@ -66,7 +66,7 @@ resource "google_secret_manager_secret" "auto_sql_db_password" {
   provider = google-beta
 
   secret_id = "auto-sql-db-password"
-  project   = var.exists ? var.project_id : module.project.project_id
+  project   = module.project.project_id
 
   replication {
     user_managed {

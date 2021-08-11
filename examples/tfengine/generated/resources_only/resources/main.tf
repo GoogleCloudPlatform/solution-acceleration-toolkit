@@ -61,7 +61,7 @@ module "one_billion_ms_example_dataset" {
   version = "~> 4.5.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
-  project_id                  = var.exists ? var.project_id : module.project.project_id
+  project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
   access = [
@@ -85,7 +85,7 @@ module "example_healthcare_dataset" {
   version = "~> 2.1.0"
 
   name     = "example-healthcare-dataset"
-  project  = var.exists ? var.project_id : module.project.project_id
+  project  = module.project.project_id
   location = "us-central1"
 
   iam_members = [
@@ -140,7 +140,7 @@ resource "google_service_account" "example_sa" {
 
   description = "Example Service Account"
 
-  project = var.exists ? var.project_id : module.project.project_id
+  project = module.project.project_id
 }
 
 module "example_prod_bucket" {
@@ -148,7 +148,7 @@ module "example_prod_bucket" {
   version = "~> 1.4"
 
   name       = "example-prod-bucket"
-  project_id = var.exists ? var.project_id : module.project.project_id
+  project_id = module.project.project_id
   location   = "us-central1"
 
   labels = {

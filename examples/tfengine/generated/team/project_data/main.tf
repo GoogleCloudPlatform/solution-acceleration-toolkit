@@ -69,7 +69,7 @@ module "one_billion_ms_dataset" {
   version = "~> 4.5.0"
 
   dataset_id                  = "1billion_ms_dataset"
-  project_id                  = var.exists ? var.project_id : module.project.project_id
+  project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
   dataset_labels = {
@@ -83,7 +83,7 @@ module "sql_instance" {
   version = "~> 4.5.0"
 
   name                = "sql-instance"
-  project_id          = var.exists ? var.project_id : module.project.project_id
+  project_id          = module.project.project_id
   region              = "us-central1"
   zone                = "us-central1-a"
   availability_type   = "REGIONAL"
@@ -104,7 +104,7 @@ module "healthcare_dataset" {
   version = "~> 2.1.0"
 
   name     = "healthcare-dataset"
-  project  = var.exists ? var.project_id : module.project.project_id
+  project  = module.project.project_id
   location = "us-central1"
 
   consent_stores = [
@@ -203,7 +203,7 @@ module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 7.2.0"
 
-  projects = [var.exists ? var.project_id : module.project.project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {
@@ -218,7 +218,7 @@ module "topic" {
   version = "~> 1.9.0"
 
   topic      = "topic"
-  project_id = var.exists ? var.project_id : module.project.project_id
+  project_id = module.project.project_id
 
   topic_labels = {
     env  = "prod"
@@ -245,7 +245,7 @@ module "example_bucket" {
   version = "~> 1.4"
 
   name       = "example-bucket"
-  project_id = var.exists ? var.project_id : module.project.project_id
+  project_id = module.project.project_id
   location   = "us-central1"
 
   labels = {
