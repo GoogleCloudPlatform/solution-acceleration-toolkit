@@ -27,7 +27,7 @@ terraform {
 
 resource "google_compute_address" "static" {
   name    = "static-ipv4-address"
-  project = module.project[0].project_id
+  project = module.project.project_id
   region  = "us-central1"
 }
 
