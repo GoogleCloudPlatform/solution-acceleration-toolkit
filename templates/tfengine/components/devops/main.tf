@@ -102,7 +102,7 @@ resource "time_sleep" "owners_wait" {
 resource "google_project_iam_binding" "devops_owners" {
   project = module.project.project_id
   role    = "roles/owner"
-  members = ["group:${var.project.exists ? var.project.owners_group.id : module.owners_group.id}"]
+  members = ["group:${var.project.owners_group.exists ? var.project.owners_group.id : module.owners_group.id}"]
   depends_on = [time_sleep.owners_wait]
 }
 
