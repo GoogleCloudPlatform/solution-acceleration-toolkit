@@ -18,7 +18,8 @@ schema = {
   required = [
     "auditors_group",
     "logs_bigquery_dataset",
-    "logs_storage_bucket"
+    "logs_storage_bucket",
+    "project"
   ]
   properties = {
     parent_type = {
@@ -36,10 +37,17 @@ schema = {
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
     }
+    billing_account = {
+      description = "ID of billing account to attach to this project."
+      type        = "string"
+    }
     project = {
       description          = "Config of project to host auditing resources"
       type                 = "object"
       additionalProperties = false
+      required = [
+        "project_id"
+      ]
       properties = {
         project_id = {
           description = "ID of project."
@@ -124,17 +132,8 @@ schema = {
   }
 }
 
-template "project" {
-  recipe_path = "./project.hcl"
-  data = {
-    project = {
-      project_id = {{hcl .project.project_id}}
-      apis = [
-        "bigquery.googleapis.com",
-        "logging.googleapis.com",
-      ]
-    }
-  }
+template "deployment" {
+  recipe_path = "./deployment.hcl"
 }
 
 template "audit" {

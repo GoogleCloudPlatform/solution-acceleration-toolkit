@@ -12,6 +12,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
+# Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
+# Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
+# Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
+module "project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 11.1.0"
+
+  name            = var.project.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
+  lien            = true
+  # Create and keep default service accounts when certain APIs are enabled.
+  default_service_account = "keep"
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
+  # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  # It is a no-op when Kubernetes Engine API is not enabled in the project.
+  grant_services_security_admin_role = true
+  activate_apis = [
+    "bigquery.googleapis.com",
+    "logging.googleapis.com",
+  ]
+}
+
 # Organization IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
   count = var.parent_type == "organization" ? 1 : 0

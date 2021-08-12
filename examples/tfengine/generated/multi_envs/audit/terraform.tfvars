@@ -19,6 +19,10 @@ additional_filters = [
   "logName:\"logs/forseti\"",
   "logName:\"logs/application\"",
 ]
+billing_account = "000-000-000"
+project = {
+  project_id = "example-audit"
+}
 bigquery_location = "us-east1"
 logs_bigquery_dataset = {
   dataset_id = "1yr_folder_audit_logs"

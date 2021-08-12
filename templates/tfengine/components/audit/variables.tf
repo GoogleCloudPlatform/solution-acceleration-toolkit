@@ -14,6 +14,7 @@ limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
 {{$logsBigQueryProps := $props.logs_bigquery_dataset.properties -}}
 {{$logsStorageProps := $props.logs_storage_bucket.properties -}}
+{{$projectProps := $props.project.properties -}}
 variable "additional_filters" {
   type = list(string)
   description = {{schemaDescription $props.additional_filters.description}}
@@ -28,6 +29,28 @@ variable "auditors_group" {
 variable "bigquery_location" {
   type = string
   description = {{schemaDescription $props.bigquery_location.description}}
+}
+
+variable "billing_account" {
+  type        = string
+  description = {{schemaDescription $props.billing_account.description}}
+}
+
+variable "project" {
+  type = object({
+    project_id = string
+  })
+  description = <<EOF
+    {{$props.project.description}}
+
+    Fields:
+
+    * project_id = {{$projectProps.project_id.description}}
+  EOF
+  validation {
+    condition     = can(regex("{{replace $projectProps.project_id.pattern "\\" ""}}", var.project.project_id))
+    error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
+  }
 }
 
 variable "logs_bigquery_dataset" {

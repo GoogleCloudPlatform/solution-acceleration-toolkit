@@ -32,10 +32,10 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "example-audit"
-  org_id          = ""
-  folder_id       = "12345678"
-  billing_account = "000-000-000"
+  name            = var.project.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
@@ -50,6 +50,7 @@ module "project" {
     "logging.googleapis.com",
   ]
 }
+
 # Organization IAM Audit log configs to enable collection of all possible audit logs.
 resource "google_organization_iam_audit_config" "config" {
   count = var.parent_type == "organization" ? 1 : 0
