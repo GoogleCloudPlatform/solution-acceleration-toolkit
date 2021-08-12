@@ -36,6 +36,10 @@ schema = {
       type        = "string"
       pattern     = "^[0-9]{8,25}$"
     }
+    billing_account = {
+      description = "ID of billing account to attach to this project."
+      type        = "string"
+    }
     project = {
       description          = "Config of project to host auditing resources"
       type                 = "object"
@@ -124,17 +128,8 @@ schema = {
   }
 }
 
-template "project" {
-  recipe_path = "./project.hcl"
-  data = {
-    project = {
-      project_id = {{hcl .project.project_id}}
-      apis = [
-        "bigquery.googleapis.com",
-        "logging.googleapis.com",
-      ]
-    }
-  }
+template "deployment" {
+  recipe_path = "./deployment.hcl"
 }
 
 template "audit" {

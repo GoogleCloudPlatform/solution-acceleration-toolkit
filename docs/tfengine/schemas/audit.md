@@ -9,6 +9,7 @@
 | additional_filters | Additional filters for log collection and export. List entries will be        concatenated by "OR" operator. Refer to        <https://cloud.google.com/logging/docs/view/query-library> for query syntax.        Need to escape \ and " to preserve them in the final filter strings.        See example usages under "examples/tfengine/".        Logs with filter `"logName:\"logs/cloudaudit.googleapis.com\""` is always enabled. | array(string) | false | [] | - |
 | auditors_group | This group will be granted viewer access to the audit log dataset and        bucket as well as security reviewer permission on the root resource        specified. | string | true | - | - |
 | bigquery_location | Location of logs bigquery dataset. | string | false | - | - |
+| billing_account | ID of billing account to attach to this project. | string | false | - | - |
 | logs_bigquery_dataset | Bigquery Dataset to host audit logs for 1 year. Useful for querying recent activity. | object | true | - | - |
 | logs_bigquery_dataset.dataset_id | ID of Bigquery Dataset. | string | true | - | - |
 | logs_bigquery_dataset.sink_name | Name of the logs sink. | string | false | bigquery-audit-logs-sink | - |

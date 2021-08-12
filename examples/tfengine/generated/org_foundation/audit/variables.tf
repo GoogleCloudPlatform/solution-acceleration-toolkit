@@ -39,6 +39,28 @@ variable "bigquery_location" {
   description = "Location of logs bigquery dataset."
 }
 
+variable "billing_account" {
+  type        = string
+  description = "ID of billing account to attach to this project."
+}
+
+variable "project" {
+  type = object({
+    project_id = string
+  })
+  description = <<EOF
+    Config of project to host auditing resources
+
+    Fields:
+
+    * project_id = ID of project.
+  EOF
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project.project_id))
+    error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
+  }
+}
+
 variable "logs_bigquery_dataset" {
   type = object({
     dataset_id = string
