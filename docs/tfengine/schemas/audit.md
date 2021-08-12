@@ -18,6 +18,6 @@
 | logs_storage_bucket.sink_name | Name of the logs sink. | string | false | storage-audit-logs-sink | - |
 | parent_id | ID of the parent GCP resource to apply the configuration. | string | false | - | ^[0-9]{8,25}$ |
 | parent_type | Type of parent GCP resource to apply the policy.        Must be one of 'organization' or 'folder'." | string | false | - | ^organization\|folder$ |
-| project | Config of project to host auditing resources | object | false | - | - |
-| project.project_id | ID of project. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
+| project | Config of project to host auditing resources | object | true | - | - |
+| project.project_id | ID of project. | string | true | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | storage_location | Location of logs storage bucket. | string | false | - | - |
