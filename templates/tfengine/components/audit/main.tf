@@ -12,16 +12,55 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{- $parent_field := "org_id"}}
-{{- $parent_var := "var.org_id"}}
-{{- if eq .parent_type "folder"}}
-  {{- $parent_field = "folder"}}
-  {{- $parent_var = "var.folder"}}
-{{- end}}
+# Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
+# Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
+# Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
+module "project" {
+  source  = "terraform-google-modules/project-factory/google"
+  version = "~> 11.1.0"
 
-# IAM Audit log configs to enable collection of all possible audit logs.
-resource "google_{{.parent_type}}_iam_audit_config" "config" {
-  {{$parent_field}} = {{$parent_var}}
+  name            = var.project.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
+  lien            = true
+  # Create and keep default service accounts when certain APIs are enabled.
+  default_service_account = "keep"
+  # Do not create an additional project service account to be used for Compute Engine.
+  create_project_sa = false
+  # When Kubernetes Engine API is enabled, grant Kubernetes Engine Service Agent the
+  # Compute Security Admin role on the VPC host project so it can manage firewall rules.
+  # It is a no-op when Kubernetes Engine API is not enabled in the project.
+  grant_services_security_admin_role = true
+  activate_apis = [
+    "bigquery.googleapis.com",
+    "logging.googleapis.com",
+  ]
+}
+
+# Organization IAM Audit log configs to enable collection of all possible audit logs.
+resource "google_organization_iam_audit_config" "config" {
+  count = var.parent_type == "organization" ? 1 : 0
+
+  org_id = var.parent_id
+  service = "allServices"
+
+  audit_log_config {
+    log_type = "DATA_READ"
+  }
+  audit_log_config {
+    log_type = "DATA_WRITE"
+  }
+  audit_log_config {
+    log_type = "ADMIN_READ"
+  }
+}
+
+# Folder IAM Audit log configs to enable collection of all possible audit logs.
+resource "google_folder_iam_audit_config" "config" {
+  count = var.parent_type == "folder" ? 1 : 0
+
+  folder = "folder/${var.parent_id}"
   service = "allServices"
 
   audit_log_config {
@@ -42,8 +81,8 @@ module "bigquery_export" {
   log_sink_name          = var.logs_bigquery_dataset.sink_name
   destination_uri        = "${module.bigquery_destination.destination_uri}"
   filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
-  parent_resource_type   = "{{.parent_type}}"
-  parent_resource_id     = {{$parent_var}}
+  parent_resource_type   = var.parent_type
+  parent_resource_id     = var.parent_id
   unique_writer_identity = true
   include_children       = true
 }
@@ -66,8 +105,8 @@ module "storage_export" {
   log_sink_name          = var.logs_storage_bucket.sink_name
   destination_uri        = "${module.storage_destination.destination_uri}"
   filter                 = join(" OR ", concat(["logName:\"logs/cloudaudit.googleapis.com\""], var.additional_filters))
-  parent_resource_type   = "{{.parent_type}}"
-  parent_resource_id     = {{$parent_var}}
+  parent_resource_type   = var.parent_type
+  parent_resource_id     = var.parent_id
   unique_writer_identity = true
   include_children       = true
 }
@@ -101,9 +140,20 @@ resource "google_project_iam_member" "logs_viewers_auditors" {
   member  = "group:${var.auditors_group}"
 }
 
-# IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
-resource "google_{{.parent_type}}_iam_member" "security_reviewer_auditors" {
-  {{$parent_field}} = {{$parent_var}}
+# Organization IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
+resource "google_organization_iam_member" "security_reviewer_auditors" {
+  count = var.parent_type == "organization" ? 1 : 0
+
+  org_id = var.parent_id
+  role   = "roles/iam.securityReviewer"
+  member = "group:${var.auditors_group}"
+}
+
+# Folder IAM permissions to grant log Auditors iam.securityReviewer role to view the logs.
+resource "google_folder_iam_member" "security_reviewer_auditors" {
+  count = var.parent_type == "folder" ? 1 : 0
+
+  folder = "folder/${var.parent_id}"
   role   = "roles/iam.securityReviewer"
   member = "group:${var.auditors_group}"
 }
