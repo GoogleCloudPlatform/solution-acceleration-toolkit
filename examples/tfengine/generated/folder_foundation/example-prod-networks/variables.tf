@@ -29,7 +29,6 @@ EOF
   default = ""
 }
 
-
 variable "parent_type" {
   type        = string
   description = <<EOF
@@ -63,6 +62,12 @@ for a list of related roles.
     * roles = Roles to granted to the API Service Agent.
   EOF
   default     = []
+}
+
+variable "exists" {
+  type        = bool
+  description = "Whether this project exists."
+  default     = false
 }
 
 variable "apis" {
