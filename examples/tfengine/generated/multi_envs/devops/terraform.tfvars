@@ -13,10 +13,18 @@
 # limitations under the License.
 
 admins_group = {
-  id           = "example-folder-admins@example.com"
-  display_name = "Example Folder Admins Group"
   customer_id  = "c12345678"
-  owners       = ["user1@example.com"]
+  description  = ""
+  display_name = "Example Folder Admins Group"
+  exists       = false
+  id           = "example-folder-admins@example.com"
+  owners = [
+    "user1@example.com",
+  ]
+  managers = [
+  ]
+  members = [
+  ]
 }
 billing_account = "000-000-000"
 parent_id       = "12345678"
@@ -26,10 +34,18 @@ project = {
     "cloudidentity.googleapis.com",
   ]
   owners_group = {
-    id           = "example-devops-owners@example.com"
-    display_name = "example-devops-owners"
     customer_id  = "c12345678"
-    owners       = ["user1@example.com"]
+    description  = ""
+    display_name = "example-devops-owners"
+    exists       = false
+    id           = "example-devops-owners@example.com"
+    owners = [
+      "user1@example.com",
+    ]
+    managers = [
+    ]
+    members = [
+    ]
   }
   project_id = "example-devops"
 }
