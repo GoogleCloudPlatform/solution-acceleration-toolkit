@@ -18,7 +18,8 @@ schema = {
   required = [
     "auditors_group",
     "logs_bigquery_dataset",
-    "logs_storage_bucket"
+    "logs_storage_bucket",
+    "project"
   ]
   properties = {
     parent_type = {
@@ -44,6 +45,9 @@ schema = {
       description          = "Config of project to host auditing resources"
       type                 = "object"
       additionalProperties = false
+      required = [
+        "project_id"
+      ]
       properties = {
         project_id = {
           description = "ID of project."

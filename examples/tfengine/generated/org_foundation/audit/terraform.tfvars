@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-parent_id         = "12345678"
-parent_type       = "organization"
-auditors_group    = "example-auditors@example.com"
+parent_id       = "12345678"
+parent_type     = "organization"
+auditors_group  = "example-auditors@example.com"
+billing_account = "000-000-000"
+project = {
+  project_id = "example-audit"
+}
 bigquery_location = "us-east1"
 logs_bigquery_dataset = {
   dataset_id = "1yr_org_audit_logs"

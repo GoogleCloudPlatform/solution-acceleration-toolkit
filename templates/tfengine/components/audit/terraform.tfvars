@@ -15,6 +15,10 @@ parent_id = "{{.parent_id}}"
 parent_type = "{{.parent_type}}"
 auditors_group = "{{.auditors_group}}"
 {{hclField . "additional_filters" -}}
+billing_account = "{{.billing_account}}"
+project = {
+  project_id = "{{.project.project_id}}"
+}
 bigquery_location ="{{.bigquery_location}}"
 logs_bigquery_dataset = {
   dataset_id = "{{.logs_bigquery_dataset.dataset_id}}"
