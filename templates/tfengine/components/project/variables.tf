@@ -30,7 +30,6 @@ variable "parent_id" {
   default = ""
 }
 
-
 variable "parent_type" {
   type        = string
   description = {{schemaDescription $props.parent_type.description}}
@@ -54,6 +53,12 @@ variable "api_identities" {
     * roles = {{$apiIdentitiesProps.roles.description}}
   EOF
   default     = {{$projectProps.api_identities.default}}
+}
+
+variable "exists" {
+  type        = bool
+  description = {{schemaDescription $projectProps.exists.description}}
+  default     = {{$projectProps.exists.default}}
 }
 
 variable "apis" {
