@@ -32,24 +32,12 @@ data "terraform_remote_state" "folders" {
     prefix = "folders"
   }
 }
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
-
-  count = var.exists ? 0 : 1
 
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? data.terraform_remote_state.folders.outputs.folder_ids["dev"] : ""
@@ -79,7 +67,7 @@ module "example_bucket_dev" {
   version = "~> 1.4"
 
   name       = "example-bucket-dev"
-  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id = module.project.project_id
   location   = "us-central1"
 
   labels = {

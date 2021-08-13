@@ -15,7 +15,7 @@ module "project_iam_members" {
   source   = "terraform-google-modules/iam/google//modules/projects_iam"
   version  = "~> 7.2.0"
 
-  projects = [var.exists ? module.existing_project[0].project_id : module.project[0].project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {

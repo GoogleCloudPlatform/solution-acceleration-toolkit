@@ -33,7 +33,7 @@ module "{{resourceName . "name"}}" {
 
   # Required.
   name                   = "{{.name}}"
-  project_id             = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id             = module.project.project_id
   region                 = "{{get . "gke_region" (get $ "gke_region")}}"
   regional               = true
   {{hclField . "network_project_id"}}

@@ -31,24 +31,12 @@ resource "google_compute_address" "static" {
   region  = "us-central1"
 }
 
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
-
-  count = var.exists ? 0 : 1
 
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
@@ -73,7 +61,7 @@ module "project" {
   activate_api_identities = var.api_identities
 }
 resource "google_binary_authorization_policy" "policy" {
-  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project = module.project.project_id
 
   # Allow Google-built images.
   # See https://cloud.google.com/binary-authorization/docs/policy-yaml-reference#globalpolicyevaluationmode
@@ -119,7 +107,7 @@ resource "google_binary_authorization_policy" "policy" {
 
   # Allow images from this project.
   admission_whitelist_patterns {
-    name_pattern = "gcr.io/${var.exists ? module.existing_project[0].project_id : module.project[0].project_id}/*"
+    name_pattern = "gcr.io/${module.project.project_id}/*"
   }
 
   admission_whitelist_patterns {
@@ -132,7 +120,7 @@ module "instance_template" {
   version = "~> 6.6.0"
 
   name_prefix        = "instance-template"
-  project_id         = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id         = module.project.project_id
   region             = "us-central1"
   subnetwork_project = "example-prod-networks"
   subnetwork         = "instance-subnet"
@@ -187,7 +175,7 @@ module "domain" {
   version = "~> 3.1.0"
 
   name       = "domain"
-  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id = module.project.project_id
   domain     = "example.com."
   type       = "public"
 
@@ -221,7 +209,7 @@ module "gke_cluster" {
 
   # Required.
   name               = "gke-cluster"
-  project_id         = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id         = module.project.project_id
   region             = "us-central1"
   regional           = true
   network_project_id = "example-prod-networks"
@@ -254,7 +242,7 @@ module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 7.2.0"
 
-  projects = [var.exists ? module.existing_project[0].project_id : module.project[0].project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {
@@ -270,5 +258,5 @@ resource "google_service_account" "runner" {
 
   description = "Service Account"
 
-  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project = module.project.project_id
 }

@@ -18,7 +18,7 @@ module "{{resourceName . "name"}}" {
   version = "~> 1.4"
 
   name       = "{{.name}}"
-  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id = module.project.project_id
   location   = "{{get . "storage_location" $.storage_location}}"
 
   {{if $labels := merge (get $ "labels") (get . "labels") -}}

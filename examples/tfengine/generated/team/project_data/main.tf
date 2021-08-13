@@ -33,24 +33,12 @@ data "google_secret_manager_secret_version" "db_password" {
   project = "example-prod-secrets"
 }
 
-module "existing_project" {
-  source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
-
-  count = var.exists ? 1 : 0
-
-  project_id    = var.project_id
-  activate_apis = var.apis
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
-
-  count = var.exists ? 0 : 1
 
   name            = var.project_id
   org_id          = var.parent_type == "organization" ? var.parent_id : ""
@@ -80,7 +68,7 @@ module "one_billion_ms_dataset" {
   version = "~> 4.5.0"
 
   dataset_id                  = "1billion_ms_dataset"
-  project_id                  = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id                  = module.project.project_id
   location                    = "us-east1"
   default_table_expiration_ms = 1e+09
   dataset_labels = {
@@ -94,7 +82,7 @@ module "sql_instance" {
   version = "~> 4.5.0"
 
   name                = "sql-instance"
-  project_id          = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id          = module.project.project_id
   region              = "us-central1"
   zone                = "us-central1-a"
   availability_type   = "REGIONAL"
@@ -115,7 +103,7 @@ module "healthcare_dataset" {
   version = "~> 2.1.0"
 
   name     = "healthcare-dataset"
-  project  = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project  = module.project.project_id
   location = "us-central1"
 
   consent_stores = [
@@ -214,7 +202,7 @@ module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
   version = "~> 7.2.0"
 
-  projects = [var.exists ? module.existing_project[0].project_id : module.project[0].project_id]
+  projects = [module.project.project_id]
   mode     = "additive"
 
   bindings = {
@@ -229,7 +217,7 @@ module "topic" {
   version = "~> 1.9.0"
 
   topic      = "topic"
-  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id = module.project.project_id
 
   topic_labels = {
     env  = "prod"
@@ -256,7 +244,7 @@ module "example_bucket" {
   version = "~> 1.4"
 
   name       = "example-bucket"
-  project_id = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id = module.project.project_id
   location   = "us-central1"
 
   labels = {

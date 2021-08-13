@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range .compute_instance_templates}}
 {{$template_resource_name := resourceName . "name_prefix" -}}
 
-{{$network_project_id :=  "${var.exists ? module.existing_project[0].project_id : module.project[0].project_id}" -}}
+{{$network_project_id :=  "${module.project.project_id}" -}}
 {{if has . "network_project_id" -}}
   {{$network_project_id = .network_project_id -}}
 {{end -}}
@@ -26,7 +26,7 @@ module "{{$template_resource_name}}" {
   version = "~> 6.6.0"
 
   name_prefix        = "{{.name_prefix}}"
-  project_id         = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project_id         = module.project.project_id
   region             = "{{get . "compute_region" $.compute_region}}"
   subnetwork_project = "{{$network_project_id}}"
   subnetwork         = "{{$subnet}}"

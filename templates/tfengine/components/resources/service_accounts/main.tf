@@ -17,6 +17,6 @@ resource "google_service_account" "{{resourceName . "account_id"}}" {
   account_id = "{{.account_id}}"
   {{hclField . "display_name"}}
   {{hclField . "description"}}
-  project    = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project    = module.project.project_id
 }
 {{end -}}

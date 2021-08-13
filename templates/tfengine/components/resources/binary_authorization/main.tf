@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 resource "google_binary_authorization_policy" "policy" {
-  project = var.exists ? module.existing_project[0].project_id : module.project[0].project_id
+  project = module.project.project_id
 
   # Allow Google-built images.
   # See https://cloud.google.com/binary-authorization/docs/policy-yaml-reference#globalpolicyevaluationmode
@@ -59,7 +59,7 @@ resource "google_binary_authorization_policy" "policy" {
 
   # Allow images from this project.
   admission_whitelist_patterns {
-    name_pattern = "gcr.io/${var.exists ? module.existing_project[0].project_id : module.project[0].project_id}/*"
+    name_pattern = "gcr.io/${module.project.project_id}/*"
   }
 
   {{range get . "binary_authorization.admission_whitelist_patterns" -}}
