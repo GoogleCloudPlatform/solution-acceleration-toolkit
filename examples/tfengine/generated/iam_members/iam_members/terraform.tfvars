@@ -54,6 +54,20 @@ project_iam_members = [
   },
 ]
 
+service_account_iam_members = [
+  {
+    resource_ids = ["example-sa@example.iam.gserviceaccount.com"]
+    bindings = {
+      "roles/iam.serviceAccountKeyAdmin" = [
+        "serviceAccount:example-sa-two@example.iam.gserviceaccount.com",
+        "group:example-group@example.com",
+        "user:example-user@example.com",
+      ],
+    }
+    project_id = "example"
+  },
+]
+
 storage_bucket_iam_members = [
   {
     resource_ids = ["example-bucket"]

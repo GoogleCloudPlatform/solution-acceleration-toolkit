@@ -25,6 +25,7 @@ limitations under the License. */ -}}
             ],
           {{end -}}
         }
+        {{hclField . "project_id" -}}
       },
     {{end -}}
   ]
