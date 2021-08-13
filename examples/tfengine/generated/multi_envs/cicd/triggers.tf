@@ -15,7 +15,6 @@
 # ================== Triggers for "shared" environment ==================
 
 resource "google_cloudbuild_trigger" "validate_shared" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-shared"
   description = "Terraform validate job triggered on push event."
@@ -43,7 +42,6 @@ resource "google_cloudbuild_trigger" "validate_shared" {
 }
 
 resource "google_cloudbuild_trigger" "plan_shared" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-shared"
   description = "Terraform plan job triggered on push event."
@@ -72,7 +70,6 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 
 resource "google_cloudbuild_trigger" "apply_shared" {
   disabled    = true
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-shared"
   description = "Terraform apply job triggered on push event and/or schedule."
@@ -102,7 +99,6 @@ resource "google_cloudbuild_trigger" "apply_shared" {
 # ================== Triggers for "dev" environment ==================
 
 resource "google_cloudbuild_trigger" "validate_dev" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-dev"
   description = "Terraform validate job triggered on push event."
@@ -130,7 +126,6 @@ resource "google_cloudbuild_trigger" "validate_dev" {
 }
 
 resource "google_cloudbuild_trigger" "apply_dev" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-dev"
   description = "Terraform apply job triggered on push event and/or schedule."
@@ -160,7 +155,6 @@ resource "google_cloudbuild_trigger" "apply_dev" {
 # ================== Triggers for "prod" environment ==================
 
 resource "google_cloudbuild_trigger" "validate_prod" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-prod"
   description = "Terraform validate job triggered on push event."
@@ -188,7 +182,6 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 }
 
 resource "google_cloudbuild_trigger" "plan_prod" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-prod"
   description = "Terraform plan job triggered on push event."
@@ -217,7 +210,6 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
 resource "google_cloudbuild_trigger" "apply_prod" {
   disabled    = true
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-prod"
   description = "Terraform apply job triggered on push event and/or schedule."

@@ -36,7 +36,6 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   {{- if not (get .triggers.validate "run_on_push" true)}}
   disabled    = true
   {{- end}}
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-{{.name}}"
   description = "Terraform validate job triggered on push event."
@@ -81,7 +80,6 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
 resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   # Always disabled on push to branch.
   disabled    = true
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-scheduled-{{.name}}"
   description = "Terraform validate job triggered on schedule."
@@ -150,7 +148,6 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   {{- if not (get .triggers.plan "run_on_push" true)}}
   disabled    = true
   {{- end}}
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-{{.name}}"
   description = "Terraform plan job triggered on push event."
@@ -195,7 +192,6 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
 resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   # Always disabled on push to branch.
   disabled    = true
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-scheduled-{{.name}}"
   description = "Terraform plan job triggered on schedule."
@@ -264,7 +260,6 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   {{- if not (get .triggers.apply "run_on_push" true)}}
   disabled    = true
   {{- end}}
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-{{.name}}"
   description = "Terraform apply job triggered on push event and/or schedule."
