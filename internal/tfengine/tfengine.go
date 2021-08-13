@@ -166,6 +166,7 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	if err := template.MergeData(data, conf.Data); err != nil {
 		return err
 	}
+
 	flattenedData, err := template.FlattenData(data, ti.Flatten)
 	if err != nil {
 		return err
@@ -176,6 +177,14 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	}
 	if err := template.MergeData(data, ti.Data); err != nil {
 		return err
+	}
+
+	// Pass through specified keys that should be validated against the
+	// schema.
+	for _, k := range ti.Passthrough {
+		if v, ok := conf.Data[k]; ok {
+			ti.Data[k] = v
+		}
 	}
 
 	switch {

@@ -113,6 +113,21 @@ properties = {
             }
           }
         }
+
+        passthrough = {
+          description = <<EOF
+            Keys to pass directly to a child template data.
+            This is not recursive.
+
+            Example:
+              The deployment recipe expects "terraform_addons" to be passed to
+	      it directly, so the project recipe uses this key to do so.
+          EOF
+          type = "array"
+          items = {
+            type = "string"
+          }
+        }
       }
     }
   }
