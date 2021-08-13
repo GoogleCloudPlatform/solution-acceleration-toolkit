@@ -168,5 +168,5 @@ func isDotNotation(s string) (bool, error) {
 	// \.											-> Has a point in between
 	// Accepts complex dot notation such as:
 	// - data["foo"][123].bar["baz"].foo
-	return regexp.MatchString("^([\\w]+(\\[((\"\\w+\")|\\d+)\\])*\\.[\\w]+(\\[((\"\\w+\")|\\d+)\\])*)+$", s)
+	return regexp.MatchString(`^([\w]+(\[((\"\w+\")|\d+)\])*\.[\w]+(\[((\"\w+\")|\d+)\])*)+$`, s)
 }
