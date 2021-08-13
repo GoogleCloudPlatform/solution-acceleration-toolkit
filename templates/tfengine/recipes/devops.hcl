@@ -25,8 +25,9 @@ schema = {
         Type of parent GCP resource to apply the policy.
         Must be one of 'organization' or 'folder'.
       EOF
-      type        = "string"
-      pattern     = "^organization|folder$"
+      type              = "string"
+      pattern           = "^organization|folder$"
+      terraformPattern  = "^$|(^organization|folder$)"
     }
     parent_id = {
       description = <<EOF

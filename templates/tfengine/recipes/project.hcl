@@ -41,9 +41,7 @@ schema = {
         Can be one of the organization ID or folder ID according to parent_type.
       EOF
       type    = "string"
-      # TODO(#987): Uncomment with correct pattern when solved
-      # pattern = "^[0-9]{8,25}$"
-      pattern = ""
+      terraformPattern = "^[0-9]{8,25}$"
     }
     billing_account = {
       description = "ID of billing account to attach to this project."
