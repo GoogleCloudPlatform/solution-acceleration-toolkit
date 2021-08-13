@@ -86,7 +86,7 @@ variable "project_id" {
   type        = string
   description = "ID of project to create and/or provision resources in."
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project_id))
+    condition     = can(regex("^$|(^[a-z][a-z0-9-]{4,28}[a-z0-9]$)", var.project_id))
     error_message = "Invalid project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
   }
 }
@@ -97,7 +97,7 @@ variable "shared_vpc_attachment" {
     subnets         = list(string)
   })
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.shared_vpc_attachment.host_project_id))
+    condition     = can(regex("^$|(^[a-z][a-z0-9-]{4,28}[a-z0-9]$)", var.shared_vpc_attachment.host_project_id))
     error_message = "Invalid shared_vpc_attachment.host_project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
   }
   description = <<EOF
