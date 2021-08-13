@@ -15,7 +15,6 @@
 # ================== Triggers for "prod" environment ==================
 
 resource "google_cloudbuild_trigger" "validate_prod" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-validate-prod"
   description = "Terraform validate job triggered on push event."
@@ -45,7 +44,6 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 }
 
 resource "google_cloudbuild_trigger" "plan_prod" {
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-plan-prod"
   description = "Terraform plan job triggered on push event."
@@ -76,7 +74,6 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
 resource "google_cloudbuild_trigger" "apply_prod" {
   disabled    = true
-  provider    = google-beta
   project     = var.project_id
   name        = "tf-apply-prod"
   description = "Terraform apply job triggered on push event and/or schedule."
