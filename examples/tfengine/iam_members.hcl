@@ -81,6 +81,21 @@ template "iam_members" {
           }
         }
       ]
+      "service_account" = [
+        {
+          resource_ids = [
+            "example-sa@example.iam.gserviceaccount.com",
+          ]
+          bindings = {
+            "roles/iam.serviceAccountKeyAdmin" = [
+              "serviceAccount:example-sa-two@example.iam.gserviceaccount.com",
+              "group:example-group@example.com",
+              "user:example-user@example.com"
+            ]
+          }
+          project_id = "example"
+        }
+      ]
     }
   }
 }

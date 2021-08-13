@@ -202,6 +202,11 @@ template "project_apps" {
         account_id   = "runner"
         description  = "Service Account"
         display_name = "Service Account"
+      },
+      {
+        account_id   = "iam-tester"
+        description  = "Service Account"
+        display_name = "Service Account"
       }]
       compute_instance_templates = [{
         name_prefix        = "instance-template"
@@ -467,6 +472,17 @@ template "additional_iam_members" {
             "serviceAccount:runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
           ]
         }
+      }]
+      "service_account" = [{
+        resource_ids = [
+          "runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com",
+        ]
+        bindings = {
+          "roles/iam.serviceAccountKeyAdmin" = [
+            "serviceAccount:iam-tester@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+          ]
+        }
+        project_id = "{{.prefix}}-{{.env}}-apps"
       }]
     }
   }
