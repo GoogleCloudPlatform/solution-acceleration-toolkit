@@ -46,9 +46,8 @@ latest versions of everything.
 
 ### Frequency
 
-We strive to make a release at least once a month, containing accumulated changes since the last release. We may make
-out-of-band releases any time as needed. We will bump the MAJOR/MINOR/PATCH versions as needed, without guarantees on
-when the MINOR or MAJOR versions will be bumped.
+We release an unstable version after each commit via an automated release flow. This release may include breaking changes.
+We may make versioned releases any time as needed. The MAJOR/MINOR/PATCH versions are updated as needed.
 
 ### Caveat about versions
 

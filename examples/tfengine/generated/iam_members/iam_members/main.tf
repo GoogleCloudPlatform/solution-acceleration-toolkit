@@ -68,3 +68,15 @@ module "organization_iam_members" {
   organizations = each.value.resource_ids
   bindings      = each.value.bindings
 }
+
+module "service_account_iam_members" {
+  source = "terraform-google-modules/iam/google//modules/service_accounts_iam"
+  mode   = "additive"
+  for_each = {
+    for idx, member in var.service_account_iam_members :
+    idx => member
+  }
+  service_accounts = each.value.resource_ids
+  bindings         = each.value.bindings
+  project          = each.value.project_id
+}

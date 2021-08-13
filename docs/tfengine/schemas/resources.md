@@ -16,12 +16,12 @@
 | bastion_hosts.members | Members who can access the bastion host. | array(string) | true | - | - |
 | bastion_hosts.name | Name of bastion host. | string | true | - | - |
 | bastion_hosts.network | Name of the bastion host's network. | string | true | - | - |
-| bastion_hosts.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
+| bastion_hosts.network_project_id | Name of network project. If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | bastion_hosts.scopes | Scopes to grant. If unset, will grant access to all cloud platform scopes. | array(string) | false | - | - |
 | bastion_hosts.startup_script | Script to run on startup. Can be multi-line. | string | false | - | - |
 | bastion_hosts.subnet | Name of the bastion host's subnet. | string | true | - | - |
 | bigquery_datasets | [Module](https://github.com/terraform-google-modules/terraform-google-bigquery) | array(object) | false | - | - |
-| bigquery_datasets.access | Access for this bigquery dataset.              Each object should contain exactly one of group_by_email, user_by_email, special_group. | array(object) | false | - | - |
+| bigquery_datasets.access | Access for this bigquery dataset. Each object should contain exactly one of group_by_email, user_by_email, special_group. | array(object) | false | - | - |
 | bigquery_datasets.access.group_by_email | An email address of a Google Group to grant access to. | string | false | - | - |
 | bigquery_datasets.access.role | Role to grant. | string | false | - | - |
 | bigquery_datasets.access.special_group | A special group to grant access to. | string | false | - | - |
@@ -31,10 +31,10 @@
 | bigquery_datasets.default_table_expiration_ms | Expiration in milliseconds. | integer | false | - | - |
 | bigquery_datasets.labels | Labels to set on the dataset. | object | false | - | - |
 | bigquery_datasets.labels.*pattern* | - | string | false | - | .+ |
-| bigquery_datasets.resource_name | Override for Terraform resource name.              If unset, defaults to normalized dataset_id.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| bigquery_datasets.resource_name | Override for Terraform resource name. If unset, defaults to normalized dataset_id. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | binary_authorization | A policy for container image binary authorization. | object | false | - | - |
 | binary_authorization.admission_whitelist_patterns | A whitelist of image patterns to exclude from admission rules. | array(object) | false | - | - |
-| binary_authorization.admission_whitelist_patterns.name_pattern | An image name pattern to whitelist, in the form registry/path/to/image.                  This supports a trailing * as a wildcard, but this is allowed                  only in text after the registry/ part." | string | false | - | - |
+| binary_authorization.admission_whitelist_patterns.name_pattern | An image name pattern to whitelist, in the form registry/path/to/image. This supports a trailing * as a wildcard, but this is allowed only in text after the registry/ part." | string | false | - | - |
 | cloud_sql_instances | [Module](https://github.com/terraform-google-modules/terraform-google-sql-db/tree/master/modules/safer_mysql) | array(object) | false | - | - |
 | cloud_sql_instances.cloud_sql_region | Region to create cloud sql instance in. Can be defined in global data block. | string | false | - | - |
 | cloud_sql_instances.cloud_sql_zone | Zone to reate cloud sql instance in. Can be defined in global data block. | string | false | - | - |
@@ -43,9 +43,9 @@
 | cloud_sql_instances.labels.*pattern* | - | string | false | - | .+ |
 | cloud_sql_instances.name | Name of the cloud sql instance. | string | true | - | - |
 | cloud_sql_instances.network | Name of the network. | string | false | - | - |
-| cloud_sql_instances.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
-| cloud_sql_instances.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
-| cloud_sql_instances.tier | The              [tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen)              for the master instance. | string | false | - | - |
+| cloud_sql_instances.network_project_id | Name of network project. If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
+| cloud_sql_instances.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| cloud_sql_instances.tier | The [tier](https://cloud.google.com/sql/docs/mysql/instance-settings#machine-type-2ndgen) for the master instance. | string | false | - | - |
 | cloud_sql_instances.type | Type of the cloud sql instance. Currently only supports 'mysql'. | string | false | - | ^mysql$ |
 | cloud_sql_instances.user_name | Default user name. | string | false | - | - |
 | cloud_sql_instances.user_password | Default user password. | string | false | - | - |
@@ -56,26 +56,26 @@
 | compute_instance_templates.image_family | Family of compute image to use. | string | false | - | - |
 | compute_instance_templates.image_project | Project of compute image to use. | string | false | - | - |
 | compute_instance_templates.instances | [Module](https://github.com/terraform-google-modules/terraform-google-vm/tree/master/modules/compute_instance) | array(object) | false | - | - |
-| compute_instance_templates.instances.access_configs | Access configurations, i.e. IPs via which this instance can                    be accessed via the Internet. Omit to ensure that the                    instance is not accessible from the Internet. | array(object) | false | - | - |
+| compute_instance_templates.instances.access_configs | Access configurations, i.e. IPs via which this instance can be accessed via the Internet. Omit to ensure that the instance is not accessible from the Internet. | array(object) | false | - | - |
 | compute_instance_templates.instances.access_configs.nat_ip | The IP address that will be 1:1 mapped to the instance's network ip. | string | true | - | - |
 | compute_instance_templates.instances.access_configs.network_tier | The networking tier used for configuring this instance. | string | false | - | - |
 | compute_instance_templates.instances.name | Name of instance. | string | true | - | - |
-| compute_instance_templates.instances.resource_name | Override for Terraform resource name.                    If unset, defaults to normalized name.                    Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| compute_instance_templates.instances.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | compute_instance_templates.labels | Labels to set on the instance template. | object | false | - | - |
 | compute_instance_templates.labels.*pattern* | - | string | false | - | .+ |
 | compute_instance_templates.metadata | Metadata to set on the instance template. | object | false | - | - |
 | compute_instance_templates.name_prefix | Name prefix of the instance template. | string | true | - | - |
-| compute_instance_templates.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
+| compute_instance_templates.network_project_id | Name of network project. If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | compute_instance_templates.preemptible | Whether the instance template can be preempted. Defaults to false. | boolean | false | - | - |
-| compute_instance_templates.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name_prefix.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| compute_instance_templates.resource_name | Override for Terraform resource name. If unset, defaults to normalized name_prefix. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | compute_instance_templates.service_account | Email of service account to attach to this instance template. | string | true | - | - |
 | compute_instance_templates.startup_script | Script to run on startup. Can be multi-line. | string | false | - | - |
 | compute_instance_templates.subnet | Name of the the instance template's subnet. | string | true | - | - |
-| compute_instance_templates.tags | [Network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags)              for the instance template." | array(string) | false | - | - |
+| compute_instance_templates.tags | [Network tags](https://cloud.google.com/vpc/docs/add-remove-network-tags) for the instance template." | array(string) | false | - | - |
 | compute_networks | [Module](https://github.com/terraform-google-modules/terraform-google-network) | array() | false | - | - |
 | compute_networks.cloud_sql_private_service_access | Whether to enable Cloud SQL private service access. Defaults to false. | object | false | - | - |
 | compute_networks.name | Name of network. | string | true | - | - |
-| compute_networks.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| compute_networks.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | compute_networks.subnets | Subnetworks within the network. | array(object) | false | - | - |
 | compute_networks.subnets.compute_region | Region to create subnet in. Can be defined in global data block. | string | false | - | - |
 | compute_networks.subnets.ip_range | IP range of the subnet. | string | false | - | - |
@@ -89,12 +89,12 @@
 | compute_routers.nats | NATs to attach to the router. | array(object) | false | - | - |
 | compute_routers.nats.name | Name of NAT. | string | true | - | - |
 | compute_routers.nats.source_subnetwork_ip_ranges_to_nat | How NAT should be configured per Subnetwork. | string | false | - | - |
-| compute_routers.nats.subnetworks | Subnet NAT configurations.                    Only applicable if 'source_subnetwork_ip_ranges_to_nat' is 'LIST_OF_SUBNETWORKS'. | array(object) | false | - | - |
+| compute_routers.nats.subnetworks | Subnet NAT configurations. Only applicable if 'source_subnetwork_ip_ranges_to_nat' is 'LIST_OF_SUBNETWORKS'. | array(object) | false | - | - |
 | compute_routers.nats.subnetworks.name | Name of subnet. | string | true | - | - |
-| compute_routers.nats.subnetworks.secondary_ip_range_names | List of the secondary ranges of the subnetwork that are allowed to use NAT.                          Only applicable if one of the values in 'source_ip_ranges_to_nat' is 'LIST_OF_SECONDARY_IP_RANGES'. | array(string) | false | - | - |
+| compute_routers.nats.subnetworks.secondary_ip_range_names | List of the secondary ranges of the subnetwork that are allowed to use NAT. Only applicable if one of the values in 'source_ip_ranges_to_nat' is 'LIST_OF_SECONDARY_IP_RANGES'. | array(string) | false | - | - |
 | compute_routers.nats.subnetworks.source_ip_ranges_to_nat | List of options for which source IPs in the subnetwork should have NAT enabled. | array(string) | true | - | - |
 | compute_routers.network | Name of network the router belongs to. | string | false | - | - |
-| compute_routers.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| compute_routers.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | dns_zones | [Module](https://github.com/terraform-google-modules/terraform-google-cloud-dns) | array(object) | false | - | - |
 | dns_zones.domain | Domain of DNS zone. Must end with period. | string | true | - | ^.+\.$ |
 | dns_zones.name | Name of DNS zone. | - | true | - | - |
@@ -103,7 +103,7 @@
 | dns_zones.record_sets.records | Data of the record set. | array(string) | false | - | - |
 | dns_zones.record_sets.ttl | Time to live of this record set, in seconds. | integer | false | - | - |
 | dns_zones.record_sets.type | Type of record set. | string | false | - | - |
-| dns_zones.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| dns_zones.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | dns_zones.type | Type of DNS zone. | string | true | - | - |
 | gke_clusters | [Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant) | array(object) | false | - | - |
 | gke_clusters.gke_region | Region to create GKE cluster in. Can be defined in global data block. | string | false | - | - |
@@ -112,19 +112,19 @@
 | gke_clusters.istio | Whether or not to enable Istio addon. | boolean | false | - | - |
 | gke_clusters.labels | Labels to set on the cluster. | object | false | - | - |
 | gke_clusters.labels.*pattern* | - | string | false | - | .+ |
-| gke_clusters.master_authorized_networks | List of master authorized networks. If none are provided, disallow external              access (except the cluster node IPs, which GKE automatically allows). | array(object) | false | - | - |
+| gke_clusters.master_authorized_networks | List of master authorized networks. If none are provided, disallow external access (except the cluster node IPs, which GKE automatically allows). | array(object) | false | - | - |
 | gke_clusters.master_authorized_networks.cidr_block | CIDR block of the master authorized network. | string | true | - | - |
 | gke_clusters.master_authorized_networks.display_name | Display name of the master authorized network. | string | true | - | - |
 | gke_clusters.master_ipv4_cidr_block | IP range in CIDR notation to use for the hosted master network. | string | false | - | - |
 | gke_clusters.name | Name of GKE cluster. | string | true | - | - |
 | gke_clusters.network | Name of the GKE cluster's network. | string | false | - | - |
-| gke_clusters.network_project_id | Name of network project.              If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
-| gke_clusters.node_pools | List of maps containing node pools.              For supported fields, see the              [module example](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/examples/node_pool_update_variant). | array(object) | false | - | - |
-| gke_clusters.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
-| gke_clusters.service_account | Use the given service account for nodes rather than creating a              new dedicated service account. | string | false | - | - |
+| gke_clusters.network_project_id | Name of network project. If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
+| gke_clusters.node_pools | List of maps containing node pools. For supported fields, see the [module example](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/examples/node_pool_update_variant). | array(object) | false | - | - |
+| gke_clusters.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| gke_clusters.service_account | Use the given service account for nodes rather than creating a new dedicated service account. | string | false | - | - |
 | gke_clusters.subnet | Name of the GKE cluster's subnet. | string | false | - | - |
 | groups | [Module](https://github.com/terraform-google-modules/terraform-google-group) | array(object) | false | - | - |
-| groups.customer_id | Customer ID of the organization to create the group in.              See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>              for how to obtain it. | string | true | - | - |
+| groups.customer_id | Customer ID of the organization to create the group in. See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id> for how to obtain it. | string | true | - | - |
 | groups.description | Description of the group. | string | false | - | - |
 | groups.display_name | Display name of the group. | string | false | - | - |
 | groups.id | Email address of the group. | string | true | - | - |
@@ -198,7 +198,7 @@
 | pubsub_topics.push_subscriptions.name | Name of subscription. | string | true | - | - |
 | pubsub_topics.push_subscriptions.push_endpoint | Name of endpoint to push to. | string | false | - | - |
 | secrets | [Module](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html) | array() | false | - | - |
-| secrets.resource_name | Override for Terraform resource name.              If unset, defaults to normalized secret_id.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| secrets.resource_name | Override for Terraform resource name. If unset, defaults to normalized secret_id. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | secrets.secret_data | Data of the secret. If unset, should be manually set in the GCP console. | string | false | - | - |
 | secrets.secret_id | ID of secret. | string | true | - | - |
 | secrets.secret_locations | Locations to replicate secret. Can be defined in global data block. | array(string) | false | - | - |
@@ -206,7 +206,7 @@
 | service_accounts.account_id | ID of service account. | string | true | - | - |
 | service_accounts.description | Description of service account. | string | false | - | - |
 | service_accounts.display_name | Display name of service account. | string | false | - | - |
-| service_accounts.resource_name | Override for Terraform resource name.              If unset, defaults to normalized account_id.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| service_accounts.resource_name | Override for Terraform resource name. If unset, defaults to normalized account_id. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | state_bucket | Bucket to store remote state. | string | false | - | - |
 | state_path_prefix | Path within bucket to store state. Defaults to the template's output_path. | string | false | - | - |
 | storage_buckets | [Module](https://github.com/terraform-google-modules/terraform-google-cloud-storage/tree/master/modules/simple_bucket) | array() | false | - | - |
@@ -217,18 +217,18 @@
 | storage_buckets.labels.*pattern* | - | string | false | - | .+ |
 | storage_buckets.lifecycle_rules | Lifecycle rules configuration for the bucket. | array(object) | false | - | - |
 | storage_buckets.lifecycle_rules.action | The Lifecycle Rule's action configuration. | object | false | - | - |
-| storage_buckets.lifecycle_rules.action.storage_class | (Required if action type is SetStorageClass)                        The target Storage Class of objects affected by this Lifecycle Rule. | string | false | - | - |
+| storage_buckets.lifecycle_rules.action.storage_class | (Required if action type is SetStorageClass) The target Storage Class of objects affected by this Lifecycle Rule. | string | false | - | - |
 | storage_buckets.lifecycle_rules.action.type | Type of action. Supported values: Delete and SetStorageClass. | string | false | - | - |
 | storage_buckets.lifecycle_rules.condition | The Lifecycle Rule's condition configuration. | object | false | - | - |
 | storage_buckets.lifecycle_rules.condition.age | Minimum age of an object in days. | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.created_before | Creation date of an object in RFC 3339 (e.g. 2017-06-13). | string | false | - | - |
 | storage_buckets.lifecycle_rules.condition.matches_storage_class | Storage Class of objects. | string | false | - | - |
-| storage_buckets.lifecycle_rules.condition.num_newer_versions | Relevant only for versioned objects.                        The number of newer versions of an object." | integer | false | - | - |
+| storage_buckets.lifecycle_rules.condition.num_newer_versions | Relevant only for versioned objects. The number of newer versions of an object." | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.with_state | Match to live and/or archived objects. | string | false | - | - |
 | storage_buckets.name | Name of storage bucket. | string | false | - | - |
-| storage_buckets.resource_name | Override for Terraform resource name.              If unset, defaults to normalized name.              Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
-| storage_buckets.retention_policy | Configuration of the bucket's data retention policy for how long              objects in the bucket should be retained. | object | false | - | - |
-| storage_buckets.retention_policy.is_locked | If set to true, the bucket will be                  [locked](https://cloud.google.com/storage/docs/bucket-lock#overview)                  and permanently restrict edits to the bucket's retention                  policy. Caution: Locking a bucket is an irreversible action.                  Defaults to false. | boolean | false | - | - |
-| storage_buckets.retention_policy.retention_period | The period of time, in seconds, that objects in the bucket                  must be retained and cannot be deleted, overwritten, or                  archived. The value must be less than 2,147,483,647 seconds. | number | false | - | - |
+| storage_buckets.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
+| storage_buckets.retention_policy | Configuration of the bucket's data retention policy for how long objects in the bucket should be retained. | object | false | - | - |
+| storage_buckets.retention_policy.is_locked | If set to true, the bucket will be [locked](https://cloud.google.com/storage/docs/bucket-lock#overview) and permanently restrict edits to the bucket's retention policy. Caution: Locking a bucket is an irreversible action. Defaults to false. | boolean | false | - | - |
+| storage_buckets.retention_policy.retention_period | The period of time, in seconds, that objects in the bucket must be retained and cannot be deleted, overwritten, or archived. The value must be less than 2,147,483,647 seconds. | number | false | - | - |
 | storage_buckets.storage_location | Location to create the storage bucket. Can be defined in global data block. | string | false | - | - |
-| terraform_addons | Additional Terraform configuration for the project deployment.        Can be used to support arbitrary resources not supported in the following list.        For schema see ./deployment.hcl. | object | false | - | - |
+| terraform_addons | Additional Terraform configuration for the project deployment. Can be used to support arbitrary resources not supported in the following list. For schema see ./deployment.hcl. | object | false | - | - |
