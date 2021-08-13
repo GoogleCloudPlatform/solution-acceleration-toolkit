@@ -23,7 +23,7 @@ ID of parent GCP resource to apply the policy
 Can be one of the organization ID or folder ID according to parent_type.
 EOF
   validation {
-    condition     = can(regex("^[0-9]{8,25}$", var.parent_id))
+    condition     = can(regex("^$|(^[0-9]{8,25}$)", var.parent_id))
     error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
   }
   default = ""
