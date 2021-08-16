@@ -54,6 +54,7 @@ type templateInfo struct {
 	RecipePath    string                  `hcl:"recipe_path,optional" json:"recipe_path,omitempty"`
 	OutputPath    string                  `hcl:"output_path,optional" json:"output_path,omitempty"`
 	Flatten       []*template.FlattenInfo `hcl:"flatten,block" json:"flatten,omitempty"`
+	Passthrough   []string                `hcl:"passthrough,optional" json:"passthrough,omitempty"`
 
 	DataCty *cty.Value             `hcl:"data,optional" json:"-"`
 	Data    map[string]interface{} `json:"data,omitempty"`
