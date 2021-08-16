@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{hclField . "exists"}}
-{{hclField . "project_id"}}
-{{hclField . "parent_type"}}
+{{hclField . "exists" -}}
+{{hclField . "project_id" -}}
+{{hclField . "parent_type" -}}
 {{if not (isDotNotation .parent_id) -}}
-{{hclField . "parent_id"}}
+{{hclField . "parent_id" -}}
 {{- end}}
-{{hclField . "billing_account"}}
-{{hclField . "apis"}}
-{{hclField . "is_shared_vpc_host"}}
-{{hclField . "api_identities"}}
+{{hclField . "billing_account" -}}
+{{hclField . "apis" -}}
+{{hclField . "is_shared_vpc_host" -}}
+{{hclField . "api_identities" -}}
 shared_vpc_attachment = {
   {{- $host := get . "shared_vpc_attachment.host_project_id" ""}}
   host_project_id = "{{$host}}"

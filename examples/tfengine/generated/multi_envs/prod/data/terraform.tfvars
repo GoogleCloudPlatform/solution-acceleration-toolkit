@@ -12,19 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-project_id = "example-data-prod"
-
+project_id  = "example-data-prod"
 parent_type = "folder"
 
-
-billing_account = "000-000-000"
-
-apis = ["compute.googleapis.com"]
-
+billing_account    = "000-000-000"
+apis               = ["compute.googleapis.com"]
 is_shared_vpc_host = true
-
-
 shared_vpc_attachment = {
   host_project_id = ""
   subnets = [

@@ -12,24 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-project_id = "example-prod-apps"
-
+project_id  = "example-prod-apps"
 parent_type = "folder"
-
-parent_id = "12345678"
+parent_id   = "12345678"
 
 billing_account = "000-000-000"
-
 apis = [
   "binaryauthorization.googleapis.com",
   "compute.googleapis.com",
   "dns.googleapis.com",
   "container.googleapis.com",
 ]
-
-
-
 shared_vpc_attachment = {
   host_project_id = "example-prod-networks"
   subnets = [

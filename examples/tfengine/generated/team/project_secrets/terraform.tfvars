@@ -12,19 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-project_id = "example-prod-secrets"
-
+project_id  = "example-prod-secrets"
 parent_type = "folder"
-
-parent_id = "12345678"
+parent_id   = "12345678"
 
 billing_account = "000-000-000"
-
-apis = ["secretmanager.googleapis.com"]
-
-
-
+apis            = ["secretmanager.googleapis.com"]
 shared_vpc_attachment = {
   host_project_id = ""
   subnets = [

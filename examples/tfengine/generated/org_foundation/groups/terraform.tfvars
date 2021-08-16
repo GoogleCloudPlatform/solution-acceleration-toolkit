@@ -12,19 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-exists = true
-
-project_id = "example-devops"
-
+exists      = true
+project_id  = "example-devops"
 parent_type = "organization"
-
-parent_id = "12345678"
+parent_id   = "12345678"
 
 billing_account = "000-000-000"
-
-
-
-
 shared_vpc_attachment = {
   host_project_id = ""
   subnets = [

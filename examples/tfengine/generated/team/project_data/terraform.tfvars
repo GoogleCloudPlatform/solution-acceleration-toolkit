@@ -12,15 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-project_id = "example-prod-data"
-
+project_id  = "example-prod-data"
 parent_type = "folder"
-
-parent_id = "12345678"
+parent_id   = "12345678"
 
 billing_account = "000-000-000"
-
 apis = [
   "bigquery.googleapis.com",
   "compute.googleapis.com",
@@ -28,8 +24,6 @@ apis = [
   "sqladmin.googleapis.com",
   "pubsub.googleapis.com",
 ]
-
-
 api_identities = [
   {
     api = "healthcare.googleapis.com"
@@ -41,7 +35,6 @@ api_identities = [
     ]
   },
 ]
-
 shared_vpc_attachment = {
   host_project_id = "example-prod-networks"
   subnets = [
