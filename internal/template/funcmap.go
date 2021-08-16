@@ -164,9 +164,9 @@ func schemaDescription(s string) string {
 func isDotNotation(s string) (bool, error) {
 	// Parts:
 	// [\w]+									-> Starts with a word
-	// (\[((\"\w+\")|\d+)\])* -> Might be followed by map/array notation several times
+	// (\[(("\w+")|\d+)\])* -> Might be followed by map/array notation several times
 	// \.											-> Has a point in between
 	// Accepts complex dot notation such as:
 	// - data["foo"][123].bar["baz"].foo
-	return regexp.MatchString(`^([\w]+(\[((\"\w+\")|\d+)\])*\.[\w]+(\[((\"\w+\")|\d+)\])*)+$`, s)
+	return regexp.MatchString(`^([\w]+(\[(("\w+")|\d+)\])*\.[\w]+(\[(("\w+")|\d+)\])*)+$`, s)
 }
