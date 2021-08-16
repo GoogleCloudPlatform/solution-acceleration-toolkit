@@ -16,6 +16,6 @@
 | template.flatten.key | Name of key in data to flatten. | string | true | - | - |
 | template.name | Name of the template. | string | false | - | - |
 | template.output_path | Relative path for this template to write its contents. This value will be joined with the value passed in by the flag at --output_path. | string | false | - | - |
-| template.passthrough | Keys to pass directly to a child template data. This is not recursive.<br><br>Example: The deployment recipe expects "terraform_addons" to be passed to        it directly, so the project recipe uses this key to do so. | array(string) | false | - | - |
+| template.passthrough | Keys to pass directly to a child template data. This is not recursive.<br><br>Example: The deployment recipe expects "terraform_addons" to be passed to it directly, so the project recipe uses this key to do so. | array(string) | false | - | - |
 | template.recipe_path | Path to a recipe YAML config. Mutually exclusive with 'component_path'. | string | false | - | - |
 | version | Optional constraint on the binary version required for this config. See [syntax](https://www.terraform.io/docs/configuration/version-constraints.html). | string | false | - | - |

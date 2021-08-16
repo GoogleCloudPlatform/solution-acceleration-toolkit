@@ -121,7 +121,7 @@ properties = {
 
             Example:
               The deployment recipe expects "terraform_addons" to be passed to
-	      it directly, so the project recipe uses this key to do so.
+              it directly, so the project recipe uses this key to do so.
           EOF
           type = "array"
           items = {

@@ -184,6 +184,8 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	for _, k := range ti.Passthrough {
 		if v, ok := conf.Data[k]; ok {
 			ti.Data[k] = v
+		} else {
+			return fmt.Errorf("did not find key %q to pass through to child template", k)
 		}
 	}
 
