@@ -182,11 +182,9 @@ func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateIn
 	// Pass through specified keys that should be validated against the
 	// schema.
 	for _, k := range ti.Passthrough {
-		v, ok := conf.Data[k]
-		if !ok {
-			return fmt.Errorf("did not find key %q to pass through to child template", k)
+		if v, ok := conf.Data[k]; ok {
+			ti.Data[k] = v
 		}
-		ti.Data[k] = v
 	}
 
 	switch {

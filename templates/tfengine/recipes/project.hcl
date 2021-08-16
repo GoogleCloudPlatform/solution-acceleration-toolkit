@@ -155,6 +155,11 @@ schema = {
 
 template "deployment" {
   recipe_path = "./deployment.hcl"
+  passthrough = [
+    "state_bucket",
+    "state_path_prefix",
+    "terraform_addons",
+  ]
 }
 
 template "project" {
