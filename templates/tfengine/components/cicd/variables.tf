@@ -165,11 +165,3 @@ variable "terraform_root" {
   type = string
   description = {{schemaDescription $props.terraform_root.description}}
 }
-
-variable "terraform_root_prefix" {
-  type = string
-  description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. 
-    It includes ending "/" when terraform root is not "."
-  EOF
-}

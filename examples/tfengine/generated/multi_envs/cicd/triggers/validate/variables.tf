@@ -104,14 +104,6 @@ Do not include ending "/".
 EOF
 }
 
-variable "terraform_root_prefix" {
-  type        = string
-  description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. 
-    It includes ending "/" when terraform root is not "."
-  EOF
-}
-
 variable "service_account_email" {
   type        = string
   description = "Email of the Cloud Scheduler service account."

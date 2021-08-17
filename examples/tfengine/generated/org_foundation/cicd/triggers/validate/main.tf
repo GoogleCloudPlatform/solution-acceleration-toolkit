@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  terraform_root        = var.terraform_root == "/" ? "." : var.terraform_root
+  terraform_root_prefix = var.terraform_root == "/" ? "" : "${var.terraform_root}/"
+}
+
 resource "google_cloudbuild_trigger" "validate" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
@@ -21,7 +26,7 @@ resource "google_cloudbuild_trigger" "validate" {
   description = "Terraform validate job triggered on push event."
 
   included_files = [
-    "${var.terraform_root_prefix}**",
+    "${local.terraform_root_prefix}**",
   ]
 
   github {
@@ -32,10 +37,10 @@ resource "google_cloudbuild_trigger" "validate" {
     }
   }
 
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = var.terraform_root
+    _TERRAFORM_ROOT = local.terraform_root
     _MANAGED_DIRS   = var.managed_dirs
   }
 }
@@ -51,7 +56,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled" {
   description = "Terraform validate job triggered on schedule."
 
   included_files = [
-    "${var.terraform_root_prefix}**",
+    "${local.terraform_root_prefix}**",
   ]
 
   github {
@@ -62,10 +67,10 @@ resource "google_cloudbuild_trigger" "validate_scheduled" {
     }
   }
 
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = var.terraform_root
+    _TERRAFORM_ROOT = local.terraform_root
     _MANAGED_DIRS   = var.managed_dirs
   }
 }
