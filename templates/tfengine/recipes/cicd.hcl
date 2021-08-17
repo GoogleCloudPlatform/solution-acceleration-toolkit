@@ -41,9 +41,10 @@ schema = {
       pattern     = "^[0-9]{8,25}$"
     }
     project_id = {
-      description = "ID of project to deploy CICD in."
-      type        = "string"
-      pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
+      description      = "ID of project to deploy CICD in."
+      type             = "string"
+      pattern          = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
+      terraformPattern = "^[a-z][a-z0-9-]{4,28}[a-z0-9]$"
     }
     github = {
       description          = "Config for GitHub Cloud Build triggers."
