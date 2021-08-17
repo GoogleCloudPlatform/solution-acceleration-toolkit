@@ -85,7 +85,7 @@ variable "project_id" {
   type        = string
   description = {{schemaDescription $props.project_id.description}}
   validation {
-    condition     = can(regex("{{replace $props.project_id.pattern "\\" ""}}", var.project_id))
+    condition     = can(regex("{{terraformPattern $props.project_id}}", var.project_id))
     error_message = "The project_id must be valid. The project ID must be a unique string of 6 to 30 lowercase letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects#before_you_begin for more information about project id format."
   }
 }

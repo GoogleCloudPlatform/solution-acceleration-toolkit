@@ -52,9 +52,10 @@ schema = {
       ]
       properties = {
         project_id = {
-          description = "ID of project."
-          type        = "string"
-          pattern     = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
+          description      = "ID of project."
+          type             = "string"
+          pattern          = "^[a-z][a-z0-9\\-]{4,28}[a-z0-9]$"
+          terraformPattern = "^[a-z][a-z0-9-]{4,28}[a-z0-9]$"
         }
         owners_group = {
           description          = <<EOF

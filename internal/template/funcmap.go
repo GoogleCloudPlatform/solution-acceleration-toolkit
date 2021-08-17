@@ -37,6 +37,7 @@ var funcMap = map[string]interface{}{
 	"makeSlice":         makeSlice,
 	"schemaDescription": schemaDescription,
 	"isDotNotation":     isDotNotation,
+	"terraformPattern":  terraformPattern,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -169,4 +170,10 @@ func isDotNotation(s string) (bool, error) {
 	// Accepts complex dot notation such as:
 	// - data["foo"][123].bar["baz"].foo
 	return regexp.MatchString(`^([\w]+(\[(("\w+")|\d+)\])*\.[\w]+(\[(("\w+")|\d+)\])*)+$`, s)
+}
+
+// This function returns either "terraformPattern" if present, or the
+// regular "pattern" otherwise
+func terraformPattern(m map[string]interface{}) interface{} {
+	return get(m, "terraformPattern", get(m, "pattern"))
 }
