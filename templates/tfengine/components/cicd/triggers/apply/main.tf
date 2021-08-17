@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 locals {
   terraform_root = var.terraform_root == "/" ? "." : var.terraform_root
-  terraform_root_prefix = local.terraform_root == "." ? "" : "${var.terraform_root}/"
+  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
 }
 
 resource "google_cloudbuild_trigger" "apply" {

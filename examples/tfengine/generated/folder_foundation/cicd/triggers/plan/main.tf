@@ -14,7 +14,7 @@
 
 locals {
   terraform_root        = var.terraform_root == "/" ? "." : var.terraform_root
-  terraform_root_prefix = local.terraform_root == "." ? "" : "${var.terraform_root}/"
+  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
 }
 
 resource "google_cloudbuild_trigger" "plan" {
