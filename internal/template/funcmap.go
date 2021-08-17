@@ -177,7 +177,7 @@ func isDotNotation(s string) (bool, error) {
 // Schema patterns may differ from the terraform pattern for various reasons such as:
 // - Terraform pattern might accept empty strings for optional fields
 // - Terraform pattern might have escaped characters that don't work when rendered in the variables.tf
-// It is recommended to use this function for pattern rendering to avoid redundant maintainance
+// It is recommended to use this function for pattern rendering to avoid redundant maintainance.
 func terraformPattern(m map[string]interface{}) interface{} {
 	return get(m, "terraformPattern", get(m, "pattern"))
 }
