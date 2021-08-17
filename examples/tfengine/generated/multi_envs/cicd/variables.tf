@@ -118,29 +118,29 @@ NOTE: The modules will be deployed in the given order. If a module
 depends on another module, it should show up after it in this list. 
     * name = Name of the environment. 
     * triggers = Config block for the CICD Cloud Build triggers. 
-    ** apply = Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+      * apply = Config block for the postsubmit apply/deployyemt Cloud Build trigger.
 If specified,create the trigger and grant the Cloud Build Service Account
 necessary permissions to perform the build.
-    *** skip = Whether or not to skip creating trigger resources.
-    *** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
 Default to true.
-    *** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+        * run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
 at Eastern Standard Time (EST). Default to none.
-    ** plan = Config block for the presubmit plan Cloud Build trigger.
+      * plan = Config block for the presubmit plan Cloud Build trigger.
 If specified, create the trigger and grant the Cloud Build Service Account
 necessary permissions to perform the build.
-    *** skip = Whether or not to skip creating trigger resources.
-    *** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
-    *** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+        * run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
 at Eastern Standard Time (EST).
-    ** validate = Config block for the presubmit validation Cloud Build trigger. If specified, create
+      * validate = Config block for the presubmit validation Cloud Build trigger. If specified, create
 the trigger and grant the Cloud Build Service Account necessary permissions to
 perform the build.
-    *** skip = Whether or not to skip creating trigger resources.
-    *** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
-    *** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+        * run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
 The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
 at Eastern Standard Time (EST).
   EOF
