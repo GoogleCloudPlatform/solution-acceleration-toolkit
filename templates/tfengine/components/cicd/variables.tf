@@ -12,6 +12,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
+variable "parent_id" {
+  type        = string
+  description = {{schemaDescription $props.parent_id.description}}
+  validation {
+    condition     = can(regex("{{$props.parent_id.pattern}}", var.parent_id))
+    error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
+}
+
+variable "parent_type" {
+  type        = string
+  description = {{schemaDescription $props.parent_type.description}}
+  validation {
+    condition     = can(regex("{{$props.parent_type.pattern}}", var.parent_type))
+    error_message = "The parent_type must be valid. Should be either folder or organization."
+  }
+}
+
 variable "build_editors" {
   type = list(string)
   description = {{schemaDescription $props.build_editors.description}}
@@ -79,6 +97,12 @@ variable "envs" {
     })
   }))
   description = {{schemaDescription $props.envs.description}}
+}
+
+variable "grant_automation_billing_user_role" {
+  type        = bool
+  description = {{schemaDescription $props.grant_automation_billing_user_role.description}}
+  default     = {{$props.grant_automation_billing_user_role.default}}
 }
 
 variable "project_id" {

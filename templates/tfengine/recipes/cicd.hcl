@@ -21,6 +21,21 @@ schema = {
     "scheduler_region",
   ]
   properties = {
+    parent_type = {
+      description = <<EOF
+        Type of parent GCP resource to apply the policy.
+        Must be one of 'organization' or 'folder'."
+      EOF
+      type        = "string"
+      pattern     = "^organization|folder$"
+    }
+    parent_id = {
+      description = <<EOF
+        ID of the parent GCP resource to apply the configuration.
+      EOF
+      type        = "string"
+      pattern     = "^[0-9]{8,25}$"
+    }
     project_id = {
       description = "ID of project to deploy CICD in."
       type        = "string"

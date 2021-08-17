@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+parent_id             = "12345678"
+parent_type           = "folder"
 billing_account       = "000-000-000"
 project_id            = "example-prod-devops"
 scheduler_region      = "us-east1"

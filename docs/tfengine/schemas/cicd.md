@@ -30,6 +30,8 @@
 | github.name | GitHub repo name. | string | true | - | - |
 | github.owner | GitHub repo owner. | string | true | - | - |
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role. Default to true. | boolean | false | true | - |
+| parent_id | ID of the parent GCP resource to apply the configuration. | string | false | - | ^[0-9]{8,25}$ |
+| parent_type | Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'." | string | false | - | ^organization\|folder$ |
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |

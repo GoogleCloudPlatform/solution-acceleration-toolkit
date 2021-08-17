@@ -12,6 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "parent_id" {
+  type        = string
+  description = "ID of the parent GCP resource to apply the configuration."
+  validation {
+    condition     = can(regex("^[0-9]{8,25}$", var.parent_id))
+    error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
+}
+
+variable "parent_type" {
+  type        = string
+  description = <<EOF
+Type of parent GCP resource to apply the policy.
+Must be one of 'organization' or 'folder'."
+EOF
+  validation {
+    condition     = can(regex("^organization|folder$", var.parent_type))
+    error_message = "The parent_type must be valid. Should be either folder or organization."
+  }
+}
+
 variable "build_editors" {
   type        = list(string)
   description = <<EOF
@@ -66,6 +87,15 @@ variable "envs" {
     })
   }))
   description = "Config block for per-environment resources."
+}
+
+variable "grant_automation_billing_user_role" {
+  type        = bool
+  description = <<EOF
+Whether or not to grant automation service account the billing.user role.
+Default to true.
+EOF
+  default     = true
 }
 
 variable "project_id" {
