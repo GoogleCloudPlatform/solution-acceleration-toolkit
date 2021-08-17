@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-parent_id             = "12345678"
-parent_type           = "organization"
-billing_account       = "000-000-000"
-project_id            = "example-devops"
-scheduler_region      = "us-east1"
-state_bucket          = "example-terraform-state"
-terraform_root        = "terraform"
+parent_id        = "12345678"
+parent_type      = "organization"
+billing_account  = "000-000-000"
+project_id       = "example-devops"
+scheduler_region = "us-east1"
+state_bucket     = "example-terraform-state"
+terraform_root   = "terraform"
+
 terraform_root_prefix = "terraform/"
 build_editors         = ["group:example-cicd-editors@example.com"]
 

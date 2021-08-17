@@ -21,6 +21,7 @@ project_id        = "{{.project_id}}"
 scheduler_region  = "{{.scheduler_region}}"
 state_bucket      = "{{.state_bucket}}"
 terraform_root    = "{{.terraform_root}}"
+{{hclField . "grant_automation_billing_user_role" -}}
 {{- $terraform_root := .terraform_root}}
 {{- if eq $terraform_root "/"}}
   {{- $terraform_root = "."}}
@@ -96,6 +97,5 @@ envs = [
         }
     }
   },
-  {{- end}} 
+  {{- end}}
 ]
-{{hclField . "grant_automation_billing_user_role" -}}

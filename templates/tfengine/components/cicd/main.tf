@@ -105,8 +105,6 @@ resource "google_project_service" "services" {
 
 # IAM permissions to allow contributors to view the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_viewers" {
-  count    = length(var.build_viewers) > 0 ? 1 : 0
-
   for_each = toset(var.build_viewers)
   project  = var.project_id
   role     = "roles/cloudbuild.builds.viewer"
@@ -118,8 +116,6 @@ resource "google_project_iam_member" "cloudbuild_builds_viewers" {
 
 # IAM permissions to allow approvers to edit/create the cloud build jobs.
 resource "google_project_iam_member" "cloudbuild_builds_editors" {
-  count    = length(var.build_editors) > 0 ? 1 : 0
-
   for_each = toset(var.build_editors)
   project  = var.project_id
   role     = "roles/cloudbuild.builds.editor"
@@ -246,7 +242,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 
 # Grant Cloud Build Service Account access to the organization.
 resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
-  for_each = var.parent_type == "organization" ? local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles) : []
+  for_each = var.parent_type == "organization" ? (local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles)) : []
 
   org_id   = var.parent_id
   role     = each.value
@@ -258,7 +254,7 @@ resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
 
 # Grant Cloud Build Service Account access to the folder.
 resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
-  for_each = var.parent_type == "folder" ? local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles) : []
+  for_each = var.parent_type == "folder" ? (local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles)) : []
 
   folder   = var.parent_id
   role     = each.value
