@@ -30,8 +30,8 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  project_id    = "example-prod-project"
-  activate_apis = []
+  project_id    = var.project_id
+  activate_apis = var.apis
 }
 
 module "one_billion_ms_example_dataset" {

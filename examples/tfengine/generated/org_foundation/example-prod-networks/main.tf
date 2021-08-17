@@ -32,9 +32,10 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "example-prod-networks"
-  org_id          = "12345678"
-  billing_account = "000-000-000"
+  name            = var.project_id
+  org_id          = var.parent_type == "organization" ? var.parent_id : ""
+  folder_id       = var.parent_type == "folder" ? var.parent_id : ""
+  billing_account = var.billing_account
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
   default_service_account = "keep"
@@ -44,8 +45,14 @@ module "project" {
   # Compute Security Admin role on the VPC host project so it can manage firewall rules.
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
-  enable_shared_vpc_host_project     = true
-  activate_apis                      = ["compute.googleapis.com"]
+
+  enable_shared_vpc_host_project = var.is_shared_vpc_host
+
+  svpc_host_project_id = var.shared_vpc_attachment.host_project_id
+  shared_vpc_subnets   = var.shared_vpc_attachment.subnets
+  activate_apis        = var.apis
+
+  activate_api_identities = var.api_identities
 }
 
 module "example_network" {
