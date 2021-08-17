@@ -15,6 +15,7 @@ limitations under the License. */ -}}
 {{$csrProps := $props.cloud_source_repository.properties -}}
 {{$githubProps := $props.github.properties -}}
 {{$envsProps := $props.envs.items.properties -}}
+{{$triggerProps := $envsProps.triggers.properties -}}
 variable "parent_id" {
   type        = string
   description = {{schemaDescription $props.parent_id.description}}
@@ -81,6 +82,7 @@ variable "github" {
     {{$props.github.description}}
 
     Fields:
+
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
@@ -119,9 +121,18 @@ variable "envs" {
     * managed_dirs = {{$envsProps.managed_dirs.description}} 
     * name = {{$envsProps.name.description}} 
     * triggers = {{$envsProps.triggers.description}} 
-    ** apply = {{$envsProps.triggers.properties.apply.description}}
-    ** plan = {{$envsProps.triggers.properties.plan.description}}
-    ** validate = {{$envsProps.triggers.properties.validate.description}}
+    ** apply = {{$triggerProps.apply.description}}
+    *** skip = Whether or not to skip creating trigger resources.
+    *** run_on_push = {{$triggerProps.apply.properties.run_on_push.description}}
+    *** run_on_schedule = {{$triggerProps.apply.properties.run_on_schedule.description}}
+    ** plan = {{$triggerProps.plan.description}}
+    *** skip = Whether or not to skip creating trigger resources.
+    *** run_on_push = {{$triggerProps.plan.properties.run_on_push.description}}
+    *** run_on_schedule = {{$triggerProps.plan.properties.run_on_schedule.description}}
+    ** validate = {{$triggerProps.validate.description}}
+    *** skip = Whether or not to skip creating trigger resources.
+    *** run_on_push = {{$triggerProps.validate.properties.run_on_push.description}}
+    *** run_on_schedule = {{$triggerProps.validate.properties.run_on_schedule.description}}
   EOF
 }
 

@@ -54,7 +54,37 @@ variable "triggers" {
       run_on_schedule = string
     })
   })
-  description = "Config block for the CICD Cloud Build triggers."
+  description = <<EOF
+    Config block for the CICD Cloud Build triggers.
+
+    Fields:
+
+    * apply = Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+If specified,create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+Default to true.
+    ** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST). Default to none.
+    * plan = Config block for the presubmit plan Cloud Build trigger.
+If specified, create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+    ** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST).
+    * validate = Config block for the presubmit validation Cloud Build trigger. If specified, create
+the trigger and grant the Cloud Build Service Account necessary permissions to
+perform the build.
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = Whether or not to be automatically triggered from a PR/push to branch.
+    ** run_on_schedule = Whether or not to be automatically triggered according a specified schedule.
+The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
+at Eastern Standard Time (EST).
+  EOF
 }
 
 variable "github" {
@@ -62,7 +92,14 @@ variable "github" {
     owner = string
     name  = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+    
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
+  EOF
 }
 
 variable "project_id" {

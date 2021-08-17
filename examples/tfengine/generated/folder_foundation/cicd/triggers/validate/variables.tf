@@ -62,7 +62,14 @@ variable "github" {
     owner = string
     name  = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
+  EOF
 }
 
 variable "project_id" {

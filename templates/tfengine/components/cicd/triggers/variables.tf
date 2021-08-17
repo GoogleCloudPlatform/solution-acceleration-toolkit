@@ -12,20 +12,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
-{{$envProps := $props.envs.items.properties -}}
+{{$csrProps := $props.cloud_source_repository.properties -}}
+{{$githubProps := $props.github.properties -}}
+{{$envsProps := $props.envs.items.properties -}}
+{{$triggerProps := $envsProps.triggers.properties -}}
 variable "branch_name" {
   type = string
-  description = {{schemaDescription $envProps.branch_name.description}}
+  description = {{schemaDescription $envsProps.branch_name.description}}
 }
 
 variable "managed_dirs" {
   type = string
-  description = {{schemaDescription $envProps.managed_dirs.description}}
+  description = {{schemaDescription $envsProps.managed_dirs.description}}
 }
 
 variable "env" {
   type = string
-  description = {{schemaDescription $envProps.name.description}}
+  description = {{schemaDescription $envsProps.name.description}}
 }
 
 variable "triggers" {
@@ -46,16 +49,39 @@ variable "triggers" {
       run_on_schedule = string
     })
   })
-  description = {{schemaDescription $envProps.triggers.description}}
+  description = <<EOF
+    {{$envsProps.triggers.description}}
+
+    Fields:
+
+    * apply = {{$triggerProps.apply.description}}
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = {{$triggerProps.apply.properties.run_on_push.description}}
+    ** run_on_schedule = {{$triggerProps.apply.properties.run_on_schedule.description}}
+    * plan = {{$triggerProps.plan.description}}
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = {{$triggerProps.plan.properties.run_on_push.description}}
+    ** run_on_schedule = {{$triggerProps.plan.properties.run_on_schedule.description}}
+    * validate = {{$triggerProps.validate.description}}
+    ** skip = Whether or not to skip creating trigger resources.
+    ** run_on_push = {{$triggerProps.validate.properties.run_on_push.description}}
+    ** run_on_schedule = {{$triggerProps.validate.properties.run_on_schedule.description}}
+  EOF
 }
 
 {{- if has . "cloud_source_repository"}}
 
-variable "cloud_source_repository" {
+variable "" {
   type = object({
     name = string
   })
-  description = {{schemaDescription $props.cloud_source_repository.description}}
+  description = <<EOF
+    {{$props.cloud_source_repository.description}}
+
+    Fields:
+
+    * name = {{$csrProps.name.description}}
+  EOF
 }
 {{- end}}
 
@@ -66,7 +92,14 @@ variable "github" {
     owner = string
     name = string
   })
-  description = {{schemaDescription $props.github.description}}
+  description = <<EOF
+    {{$props.github.description}}
+
+    Fields:
+    
+    * owner = {{$githubProps.owner.description}}
+    * name = {{$githubProps.name.description}}
+  EOF
 }
 {{- end}}
 

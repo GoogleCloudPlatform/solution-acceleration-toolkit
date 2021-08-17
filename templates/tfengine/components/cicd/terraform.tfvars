@@ -12,8 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
-{{$envProps := $props.envs.items.properties -}}
-{{$triggerProps := $envProps.triggers.properties -}}
+{{$envsProps := $props.envs.items.properties -}}
+{{$triggerProps := $envsProps.triggers.properties -}}
 parent_id         = "{{.parent_id}}"
 parent_type       = "{{.parent_type}}"
 billing_account   = "{{.billing_account}}"
