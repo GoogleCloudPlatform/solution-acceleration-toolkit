@@ -48,7 +48,7 @@ variable "project" {
     * project_id = {{$projectProps.project_id.description}}
   EOF
   validation {
-    condition     = can(regex("{{replace $projectProps.project_id.pattern "\\" ""}}", var.project.project_id))
+    condition     = can(regex("{{terraformPattern $projectProps.project_id}}", var.project.project_id))
     error_message = "Invalid project.project_id. Should be a string of 6 to 30 letters, digits, or hyphens. It must start with a letter, and cannot have a trailing hyphen. See https://cloud.google.com/resource-manager/docs/creating-managing-projects."
   }
 }
@@ -87,7 +87,7 @@ variable "parent_id" {
   type        = string
   description = {{schemaDescription $props.parent_id.description}}
   validation {
-    condition     = can(regex("{{$props.parent_id.pattern}}", var.parent_id))
+    condition     = can(regex("{{terraformPattern $props.parent_id}}", var.parent_id))
     error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
   }
 }
@@ -96,7 +96,7 @@ variable "parent_type" {
   type        = string
   description = {{schemaDescription $props.parent_type.description}}
   validation {
-    condition     = can(regex("{{$props.parent_type.pattern}}", var.parent_type))
+    condition     = can(regex("{{terraformPattern $props.parent_type}}", var.parent_type))
     error_message = "The parent_type must be valid. Should be either folder or organization."
   }
 }
