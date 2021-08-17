@@ -12,6 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
+{{$csrProps := $props.cloud_source_repository.properties -}}
+{{$githubProps := $props.github.properties -}}
+{{$envsProps := $props.envs.items.properties -}}
 variable "parent_id" {
   type        = string
   description = {{schemaDescription $props.parent_id.description}}
@@ -44,6 +47,7 @@ variable "build_viewers" {
 
 variable "billing_account" {
   type = string
+  description = {{schemaDescription $props.billing_account.description}}
 }
 
 {{- if has . "cloud_source_repository"}}
@@ -51,14 +55,18 @@ variable "billing_account" {
 variable "cloud_source_repository" {
   type = object({
     name = string
-    {{- if has .cloud_source_repository "readers"}}
     readers = list(string)
-    {{- end}}
-    {{- if has .cloud_source_repository "writers"}}
     writers = list(string)
-    {{- end}}
   })
-  description = {{schemaDescription $props.cloud_source_repository.description}}
+  description = <<EOF
+    {{$props.cloud_source_repository.description}}
+
+    Fields:
+
+    * name = {{$csrProps.name.description}}
+    * readers = {{$csrProps.readers.description}}
+    * writers = {{$csrProps.writers.description}}
+  EOF
 }
 {{- end}}
 
@@ -69,7 +77,13 @@ variable "github" {
     owner = string
     name = string
   })
-  description = {{schemaDescription $props.github.description}}
+  description = <<EOF
+    {{$props.github.description}}
+
+    Fields:
+    * owner = {{$githubProps.owner.description}}
+    * name = {{$githubProps.name.description}}
+  EOF
 }
 {{- end}}
 
@@ -96,7 +110,19 @@ variable "envs" {
       })
     })
   }))
-  description = {{schemaDescription $props.envs.description}}
+  description = <<EOF
+    {{schemaDescription $props.envs.description}}
+  
+    Fields:
+
+    * branch_name = {{$envsProps.branch_name.description}} 
+    * managed_dirs = {{$envsProps.managed_dirs.description}} 
+    * name = {{$envsProps.name.description}} 
+    * triggers = {{$envsProps.triggers.description}} 
+    ** apply = {{$envsProps.triggers.properties.apply.description}}
+    ** plan = {{$envsProps.triggers.properties.plan.description}}
+    ** validate = {{$envsProps.triggers.properties.validate.description}}
+  EOF
 }
 
 variable "grant_automation_billing_user_role" {

@@ -35,20 +35,16 @@ terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
   name = "{{.cloud_source_repository.name}}"
-  {{- if has .cloud_source_repository "readers"}}
   readers = [
     {{- range .cloud_source_repository.readers}}
     "{{.}}",
     {{- end}}
   ]
-  {{- end}}
-  {{- if has .cloud_source_repository "writers"}}
   writers = [
     {{- range .cloud_source_repository.writers}}
     "{{.}}",
     {{- end}}
   ]
-  {{- end}}
 }
 {{- end}}
 {{- if has . "github"}}

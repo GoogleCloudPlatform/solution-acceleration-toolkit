@@ -186,7 +186,6 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
-
 # Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
 resource "google_service_account" "cloudbuild_scheduler_sa" {
   count = local.has_scheduled_jobs ? 1 : 0

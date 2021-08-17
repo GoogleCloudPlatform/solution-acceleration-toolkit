@@ -21,6 +21,10 @@ schema = {
     "scheduler_region",
   ]
   properties = {
+    billing_account = {
+      description = "ID of billing account to attach to this project."
+      type        = "string"
+    }
     parent_type = {
       description = <<EOF
         Type of parent GCP resource to apply the policy.
@@ -89,6 +93,7 @@ schema = {
             IAM members to allow reading the repo.
           EOF
           type        = "array"
+          default     = "[]"
           items = {
             type = "string"
           }
@@ -98,6 +103,7 @@ schema = {
             IAM members to allow writing to the repo.
           EOF
           type        = "array"
+          default     = "[]"
           items = {
             type = "string"
           }

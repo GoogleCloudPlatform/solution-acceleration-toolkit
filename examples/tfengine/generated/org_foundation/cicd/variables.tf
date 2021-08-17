@@ -52,7 +52,8 @@ EOF
 }
 
 variable "billing_account" {
-  type = string
+  type        = string
+  description = "ID of billing account to attach to this project."
 }
 
 variable "github" {
@@ -60,7 +61,13 @@ variable "github" {
     owner = string
     name  = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
+  EOF
 }
 
 variable "envs" {
@@ -86,7 +93,30 @@ variable "envs" {
       })
     })
   }))
-  description = "Config block for per-environment resources."
+  description = <<EOF
+    "Config block for per-environment resources."
+  
+    Fields:
+
+    * branch_name = Name of the branch to set the Cloud Build Triggers to monitor.
+Regex is not supported to enforce a 1:1 mapping from a branch to a GCP
+environment. 
+    * managed_dirs = List of root modules managed by the CICD relative to `terraform_root`.
+
+NOTE: The modules will be deployed in the given order. If a module
+depends on another module, it should show up after it in this list. 
+    * name = Name of the environment. 
+    * triggers = Config block for the CICD Cloud Build triggers. 
+    ** apply = Config block for the postsubmit apply/deployyemt Cloud Build trigger.
+If specified,create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+    ** plan = Config block for the presubmit plan Cloud Build trigger.
+If specified, create the trigger and grant the Cloud Build Service Account
+necessary permissions to perform the build.
+    ** validate = Config block for the presubmit validation Cloud Build trigger. If specified, create
+the trigger and grant the Cloud Build Service Account necessary permissions to
+perform the build.
+  EOF
 }
 
 variable "grant_automation_billing_user_role" {
