@@ -210,6 +210,7 @@
 | state_bucket | Bucket to store remote state. | string | false | - | - |
 | state_path_prefix | Path within bucket to store state. Defaults to the template's output_path. | string | false | - | - |
 | storage_buckets | [Module](https://github.com/terraform-google-modules/terraform-google-cloud-storage/tree/master/modules/simple_bucket) | array() | false | - | - |
+| storage_buckets.force_destroy | When deleting a bucket, this boolean option will delete all contained objects. If false, Terraform will fail to delete buckets which contain objects. | boolean | false | false | - |
 | storage_buckets.iam_members | IAM member to grant access for. | array(object) | false | - | - |
 | storage_buckets.iam_members.member | Member to grant acess to role. | string | true | - | - |
 | storage_buckets.iam_members.role | IAM role to grant. | string | true | - | - |
