@@ -19,12 +19,17 @@ project_id       = "example-devops"
 scheduler_region = "us-east1"
 state_bucket     = "example-terraform-state"
 terraform_root   = "terraform"
-
-terraform_root_prefix = "terraform/"
-build_editors         = ["group:example-cicd-editors@example.com"]
+build_editors    = ["group:example-cicd-editors@example.com"]
 
 build_viewers = ["group:example-cicd-viewers@example.com"]
 
+cloud_source_repository = {
+  name = ""
+  readers = [
+  ]
+  writers = [
+  ]
+}
 github = {
   owner = "GoogleCloudPlatform"
   name  = "example"

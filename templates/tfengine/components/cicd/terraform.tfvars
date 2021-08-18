@@ -22,38 +22,25 @@ scheduler_region  = "{{.scheduler_region}}"
 state_bucket      = "{{.state_bucket}}"
 terraform_root    = "{{.terraform_root}}"
 {{hclField . "grant_automation_billing_user_role" -}}
-{{- $terraform_root := .terraform_root}}
-{{- if eq $terraform_root "/"}}
-  {{- $terraform_root = "."}}
-{{- end}}
-{{- $terraform_root_prefix := printf "%s/" $terraform_root}}
-{{- if eq $terraform_root "."}}
-  {{- $terraform_root_prefix = ""}}
-{{- end}}
-terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{hclField . "build_editors"}}
 {{hclField . "build_viewers"}}
-{{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
-  name = "{{.cloud_source_repository.name}}"
+  name = "{{get . "cloud_source_repository.name" ""}}"
   readers = [
-    {{- range .cloud_source_repository.readers}}
+    {{- range (get . "cloud_source_repository.readers" nil)}}
     "{{.}}",
     {{- end}}
   ]
   writers = [
-    {{- range .cloud_source_repository.writers}}
+    {{- range (get . "cloud_source_repository.writers" nil)}}
     "{{.}}",
     {{- end}}
   ]
 }
-{{- end}}
-{{- if has . "github"}}
 github = {
-  owner = "{{.github.owner}}"
-  name = "{{.github.name}}"
+  owner = "{{get . "github.owner" ""}}"
+  name = "{{get . "github.name" ""}}"
 }
-{{- end}}
 envs = [
   {{- range get . "envs" -}}
   {{- $managed_dirs := ""}}

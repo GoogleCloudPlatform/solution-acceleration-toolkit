@@ -87,7 +87,7 @@ at Eastern Standard Time (EST).
   EOF
 }
 
-variable "" {
+variable "cloud_source_repository" {
   type = object({
     name = string
   })
@@ -105,6 +105,21 @@ and let 'apply' trigger 'run_on_push'.
 
     * name = Cloud Source Repository repo name.
 The Cloud Source Repository should be hosted under the devops project.
+  EOF
+}
+
+variable "github" {
+  type = object({
+    owner = string
+    name  = string
+  })
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+    
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
   EOF
 }
 

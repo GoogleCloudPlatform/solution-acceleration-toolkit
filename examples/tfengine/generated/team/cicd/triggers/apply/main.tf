@@ -13,8 +13,10 @@
 # limitations under the License.
 
 locals {
-  terraform_root        = var.terraform_root == "/" ? "." : var.terraform_root
-  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+  terraform_root             = var.terraform_root == "/" ? "." : var.terraform_root
+  terraform_root_prefix      = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+  is_github                  = var.github.name != ""
+  is_cloud_source_repository = !var.is_github && var.cloud_source_repository.name != ""
 }
 
 resource "google_cloudbuild_trigger" "apply" {
@@ -29,13 +31,24 @@ resource "google_cloudbuild_trigger" "apply" {
     "${local.terraform_root_prefix}**",
   ]
 
-  github {
-    owner = var.github.owner
-    name  = var.github.name
-    push {
-      branch = "^${var.branch_name}$"
+  github = var.is_github ? [
+    {
+      owner = var.github.owner
+      name  = var.github.name
+      push = [
+        {
+          branch = "^${var.branch_name}$"
+        }
+      ]
     }
-  }
+  ] : []
+
+  trigger_template = local.is_cloud_source_repository ? [
+    {
+      repo_name   = var.cloud_source_repository.name
+      branch_name = "^${var.branch_name}$"
+    }
+  ] : []
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
 

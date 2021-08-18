@@ -21,12 +21,8 @@ module "validate_triggers" {
   skip                    = var.triggers.validate.skip
   run_on_push             = var.triggers.validate.run_on_push
   run_on_schedule         = var.triggers.validate.run_on_schedule
-  {{- if has . "cloud_source_repository"}}
   cloud_source_repository = var.cloud_source_repository
-  {{- end}}
-  {{- if has . "github"}}
   github                  = var.github
-  {{- end}}
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
@@ -43,12 +39,8 @@ module "plan_triggers" {
   skip                    = var.triggers.plan.skip
   run_on_push             = var.triggers.plan.run_on_push
   run_on_schedule         = var.triggers.plan.run_on_schedule
-  {{- if has . "cloud_source_repository"}}
   cloud_source_repository = var.cloud_source_repository
-  {{- end}}
-  {{- if has . "github"}}
   github                  = var.github
-  {{- end}}
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
@@ -64,12 +56,8 @@ module "apply_triggers" {
   skip                    = var.triggers.apply.skip
   run_on_push             = var.triggers.apply.run_on_push
   run_on_schedule         = var.triggers.apply.run_on_schedule
-  {{- if has . "cloud_source_repository"}}
   cloud_source_repository = var.cloud_source_repository
-  {{- end}}
-  {{- if has . "github"}}
   github                  = var.github
-  {{- end}}
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root

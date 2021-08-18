@@ -81,6 +81,21 @@ The Cloud Source Repository should be hosted under the devops project.
   EOF
 }
 
+variable "github" {
+  type = object({
+    owner = string
+    name  = string
+  })
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
+  EOF
+}
+
 variable "envs" {
   type = list(object({
     branch_name  = string

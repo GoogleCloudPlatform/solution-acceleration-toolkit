@@ -69,9 +69,7 @@ variable "triggers" {
   EOF
 }
 
-{{- if has . "cloud_source_repository"}}
-
-variable "" {
+variable "cloud_source_repository" {
   type = object({
     name = string
   })
@@ -83,9 +81,6 @@ variable "" {
     * name = {{$csrProps.name.description}}
   EOF
 }
-{{- end}}
-
-{{- if has . "github"}}
 
 variable "github" {
   type = object({
@@ -101,7 +96,6 @@ variable "github" {
     * name = {{$githubProps.name.description}}
   EOF
 }
-{{- end}}
 
 variable "project_id" {
   type        = string

@@ -15,49 +15,52 @@
 module "validate_triggers" {
   source = "./trigger"
 
-  command               = "validate"
-  env                   = var.env
-  branch_name           = var.branch_name
-  managed_dirs          = var.managed_dirs
-  skip                  = var.triggers.validate.skip
-  run_on_push           = var.triggers.validate.run_on_push
-  run_on_schedule       = var.triggers.validate.run_on_schedule
-  github                = var.github
-  project_id            = var.project_id
-  scheduler_region      = var.scheduler_region
-  terraform_root        = var.terraform_root
-  service_account_email = var.service_account_email
+  command                 = "validate"
+  env                     = var.env
+  branch_name             = var.branch_name
+  managed_dirs            = var.managed_dirs
+  skip                    = var.triggers.validate.skip
+  run_on_push             = var.triggers.validate.run_on_push
+  run_on_schedule         = var.triggers.validate.run_on_schedule
+  cloud_source_repository = var.cloud_source_repository
+  github                  = var.github
+  project_id              = var.project_id
+  scheduler_region        = var.scheduler_region
+  terraform_root          = var.terraform_root
+  service_account_email   = var.service_account_email
 }
 
 module "plan_triggers" {
   source = "./trigger"
 
-  command               = "plan"
-  env                   = var.env
-  branch_name           = var.branch_name
-  managed_dirs          = var.managed_dirs
-  skip                  = var.triggers.plan.skip
-  run_on_push           = var.triggers.plan.run_on_push
-  run_on_schedule       = var.triggers.plan.run_on_schedule
-  github                = var.github
-  project_id            = var.project_id
-  scheduler_region      = var.scheduler_region
-  terraform_root        = var.terraform_root
-  service_account_email = var.service_account_email
+  command                 = "plan"
+  env                     = var.env
+  branch_name             = var.branch_name
+  managed_dirs            = var.managed_dirs
+  skip                    = var.triggers.plan.skip
+  run_on_push             = var.triggers.plan.run_on_push
+  run_on_schedule         = var.triggers.plan.run_on_schedule
+  cloud_source_repository = var.cloud_source_repository
+  github                  = var.github
+  project_id              = var.project_id
+  scheduler_region        = var.scheduler_region
+  terraform_root          = var.terraform_root
+  service_account_email   = var.service_account_email
 }
 
 module "apply_triggers" {
   source = "./apply"
 
-  env                   = var.env
-  branch_name           = var.branch_name
-  managed_dirs          = var.managed_dirs
-  skip                  = var.triggers.apply.skip
-  run_on_push           = var.triggers.apply.run_on_push
-  run_on_schedule       = var.triggers.apply.run_on_schedule
-  github                = var.github
-  project_id            = var.project_id
-  scheduler_region      = var.scheduler_region
-  terraform_root        = var.terraform_root
-  service_account_email = var.service_account_email
+  env                     = var.env
+  branch_name             = var.branch_name
+  managed_dirs            = var.managed_dirs
+  skip                    = var.triggers.apply.skip
+  run_on_push             = var.triggers.apply.run_on_push
+  run_on_schedule         = var.triggers.apply.run_on_schedule
+  cloud_source_repository = var.cloud_source_repository
+  github                  = var.github
+  project_id              = var.project_id
+  scheduler_region        = var.scheduler_region
+  terraform_root          = var.terraform_root
+  service_account_email   = var.service_account_email
 }
