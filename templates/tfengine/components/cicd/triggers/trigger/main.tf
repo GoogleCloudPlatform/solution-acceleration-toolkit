@@ -19,8 +19,8 @@ locals {
 }
 
 resource "google_cloudbuild_trigger" "push" {
-  count       = var.skip ? 0 : 1
-  disabled    = var.run_on_push
+  count       = var.push.skip ? 0 : 1
+  disabled    = var.push.disabled
   provider    = google-beta
   project     = var.project_id
   name        = "tf-${var.command}-${var.env}"
@@ -59,9 +59,8 @@ resource "google_cloudbuild_trigger" "push" {
 
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
 resource "google_cloudbuild_trigger" "scheduled" {
-  count       = (!var.skip && var.run_on_schedule != "") ? 1 : 0
-  # Always disabled on push to branch.
-  disabled    = true
+  count       = var.scheduled.skip ? 0 : 1
+  disabled    = var.scheduled.disabled
   provider    = google-beta
   project     = var.project_id
   name        = "tf-${var.command}-scheduled-${var.env}"
@@ -99,7 +98,7 @@ resource "google_cloudbuild_trigger" "scheduled" {
 }
 
 resource "google_cloud_scheduler_job" "scheduler" {
-  count     = (!var.skip && var.run_on_schedule != "") ? 1 : 0
+  count     = var.scheduled.skip ? 0 : 1
   project   = var.project_id
   name      = "${var.command}-scheduler-${var.env}"
   region    = var.scheduler_region

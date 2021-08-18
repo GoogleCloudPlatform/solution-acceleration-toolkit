@@ -21,6 +21,20 @@ variable "command" {
   }
 }
 
+variable "push" {
+  type = object({
+    skip     = bool
+    disabled = bool
+  })
+}
+
+variable "scheduled" {
+  type = object({
+    skip     = bool
+    disabled = bool
+  })
+}
+
 variable "branch_name" {
   type        = string
   description = <<EOF
@@ -43,17 +57,6 @@ EOF
 variable "env" {
   type        = string
   description = "Name of the environment."
-}
-
-variable "skip" {
-  type        = bool
-  description = "Whether or not to skip creating trigger resources."
-}
-
-variable "run_on_push" {
-  type        = bool
-  description = "Whether or not to be automatically triggered from a PR/push to branch."
-  default     = true
 }
 
 variable "run_on_schedule" {

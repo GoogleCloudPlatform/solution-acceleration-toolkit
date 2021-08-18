@@ -19,8 +19,6 @@ module "validate_triggers" {
   env                     = var.env
   branch_name             = var.branch_name
   managed_dirs            = var.managed_dirs
-  skip                    = var.triggers.validate.skip
-  run_on_push             = var.triggers.validate.run_on_push
   run_on_schedule         = var.triggers.validate.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
   github                  = var.github
@@ -28,6 +26,16 @@ module "validate_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   service_account_email   = var.service_account_email
+
+  push = {
+    skip     = var.triggers.validate.skip
+    disabled = !var.triggers.validate.run_on_push
+  }
+
+  scheduled = {
+    skip     = var.triggers.validate.skip || var.triggers.validate.run_on_schedule == ""
+    disabled = true # Always disabled on push to branch.
+  }
 }
 
 module "plan_triggers" {
@@ -37,8 +45,6 @@ module "plan_triggers" {
   env                     = var.env
   branch_name             = var.branch_name
   managed_dirs            = var.managed_dirs
-  skip                    = var.triggers.plan.skip
-  run_on_push             = var.triggers.plan.run_on_push
   run_on_schedule         = var.triggers.plan.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
   github                  = var.github
@@ -46,6 +52,16 @@ module "plan_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   service_account_email   = var.service_account_email
+
+  push = {
+    skip     = var.triggers.plan.skip
+    disabled = !var.triggers.plan.run_on_push
+  }
+
+  scheduled = {
+    skip     = var.triggers.plan.skip || var.triggers.plan.run_on_schedule == ""
+    disabled = true # Always disabled on push to branch.
+  }
 }
 
 module "apply_triggers" {

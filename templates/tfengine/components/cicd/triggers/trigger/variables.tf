@@ -25,6 +25,20 @@ variable "command" {
   }
 }
 
+variable "push" {
+  type = object({
+    skip = bool
+    disabled = bool
+  })
+}
+
+variable "scheduled" {
+  type = object({
+    skip = bool
+    disabled = bool
+  })
+}
+
 variable "branch_name" {
   type = string
   description = {{schemaDescription $envsProps.branch_name.description}}
@@ -38,17 +52,6 @@ variable "managed_dirs" {
 variable "env" {
   type = string
   description = {{schemaDescription $envsProps.name.description}}
-}
-
-variable "skip" {
-  type = bool
-  description = "Whether or not to skip creating trigger resources."
-}
-
-variable "run_on_push" {
-  type = bool
-  description = {{schemaDescription $triggerProps.validate.properties.run_on_push.description}}
-  default     = {{$triggerProps.validate.properties.run_on_push.default}}
 }
 
 variable "run_on_schedule" {

@@ -31,7 +31,7 @@ resource "google_cloudbuild_trigger" "apply" {
     "${local.terraform_root_prefix}**",
   ]
 
-  github = var.is_github ? [
+  github = local.is_github ? [
     {
       owner = var.github.owner
       name  = var.github.name
