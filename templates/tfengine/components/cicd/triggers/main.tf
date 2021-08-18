@@ -12,8 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 module "validate_triggers" {
-  source                  = "./validate"
+  source                  = "./trigger"
 
+  command                 = "validate"
   env                     = var.env
   branch_name             = var.branch_name
   managed_dirs            = var.managed_dirs
@@ -33,9 +34,10 @@ module "validate_triggers" {
 }
 
 module "plan_triggers" {
-  source                  = "./plan"
+  source                  = "./trigger"
 
-  env                    = var.env
+  command                 = "plan"
+  env                     = var.env
   branch_name             = var.branch_name
   managed_dirs            = var.managed_dirs
   skip                    = var.triggers.plan.skip

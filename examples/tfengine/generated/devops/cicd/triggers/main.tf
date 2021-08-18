@@ -13,8 +13,9 @@
 # limitations under the License.
 
 module "validate_triggers" {
-  source = "./validate"
+  source = "./trigger"
 
+  command               = "validate"
   env                   = var.env
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs
@@ -29,8 +30,9 @@ module "validate_triggers" {
 }
 
 module "plan_triggers" {
-  source = "./plan"
+  source = "./trigger"
 
+  command               = "plan"
   env                   = var.env
   branch_name           = var.branch_name
   managed_dirs          = var.managed_dirs

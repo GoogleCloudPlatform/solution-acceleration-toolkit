@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "command" {
+  type        = string
+  description = "Terraform command to execute within this trigger."
+  validation {
+    condition     = can(regex("^validate|apply|plan$"), var.command)
+    error_message = "The provided command should be one of validate, apply or plan."
+  }
+}
+
 variable "branch_name" {
   type        = string
   description = <<EOF
@@ -57,24 +66,18 @@ EOF
   default     = ""
 }
 
-variable "cloud_source_repository" {
+variable "github" {
   type = object({
-    name = string
+    owner = string
+    name  = string
   })
   description = <<EOF
-    Config for Google Cloud Source Repository.
-
-IMPORTANT: Cloud Source Repositories does not support code review or
-presubmit runs. If you set both plan and apply to run at the same time,
-they will conflict and may error out. To get around this, for 'shared'
-and 'prod' environment, set 'apply' trigger to not 'run_on_push',
-and for other environments, do not specify the 'plan' trigger block
-and let 'apply' trigger 'run_on_push'.
+    Config for GitHub Cloud Build triggers.
 
     Fields:
 
-    * name = Cloud Source Repository repo name.
-The Cloud Source Repository should be hosted under the devops project.
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
   EOF
 }
 

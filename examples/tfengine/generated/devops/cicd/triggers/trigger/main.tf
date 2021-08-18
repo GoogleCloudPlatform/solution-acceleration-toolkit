@@ -17,13 +17,13 @@ locals {
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
 }
 
-resource "google_cloudbuild_trigger" "validate" {
+resource "google_cloudbuild_trigger" "push" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-${var.env}"
-  description = "Terraform validate job triggered on push event."
+  name        = "tf-${var.command}-${var.env}"
+  description = "Terraform ${var.command} job triggered on push event."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -37,7 +37,7 @@ resource "google_cloudbuild_trigger" "validate" {
     }
   }
 
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-${var.command}.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = local.terraform_root
@@ -46,14 +46,14 @@ resource "google_cloudbuild_trigger" "validate" {
 }
 
 # Create another trigger as Pull Request Cloud Build triggers cannot be used by Cloud Scheduler.
-resource "google_cloudbuild_trigger" "validate_scheduled" {
+resource "google_cloudbuild_trigger" "scheduled" {
   count = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   # Always disabled on push to branch.
   disabled    = true
   provider    = google-beta
   project     = var.project_id
-  name        = "tf-validate-scheduled-${var.env}"
-  description = "Terraform validate job triggered on schedule."
+  name        = "tf-${var.command}-scheduled-${var.env}"
+  description = "Terraform ${var.command} job triggered on schedule."
 
   included_files = [
     "${local.terraform_root_prefix}**",
@@ -67,7 +67,7 @@ resource "google_cloudbuild_trigger" "validate_scheduled" {
     }
   }
 
-  filename = "${local.terraform_root_prefix}cicd/configs/tf-validate.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-${var.command}.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = local.terraform_root
@@ -75,10 +75,10 @@ resource "google_cloudbuild_trigger" "validate_scheduled" {
   }
 }
 
-resource "google_cloud_scheduler_job" "validate_scheduler" {
+resource "google_cloud_scheduler_job" "scheduler" {
   count            = (!var.skip && var.run_on_schedule != "") ? 1 : 0
   project          = var.project_id
-  name             = "validate-scheduler-${var.env}"
+  name             = "${var.command}-scheduler-${var.env}"
   region           = var.scheduler_region
   schedule         = var.run_on_schedule
   time_zone        = "America/New_York" # Eastern Standard Time (EST)
@@ -89,7 +89,7 @@ resource "google_cloud_scheduler_job" "validate_scheduler" {
       scope                 = "https://www.googleapis.com/auth/cloud-platform"
       service_account_email = var.service_account_email
     }
-    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.validate_scheduled[0].id}:run"
+    uri  = "https://cloudbuild.googleapis.com/v1/${google_cloudbuild_trigger.scheduled[0].id}:run"
     body = base64encode("{\"branchName\":\"${var.branch_name}\"}")
   }
 }

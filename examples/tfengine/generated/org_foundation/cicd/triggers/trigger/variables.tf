@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "command" {
+  type        = string
+  description = "Terraform command to execute within this trigger."
+  validation {
+    condition     = can(regex("^validate|apply|plan$"), var.command)
+    error_message = "The provided command should be one of validate, apply or plan."
+  }
+}
+
 variable "branch_name" {
   type        = string
   description = <<EOF

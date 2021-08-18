@@ -16,6 +16,15 @@ limitations under the License. */ -}}
 {{$githubProps := $props.github.properties -}}
 {{$envsProps := $props.envs.items.properties -}}
 {{$triggerProps := $envsProps.triggers.properties -}}
+variable "command" {
+  type = string
+  description = "Terraform command to execute within this trigger."
+  validation {
+    condition     = can(regex("^validate|apply|plan$"), var.command)
+    error_message = "The provided command should be one of validate, apply or plan."
+  }
+}
+
 variable "branch_name" {
   type = string
   description = {{schemaDescription $envsProps.branch_name.description}}
