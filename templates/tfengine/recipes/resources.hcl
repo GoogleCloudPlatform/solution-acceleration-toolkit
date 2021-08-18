@@ -1266,6 +1266,11 @@ schema = {
             EOF
             type        = "string"
           }
+          force_destroy = {
+            description = "When deleting a bucket, this boolean option will delete all contained objects. If false, Terraform will fail to delete buckets which contain objects."
+            type = "boolean"
+            default = "false"
+          }
           storage_location = {
             description = "Location to create the storage bucket. Can be defined in global data block."
             type        = "string"
