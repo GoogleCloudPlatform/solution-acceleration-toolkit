@@ -85,7 +85,7 @@ module "apply_triggers" {
   }
 
   scheduled = {
-    skip     = var.apply.validate.skip
-    disabled = !var.apply.apply.run_on_push
+    skip     = var.triggers.apply.skip
+    disabled = !var.triggers.apply.run_on_push
   }
 }
