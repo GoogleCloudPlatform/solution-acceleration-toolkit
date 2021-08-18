@@ -277,13 +277,9 @@ module "environment_triggers" {
   terraform_root        = var.terraform_root
   service_account_email = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa.email : ""
 
-  depends_on = concat(
-    [
-      google_project_service.services,
-      google_app_engine_application.cloudbuild_scheduler_app,
-    ],
-    local.is_cloud_source_repository ? [
-      google_sourcerepo_repository.configs,
-    ] : []
-  )
+  depends_on = [
+    google_project_service.services,
+    google_app_engine_application.cloudbuild_scheduler_app,
+    google_sourcerepo_repository.configs,
+  ]
 }
