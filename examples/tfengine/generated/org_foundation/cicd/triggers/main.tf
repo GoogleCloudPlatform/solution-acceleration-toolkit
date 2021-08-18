@@ -65,13 +65,12 @@ module "plan_triggers" {
 }
 
 module "apply_triggers" {
-  source = "./apply"
+  source = "./trigger"
 
+  command                 = "apply"
   env                     = var.env
   branch_name             = var.branch_name
   managed_dirs            = var.managed_dirs
-  skip                    = var.triggers.apply.skip
-  run_on_push             = var.triggers.apply.run_on_push
   run_on_schedule         = var.triggers.apply.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
   github                  = var.github
@@ -79,4 +78,14 @@ module "apply_triggers" {
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
   service_account_email   = var.service_account_email
+
+  push = {
+    skip     = true # Always true since scheduled trigger may act as a push trigger too
+    disabled = true
+  }
+
+  scheduled = {
+    skip     = var.apply.validate.skip
+    disabled = !var.apply.apply.run_on_push
+  }
 }

@@ -30,6 +30,14 @@ variable "push" {
     skip = bool
     disabled = bool
   })
+  description = <<EOF
+    Special options to specify for push trigger.
+
+    Fields:
+
+    * skip = Whether or not to create the push trigger.
+    * disabled = If created, whether or not to disable it on push events.
+  EOF
 }
 
 variable "scheduled" {
@@ -37,6 +45,14 @@ variable "scheduled" {
     skip = bool
     disabled = bool
   })
+  description = <<EOF
+    Special options to specify for scheduled trigger.
+
+    Fields:
+
+    * skip = Whether or not to create the scheduled trigger.
+    * disabled = If created, whether or not to disable it on push events.
+  EOF
 }
 
 variable "branch_name" {
