@@ -40,32 +40,49 @@ data "google_project" "devops" {
 }
 
 locals {
-  cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
-  services = [
-    "admin.googleapis.com",
-    "bigquery.googleapis.com",
-    "cloudbilling.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "compute.googleapis.com",
-    "iam.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "serviceusage.googleapis.com",
-    "sqladmin.googleapis.com",
-    "sourcerepo.googleapis.com",
-  ]
+  cloudbuild_sa      = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  has_scheduled_jobs = anytrue([for env in var.envs : env.triggers.validate.run_on_schedule || env.triggers.plan.run_on_schedule || env.triggers.apply.run_on_schedule])
+  has_apply_jobs     = anytrue([for env in var.envs : !env.triggers.apply.skip])
+  services = concat(
+    [
+      "admin.googleapis.com",
+      "bigquery.googleapis.com",
+      "cloudbilling.googleapis.com",
+      "cloudbuild.googleapis.com",
+      "cloudresourcemanager.googleapis.com",
+      "compute.googleapis.com",
+      "iam.googleapis.com",
+      "servicenetworking.googleapis.com",
+      "serviceusage.googleapis.com",
+      "sqladmin.googleapis.com",
+      "sourcerepo.googleapis.com",
+    ],
+    local.has_scheduled_jobs ? [
+      "appengine.googleapis.com",
+      "cloudscheduler.googleapis.com",
+    ] : []
+  )
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
     "roles/iam.securityReviewer",
     "roles/secretmanager.secretViewer",
     "roles/secretmanager.secretAccessor",
   ]
-  cloudbuild_sa_editor_roles = [
-    "roles/compute.xpnAdmin",
-    "roles/logging.configWriter",
-    "roles/resourcemanager.projectCreator",
-    "roles/resourcemanager.folderAdmin",
-  ]
+  cloudbuild_sa_editor_roles = concat(
+    [
+      "roles/compute.xpnAdmin",
+      "roles/logging.configWriter",
+      "roles/resourcemanager.projectCreator",
+    ],
+    var.parent_type == "organization" ? [
+      "roles/resourcemanager.organizationAdmin",
+      "roles/orgpolicy.policyAdmin",
+      "roles/resourcemanager.folderCreator",
+    ] : [],
+    var.parent_type == "folder" ? [
+      "roles/resourcemanager.folderAdmin"
+    ] : [],
+  )
   cloudbuild_devops_roles = [
     # Allow CICD to view all resources within the devops project so it can run terraform plans against them.
     # It won't be able to actually apply any changes unless granted the permission in this list.
@@ -165,10 +182,35 @@ resource "google_app_engine_application" "cloudbuild_scheduler_app" {
   ]
 }
 
+# Service Account and its IAM permissions used for Cloud Scheduler to schedule Cloud Build triggers.
+resource "google_service_account" "cloudbuild_scheduler_sa" {
+  count = local.has_scheduled_jobs ? 1 : 0
+
+  project      = var.project_id
+  account_id   = "cloudbuild-scheduler-sa"
+  display_name = "Cloud Build scheduler service account"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
+  count = local.has_scheduled_jobs ? 1 : 0
+
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.editor"
+  member  = "serviceAccount:${google_service_account.cloudbuild_scheduler_sa[0].email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
 # Cloud Build - Cloud Build Service Account IAM permissions
 
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
+  count = local.has_apply_jobs && var.grant_automation_billing_user_role ? 1 : 0
+
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
   member             = local.cloudbuild_sa
@@ -180,7 +222,19 @@ resource "google_billing_account_iam_member" "binding" {
 # IAM permissions to allow Cloud Build SA to access state.
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
-  role   = "roles/storage.admin"
+  role   = local.has_apply_jobs ? "roles/storage.admin" : "roles/storage.objectViewer"
+  member = local.cloudbuild_sa
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# Grant Cloud Build Service Account access to the organization.
+resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
+  for_each = var.parent_type == "organization" ? (local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles)) : []
+
+  org_id = var.parent_id
+  role   = each.value
   member = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
@@ -189,10 +243,11 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
 
 # Grant Cloud Build Service Account access to the folder.
 resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
-  for_each = toset(local.cloudbuild_sa_editor_roles)
-  folder   = 12345678
-  role     = each.value
-  member   = local.cloudbuild_sa
+  for_each = var.parent_type == "folder" ? (local.has_apply_jobs ? toset(local.cloudbuild_sa_editor_roles) : toset(local.cloudbuild_sa_viewer_roles)) : []
+
+  folder = var.parent_id
+  role   = each.value
+  member = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -211,9 +266,8 @@ module "triggers" {
   cloud_source_repository = var.cloud_source_repository
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
-  // TODO(ernestognw): Look how to calculate terraform_root_prefix from terraform_root
-  terraform_root        = var.terraform_root
-  terraform_root_prefix = var.terraform_root_prefix
+  terraform_root          = var.terraform_root
+  service_account_email   = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa.email : ""
 
   depends_on = [
     google_project_service.services,

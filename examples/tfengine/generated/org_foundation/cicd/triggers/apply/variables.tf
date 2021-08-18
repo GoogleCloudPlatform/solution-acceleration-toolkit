@@ -65,7 +65,14 @@ variable "github" {
     owner = string
     name  = string
   })
-  description = "Config for GitHub Cloud Build triggers."
+  description = <<EOF
+    Config for GitHub Cloud Build triggers.
+
+    Fields:
+
+    * owner = GitHub repo owner.
+    * name = GitHub repo name.
+  EOF
 }
 
 variable "project_id" {
@@ -92,14 +99,6 @@ variable "terraform_root" {
 Path of the directory relative to the repo root containing the Terraform configs.
 Do not include ending "/".
 EOF
-}
-
-variable "terraform_root_prefix" {
-  type        = string
-  description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. 
-    It includes ending "/" when terraform root is not "."
-  EOF
 }
 
 variable "service_account_email" {

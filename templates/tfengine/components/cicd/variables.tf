@@ -12,6 +12,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
+{{$csrProps := $props.cloud_source_repository.properties -}}
+{{$githubProps := $props.github.properties -}}
+{{$envsProps := $props.envs.items.properties -}}
+{{$triggerProps := $envsProps.triggers.properties -}}
+variable "parent_id" {
+  type        = string
+  description = {{schemaDescription $props.parent_id.description}}
+  validation {
+    condition     = can(regex("{{terraformPattern $props.parent_id}}", var.parent_id))
+    error_message = "The parent_id must be valid. Should have only numeric values with a length between 8 and 25 digits. See https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy to know how to get your organization/folder id."
+  }
+}
+
+variable "parent_type" {
+  type        = string
+  description = {{schemaDescription $props.parent_type.description}}
+  validation {
+    condition     = can(regex("{{terraformPattern $props.parent_type}}", var.parent_type))
+    error_message = "The parent_type must be valid. Should be either folder or organization."
+  }
+}
+
 variable "build_editors" {
   type = list(string)
   description = {{schemaDescription $props.build_editors.description}}
@@ -26,6 +48,7 @@ variable "build_viewers" {
 
 variable "billing_account" {
   type = string
+  description = {{schemaDescription $props.billing_account.description}}
 }
 
 {{- if has . "cloud_source_repository"}}
@@ -33,14 +56,18 @@ variable "billing_account" {
 variable "cloud_source_repository" {
   type = object({
     name = string
-    {{- if has .cloud_source_repository "readers"}}
     readers = list(string)
-    {{- end}}
-    {{- if has .cloud_source_repository "writers"}}
     writers = list(string)
-    {{- end}}
   })
-  description = {{schemaDescription $props.cloud_source_repository.description}}
+  description = <<EOF
+    {{$props.cloud_source_repository.description}}
+
+    Fields:
+
+    * name = {{$csrProps.name.description}}
+    * readers = {{$csrProps.readers.description}}
+    * writers = {{$csrProps.writers.description}}
+  EOF
 }
 {{- end}}
 
@@ -51,7 +78,14 @@ variable "github" {
     owner = string
     name = string
   })
-  description = {{schemaDescription $props.github.description}}
+  description = <<EOF
+    {{$props.github.description}}
+
+    Fields:
+
+    * owner = {{$githubProps.owner.description}}
+    * name = {{$githubProps.name.description}}
+  EOF
 }
 {{- end}}
 
@@ -78,7 +112,34 @@ variable "envs" {
       })
     })
   }))
-  description = {{schemaDescription $props.envs.description}}
+  description = <<EOF
+    {{schemaDescription $props.envs.description}}
+  
+    Fields:
+
+    * branch_name = {{$envsProps.branch_name.description}} 
+    * managed_dirs = {{$envsProps.managed_dirs.description}} 
+    * name = {{$envsProps.name.description}} 
+    * triggers = {{$envsProps.triggers.description}} 
+      * apply = {{$triggerProps.apply.description}}
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = {{$triggerProps.apply.properties.run_on_push.description}}
+        * run_on_schedule = {{$triggerProps.apply.properties.run_on_schedule.description}}
+      * plan = {{$triggerProps.plan.description}}
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = {{$triggerProps.plan.properties.run_on_push.description}}
+        * run_on_schedule = {{$triggerProps.plan.properties.run_on_schedule.description}}
+      * validate = {{$triggerProps.validate.description}}
+        * skip = Whether or not to skip creating trigger resources.
+        * run_on_push = {{$triggerProps.validate.properties.run_on_push.description}}
+        * run_on_schedule = {{$triggerProps.validate.properties.run_on_schedule.description}}
+  EOF
+}
+
+variable "grant_automation_billing_user_role" {
+  type        = bool
+  description = {{schemaDescription $props.grant_automation_billing_user_role.description}}
+  default     = {{$props.grant_automation_billing_user_role.default}}
 }
 
 variable "project_id" {
@@ -103,12 +164,4 @@ variable "state_bucket" {
 variable "terraform_root" {
   type = string
   description = {{schemaDescription $props.terraform_root.description}}
-}
-
-variable "terraform_root_prefix" {
-  type = string
-  description = <<EOF
-    Path of the directory relative to the repo root containing the Terraform configs. 
-    It includes ending "/" when terraform root is not "."
-  EOF
 }

@@ -11,6 +11,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
+locals {
+  terraform_root = var.terraform_root == "/" ? "." : var.terraform_root
+  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+}
+
 resource "google_cloudbuild_trigger" "apply" {
   count       = var.skip ? 0 : 1
   disabled    = var.run_on_push
@@ -20,7 +25,7 @@ resource "google_cloudbuild_trigger" "apply" {
   description = "Terraform apply job triggered on push event and/or schedule."
 
   included_files = [
-    "${var.terraform_root_prefix}**",
+    "${local.terraform_root_prefix}**",
   ]
 
   {{if has $ "github" -}}
@@ -38,10 +43,10 @@ resource "google_cloudbuild_trigger" "apply" {
   }
   {{- end}}
 
-  filename = "${var.terraform_root_prefix}cicd/configs/tf-apply.yaml"
+  filename = "${local.terraform_root_prefix}cicd/configs/tf-apply.yaml"
 
   substitutions = {
-    _TERRAFORM_ROOT = var.terraform_root
+    _TERRAFORM_ROOT = local.terraform_root
     _MANAGED_DIRS = var.managed_dirs
   }
 }

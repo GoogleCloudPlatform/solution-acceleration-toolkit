@@ -12,13 +12,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 {{$props := .__schema__.properties -}}
-{{$envProps := $props.envs.items.properties -}}
-{{$triggerProps := $envProps.triggers.properties -}}
+{{$envsProps := $props.envs.items.properties -}}
+{{$triggerProps := $envsProps.triggers.properties -}}
+parent_id         = "{{.parent_id}}"
+parent_type       = "{{.parent_type}}"
 billing_account   = "{{.billing_account}}"
 project_id        = "{{.project_id}}"
 scheduler_region  = "{{.scheduler_region}}"
 state_bucket      = "{{.state_bucket}}"
 terraform_root    = "{{.terraform_root}}"
+{{hclField . "grant_automation_billing_user_role" -}}
 {{- $terraform_root := .terraform_root}}
 {{- if eq $terraform_root "/"}}
   {{- $terraform_root = "."}}
@@ -33,20 +36,16 @@ terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
   name = "{{.cloud_source_repository.name}}"
-  {{- if has .cloud_source_repository "readers"}}
   readers = [
     {{- range .cloud_source_repository.readers}}
     "{{.}}",
     {{- end}}
   ]
-  {{- end}}
-  {{- if has .cloud_source_repository "writers"}}
   writers = [
     {{- range .cloud_source_repository.writers}}
     "{{.}}",
     {{- end}}
   ]
-  {{- end}}
 }
 {{- end}}
 {{- if has . "github"}}

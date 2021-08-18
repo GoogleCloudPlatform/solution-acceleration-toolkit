@@ -6,12 +6,13 @@
 
 | Property | Description | Type | Required | Default | Pattern |
 | -------- | ----------- | ---- | -------- | ------- | ------- |
+| billing_account | ID of billing account to attach to this project. | string | false | - | - |
 | build_editors | IAM members to grant `cloudbuild.builds.editor` role in the devops project to see CICD results. | array(string) | false | [] | - |
 | build_viewers | IAM members to grant `cloudbuild.builds.viewer` role in the devops project to see CICD results. | array(string) | false | [] | - |
 | cloud_source_repository | Config for Google Cloud Source Repository.<br><br>IMPORTANT: Cloud Source Repositories does not support code review or presubmit runs. If you set both plan and apply to run at the same time, they will conflict and may error out. To get around this, for 'shared' and 'prod' environment, set 'apply' trigger to not 'run_on_push', and for other environments, do not specify the 'plan' trigger block and let 'apply' trigger 'run_on_push'. | object | false | - | - |
 | cloud_source_repository.name | Cloud Source Repository repo name. The Cloud Source Repository should be hosted under the devops project. | string | true | - | - |
-| cloud_source_repository.readers | IAM members to allow reading the repo. | array(string) | false | - | - |
-| cloud_source_repository.writers | IAM members to allow writing to the repo. | array(string) | false | - | - |
+| cloud_source_repository.readers | IAM members to allow reading the repo. | array(string) | false | [] | - |
+| cloud_source_repository.writers | IAM members to allow writing to the repo. | array(string) | false | [] | - |
 | envs | Config block for per-environment resources. | array(object) | true | - | - |
 | envs.branch_name | Name of the branch to set the Cloud Build Triggers to monitor. Regex is not supported to enforce a 1:1 mapping from a branch to a GCP environment. | string | true | - | - |
 | envs.managed_dirs | List of root modules managed by the CICD relative to `terraform_root`.<br><br>NOTE: The modules will be deployed in the given order. If a module depends on another module, it should show up after it in this list. | array(string) | false | - | - |
@@ -30,6 +31,8 @@
 | github.name | GitHub repo name. | string | true | - | - |
 | github.owner | GitHub repo owner. | string | true | - | - |
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role. Default to true. | boolean | false | true | - |
+| parent_id | ID of the parent GCP resource to apply the configuration. | string | false | - | ^[0-9]{8,25}$ |
+| parent_type | Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'." | string | false | - | ^organization\|folder$ |
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |
