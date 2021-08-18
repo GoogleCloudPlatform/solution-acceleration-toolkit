@@ -97,6 +97,7 @@ template "resources" {
       }]
       storage_buckets = [{
         name = "example-prod-bucket"
+        force_destroy = true
         labels = {
           type = "phi"
         }
