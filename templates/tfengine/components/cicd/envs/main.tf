@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 module "validate_triggers" {
-  source                  = "./trigger"
+  source                  = "./triggers"
 
   command                 = "validate"
   env                     = var.env
@@ -38,7 +38,7 @@ module "validate_triggers" {
 }
 
 module "plan_triggers" {
-  source                  = "./trigger"
+  source                  = "./triggers"
 
   command                 = "plan"
   env                     = var.env
@@ -64,7 +64,7 @@ module "plan_triggers" {
 }
 
 module "apply_triggers" {
-  source                  = "./trigger"
+  source                  = "./triggers"
 
   command                 = "apply"
   env                     = var.env

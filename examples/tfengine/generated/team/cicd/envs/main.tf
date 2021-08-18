@@ -13,7 +13,7 @@
 # limitations under the License.
 
 module "validate_triggers" {
-  source = "./trigger"
+  source = "./triggers"
 
   command                 = "validate"
   env                     = var.env
@@ -39,7 +39,7 @@ module "validate_triggers" {
 }
 
 module "plan_triggers" {
-  source = "./trigger"
+  source = "./triggers"
 
   command                 = "plan"
   env                     = var.env
@@ -65,7 +65,7 @@ module "plan_triggers" {
 }
 
 module "apply_triggers" {
-  source = "./trigger"
+  source = "./triggers"
 
   command                 = "apply"
   env                     = var.env
