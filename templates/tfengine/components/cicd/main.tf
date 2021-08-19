@@ -43,8 +43,6 @@ locals {
   cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
   has_scheduled_jobs = anytrue([for env in var.envs : env.triggers.validate.run_on_schedule || env.triggers.plan.run_on_schedule || env.triggers.apply.run_on_schedule])
   has_apply_jobs = anytrue([for env in var.envs : !env.triggers.apply.skip])
-  is_github = var.github.name != ""
-  is_cloud_source_repository = !var.is_github && var.cloud_source_repository.name != ""
   services = concat(
     [
       "admin.googleapis.com",
@@ -56,11 +54,11 @@ locals {
       "iam.googleapis.com",
       "servicenetworking.googleapis.com",
       "serviceusage.googleapis.com",
-      "sqladmin.googleapis.com"
-    ],
-    local.is_cloud_source_repository ? [
+      "sqladmin.googleapis.com",
+      {{- if has . "cloud_source_repository"}}
       "sourcerepo.googleapis.com",
-    ] : [],
+      {{- end}}
+    ],
     local.has_scheduled_jobs ? [
       "appengine.googleapis.com",
       "cloudscheduler.googleapis.com",
@@ -139,10 +137,10 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   ]
 }
 
+{{- if has . "cloud_source_repository"}}
+
 # Create the Cloud Source Repository.
 resource "google_sourcerepo_repository" "configs" {
-  count = local.is_cloud_source_repository ? 1 : 0
-
   project  = var.project_id
   name     = var.cloud_source_repository.name
   depends_on = [
@@ -150,21 +148,28 @@ resource "google_sourcerepo_repository" "configs" {
   ]
 }
 
+{{- if has .cloud_source_repository "readers"}}
+
 resource "google_sourcerepo_repository_iam_member" "readers" {
-  for_each = local.is_cloud_source_repository ? toset(var.cloud_source_repository.readers) : []
+  for_each = toset(var.cloud_source_repository.readers)
   project = var.project_id
-  repository = google_sourcerepo_repository.configs[0].name
+  repository = google_sourcerepo_repository.configs.name
   role = "roles/source.reader"
   member = each.key
 }
+{{- end}}
+
+{{- if has .cloud_source_repository "writers"}}
 
 resource "google_sourcerepo_repository_iam_member" "writers" {
-  for_each = local.is_cloud_source_repository ? toset(var.cloud_source_repository.writers) : []
+  for_each = toset(var.cloud_source_repository.writers)
   project = var.project_id
-  repository = google_sourcerepo_repository.configs[0].name
+  repository = google_sourcerepo_repository.configs.name
   role = "roles/source.writer"
   member = each.key
 }
+{{- end}}
+{{- end}}
 
 # Grant Cloud Build Service Account access to the devops project.
 resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
@@ -268,10 +273,12 @@ module "environment_triggers" {
   branch_name             = each.value.branch_name
   managed_dirs            = each.value.managed_dirs
   triggers                = each.value.triggers
-  cloud_source_repository = {
-    name = var.cloud_source_repository.name
-  }
+  {{- if has . "cloud_source_repository"}}
+  cloud_source_repository = var.cloud_source_repository
+  {{- end}}
+  {{- if has . "github"}}
   github                  = var.github
+  {{- end}}
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
@@ -280,6 +287,8 @@ module "environment_triggers" {
   depends_on = [
     google_project_service.services,
     google_app_engine_application.cloudbuild_scheduler_app,
+    {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
+    {{- end}}
   ]
 }

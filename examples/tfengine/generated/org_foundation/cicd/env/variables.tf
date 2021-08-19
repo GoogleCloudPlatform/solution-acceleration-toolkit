@@ -87,27 +87,6 @@ at Eastern Standard Time (EST).
   EOF
 }
 
-variable "cloud_source_repository" {
-  type = object({
-    name = string
-  })
-  description = <<EOF
-    Config for Google Cloud Source Repository.
-
-IMPORTANT: Cloud Source Repositories does not support code review or
-presubmit runs. If you set both plan and apply to run at the same time,
-they will conflict and may error out. To get around this, for 'shared'
-and 'prod' environment, set 'apply' trigger to not 'run_on_push',
-and for other environments, do not specify the 'plan' trigger block
-and let 'apply' trigger 'run_on_push'.
-
-    Fields:
-
-    * name = Cloud Source Repository repo name.
-The Cloud Source Repository should be hosted under the devops project.
-  EOF
-}
-
 variable "github" {
   type = object({
     owner = string

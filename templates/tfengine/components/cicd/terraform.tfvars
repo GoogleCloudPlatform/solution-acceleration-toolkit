@@ -24,6 +24,7 @@ terraform_root    = "{{.terraform_root}}"
 {{hclField . "grant_automation_billing_user_role" -}}
 {{hclField . "build_editors"}}
 {{hclField . "build_viewers"}}
+{{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
   name = "{{get . "cloud_source_repository.name" ""}}"
   readers = [
@@ -37,10 +38,13 @@ cloud_source_repository = {
     {{- end}}
   ]
 }
+{{- end}}
+{{- if has . "github"}}
 github = {
   owner = "{{get . "github.owner" ""}}"
   name = "{{get . "github.name" ""}}"
 }
+{{- end}}
 envs = [
   {{- range get . "envs" -}}
   {{- $managed_dirs := ""}}

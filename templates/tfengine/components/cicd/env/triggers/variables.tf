@@ -76,6 +76,8 @@ variable "run_on_schedule" {
   default     = {{$triggerProps.validate.properties.run_on_schedule.default}}
 }
 
+{{- if has . "cloud_source_repository"}}
+
 variable "cloud_source_repository" {
   type = object({
     name = string
@@ -88,6 +90,9 @@ variable "cloud_source_repository" {
     * name = {{$csrProps.name.description}}
   EOF
 }
+{{- end}}
+
+{{- if has . "github"}}
 
 variable "github" {
   type = object({
@@ -98,11 +103,12 @@ variable "github" {
     {{$props.github.description}}
 
     Fields:
-
+    
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
 }
+{{- end}}
 
 variable "project_id" {
   type        = string
