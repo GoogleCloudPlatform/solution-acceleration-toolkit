@@ -43,7 +43,7 @@ resource "google_cloudbuild_trigger" "push" {
     }
   ] : []
 
-  trigger_template = is_cloud_source_repository ? [
+  trigger_template = local.is_cloud_source_repository ? [
     {
       repo_name   = var.cloud_source_repository.name
       branch_name = "^${var.branch_name}$"
