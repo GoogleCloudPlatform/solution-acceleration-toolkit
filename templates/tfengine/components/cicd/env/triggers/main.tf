@@ -15,7 +15,7 @@ locals {
   terraform_root = var.terraform_root == "/" ? "." : var.terraform_root
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
   is_github = var.github.name != ""
-  is_cloud_source_repository = !var.is_github && var.cloud_source_repository.name != ""
+  is_cloud_source_repository = !local.is_github && var.cloud_source_repository.name != ""
 }
 
 resource "google_cloudbuild_trigger" "push" {
@@ -30,7 +30,7 @@ resource "google_cloudbuild_trigger" "push" {
     "${local.terraform_root_prefix}**",
   ]
 
-  github = var.is_github ? [
+  github = local.is_github ? [
     {
       owner = var.github.owner
       name  = var.github.name
