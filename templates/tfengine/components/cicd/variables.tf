@@ -66,6 +66,11 @@ variable "cloud_source_repository" {
     * readers = {{$csrProps.readers.description}}
     * writers = {{$csrProps.writers.description}}
   EOF
+  default = {
+    name = {{$csrProps.name.default}}
+    readers = {{$csrProps.readers.default}}
+    writers = {{$csrProps.writers.default}}
+  }
 }
 
 variable "github" {
@@ -81,6 +86,10 @@ variable "github" {
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
+  default = {
+    owner = {{$githubProps.owner.default}}
+    name = {{$githubProps.name.default}}
+  }
 }
 
 variable "envs" {

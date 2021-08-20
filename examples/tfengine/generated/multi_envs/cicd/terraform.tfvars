@@ -32,10 +32,6 @@ cloud_source_repository = {
     "group:example-source-writers@example.com",
   ]
 }
-github = {
-  owner = ""
-  name  = ""
-}
 envs = [
   {
     branch_name  = "shared"
