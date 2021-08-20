@@ -13,8 +13,11 @@
 # limitations under the License.
 
 locals {
-  terraform_root             = var.terraform_root == "/" ? "." : var.terraform_root
-  terraform_root_prefix      = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+  terraform_root        = var.terraform_root == "/" ? "." : var.terraform_root
+  terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
+  // Github and CSR are mutually exclusive so there shouldn't be both specified on the same
+  // terraform configuration, but in case they're, priority goes to github since it creates the
+  // less amount of extra resources 
   is_github                  = var.github.name != ""
   is_cloud_source_repository = !local.is_github && var.cloud_source_repository.name != ""
 }
