@@ -16,7 +16,7 @@ variable "command" {
   type        = string
   description = "Terraform command to execute within this trigger."
   validation {
-    condition     = can(regex("^validate|apply|plan$"), var.command)
+    condition     = can(regex("^validate|apply|plan$", var.command))
     error_message = "The provided command should be one of validate, apply or plan."
   }
 }

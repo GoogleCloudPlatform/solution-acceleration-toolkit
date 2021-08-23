@@ -279,7 +279,7 @@ module "triggers" {
   project_id            = var.project_id
   scheduler_region      = var.scheduler_region
   terraform_root        = var.terraform_root
-  service_account_email = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa.email : ""
+  service_account_email = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa[0].email : ""
 
   depends_on = [
     google_project_service.services,
