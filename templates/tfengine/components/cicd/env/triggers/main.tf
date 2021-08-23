@@ -73,7 +73,7 @@ resource "google_cloudbuild_trigger" "scheduled" {
     }
   }
   {{- else if has $ "cloud_source_repository" -}}
-  trigger_template = {
+  trigger_template {
     repo_name   = var.cloud_source_repository.name
     branch_name = "^${var.branch_name}$"
   }

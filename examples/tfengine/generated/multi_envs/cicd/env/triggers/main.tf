@@ -55,7 +55,7 @@ resource "google_cloudbuild_trigger" "scheduled" {
     "${local.terraform_root_prefix}**",
   ]
 
-  trigger_template = {
+  trigger_template {
     repo_name   = var.cloud_source_repository.name
     branch_name = "^${var.branch_name}$"
   }
