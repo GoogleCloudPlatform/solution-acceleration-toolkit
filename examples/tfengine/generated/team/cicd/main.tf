@@ -40,6 +40,12 @@ data "google_project" "devops" {
 }
 
 locals {
+  // Github and CSR are mutually exclusive so there shouldn't be both specified on the same
+  // terraform configuration, but in case they're, priority goes to github since it creates the
+  // less amount of extra resources 
+  is_github                  = var.github.name != ""
+  is_cloud_source_repository = !local.is_github && var.cloud_source_repository.name != ""
+
   cloudbuild_sa      = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
   has_scheduled_jobs = anytrue([for env in var.envs : env.triggers.validate.run_on_schedule || env.triggers.plan.run_on_schedule || env.triggers.apply.run_on_schedule])
   has_apply_jobs     = anytrue([for env in var.envs : !env.triggers.apply.skip])
@@ -228,7 +234,7 @@ resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
 }
 
 # Create Google Cloud Build triggers for specified environments
-module "environment_triggers" {
+module "triggers" {
   for_each = { for env in var.envs : env.name => env }
   source   = "./env"
 
@@ -240,7 +246,7 @@ module "environment_triggers" {
   project_id            = var.project_id
   scheduler_region      = var.scheduler_region
   terraform_root        = var.terraform_root
-  service_account_email = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa.email : ""
+  service_account_email = local.has_scheduled_jobs ? google_service_account.cloudbuild_scheduler_sa[0].email : ""
 
   depends_on = [
     google_project_service.services,

@@ -20,7 +20,7 @@ variable "command" {
   type = string
   description = "Terraform command to execute within this trigger."
   validation {
-    condition     = can(regex("^validate|apply|plan$"), var.command)
+    condition     = can(regex("^validate|apply|plan$", var.command))
     error_message = "The provided command should be one of validate, apply or plan."
   }
 }
@@ -89,6 +89,9 @@ variable "cloud_source_repository" {
 
     * name = {{$csrProps.name.description}}
   EOF
+  default = {
+    name = {{$csrProps.name.default}}
+  }
 }
 {{- end}}
 
@@ -107,6 +110,10 @@ variable "github" {
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
+  default = {
+    owner = {{$githubProps.owner.default}}
+    name = {{$githubProps.name.default}}
+  }
 }
 {{- end}}
 

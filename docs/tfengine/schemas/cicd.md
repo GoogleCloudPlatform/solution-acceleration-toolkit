@@ -9,8 +9,8 @@
 | billing_account | ID of billing account to attach to this project. | string | false | - | - |
 | build_editors | IAM members to grant `cloudbuild.builds.editor` role in the devops project to see CICD results. | array(string) | false | [] | - |
 | build_viewers | IAM members to grant `cloudbuild.builds.viewer` role in the devops project to see CICD results. | array(string) | false | [] | - |
-| cloud_source_repository | Config for Google Cloud Source Repository.<br><br>IMPORTANT: Cloud Source Repositories does not support code review or presubmit runs. If you set both plan and apply to run at the same time, they will conflict and may error out. To get around this, for 'shared' and 'prod' environment, set 'apply' trigger to not 'run_on_push', and for other environments, do not specify the 'plan' trigger block and let 'apply' trigger 'run_on_push'. | object | false | - | - |
-| cloud_source_repository.name | Cloud Source Repository repo name. The Cloud Source Repository should be hosted under the devops project. | string | true | - | - |
+| cloud_source_repository | Config for Google Cloud Source Repository.<br><br>IMPORTANT: Cloud Source Repositories does not support code review or presubmit runs. If you set both plan and apply to run at the same time, they will conflict and may error out. To get around this, for 'shared' and 'prod' environment, set 'apply' trigger to not 'run_on_push', and for other environments, do not specify the 'plan' trigger block and let 'apply' trigger 'run_on_push'.<br><br>IMPORTANT: Only specify one of github or cloud_source_repository since triggers should only respond to one of them, but not both. In case both are provided, Github will receive priority. | object | false | - | - |
+| cloud_source_repository.name | Cloud Source Repository repo name. The Cloud Source Repository should be hosted under the devops project. | string | true | "" | - |
 | cloud_source_repository.readers | IAM members to allow reading the repo. | array(string) | false | [] | - |
 | cloud_source_repository.writers | IAM members to allow writing to the repo. | array(string) | false | [] | - |
 | envs | Config block for per-environment resources. | array(object) | true | - | - |
@@ -27,9 +27,9 @@
 | envs.triggers.validate | Config block for the presubmit validation Cloud Build trigger. If specified, create the trigger and grant the Cloud Build Service Account necessary permissions to perform the build. | object | false | - | - |
 | envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch. | boolean | false | true | - |
 | envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule. The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule) at Eastern Standard Time (EST). | string | false | "" | - |
-| github | Config for GitHub Cloud Build triggers. | object | false | - | - |
-| github.name | GitHub repo name. | string | true | - | - |
-| github.owner | GitHub repo owner. | string | true | - | - |
+| github | Config for GitHub Cloud Build triggers.<br><br>IMPORTANT: Only specify one of github or cloud_source_repository since triggers should only respond to one of them, but not both. In case both are provided, Github will receive priority. | object | false | - | - |
+| github.name | GitHub repo name. | string | true | "" | - |
+| github.owner | GitHub repo owner. | string | true | "" | - |
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role. Default to true. | boolean | false | true | - |
 | parent_id | ID of the parent GCP resource to apply the configuration. | string | false | - | ^[0-9]{8,25}$ |
 | parent_type | Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'." | string | false | - | ^organization\|folder$ |

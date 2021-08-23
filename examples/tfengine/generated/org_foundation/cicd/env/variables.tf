@@ -95,11 +95,19 @@ variable "github" {
   description = <<EOF
     Config for GitHub Cloud Build triggers.
 
+IMPORTANT: Only specify one of github or cloud_source_repository since
+triggers should only respond to one of them, but not both. In case both are provided,
+Github will receive priority.
+
     Fields:
-    
+
     * owner = GitHub repo owner.
     * name = GitHub repo name.
   EOF
+  default = {
+    owner = ""
+    name  = ""
+  }
 }
 
 variable "project_id" {

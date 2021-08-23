@@ -47,7 +47,13 @@ schema = {
       terraformPattern = "^[a-z][a-z0-9-]{4,28}[a-z0-9]$"
     }
     github = {
-      description          = "Config for GitHub Cloud Build triggers."
+      description          = <<EOF
+        Config for GitHub Cloud Build triggers.
+
+        IMPORTANT: Only specify one of github or cloud_source_repository since
+        triggers should only respond to one of them, but not both. In case both are provided,
+        Github will receive priority.
+      EOF
       type                 = "object"
       additionalProperties = false
       required = [
@@ -58,10 +64,12 @@ schema = {
         owner = {
           description = "GitHub repo owner."
           type        = "string"
+          default     = "\"\""
         }
         name = {
           description = "GitHub repo name."
           type        = "string"
+          default     = "\"\""
         }
       }
     }
@@ -75,6 +83,10 @@ schema = {
         and 'prod' environment, set 'apply' trigger to not 'run_on_push',
         and for other environments, do not specify the 'plan' trigger block
         and let 'apply' trigger 'run_on_push'.
+
+        IMPORTANT: Only specify one of github or cloud_source_repository since
+        triggers should only respond to one of them, but not both. In case both are provided,
+        Github will receive priority.
       EOF
       type                 = "object"
       additionalProperties = false
@@ -88,6 +100,7 @@ schema = {
             The Cloud Source Repository should be hosted under the devops project.
           EOF
           type        = "string"
+          default     = "\"\""
         }
         readers = {
           description = <<EOF

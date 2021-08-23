@@ -77,7 +77,7 @@ module "apply_triggers" {
   service_account_email   = var.service_account_email
 
   push = {
-    skip     = true # Always true since scheduled trigger may act as a push trigger too
+    skip     = true # Always true since the scheduled trigger act as the push trigger for "apply".
     disabled = true
   }
 

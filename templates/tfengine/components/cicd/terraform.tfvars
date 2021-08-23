@@ -26,7 +26,7 @@ terraform_root    = "{{.terraform_root}}"
 {{hclField . "build_viewers"}}
 {{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
-  name = "{{get . "cloud_source_repository.name" ""}}"
+  name = "{{.cloud_source_repository.name}}"
   readers = [
     {{- range (get . "cloud_source_repository.readers" nil)}}
     "{{.}}",
@@ -41,8 +41,8 @@ cloud_source_repository = {
 {{- end}}
 {{- if has . "github"}}
 github = {
-  owner = "{{get . "github.owner" ""}}"
-  name = "{{get . "github.name" ""}}"
+  owner = "{{.github.owner}}"
+  name = "{{.github.name}}"
 }
 {{- end}}
 envs = [

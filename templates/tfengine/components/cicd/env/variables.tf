@@ -82,6 +82,9 @@ variable "cloud_source_repository" {
 
     * name = {{$csrProps.name.description}}
   EOF
+  default = {
+    name = {{$csrProps.name.default}}
+  }
 }
 {{- end}}
 
@@ -96,10 +99,14 @@ variable "github" {
     {{$props.github.description}}
 
     Fields:
-    
+
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
+  default = {
+    owner = {{$githubProps.owner.default}}
+    name = {{$githubProps.name.default}}
+  }
 }
 {{- end}}
 
