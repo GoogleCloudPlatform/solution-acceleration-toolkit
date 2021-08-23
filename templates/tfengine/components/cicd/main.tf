@@ -41,7 +41,7 @@ data "google_project" "devops" {
 
 locals {
   cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
-  has_scheduled_jobs = anytrue([for env in var.envs : env.triggers.validate.run_on_schedule || env.triggers.plan.run_on_schedule || env.triggers.apply.run_on_schedule])
+  has_scheduled_jobs = anytrue([for env in var.envs : env.triggers.validate.run_on_schedule != "" || env.triggers.plan.run_on_schedule != "" || env.triggers.apply.run_on_schedule != ""])
   has_apply_jobs = anytrue([for env in var.envs : !env.triggers.apply.skip])
   services = concat(
     [
