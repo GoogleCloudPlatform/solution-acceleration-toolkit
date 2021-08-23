@@ -98,7 +98,7 @@ triggers should only respond to one of them, but not both. In case both are prov
 Github will receive priority.
 
     Fields:
-    
+
     * owner = GitHub repo owner.
     * name = GitHub repo name.
   EOF

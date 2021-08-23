@@ -106,7 +106,7 @@ variable "github" {
     {{$props.github.description}}
 
     Fields:
-    
+
     * owner = {{$githubProps.owner.description}}
     * name = {{$githubProps.name.description}}
   EOF
