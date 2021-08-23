@@ -14,10 +14,6 @@ limitations under the License. */ -}}
 locals {
   terraform_root = var.terraform_root == "/" ? "." : var.terraform_root
   terraform_root_prefix = local.terraform_root == "." ? "" : "${local.terraform_root}/"
-  // GitHub and CSR are mutually exclusive so there shouldn't be both specified on the same
-  // terraform configuration, but in case they're, priority goes to GitHub.
-  is_github = var.github.name != ""
-  is_cloud_source_repository = !local.is_github && var.cloud_source_repository.name != ""
 }
 
 resource "google_cloudbuild_trigger" "push" {
@@ -32,24 +28,20 @@ resource "google_cloudbuild_trigger" "push" {
     "${local.terraform_root_prefix}**",
   ]
 
-  github = local.is_github ? [
-    {
-      owner = var.github.owner
-      name  = var.github.name
-      pull_request = [
-        {
-          branch = "^${var.branch_name}$"
-        }
-      ]
+  {{if has $ "github" -}}
+  github {
+    owner = var.github.owner
+    name  = var.github.name
+    pull_request {
+      branch = "^${var.branch_name}$"
     }
-  ] : []
-
-  trigger_template = local.is_cloud_source_repository ? [
-    {
-      repo_name   = var.cloud_source_repository.name
-      branch_name = "^${var.branch_name}$"
-    }
-  ] : []
+  }
+  {{- else if has $ "cloud_source_repository" -}}
+  trigger_template {
+    repo_name   = var.cloud_source_repository.name
+    branch_name = "^${var.branch_name}$"
+  }
+  {{- end}}
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-${var.command}.yaml"
 
@@ -72,24 +64,20 @@ resource "google_cloudbuild_trigger" "scheduled" {
     "${local.terraform_root_prefix}**",
   ]
 
-  github = local.is_github ? [
-    {
-      owner = var.github.owner
-      name  = var.github.name
-      push  = [
-        {
-          branch = "^${var.branch_name}$"
-        }
-      ]
+  {{if has $ "github" -}}
+  github {
+    owner = var.github.owner
+    name  = var.github.name
+    push {
+      branch = "^${var.branch_name}$"
     }
-  ] : []
-
-  trigger_template = local.is_cloud_source_repository ? [
-    {
-      repo_name   = var.cloud_source_repository.name
-      branch_name = "^${var.branch_name}$"
-    }
-  ] : []
+  }
+  {{- else if has $ "cloud_source_repository" -}}
+  trigger_template = {
+    repo_name   = var.cloud_source_repository.name
+    branch_name = "^${var.branch_name}$"
+  }
+  {{- end}}
 
   filename = "${local.terraform_root_prefix}cicd/configs/tf-${var.command}.yaml"
 

@@ -21,7 +21,6 @@ module "validate_triggers" {
   managed_dirs            = var.managed_dirs
   run_on_schedule         = var.triggers.validate.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
-  github                  = var.github
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
@@ -47,7 +46,6 @@ module "plan_triggers" {
   managed_dirs            = var.managed_dirs
   run_on_schedule         = var.triggers.plan.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
-  github                  = var.github
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
@@ -73,7 +71,6 @@ module "apply_triggers" {
   managed_dirs            = var.managed_dirs
   run_on_schedule         = var.triggers.apply.run_on_schedule
   cloud_source_repository = var.cloud_source_repository
-  github                  = var.github
   project_id              = var.project_id
   scheduler_region        = var.scheduler_region
   terraform_root          = var.terraform_root
