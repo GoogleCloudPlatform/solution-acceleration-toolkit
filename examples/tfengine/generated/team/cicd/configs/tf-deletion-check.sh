@@ -49,6 +49,9 @@ for planfile in $(find "$(pwd)" -name 'plan.tfplan'); do
   plandir="$(dirname ${planfile})"
   pushd "${plandir}" &>/dev/null
 
+  # Echo the planfile to help with debugging.
+  terraform show -json "$(basename ${planfile}"
+
   delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[]? | select(.change.actions | index("delete")) | .address')"
 
   # Filter through the allowlist, if configured.
