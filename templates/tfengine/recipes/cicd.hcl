@@ -64,12 +64,12 @@ schema = {
         owner = {
           description = "GitHub repo owner."
           type        = "string"
-          default     = "\"\""
+          default     = "\"\"" # Escaped quotes since default is an empty string
         }
         name = {
           description = "GitHub repo name."
           type        = "string"
-          default     = "\"\""
+          default     = "\"\"" # Escaped quotes since default is an empty string
         }
       }
     }
@@ -100,7 +100,7 @@ schema = {
             The Cloud Source Repository should be hosted under the devops project.
           EOF
           type        = "string"
-          default     = "\"\""
+          default     = "\"\"" # Escaped quotes since default is an empty string
         }
         readers = {
           description = <<EOF
@@ -238,7 +238,7 @@ schema = {
                     The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                     at Eastern Standard Time (EST).
                   EOF
-                    default     = "\"\""
+                    default     = "\"\"" # Escaped quotes since default is an empty string
                     type        = "string"
                   }
                 }
@@ -265,7 +265,7 @@ schema = {
                     The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                     at Eastern Standard Time (EST).
                   EOF
-                    default     = "\"\""
+                    default     = "\"\"" # Escaped quotes since default is an empty string
                     type        = "string"
                   }
                 }
@@ -293,7 +293,7 @@ schema = {
                     The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule)
                     at Eastern Standard Time (EST). Default to none.
                   EOF
-                    default     = "\"\""
+                    default     = "\"\"" # Escaped quotes since default is an empty string
                     type        = "string"
                   }
                 }
