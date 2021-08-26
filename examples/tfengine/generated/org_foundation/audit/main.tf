@@ -73,7 +73,7 @@ resource "google_organization_iam_audit_config" "config" {
 resource "google_folder_iam_audit_config" "config" {
   count = var.parent_type == "folder" ? 1 : 0
 
-  folder  = "folder/${var.parent_id}"
+  folder  = "folders/${var.parent_id}"
   service = "allServices"
 
   audit_log_config {
@@ -166,7 +166,7 @@ resource "google_organization_iam_member" "security_reviewer_auditors" {
 resource "google_folder_iam_member" "security_reviewer_auditors" {
   count = var.parent_type == "folder" ? 1 : 0
 
-  folder = "folder/${var.parent_id}"
+  folder = "folders/${var.parent_id}"
   role   = "roles/iam.securityReviewer"
   member = "group:${var.auditors_group}"
 }
