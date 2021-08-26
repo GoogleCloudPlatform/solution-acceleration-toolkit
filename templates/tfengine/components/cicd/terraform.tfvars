@@ -62,7 +62,7 @@ envs = [
           run_on_push = {{get .triggers.validate "run_on_push" $triggerProps.validate.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
           {{- else}}
-          run_on_push = false
+          run_on_push = true
           run_on_schedule = ""
           {{- end}}
         }
@@ -72,7 +72,7 @@ envs = [
           run_on_push = {{get .triggers.plan "run_on_push" $triggerProps.plan.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
           {{- else}}
-          run_on_push = false
+          run_on_push = true
           run_on_schedule = ""
           {{- end}}
         }
@@ -82,7 +82,7 @@ envs = [
           run_on_push = {{get .triggers.apply "run_on_push" $triggerProps.apply.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
           {{- else}}
-          run_on_push = false
+          run_on_push = true
           run_on_schedule = ""
           {{- end}}
         }

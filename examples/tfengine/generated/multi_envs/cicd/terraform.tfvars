@@ -40,12 +40,12 @@ envs = [
     triggers = {
       validate = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       apply = {
@@ -62,17 +62,17 @@ envs = [
     triggers = {
       validate = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       apply = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
     }
@@ -84,12 +84,12 @@ envs = [
     triggers = {
       validate = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
         skip            = true
-        run_on_push     = false
+        run_on_push     = true
         run_on_schedule = ""
       }
       apply = {
