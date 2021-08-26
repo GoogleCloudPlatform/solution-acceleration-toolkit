@@ -75,7 +75,7 @@ resource "google_cloudbuild_trigger" "scheduled" {
 }
 
 resource "google_cloud_scheduler_job" "scheduler" {
-  count            = var.scheduled.skip ? 0 : 1
+  count            = (var.scheduled.skip || var.run_on_schedule == "") ? 0 : 1
   project          = var.project_id
   name             = "${var.command}-scheduler-${var.env}"
   region           = var.scheduler_region
