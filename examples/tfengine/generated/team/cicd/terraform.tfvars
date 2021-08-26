@@ -34,13 +34,13 @@ envs = [
     name         = "prod"
     triggers = {
       validate = {
-        skip            = false
-        run_on_push     = true
+        skip            = true
+        run_on_push     = false
         run_on_schedule = ""
       }
       plan = {
-        skip            = false
-        run_on_push     = true
+        skip            = true
+        run_on_push     = false
         run_on_schedule = ""
       }
       apply = {

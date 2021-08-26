@@ -57,8 +57,8 @@ envs = [
     name = "{{.name}}"
     triggers = {
         validate = {
-          skip = {{not (has .triggers "validate")}}
-          {{- if has .triggers "validate"}}
+          skip = {{empty .triggers "validate"}}
+          {{- if not (empty .triggers "validate")}}
           run_on_push = {{get .triggers.validate "run_on_push" $triggerProps.validate.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
           {{- else}}
@@ -67,8 +67,8 @@ envs = [
           {{- end}}
         }
         plan = {
-          skip = {{not (has .triggers "plan")}}
-          {{- if has .triggers "plan"}}
+          skip = {{empty .triggers "plan"}}
+          {{- if not (empty .triggers "plan")}}
           run_on_push = {{get .triggers.plan "run_on_push" $triggerProps.plan.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
           {{- else}}
@@ -77,8 +77,8 @@ envs = [
           {{- end}}
         }
         apply = {
-          skip = {{not (has .triggers "apply")}}
-          {{- if has .triggers "apply"}}
+          skip = {{empty .triggers "apply"}}
+          {{- if not (empty .triggers "apply")}}
           run_on_push = {{get .triggers.apply "run_on_push" $triggerProps.apply.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
           {{- else}}
