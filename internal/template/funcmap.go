@@ -192,7 +192,7 @@ func empty(m map[string]interface{}, key string) bool {
 		return true
 	}
 
-	v, _ := m[key]
+	v := m[key]
 
 	return len(v.(map[string]interface{})) == 0
 }
