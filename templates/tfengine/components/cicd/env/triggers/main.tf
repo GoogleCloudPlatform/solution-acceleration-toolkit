@@ -88,7 +88,7 @@ resource "google_cloudbuild_trigger" "scheduled" {
 }
 
 resource "google_cloud_scheduler_job" "scheduler" {
-  # Count metaargument logic is duplicated with the skip logic of the env/main.tf module
+  # Count meta-argument logic is duplicated with the skip logic of the env/main.tf module
   # for `validate` and `plan`.
   # This is intentionally done while for the `apply` command, it's needed to not create the scheduler
   # when the `scheduled` job is only used as a `push`.
