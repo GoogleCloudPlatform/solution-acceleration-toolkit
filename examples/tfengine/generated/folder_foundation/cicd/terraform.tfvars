@@ -34,7 +34,7 @@ envs = [
     name         = "prod"
     triggers = {
       validate = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }

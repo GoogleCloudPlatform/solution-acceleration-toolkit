@@ -38,7 +38,6 @@ var funcMap = map[string]interface{}{
 	"schemaDescription": schemaDescription,
 	"isDotNotation":     isDotNotation,
 	"terraformPattern":  terraformPattern,
-	"empty":             empty,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -181,18 +180,4 @@ func isDotNotation(s string) (bool, error) {
 // It is recommended to use this function for pattern rendering to avoid redundant maintainance.
 func terraformPattern(m map[string]interface{}) interface{} {
 	return get(m, "terraformPattern", get(m, "pattern"))
-}
-
-// empty checks whether a variable is nil or a map without any value
-// This is needed to avoid situations where a resource is created based on
-// the absence of a field, but it also expects inner values.
-// The presence of the field as an empty map should be considered nil as well
-func empty(m map[string]interface{}, key string) bool {
-	if !has(m, key) {
-		return true
-	}
-
-	v := m[key]
-
-	return len(v.(map[string]interface{})) == 0
 }

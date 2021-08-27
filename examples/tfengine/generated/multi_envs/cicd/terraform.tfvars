@@ -39,12 +39,12 @@ envs = [
     name         = "shared"
     triggers = {
       validate = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
@@ -61,17 +61,17 @@ envs = [
     name         = "dev"
     triggers = {
       validate = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
         skip            = true
-        run_on_push     = true
+        run_on_push     = false
         run_on_schedule = ""
       }
       apply = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
@@ -83,12 +83,12 @@ envs = [
     name         = "prod"
     triggers = {
       validate = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
       plan = {
-        skip            = true
+        skip            = false
         run_on_push     = true
         run_on_schedule = ""
       }
