@@ -22,27 +22,18 @@ scheduler_region  = "{{.scheduler_region}}"
 state_bucket      = "{{.state_bucket}}"
 terraform_root    = "{{.terraform_root}}"
 {{hclField . "grant_automation_billing_user_role" -}}
-{{- $terraform_root := .terraform_root}}
-{{- if eq $terraform_root "/"}}
-  {{- $terraform_root = "."}}
-{{- end}}
-{{- $terraform_root_prefix := printf "%s/" $terraform_root}}
-{{- if eq $terraform_root "."}}
-  {{- $terraform_root_prefix = ""}}
-{{- end}}
-terraform_root_prefix = "{{$terraform_root_prefix}}"
 {{hclField . "build_editors"}}
 {{hclField . "build_viewers"}}
 {{- if has . "cloud_source_repository"}}
 cloud_source_repository = {
   name = "{{.cloud_source_repository.name}}"
   readers = [
-    {{- range .cloud_source_repository.readers}}
+    {{- range (get . "cloud_source_repository.readers" nil)}}
     "{{.}}",
     {{- end}}
   ]
   writers = [
-    {{- range .cloud_source_repository.writers}}
+    {{- range (get . "cloud_source_repository.writers" nil)}}
     "{{.}}",
     {{- end}}
   ]
@@ -66,31 +57,34 @@ envs = [
     name = "{{.name}}"
     triggers = {
         validate = {
-          skip = {{not (has .triggers "validate")}}
           {{- if has .triggers "validate"}}
+          skip = false
           run_on_push = {{get .triggers.validate "run_on_push" $triggerProps.validate.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.validate "run_on_schedule" ""}}"
           {{- else}}
+          skip = true
           run_on_push = false
           run_on_schedule = ""
           {{- end}}
         }
         plan = {
-          skip = {{not (has .triggers "plan")}}
           {{- if has .triggers "plan"}}
+          skip = false
           run_on_push = {{get .triggers.plan "run_on_push" $triggerProps.plan.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.plan "run_on_schedule" ""}}"
           {{- else}}
+          skip = true
           run_on_push = false
           run_on_schedule = ""
           {{- end}}
         }
         apply = {
-          skip = {{not (has .triggers "apply")}}
           {{- if has .triggers "apply"}}
+          skip = false
           run_on_push = {{get .triggers.apply "run_on_push" $triggerProps.apply.properties.run_on_push.default}}
           run_on_schedule = "{{get .triggers.apply "run_on_schedule" ""}}"
           {{- else}}
+          skip = true
           run_on_push = false
           run_on_schedule = ""
           {{- end}}

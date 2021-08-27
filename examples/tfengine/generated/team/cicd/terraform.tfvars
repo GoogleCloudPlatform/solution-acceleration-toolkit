@@ -19,9 +19,7 @@ project_id       = "example-prod-devops"
 scheduler_region = "us-east1"
 state_bucket     = "example-terraform-state"
 terraform_root   = "terraform"
-
-terraform_root_prefix = "terraform/"
-build_editors         = ["group:example-cicd-editors@example.com"]
+build_editors    = ["group:example-cicd-editors@example.com"]
 
 build_viewers = ["group:example-cicd-viewers@example.com"]
 

@@ -72,6 +72,10 @@ and 'prod' environment, set 'apply' trigger to not 'run_on_push',
 and for other environments, do not specify the 'plan' trigger block
 and let 'apply' trigger 'run_on_push'.
 
+IMPORTANT: Only specify one of github or cloud_source_repository since
+triggers should only respond to one of them, but not both. In case both are provided,
+Github will receive priority.
+
     Fields:
 
     * name = Cloud Source Repository repo name.
@@ -79,6 +83,11 @@ The Cloud Source Repository should be hosted under the devops project.
     * readers = IAM members to allow reading the repo.
     * writers = IAM members to allow writing to the repo.
   EOF
+  default = {
+    name    = ""
+    readers = []
+    writers = []
+  }
 }
 
 variable "envs" {
