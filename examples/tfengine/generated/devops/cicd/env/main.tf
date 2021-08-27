@@ -32,7 +32,7 @@ module "validate_triggers" {
   }
 
   scheduled = {
-    skip     = var.triggers.validate.skip
+    skip     = var.triggers.validate.skip || var.triggers.validate.run_on_schedule == ""
     disabled = true # Always disabled on push to branch.
   }
 }
@@ -57,7 +57,7 @@ module "plan_triggers" {
   }
 
   scheduled = {
-    skip     = var.triggers.plan.skip
+    skip     = var.triggers.plan.skip || var.triggers.plan.run_on_schedule == ""
     disabled = true # Always disabled on push to branch.
   }
 }
