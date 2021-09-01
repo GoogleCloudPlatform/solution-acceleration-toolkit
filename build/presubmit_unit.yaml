@@ -47,6 +47,12 @@ steps:
 
 - name: "${_CFT_TOOLS_CONTAINER}"
   entrypoint: "bash"
+  args: ["build/sh_syntax_check.sh"]
+  waitFor: ["-"]
+  id: Bash scripts syntax check
+
+- name: "${_CFT_TOOLS_CONTAINER}"
+  entrypoint: "bash"
   args: ["build/gen_check.sh"]
   waitFor: ["-"]
   id: Generated files check
