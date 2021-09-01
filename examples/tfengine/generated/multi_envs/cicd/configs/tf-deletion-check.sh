@@ -50,7 +50,7 @@ for planfile in $(find "$(pwd)" -name 'plan.tfplan'); do
   pushd "${plandir}" &>/dev/null
 
   # Echo the planfile to help with debugging.
-  terraform show -json "$(basename ${planfile}"
+  terraform show -json "$(basename ${planfile})"
 
   delchanges="$(terraform show -json $(basename ${planfile}) | jq -rM '.resource_changes[]? | select(.change.actions | index("delete")) | .address')"
 
