@@ -36,6 +36,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
+    _WORKER_POOL    = ""
   }
 
   depends_on = [

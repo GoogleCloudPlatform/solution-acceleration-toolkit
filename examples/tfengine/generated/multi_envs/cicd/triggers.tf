@@ -33,6 +33,7 @@ resource "google_cloudbuild_trigger" "validate_shared" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -117,6 +118,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -173,6 +175,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [

@@ -23,6 +23,11 @@
   {{- $terraform_root_prefix = ""}}
 {{- end}}
 
+{{- $worker_pool := ""}}
+{{- if has . "worker_pool"}}
+  {{- $worker_pool := printf "projects/%s/locations/%s/workerPools/%s" .worker_pool.project .worker_pool.location .worker_pool.name}}
+{{- end}}
+
 {{range get . "envs" -}}
 # ================== Triggers for "{{.name}}" environment ==================
 {{- $managed_dirs := ""}}
@@ -64,6 +69,7 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
+    _WORKER_POOL = "{{$worker_pool}}"
   }
 
   depends_on = [

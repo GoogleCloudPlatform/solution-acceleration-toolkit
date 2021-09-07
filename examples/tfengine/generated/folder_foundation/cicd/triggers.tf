@@ -36,6 +36,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [

@@ -20,6 +20,7 @@ timeout: 1200s
 substitutions:
     _TERRAFORM_ROOT: "."
     _MANAGED_DIRS: ""
+    _WORKER_POOL: ""
 
 steps:
   - name: "{{$cft}}"
@@ -39,3 +40,6 @@ steps:
     args: ["./cicd/configs/tf-deletion-check.sh", "./cicd/configs/tf-deletion-allowlist.txt"]
     dir: "${_TERRAFORM_ROOT}"
     id: Resource deletion check
+
+options:
+  workerPool: "${_WORKER_POOL}"

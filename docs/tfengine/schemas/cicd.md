@@ -33,3 +33,7 @@
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |
+| worker_pool | Optional worker pool attribute. Required for CICD to work with private cluster endpoints. | object | false | - | - |
+| worker_pool.location | GCP region of the worker pool. Example: us-central1. | string | true | - | - |
+| worker_pool.name | Name of the worker pool. | string | true | - | - |
+| worker_pool.project | The project worker pool belongs to. | string | true | - | - |

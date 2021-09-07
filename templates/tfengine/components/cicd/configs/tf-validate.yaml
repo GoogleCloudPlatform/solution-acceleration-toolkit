@@ -20,6 +20,7 @@ timeout: 600s
 substitutions:
     _TERRAFORM_ROOT: "."
     _MANAGED_DIRS: ""
+    _WORKER_POOL: ""
 
 steps:
   - name: "{{$cft}}"
@@ -38,3 +39,6 @@ steps:
     args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -backend=false", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate
+
+options:
+  workerPool: "${_WORKER_POOL}"
