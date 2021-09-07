@@ -261,7 +261,8 @@ schema = {
           }
           worker_pool = {
             description          = <<EOF
-              Optional worker pool attribute. Required for CICD to work with private cluster endpoints.
+              Optional Cloud Build private worker pool configuration.
+              Required for CICD to access resources in a private network, e.g. GKE clusters with a private endpoint.
             EOF
             type                 = "object"
             additionalProperties = false

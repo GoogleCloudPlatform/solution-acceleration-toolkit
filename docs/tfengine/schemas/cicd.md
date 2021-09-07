@@ -26,7 +26,7 @@
 | envs.triggers.validate | Config block for the presubmit validation Cloud Build trigger. If specified, create the trigger and grant the Cloud Build Service Account necessary permissions to perform the build. | object | false | - | - |
 | envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch. Default to true. | boolean | false | - | - |
 | envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule. The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule) at Eastern Standard Time (EST). Default to none. | string | false | - | - |
-| envs.worker_pool | Optional worker pool attribute. Required for CICD to work with private cluster endpoints. | object | false | - | - |
+| envs.worker_pool | Optional Cloud Build private worker pool configuration. Required for CICD to access resources in a private network, e.g. GKE clusters with a private endpoint. | object | false | - | - |
 | envs.worker_pool.location | GCP region of the worker pool. Example: us-central1. | string | true | - | - |
 | envs.worker_pool.name | Name of the worker pool. | string | true | - | - |
 | envs.worker_pool.project | The project worker pool belongs to. | string | true | - | - |
