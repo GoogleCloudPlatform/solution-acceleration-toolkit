@@ -26,6 +26,10 @@
 | envs.triggers.validate | Config block for the presubmit validation Cloud Build trigger. If specified, create the trigger and grant the Cloud Build Service Account necessary permissions to perform the build. | object | false | - | - |
 | envs.triggers.validate.run_on_push | Whether or not to be automatically triggered from a PR/push to branch. Default to true. | boolean | false | - | - |
 | envs.triggers.validate.run_on_schedule | Whether or not to be automatically triggered according a specified schedule. The schedule is specified using [unix-cron format](https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules#defining_the_job_schedule) at Eastern Standard Time (EST). Default to none. | string | false | - | - |
+| envs.worker_pool | Optional worker pool attribute. Required for CICD to work with private cluster endpoints. | object | false | - | - |
+| envs.worker_pool.location | GCP region of the worker pool. Example: us-central1. | string | true | - | - |
+| envs.worker_pool.name | Name of the worker pool. | string | true | - | - |
+| envs.worker_pool.project | The project worker pool belongs to. | string | true | - | - |
 | github | Config for GitHub Cloud Build triggers. | object | false | - | - |
 | github.name | GitHub repo name. | string | false | - | - |
 | github.owner | GitHub repo owner. | string | false | - | - |
@@ -33,7 +37,3 @@
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |
-| worker_pool | Optional worker pool attribute. Required for CICD to work with private cluster endpoints. | object | false | - | - |
-| worker_pool.location | GCP region of the worker pool. Example: us-central1. | string | true | - | - |
-| worker_pool.name | Name of the worker pool. | string | true | - | - |
-| worker_pool.project | The project worker pool belongs to. | string | true | - | - |

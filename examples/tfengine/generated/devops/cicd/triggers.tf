@@ -66,6 +66,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -98,6 +99,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -150,6 +152,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
+    _WORKER_POOL    = ""
   }
 
   depends_on = [

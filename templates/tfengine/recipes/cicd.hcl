@@ -120,32 +120,6 @@ schema = {
       EOF
       type        = "string"
     }
-    worker_pool = {
-      description          = <<EOF
-        Optional worker pool attribute. Required for CICD to work with private cluster endpoints.
-      EOF
-      type                 = "object"
-      additionalProperties = false
-      required = [
-        "project",
-        "location",
-        "name"
-      ]
-      properties = {
-        project = {
-          description = "The project worker pool belongs to."
-          type        = "string"
-        }
-        location = {
-          description = "GCP region of the worker pool. Example: us-central1."
-          type        = "string"
-        }
-        name = {
-          description = "Name of the worker pool."
-          type        = "string"
-        }
-      }
-    }
     grant_automation_billing_user_role = {
       description = <<EOF
         Whether or not to grant automation service account the billing.user role.
@@ -282,6 +256,32 @@ schema = {
                     type        = "string"
                   }
                 }
+              }
+            }
+          }
+          worker_pool = {
+            description          = <<EOF
+              Optional worker pool attribute. Required for CICD to work with private cluster endpoints.
+            EOF
+            type                 = "object"
+            additionalProperties = false
+            required = [
+              "project",
+              "location",
+              "name"
+            ]
+            properties = {
+              project = {
+                description = "The project worker pool belongs to."
+                type        = "string"
+              }
+              location = {
+                description = "GCP region of the worker pool. Example: us-central1."
+                type        = "string"
+              }
+              name = {
+                description = "Name of the worker pool."
+                type        = "string"
               }
             }
           }
