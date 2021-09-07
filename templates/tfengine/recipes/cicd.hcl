@@ -273,7 +273,7 @@ schema = {
             ]
             properties = {
               project = {
-                description = "The project worker pool belongs to."
+                description = "The project worker pool belongs."
                 type        = "string"
               }
               location = {

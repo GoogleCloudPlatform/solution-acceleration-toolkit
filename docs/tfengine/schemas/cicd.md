@@ -29,7 +29,7 @@
 | envs.worker_pool | Optional Cloud Build private worker pool configuration. Required for CICD to access resources in a private network, e.g. GKE clusters with a private endpoint. | object | false | - | - |
 | envs.worker_pool.location | GCP region of the worker pool. Example: us-central1. | string | true | - | - |
 | envs.worker_pool.name | Name of the worker pool. | string | true | - | - |
-| envs.worker_pool.project | The project worker pool belongs to. | string | true | - | - |
+| envs.worker_pool.project | The project worker pool belongs. | string | true | - | - |
 | github | Config for GitHub Cloud Build triggers. | object | false | - | - |
 | github.name | GitHub repo name. | string | false | - | - |
 | github.owner | GitHub repo owner. | string | false | - | - |
