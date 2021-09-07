@@ -154,6 +154,11 @@ template "cicd" {
         managed_dirs = [
           "dev/data",
         ]
+        worker_pool = {
+          project  = "example-devops"
+          location = "us-east1"
+          name     = "cicd-pool-one"
+        }
       },
       {
         name        = "prod"
@@ -168,6 +173,11 @@ template "cicd" {
         managed_dirs = [
           "prod/data",
         ]
+        worker_pool = {
+          project  = "example-devops"
+          location = "us-east1"
+          name     = "cicd-pool-two"
+        }
       }
     ]
   }

@@ -142,6 +142,11 @@ template "cicd" {
           "project_data",
           "additional_iam_members",
         ]
+        worker_pool = {
+          project  = "{{.prefix}}-{{.env}}-devops"
+          location = "us-east1"
+          name     = "cicd-pool"
+        }
       }
     ]
   }
