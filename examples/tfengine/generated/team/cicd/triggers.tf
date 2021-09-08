@@ -36,6 +36,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -65,6 +66,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [
@@ -95,6 +97,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members"
+    _WORKER_POOL    = ""
   }
 
   depends_on = [

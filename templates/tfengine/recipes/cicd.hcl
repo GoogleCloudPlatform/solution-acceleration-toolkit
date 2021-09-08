@@ -259,6 +259,33 @@ schema = {
               }
             }
           }
+          worker_pool = {
+            description          = <<EOF
+              Optional Cloud Build private worker pool configuration.
+              Required for CICD to access resources in a private network, e.g. GKE clusters with a private endpoint.
+            EOF
+            type                 = "object"
+            additionalProperties = false
+            required = [
+              "project",
+              "location",
+              "name"
+            ]
+            properties = {
+              project = {
+                description = "The project worker pool belongs."
+                type        = "string"
+              }
+              location = {
+                description = "GCP region of the worker pool. Example: us-central1."
+                type        = "string"
+              }
+              name = {
+                description = "Name of the worker pool."
+                type        = "string"
+              }
+            }
+          }
         }
       }
     }
