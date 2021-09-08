@@ -42,4 +42,5 @@ steps:
     id: Resource deletion check
 
 options:
-  workerPool: "${_WORKER_POOL}"
+  pool:
+    name: "${_WORKER_POOL}"

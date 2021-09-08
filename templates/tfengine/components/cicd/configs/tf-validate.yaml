@@ -41,4 +41,5 @@ steps:
     id: Validate
 
 options:
-  workerPool: "${_WORKER_POOL}"
+  pool:
+    name: "${_WORKER_POOL}"
