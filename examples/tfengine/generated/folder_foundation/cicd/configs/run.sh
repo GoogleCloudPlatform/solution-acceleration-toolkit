@@ -20,6 +20,12 @@ ACTIONS=()
 DIRS=()
 ROOT="."
 
+# TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/1029): Remove this after CICD container is updated to the latest.
+LATEST_GCLOUD_VERSION=356.0.0
+
+apk add --no-cache curl
+gcloud components update --version $LATEST_GCLOUD_VERSION
+
 while getopts "a:d:r:" c
 do
   case $c in
