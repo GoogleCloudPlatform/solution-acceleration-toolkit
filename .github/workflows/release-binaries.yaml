@@ -48,9 +48,12 @@ jobs:
       run: |
         set -x
 
-        # Install the latest version of hub
+        # Install the latest version of hub.
         ./build/install-hub.sh
 
-        # Create the release with all binaries
+        # Get a commit log since the previous tag.
+        changes="$(./build/changelog_binaries.sh)"
+
+        # Create the release with all binaries.
         version="$(echo ${{ github.ref }} | sed -e 's|^refs/tags/||')"
-        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" "${version}"
+        bin/hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" -m "${changes}" "${version}"
