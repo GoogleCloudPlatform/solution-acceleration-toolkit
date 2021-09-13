@@ -101,6 +101,10 @@ To trigger an automated release:
 1. Follow the workflow on the
    [Actions page](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/actions).
 
+1. Binaries releases will also auto-generate a simple changelog from the commits made since the previous tag.
+   Look at the new release in GitHub and edit this changelog if required, as some PRs are not important
+   and including them in the notes adds clutter and can confuse users.
+
 ## Manual releases
 
 If automation is not available, releases can be made manually. Follow the steps above to create and push a tag,
@@ -120,6 +124,16 @@ then manually build and upload the release artifacts as described below.
 
 1. Create a release from the `${version}` tag and upload all the `tfengine_*`,
    `policygen_*` and `tfimport_*` binaries as assets.
+
+1. Generate a changelog:
+
+   ```bash
+   ./build/changelog_binaries.sh
+   ```
+
+1. Edit this changelog if required, as some PRs are not important and including them in the notes adds clutter and can confuse users.
+
+1. Add the changelog to the release description.
 
 ### Templates
 
@@ -157,7 +171,7 @@ Follow instructions to install it, then run one of the following commands:
 1. For binaries:
 
    ```bash
-   hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" "${version}"
+   hub release create $(printf -- ' --attach=%s' ./*-amd64) -m "Binaries release version ${version}" -m "$(./build/changelog_binaries.sh)" "${version}"
    ```
 
 1. For templates:
