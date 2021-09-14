@@ -32,7 +32,7 @@
 
 {{- $worker_pool := ""}}
 {{- if has . "worker_pool"}}
-  {{- $worker_pool := printf "projects/%s/locations/%s/workerPools/%s" .worker_pool.project .worker_pool.location .worker_pool.name}}
+  {{- $worker_pool = printf "projects/%s/locations/%s/workerPools/%s" .worker_pool.project .worker_pool.location .worker_pool.name}}
 {{- end}}
 
 {{- if has .triggers "validate"}}
