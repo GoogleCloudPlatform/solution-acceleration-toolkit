@@ -120,7 +120,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
-    _WORKER_POOL    = ""
+    _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
   }
 
   depends_on = [
@@ -148,7 +148,7 @@ resource "google_cloudbuild_trigger" "apply_dev" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
-    _WORKER_POOL    = ""
+    _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
   }
 
   depends_on = [
@@ -178,7 +178,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
-    _WORKER_POOL    = ""
+    _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
   }
 
   depends_on = [
@@ -206,7 +206,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
-    _WORKER_POOL    = ""
+    _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
   }
 
   depends_on = [
@@ -235,7 +235,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
-    _WORKER_POOL    = ""
+    _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
   }
 
   depends_on = [
