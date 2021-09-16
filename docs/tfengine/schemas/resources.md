@@ -186,6 +186,10 @@
 | healthcare_datasets.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.name | Name of healthcare dataset. | string | true | - | - |
 | iam_members | Map of IAM role to list of members to grant access to the role. | object | false | - | - |
+| kubernetes_service_accounts | Kubernetes service accounts. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>. | array() | false | - | - |
+| kubernetes_service_accounts.name | Name of the KSA. | string | true | - | - |
+| kubernetes_service_accounts.namespace | Namespace to where the KSA will be created. | string | true | - | - |
+| kubernetes_service_accounts.provider | Kubernetes provider. | string | true | - | - |
 | pubsub_topics | [Module](https://github.com/terraform-google-modules/terraform-google-pubsub) | array() | false | - | - |
 | pubsub_topics.labels | Labels to set on the topic. | object | false | - | - |
 | pubsub_topics.labels.*pattern* | - | string | false | - | .+ |
@@ -233,3 +237,10 @@
 | storage_buckets.retention_policy.retention_period | The period of time, in seconds, that objects in the bucket must be retained and cannot be deleted, overwritten, or archived. The value must be less than 2,147,483,647 seconds. | number | false | - | - |
 | storage_buckets.storage_location | Location to create the storage bucket. Can be defined in global data block. | string | false | - | - |
 | terraform_addons | Additional Terraform configuration for the project deployment. Can be used to support arbitrary resources not supported in the following list. For schema see ./deployment.hcl. | object | false | - | - |
+| workload_identity_configurations | [Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/workload-identity) | array() | false | - | - |
+| workload_identity_configurations.cluster_name | Cluster name where the workload is deployed. | string | true | - | - |
+| workload_identity_configurations.google_service_account_id | ID of the google service account the workload will use. | string | true | - | - |
+| workload_identity_configurations.kubernetes_service_account_name | Name of the kubernetes service account to authenticate as the provided google service account. | string | true | - | - |
+| workload_identity_configurations.location | Cluster location (region if regional cluster, zone if zonal cluster). | string | true | - | - |
+| workload_identity_configurations.namespace | The namespace where the kubernetes service account is created. | string | true | - | - |
+| workload_identity_configurations.project_id | ID of the project which include the GKE cluster. | string | true | - | - |

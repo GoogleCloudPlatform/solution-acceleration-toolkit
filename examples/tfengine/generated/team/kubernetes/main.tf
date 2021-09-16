@@ -34,6 +34,7 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
+  alias                  = "12345678"
   load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint
@@ -50,4 +51,38 @@ resource "kubernetes_namespace" "namespace" {
     }
   }
 }
+
+
+module "project" {
+  source  = "terraform-google-modules/project-factory/google//modules/project_services"
+  version = "~> 11.1.0"
+
+  project_id    = "example-prod-apps"
+  activate_apis = []
+}
+
+resource "kubernetes_service_account" "ksa_ksa-gke" {
+  metadata {
+    name      = "ksa-gke"
+    namespace = "namespace"
+  }
+  provider = kubernetes.12345678
+}
+
+module "workload_identity___google_service_account_runner_account_id_" {
+  source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
+  version    = "16.1.0"
+  project_id = "example-prod-apps"
+  name       = google_service_account.runner.account_id
+
+  use_existing_gcp_sa = true
+  gcp_sa_name         = google_service_account.runner.account_id
+
+  use_existing_k8s_sa = true
+  namespace           = "namespace"
+  k8s_sa_name         = "ksa-gke"
+  cluster_name        = "gke-cluster"
+  location            = "us-central1"
+}
+
 

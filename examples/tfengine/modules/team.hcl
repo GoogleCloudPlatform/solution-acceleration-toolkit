@@ -490,10 +490,29 @@ template "additional_iam_members" {
 
 # Kubernetes Terraform deployment. This should be deployed after the GKE Cluster has been deployed.
 template "kubernetes" {
-  recipe_path = "{{.recipes}}/deployment.hcl"
+  recipe_path = "{{.recipes}}/project.hcl"
   output_path = "./kubernetes"
 
   data = {
+    project = {
+      project_id = "{{.prefix}}-{{.env}}-apps"
+      exists     = true
+    }
+    resources = {
+      kubernetes_service_accounts = [{
+        name = "ksa-gke"
+        namespace = "namespace"
+        provider = "12345678"
+      }]
+      workload_identity_configurations = [{
+        project_id = "{{.prefix}}-{{.env}}-apps"
+        google_service_account_id = "$${google_service_account.runner.account_id}"
+        kubernetes_service_account_name = "ksa-gke"
+        namespace = "namespace"
+        cluster_name = "gke-cluster"
+        location = "{{.default_location}}"
+      }]
+    }
     terraform_addons = {
       raw_config = <<EOF
 data "google_client_config" "default" {}
@@ -505,6 +524,7 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
+  alias                  = "12345678"
   load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint

@@ -1463,6 +1463,73 @@ schema = {
         }
       }
     }
+    kubernetes_service_accounts = {
+      description = "Kubernetes service accounts. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>."
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "name",
+          "namespace",
+          "provider"
+        ]
+        properties = {
+          name = {
+            description = "Name of the KSA."
+            type        = "string"
+          }
+          namespace = {
+            description = "Namespace to where the KSA will be created."
+            type        = "string"
+          }
+          provider = {
+            description = "Kubernetes provider."
+            type        = "string"
+          }
+        }
+      }
+    }
+    workload_identity_configurations = {
+      description = "[Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/workload-identity)"
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "project_id",
+          "google_service_account_id",
+          "kubernetes_service_account_name",
+          "namespace",
+          "cluster_name",
+          "location"
+        ]
+        properties = {
+          project_id = {
+            description = "ID of the project which include the GKE cluster."
+            type        = "string"
+          }
+          google_service_account_id = {
+            description = "ID of the google service account the workload will use."
+            type        = "string"
+          }
+          kubernetes_service_account_name = {
+            description = "Name of the kubernetes service account to authenticate as the provided google service account."
+            type        = "string"
+          }
+          namespace = {
+            description = "The namespace where the kubernetes service account is created."
+            type        = "string"
+          }
+          cluster_name = {
+            description = "Cluster name where the workload is deployed."
+            type        = "string"
+          }
+          location = {
+            description = "Cluster location (region if regional cluster, zone if zonal cluster)."
+            type        = "string"
+          }
+        }
+      }
+    }
   }
 }
 
@@ -1559,5 +1626,17 @@ template "storage_buckets" {
 {{if has . "groups"}}
 template "groups" {
   component_path = "../components/resources/groups"
+}
+{{end}}
+
+{{if has . "kubernetes_service_accounts"}}
+template "kubernetes_service_accounts" {
+  component_path = "../components/resources/kubernetes_service_accounts"
+}
+{{end}}
+
+{{if has . "workload_identity_configurations"}}
+template "workload_identity_configurations" {
+  component_path = "../components/resources/workload_identity_configurations"
 }
 {{end}}
