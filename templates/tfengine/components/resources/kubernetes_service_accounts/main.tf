@@ -15,8 +15,11 @@ limitations under the License. */ -}}
 {{range get . "kubernetes_service_accounts"}}
 resource "kubernetes_service_account" "ksa_{{.name}}" {
   metadata {
-    name = "{{.name}}"
-    namespace = "{{.namespace}}"
+    name        = "{{.name}}"
+    namespace   = "{{.namespace}}"
+    annotations = {
+      "iam.gke.io/gcp-service-account" = "{{.google_service_account_email}}"
+    }
   }
   provider = kubernetes.{{.provider}}
 }

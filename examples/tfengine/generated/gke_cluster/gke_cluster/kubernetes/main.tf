@@ -21,7 +21,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "kubernetes"
+    prefix = "gke_cluster/kubernetes"
   }
 }
 
@@ -30,7 +30,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "example-prod-apps"
+  project  = "cluster-project-example"
 }
 
 provider "kubernetes" {
@@ -45,9 +45,9 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "namespace" {
   metadata {
-    name = "namespace"
+    name = "example-namespace"
     annotations = {
-      name = "namespace"
+      name = "example-namespace"
     }
   }
 }
@@ -57,33 +57,33 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  project_id    = "example-prod-apps"
+  project_id    = "cluster-project-example"
   activate_apis = []
 }
 
 resource "kubernetes_service_account" "ksa_ksa-gke" {
   metadata {
     name      = "ksa-gke"
-    namespace = "namespace"
+    namespace = "example-namespace"
     annotations = {
-      "iam.gke.io/gcp-service-account" = "runner@example-prod-apps.iam.gserviceaccount.com"
+      "iam.gke.io/gcp-service-account" = "example-sa@cluster-project-example.iam.gserviceaccount.com"
     }
   }
   provider = kubernetes.gke-alias
 }
 
-module "workload_identity_namespace" {
+module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "16.1.0"
-  project_id = "example-prod-apps"
-  name       = "runner"
+  project_id = "cluster-project-example"
+  name       = "example-sa"
 
   use_existing_gcp_sa = true
-  gcp_sa_name         = "runner"
+  gcp_sa_name         = "example-sa"
 
   use_existing_k8s_sa = true
   annotate_k8s_sa     = false
-  namespace           = "namespace"
+  namespace           = "example-namespace"
   k8s_sa_name         = "ksa-gke"
   cluster_name        = "gke-cluster"
   location            = "us-central1"

@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "workload_identity_configurations"}}
-module "workload_identity_{{resourceName . "google_service_account_id"}}" {
+module "workload_identity_{{resourceName . "namespace"}}" {
   source              = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version             = "16.1.0"
   project_id          = "{{.project_id}}"
@@ -23,6 +23,7 @@ module "workload_identity_{{resourceName . "google_service_account_id"}}" {
   gcp_sa_name         = "{{.google_service_account_id}}"
 
   use_existing_k8s_sa = true
+  annotate_k8s_sa     = false
   namespace           = "{{.namespace}}"
   k8s_sa_name         = "{{.kubernetes_service_account_name}}"
   cluster_name        = "{{.cluster_name}}"

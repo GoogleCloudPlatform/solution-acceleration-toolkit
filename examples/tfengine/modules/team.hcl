@@ -502,11 +502,12 @@ template "kubernetes" {
       kubernetes_service_accounts = [{
         name = "ksa-gke"
         namespace = "namespace"
-        provider = "12345678"
+        google_service_account_email = "runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        provider = "gke-alias"
       }]
       workload_identity_configurations = [{
         project_id = "{{.prefix}}-{{.env}}-apps"
-        google_service_account_id = "$${google_service_account.runner.account_id}"
+        google_service_account_id = "runner"
         kubernetes_service_account_name = "ksa-gke"
         namespace = "namespace"
         cluster_name = "gke-cluster"
@@ -524,7 +525,7 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
-  alias                  = "12345678"
+  alias                  = "gke-alias"
   load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint

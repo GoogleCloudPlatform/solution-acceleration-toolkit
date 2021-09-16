@@ -1471,6 +1471,7 @@ schema = {
         required = [
           "name",
           "namespace",
+          "google_service_account_email",
           "provider"
         ]
         properties = {
@@ -1481,6 +1482,9 @@ schema = {
           namespace = {
             description = "Namespace to where the KSA will be created."
             type        = "string"
+          }
+          google_service_account_email = {
+            description = "Email of the google service account the kubernetes service account should use to authenticate with other resources."
           }
           provider = {
             description = "Kubernetes provider."
@@ -1504,15 +1508,15 @@ schema = {
         ]
         properties = {
           project_id = {
-            description = "ID of the project which include the GKE cluster."
+            description = "ID of the project where the GKE cluster is deployed."
             type        = "string"
           }
           google_service_account_id = {
-            description = "ID of the google service account the workload will use."
+            description = "ID of the google service account the deployment should use to authenticate with other resources."
             type        = "string"
           }
           kubernetes_service_account_name = {
-            description = "Name of the kubernetes service account to authenticate as the provided google service account."
+            description = "Name of the kubernetes service account associated with the workload."
             type        = "string"
           }
           namespace = {
