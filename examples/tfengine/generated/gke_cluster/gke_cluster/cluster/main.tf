@@ -71,7 +71,7 @@ module "instance_template" {
   source_image_family  = "ubuntu-2004-lts"
   source_image_project = "ubuntu-os-cloud"
   service_account = {
-    email  = "${google_service_account.example-sa.email}"
+    email  = "${google_service_account.example_sa.email}"
     scopes = ["cloud-platform"]
   }
 

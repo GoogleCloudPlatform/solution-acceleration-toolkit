@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
 {{range get . "kubernetes_service_accounts"}}
-resource "kubernetes_service_account" "ksa_{{.name}}" {
+resource "kubernetes_service_account" "ksa_{{resourceName . "name"}}" {
   metadata {
     name        = "{{.name}}"
     namespace   = "{{.namespace}}"

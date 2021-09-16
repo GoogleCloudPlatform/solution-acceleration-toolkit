@@ -61,7 +61,7 @@ module "project" {
   activate_apis = []
 }
 
-resource "kubernetes_service_account" "ksa_ksa-gke" {
+resource "kubernetes_service_account" "ksa_ksa_gke" {
   metadata {
     name      = "ksa-gke"
     namespace = "example-namespace"
