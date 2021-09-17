@@ -55,23 +55,23 @@ data "google_client_config" "default" {}
 
 
 provider "kubernetes" {
-  alias                  = "gke_cluster"
+  alias                  = "example_cluster"
   load_config_file       = false
-  host                   = "https://${module.gke_cluster.endpoint}"
+  host                   = "https://${module.example_cluster.endpoint}"
   token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(module.gke_cluster.ca_certificate)
+  cluster_ca_certificate = base64decode(module.example_cluster.ca_certificate)
 }
 
-module "gke_cluster" {
+module "example_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
   version = "~> 13.1.0"
 
   providers = {
-    kubernetes = kubernetes.gke_cluster
+    kubernetes = kubernetes.example_cluster
   }
 
   # Required.
-  name               = "gke-cluster"
+  name               = "example-cluster"
   project_id         = module.project.project_id
   region             = "<no value>"
   regional           = true

@@ -70,7 +70,7 @@ template "cluster" {
     }
     resources = {
       gke_clusters = [{
-        name                   = "gke-cluster"
+        name                   = "example-cluster"
         network_project_id     = "example-networks"
         network                = "network"
         subnet                 = "gke-subnet"
@@ -113,7 +113,7 @@ template "kubernetes" {
         google_service_account_id = "example-sa"
         kubernetes_service_account_name = "ksa"
         namespace = "example-namespace"
-        cluster_name = "gke-cluster"
+        cluster_name = "example-cluster"
         location = "us-central1"
       }]
     }
@@ -122,7 +122,7 @@ template "kubernetes" {
 data "google_client_config" "default" {}
 
 data "google_container_cluster" "gke_cluster" {
-  name     = "gke-cluster"
+  name     = "example-cluster"
   location = "us-central1"
   project  = "$${module.project.project_id}"
 }

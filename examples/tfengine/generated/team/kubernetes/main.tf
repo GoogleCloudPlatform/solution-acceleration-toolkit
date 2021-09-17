@@ -63,7 +63,7 @@ resource "kubernetes_service_account" "ksa" {
 
 resource "kubernetes_namespace" "namespace" {
   metadata {
-    name = ".name"
+    name = "namespace"
     labels = {
       env = "prod"
     }

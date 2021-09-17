@@ -28,7 +28,7 @@ terraform {
 data "google_client_config" "default" {}
 
 data "google_container_cluster" "gke_cluster" {
-  name     = "gke-cluster"
+  name     = "example-cluster"
   location = "us-central1"
   project  = module.project.project_id
 }
@@ -63,7 +63,7 @@ resource "kubernetes_service_account" "ksa" {
 
 resource "kubernetes_namespace" "example_namespace" {
   metadata {
-    name = ".name"
+    name = "example-namespace"
     annotations = {
       name = "example-namespace"
     }
@@ -84,7 +84,7 @@ module "workload_identity_example_namespace" {
   annotate_k8s_sa = false
   namespace       = "example-namespace"
   k8s_sa_name     = "ksa"
-  cluster_name    = "gke-cluster"
+  cluster_name    = "example-cluster"
   location        = "us-central1"
 }
 

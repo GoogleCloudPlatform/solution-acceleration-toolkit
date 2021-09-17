@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "kubernetes_namespaces"}}
 resource "kubernetes_namespace" "{{resourceName . "name"}}" {
   metadata {
-    name = ".name"
+    name = "{{.name}}"
     {{if $labels := merge (get $ "labels") (get . "labels") -}}
     
     labels = {
