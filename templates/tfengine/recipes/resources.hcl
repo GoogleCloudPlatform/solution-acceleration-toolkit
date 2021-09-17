@@ -1490,6 +1490,14 @@ schema = {
               ".+" = { type = "string" }
             }
           }
+          provider = {
+            description = <<EOF
+              The alias of the kubernetes provider.
+              This field allows the resource to authenticate with the intended cluster.
+              See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>
+            EOF
+            type        = "string"
+          }
         }
       }
     }
@@ -1502,7 +1510,6 @@ schema = {
           "name",
           "namespace",
           "google_service_account_email",
-          "provider"
         ]
         properties = {
           name = {
@@ -1517,7 +1524,11 @@ schema = {
             description = "Email of the google service account the KSA should use to authenticate with other resources."
           }
           provider = {
-            description = "Kubernetes provider. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>"
+            description = <<EOF
+              The alias of the kubernetes provider.
+              This field allows the resource to authenticate with the intended cluster.
+              See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>
+            EOF
             type        = "string"
           }
         }

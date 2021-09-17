@@ -34,7 +34,6 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
-  alias                  = "gke-alias"
   load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint
@@ -60,7 +59,6 @@ resource "kubernetes_service_account" "ksa" {
       "iam.gke.io/gcp-service-account" = "runner@${module.project.project_id}.iam.gserviceaccount.com"
     }
   }
-  provider = kubernetes.gke-alias
 }
 
 resource "kubernetes_namespace" "namespace" {

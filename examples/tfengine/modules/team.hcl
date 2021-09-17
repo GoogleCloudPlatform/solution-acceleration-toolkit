@@ -503,7 +503,6 @@ template "kubernetes" {
         name = "ksa"
         namespace = "namespace"
         google_service_account_email = "runner@$${module.project.project_id}.iam.gserviceaccount.com"
-        provider = "gke-alias"
       }]
       kubernetes_namespaces = [{
         name = "namespace"
@@ -531,7 +530,6 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
-  alias                  = "gke-alias"
   load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint

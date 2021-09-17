@@ -33,5 +33,8 @@ resource "kubernetes_namespace" "{{resourceName . "name"}}" {
     }
     {{end -}}
   }
+  {{- if has . "provider"}}
+  provider = kubernetes.{{.provider}}
+  {{- end}}
 }
 {{end -}}

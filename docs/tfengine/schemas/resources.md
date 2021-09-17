@@ -192,11 +192,12 @@
 | kubernetes_namespaces.labels | Labels to set on the namespace. | object | false | - | - |
 | kubernetes_namespaces.labels.*pattern* | - | string | false | - | .+ |
 | kubernetes_namespaces.name | Name of the namespace. | string | true | - | - |
+| kubernetes_namespaces.provider | The alias of the kubernetes provider. This field allows the resource to authenticate with the intended cluster. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs> | string | false | - | - |
 | kubernetes_service_accounts | Kubernetes service accounts (KSAs). See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>. | array() | false | - | - |
 | kubernetes_service_accounts.google_service_account_email | Email of the google service account the KSA should use to authenticate with other resources. | - | true | - | - |
 | kubernetes_service_accounts.name | Name of the KSA. | string | true | - | - |
 | kubernetes_service_accounts.namespace | Namespace to where the KSA will be created. | string | true | - | - |
-| kubernetes_service_accounts.provider | Kubernetes provider. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs | string | true | - | - |
+| kubernetes_service_accounts.provider | The alias of the kubernetes provider. This field allows the resource to authenticate with the intended cluster. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs> | string | false | - | - |
 | pubsub_topics | [Module](https://github.com/terraform-google-modules/terraform-google-pubsub) | array() | false | - | - |
 | pubsub_topics.labels | Labels to set on the topic. | object | false | - | - |
 | pubsub_topics.labels.*pattern* | - | string | false | - | .+ |

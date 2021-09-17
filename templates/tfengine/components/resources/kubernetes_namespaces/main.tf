@@ -21,6 +21,8 @@ resource "kubernetes_service_account" "{{resourceName . "name"}}" {
       "iam.gke.io/gcp-service-account" = "{{.google_service_account_email}}"
     }
   }
+  {{- if has . "provider"}}
   provider = kubernetes.{{.provider}}
+  {{- end}}
 }
 {{end -}}
