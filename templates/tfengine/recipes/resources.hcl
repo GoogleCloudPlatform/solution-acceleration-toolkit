@@ -1463,6 +1463,10 @@ schema = {
         }
       }
     }
+    # To use kubernetes_* resources a google_client_config data resource and
+    # a kubernetes provider must be specified in the deployment. This allows
+    # the kubernetes_* resources to be created under the intended cluster.
+    # See examples/tfengine/gke_cluster.hcl for an example.
     kubernetes_namespaces = {
       description = "Kubernetes namespace. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace>."
       type        = "array"
