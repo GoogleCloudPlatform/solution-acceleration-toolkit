@@ -28,7 +28,7 @@ template "networks" {
   output_path = "./gke_cluster/networks"
   data = {
     project = {
-      project_id         = "networks-example-project"
+      project_id         = "example-networks"
       is_shared_vpc_host = true
     }
     resources = {
@@ -64,9 +64,9 @@ template "cluster" {
   output_path = "./gke_cluster/cluster"
   data = {
     project = {
-      project_id = "cluster-project-example"
+      project_id = "example-apps"
       shared_vpc_attachment = {
-        host_project_id = "networks-example-project"
+        host_project_id = "example-networks"
         subnets = [{
           name = "gke-subnet"
         }]
@@ -75,7 +75,7 @@ template "cluster" {
     resources = {
       gke_clusters = [{
         name                   = "gke-cluster"
-        network_project_id     = "networks-example-project"
+        network_project_id     = "example-networks"
         network                = "network"
         subnet                 = "gke-subnet"
         ip_range_pods_name     = "pods-range"
@@ -89,7 +89,7 @@ template "cluster" {
       }]
       compute_instance_templates = [{
         name_prefix        = "instance-template"
-        network_project_id = "networks-example-project"
+        network_project_id = "example-networks"
         subnet             = "instance-subnet"
         service_account    = "$${google_service_account.example_sa.email}"
         image_family       = "ubuntu-2004-lts"
@@ -122,14 +122,14 @@ template "kubernetes" {
 
   data = {
     project = {
-      project_id = "cluster-project-example"
+      project_id = "example-apps"
       exists     = true
     }
     resources = {
       kubernetes_service_accounts = [{
         name = "ksa"
         namespace = "example-namespace"
-        google_service_account_email = "example-sa@cluster-project-example.iam.gserviceaccount.com"
+        google_service_account_email = "example-sa@example-apps.iam.gserviceaccount.com"
       }]
       kubernetes_namespaces = [{
         name = "example-namespace"
@@ -138,7 +138,7 @@ template "kubernetes" {
         }
       }]
       workload_identity = [{
-        project_id = "cluster-project-example"
+        project_id = "example-apps"
         google_service_account_id = "example-sa"
         kubernetes_service_account_name = "ksa"
         namespace = "example-namespace"
@@ -153,7 +153,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "cluster-project-example"
+  project  = "example-apps"
 }
 
 provider "kubernetes" {

@@ -38,7 +38,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "cluster-project-example"
+  name            = "example-apps"
   org_id          = "12345678"
   billing_account = "000-000-000"
   lien            = true
@@ -51,9 +51,9 @@ module "project" {
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
 
-  svpc_host_project_id = "networks-example-project"
+  svpc_host_project_id = "example-networks"
   shared_vpc_subnets = [
-    "projects/networks-example-project/regions/us-central1/subnetworks/gke-subnet",
+    "projects/example-networks/regions/us-central1/subnetworks/gke-subnet",
   ]
   activate_apis = []
 }
@@ -65,7 +65,7 @@ module "instance_template" {
   name_prefix        = "instance-template"
   project_id         = module.project.project_id
   region             = "us-central1"
-  subnetwork_project = "networks-example-project"
+  subnetwork_project = "example-networks"
   subnetwork         = "instance-subnet"
 
   source_image_family  = "ubuntu-2004-lts"
@@ -93,7 +93,7 @@ module "instance" {
   hostname           = "instance"
   instance_template  = module.instance_template.self_link
   region             = "us-central1"
-  subnetwork_project = "networks-example-project"
+  subnetwork_project = "example-networks"
   subnetwork         = "instance-subnet"
 
   access_config = [
@@ -128,7 +128,7 @@ module "gke_cluster" {
   project_id         = module.project.project_id
   region             = "<no value>"
   regional           = true
-  network_project_id = "networks-example-project"
+  network_project_id = "example-networks"
 
   network                 = "network"
   subnetwork              = "gke-subnet"

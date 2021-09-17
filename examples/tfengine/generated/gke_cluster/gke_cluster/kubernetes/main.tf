@@ -30,7 +30,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "cluster-project-example"
+  project  = "example-apps"
 }
 
 provider "kubernetes" {
@@ -47,7 +47,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  project_id    = "cluster-project-example"
+  project_id    = "example-apps"
   activate_apis = []
 }
 
@@ -56,7 +56,7 @@ resource "kubernetes_service_account" "ksa" {
     name      = "ksa"
     namespace = "example-namespace"
     annotations = {
-      "iam.gke.io/gcp-service-account" = "example-sa@cluster-project-example.iam.gserviceaccount.com"
+      "iam.gke.io/gcp-service-account" = "example-sa@example-apps.iam.gserviceaccount.com"
     }
   }
 }
@@ -73,7 +73,7 @@ resource "kubernetes_namespace" "example_namespace" {
 module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "16.1.0"
-  project_id = "cluster-project-example"
+  project_id = "example-apps"
   name       = "example-sa"
 
   use_existing_gcp_sa = true

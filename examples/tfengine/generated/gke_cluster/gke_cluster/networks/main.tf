@@ -32,7 +32,7 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google"
   version = "~> 11.1.0"
 
-  name            = "networks-example-project"
+  name            = "example-networks"
   org_id          = "12345678"
   billing_account = "000-000-000"
   lien            = true
