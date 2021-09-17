@@ -48,10 +48,6 @@ template "networks" {
                 ip_range = "172.20.0.0/14"
               }
             ]
-          },
-          {
-            name     = "instance-subnet"
-            ip_range = "10.3.0.0/16"
           }
         ]
       }]
@@ -87,31 +83,6 @@ template "cluster" {
         description  = "Service Account"
         display_name = "Service Account"
       }]
-      compute_instance_templates = [{
-        name_prefix        = "instance-template"
-        network_project_id = "example-networks"
-        subnet             = "instance-subnet"
-        service_account    = "$${google_service_account.example_sa.email}"
-        image_family       = "ubuntu-2004-lts"
-        image_project      = "ubuntu-os-cloud"
-
-        instances = [{
-          name = "instance"
-          access_configs = [{
-            nat_ip       = "$${google_compute_address.static.address}"
-            network_tier = "PREMIUM"
-          }]
-        }]
-      }]
-    }
-    terraform_addons = {
-      raw_config = <<EOF
-resource "google_compute_address" "static" {
-  name    = "static-ipv4-address"
-  project = module.project.project_id
-  region  = "us-central1"
-}
-EOF
     }
   }
 }

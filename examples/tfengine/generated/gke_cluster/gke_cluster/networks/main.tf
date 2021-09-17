@@ -63,13 +63,6 @@ module "network" {
       subnet_flow_logs      = true
       subnet_private_access = true
     },
-    {
-      subnet_name           = "instance-subnet"
-      subnet_ip             = "10.3.0.0/16"
-      subnet_region         = "us-central1"
-      subnet_flow_logs      = true
-      subnet_private_access = true
-    },
   ]
   secondary_ranges = {
     "gke-subnet" = [

@@ -25,12 +25,6 @@ terraform {
   }
 }
 
-resource "google_compute_address" "static" {
-  name    = "static-ipv4-address"
-  project = module.project.project_id
-  region  = "us-central1"
-}
-
 # Create the project and optionally enable APIs, create the deletion lien and add to shared VPC.
 # Deletion lien: https://cloud.google.com/resource-manager/docs/project-liens
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
@@ -56,53 +50,6 @@ module "project" {
     "projects/example-networks/regions/us-central1/subnetworks/gke-subnet",
   ]
   activate_apis = []
-}
-
-module "instance_template" {
-  source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.6.0"
-
-  name_prefix        = "instance-template"
-  project_id         = module.project.project_id
-  region             = "us-central1"
-  subnetwork_project = "example-networks"
-  subnetwork         = "instance-subnet"
-
-  source_image_family  = "ubuntu-2004-lts"
-  source_image_project = "ubuntu-os-cloud"
-  service_account = {
-    email  = "${google_service_account.example_sa.email}"
-    scopes = ["cloud-platform"]
-  }
-
-  enable_shielded_vm = true
-  shielded_instance_config = {
-    enable_secure_boot          = true
-    enable_vtpm                 = true
-    enable_integrity_monitoring = true
-  }
-  depends_on = [
-    module.project
-  ]
-}
-
-module "instance" {
-  source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.6.0"
-
-  hostname           = "instance"
-  instance_template  = module.instance_template.self_link
-  region             = "us-central1"
-  subnetwork_project = "example-networks"
-  subnetwork         = "instance-subnet"
-
-  access_config = [
-    {
-      nat_ip       = "${google_compute_address.static.address}"
-      network_tier = "PREMIUM"
-    },
-  ]
-
 }
 data "google_client_config" "default" {}
 
