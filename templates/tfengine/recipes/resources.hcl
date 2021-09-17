@@ -1463,6 +1463,125 @@ schema = {
         }
       }
     }
+    # To use kubernetes_* resources a google_client_config data resource and
+    # a kubernetes provider must be specified in the deployment. This allows
+    # the kubernetes_* resources to be created under the intended cluster.
+    # See examples/tfengine/gke_cluster.hcl for an example.
+    kubernetes_namespaces = {
+      description = "Kubernetes namespace. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace>."
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "name"
+        ]
+        properties = {
+          name = {
+            description = "Name of the namespace."
+            type        = "string"
+          }
+          annotations = {
+            description = "Arbitrary annotations to store metadata for the namespace."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
+          labels = {
+            description = "Labels to set on the namespace."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
+          provider = {
+            description = <<EOF
+              The alias of the kubernetes provider.
+              This field allows the resource to authenticate with the intended cluster.
+              See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>
+            EOF
+            type        = "string"
+          }
+        }
+      }
+    }
+    kubernetes_service_accounts = {
+      description = "Kubernetes service accounts (KSAs). See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>."
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "name",
+          "namespace",
+          "google_service_account_email",
+        ]
+        properties = {
+          name = {
+            description = "Name of the KSA."
+            type        = "string"
+          }
+          namespace = {
+            description = "Namespace to where the KSA will be created."
+            type        = "string"
+          }
+          google_service_account_email = {
+            description = "Email of the google service account the KSA should use to authenticate with other resources."
+          }
+          provider = {
+            description = <<EOF
+              The alias of the kubernetes provider.
+              This field allows the resource to authenticate with the intended cluster.
+              See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>
+            EOF
+            type        = "string"
+          }
+        }
+      }
+    }
+    workload_identity = {
+      description = "[Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/workload-identity)"
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "project_id",
+          "google_service_account_id",
+          "kubernetes_service_account_name",
+          "namespace",
+          "cluster_name",
+          "location"
+        ]
+        properties = {
+          project_id = {
+            description = "ID of the project where the GKE cluster is deployed."
+            type        = "string"
+          }
+          google_service_account_id = {
+            description = <<EOF
+              ID of the google service account the deployment should use to authenticate with other resources.
+              See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account#account_id>.
+            EOF
+            type        = "string"
+          }
+          kubernetes_service_account_name = {
+            description = "Name of the KSA associated with the workload."
+            type        = "string"
+          }
+          namespace = {
+            description = "The namespace where the KSA is created."
+            type        = "string"
+          }
+          cluster_name = {
+            description = "Cluster name where the workload is deployed."
+            type        = "string"
+          }
+          location = {
+            description = "Cluster location (region if regional cluster, zone if zonal cluster)."
+            type        = "string"
+          }
+        }
+      }
+    }
   }
 }
 
@@ -1559,5 +1678,23 @@ template "storage_buckets" {
 {{if has . "groups"}}
 template "groups" {
   component_path = "../components/resources/groups"
+}
+{{end}}
+
+{{if has . "kubernetes_namespaces"}}
+template "kubernetes_namespaces" {
+  component_path = "../components/resources/kubernetes_namespaces"
+}
+{{end}}
+
+{{if has . "kubernetes_service_accounts"}}
+template "kubernetes_service_accounts" {
+  component_path = "../components/resources/kubernetes_service_accounts"
+}
+{{end}}
+
+{{if has . "workload_identity"}}
+template "workload_identity" {
+  component_path = "../components/resources/workload_identity"
 }
 {{end}}

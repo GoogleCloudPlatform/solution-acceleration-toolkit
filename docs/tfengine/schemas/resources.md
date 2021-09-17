@@ -186,6 +186,18 @@
 | healthcare_datasets.iam_members.role | IAM role to grant. | string | true | - | - |
 | healthcare_datasets.name | Name of healthcare dataset. | string | true | - | - |
 | iam_members | Map of IAM role to list of members to grant access to the role. | object | false | - | - |
+| kubernetes_namespaces | Kubernetes namespace. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace>. | array() | false | - | - |
+| kubernetes_namespaces.annotations | Arbitrary annotations to store metadata for the namespace. | object | false | - | - |
+| kubernetes_namespaces.annotations.*pattern* | - | string | false | - | .+ |
+| kubernetes_namespaces.labels | Labels to set on the namespace. | object | false | - | - |
+| kubernetes_namespaces.labels.*pattern* | - | string | false | - | .+ |
+| kubernetes_namespaces.name | Name of the namespace. | string | true | - | - |
+| kubernetes_namespaces.provider | The alias of the kubernetes provider. This field allows the resource to authenticate with the intended cluster. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs> | string | false | - | - |
+| kubernetes_service_accounts | Kubernetes service accounts (KSAs). See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>. | array() | false | - | - |
+| kubernetes_service_accounts.google_service_account_email | Email of the google service account the KSA should use to authenticate with other resources. | - | true | - | - |
+| kubernetes_service_accounts.name | Name of the KSA. | string | true | - | - |
+| kubernetes_service_accounts.namespace | Namespace to where the KSA will be created. | string | true | - | - |
+| kubernetes_service_accounts.provider | The alias of the kubernetes provider. This field allows the resource to authenticate with the intended cluster. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs> | string | false | - | - |
 | pubsub_topics | [Module](https://github.com/terraform-google-modules/terraform-google-pubsub) | array() | false | - | - |
 | pubsub_topics.labels | Labels to set on the topic. | object | false | - | - |
 | pubsub_topics.labels.*pattern* | - | string | false | - | .+ |
@@ -233,3 +245,10 @@
 | storage_buckets.retention_policy.retention_period | The period of time, in seconds, that objects in the bucket must be retained and cannot be deleted, overwritten, or archived. The value must be less than 2,147,483,647 seconds. | number | false | - | - |
 | storage_buckets.storage_location | Location to create the storage bucket. Can be defined in global data block. | string | false | - | - |
 | terraform_addons | Additional Terraform configuration for the project deployment. Can be used to support arbitrary resources not supported in the following list. For schema see ./deployment.hcl. | object | false | - | - |
+| workload_identity | [Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/workload-identity) | array() | false | - | - |
+| workload_identity.cluster_name | Cluster name where the workload is deployed. | string | true | - | - |
+| workload_identity.google_service_account_id | ID of the google service account the deployment should use to authenticate with other resources. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account#account_id>. | string | true | - | - |
+| workload_identity.kubernetes_service_account_name | Name of the KSA associated with the workload. | string | true | - | - |
+| workload_identity.location | Cluster location (region if regional cluster, zone if zonal cluster). | string | true | - | - |
+| workload_identity.namespace | The namespace where the KSA is created. | string | true | - | - |
+| workload_identity.project_id | ID of the project where the GKE cluster is deployed. | string | true | - | - |

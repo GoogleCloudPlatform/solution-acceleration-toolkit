@@ -490,10 +490,35 @@ template "additional_iam_members" {
 
 # Kubernetes Terraform deployment. This should be deployed after the GKE Cluster has been deployed.
 template "kubernetes" {
-  recipe_path = "{{.recipes}}/deployment.hcl"
+  recipe_path = "{{.recipes}}/project.hcl"
   output_path = "./kubernetes"
 
   data = {
+    project = {
+      project_id = "{{.prefix}}-{{.env}}-apps"
+      exists     = true
+    }
+    resources = {
+      kubernetes_service_accounts = [{
+        name = "ksa"
+        namespace = "namespace"
+        google_service_account_email = "runner@$${module.project.project_id}.iam.gserviceaccount.com"
+      }]
+      kubernetes_namespaces = [{
+        name = "namespace"
+        annotations = {
+          name = "namespace"
+        }
+      }]
+      workload_identity = [{
+        project_id = "$${module.project.project_id}"
+        google_service_account_id = "runner"
+        kubernetes_service_account_name = "ksa"
+        namespace = "namespace"
+        cluster_name = "gke-cluster"
+        location = "{{.default_location}}"
+      }]
+    }
     terraform_addons = {
       raw_config = <<EOF
 data "google_client_config" "default" {}
@@ -501,7 +526,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "{{.default_location}}"
-  project  = "{{.prefix}}-{{.env}}-apps"
+  project  = "$${module.project.project_id}"
 }
 
 provider "kubernetes" {
@@ -511,15 +536,6 @@ provider "kubernetes" {
   client_certificate     = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_certificate)
   client_key             = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_key)
   cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
-}
-
-resource "kubernetes_namespace" "namespace" {
-  metadata {
-    name = "namespace"
-    annotations = {
-      name = "namespace"
-    }
-  }
 }
 EOF
     }

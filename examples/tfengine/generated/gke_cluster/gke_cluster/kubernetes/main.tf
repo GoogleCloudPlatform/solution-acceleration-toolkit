@@ -21,14 +21,14 @@ terraform {
   }
   backend "gcs" {
     bucket = "example-terraform-state"
-    prefix = "kubernetes"
+    prefix = "gke_cluster/kubernetes"
   }
 }
 
 data "google_client_config" "default" {}
 
 data "google_container_cluster" "gke_cluster" {
-  name     = "gke-cluster"
+  name     = "example-cluster"
   location = "us-central1"
   project  = module.project.project_id
 }
@@ -47,47 +47,44 @@ module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
   version = "~> 11.1.0"
 
-  project_id    = "example-prod-apps"
+  project_id    = "example-apps"
   activate_apis = []
 }
 
 resource "kubernetes_service_account" "ksa" {
   metadata {
     name      = "ksa"
-    namespace = "namespace"
+    namespace = "example-namespace"
     annotations = {
-      "iam.gke.io/gcp-service-account" = "runner@${module.project.project_id}.iam.gserviceaccount.com"
+      "iam.gke.io/gcp-service-account" = "example-sa@${module.project.project_id}.iam.gserviceaccount.com"
     }
   }
 }
 
-resource "kubernetes_namespace" "namespace" {
+resource "kubernetes_namespace" "example_namespace" {
   metadata {
-    name = "namespace"
-    labels = {
-      env = "prod"
-    }
+    name = "example-namespace"
     annotations = {
-      name = "namespace"
+      name = "example-namespace"
     }
   }
 }
 
-module "workload_identity_namespace" {
+module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "16.1.0"
   project_id = module.project.project_id
-  name       = "runner"
+  name       = "example-sa"
 
   use_existing_gcp_sa = true
-  gcp_sa_name         = "runner"
+  gcp_sa_name         = "example-sa"
 
   use_existing_k8s_sa = true
   # The KSA is annotated as part the KSA resource. It bears the "iam.gke.io/gcp-service-account" annotation.
   annotate_k8s_sa = false
-  namespace       = "namespace"
+  namespace       = "example-namespace"
   k8s_sa_name     = "ksa"
-  cluster_name    = "gke-cluster"
+  cluster_name    = "example-cluster"
   location        = "us-central1"
 }
 
