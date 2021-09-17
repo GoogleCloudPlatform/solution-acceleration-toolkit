@@ -30,7 +30,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "example-prod-apps"
+  project  = module.project.project_id
 }
 
 provider "kubernetes" {

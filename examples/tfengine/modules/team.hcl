@@ -526,7 +526,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "{{.default_location}}"
-  project  = "{{.prefix}}-{{.env}}-apps"
+  project  = "$${module.project.project_id}"
 }
 
 provider "kubernetes" {

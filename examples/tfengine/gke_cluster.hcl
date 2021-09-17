@@ -100,7 +100,7 @@ template "kubernetes" {
       kubernetes_service_accounts = [{
         name = "ksa"
         namespace = "example-namespace"
-        google_service_account_email = "example-sa@example-apps.iam.gserviceaccount.com"
+        google_service_account_email = "example-sa@$${module.project.project_id}.iam.gserviceaccount.com"
       }]
       kubernetes_namespaces = [{
         name = "example-namespace"
@@ -109,7 +109,7 @@ template "kubernetes" {
         }
       }]
       workload_identity = [{
-        project_id = "example-apps"
+        project_id = "$${module.project.project_id}"
         google_service_account_id = "example-sa"
         kubernetes_service_account_name = "ksa"
         namespace = "example-namespace"
@@ -124,7 +124,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "example-apps"
+  project  = "$${module.project.project_id}"
 }
 
 provider "kubernetes" {

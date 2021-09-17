@@ -30,7 +30,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "gke-cluster"
   location = "us-central1"
-  project  = "example-apps"
+  project  = module.project.project_id
 }
 
 provider "kubernetes" {
@@ -56,7 +56,7 @@ resource "kubernetes_service_account" "ksa" {
     name      = "ksa"
     namespace = "example-namespace"
     annotations = {
-      "iam.gke.io/gcp-service-account" = "example-sa@example-apps.iam.gserviceaccount.com"
+      "iam.gke.io/gcp-service-account" = "example-sa@${module.project.project_id}.iam.gserviceaccount.com"
     }
   }
 }
@@ -73,7 +73,7 @@ resource "kubernetes_namespace" "example_namespace" {
 module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "16.1.0"
-  project_id = "example-apps"
+  project_id = module.project.project_id
   name       = "example-sa"
 
   use_existing_gcp_sa = true
