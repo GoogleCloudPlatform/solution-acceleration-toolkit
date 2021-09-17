@@ -12,26 +12,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */ -}}
 
-{{range get . "kubernetes_namespaces"}}
-resource "kubernetes_namespace" "{{resourceName . "name"}}" {
+{{range get . "kubernetes_service_accounts"}}
+resource "kubernetes_service_account" "{{resourceName . "name"}}" {
   metadata {
-    name = ".name"
-    {{if $labels := merge (get $ "labels") (get . "labels") -}}
-    
-    labels = {
-      {{range $k, $v := $labels -}}
-      {{$k}} = "{{$v}}"
-      {{end -}}
-    }
-    {{end -}}
-    
-    {{if $annotations := merge (get $ "annotations") (get . "annotations") -}}
+    name        = "{{.name}}"
+    namespace   = "{{.namespace}}"
     annotations = {
-      {{range $k, $v := $annotations -}}
-      {{$k}} = "{{$v}}"
-      {{end -}}
+      "iam.gke.io/gcp-service-account" = "{{.google_service_account_email}}"
     }
-    {{end -}}
   }
+  provider = kubernetes.{{.provider}}
 }
 {{end -}}

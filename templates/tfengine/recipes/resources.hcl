@@ -1463,8 +1463,38 @@ schema = {
         }
       }
     }
+    kubernetes_namespaces = {
+      description = "Kubernetes namespace. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace>."
+      type        = "array"
+      items = {
+        additionalProperties = false
+        required = [
+          "name"
+        ]
+        properties = {
+          name = {
+            description = "Name of the namespace."
+            type        = "string"
+          }
+          annotations = {
+            description = "Arbitrary annotations to store metadata for the namespace."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
+          labels = {
+            description = "Labels to set on the namespace."
+            type        = "object"
+            patternProperties = {
+              ".+" = { type = "string" }
+            }
+          }
+        }
+      }
+    }
     kubernetes_service_accounts = {
-      description = "Kubernetes service accounts. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>."
+      description = "Kubernetes service accounts (KSAs). See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account>."
       type        = "array"
       items = {
         additionalProperties = false
@@ -1484,16 +1514,16 @@ schema = {
             type        = "string"
           }
           google_service_account_email = {
-            description = "Email of the google service account the kubernetes service account should use to authenticate with other resources."
+            description = "Email of the google service account the KSA should use to authenticate with other resources."
           }
           provider = {
-            description = "Kubernetes provider."
+            description = "Kubernetes provider. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs>"
             type        = "string"
           }
         }
       }
     }
-    workload_identity_configurations = {
+    workload_identity = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/workload-identity)"
       type        = "array"
       items = {
@@ -1512,15 +1542,18 @@ schema = {
             type        = "string"
           }
           google_service_account_id = {
-            description = "ID of the google service account the deployment should use to authenticate with other resources."
+            description = <<EOF
+              ID of the google service account the deployment should use to authenticate with other resources.
+              See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account#account_id>.
+            EOF
             type        = "string"
           }
           kubernetes_service_account_name = {
-            description = "Name of the kubernetes service account associated with the workload."
+            description = "Name of the KSA associated with the workload."
             type        = "string"
           }
           namespace = {
-            description = "The namespace where the kubernetes service account is created."
+            description = "The namespace where the KSA is created."
             type        = "string"
           }
           cluster_name = {
@@ -1633,14 +1666,20 @@ template "groups" {
 }
 {{end}}
 
+{{if has . "kubernetes_namespaces"}}
+template "kubernetes_namespaces" {
+  component_path = "../components/resources/kubernetes_namespaces"
+}
+{{end}}
+
 {{if has . "kubernetes_service_accounts"}}
 template "kubernetes_service_accounts" {
   component_path = "../components/resources/kubernetes_service_accounts"
 }
 {{end}}
 
-{{if has . "workload_identity_configurations"}}
-template "workload_identity_configurations" {
-  component_path = "../components/resources/workload_identity_configurations"
+{{if has . "workload_identity"}}
+template "workload_identity" {
+  component_path = "../components/resources/workload_identity"
 }
 {{end}}

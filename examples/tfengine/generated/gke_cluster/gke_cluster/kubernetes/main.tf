@@ -43,15 +43,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
 }
 
-resource "kubernetes_namespace" "namespace" {
-  metadata {
-    name = "example-namespace"
-    annotations = {
-      name = "example-namespace"
-    }
-  }
-}
-
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
@@ -61,15 +52,24 @@ module "project" {
   activate_apis = []
 }
 
-resource "kubernetes_service_account" "ksa_ksa_gke" {
+resource "kubernetes_service_account" "ksa" {
   metadata {
-    name      = "ksa-gke"
+    name      = "ksa"
     namespace = "example-namespace"
     annotations = {
       "iam.gke.io/gcp-service-account" = "example-sa@cluster-project-example.iam.gserviceaccount.com"
     }
   }
   provider = kubernetes.gke-alias
+}
+
+resource "kubernetes_namespace" "example_namespace" {
+  metadata {
+    name = ".name"
+    annotations = {
+      name = "example-namespace"
+    }
+  }
 }
 
 module "workload_identity_example_namespace" {
@@ -82,11 +82,11 @@ module "workload_identity_example_namespace" {
   gcp_sa_name         = "example-sa"
 
   use_existing_k8s_sa = true
-  annotate_k8s_sa     = false
-  namespace           = "example-namespace"
-  k8s_sa_name         = "ksa-gke"
-  cluster_name        = "gke-cluster"
-  location            = "us-central1"
+  # The KSA is annotated as part the KSA resource. It bears the "iam.gke.io/gcp-service-account" annotation.
+  annotate_k8s_sa = false
+  namespace       = "example-namespace"
+  k8s_sa_name     = "ksa"
+  cluster_name    = "gke-cluster"
+  location        = "us-central1"
 }
-
 

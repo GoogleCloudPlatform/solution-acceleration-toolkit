@@ -500,15 +500,21 @@ template "kubernetes" {
     }
     resources = {
       kubernetes_service_accounts = [{
-        name = "ksa-gke"
+        name = "ksa"
         namespace = "namespace"
-        google_service_account_email = "runner@{{.prefix}}-{{.env}}-apps.iam.gserviceaccount.com"
+        google_service_account_email = "runner@$${module.project.project_id}.iam.gserviceaccount.com"
         provider = "gke-alias"
       }]
-      workload_identity_configurations = [{
-        project_id = "{{.prefix}}-{{.env}}-apps"
+      kubernetes_namespaces = [{
+        name = "namespace"
+        annotations = {
+          name = "namespace"
+        }
+      }]
+      workload_identity = [{
+        project_id = "$${module.project.project_id}"
         google_service_account_id = "runner"
-        kubernetes_service_account_name = "ksa-gke"
+        kubernetes_service_account_name = "ksa"
         namespace = "namespace"
         cluster_name = "gke-cluster"
         location = "{{.default_location}}"
@@ -532,15 +538,6 @@ provider "kubernetes" {
   client_certificate     = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_certificate)
   client_key             = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_key)
   cluster_ca_certificate = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.cluster_ca_certificate)
-}
-
-resource "kubernetes_namespace" "namespace" {
-  metadata {
-    name = "namespace"
-    annotations = {
-      name = "namespace"
-    }
-  }
 }
 EOF
     }
