@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+data = {
+  # Default locations for resources. Can be overridden in individual templates.
+  storage_location    = "{{.default_location}}"
+}
+
 template "devops" {
   recipe_path = "{{.recipes}}/devops.hcl"
   output_path = "./devops"
@@ -19,8 +24,6 @@ template "devops" {
     # TODO(user): Uncomment and re-run the engine after generated devops module has been deployed.
     # Run `terraform init` in the devops module to backup its state to GCS.
     # enable_gcs_backend = true
-
-    storage_location = "{{.default_location}}"
 
     admins_group = {
       id     = "{{.prefix}}-team-admins@{{.domain}}"
@@ -107,6 +110,37 @@ template "groups" {
   }
 }
 
+# Must first be deployed manually before 'cicd' is deployed because some triggers used
+# in 'cicd' template require the resources created here.
+template "cloudbuild_service_accounts" {
+  recipe_path = "{{.recipes}}/project.hcl"
+  output_path = "./cloudbuild_service_accounts"
+  data = {
+    project = {
+      project_id = "{{.prefix}}-{{.env}}-devops"
+      exists     = true
+    }
+    resources = {
+      service_accounts = [{
+        account_id   = "cloudbuild_sa"
+        description  = "Cloudbuild Service Account"
+        display_name = "Cloudbuild Service Account"
+      }]
+      iam_members = {
+        "roles/iam.serviceAccountUser" = [
+          "serviceAccount:$${google_service_account.cloudbuild_sa.account_id}@{{.prefix}}-{{.env}}-devops.iam.gserviceaccount.com",
+        ]
+        "roles/logging.logWriter" = [
+          "serviceAccount:$${google_service_account.cloudbuild_sa.account_id}@{{.prefix}}-{{.env}}-devops.iam.gserviceaccount.com",
+        ]
+      }
+      storage_buckets = [{
+        name = "{{.prefix}}-logs-bucket"
+      }]
+    }
+  }
+}
+
 template "cicd" {
   recipe_path = "{{.recipes}}/cicd.hcl"
   output_path = "./cicd"
@@ -147,6 +181,9 @@ template "cicd" {
           location = "us-east1"
           name     = "cicd-pool"
         }
+        // Do not use $${module.project.project_id} for project ID.
+        service_account = "projects/{{.prefix}}-{{.env}}-devops/serviceAccounts/cloudbuild_sa"
+        logs_bucket = "gs://{{.prefix}}-logs-bucket"
       }
     ]
   }

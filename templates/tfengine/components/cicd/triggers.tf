@@ -64,6 +64,10 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   }
   {{- end}}
 
+  {{hclField . "service_account" -}}
+
+  {{hclField . "logs_bucket" -}}
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
@@ -108,6 +112,10 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
+
+  {{hclField . "service_account" -}}
+
+  {{hclField . "logs_bucket" -}}
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
@@ -178,6 +186,10 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   }
   {{- end}}
 
+  {{hclField . "service_account" -}}
+
+  {{hclField . "logs_bucket" -}}
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
@@ -222,6 +234,10 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
+
+  {{hclField . "service_account" -}}
+
+  {{hclField . "logs_bucket" -}}
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
@@ -291,6 +307,10 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
     branch_name = "^{{.branch_name}}$"
   }
   {{- end}}
+
+  {{hclField . "service_account" -}}
+
+  {{hclField . "logs_bucket" -}}
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-apply.yaml"
 

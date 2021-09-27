@@ -31,7 +31,9 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     }
   }
 
-  filename = "terraform/cicd/configs/tf-validate.yaml"
+  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild_sa"
+  logs_bucket     = "gs://example-logs-bucket"
+  filename        = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
@@ -61,7 +63,9 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     }
   }
 
-  filename = "terraform/cicd/configs/tf-plan.yaml"
+  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild_sa"
+  logs_bucket     = "gs://example-logs-bucket"
+  filename        = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
@@ -92,7 +96,9 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     }
   }
 
-  filename = "terraform/cicd/configs/tf-apply.yaml"
+  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild_sa"
+  logs_bucket     = "gs://example-logs-bucket"
+  filename        = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"

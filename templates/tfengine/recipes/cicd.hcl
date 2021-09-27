@@ -286,6 +286,26 @@ schema = {
               }
             }
           }
+          service_account = {
+            description = <<EOF
+              The service account ID used for all user-controlled operations.
+              If no service account is set, then the standard Cloud Build service account
+              ([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.
+
+              This service account should have several permissions to perform
+              different operations. For example, to start builds, it requires the
+              iam.serviceAccounts.actAs permission, and to store logs, it requires
+              the roles/logging.logWriter) role.
+              See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>.
+
+              Format: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}
+            EOF
+            type        = "string"
+          }
+          logs_bucket = {
+            description = "Google Cloud Storage bucket where logs should be written. E.g. gs://mybucket/logs"
+            type        = "string"
+          }
         }
       }
     }
