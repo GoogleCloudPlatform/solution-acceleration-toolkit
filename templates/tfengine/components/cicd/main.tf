@@ -51,7 +51,6 @@ data "google_project" "devops" {
 }
 
 locals {
-  cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -211,7 +210,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
   project  = var.project_id
   role     = each.key
-  member   = local.cloudbuild_sa
+  member   = "serviceAccount:${var.service_account_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -250,6 +249,43 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 }
 {{- end}}
 
+{{- if not (has . "service_account")}}
+resource "google_service_account" "cloudbuild_sa" {
+  project      = var.project_id
+  account_id   = "cloudbuild-sa"
+  display_name = "Cloudbuild service account"
+  description  = "Cloudbuild service account"
+}
+{{- end}}
+
+{{- if not (has . "logs_bucket")}}
+module "logs_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 1.4"
+
+  name       = var.logs_bucket
+  project_id = var.project_id
+  location   = "{{get . "storage_location" $.storage_location}}"
+}
+{{- end}}
+
+module "project_iam_members" {
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 7.2.0"
+
+  projects = [var.project_id]
+  mode     = "additive"
+
+  bindings = {
+    "roles/iam.serviceAccountUser" = [
+      "serviceAccount:${var.service_account_email}",
+    ],
+    "roles/logging.logWriter" = [
+      "serviceAccount:${var.service_account_email}",
+    ],
+  }
+}
+
 # Cloud Build - Cloud Build Service Account IAM permissions
 {{- if and $hasApplyJobs (get . "grant_automation_billing_user_role" true)}}
 
@@ -257,7 +293,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
-  member             = local.cloudbuild_sa
+  member             = "serviceAccount:${var.service_account_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -272,7 +308,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   {{- else}}
   role   = "roles/storage.objectViewer"
   {{- end}}
-  member = local.cloudbuild_sa
+  member = "serviceAccount:${var.service_account_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -291,7 +327,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
   folder   = {{.parent_id}}
   {{- end}}
   role     = each.value
-  member   = local.cloudbuild_sa
+  member   = "serviceAccount:${var.service_account_email}"
   depends_on = [
     google_project_service.services,
   ]

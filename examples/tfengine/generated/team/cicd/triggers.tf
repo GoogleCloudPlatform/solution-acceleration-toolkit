@@ -31,9 +31,11 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     }
   }
 
-  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild-sa"
-  logs_bucket     = "gs://example-logs-bucket"
-  filename        = "terraform/cicd/configs/tf-validate.yaml"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
+  filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
@@ -63,9 +65,11 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     }
   }
 
-  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild-sa"
-  logs_bucket     = "gs://example-logs-bucket"
-  filename        = "terraform/cicd/configs/tf-plan.yaml"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
+  filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
@@ -96,9 +100,11 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     }
   }
 
-  service_account = "projects/example-prod-devops/serviceAccounts/cloudbuild-sa"
-  logs_bucket     = "gs://example-logs-bucket"
-  filename        = "terraform/cicd/configs/tf-apply.yaml"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
+  filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"

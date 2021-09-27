@@ -28,6 +28,10 @@ resource "google_cloudbuild_trigger" "validate_shared" {
     branch_name = "^shared$"
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
@@ -55,6 +59,10 @@ resource "google_cloudbuild_trigger" "plan_shared" {
     repo_name   = "example"
     branch_name = "^shared$"
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
@@ -84,6 +92,10 @@ resource "google_cloudbuild_trigger" "apply_shared" {
     repo_name   = "example"
     branch_name = "^shared$"
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
@@ -115,6 +127,10 @@ resource "google_cloudbuild_trigger" "validate_dev" {
     branch_name = "^dev$"
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
@@ -142,6 +158,10 @@ resource "google_cloudbuild_trigger" "apply_dev" {
     repo_name   = "example"
     branch_name = "^dev$"
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
@@ -173,6 +193,10 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     branch_name = "^main$"
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
@@ -200,6 +224,10 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     repo_name   = "example"
     branch_name = "^main$"
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
@@ -229,6 +257,10 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     repo_name   = "example"
     branch_name = "^main$"
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
 

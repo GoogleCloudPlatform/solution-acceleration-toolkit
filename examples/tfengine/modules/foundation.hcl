@@ -114,25 +114,6 @@ template "cicd" {
   recipe_path = "{{.recipes}}/cicd.hcl"
   output_path = "./cicd"
   data = {
-    resources = {
-      service_accounts = [{
-        account_id   = "cloudbuild-sa"
-        description  = "Cloudbuild Service Account"
-        display_name = "Cloudbuild Service Account"
-      }]
-      iam_members = {
-        "roles/iam.serviceAccountUser" = [
-          "serviceAccount:$${google_service_account.cloudbuild_sa.account_id}@{{.prefix}}-{{.env}}-devops.iam.gserviceaccount.com",
-        ]
-        "roles/logging.logWriter" = [
-          "serviceAccount:$${google_service_account.cloudbuild_sa.account_id}@{{.prefix}}-{{.env}}-devops.iam.gserviceaccount.com",
-        ]
-      }
-      storage_buckets = [{
-        name = "{{.prefix}}-logs-bucket"
-      }]
-    }
-
     project_id = "{{.prefix}}-{{.env}}-devops"
     github = {
       owner = "GoogleCloudPlatform"
@@ -146,6 +127,9 @@ template "cicd" {
     build_editors = ["group:{{.prefix}}-cicd-editors@{{.domain}}"]
 
     terraform_root = "terraform"
+
+    service_account = "cloudbuild-sa@{{.prefix}}-{{.env}}.iam.gserviceaccount.com"
+    logs_bucket = "{{.prefix}}-{{.env}}-devops-cloudbuild-logs-bucket"
     envs = [
       {
         name        = "prod"
@@ -169,8 +153,6 @@ template "cicd" {
           location = "us-east1"
           name     = "cicd-pool"
         }
-        service_account = "projects/{{.prefix}}-{{.env}}-devops/serviceAccounts/cloudbuild-sa"
-        logs_bucket = "gs://{{.prefix}}-logs-bucket"
       }
     ]
   }

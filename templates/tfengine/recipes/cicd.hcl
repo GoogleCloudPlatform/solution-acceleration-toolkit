@@ -127,6 +127,27 @@ schema = {
       EOF
       type        = "boolean"
     }
+    service_account = {
+      description = <<EOF
+        The service account email used for all user-controlled operations.
+        If no service account is provided, one will be created and will
+        be used for all CICD triggers.
+
+        This service account should have several permissions to perform
+        different operations. These permissions will be granted to the
+        service account as part of the CICD deployment.
+        See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>.
+      EOF
+      type        = "string"
+    }
+    logs_bucket = {
+      description = <<EOF
+        Google Cloud Storage bucket name where logs should be written.
+        If no bucket is provided, one will be created and will
+        be used to store cloudbuild logs.
+      EOF
+      type        = "string"
+    }
     envs = {
       description = <<EOF
         Config block for per-environment resources.
@@ -286,38 +307,8 @@ schema = {
               }
             }
           }
-          service_account = {
-            description = <<EOF
-              The service account ID used for all user-controlled operations.
-              If no service account is set, then the standard Cloud Build service account
-              ([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.
-
-              This service account should have several permissions to perform
-              different operations. For example, to start builds, it requires the
-              iam.serviceAccounts.actAs permission, and to store logs, it requires
-              the roles/logging.logWriter) role.
-              See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>.
-
-              Format: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}
-            EOF
-            type        = "string"
-          }
-          logs_bucket = {
-            description = <<EOF
-              Google Cloud Storage bucket where logs should be written.
-              Required if service_account is provided.
-              E.g. gs://mybucket/logs
-            EOF
-            type        = "string"
-          }
         }
       }
-    }
-    resources = {
-      description = <<EOF
-        Optional resources for CICD.
-        See [resources.md](./resources.md) for schema.
-      EOF
     }
   }
 }
@@ -325,12 +316,3 @@ schema = {
 template "cicd" {
   component_path = "../components/cicd"
 }
-
-{{if has . "resources"}}
-template "resources" {
-  recipe_path = "./resources.hcl"
-  flatten {
-    key = "resources"
-  }
-}
-{{end}}

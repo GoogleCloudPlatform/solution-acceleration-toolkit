@@ -14,10 +14,8 @@
 | cloud_source_repository.writers | IAM members to allow writing to the repo. | array(string) | false | - | - |
 | envs | Config block for per-environment resources. | array(object) | true | - | - |
 | envs.branch_name | Name of the branch to set the Cloud Build Triggers to monitor. Regex is not supported to enforce a 1:1 mapping from a branch to a GCP environment. | string | true | - | - |
-| envs.logs_bucket | Google Cloud Storage bucket where logs should be written. Required if service_account is provided. E.g. gs://mybucket/logs | string | false | - | - |
 | envs.managed_dirs | List of root modules managed by the CICD relative to `terraform_root`.<br><br>NOTE: The modules will be deployed in the given order. If a module depends on another module, it should show up after it in this list.<br><br>NOTE: The CICD has permission to update APIs within its own project. Thus, you can list the devops module as one of the managed modules. Other changes to the devops project or CICD pipelines must be deployed manually. | array(string) | false | - | - |
 | envs.name | Name of the environment. | string | true | - | - |
-| envs.service_account | The service account ID used for all user-controlled operations. If no service account is set, then the standard Cloud Build service account ([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.<br><br>This service account should have several permissions to perform different operations. For example, to start builds, it requires the iam.serviceAccounts.actAs permission, and to store logs, it requires the roles/logging.logWriter) role. See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>.<br><br>Format: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL} | string | false | - | - |
 | envs.triggers | Config block for the CICD Cloud Build triggers. | object | true | - | - |
 | envs.triggers.apply | Config block for the postsubmit apply/deployyemt Cloud Build trigger. If specified,create the trigger and grant the Cloud Build Service Account necessary permissions to perform the build. | object | false | - | - |
 | envs.triggers.apply.run_on_push | Whether or not to be automatically triggered from a PR/push to branch. Default to true. | boolean | false | - | - |
@@ -36,7 +34,8 @@
 | github.name | GitHub repo name. | string | false | - | - |
 | github.owner | GitHub repo owner. | string | false | - | - |
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role. Default to true. | boolean | false | - | - |
+| logs_bucket | Google Cloud Storage bucket name where logs should be written. If no bucket is provided, one will be created and will be used to store cloudbuild logs. | string | false | - | - |
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
-| resources | Optional resources for CICD. See [resources.md](./resources.md) for schema. | - | false | - | - |
 | scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
+| service_account | The service account email used for all user-controlled operations. If no service account is provided, one will be created and will be used for all CICD triggers.<br><br>This service account should have several permissions to perform different operations. These permissions will be granted to the service account as part of the CICD deployment. See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>. | string | false | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |

@@ -31,6 +31,10 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     }
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
+
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
@@ -60,6 +64,10 @@ resource "google_cloudbuild_trigger" "plan_prod" {
       branch = "^main$"
     }
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
@@ -93,6 +101,10 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
       branch = "^main$"
     }
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
@@ -146,6 +158,10 @@ resource "google_cloudbuild_trigger" "apply_prod" {
       branch = "^main$"
     }
   }
+
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
 

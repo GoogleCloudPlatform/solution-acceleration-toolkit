@@ -35,10 +35,6 @@
   {{- $worker_pool = printf "projects/%s/locations/%s/workerPools/%s" .worker_pool.project .worker_pool.location .worker_pool.name}}
 {{- end}}
 
-{{- if has . "service_account"}}
-  {{- $logs_bucket := .logs_bucket}}
-{{- end}}
-
 {{- if has .triggers "validate"}}
 
 resource "google_cloudbuild_trigger" "validate_{{.name}}" {
@@ -68,9 +64,9 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   }
   {{- end}}
 
-  {{hclField . "service_account" -}}
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
 
-  {{hclField . "logs_bucket" -}}
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
@@ -117,9 +113,9 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   }
   {{- end}}
 
-  {{hclField . "service_account" -}}
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
 
-  {{hclField . "logs_bucket" -}}
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
@@ -190,9 +186,9 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   }
   {{- end}}
 
-  {{hclField . "service_account" -}}
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
 
-  {{hclField . "logs_bucket" -}}
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
@@ -239,9 +235,9 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   }
   {{- end}}
 
-  {{hclField . "service_account" -}}
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
 
-  {{hclField . "logs_bucket" -}}
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
@@ -312,9 +308,9 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   }
   {{- end}}
 
-  {{hclField . "service_account" -}}
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
 
-  {{hclField . "logs_bucket" -}}
+  logs_bucket = "gs://${var.logs_bucket}"
 
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-apply.yaml"
 
