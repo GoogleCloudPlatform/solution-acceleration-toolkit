@@ -122,7 +122,7 @@ template "cloudbuild_service_accounts" {
     }
     resources = {
       service_accounts = [{
-        account_id   = "cloudbuild_sa"
+        account_id   = "cloudbuild-sa"
         description  = "Cloudbuild Service Account"
         display_name = "Cloudbuild Service Account"
       }]
@@ -182,7 +182,7 @@ template "cicd" {
           name     = "cicd-pool"
         }
         // Do not use $${module.project.project_id} for project ID.
-        service_account = "projects/{{.prefix}}-{{.env}}-devops/serviceAccounts/cloudbuild_sa"
+        service_account = "projects/{{.prefix}}-{{.env}}-devops/serviceAccounts/cloudbuild-sa"
         logs_bucket = "gs://{{.prefix}}-logs-bucket"
       }
     ]

@@ -52,7 +52,7 @@ module "project_iam_members" {
 }
 
 resource "google_service_account" "cloudbuild_sa" {
-  account_id   = "cloudbuild_sa"
+  account_id   = "cloudbuild-sa"
   display_name = "Cloudbuild Service Account"
 
   description = "Cloudbuild Service Account"
