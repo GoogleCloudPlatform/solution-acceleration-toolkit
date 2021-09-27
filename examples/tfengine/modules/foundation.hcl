@@ -110,16 +110,10 @@ template "groups" {
   }
 }
 
-# Must first be deployed manually before 'cicd' is deployed because some triggers used
-# in 'cicd' template require the resources created here.
-template "cloudbuild_service_accounts" {
-  recipe_path = "{{.recipes}}/project.hcl"
-  output_path = "./cloudbuild_service_accounts"
+template "cicd" {
+  recipe_path = "{{.recipes}}/cicd.hcl"
+  output_path = "./cicd"
   data = {
-    project = {
-      project_id = "{{.prefix}}-{{.env}}-devops"
-      exists     = true
-    }
     resources = {
       service_accounts = [{
         account_id   = "cloudbuild-sa"
@@ -138,13 +132,7 @@ template "cloudbuild_service_accounts" {
         name = "{{.prefix}}-logs-bucket"
       }]
     }
-  }
-}
 
-template "cicd" {
-  recipe_path = "{{.recipes}}/cicd.hcl"
-  output_path = "./cicd"
-  data = {
     project_id = "{{.prefix}}-{{.env}}-devops"
     github = {
       owner = "GoogleCloudPlatform"
@@ -181,7 +169,6 @@ template "cicd" {
           location = "us-east1"
           name     = "cicd-pool"
         }
-        // Do not use $${module.project.project_id} for project ID.
         service_account = "projects/{{.prefix}}-{{.env}}-devops/serviceAccounts/cloudbuild-sa"
         logs_bucket = "gs://{{.prefix}}-logs-bucket"
       }

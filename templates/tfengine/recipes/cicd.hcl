@@ -303,11 +303,21 @@ schema = {
             type        = "string"
           }
           logs_bucket = {
-            description = "Google Cloud Storage bucket where logs should be written. E.g. gs://mybucket/logs"
+            description = <<EOF
+              Google Cloud Storage bucket where logs should be written.
+              Required if service_account is provided.
+              E.g. gs://mybucket/logs
+            EOF
             type        = "string"
           }
         }
       }
+    }
+    resources = {
+      description = <<EOF
+        Optional resources for CICD.
+        See [resources.md](./resources.md) for schema.
+      EOF
     }
   }
 }
@@ -315,3 +325,12 @@ schema = {
 template "cicd" {
   component_path = "../components/cicd"
 }
+
+{{if has . "resources"}}
+template "resources" {
+  recipe_path = "./resources.hcl"
+  flatten {
+    key = "resources"
+  }
+}
+{{end}}

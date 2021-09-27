@@ -178,3 +178,42 @@ resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
     google_project_service.services,
   ]
 }
+
+module "project_iam_members" {
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 7.2.0"
+
+  projects = [module.project.project_id]
+  mode     = "additive"
+
+  bindings = {
+    "roles/iam.serviceAccountUser" = [
+      "serviceAccount:${google_service_account.cloudbuild_sa.account_id}@example-prod-devops.iam.gserviceaccount.com",
+    ],
+    "roles/logging.logWriter" = [
+      "serviceAccount:${google_service_account.cloudbuild_sa.account_id}@example-prod-devops.iam.gserviceaccount.com",
+    ],
+  }
+}
+
+resource "google_service_account" "cloudbuild_sa" {
+  account_id   = "cloudbuild-sa"
+  display_name = "Cloudbuild Service Account"
+
+  description = "Cloudbuild Service Account"
+
+  project = module.project.project_id
+}
+
+module "example_logs_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 1.4"
+
+  name       = "example-logs-bucket"
+  project_id = module.project.project_id
+  location   = "us-central1"
+
+  labels = {
+    env = "prod"
+  }
+}
