@@ -215,7 +215,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
   project  = var.project_id
   role     = each.key
-  member   = locals.cloudbuild_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -281,10 +281,10 @@ module "project_iam_members" {
 
   bindings = {
     "roles/iam.serviceAccountUser" = [
-      locals.cloudbuild_sa,
+      local.cloudbuild_sa,
     ],
     "roles/logging.logWriter" = [
-      locals.cloudbuild_sa,
+      local.cloudbuild_sa,
     ],
   }
 }
@@ -296,7 +296,7 @@ module "project_iam_members" {
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
-  member             = locals.cloudbuild_sa
+  member             = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -311,7 +311,7 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   {{- else}}
   role   = "roles/storage.objectViewer"
   {{- end}}
-  member = locals.cloudbuild_sa
+  member = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
@@ -330,7 +330,7 @@ resource "google_{{.parent_type}}_iam_member" "cloudbuild_sa_{{.parent_type}}_ia
   folder   = {{.parent_id}}
   {{- end}}
   role     = each.value
-  member   = locals.cloudbuild_sa
+  member   = local.cloudbuild_sa
   depends_on = [
     google_project_service.services,
   ]
