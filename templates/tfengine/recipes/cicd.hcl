@@ -19,6 +19,8 @@ schema = {
     "envs",
     "terraform_root",
     "scheduler_region",
+    "service_account",
+    "logs_bucket"
   ]
   properties = {
     project_id = {
@@ -130,9 +132,6 @@ schema = {
     service_account = {
       description = <<EOF
         The service account ID used for all user-controlled operations.
-        If no service account is provided, one will be created and will
-        be used for all CICD triggers.
-
         This service account should have several permissions to perform
         different operations. These permissions will be granted to the
         service account as part of the CICD deployment.
@@ -140,13 +139,14 @@ schema = {
       EOF
       type        = "string"
     }
+    service_account_exists = {
+      description = "Whether the cloudbuild service_account exists. Defaults to 'false'."
+      type        = "boolean"
+    }
     logs_bucket = {
       description = <<EOF
         Google Cloud Storage bucket name where logs should be written.
-        If no bucket is provided, one will be created and will
-        be used to store cloudbuild logs.
-
-        If b
+        The bucket will be created as part of CICD.
       EOF
       type        = "string"
     }

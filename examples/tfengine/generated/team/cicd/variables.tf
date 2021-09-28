@@ -28,12 +28,10 @@ variable "state_bucket" {
 
 variable "logs_bucket" {
   description = "Name of the bucket used for cloudbuild logs"
-  default     = "cloudbuild-logs-bucket"
   type        = string
 }
 
 variable "service_account" {
   description = "Service account used for cloudbuild triggers"
-  default     = "cloudbuild-sa"
   type        = string
 }
