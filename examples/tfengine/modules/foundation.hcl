@@ -128,7 +128,7 @@ template "cicd" {
 
     terraform_root = "terraform"
 
-    service_account = "cloudbuild-sa@{{.prefix}}-{{.env}}.iam.gserviceaccount.com"
+    service_account = "cloudbuild-sa"
     logs_bucket = "{{.prefix}}-{{.env}}-devops-cloudbuild-logs-bucket"
     envs = [
       {

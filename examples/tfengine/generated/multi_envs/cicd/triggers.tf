@@ -28,7 +28,7 @@ resource "google_cloudbuild_trigger" "validate_shared" {
     branch_name = "^shared$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -60,7 +60,8 @@ resource "google_cloudbuild_trigger" "plan_shared" {
     branch_name = "^shared$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  // TODO refactor to "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -93,7 +94,7 @@ resource "google_cloudbuild_trigger" "apply_shared" {
     branch_name = "^shared$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -127,7 +128,7 @@ resource "google_cloudbuild_trigger" "validate_dev" {
     branch_name = "^dev$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -159,7 +160,7 @@ resource "google_cloudbuild_trigger" "apply_dev" {
     branch_name = "^dev$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -193,7 +194,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     branch_name = "^main$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -225,7 +226,8 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     branch_name = "^main$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  // TODO refactor to "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 
@@ -258,7 +260,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     branch_name = "^main$"
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
 

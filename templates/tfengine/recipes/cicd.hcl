@@ -129,7 +129,7 @@ schema = {
     }
     service_account = {
       description = <<EOF
-        The service account email used for all user-controlled operations.
+        The service account ID used for all user-controlled operations.
         If no service account is provided, one will be created and will
         be used for all CICD triggers.
 
@@ -145,6 +145,8 @@ schema = {
         Google Cloud Storage bucket name where logs should be written.
         If no bucket is provided, one will be created and will
         be used to store cloudbuild logs.
+
+        If b
       EOF
       type        = "string"
     }

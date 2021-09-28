@@ -28,12 +28,12 @@ variable "state_bucket" {
 
 variable "logs_bucket" {
   description = "Name of the bucket used for cloudbuild logs"
-  default     = "cloudbuild-sa@example-devops.iam.gserviceaccount.com"
+  default     = "cloudbuild-logs-bucket"
   type        = string
 }
 
-variable "service_account_email" {
+variable "service_account" {
   description = "Service account used for cloudbuild triggers"
-  default     = "example-devops-cloudbuild-logs-bucket"
+  default     = "cloudbuild-sa"
   type        = string
 }

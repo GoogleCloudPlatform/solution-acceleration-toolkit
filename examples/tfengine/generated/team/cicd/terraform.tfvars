@@ -15,5 +15,5 @@
 billing_account = "000-000-000"
 project_id      = "example-prod-devops"
 state_bucket    = "example-terraform-state"
-service_account = "cloudbuild-sa@example-prod.iam.gserviceaccount.com"
+service_account = "cloudbuild-sa"
 logs_bucket     = "example-prod-devops-cloudbuild-logs-bucket"
