@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -64,7 +64,7 @@ provider "kubernetes" {
 
 module "example_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.1.0"
+  version = "~> 17.0.0"
 
   providers = {
     kubernetes = kubernetes.example_cluster

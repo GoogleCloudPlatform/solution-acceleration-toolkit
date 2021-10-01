@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.0"
     google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -72,7 +72,7 @@ resource "kubernetes_namespace" "example_namespace" {
 
 module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version    = "16.1.0"
+  version    = "17.0.0"
   project_id = module.project.project_id
   name       = "example-sa"
 
