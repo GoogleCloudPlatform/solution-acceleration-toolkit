@@ -208,6 +208,7 @@
 | private_worker_pools.create_gke_vpn_connection | HA VPN connection between the private worker pool vpc and the gke network vpc. See <https://registry.terraform.io/modules/terraform-google-modules/vpn/google/latest/submodules/vpn_ha>. | object | false | - | - |
 | private_worker_pools.create_gke_vpn_connection.gke_control_plane_range | The CIDR of the gke cluster control plane range. E.g. 192.168.0.0/28. | string | true | - | - |
 | private_worker_pools.create_gke_vpn_connection.gke_name | Name of the GKE cluster the worker pool can access. | string | true | - | - |
+| private_worker_pools.create_gke_vpn_connection.gke_network | Name of the bastion host's subnet. | string | true | - | - |
 | private_worker_pools.name | Name of private worker pool. | string | true | - | - |
 | private_worker_pools.pool_address | IP address of the worker pool IP range. | string | true | - | - |
 | private_worker_pools.pool_prefix_length | The prefix length of the worker pool IP range. | integer | true | - | - |

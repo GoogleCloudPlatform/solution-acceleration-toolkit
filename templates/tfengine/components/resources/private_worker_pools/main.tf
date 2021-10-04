@@ -130,7 +130,7 @@ module "{{$name}}_vpn_ha_2" {
   version          = "~> 1.5.0"
   project_id       = module.project.project_id
   region           = "{{$.compute_region}}"
-  network          = module.123.network_self_link
+  network          = "{{$worker_pool.create_gke_vpn_connection.gke_network}}"
   name             = "{{$worker_pool.create_gke_vpn_connection.gke_name}}-net-to-{{$worker_pool.name}}-net"
   router_asn       = {{sub 64513 $index}}
   peer_gcp_gateway = module.{{$name}}_vpn_ha_1.self_link

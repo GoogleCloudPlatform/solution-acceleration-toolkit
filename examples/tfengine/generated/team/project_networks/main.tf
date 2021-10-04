@@ -287,7 +287,7 @@ module "worker_pool_vpn_ha_2" {
   version          = "~> 1.5.0"
   project_id       = module.project.project_id
   region           = "us-central1"
-  network          = module.123.network_self_link
+  network          = module.network.network.network.self_link
   name             = "gke-cluster-net-to-worker-pool-net"
   router_asn       = 64513
   peer_gcp_gateway = module.worker_pool_vpn_ha_1.self_link

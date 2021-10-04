@@ -704,7 +704,8 @@ schema = {
             additionalProperties = false
             required = [
               "gke_name",
-              "gke_control_plane_range"
+              "gke_control_plane_range",
+              "gke_network"
             ]
             properties = {
               gke_name = {
@@ -714,6 +715,10 @@ schema = {
               gke_control_plane_range = {
                 description = "The CIDR of the gke cluster control plane range. E.g. 192.168.0.0/28."
                 type        = "string"
+              }
+              gke_network = {
+                description = "Name of the bastion host's subnet."
+                type = "string"
               }
             }
           }
