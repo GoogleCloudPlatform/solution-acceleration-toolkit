@@ -52,6 +52,7 @@ module "project" {
     "iap.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
+    "cloudbuild.googleapis.com",
   ]
 }
 
@@ -171,4 +172,163 @@ resource "google_service_account" "bastion_accessor" {
   description = "Placeholder service account to use as members who can access the bastion host."
 
   project = module.project.project_id
+}
+resource "google_project_service" "servicenetworking" {
+  service            = "servicenetworking.googleapis.com"
+  project            = module.project.project_id
+  disable_on_destroy = false
+}
+
+module "worker_pool_network" {
+  source  = "terraform-google-modules/network/google"
+  version = "~> 3.3.0"
+
+  network_name = "worker-pool-network"
+  project_id   = module.project.project_id
+
+  subnets = []
+}
+
+resource "google_compute_global_address" "worker_pool_address" {
+  provider      = google-beta
+  name          = "worker-pool-address"
+  purpose       = "VPC_PEERING"
+  network       = module.worker_pool_network.network_self_link
+  address_type  = "INTERNAL"
+  address       = "192.168.0.0"
+  prefix_length = 16
+  project       = module.project.project_id
+}
+
+resource "google_service_networking_connection" "worker_pool_connection" {
+  network                 = module.worker_pool_network.network_self_link
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.worker_pool_address.name]
+  depends_on              = [google_project_service.servicenetworking]
+}
+
+resource "google_compute_network_peering_routes_config" "worker_pool_peering" {
+  network              = module.worker_pool_network.network_name
+  peering              = "servicenetworking-googleapis-com"
+  import_custom_routes = false
+  export_custom_routes = true
+  project              = module.project.project_id
+  depends_on = [
+    google_service_networking_connection.worker_pool_connection,
+    module.worker_pool_network,
+  ]
+}
+
+module "private_pool_gcloud" {
+  source                 = "terraform-google-modules/gcloud/google"
+  version                = "~> 3.0.1"
+  additional_components  = []
+  create_cmd_entrypoint  = "gcloud"
+  create_cmd_body        = "builds worker-pools create private-pool --region=us-central1 --peered-network=projects/$${module.project.project_id}/global/networks/$${module.worker_pool_network.network_name} --project=$${module.project.project_id} --quiet"
+  destroy_cmd_entrypoint = "gcloud"
+  destroy_cmd_body       = "builds worker-pools delete private-pool --region=us-central1  --project=$${module.project.project_id} --quiet"
+  module_depends_on = [
+    google_compute_network_peering_routes_config.worker_pool_peering,
+  ]
+}
+module "worker_pool_vpn_ha_1" {
+  source           = "terraform-google-modules/vpn/google//modules/vpn_ha"
+  version          = "~> 1.5.0"
+  project_id       = module.project.project_id
+  region           = "us-central1"
+  network          = module.worker_pool_network.network_self_link
+  name             = "worker-pool-net-to-gke-cluster-net"
+  peer_gcp_gateway = module.worker_pool_vpn_ha_2.self_link
+  router_asn       = 64514
+  tunnels = {
+    remote-0 = {
+      bgp_peer = {
+        address = "169.254.1.1"
+        asn     = 64513
+      }
+      bgp_peer_options = {
+        advertise_mode = "CUSTOM"
+        advertise_ip_ranges = {
+          "192.168.0.0/16" : ""
+        }
+        route_priority   = 1000
+        advertise_groups = null
+      }
+      bgp_session_range               = "169.254.1.2/30"
+      ike_version                     = 2
+      vpn_gateway_interface           = 0
+      peer_external_gateway_interface = null
+      shared_secret                   = ""
+    }
+    remote-1 = {
+      bgp_peer = {
+        address = "169.254.2.1"
+        asn     = 64513
+      }
+      bgp_peer_options = {
+        advertise_mode = "CUSTOM"
+        advertise_ip_ranges = {
+          "192.168.0.0/16" : ""
+        }
+        route_priority   = 1000
+        advertise_groups = null
+      }
+      bgp_session_range               = "169.254.2.2/30"
+      ike_version                     = 2
+      vpn_gateway_interface           = 1
+      peer_external_gateway_interface = null
+      shared_secret                   = ""
+    }
+  }
+}
+
+module "worker_pool_vpn_ha_2" {
+  source           = "terraform-google-modules/vpn/google//modules/vpn_ha"
+  version          = "~> 1.5.0"
+  project_id       = module.project.project_id
+  region           = "us-central1"
+  network          = module.123.network_self_link
+  name             = "gke-cluster-net-to-worker-pool-net"
+  router_asn       = 64513
+  peer_gcp_gateway = module.worker_pool_vpn_ha_1.self_link
+  tunnels = {
+    remote-0 = {
+      bgp_peer = {
+        address = "169.254.1.2"
+        asn     = 64514
+      }
+      bgp_peer_options = {
+        advertise_mode = "CUSTOM"
+        advertise_ip_ranges = {
+          "172.16.0.0/28" : ""
+        }
+        route_priority   = 1000
+        advertise_groups = null
+      }
+      bgp_session_range               = "169.254.1.1/30"
+      ike_version                     = 2
+      vpn_gateway_interface           = 0
+      peer_external_gateway_interface = null
+      shared_secret                   = module.worker_pool_vpn_ha_1.random_secret
+    }
+    remote-1 = {
+      bgp_peer = {
+        address = "169.254.2.2"
+        asn     = 64514
+      }
+      bgp_peer_options = {
+        advertise_mode = "CUSTOM"
+        advertise_ip_ranges = {
+          "172.16.0.0/28" : ""
+        }
+        route_priority   = 1000
+        advertise_groups = null
+      }
+      bgp_session_range               = "169.254.2.1/30"
+      ike_version                     = 2
+      vpn_gateway_interface           = 1
+      peer_external_gateway_interface = null
+      shared_secret                   = module.worker_pool_vpn_ha_1.random_secret
+    }
+  }
 }

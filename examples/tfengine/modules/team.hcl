@@ -86,6 +86,7 @@ template "project_networks" {
         "iap.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
+        "cloudbuild.googleapis.com",
       ]
     }
     resources = {
@@ -102,6 +103,7 @@ template "project_networks" {
             secondary_ranges = [
               {
                 name     = "pods-range"
+                // TODO double check the ip_ranges.
                 ip_range = "172.16.0.0/14"
               },
               {
@@ -150,6 +152,15 @@ EOF
 
         }]
       }]
+      private_worker_pools = [{
+        name                      = "worker-pool"
+        pool_address              = "192.168.0.0"
+        pool_prefix_length        = 16
+        create_gke_vpn_connection = {
+          gke_name                = "gke-cluster"
+          gke_control_plane_range = "172.16.0.0/28"
+        }
+      }]
     }
   }
 }
@@ -182,7 +193,12 @@ template "project_apps" {
         subnet                 = "gke-subnet"
         ip_range_pods_name     = "pods-range"
         ip_range_services_name = "services-range"
-        master_ipv4_cidr_block = "192.168.0.0/28"
+        master_ipv4_cidr_block = "172.16.0.0/28"
+
+        master_authorized_networks = [{
+          display_name: "cloudbuild"
+          cidr_block: "192.168.0.0/16"
+        }]
 
         # Set custom node pool to control machine type.
         node_pools = [{

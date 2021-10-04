@@ -27,6 +27,7 @@ var funcMap = map[string]interface{}{
 	"get":               get,
 	"has":               has,
 	"hcl":               hcl,
+	"sub":               sub,
 	"hclField":          hclField,
 	"merge":             merge,
 	"replace":           replace,
@@ -81,6 +82,12 @@ func hcl(v interface{}) (string, error) {
 		return "", err
 	}
 	return strings.TrimSpace(string(b)), nil
+}
+
+// sub computes the subtraction between two integers.
+// (e.g. sub(5, 3) returns 2.)
+func sub(a int, b int) int {
+	return a - b
 }
 
 // hclField returns a hcl marshaled field e.g. `name = "foo"`, if present.

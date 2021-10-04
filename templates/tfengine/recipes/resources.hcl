@@ -660,6 +660,66 @@ schema = {
         }
       }
     }
+    private_worker_pools = {
+      description = <<EOF
+        Cloudbuild private worker pool config.
+
+        This creates a worker pool with a dedicated computer network subnet
+        and creates a peering connection with the subnet.
+        
+        Must be created in the networks project used in the GKE cluster.
+      EOF
+      type        = "array"
+      items = {
+        type                 = "object"
+        additionalProperties = false
+        required = [
+          "name",
+          "pool_address",
+          "pool_prefix_length"
+        ]
+        properties = {
+          name = {
+            description = "Name of private worker pool."
+            type        = "string"
+          }
+          compute_region = {
+            description = "Region to create worker pool in. Can be defined in global data block."
+            type        = "string"
+          }
+          pool_address = {
+            description = "IP address of the worker pool IP range."
+            type        = "string"
+          }
+          pool_prefix_length = {
+            description = "The prefix length of the worker pool IP range."
+            type        = "integer"
+          }
+          create_gke_vpn_connection = {
+            description = <<EOF
+              HA VPN connection between the private worker pool vpc and the gke network vpc.
+              See <https://registry.terraform.io/modules/terraform-google-modules/vpn/google/latest/submodules/vpn_ha>.
+            EOF
+            type                 = "object"
+            additionalProperties = false
+            required = [
+              "gke_name",
+              "gke_control_plane_range"
+            ]
+            properties = {
+              gke_name = {
+                description = "Name of the GKE cluster the worker pool can access."
+                type        = "string"
+              }
+              gke_control_plane_range = {
+                description = "The CIDR of the gke cluster control plane range. E.g. 192.168.0.0/28."
+                type        = "string"
+              }
+            }
+          }
+        }
+      }
+    }
     gke_clusters = {
       description = "[Module](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/modules/safer-cluster-update-variant)"
       type        = "array"
@@ -1703,6 +1763,12 @@ template "storage_buckets" {
 {{if has . "groups"}}
 template "groups" {
   component_path = "../components/resources/groups"
+}
+{{end}}
+
+{{if has . "private_worker_pools"}}
+template "private_worker_pools" {
+  component_path = "../components/resources/private_worker_pools"
 }
 {{end}}
 
