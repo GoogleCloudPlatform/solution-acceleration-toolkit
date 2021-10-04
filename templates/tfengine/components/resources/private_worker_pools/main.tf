@@ -73,14 +73,14 @@ module "private_pool_gcloud" {
   ]
 }
 
-{{- if has $worker_pool "create_gke_vpn_connection"}}
+{{- if has $worker_pool "gke_vpn_connection"}}
 module "{{$name}}_vpn_ha_1" {
   source           = "terraform-google-modules/vpn/google//modules/vpn_ha"
   version          = "~> 1.5.0"
   project_id       = module.project.project_id
   region           = "{{$.compute_region}}"
   network          = module.{{$name}}_network.network_self_link
-  name             = "{{$worker_pool.name}}-net-to-{{$worker_pool.create_gke_vpn_connection.gke_name}}-net"
+  name             = "{{$worker_pool.name}}-net-to-{{$worker_pool.gke_vpn_connection.gke_name}}-net"
   peer_gcp_gateway = module.{{$name}}_vpn_ha_2.self_link
   router_asn       = {{sub 64514 $index}}
   tunnels = {
@@ -130,8 +130,8 @@ module "{{$name}}_vpn_ha_2" {
   version          = "~> 1.5.0"
   project_id       = module.project.project_id
   region           = "{{$.compute_region}}"
-  network          = "{{$worker_pool.create_gke_vpn_connection.gke_network}}"
-  name             = "{{$worker_pool.create_gke_vpn_connection.gke_name}}-net-to-{{$worker_pool.name}}-net"
+  network          = "{{$worker_pool.gke_vpn_connection.gke_network}}"
+  name             = "{{$worker_pool.gke_vpn_connection.gke_name}}-net-to-{{$worker_pool.name}}-net"
   router_asn       = {{sub 64513 $index}}
   peer_gcp_gateway = module.{{$name}}_vpn_ha_1.self_link
   tunnels = {
@@ -143,7 +143,7 @@ module "{{$name}}_vpn_ha_2" {
       bgp_peer_options = {
         advertise_mode = "CUSTOM"
         advertise_ip_ranges = {
-          "{{$worker_pool.create_gke_vpn_connection.gke_control_plane_range}}" : ""
+          "{{$worker_pool.gke_vpn_connection.gke_control_plane_range}}" : ""
         }
         route_priority   = 1000
         advertise_groups = null
@@ -162,7 +162,7 @@ module "{{$name}}_vpn_ha_2" {
       bgp_peer_options = {
         advertise_mode = "CUSTOM"
         advertise_ip_ranges = {
-          "{{$worker_pool.create_gke_vpn_connection.gke_control_plane_range}}" : ""
+          "{{$worker_pool.gke_vpn_connection.gke_control_plane_range}}" : ""
         }
         route_priority   = 1000
         advertise_groups = null

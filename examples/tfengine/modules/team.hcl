@@ -156,7 +156,7 @@ EOF
         name                      = "worker-pool"
         pool_address              = "192.168.0.0"
         pool_prefix_length        = 16
-        create_gke_vpn_connection = {
+        gke_vpn_connection = {
           gke_name                = "gke-cluster"
           gke_control_plane_range = "172.16.0.0/28"
           gke_network             = "$${module.network.network.network.self_link}"

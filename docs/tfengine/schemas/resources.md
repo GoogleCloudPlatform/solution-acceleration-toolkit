@@ -205,10 +205,10 @@
 | kubernetes_service_accounts.provider | The alias of the kubernetes provider. This field allows the resource to authenticate with the intended cluster. See <https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs> | string | false | - | - |
 | private_worker_pools | Cloudbuild private worker pool config.<br><br>This creates a worker pool with a dedicated computer network subnet and creates a peering connection with the subnet.  Must be created in the networks project used in the GKE cluster. | array(object) | false | - | - |
 | private_worker_pools.compute_region | Region to create worker pool in. Can be defined in global data block. | string | false | - | - |
-| private_worker_pools.create_gke_vpn_connection | HA VPN connection between the private worker pool vpc and the gke network vpc. See <https://registry.terraform.io/modules/terraform-google-modules/vpn/google/latest/submodules/vpn_ha>. | object | false | - | - |
-| private_worker_pools.create_gke_vpn_connection.gke_control_plane_range | The CIDR of the gke cluster control plane range. E.g. 192.168.0.0/28. | string | true | - | - |
-| private_worker_pools.create_gke_vpn_connection.gke_name | Name of the GKE cluster the worker pool can access. | string | true | - | - |
-| private_worker_pools.create_gke_vpn_connection.gke_network | Name of the bastion host's subnet. | string | true | - | - |
+| private_worker_pools.gke_vpn_connection | HA VPN connection between the private worker pool vpc and the gke network vpc. See <https://registry.terraform.io/modules/terraform-google-modules/vpn/google/latest/submodules/vpn_ha>. | object | false | - | - |
+| private_worker_pools.gke_vpn_connection.gke_control_plane_range | The CIDR of the gke cluster control plane range. E.g. 192.168.0.0/28. | string | true | - | - |
+| private_worker_pools.gke_vpn_connection.gke_name | Name of the GKE cluster the worker pool can access. | string | true | - | - |
+| private_worker_pools.gke_vpn_connection.gke_network | Name of the bastion host's subnet. | string | true | - | - |
 | private_worker_pools.name | Name of private worker pool. | string | true | - | - |
 | private_worker_pools.pool_address | IP address of the worker pool IP range. | string | true | - | - |
 | private_worker_pools.pool_prefix_length | The prefix length of the worker pool IP range. | integer | true | - | - |

@@ -695,7 +695,7 @@ schema = {
             description = "The prefix length of the worker pool IP range."
             type        = "integer"
           }
-          create_gke_vpn_connection = {
+          gke_vpn_connection = {
             description = <<EOF
               HA VPN connection between the private worker pool vpc and the gke network vpc.
               See <https://registry.terraform.io/modules/terraform-google-modules/vpn/google/latest/submodules/vpn_ha>.
