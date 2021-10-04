@@ -75,4 +75,14 @@ module "{{resourceName . "name"}}" {
     module.project
   ]
 }
+
+{{- if has . "network_peering_routes_config"}}
+resource "google_compute_network_peering_routes_config" "peering_{{resourceName . "name"}}" {
+  network = {{hcl .network_peering_routes_config.network}}
+  project = {{hcl .network_peering_routes_config.project}}
+  import_custom_routes = {{hcl .network_peering_routes_config.import_custom_routes}}
+  export_custom_routes = {{hcl .network_peering_routes_config.export_custom_routes}}
+  peering = module.{{resourceName . "name"}}.peering_name
+}
+{{- end}}
 {{end -}}

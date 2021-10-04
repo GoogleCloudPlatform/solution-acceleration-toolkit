@@ -118,6 +118,11 @@
 | gke_clusters.master_ipv4_cidr_block | IP range in CIDR notation to use for the hosted master network. | string | false | - | - |
 | gke_clusters.name | Name of GKE cluster. | string | true | - | - |
 | gke_clusters.network | Name of the GKE cluster's network. | string | false | - | - |
+| gke_clusters.network_peering_routes_config | GKE clustes network peering's route settings. See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network_peering_routes_config>. | object | false | - | - |
+| gke_clusters.network_peering_routes_config.export_custom_routes | Whether to export the custom routes to the peer network. | boolean | false | - | - |
+| gke_clusters.network_peering_routes_config.import_custom_routes | Whether to import the custom routes to the peer network. | boolean | false | - | - |
+| gke_clusters.network_peering_routes_config.network | The name of the primary network for the peering. | string | false | - | - |
+| gke_clusters.network_peering_routes_config.project | The ID of the project in which the resource belongs. | string | false | - | - |
 | gke_clusters.network_project_id | Name of network project. If unset, the current project will be used. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | gke_clusters.node_pools | List of maps containing node pools. For supported fields, see the [module example](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/tree/master/examples/node_pool_update_variant). | array(object) | false | - | - |
 | gke_clusters.resource_name | Override for Terraform resource name. If unset, defaults to normalized name. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |

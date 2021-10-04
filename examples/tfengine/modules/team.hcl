@@ -192,6 +192,12 @@ template "project_apps" {
         labels = {
           type = "no-phi"
         }
+        network_peering_routes_config = {
+          network      = "network"
+          import_custom_routes = false
+          export_custom_routes = true
+          project = "{{.prefix}}-{{.env}}-networks"
+        }
       }]
       binary_authorization = {
         admission_whitelist_patterns = [{

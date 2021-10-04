@@ -770,6 +770,31 @@ schema = {
             EOF
             type        = "boolean"
           }
+          network_peering_routes_config = {
+            description = <<EOF
+              GKE clustes network peering's route settings.
+              See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network_peering_routes_config>.
+            EOF
+            type        = "object"
+            properties = {
+              "network" = {
+                description = "The name of the primary network for the peering."
+                type        = "string"
+              }
+              "export_custom_routes" = {
+                description = "Whether to export the custom routes to the peer network."
+                type        = "boolean"
+              }
+              "import_custom_routes" = {
+                description = "Whether to import the custom routes to the peer network."
+                type        = "boolean"
+              }
+              "project" = {
+                description = "The ID of the project in which the resource belongs."
+                type        = "string"
+              }
+            }
+          }
         }
       }
     }

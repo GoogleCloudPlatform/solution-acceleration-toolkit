@@ -240,6 +240,13 @@ module "gke_cluster" {
     module.project
   ]
 }
+resource "google_compute_network_peering_routes_config" "peering_gke_cluster" {
+  network              = "network"
+  project              = "example-prod-networks"
+  import_custom_routes = false
+  export_custom_routes = true
+  peering              = module.gke_cluster.peering_name
+}
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
