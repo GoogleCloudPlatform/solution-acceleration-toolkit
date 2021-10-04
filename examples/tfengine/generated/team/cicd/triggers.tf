@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members kubernetes"
-    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/worker-pool"
+    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/cicd-pool"
   }
 
   depends_on = [
@@ -66,7 +66,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members kubernetes"
-    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/worker-pool"
+    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/cicd-pool"
   }
 
   depends_on = [
@@ -97,7 +97,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "project_secrets project_networks project_apps project_data additional_iam_members kubernetes"
-    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/worker-pool"
+    _WORKER_POOL    = "projects/example-prod-devops/locations/us-east1/workerPools/cicd-pool"
   }
 
   depends_on = [

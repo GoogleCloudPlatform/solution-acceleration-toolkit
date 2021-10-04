@@ -134,6 +134,7 @@ template "cicd" {
           plan     = {}
           apply    = { run_on_push = false } # Do not auto run on push to branch
         }
+        # Kubernetes intentionally left out as it cannot be deployed by CICD.
         managed_dirs = [
           "project_secrets",
           "project_networks",
@@ -145,7 +146,7 @@ template "cicd" {
         worker_pool = {
           project  = "{{.prefix}}-{{.env}}-devops"
           location = "us-east1"
-          name     = "worker-pool"
+          name     = "cicd-pool"
         }
       }
     ]
