@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   name            = "example-prod-networks"
   org_id          = ""
@@ -51,7 +51,7 @@ module "project" {
 
 module "example_network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 3.3.0"
+  version = "~> 3.4.0"
 
   network_name = "example-network"
   project_id   = module.project.project_id
@@ -69,7 +69,7 @@ module "example_network" {
 
 module "forseti_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 1.1.0"
+  version = "~> 1.2.0"
 
   name    = "forseti-router"
   project = module.project.project_id

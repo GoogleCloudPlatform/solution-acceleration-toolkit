@@ -28,7 +28,7 @@ terraform {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   project_id    = "example-devops"
   activate_apis = []
@@ -42,7 +42,7 @@ provider "google-beta" {
 
 module "example_cicd_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.2"
+  version = "~> 0.3"
 
   id           = "example-cicd-viewers@example.com"
   customer_id  = "c12345678"
@@ -51,7 +51,7 @@ module "example_cicd_viewers_example_com" {
 
 module "example_cicd_editors_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.2"
+  version = "~> 0.3"
 
   id           = "example-cicd-editors@example.com"
   customer_id  = "c12345678"

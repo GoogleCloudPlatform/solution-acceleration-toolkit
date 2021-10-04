@@ -38,7 +38,7 @@ data "google_secret_manager_secret_version" "db_password" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   name            = "example-prod-data"
   org_id          = ""
