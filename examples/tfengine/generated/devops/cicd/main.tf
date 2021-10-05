@@ -76,6 +76,9 @@ locals {
 
     # Enable Cloud Build SA to list and enable APIs in the devops project.
     "roles/serviceusage.serviceUsageAdmin",
+
+    # Allos Cloud Build SA to write logs.
+    "roles/logging.logWriter"
   ]
 }
 
@@ -182,20 +185,6 @@ module "logs_bucket" {
   name       = var.logs_bucket
   project_id = var.project_id
   location   = "us-central1"
-}
-
-module "project_iam_members" {
-  source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.2.0"
-
-  projects = [var.project_id]
-  mode     = "additive"
-
-  bindings = {
-    "roles/logging.logWriter" = [
-      local.cloudbuild_sa,
-    ],
-  }
 }
 
 # Cloud Build - Cloud Build Service Account IAM permissions
