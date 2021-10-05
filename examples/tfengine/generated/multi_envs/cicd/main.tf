@@ -199,9 +199,6 @@ module "project_iam_members" {
   mode     = "additive"
 
   bindings = {
-    "roles/iam.serviceAccountUser" = [
-      local.cloudbuild_sa,
-    ],
     "roles/logging.logWriter" = [
       local.cloudbuild_sa,
     ],
