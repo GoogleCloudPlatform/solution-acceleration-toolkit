@@ -15,5 +15,5 @@
 billing_account = "{{.billing_account}}"
 project_id      = "{{.project_id}}"
 state_bucket    = "{{.state_bucket}}"
-{{hclField . "service_account" -}}
-{{hclField . "logs_bucket" -}}
+service_account = {{hcl .service_account.id}}
+logs_bucket     = {{hcl .logs_bucket}}

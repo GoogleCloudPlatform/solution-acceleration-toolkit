@@ -131,17 +131,27 @@ schema = {
     }
     service_account = {
       description = <<EOF
-        The custom service account ID to run Cloud Build triggers.
+        The custom service account to run Cloud Build triggers.
         During the CICD deployment, this service account will be granted
         all necessary permissions to provision and manage your infrastructure.
         See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>
         for more details.
       EOF
-      type        = "string"
-    }
-    service_account_exists = {
-      description = "Whether the cloudbuild service_account exists. Defaults to 'false'."
-      type        = "boolean"
+      type        = "object"
+      additionalProperties = false
+      required = [
+        "id",
+      ]
+      properties = {
+        id = {
+          description = "ID of the service account."
+          type        = "string"
+        }
+        exists = {
+          description = "Whether the service account exists. Defaults to 'false'."
+          type        = "boolean"
+        }
+      }
     }
     logs_bucket = {
       description = <<EOF
