@@ -65,7 +65,6 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     }
   }
 
-  // TODO refactor to "projects/${var.project_id}/serviceAccounts/${var.service_account}"
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
   logs_bucket = "gs://${var.logs_bucket}"
