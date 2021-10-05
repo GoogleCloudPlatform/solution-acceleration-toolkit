@@ -131,11 +131,11 @@ schema = {
     }
     service_account = {
       description = <<EOF
-        The service account ID used for all user-controlled operations.
-        This service account should have several permissions to perform
-        different operations. These permissions will be granted to the
-        service account as part of the CICD deployment.
-        See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>.
+        The custom service account ID to run Cloud Build triggers.
+        During the CICD deployment, this service account will be granted
+        all necessary permissions to provision and manage your infrastructure.
+        See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>
+        for more details.
       EOF
       type        = "string"
     }
@@ -145,7 +145,7 @@ schema = {
     }
     logs_bucket = {
       description = <<EOF
-        Google Cloud Storage bucket name where logs should be written.
+        Google Cloud Storage bucket name where Cloud Build logs should be written.
         The bucket will be created as part of CICD.
       EOF
       type        = "string"
