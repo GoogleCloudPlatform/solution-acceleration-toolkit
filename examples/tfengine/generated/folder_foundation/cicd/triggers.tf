@@ -39,7 +39,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -72,7 +72,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -108,7 +108,7 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -164,7 +164,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
