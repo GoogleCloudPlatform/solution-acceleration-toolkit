@@ -19,6 +19,8 @@ schema = {
     "envs",
     "terraform_root",
     "scheduler_region",
+    "service_account",
+    "logs_bucket"
   ]
   properties = {
     project_id = {
@@ -126,6 +128,41 @@ schema = {
         Default to true.
       EOF
       type        = "boolean"
+    }
+    service_account = {
+      description = <<EOF
+        The custom service account to run Cloud Build triggers.
+        During the CICD deployment, this service account will be granted
+        all necessary permissions to provision and manage your infrastructure.
+        See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions>
+        for more details.
+      EOF
+      type        = "object"
+      additionalProperties = false
+      required = [
+        "id",
+      ]
+      properties = {
+        id = {
+          description = "ID of the service account."
+          type        = "string"
+        }
+        exists = {
+          description = "Whether the service account exists. Defaults to 'false'."
+          type        = "boolean"
+        }
+      }
+    }
+    logs_bucket = {
+      description = <<EOF
+        Name of the Google Cloud Storage bucket where Cloud Build logs should be written.
+        The bucket will be created as part of CICD.
+      EOF
+      type        = "string"
+    }
+    storage_location = {
+      description = "Location of logs bucket."
+      type        = "string"
     }
     envs = {
       description = <<EOF

@@ -21,6 +21,7 @@ substitutions:
     _TERRAFORM_ROOT: "."
     _MANAGED_DIRS: ""
     _WORKER_POOL: ""
+    _LOGS_BUCKET: ""
 
 steps:
   - name: "{{$cft}}"
@@ -39,6 +40,8 @@ steps:
     args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -backend=false", "-a", "validate"]
     dir: "${_TERRAFORM_ROOT}"
     id: Validate
+
+logs_bucket: "${_LOGS_BUCKET}"
 
 options:
   pool:

@@ -64,12 +64,15 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
   }
   {{- end}}
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -109,12 +112,15 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
   }
   {{- end}}
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -178,12 +184,15 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
   }
   {{- end}}
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -223,12 +232,15 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
   }
   {{- end}}
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -292,12 +304,15 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
   }
   {{- end}}
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [

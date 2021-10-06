@@ -25,3 +25,13 @@ variable "state_bucket" {
   description = "Name of the Terraform state bucket"
   type        = string
 }
+
+variable "logs_bucket" {
+  description = "Name of the bucket used for cloudbuild logs"
+  type        = string
+}
+
+variable "service_account" {
+  description = "Service account used for cloudbuild triggers"
+  type        = string
+}
