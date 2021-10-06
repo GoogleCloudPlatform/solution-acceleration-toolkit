@@ -51,11 +51,11 @@ data "google_project" "devops" {
 }
 
 locals {
-  {{- if get .service_account "exists"}}
+{{- if get .service_account "exists" false}}
   cloudbuid_sa = "serviceAccount:${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
-  {{- else}}
+{{- else}}
   cloudbuid_sa = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
-  {{- end}}
+{{- end}}
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -257,7 +257,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 }
 {{- end}}
 
-{{- if not (get .service_account "exists")}}
+{{- if not (get .service_account "exists" false)}}
 resource "google_service_account" "cloudbuild_sa" {
   project      = var.project_id
   account_id   = var.service_account
