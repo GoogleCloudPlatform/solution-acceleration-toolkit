@@ -31,7 +31,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     }
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
 
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
@@ -64,7 +64,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     }
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
 
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
@@ -98,7 +98,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     }
   }
 
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
 
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
