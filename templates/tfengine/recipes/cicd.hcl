@@ -155,7 +155,7 @@ schema = {
     }
     logs_bucket = {
       description = <<EOF
-        Google Cloud Storage bucket name where Cloud Build logs should be written.
+        Name of the Google Cloud Storage bucket where Cloud Build logs should be written.
         The bucket will be created as part of CICD.
       EOF
       type        = "string"
