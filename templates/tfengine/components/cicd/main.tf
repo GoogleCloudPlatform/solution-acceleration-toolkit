@@ -258,6 +258,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 {{- end}}
 
 {{- if not (get .service_account "exists" false)}}
+# Cloud Build - Service Account replacing the default Cloud Build Service Account.
 resource "google_service_account" "cloudbuild_sa" {
   project      = var.project_id
   account_id   = var.service_account
@@ -266,6 +267,7 @@ resource "google_service_account" "cloudbuild_sa" {
 }
 {{- end}}
 
+# Cloud Build - Storage Bucket to store Cloud Build logs.
 module "logs_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
   version = "~> 1.4"
