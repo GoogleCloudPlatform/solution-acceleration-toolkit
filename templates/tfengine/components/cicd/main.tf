@@ -52,9 +52,9 @@ data "google_project" "devops" {
 
 locals {
 {{- if get .service_account "exists" false}}
-  cloudbuid_sa = "serviceAccount:${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
+  cloudbuild_sa = "serviceAccount:${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
 {{- else}}
-  cloudbuid_sa = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
+  cloudbuild_sa = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
 {{- end}}
   services = [
     "admin.googleapis.com",

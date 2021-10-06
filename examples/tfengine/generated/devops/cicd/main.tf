@@ -40,7 +40,7 @@ data "google_project" "devops" {
 }
 
 locals {
-  cloudbuid_sa = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
+  cloudbuild_sa = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
