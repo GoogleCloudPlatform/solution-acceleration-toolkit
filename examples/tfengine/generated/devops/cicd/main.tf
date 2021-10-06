@@ -40,7 +40,7 @@ data "google_project" "devops" {
 }
 
 locals {
-  cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
+  cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -170,13 +170,6 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
   depends_on = [
     google_project_service.services,
   ]
-}
-# Cloud Build - Service Account replacing the default Cloud Build Service Account.
-resource "google_service_account" "cloudbuild_sa" {
-  project      = var.project_id
-  account_id   = var.service_account
-  display_name = "Cloudbuild service account"
-  description  = "Cloudbuild service account"
 }
 
 # Cloud Build - Storage Bucket to store Cloud Build logs.

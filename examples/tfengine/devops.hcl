@@ -89,7 +89,8 @@ template "cicd" {
     terraform_root = "terraform"
 
     service_account = {
-      id = "cloudbuild-sa"
+      id     = "cloudbuild-sa"
+      exists = true
     }
     logs_bucket = "example-devops-cloudbuild-logs-bucket"
 
