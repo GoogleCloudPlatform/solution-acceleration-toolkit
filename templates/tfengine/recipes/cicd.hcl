@@ -160,6 +160,10 @@ schema = {
       EOF
       type        = "string"
     }
+    storage_location = {
+      description = "Location of logs bucket."
+      type        = "string"
+    }
     envs = {
       description = <<EOF
         Config block for per-environment resources.

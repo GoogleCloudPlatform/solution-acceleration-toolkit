@@ -274,7 +274,7 @@ module "logs_bucket" {
 
   name       = var.logs_bucket
   project_id = var.project_id
-  location   = "{{get . "storage_location" $.storage_location}}"
+  location   = "{{.storage_location}}"
 }
 
 # Cloud Build - Cloud Build Service Account IAM permissions

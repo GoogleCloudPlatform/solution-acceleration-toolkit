@@ -40,4 +40,5 @@
 | service_account | The custom service account to run Cloud Build triggers. During the CICD deployment, this service account will be granted all necessary permissions to provision and manage your infrastructure. See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions> for more details. | object | true | - | - |
 | service_account.exists | Whether the service account exists. Defaults to 'false'. | boolean | false | - | - |
 | service_account.id | ID of the service account. | string | true | - | - |
+| storage_location | Location of logs bucket. | string | false | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |
