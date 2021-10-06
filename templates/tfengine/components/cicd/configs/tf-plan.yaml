@@ -21,6 +21,7 @@ substitutions:
     _TERRAFORM_ROOT: "."
     _MANAGED_DIRS: ""
     _WORKER_POOL: ""
+    _LOGS_BUCKET: ""
 
 steps:
   - name: "{{$cft}}"
@@ -40,6 +41,8 @@ steps:
     args: ["./cicd/configs/tf-deletion-check.sh", "./cicd/configs/tf-deletion-allowlist.txt"]
     dir: "${_TERRAFORM_ROOT}"
     id: Resource deletion check
+
+logs_bucket: "${_LOGS_BUCKET}"
 
 options:
   pool:

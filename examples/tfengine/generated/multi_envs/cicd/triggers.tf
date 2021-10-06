@@ -30,14 +30,13 @@ resource "google_cloudbuild_trigger" "validate_shared" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -62,14 +61,13 @@ resource "google_cloudbuild_trigger" "plan_shared" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -95,14 +93,13 @@ resource "google_cloudbuild_trigger" "apply_shared" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -129,14 +126,13 @@ resource "google_cloudbuild_trigger" "validate_dev" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -161,14 +157,13 @@ resource "google_cloudbuild_trigger" "apply_dev" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -195,14 +190,13 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -227,14 +221,13 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -260,14 +253,13 @@ resource "google_cloudbuild_trigger" "apply_prod" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [

@@ -66,14 +66,13 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -115,14 +114,13 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -188,14 +186,13 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -237,14 +234,13 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
@@ -310,14 +306,13 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
 
   service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
 
-  logs_bucket = "gs://${var.logs_bucket}"
-
   filename = "{{$terraform_root_prefix}}cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
+    _LOGS_BUCKET = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
