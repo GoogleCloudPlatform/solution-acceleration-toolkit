@@ -54,7 +54,7 @@ locals {
 {{- if get .service_account "exists" false}}
   cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
 {{- else}}
-  cloudbuild_sa_email = "${google_service_account.cloudbuild_sa.email}"
+  cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
 {{- end}}
   services = [
     "admin.googleapis.com",
