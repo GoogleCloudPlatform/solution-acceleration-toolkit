@@ -99,7 +99,7 @@ locals {
     # Enable Cloud Build SA to list and enable APIs in the devops project.
     "roles/serviceusage.serviceUsageAdmin",
 
-    # Allos Cloud Build SA to write logs.
+    # Allow Cloud Build SA to write logs.
     "roles/logging.logWriter"
   ]
 }
