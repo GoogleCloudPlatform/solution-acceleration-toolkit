@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+data = {
+  # Default locations for resources. Can be overridden in individual templates.
+  storage_location    = "{{.default_location}}"
+}
+
 template "devops" {
   recipe_path = "{{.recipes}}/devops.hcl"
   output_path = "./devops"
@@ -19,8 +24,6 @@ template "devops" {
     # TODO(user): Uncomment and re-run the engine after generated devops module has been deployed.
     # Run `terraform init` in the devops module to backup its state to GCS.
     # enable_gcs_backend = true
-
-    storage_location = "{{.default_location}}"
 
     admins_group = {
       id     = "{{.prefix}}-team-admins@{{.domain}}"
@@ -124,6 +127,11 @@ template "cicd" {
     build_editors = ["group:{{.prefix}}-cicd-editors@{{.domain}}"]
 
     terraform_root = "terraform"
+
+    service_account = {
+      id = "cloudbuild-sa"
+    }
+    logs_bucket = "{{.prefix}}-{{.env}}-devops-cloudbuild-logs-bucket"
     envs = [
       {
         name        = "prod"

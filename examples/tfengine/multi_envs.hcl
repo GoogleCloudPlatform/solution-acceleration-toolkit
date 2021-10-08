@@ -121,6 +121,11 @@ template "cicd" {
 
     terraform_root = "terraform"
 
+    service_account = {
+      id = "cloudbuild-sa"
+    }
+    logs_bucket = "example-devops-cloudbuild-logs-bucket"
+
     # IMPORTANT: Cloud Source Repositories does not support code review or
     # presubmit runs. If we set both plan and apply to run at the same time,
     # they will conflict and may error out. To get around this, for 'shared'

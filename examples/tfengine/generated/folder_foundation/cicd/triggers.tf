@@ -31,12 +31,15 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     }
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "terraform/cicd/configs/tf-validate.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -61,12 +64,15 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     }
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -94,12 +100,15 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
     }
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "terraform/cicd/configs/tf-plan.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [
@@ -147,12 +156,15 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     }
   }
 
+  service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
+
   filename = "terraform/cicd/configs/tf-apply.yaml"
 
   substitutions = {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit example-prod-networks monitor folders"
     _WORKER_POOL    = ""
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
   }
 
   depends_on = [

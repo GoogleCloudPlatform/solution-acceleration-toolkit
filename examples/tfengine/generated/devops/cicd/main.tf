@@ -40,7 +40,7 @@ data "google_project" "devops" {
 }
 
 locals {
-  cloudbuild_sa = "serviceAccount:${data.google_project.devops.number}@cloudbuild.gserviceaccount.com"
+  cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -76,6 +76,9 @@ locals {
 
     # Enable Cloud Build SA to list and enable APIs in the devops project.
     "roles/serviceusage.serviceUsageAdmin",
+
+    # Allow Cloud Build SA to write logs.
+    "roles/logging.logWriter"
   ]
 }
 
@@ -133,7 +136,7 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   for_each = toset(local.cloudbuild_devops_roles)
   project  = var.project_id
   role     = each.key
-  member   = local.cloudbuild_sa
+  member   = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -169,13 +172,23 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
   ]
 }
 
+# Cloud Build - Storage Bucket to store Cloud Build logs.
+module "logs_bucket" {
+  source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
+  version = "~> 1.4"
+
+  name       = var.logs_bucket
+  project_id = var.project_id
+  location   = "us-central1"
+}
+
 # Cloud Build - Cloud Build Service Account IAM permissions
 
 # IAM permissions to allow Cloud Build Service Account use the billing account.
 resource "google_billing_account_iam_member" "binding" {
   billing_account_id = var.billing_account
   role               = "roles/billing.user"
-  member             = local.cloudbuild_sa
+  member             = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -185,7 +198,7 @@ resource "google_billing_account_iam_member" "binding" {
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
   role   = "roles/storage.admin"
-  member = local.cloudbuild_sa
+  member = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,
   ]
@@ -196,7 +209,7 @@ resource "google_organization_iam_member" "cloudbuild_sa_organization_iam" {
   for_each = toset(local.cloudbuild_sa_editor_roles)
   org_id   = 12345678
   role     = each.value
-  member   = local.cloudbuild_sa
+  member   = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,
   ]

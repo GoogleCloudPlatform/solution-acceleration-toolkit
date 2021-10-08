@@ -87,6 +87,13 @@ template "cicd" {
     build_editors = ["group:example-cicd-editors@example.com"]
 
     terraform_root = "terraform"
+
+    service_account = {
+      id     = "cloudbuild-sa"
+      exists = true
+    }
+    logs_bucket = "example-devops-cloudbuild-logs-bucket"
+
     envs = [
       {
         name        = "prod"
