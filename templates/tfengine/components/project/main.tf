@@ -12,7 +12,7 @@ limitations under the License. */ -}}
 {{- if get . "exists"}}
 module "project" {
   source = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   project_id =  "{{.project_id}}"
   activate_apis = {{- if has . "apis"}} {{hcl .apis}} {{- else}} [] {{end}}
@@ -23,7 +23,7 @@ module "project" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   name            = "{{.project_id}}"
   {{- if eq .parent_type "organization"}}

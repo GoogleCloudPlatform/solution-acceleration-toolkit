@@ -33,7 +33,7 @@ terraform {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.1.0"
+  version = "~> 11.2.0"
 
   name            = "example-prod-devops"
   org_id          = ""
