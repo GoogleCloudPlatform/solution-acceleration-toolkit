@@ -39,11 +39,12 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
     google_project_service.services,
+    module.logs_bucket,
   ]
 }
 
@@ -72,11 +73,13 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
     google_project_service.services,
+    module.logs_bucket,
+
   ]
 }
 
@@ -108,11 +111,12 @@ resource "google_cloudbuild_trigger" "plan_scheduled_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
     google_project_service.services,
+    module.logs_bucket,
   ]
 }
 
@@ -164,11 +168,12 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = ""
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${module.logs_bucket.name}"
+    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
   }
 
   depends_on = [
     google_project_service.services,
+    module.logs_bucket,
   ]
 }
 
