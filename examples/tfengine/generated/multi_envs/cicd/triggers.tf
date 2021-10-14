@@ -36,12 +36,11 @@ resource "google_cloudbuild_trigger" "validate_shared" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }
@@ -68,12 +67,11 @@ resource "google_cloudbuild_trigger" "plan_shared" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
 
   ]
@@ -102,12 +100,11 @@ resource "google_cloudbuild_trigger" "apply_shared" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "groups audit folders"
     _WORKER_POOL    = ""
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }
@@ -136,12 +133,11 @@ resource "google_cloudbuild_trigger" "validate_dev" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }
@@ -168,12 +164,11 @@ resource "google_cloudbuild_trigger" "apply_dev" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "dev/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-one"
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }
@@ -202,12 +197,11 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }
@@ -234,12 +228,11 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
 
   ]
@@ -268,12 +261,11 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     _TERRAFORM_ROOT = "terraform"
     _MANAGED_DIRS   = "prod/data"
     _WORKER_POOL    = "projects/example-devops/locations/us-east1/workerPools/cicd-pool-two"
-    _LOGS_BUCKET    = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET    = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
     google_sourcerepo_repository.configs,
   ]
 }

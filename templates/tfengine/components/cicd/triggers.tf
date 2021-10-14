@@ -72,12 +72,11 @@ resource "google_cloudbuild_trigger" "validate_{{.name}}" {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
-    _LOGS_BUCKET = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
@@ -121,12 +120,11 @@ resource "google_cloudbuild_trigger" "validate_scheduled_{{.name}}" {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
-    _LOGS_BUCKET = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
@@ -194,12 +192,11 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
-    _LOGS_BUCKET = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
@@ -244,12 +241,11 @@ resource "google_cloudbuild_trigger" "plan_scheduled_{{.name}}" {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
-    _LOGS_BUCKET = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
@@ -317,12 +313,11 @@ resource "google_cloudbuild_trigger" "apply_{{.name}}" {
     _TERRAFORM_ROOT = "{{$terraform_root}}"
     _MANAGED_DIRS = "{{$managed_dirs}}"
     _WORKER_POOL = "{{$worker_pool}}"
-    _LOGS_BUCKET = "gs://${var.logs_bucket}"
+    _LOGS_BUCKET = "gs://${module.logs_bucket.bucket.name}"
   }
 
   depends_on = [
     google_project_service.services,
-    module.logs_bucket,
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
