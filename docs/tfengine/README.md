@@ -168,7 +168,6 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
     - `roles/resourcemanager.projectCreator` on the org or folder
     - `roles/compute.xpnAdmin` on the org or folder
     - `roles/billing.admin` on the billing account
-    - `roles/roles/iam.serviceAccountUser` on the Cloud Build service account
 
 ## Defining Architecture
 

@@ -200,7 +200,6 @@ resource "google_cloudbuild_trigger" "plan_{{.name}}" {
 {{- if has $ "cloud_source_repository"}}
     google_sourcerepo_repository.configs,
 {{- end}}
-
   ]
 }
 

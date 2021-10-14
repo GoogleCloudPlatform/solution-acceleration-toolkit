@@ -77,7 +77,6 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   depends_on = [
     google_project_service.services,
-
   ]
 }
 

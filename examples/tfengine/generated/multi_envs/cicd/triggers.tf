@@ -73,7 +73,6 @@ resource "google_cloudbuild_trigger" "plan_shared" {
   depends_on = [
     google_project_service.services,
     google_sourcerepo_repository.configs,
-
   ]
 }
 
@@ -234,7 +233,6 @@ resource "google_cloudbuild_trigger" "plan_prod" {
   depends_on = [
     google_project_service.services,
     google_sourcerepo_repository.configs,
-
   ]
 }
 
