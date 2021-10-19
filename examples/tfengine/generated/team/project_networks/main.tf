@@ -164,6 +164,72 @@ module "router" {
   ]
 }
 
+module "google_apis" {
+  source  = "terraform-google-modules/cloud-dns/google"
+  version = "~> 3.1.0"
+
+  name       = "google-apis"
+  project_id = module.project.project_id
+  domain     = "googleapis.com."
+  type       = "private"
+
+  private_visibility_config_networks = ["${module.network.network.network.self_link}"]
+  recordsets = [
+    {
+      name = "private"
+
+      records = [
+        "199.36.153.8",
+        "199.36.153.9",
+        "199.36.153.10",
+        "199.36.153.11",
+      ]
+
+      ttl  = 300
+      type = "A"
+    },
+    {
+      name    = "*"
+      records = ["private.googleapis.com."]
+      ttl     = 300
+      type    = "CNAME"
+    },
+  ]
+}
+
+module "gcr" {
+  source  = "terraform-google-modules/cloud-dns/google"
+  version = "~> 3.1.0"
+
+  name       = "gcr"
+  project_id = module.project.project_id
+  domain     = "gcr.io."
+  type       = "private"
+
+  private_visibility_config_networks = ["${module.network.network.network.self_link}"]
+  recordsets = [
+    {
+      name = ""
+
+      records = [
+        "199.36.153.8",
+        "199.36.153.9",
+        "199.36.153.10",
+        "199.36.153.11",
+      ]
+
+      ttl  = 300
+      type = "A"
+    },
+    {
+      name    = "*"
+      records = ["gcr.io."]
+      ttl     = 300
+      type    = "CNAME"
+    },
+  ]
+}
+
 resource "google_service_account" "bastion_accessor" {
   account_id   = "bastion-accessor"
   display_name = "Bastion Accessor Service Account"

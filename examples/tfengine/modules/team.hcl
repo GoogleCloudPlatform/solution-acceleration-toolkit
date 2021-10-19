@@ -150,6 +150,70 @@ EOF
 
         }]
       }]
+      dns_zones = [
+        {
+          name   = "google-apis"
+          domain = "googleapis.com."
+          type   = "private"
+
+          private_visibility_config_networks = [
+            "$${module.network.network.network.self_link}"
+          ]
+
+          record_sets = [
+            {
+              name = "private"
+              type = "A"
+              ttl  = 300
+              records = [
+                "199.36.153.8",
+                "199.36.153.9",
+                "199.36.153.10",
+                "199.36.153.11"
+              ]
+            },
+            {
+              name = "*"
+              type = "CNAME"
+              ttl  = 300
+              records = [
+                "private.googleapis.com.",
+              ]
+            },
+          ]
+        },
+        {
+          name   = "gcr"
+          domain = "gcr.io."
+          type   = "private"
+
+          private_visibility_config_networks = [
+            "$${module.network.network.network.self_link}"
+          ]
+
+          record_sets = [
+            {
+              name = ""
+              type = "A"
+              ttl  = 300
+              records = [
+                "199.36.153.8",
+                "199.36.153.9",
+                "199.36.153.10",
+                "199.36.153.11"
+              ]
+            },
+            {
+              name = "*"
+              type = "CNAME"
+              ttl  = 300
+              records = [
+                "gcr.io.",
+              ]
+            },
+          ]
+        }
+      ]
     }
   }
 }
