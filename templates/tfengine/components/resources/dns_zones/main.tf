@@ -22,6 +22,8 @@ module "{{resourceName . "name"}}" {
   domain     = "{{.domain}}"
   type       = "{{.type}}"
 
+  {{hclField . "private_visibility_config_networks" -}}
+
   recordsets = {{hcl .record_sets}}
 }
 {{end -}}
