@@ -98,7 +98,7 @@
 | dns_zones | [Module](https://github.com/terraform-google-modules/terraform-google-cloud-dns) | array(object) | false | - | - |
 | dns_zones.domain | Domain of DNS zone. Must end with period. | string | true | - | ^.+\.$ |
 | dns_zones.name | Name of DNS zone. | - | true | - | - |
-| dns_zones.private_visibility_config_networks | List of VPC self links that can see this zone. Format: https://www.googleapis.com/compute/v1/projects/my-project/global/networks/my-vpc | array(string) | false | - | - |
+| dns_zones.private_visibility_config_networks | List of VPC self links that can see this zone. Format: "https://www.googleapis.com/compute/v1/projects/my-project/global/networks/my-vpc" | array(string) | false | - | - |
 | dns_zones.record_sets | Records managed by the DNS zone. | array(object) | true | - | - |
 | dns_zones.record_sets.name | Name of record set. | string | false | - | - |
 | dns_zones.record_sets.records | Data of the record set. | array(string) | false | - | - |
