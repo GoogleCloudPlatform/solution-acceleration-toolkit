@@ -86,6 +86,7 @@ template "project_networks" {
         "iap.googleapis.com",
         "servicenetworking.googleapis.com",
         "sqladmin.googleapis.com",
+        "dns.googleapis.com",
       ]
     }
     resources = {

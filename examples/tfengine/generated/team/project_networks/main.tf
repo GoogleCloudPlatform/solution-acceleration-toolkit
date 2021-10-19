@@ -52,6 +52,7 @@ module "project" {
     "iap.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
+    "dns.googleapis.com",
   ]
 }
 
