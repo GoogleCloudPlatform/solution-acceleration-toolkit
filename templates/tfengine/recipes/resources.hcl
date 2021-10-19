@@ -628,6 +628,16 @@ schema = {
               "peering",
             ]
           }
+          private_visibility_config_networks = {
+            description = <<EOF
+              List of VPC self links that can see this zone.
+              Format: https://www.googleapis.com/compute/v1/projects/my-project/global/networks/my-vpc
+            EOF
+            type        = "array"
+            items = {
+              type = "string"
+            }
+          }
           record_sets = {
             description = "Records managed by the DNS zone."
             type        = "array"
