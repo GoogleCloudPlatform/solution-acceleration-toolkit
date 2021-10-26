@@ -268,6 +268,9 @@ directly use the `terraform` binary to deploy the infrastructure.
     tfengine --config_path=$CONFIG_PATH --output_path=$OUTPUT_PATH
     ```
 
+    **NOTE**: For usage information on all supported flags, please refer to
+    [main.go](../../cmd/tfengine/main.go#L33).
+
     Each generated folder typically contains the following files:
 
     - **main.tf**: This file defines the Terraform resources and modules to
