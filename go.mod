@@ -3,7 +3,7 @@ module github.com/GoogleCloudPlatform/healthcare-data-protection-suite
 go 1.14
 
 require (
-	cloud.google.com/go/storage v1.15.0
+	cloud.google.com/go/storage v1.18.2
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.6
@@ -19,5 +19,5 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.9.1
-	google.golang.org/api v0.58.0
+	google.golang.org/api v0.60.0
 )
