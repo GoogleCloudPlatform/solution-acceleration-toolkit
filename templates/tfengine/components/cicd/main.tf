@@ -86,6 +86,7 @@ locals {
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
     "roles/resourcemanager.{{.parent_type}}Admin",
+    "roles/storage.objectAdmin",
     {{- if eq (get . "parent_type") "organization"}}
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderCreator",

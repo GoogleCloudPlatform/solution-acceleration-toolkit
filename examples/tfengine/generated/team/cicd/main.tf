@@ -64,6 +64,7 @@ locals {
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
     "roles/resourcemanager.folderAdmin",
+    "roles/storage.objectAdmin",
   ]
   cloudbuild_devops_roles = [
     # Allow CICD to view all resources within the devops project so it can run terraform plans against them.

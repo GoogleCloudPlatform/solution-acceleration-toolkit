@@ -66,6 +66,7 @@ locals {
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
     "roles/resourcemanager.organizationAdmin",
+    "roles/storage.objectAdmin",
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderCreator",
   ]
