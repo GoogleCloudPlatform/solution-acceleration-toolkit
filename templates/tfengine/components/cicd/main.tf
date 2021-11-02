@@ -86,7 +86,6 @@ locals {
     "roles/logging.configWriter",
     "roles/resourcemanager.projectCreator",
     "roles/resourcemanager.{{.parent_type}}Admin",
-    "roles/storage.objectAdmin",
     {{- if eq (get . "parent_type") "organization"}}
     "roles/orgpolicy.policyAdmin",
     "roles/resourcemanager.folderCreator",
@@ -300,6 +299,16 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   {{- else}}
   role   = "roles/storage.objectViewer"
   {{- end}}
+  member = "serviceAccount:${local.cloudbuild_sa_email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permissions to allow Cloud Build SA to access logs bucket.
+resource "google_storage_bucket_iam_member" "cloudbuild_logs_bucket_iam" {
+  bucket = var.logs_bucket
+  role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,
