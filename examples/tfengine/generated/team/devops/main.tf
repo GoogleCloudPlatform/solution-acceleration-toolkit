@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+terraform {
+  required_version = ">=0.14"
+  required_providers {
+    google      = ">=3.0, <= 3.71"
+    google-beta = "~>3.50"
+    kubernetes  = "~> 1.0"
+  }
+}
+
 # This folder contains Terraform resources to setup the devops project, which includes:
 # - The project itself,
 # - APIs to enable,
@@ -20,15 +29,6 @@
 # - A Cloud Storage bucket to store Terraform states for all deployments,
 # - Admin permission at folder level,
 # - Cloud Identity groups and memberships, if requested.
-
-// TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
-terraform {
-  required_version = ">=0.14"
-  required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-  }
-}
 
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
