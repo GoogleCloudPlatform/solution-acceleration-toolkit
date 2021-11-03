@@ -210,6 +210,16 @@ resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   ]
 }
 
+# IAM permissions to allow Cloud Build SA to access logs bucket.
+resource "google_storage_bucket_iam_member" "cloudbuild_logs_bucket_iam" {
+  bucket = module.logs_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${local.cloudbuild_sa_email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
 # Grant Cloud Build Service Account access to the folder.
 resource "google_folder_iam_member" "cloudbuild_sa_folder_iam" {
   for_each = toset(local.cloudbuild_sa_editor_roles)
