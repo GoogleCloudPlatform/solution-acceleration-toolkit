@@ -29,3 +29,4 @@
 | project.project_id | ID of project. | string | true | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | state_bucket | Name of Terraform remote state bucket. | string | false | - | - |
 | storage_location | Location of state bucket. | string | false | - | - |
+| terraform_addons | Additional Terraform configuration for the devops deployment. For schema see ./deployment.hcl. | - | false | - | - |

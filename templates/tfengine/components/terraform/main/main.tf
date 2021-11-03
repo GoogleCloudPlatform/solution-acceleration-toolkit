@@ -43,10 +43,12 @@ terraform {
     kubernetes  = "~> 1.0"
     {{end -}}
   }
+{{- if get . "enable_gcs_backend" true}}
   backend "gcs" {
     bucket = "{{.state_bucket}}"
     prefix = "{{get . "state_path_prefix" .output_path}}"
   }
+{{- end}}
 }
 
 {{if has . "raw_config" -}}
