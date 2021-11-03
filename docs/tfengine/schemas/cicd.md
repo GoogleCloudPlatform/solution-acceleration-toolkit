@@ -41,4 +41,5 @@
 | service_account.exists | Whether the service account exists. Defaults to 'false'. | boolean | false | - | - |
 | service_account.id | ID of the service account. | string | true | - | - |
 | storage_location | Location of logs bucket. | string | false | - | - |
+| terraform_addons | Additional Terraform configuration for the cicd deployment. For schema see ./deployment.hcl. | - | false | - | - |
 | terraform_root | Path of the directory relative to the repo root containing the Terraform configs. Do not include ending "/". | string | true | - | - |

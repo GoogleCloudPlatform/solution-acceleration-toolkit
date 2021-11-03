@@ -12,6 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+terraform {
+  required_version = ">=0.14"
+  required_providers {
+    google      = ">=3.0, <= 3.71"
+    google-beta = "~>3.50"
+    kubernetes  = "~> 1.0"
+  }
+  backend "gcs" {
+    bucket = "example-terraform-state"
+    prefix = "cicd"
+  }
+}
+
 # This folder contains Terraform resources to setup CI/CD, which includes:
 # - Necessary APIs to enable in the devops project for CI/CD purposes,
 # - Necessary IAM permissions to set to enable Cloud Build Service Account perform CI/CD jobs.
@@ -22,18 +35,6 @@
 # ***NOTE***: First follow
 # https://cloud.google.com/cloud-build/docs/automating-builds/create-github-app-triggers#installing_the_cloud_build_app
 # to install the Cloud Build app and connect your GitHub repository to your Cloud project.
-
-terraform {
-  required_version = ">=0.14"
-  required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-  }
-  backend "gcs" {
-    bucket = "example-terraform-state"
-    prefix = "cicd"
-  }
-}
 
 data "google_project" "devops" {
   project_id = var.project_id

@@ -1,16 +1,16 @@
-# Copyright 2021 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+{{- /* Copyright 2021 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */ -}}
 
 # This folder contains Terraform resources to setup the devops project, which includes:
 # - The project itself,
@@ -20,21 +20,6 @@
 # - A Cloud Storage bucket to store Terraform states for all deployments,
 # - Admin permission at {{.parent_type}} level,
 # - Cloud Identity groups and memberships, if requested.
-
-// TODO: replace with https://github.com/terraform-google-modules/terraform-google-bootstrap
-terraform {
-  required_version = ">=0.14"
-  required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-  }
-{{- if get . "enable_gcs_backend"}}
-  backend "gcs" {
-    bucket = "{{.state_bucket}}"
-    prefix = "devops"
-  }
-{{- end}}
-}
 
 {{- if or (not (get .admins_group "exists" false)) (not (get .project.owners_group "exists" false))}}
 
