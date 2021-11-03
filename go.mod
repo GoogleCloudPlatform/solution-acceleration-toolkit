@@ -18,6 +18,6 @@ require (
 	github.com/ryanuber/columnize v2.1.2+incompatible
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zclconf/go-cty v1.9.1
+	github.com/zclconf/go-cty v1.10.0
 	google.golang.org/api v0.60.0
 )

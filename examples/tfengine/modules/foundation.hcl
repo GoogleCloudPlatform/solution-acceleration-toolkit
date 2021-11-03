@@ -45,6 +45,18 @@ template "devops" {
         "secretmanager.googleapis.com",
       ]
     }
+    terraform_addons = {
+      providers = [
+        {
+          name = "google",
+          version_constraints = ">=3.0, <= 3.71"
+        },
+        {
+          name = "google-beta",
+          version_constraints = "~>3.50"
+        }
+      ]
+    }
   }
 }
 
@@ -157,5 +169,17 @@ template "cicd" {
         }
       }
     ]
+    terraform_addons = {
+      providers = [
+        {
+          name = "google",
+          version_constraints = ">=3.0, <= 3.71"
+        },
+        {
+          name = "google-beta",
+          version_constraints = "~>3.50"
+        }
+      ]
+    }
   }
 }
