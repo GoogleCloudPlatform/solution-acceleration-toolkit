@@ -326,7 +326,20 @@ schema = {
         }
       }
     }
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the cicd deployment.
+        For schema see ./deployment.hcl.
+      EOF
+    }
   }
+}
+
+template "deployment" {
+  recipe_path = "./deployment.hcl"
+  passthrough = [
+    "terraform_addons",
+  ]
 }
 
 template "cicd" {
