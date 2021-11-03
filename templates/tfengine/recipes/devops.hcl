@@ -215,12 +215,31 @@ schema = {
       EOF
       type        = "boolean"
     }
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the devops deployment.
+        For schema see ./deployment.hcl.
+      EOF
+    }
   }
 }
 
 template "git" {
   component_path = "../components/git"
   output_path    = ".."
+}
+
+template "deployment" {
+  recipe_path = "./deployment.hcl"
+  passthrough = [
+    "terraform_addons",
+  ]
+  data = {
+    # The default value for `enable_gcs_backend` when not specified in the "deployment"
+    # recipe is set to `true`, while in the "devops" recipe, the default value when not
+    # specified should be `false`.
+    enable_gcs_backend = {{get . "enable_gcs_backend" false}}
+  }
 }
 
 template "devops" {
