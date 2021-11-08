@@ -78,7 +78,7 @@ template "project_networks" {
   output_path = "./project_networks"
   data = {
     project = {
-      project_id         = "{{.prefix}}-{{.env}}-networks"
+      project_id         = "{{.prefix}}-{{.env}}-networks-2"
       is_shared_vpc_host = true
       apis = [
         "compute.googleapis.com",
