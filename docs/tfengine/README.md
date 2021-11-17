@@ -50,8 +50,8 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
 
   - For example, the
         [org foundation example](../../examples/tfengine/org_foundation.hcl)
-        creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
-        `folders`, etc.
+        creates the Terraform root modules `devops`, `cicd`, `audit`, `folders`,
+        etc.
 
 ### Google Cloud best practices
 
