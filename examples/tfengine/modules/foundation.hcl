@@ -27,14 +27,16 @@ template "devops" {
 
     admins_group = {
       id     = "{{.prefix}}-team-admins@{{.domain}}"
-      exists = true
+      customer_id = "{{.customer_id}}"
+      exists = false
     }
 
     project = {
       project_id = "{{.prefix}}-{{.env}}-devops"
       owners_group = {
         id     = "{{.prefix}}-devops-owners@{{.domain}}"
-        exists = true
+        customer_id = "{{.customer_id}}"
+        exists = false
       }
       apis = [
         "container.googleapis.com",
