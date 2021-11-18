@@ -19,8 +19,11 @@
 //  - The runner (e.g. authenticated local user or service account) must have
 //    the following roles:
 //    - `roles/resourcemanager.projectCreator` on the folder
+//    - `roles/resourcemanager.projectDeleter` on the folder
 //    - `roles/resourcemanager.folderAdmin` on the folder
 //    - `roles/compute.xpnAdmin` on the folder
+//    - `roles/serviceusage.serviceUsageAdmin` on the folder
+//    - `roles/resourcemanager.lienModifier` on the folder
 //    - `roles/billing.user` on the billing account
 
 package integration_test
@@ -41,6 +44,7 @@ import (
 )
 
 var dirsToDeploy = []string{
+	"devops",
 	"project_secrets",
 	"project_networks",
 	"project_apps",
@@ -110,7 +114,8 @@ template "main" {
 		folder_id       = "{{.FOLDER_ID}}"
 		billing_account = "{{.BILLING_ACCOUNT}}"
 		prefix          = "{{.PREFIX}}"
-		state_bucket    = "placeholder" # Remote backend block will be removed by test.
+		state_bucket    = "{{.STATE_BUCKET}}" # Remote backend block will be removed by test.
+		customer_id     = "{{.CUSTOMER_ID}}"
 		domain           = "{{.DOMAIN}}"
 		env              = "p"
 		default_location = "us-central1"
@@ -143,10 +148,12 @@ func buildData(t *testing.T) map[string]interface{} {
 		t.Fatal("runtime.Caller not ok")
 	}
 	prefix := fmt.Sprintf("dpt%v", time.Now().Unix())
+	state := fmt.Sprintf("%v-state", prefix)
 
-	data := fromEnv(t, "BILLING_ACCOUNT", "FOLDER_ID", "DOMAIN")
+	data := fromEnv(t, "BILLING_ACCOUNT", "FOLDER_ID", "DOMAIN", "CUSTOMER_ID")
 	data["CWD"] = filepath.Dir(callerPath)
 	data["PREFIX"] = prefix
+	data["STATE_BUCKET"] = state
 	return data
 }
 

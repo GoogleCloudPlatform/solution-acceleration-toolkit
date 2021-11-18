@@ -18,6 +18,7 @@ template "root" {
     recipes          = "../../templates/tfengine/recipes"
     folder_id        = "12345678"
     billing_account  = "000-000-000"
+    customer_id      = "c12345678"
     state_bucket     = "example-terraform-state"
     domain           = "example.com"
     prefix           = "example"

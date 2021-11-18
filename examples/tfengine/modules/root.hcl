@@ -30,6 +30,14 @@ schema = {
       description = "ID of billing account to associate projects with."
       type        = "string"
     }
+    customer_id = {
+      description = <<EOF
+        Customer ID of the organization to create the group in.
+        See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id>
+        for how to obtain it.
+      EOF
+      type        = "string"
+    }
     state_bucket = {
       description = "Name of the state bucket."
       type        = "string"
