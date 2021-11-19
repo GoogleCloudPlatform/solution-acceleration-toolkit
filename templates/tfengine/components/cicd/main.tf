@@ -134,6 +134,22 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
     google_project_service.services,
   ]
 }
+
+# IAM permission to allow approvers to trigger builds.
+resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
+  for_each = toset([
+    {{- range .build_editors}}
+    "{{.}}",
+    {{- end}}
+  ])
+  service_account_id = google_service_account.cloudbuild_sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = each.value
+  depends_on = [
+    google_project_service.services,
+    google_service_account.cloudbuild_sa
+  ]
+}
 {{- end}}
 
 # IAM permissions to allow approvers and contributors to view logs.
