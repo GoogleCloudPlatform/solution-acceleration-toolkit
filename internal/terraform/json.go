@@ -202,7 +202,6 @@ func resolveExpression(expr map[string]interface{}, plan *plan) interface{} {
 // At the moment, it only handles "var.XXX", for references to variables.
 // The docs say not to parse the strings, but I don't see anywhere in the plan where these are directly used as keys, so I'm parsing them as strings.
 // https://www.terraform.io/docs/configuration/expressions.html#references-to-named-values
-// TODO(mpetkov): Find out how to canonically resolve all types of references and expressions.
 func resolveReference(expr string, plan *plan) interface{} {
 	exprParts := strings.Split(expr, ".")
 	if exprParts[0] == "var" {
