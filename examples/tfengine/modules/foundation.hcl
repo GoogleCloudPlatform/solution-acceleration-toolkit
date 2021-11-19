@@ -129,9 +129,8 @@ template "cicd" {
   output_path = "./cicd"
   data = {
     project_id = "{{.prefix}}-{{.env}}-devops"
-    github = {
-      owner = "GoogleCloudPlatform"
-      name  = "example"
+    cloud_source_repository = {
+      name = "example"
     }
 
     # Required for scheduler.
@@ -175,7 +174,7 @@ template "cicd" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.0, <= 3.71"
+          version_constraints = ">=3.87, < 4.0.0"
         },
         {
           name = "google-beta",
