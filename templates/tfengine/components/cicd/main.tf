@@ -41,8 +41,10 @@ data "google_project" "devops" {
 locals {
 {{- if get .service_account "exists" false}}
   cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
+  cloudbuild_sa_id = "projects/${var.project_id}/serviceAccounts/${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
 {{- else}}
   cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
+  cloudbuild_sa_id = google_service_account.cloudbuild_sa.id
 {{- end}}
   services = [
     "admin.googleapis.com",
@@ -130,6 +132,21 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
   project  = var.project_id
   role     = "roles/cloudbuild.builds.editor"
   member   = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permission to allow approvers to impersonate the Cloud Build user-specified Service Account.
+resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
+  for_each = toset([
+    {{- range .build_editors}}
+    "{{.}}",
+    {{- end}}
+  ])
+  service_account_id = local.cloudbuild_sa_id
+  role               = "roles/iam.serviceAccountUser"
+  member             = each.value
   depends_on = [
     google_project_service.services,
   ]
