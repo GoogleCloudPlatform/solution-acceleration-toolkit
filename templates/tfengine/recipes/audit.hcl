@@ -108,6 +108,12 @@ schema = {
         type = "string"
       }
     }
+    terraform_addons = {
+      description = <<EOF
+        Additional Terraform configuration for the cicd deployment.
+        For schema see ./deployment.hcl.
+      EOF
+    }
   }
 }
 

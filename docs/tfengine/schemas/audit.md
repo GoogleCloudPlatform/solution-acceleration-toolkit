@@ -20,3 +20,4 @@
 | project | Config of project to host auditing resources | object | false | - | - |
 | project.project_id | ID of project. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | storage_location | Location of logs storage bucket. | string | false | - | - |
+| terraform_addons | Additional Terraform configuration for the cicd deployment. For schema see ./deployment.hcl. | - | false | - | - |

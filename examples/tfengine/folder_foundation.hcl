@@ -149,6 +149,18 @@ template "audit" {
       # Need to escape \ and " to preserve them in the final filter strings.
       "logName=\\\"logs/application\\\"",
     ]
+    terraform_addons = {
+      providers = [
+        {
+          name = "google",
+          version_constraints = ">=3.0, <= 3.71"
+        },
+        {
+          name = "google-beta",
+          version_constraints = "~>3.50"
+        }
+      ]
+    }
   }
 }
 
