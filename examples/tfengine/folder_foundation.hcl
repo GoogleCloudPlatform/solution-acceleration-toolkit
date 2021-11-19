@@ -150,6 +150,7 @@ template "audit" {
       "logName=\\\"logs/application\\\"",
     ]
     terraform_addons = {
+      # Example Terraform provider constraints.
       providers = [
         {
           name = "google",
