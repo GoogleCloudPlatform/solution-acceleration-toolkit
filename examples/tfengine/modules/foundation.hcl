@@ -77,44 +77,44 @@ template "groups" {
         # Groups used in the CICD.
         {
           id          = "{{.prefix}}-cicd-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-cicd-editors@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
         },
         # Groups used in the applications.
         {
           id          = "{{.prefix}}-apps-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
           owners = [
             "user1@{{.domain}}"
           ]
         },
         {
           id          = "{{.prefix}}-data-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
           owners = [
             "user1@{{.domain}}"
           ]
         },
         {
           id          = "{{.prefix}}-healthcare-dataset-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
           owners = [
             "user1@{{.domain}}"
           ]
         },
         {
           id          = "{{.prefix}}-fhir-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
           owners = [
             "user1@{{.domain}}"
           ]
         },
         {
           id          = "{{.prefix}}-bastion-accessors@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
           owners = [
             "user1@{{.domain}}"
           ]
