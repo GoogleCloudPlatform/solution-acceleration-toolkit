@@ -41,10 +41,10 @@ data "google_project" "devops" {
 locals {
 {{- if get .service_account "exists" false}}
   cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
-  cloudbuild_sa_name = "projects/${var.project_id}/serviceAccounts/${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
+  cloudbuild_sa_id = "projects/${var.project_id}/serviceAccounts/${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
 {{- else}}
   cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
-  cloudbuild_sa_name = google_service_account.cloudbuild_sa.name
+  cloudbuild_sa_id = google_service_account.cloudbuild_sa.id
 {{- end}}
   services = [
     "admin.googleapis.com",
@@ -144,7 +144,7 @@ resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
     "{{.}}",
     {{- end}}
   ])
-  service_account_id = local.cloudbuild_sa_name
+  service_account_id = local.cloudbuild_sa_id
   role               = "roles/iam.serviceAccountUser"
   member             = each.value
   depends_on = [

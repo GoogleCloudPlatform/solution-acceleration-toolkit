@@ -42,7 +42,7 @@ data "google_project" "devops" {
 
 locals {
   cloudbuild_sa_email = "${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
-  cloudbuild_sa_name  = "projects/${var.project_id}/serviceAccounts/${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
+  cloudbuild_sa_id    = "projects/${var.project_id}/serviceAccounts/${var.service_account}@${var.project_id}.iam.gserviceaccount.com"
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -123,7 +123,7 @@ resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
   for_each = toset([
     "group:example-cicd-editors@example.com",
   ])
-  service_account_id = local.cloudbuild_sa_name
+  service_account_id = local.cloudbuild_sa_id
   role               = "roles/iam.serviceAccountUser"
   member             = each.value
   depends_on = [
