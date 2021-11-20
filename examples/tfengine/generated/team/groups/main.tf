@@ -65,7 +65,6 @@ module "example_apps_viewers_example_com" {
   id           = "example-apps-viewers@example.com"
   customer_id  = "c12345678"
   display_name = "example-apps-viewers"
-  owners       = ["user1@example.com"]
 }
 
 module "example_data_viewers_example_com" {
@@ -75,7 +74,6 @@ module "example_data_viewers_example_com" {
   id           = "example-data-viewers@example.com"
   customer_id  = "c12345678"
   display_name = "example-data-viewers"
-  owners       = ["user1@example.com"]
 }
 
 module "example_healthcare_dataset_viewers_example_com" {
@@ -85,7 +83,6 @@ module "example_healthcare_dataset_viewers_example_com" {
   id           = "example-healthcare-dataset-viewers@example.com"
   customer_id  = "c12345678"
   display_name = "example-healthcare-dataset-viewers"
-  owners       = ["user1@example.com"]
 }
 
 module "example_fhir_viewers_example_com" {
@@ -95,7 +92,6 @@ module "example_fhir_viewers_example_com" {
   id           = "example-fhir-viewers@example.com"
   customer_id  = "c12345678"
   display_name = "example-fhir-viewers"
-  owners       = ["user1@example.com"]
 }
 
 module "example_bastion_accessors_example_com" {
@@ -105,5 +101,4 @@ module "example_bastion_accessors_example_com" {
   id           = "example-bastion-accessors@example.com"
   customer_id  = "c12345678"
   display_name = "example-bastion-accessors"
-  owners       = ["user1@example.com"]
 }

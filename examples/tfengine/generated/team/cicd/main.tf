@@ -15,7 +15,7 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
+    google      = ">=3.87, < 4.0.0"
     google-beta = "~>3.50"
     kubernetes  = "~> 1.0"
   }
@@ -54,6 +54,7 @@ locals {
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
     "sqladmin.googleapis.com",
+    "sourcerepo.googleapis.com",
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
@@ -137,6 +138,15 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   project = var.project_id
   role    = "roles/viewer"
   member  = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# Create the Cloud Source Repository.
+resource "google_sourcerepo_repository" "configs" {
+  project = var.project_id
+  name    = "example"
   depends_on = [
     google_project_service.services,
   ]
