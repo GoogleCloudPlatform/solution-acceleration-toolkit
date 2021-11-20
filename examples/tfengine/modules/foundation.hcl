@@ -87,37 +87,22 @@ template "groups" {
         {
           id          = "{{.prefix}}-apps-viewers@{{.domain}}"
           customer_id = "{{.customer_id}}"
-          owners = [
-            "user1@{{.domain}}"
-          ]
         },
         {
           id          = "{{.prefix}}-data-viewers@{{.domain}}"
           customer_id = "{{.customer_id}}"
-          owners = [
-            "user1@{{.domain}}"
-          ]
         },
         {
           id          = "{{.prefix}}-healthcare-dataset-viewers@{{.domain}}"
           customer_id = "{{.customer_id}}"
-          owners = [
-            "user1@{{.domain}}"
-          ]
         },
         {
           id          = "{{.prefix}}-fhir-viewers@{{.domain}}"
           customer_id = "{{.customer_id}}"
-          owners = [
-            "user1@{{.domain}}"
-          ]
         },
         {
           id          = "{{.prefix}}-bastion-accessors@{{.domain}}"
           customer_id = "{{.customer_id}}"
-          owners = [
-            "user1@{{.domain}}"
-          ]
         },
       ]
     }
