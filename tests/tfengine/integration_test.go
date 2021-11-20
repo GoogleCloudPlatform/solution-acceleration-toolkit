@@ -45,6 +45,8 @@ import (
 
 var dirsToDeploy = []string{
 	"devops",
+	"groups",
+	"cicd",
 	"project_secrets",
 	"project_networks",
 	"project_apps",
