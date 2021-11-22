@@ -199,7 +199,8 @@ project.
 Download the latest pre-built
 [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/):
 
-The latest binary version can be found [here](../../README.md)
+The latest binary version can be found [here](../../README.md).
+
 ```shell
 VERSION={LATEST_VERSION}
 wget -O /usr/local/bin/tfengine https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64
