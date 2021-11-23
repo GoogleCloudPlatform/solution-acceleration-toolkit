@@ -22,8 +22,10 @@
 //    - `roles/resourcemanager.projectDeleter` on the folder
 //    - `roles/resourcemanager.folderAdmin` on the folder
 //    - `roles/cloudbuild.builds.editor` on the folder
+//    - `roles/iam.serviceAccountAdmin` on the folder
 //    - `roles/iam.serviceAccountUser` on the folder
 //    - `roles/source.admin` on the folder
+//    - `roles/storage.admin` on the folder
 //    - `roles/compute.xpnAdmin` on the folder
 //    - `roles/serviceusage.serviceUsageAdmin` on the folder
 //    - `roles/resourcemanager.lienModifier` on the folder
