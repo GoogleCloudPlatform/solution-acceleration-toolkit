@@ -23,7 +23,10 @@
 //    - `roles/resourcemanager.folderAdmin` on the folder
 //    - `roles/compute.xpnAdmin` on the folder
 //    - `roles/billing.admin` on the billing account
-//    Additional roles needed to ensure the runner can build and destroy all tested resources:
+//    The additional roles below are because the permissions are typically removed
+//    from the creator and given to a specified devops group when the devops recipe
+//    is completed. These roles are needed such that the runner retains the permissions
+//    to build and destroy all test resources in the devops project.
 //    - `roles/resourcemanager.projectDeleter` on the folder
 //    - `roles/cloudbuild.builds.editor` on the folder
 //    - `roles/iam.serviceAccountAdmin` on the folder
