@@ -18,13 +18,23 @@
 //  - The environment variables BILLING_ACCOUNT, FOLDER_ID and DOMAIN must be set.
 //  - The runner (e.g. authenticated local user or service account) must have
 //    the following roles:
+//    Roles as listed under https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/tree/master/docs/tfengine#prerequisites:
 //    - `roles/resourcemanager.projectCreator` on the folder
-//    - `roles/resourcemanager.projectDeleter` on the folder
 //    - `roles/resourcemanager.folderAdmin` on the folder
 //    - `roles/compute.xpnAdmin` on the folder
+//    - `roles/billing.admin` on the billing account
+//    The additional roles below are because the permissions are typically removed
+//    from the creator and given to a specified devops group when the devops recipe
+//    is completed. These roles are needed such that the runner retains the permissions
+//    to build and destroy all test resources in the devops project.
+//    - `roles/resourcemanager.projectDeleter` on the folder
+//    - `roles/cloudbuild.builds.editor` on the folder
+//    - `roles/iam.serviceAccountAdmin` on the folder
+//    - `roles/iam.serviceAccountUser` on the folder
+//    - `roles/source.admin` on the folder
+//    - `roles/storage.admin` on the folder
 //    - `roles/serviceusage.serviceUsageAdmin` on the folder
 //    - `roles/resourcemanager.lienModifier` on the folder
-//    - `roles/billing.user` on the billing account
 
 package integration_test
 
@@ -45,6 +55,8 @@ import (
 
 var dirsToDeploy = []string{
 	"devops",
+	"groups",
+	"cicd",
 	"project_secrets",
 	"project_networks",
 	"project_apps",

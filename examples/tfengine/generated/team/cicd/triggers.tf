@@ -23,12 +23,9 @@ resource "google_cloudbuild_trigger" "validate_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
@@ -44,6 +41,7 @@ resource "google_cloudbuild_trigger" "validate_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -56,12 +54,9 @@ resource "google_cloudbuild_trigger" "plan_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    pull_request {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
@@ -77,6 +72,7 @@ resource "google_cloudbuild_trigger" "plan_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
@@ -90,12 +86,9 @@ resource "google_cloudbuild_trigger" "apply_prod" {
     "terraform/**",
   ]
 
-  github {
-    owner = "GoogleCloudPlatform"
-    name  = "example"
-    push {
-      branch = "^main$"
-    }
+  trigger_template {
+    repo_name   = "example"
+    branch_name = "^main$"
   }
 
   service_account = "projects/${var.project_id}/serviceAccounts/${local.cloudbuild_sa_email}"
@@ -111,6 +104,7 @@ resource "google_cloudbuild_trigger" "apply_prod" {
 
   depends_on = [
     google_project_service.services,
+    google_sourcerepo_repository.configs,
   ]
 }
 
