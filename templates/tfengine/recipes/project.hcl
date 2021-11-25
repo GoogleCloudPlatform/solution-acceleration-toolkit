@@ -136,6 +136,13 @@ schema = {
             }
           }
         }
+        labels = {
+          description = "Map of labels for this project"
+          type        = "object"
+          items = {
+            type = "string"
+          }
+        }
       }
     }
     resources = {
