@@ -238,7 +238,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
     ```hcl
     template "devops" {
-      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.4.0"
+      recipe_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.4.0"
       output_path = "./devops"
       data = {
         ...
@@ -366,7 +366,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
         ```hcl
         template "groups" {
-          recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/project.hcl"
+          recipe_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/project.hcl"
           output_path = "./groups"
           data = {
             project = {
