@@ -42,6 +42,7 @@ data "google_project" "devops" {
 
 locals {
   cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
+  cloudbuild_sa_id    = google_service_account.cloudbuild_sa.id
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -109,6 +110,19 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
   project = var.project_id
   role    = "roles/cloudbuild.builds.editor"
   member  = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permission to allow approvers to impersonate the Cloud Build user-specified Service Account.
+resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
+  for_each = toset([
+    "group:example-cicd-editors@example.com",
+  ])
+  service_account_id = local.cloudbuild_sa_id
+  role               = "roles/iam.serviceAccountUser"
+  member             = each.value
   depends_on = [
     google_project_service.services,
   ]
@@ -213,6 +227,16 @@ resource "google_billing_account_iam_member" "binding" {
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
   role   = "roles/storage.admin"
+  member = "serviceAccount:${local.cloudbuild_sa_email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permissions to allow Cloud Build SA to access logs bucket.
+resource "google_storage_bucket_iam_member" "cloudbuild_logs_bucket_iam" {
+  bucket = module.logs_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,

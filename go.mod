@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform v0.15.3
 	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/otiai10/copy v1.6.0
+	github.com/otiai10/copy v1.7.0
 	github.com/rodaine/hclencoder v0.0.1
 	github.com/ryanuber/columnize v2.1.2+incompatible
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect

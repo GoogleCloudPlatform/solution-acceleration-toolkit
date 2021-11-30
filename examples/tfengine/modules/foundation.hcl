@@ -27,14 +27,16 @@ template "devops" {
 
     admins_group = {
       id     = "{{.prefix}}-team-admins@{{.domain}}"
-      exists = true
+      customer_id = "{{.customer_id}}"
+      exists = false
     }
 
     project = {
       project_id = "{{.prefix}}-{{.env}}-devops"
       owners_group = {
         id     = "{{.prefix}}-devops-owners@{{.domain}}"
-        exists = true
+        customer_id = "{{.customer_id}}"
+        exists = false
       }
       apis = [
         "container.googleapis.com",
@@ -75,47 +77,32 @@ template "groups" {
         # Groups used in the CICD.
         {
           id          = "{{.prefix}}-cicd-viewers@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-cicd-editors@{{.domain}}"
-          customer_id = "c12345678"
+          customer_id = "{{.customer_id}}"
         },
         # Groups used in the applications.
         {
           id          = "{{.prefix}}-apps-viewers@{{.domain}}"
-          customer_id = "c12345678"
-          owners = [
-            "user1@{{.domain}}"
-          ]
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-data-viewers@{{.domain}}"
-          customer_id = "c12345678"
-          owners = [
-            "user1@{{.domain}}"
-          ]
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-healthcare-dataset-viewers@{{.domain}}"
-          customer_id = "c12345678"
-          owners = [
-            "user1@{{.domain}}"
-          ]
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-fhir-viewers@{{.domain}}"
-          customer_id = "c12345678"
-          owners = [
-            "user1@{{.domain}}"
-          ]
+          customer_id = "{{.customer_id}}"
         },
         {
           id          = "{{.prefix}}-bastion-accessors@{{.domain}}"
-          customer_id = "c12345678"
-          owners = [
-            "user1@{{.domain}}"
-          ]
+          customer_id = "{{.customer_id}}"
         },
       ]
     }
@@ -127,9 +114,8 @@ template "cicd" {
   output_path = "./cicd"
   data = {
     project_id = "{{.prefix}}-{{.env}}-devops"
-    github = {
-      owner = "GoogleCloudPlatform"
-      name  = "example"
+    cloud_source_repository = {
+      name = "example"
     }
 
     # Required for scheduler.
@@ -173,7 +159,7 @@ template "cicd" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.0, <= 3.71"
+          version_constraints = ">=3.87, < 4.0.0"
         },
         {
           name = "google-beta",

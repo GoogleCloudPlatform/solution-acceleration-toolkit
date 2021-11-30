@@ -30,6 +30,12 @@ terraform {
 # - Admin permission at folder level,
 # - Cloud Identity groups and memberships, if requested.
 
+# Required when using end-user ADCs (Application Default Credentials) to manage Cloud Identity groups and memberships.
+provider "google-beta" {
+  user_project_override = true
+  billing_project       = "example-prod-devops"
+}
+
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
@@ -66,16 +72,62 @@ module "state_bucket" {
   location   = "us-central1"
 }
 
+# Devops project owners group.
+module "owners_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.3"
+
+  id           = "example-devops-owners@example.com"
+  customer_id  = "c12345678"
+  display_name = "example-devops-owners"
+  depends_on = [
+    module.project
+  ]
+}
+
+# The group is not ready for IAM bindings right after creation. Wait for
+# a while before it is used.
+resource "time_sleep" "owners_wait" {
+  depends_on = [
+    module.owners_group,
+  ]
+  create_duration = "15s"
+}
+
 # Project level IAM permissions for devops project owners.
 resource "google_project_iam_binding" "devops_owners" {
-  project = module.project.project_id
-  role    = "roles/owner"
-  members = ["group:example-devops-owners@example.com"]
+  project    = module.project.project_id
+  role       = "roles/owner"
+  members    = ["group:${module.owners_group.id}"]
+  depends_on = [time_sleep.owners_wait]
+}
+
+# Admins group for at folder level.
+module "admins_group" {
+  source  = "terraform-google-modules/group/google"
+  version = "~> 0.3"
+
+  id           = "example-team-admins@example.com"
+  customer_id  = "c12345678"
+  display_name = "example-team-admins"
+  depends_on = [
+    module.project
+  ]
+}
+
+# The group is not ready for IAM bindings right after creation. Wait for
+# a while before it is used.
+resource "time_sleep" "admins_wait" {
+  depends_on = [
+    module.admins_group,
+  ]
+  create_duration = "15s"
 }
 
 # Admin permission at folder level.
 resource "google_folder_iam_member" "admin" {
-  folder = "folders/12345678"
-  role   = "roles/resourcemanager.folderAdmin"
-  member = "group:example-team-admins@example.com"
+  folder     = "folders/12345678"
+  role       = "roles/resourcemanager.folderAdmin"
+  member     = "group:${module.admins_group.id}"
+  depends_on = [time_sleep.admins_wait]
 }

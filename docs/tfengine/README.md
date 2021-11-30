@@ -50,8 +50,8 @@ This tool helps you follow Google Cloud, Terraform and security best practices.
 
   - For example, the
         [org foundation example](../../examples/tfengine/org_foundation.hcl)
-        creates the Terraform root modules `devops`, `cicd`, `audit`, `monitor`,
-        `folders`, etc.
+        creates the Terraform root modules `devops`, `cicd`, `audit`, `folders`,
+        etc.
 
 ### Google Cloud best practices
 
@@ -196,11 +196,13 @@ project.
 
 ## Installation
 
-Download a pre-built
+Download the latest pre-built
 [tfengine binary](https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/):
 
+The latest binary version can be found [here](../../README.md).
+
 ```shell
-VERSION=v0.8.0
+VERSION={LATEST_VERSION}
 wget -O /usr/local/bin/tfengine https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/releases/download/${VERSION}/tfengine_${VERSION}_linux-amd64
 chmod +x /usr/local/bin/tfengine
 ```
@@ -236,7 +238,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
     ```hcl
     template "devops" {
-      recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.4.0"
+      recipe_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/devops.hcl?ref=templates-v0.4.0"
       output_path = "./devops"
       data = {
         ...
@@ -364,7 +366,7 @@ directly use the `terraform` binary to deploy the infrastructure.
 
         ```hcl
         template "groups" {
-          recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/project.hcl"
+          recipe_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/project.hcl"
           output_path = "./groups"
           data = {
             project = {

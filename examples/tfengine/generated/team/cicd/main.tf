@@ -15,7 +15,7 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
+    google      = ">=3.87, < 4.0.0"
     google-beta = "~>3.50"
     kubernetes  = "~> 1.0"
   }
@@ -42,6 +42,7 @@ data "google_project" "devops" {
 
 locals {
   cloudbuild_sa_email = google_service_account.cloudbuild_sa.email
+  cloudbuild_sa_id    = google_service_account.cloudbuild_sa.id
   services = [
     "admin.googleapis.com",
     "bigquery.googleapis.com",
@@ -53,6 +54,7 @@ locals {
     "servicenetworking.googleapis.com",
     "serviceusage.googleapis.com",
     "sqladmin.googleapis.com",
+    "sourcerepo.googleapis.com",
   ]
   cloudbuild_sa_viewer_roles = [
     "roles/browser",
@@ -113,6 +115,19 @@ resource "google_project_iam_member" "cloudbuild_builds_editors" {
   ]
 }
 
+# IAM permission to allow approvers to impersonate the Cloud Build user-specified Service Account.
+resource "google_service_account_iam_member" "cloudbuild_builds_editors" {
+  for_each = toset([
+    "group:example-cicd-editors@example.com",
+  ])
+  service_account_id = local.cloudbuild_sa_id
+  role               = "roles/iam.serviceAccountUser"
+  member             = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
 # IAM permissions to allow approvers and contributors to view logs.
 # https://cloud.google.com/cloud-build/docs/securing-builds/store-view-build-logs
 resource "google_project_iam_member" "cloudbuild_logs_viewers" {
@@ -123,6 +138,15 @@ resource "google_project_iam_member" "cloudbuild_logs_viewers" {
   project = var.project_id
   role    = "roles/viewer"
   member  = each.value
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# Create the Cloud Source Repository.
+resource "google_sourcerepo_repository" "configs" {
+  project = var.project_id
+  name    = "example"
   depends_on = [
     google_project_service.services,
   ]
@@ -183,6 +207,16 @@ resource "google_billing_account_iam_member" "binding" {
 resource "google_storage_bucket_iam_member" "cloudbuild_state_iam" {
   bucket = var.state_bucket
   role   = "roles/storage.admin"
+  member = "serviceAccount:${local.cloudbuild_sa_email}"
+  depends_on = [
+    google_project_service.services,
+  ]
+}
+
+# IAM permissions to allow Cloud Build SA to access logs bucket.
+resource "google_storage_bucket_iam_member" "cloudbuild_logs_bucket_iam" {
+  bucket = module.logs_bucket.bucket.name
+  role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${local.cloudbuild_sa_email}"
   depends_on = [
     google_project_service.services,

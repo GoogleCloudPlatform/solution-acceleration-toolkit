@@ -122,7 +122,6 @@ template "cicd" {
           "groups",
           "audit",
           "example-prod-networks",
-          "monitor",
           "folders",
         ]
       }
@@ -148,9 +147,21 @@ template "audit" {
     }
     additional_filters = [
       # Need to escape \ and " to preserve them in the final filter strings.
-      "logName=\\\"logs/forseti\\\"",
       "logName=\\\"logs/application\\\"",
     ]
+    terraform_addons = {
+      # Example Terraform provider constraints.
+      providers = [
+        {
+          name = "google",
+          version_constraints = ">=3.0, <= 3.71"
+        },
+        {
+          name = "google-beta",
+          version_constraints = "~>3.50"
+        }
+      ]
+    }
   }
 }
 
@@ -171,45 +182,24 @@ template "project_networks" {
         name = "example-network"
         subnets = [
           {
-            name     = "forseti-subnet"
+            name     = "example-subnet"
             ip_range = "10.1.0.0/16"
           },
         ]
       }]
       compute_routers = [{
-        name    = "forseti-router"
+        name    = "example-router"
         network = "$${module.example_network.network.network.self_link}"
         nats = [{
-          name                               = "forseti-nat"
+          name                               = "example-nat"
           source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
           subnetworks = [{
-            name                     = "$${module.example_network.subnets[\"us-central1/forseti-subnet\"].self_link}"
+            name                     = "$${module.example_network.subnets[\"us-central1/example-subnet\"].self_link}"
             source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
             secondary_ip_range_names = []
           }]
         }]
       }]
-    }
-  }
-}
-
-template "monitor" {
-  recipe_path = "{{$recipes}}/monitor.hcl"
-  output_path = "./monitor"
-  data = {
-    project = {
-      project_id = "example-monitor"
-      shared_vpc_attachment = {
-        host_project_id = "example-prod-networks"
-      }
-      apis = [
-        "compute.googleapis.com",
-      ]
-    }
-    forseti = {
-      domain  = "example.com"
-      network = "example-network"
-      subnet  = "forseti-subnet"
     }
   }
 }

@@ -57,7 +57,7 @@ module "example_network" {
 
   subnets = [
     {
-      subnet_name           = "forseti-subnet"
+      subnet_name           = "example-subnet"
       subnet_ip             = "10.1.0.0/16"
       subnet_region         = "us-central1"
       subnet_flow_logs      = true
@@ -66,23 +66,23 @@ module "example_network" {
   ]
 }
 
-module "forseti_router" {
+module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
   version = "~> 1.2.0"
 
-  name    = "forseti-router"
+  name    = "example-router"
   project = module.project.project_id
   region  = "us-central1"
   network = module.example_network.network.network.self_link
 
   nats = [
     {
-      name                               = "forseti-nat"
+      name                               = "example-nat"
       source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
       subnetworks = [
         {
-          name                     = "${module.example_network.subnets["us-central1/forseti-subnet"].self_link}"
+          name                     = "${module.example_network.subnets["us-central1/example-subnet"].self_link}"
           source_ip_ranges_to_nat  = ["PRIMARY_IP_RANGE"]
           secondary_ip_range_names = []
         },
