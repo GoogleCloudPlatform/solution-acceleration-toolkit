@@ -74,6 +74,9 @@ module "project" {
     },
   ]
 
+  labels = {
+    env = "prod"
+  }
 }
 
 module "one_billion_ms_dataset" {
