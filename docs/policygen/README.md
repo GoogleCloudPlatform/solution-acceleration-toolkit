@@ -65,7 +65,7 @@ go install ./cmd/policygen
     stable than using the HEAD templates. In your config:
 
     ```hcl
-    template_dir = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen?ref=policies-v0.1.0"
+    template_dir = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen?ref=policies-v0.1.0"
     ```
 
 1. Generate policies:
