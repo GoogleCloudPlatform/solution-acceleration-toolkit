@@ -127,6 +127,13 @@ schema = {
             (even if the resources themselves are in different projects).
           EOF
         }
+        labels = {
+          description = "Map of labels for this project"
+          type        = "object"
+          items = {
+            type = "string"
+          }
+        }
       }
     }
     state_bucket = {
