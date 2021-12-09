@@ -130,8 +130,8 @@ schema = {
         labels = {
           description = "Map of labels for this project"
           type        = "object"
-          items = {
-            type = "string"
+          patternProperties = {
+            ".+" = { type = "string" }
           }
         }
       }

@@ -16,6 +16,7 @@
 | project.exists | Whether this project exists. Defaults to 'false'. | boolean | false | - | - |
 | project.is_shared_vpc_host | Whether this project is a shared VPC host. Defaults to 'false'. | boolean | false | - | - |
 | project.labels | Map of labels for this project | object | false | - | - |
+| project.labels.*pattern* | - | string | false | - | .+ |
 | project.project_id | ID of project to create and/or provision resources in. | string | true | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
 | project.shared_vpc_attachment | If set, treats this project as a shared VPC service project. | object | false | - | - |
 | project.shared_vpc_attachment.host_project_id | ID of host project to connect this project to. | string | true | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
