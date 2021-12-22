@@ -128,6 +128,20 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 	return mergo.Merge(&dst, src, mergoOpts...)
 }
 
+// CopyData creates a copy of the argument map src.
+// Nested maps are copied recursively.
+func CopyData(src map[string]interface{}) map[string]interface{} {
+	data := make(map[string]interface{})
+	for k, v := range src {
+		if vm, ok := v.(map[string]interface{}); ok {
+			data[k] = CopyData(vm)
+		} else {
+			data[k] = v
+		}
+	}
+	return data
+}
+
 // FlattenData returns the map of kes from src flattened into a single map.
 func FlattenData(src map[string]interface{}, fis []*FlattenInfo) (map[string]interface{}, error) {
 	res := make(map[string]interface{})
