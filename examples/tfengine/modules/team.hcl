@@ -38,6 +38,9 @@ template "project_secrets" {
       apis = [
         "secretmanager.googleapis.com"
       ]
+      labels = {
+        no-gdpr = "true"
+      }
     }
     resources = {
       secrets = [
