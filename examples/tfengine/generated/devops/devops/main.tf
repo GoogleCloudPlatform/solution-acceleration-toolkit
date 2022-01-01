@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    google      = "~> 4.0"
+    google-beta = "~> 4.0"
+    kubernetes  = "~> 2.0"
   }
 }
 
@@ -52,7 +52,7 @@ module "project" {
 # Terraform state bucket, hosted in the devops project.
 module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 3.0"
 
   name       = "example-terraform-state"
   project_id = module.project.project_id

@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    google      = "~> 4.0"
+    google-beta = "~> 4.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -58,7 +58,7 @@ module "project" {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 3.2.0"
+  version = "~> 4.1.0"
 
   name         = "bastion-vm"
   project      = module.project.project_id
@@ -88,7 +88,7 @@ EOF
 
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 3.4.0"
+  version = "~> 4.0.0"
 
   network_name = "network"
   project_id   = module.project.project_id
@@ -131,7 +131,7 @@ module "network" {
 }
 module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 4.5.0"
+  version = "~> 8.0.0"
 
   project_id  = module.project.project_id
   vpc_network = module.network.network_name
@@ -167,7 +167,7 @@ module "router" {
 
 module "google_apis" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 4.1.0"
 
   name       = "google-apis"
   project_id = module.project.project_id
@@ -200,7 +200,7 @@ module "google_apis" {
 
 module "gcr" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 4.1.0"
 
   name       = "gcr"
   project_id = module.project.project_id

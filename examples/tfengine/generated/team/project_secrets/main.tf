@@ -15,10 +15,10 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
-    google-beta = "~>3.50"
+    google      = "<= 4.5"
+    google-beta = "~>4.0"
     null        = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"

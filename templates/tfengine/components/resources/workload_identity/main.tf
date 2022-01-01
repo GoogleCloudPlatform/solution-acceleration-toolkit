@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "workload_identity"}}
 module "workload_identity_{{resourceName . "namespace"}}" {
   source              = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version             = "16.1.0"
+  version             = "17.3.0"
   project_id          = "{{.project_id}}"
   name                = "{{.google_service_account_id}}"
 
