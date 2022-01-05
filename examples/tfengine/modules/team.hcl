@@ -39,7 +39,7 @@ template "project_secrets" {
         "secretmanager.googleapis.com"
       ]
       labels = {
-        no-gdpr = "true"
+        type = "no-phi"
       }
     }
     resources = {

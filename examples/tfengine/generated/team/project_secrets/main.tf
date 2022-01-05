@@ -53,8 +53,8 @@ module "project" {
   grant_services_security_admin_role = true
   activate_apis                      = ["secretmanager.googleapis.com"]
   labels = {
-    env     = "prod"
-    no-gdpr = "true"
+    env  = "prod"
+    type = "no-phi"
   }
 }
 
