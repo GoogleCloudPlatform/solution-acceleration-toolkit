@@ -15,7 +15,7 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
+    google      = "<= 3.90"
     google-beta = "~>3.50"
     kubernetes  = "~> 1.0"
   }
@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.2.0"
+  version = "~> 11.3.0"
 
   name            = "example-audit"
   org_id          = ""

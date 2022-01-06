@@ -15,7 +15,7 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
+    google      = "<= 3.90"
     google-beta = "~>3.50"
     kubernetes  = "~> 1.0"
   }
@@ -39,7 +39,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.2.0"
+  version = "~> 11.3.0"
 
   name            = "example-prod-devops"
   org_id          = ""
@@ -75,7 +75,7 @@ module "state_bucket" {
 # Devops project owners group.
 module "owners_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.4"
 
   id           = "example-devops-owners@example.com"
   customer_id  = "c12345678"
@@ -105,7 +105,7 @@ resource "google_project_iam_binding" "devops_owners" {
 # Admins group for at folder level.
 module "admins_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.4"
 
   id           = "example-team-admins@example.com"
   customer_id  = "c12345678"

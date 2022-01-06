@@ -38,7 +38,7 @@ data "google_secret_manager_secret_version" "db_password" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.2.0"
+  version = "~> 11.3.0"
 
   name            = "example-prod-data"
   org_id          = ""
@@ -113,7 +113,7 @@ module "sql_instance" {
 
 module "healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 2.1.0"
+  version = "~> 2.2.0"
 
   name     = "healthcare-dataset"
   project  = module.project.project_id
@@ -213,7 +213,7 @@ EOF
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.2.0"
+  version = "~> 7.4.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
