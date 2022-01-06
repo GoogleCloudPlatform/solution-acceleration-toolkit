@@ -24,5 +24,5 @@ echo "Found ${#projects_array[@]} projects over one day old"
 for project in ${projects}
 do 
   echo "Deleting project: ${project}"
-  #gcloud projects delete ${project}
+  gcloud projects delete ${project}
 done
