@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-timeout: 3600s
-
 options:
   machineType: "N1_HIGHCPU_8"
 
@@ -26,4 +24,3 @@ steps:
   - "FOLDER_ID=${_FOLDER_ID}"
 options:
   logging: CLOUD_LOGGING_ONLY
-  

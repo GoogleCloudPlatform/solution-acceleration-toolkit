@@ -14,12 +14,12 @@
 
 #!/usr/bin/env bash
 
-#Find all projects in specified folder over one day old
+# Find all projects in specified folder over one day old.
 projects=$(gcloud projects list --format="value(projectId)" \
 --filter="parent.type=folder AND parent.id=${FOLDER_ID} AND createTime<=-P1D")
 
 projects_array=(${projects})
-echo "Found ${#projects_array[@]} projects over one day old"
+echo "Found ${#projects_array[@]} projects over one day old."
 
 for project in ${projects}
 do 
