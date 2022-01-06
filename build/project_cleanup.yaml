@@ -18,6 +18,11 @@ options:
   machineType: "N1_HIGHCPU_8"
 
 steps:
-- name: "bash"
-  args: ["../scripts/project_cleanup.sh"]
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args: ["scripts/project_cleanup.sh"]
   id: Project deletion
+  env:
+  - "FOLDER_ID=${_FOLDER_ID}"
+options:
+  logging: CLOUD_LOGGING_ONLY
