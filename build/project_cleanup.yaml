@@ -23,4 +23,6 @@ steps:
   env:
   - "FOLDER_ID=${_FOLDER_ID}"
 options:
+  # A logging option was specified since the default logging cannot be used 
+  # when the Cloud Build trigger is run by a user-specified service account.
   logging: CLOUD_LOGGING_ONLY
