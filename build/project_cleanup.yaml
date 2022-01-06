@@ -26,3 +26,4 @@ steps:
   - "FOLDER_ID=${_FOLDER_ID}"
 options:
   logging: CLOUD_LOGGING_ONLY
+  
