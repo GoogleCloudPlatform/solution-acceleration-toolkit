@@ -8,7 +8,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.6
 	github.com/google/go-cpy v0.0.0-20211218193943-a9c933c06932
-	github.com/hashicorp/go-getter v1.5.10
+	github.com/hashicorp/go-getter v1.5.11
 	github.com/hashicorp/go-version v1.4.0
 	github.com/hashicorp/hcl/v2 v2.11.1
 	github.com/hashicorp/terraform v0.15.3
@@ -20,5 +20,5 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.10.0
-	google.golang.org/api v0.63.0
+	google.golang.org/api v0.64.0
 )
