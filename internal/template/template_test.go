@@ -15,6 +15,7 @@
 package template
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -86,6 +87,40 @@ func TestMergeData(t *testing.T) {
 			}
 			if diff := cmp.Diff(tc.want, tc.dst); diff != "" {
 				t.Errorf("MergeData destination differs (-want +got):\n%v", diff)
+			}
+		})
+	}
+}
+
+func TestCopyData(t *testing.T) {
+	nested := map[string]interface{}{
+		"c": []int{1, 2, 3},
+	}
+	addrNested := fmt.Sprintf("%p", nested)
+	cases := []struct {
+		name  string
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{
+			name: "copy nested map",
+			input: map[string]interface{}{
+				"a": nested,
+			},
+			want: map[string]interface{}{
+				"a": nested,
+			},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			copy := CopyData(tc.input)
+			addrCopy := fmt.Sprintf("%p", copy["a"])
+			if diff := cmp.Diff(tc.want, copy); diff != "" {
+				t.Errorf("CopyData destination differs (-want +got):\n%v", diff)
+			}
+			if addrNested == addrCopy {
+				t.Errorf("CopyData nested map occupies the same memory\n%v", addrCopy)
 			}
 		})
 	}
