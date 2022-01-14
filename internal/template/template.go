@@ -133,10 +133,16 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 	return mergo.Merge(&dst, src, mergoOpts...)
 }
 
+// errTypeAssertion captures a CopyData error if deep copy cannot be asserted to be a map[string]interface{}
+var errTypeAssertion = errors.New("CopyData could not assert data type")
+
 // CopyData creates a deep copy of the argument map src.
-func CopyData(src map[string]interface{}) map[string]interface{} {
-	data := copier.Copy(src).(map[string]interface{})
-	return data
+func CopyData(src map[string]interface{}) (map[string]interface{}, error) {
+	if data, ok := copier.Copy(src).(map[string]interface{}); ok {
+		return data, nil
+	}
+	// err := fmt.Errorf("CopyData failed to return the expected type; got %T", data)
+	return nil, errTypeAssertion
 }
 
 // FlattenData returns the map of kes from src flattened into a single map.

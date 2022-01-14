@@ -157,7 +157,10 @@ func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[st
 func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateInfo) error {
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
 
-	data := template.CopyData(conf.Data)
+	data, err := template.CopyData(conf.Data)
+	if err != nil {
+		return err
+	}
 
 	// Make the schema available.
 	trimDescriptions(conf.Schema)

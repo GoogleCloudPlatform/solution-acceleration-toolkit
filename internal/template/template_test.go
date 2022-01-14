@@ -15,7 +15,6 @@
 package template
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -93,37 +92,30 @@ func TestMergeData(t *testing.T) {
 }
 
 func TestCopyData(t *testing.T) {
-	nested := map[string]interface{}{
-		"c": []int{1, 2, 3},
-	}
-	addrNested := fmt.Sprintf("%p", nested)
-	cases := []struct {
-		name  string
-		input map[string]interface{}
-		want  map[string]interface{}
-	}{
-		{
-			name: "copy nested map",
-			input: map[string]interface{}{
-				"a": nested,
-			},
-			want: map[string]interface{}{
-				"a": nested,
-			},
-		},
-	}
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			copy := CopyData(tc.input)
-			addrCopy := fmt.Sprintf("%p", copy["a"])
-			if diff := cmp.Diff(tc.want, copy); diff != "" {
-				t.Errorf("CopyData destination differs (-want +got):\n%v", diff)
-			}
-			if addrNested == addrCopy {
-				t.Errorf("CopyData nested map occupies the same memory\n%v", addrCopy)
-			}
-		})
-	}
+	t.Run("", func(t *testing.T) {
+		nested := map[string]interface{}{
+			"c": []int{1, 2, 3},
+		}
+		outer := map[string]interface{}{
+			"a": nested,
+		}
+
+		got, err := CopyData(outer)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+		if diff := cmp.Diff(outer, got); diff != "" {
+			t.Errorf("CopyData destination differs (-want +got):\n%v", diff)
+		}
+
+		// modify nested object
+		nested["b"] = 3
+
+		// deep copy (got) and outer map should differ now
+		if diff := cmp.Diff(outer, got); diff == "" {
+			t.Errorf("CopyData destination is expected to differ but it does not.\n")
+		}
+	})
 }
 
 func TestFlattenData(t *testing.T) {
