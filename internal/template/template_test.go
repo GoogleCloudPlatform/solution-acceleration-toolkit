@@ -91,7 +91,6 @@ func TestMergeData(t *testing.T) {
 	}
 }
 
-// TestCopyData tests deep copy effect for the tfengine's Config.Data
 // The test performs a mutation inside an inner config object.
 // It then expects that the copy does not contain the modification.
 func TestCopyData(t *testing.T) {
