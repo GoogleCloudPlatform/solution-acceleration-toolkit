@@ -131,17 +131,16 @@ func TestCopyData(t *testing.T) {
 				t.Errorf("CopyData: %v", err)
 			}
 			if diff := cmp.Diff(tc.outerConfig, got); diff != "" {
-				t.Errorf("Copied data differs (-want +got):\n%v", diff)
+				t.Errorf("copied data differs (-want +got):\n%v", diff)
 			}
 
 			// Modify inner config and expect difference between the created copy and the outer config.
 			if tc.innerConfig != nil {
 				tc.innerConfig["addedField"] = 3
 				if diff := cmp.Diff(tc.outerConfig, got); diff == "" {
-					t.Errorf("CopyData destination is expected to differ but it does not.\n")
+					t.Errorf("copy data is expected to differ but it does not.\n")
 				}
 			}
-
 		})
 	}
 }

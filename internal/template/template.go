@@ -137,7 +137,7 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 func CopyData(src map[string]interface{}) (map[string]interface{}, error) {
 	data, ok := copier.Copy(src).(map[string]interface{})
 	if !ok {
-		return nil, fmt.Errorf("Failed to assert output data type during data copy.")
+		return nil, fmt.Errorf("failed to assert output data type during data copy")
 	}
 	return data, nil
 }
