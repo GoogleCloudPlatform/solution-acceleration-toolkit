@@ -60,6 +60,9 @@ module "project" {
     "pubsub.googleapis.com",
     "secretmanager.googleapis.com",
   ]
+  labels = {
+    env = "prod"
+  }
 }
 
 # Terraform state bucket, hosted in the devops project.

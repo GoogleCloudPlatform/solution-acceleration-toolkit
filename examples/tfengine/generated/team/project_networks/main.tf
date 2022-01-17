@@ -54,6 +54,9 @@ module "project" {
     "sqladmin.googleapis.com",
     "dns.googleapis.com",
   ]
+  labels = {
+    env = "prod"
+  }
 }
 
 module "bastion_vm" {

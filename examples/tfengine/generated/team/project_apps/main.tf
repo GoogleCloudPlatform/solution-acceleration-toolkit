@@ -62,6 +62,9 @@ module "project" {
     "dns.googleapis.com",
     "container.googleapis.com",
   ]
+  labels = {
+    env = "prod"
+  }
 }
 resource "google_binary_authorization_policy" "policy" {
   project = module.project.project_id

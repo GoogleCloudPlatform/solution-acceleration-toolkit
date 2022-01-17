@@ -25,6 +25,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/google/go-cpy/cpy"
 	"github.com/imdario/mergo"
 )
 
@@ -32,6 +33,10 @@ var mergoOpts = []func(*mergo.Config){
 	mergo.WithOverride,
 	mergo.WithOverwriteWithEmptyValue,
 }
+
+var copier = cpy.New(
+	cpy.IgnoreAllUnexported(),
+)
 
 // FlattenInfo describes keys to flatten. If index is not a nil pointer then it is assumed the
 // value is a list that must be flattened at the specific index.
@@ -126,6 +131,15 @@ func MergeData(dst map[string]interface{}, src map[string]interface{}) error {
 		return errors.New("dst must not be nil")
 	}
 	return mergo.Merge(&dst, src, mergoOpts...)
+}
+
+// CopyData creates a deep copy of the argument map src.
+func CopyData(src map[string]interface{}) (map[string]interface{}, error) {
+	data, ok := copier.Copy(src).(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("failed to assert output data type during data copy")
+	}
+	return data, nil
 }
 
 // FlattenData returns the map of kes from src flattened into a single map.

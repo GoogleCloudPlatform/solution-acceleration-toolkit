@@ -64,5 +64,12 @@ module "project" {
   {{- if has . "api_identities"}}
   activate_api_identities = {{hcl .api_identities}}
   {{end}}
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 {{- end}}

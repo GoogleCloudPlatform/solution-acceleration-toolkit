@@ -19,6 +19,8 @@
 | parent_type | Type of parent GCP resource to apply the policy. Must be one of 'organization' or 'folder'. | string | false | - | ^organization\|folder$ |
 | project | Config for the project to host devops resources such as remote state and CICD. | object | true | - | - |
 | project.apis | List of APIs enabled in the devops project.<br><br>NOTE: If a CICD is deployed within this project, then the APIs of all resources managed by the CICD must be listed here (even if the resources themselves are in different projects). | - | false | - | - |
+| project.labels | Map of labels for this project | object | false | - | - |
+| project.labels.*pattern* | - | string | false | - | .+ |
 | project.owners_group | Group which will be given owner access to the project. It will be created if 'exists' is false. NOTE: By default, the creating user will be the owner of the project. However, this group will own the project going forward. Make sure to include yourselve in the group, | object | true | - | - |
 | project.owners_group.customer_id | Customer ID of the organization to create the group in. See <https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains#retrieving_customer_id> for how to obtain it. | string | false | - | - |
 | project.owners_group.description | Description of the group. | string | false | - | - |

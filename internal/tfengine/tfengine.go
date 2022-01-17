@@ -157,15 +157,14 @@ func dump(conf *Config, pwd, cacheDir, outputPath string, wantedTemplates map[st
 func dumpTemplate(conf *Config, pwd, cacheDir, outputPath string, ti *templateInfo) error {
 	outputPath = filepath.Join(outputPath, ti.OutputPath)
 
-	data := make(map[string]interface{})
+	data, err := template.CopyData(conf.Data)
+	if err != nil {
+		return err
+	}
 
 	// Make the schema available.
 	trimDescriptions(conf.Schema)
 	data["__schema__"] = conf.Schema
-
-	if err := template.MergeData(data, conf.Data); err != nil {
-		return err
-	}
 
 	flattenedData, err := template.FlattenData(data, ti.Flatten)
 	if err != nil {

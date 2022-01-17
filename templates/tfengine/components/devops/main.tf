@@ -55,6 +55,13 @@ module "project" {
     "{{.}}",
     {{end -}}
   ]
+  {{if $labels := merge (get $ "labels") (get . "labels") -}}
+  labels = {
+    {{range $k, $v := $labels -}}
+    {{$k}} = "{{$v}}"
+    {{end -}}
+  }
+  {{end -}}
 }
 
 # Terraform state bucket, hosted in the devops project.
