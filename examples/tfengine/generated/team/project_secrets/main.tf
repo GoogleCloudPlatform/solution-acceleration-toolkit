@@ -52,6 +52,10 @@ module "project" {
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
   activate_apis                      = ["secretmanager.googleapis.com"]
+  labels = {
+    env  = "prod"
+    type = "no-phi"
+  }
 }
 
 resource "google_secret_manager_secret" "auto_sql_db_password" {

@@ -91,6 +91,59 @@ func TestMergeData(t *testing.T) {
 	}
 }
 
+// The test performs a mutation inside an inner config object.
+// It then expects that the copy does not contain the modification.
+func TestCopyData(t *testing.T) {
+	cases := []struct {
+		name        string
+		outerConfig map[string]interface{}
+		innerConfig map[string]interface{}
+	}{
+		{
+			name:        "CopyData nil argument",
+			outerConfig: nil,
+			innerConfig: nil,
+		},
+		{
+			name:        "innerConfig is nil",
+			outerConfig: make(map[string]interface{}),
+			innerConfig: nil,
+		},
+		{
+			name:        "innerConfig map contains a slice",
+			outerConfig: make(map[string]interface{}),
+			innerConfig: map[string]interface{}{
+				"c": []int{1, 2, 3},
+			},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Setup an inner config if outer config is not nil.
+			if tc.outerConfig != nil {
+				tc.outerConfig["innerConfig"] = tc.innerConfig
+			}
+
+			// Perfom copying test expecting no difference.
+			got, err := CopyData(tc.outerConfig)
+			if err != nil {
+				t.Errorf("CopyData: %v", err)
+			}
+			if diff := cmp.Diff(tc.outerConfig, got); diff != "" {
+				t.Errorf("copied data differs (-want +got):\n%v", diff)
+			}
+
+			// Modify inner config and expect difference between the created copy and the outer config.
+			if tc.innerConfig != nil {
+				tc.innerConfig["addedField"] = 3
+				if diff := cmp.Diff(tc.outerConfig, got); diff == "" {
+					t.Errorf("copy data is expected to differ but it does not.\n")
+				}
+			}
+		})
+	}
+}
+
 func TestFlattenData(t *testing.T) {
 	cases := []struct {
 		name  string

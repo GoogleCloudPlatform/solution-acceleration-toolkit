@@ -65,6 +65,10 @@ schema = {
     }
     labels = {
       description = "Label map."
+      type        = "object"
+      patternProperties = {
+        ".+" = { type = "string" }
+      }
     }
   }
 }
