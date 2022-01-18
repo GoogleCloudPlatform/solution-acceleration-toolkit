@@ -13,6 +13,7 @@
 # limitations under the License.
 
 #!/usr/bin/env bash
+set -e
 
 # Find all projects in specified folder over one day old.
 projects=$(gcloud projects list --format="value(projectId)" \
@@ -21,8 +22,13 @@ projects=$(gcloud projects list --format="value(projectId)" \
 projects_array=(${projects})
 echo "Found ${#projects_array[@]} projects over one day old."
 
-for project in ${projects}
-do 
-  echo "Deleting project: ${project}"
-  gcloud projects delete ${project}
+for PROJECT in ${projects}
+do
+   echo "Removing liens in project: ${PROJECT}"
+   for lien in $(gcloud alpha resource-manager liens list --project=${PROJECT} --format="value(name)")
+   do
+   gcloud alpha resource-manager liens delete ${lien}
+   done
+   echo "Deleting project: ${PROJECT}"
+   gcloud projects delete ${PROJECT}
 done
