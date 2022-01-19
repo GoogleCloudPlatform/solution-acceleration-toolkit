@@ -24,11 +24,11 @@ echo "Found ${#projects_array[@]} projects over one day old."
 
 for PROJECT in ${projects}
 do
-   echo "Removing liens in project: ${PROJECT}"
-   for lien in $(gcloud alpha resource-manager liens list --project=${PROJECT} --format="value(name)")
-   do
-   gcloud alpha resource-manager liens delete ${lien}
-   done
-   echo "Deleting project: ${PROJECT}"
-   gcloud projects delete ${PROJECT}
+  echo "Removing liens in project: ${PROJECT}"
+  for lien in $(gcloud alpha resource-manager liens list --project=${PROJECT} --format="value(name)")
+  do
+    gcloud alpha resource-manager liens delete ${lien}
+  done
+  echo "Deleting project: ${PROJECT}"
+  gcloud projects delete ${PROJECT}
 done
