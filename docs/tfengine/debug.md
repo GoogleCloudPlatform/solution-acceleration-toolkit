@@ -2,8 +2,15 @@
 
 ## Authentication Errors
 
-1. Use `gcloud auth application-default login` for authentication, Terraform
-    uses Google Cloud Application Default Credentials (ADC).
+1. Terraform uses
+    [Google Cloud Application Default Credentials (ADC)](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login)
+    for authentication to Google Cloud. To configure:
+
+    1. Run `gcloud auth application-default login` from your terminal;
+    1. Login in with your desired account;
+    1. Make sure the environment variable `GOOGLE_APPLICATION_CREDENTIALS` is
+        set to `~/.config/gcloud/application_default_credentials.json`, which is
+        where the previous command write your credentials.
 
 ## GCP Errors
 
