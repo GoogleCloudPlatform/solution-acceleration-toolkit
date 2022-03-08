@@ -331,6 +331,11 @@ EOF
   }
 }
 
+template "schema" {
+  component_path = "./schema"
+  output_path = "./project_data/schema"
+}
+
 # Prod central data project for team 1.
 template "project_data" {
   recipe_path = "{{.recipes}}/project.hcl"
@@ -445,12 +450,7 @@ template "project_data" {
             pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
           }]
           parser_config = {
-            schema  = <<EOF
-{
-  "schematizedParsingType": "SOFT_FAIL",
-  "ignoreMinOccurs": true
-}
-EOF
+            schema  = "./schema"
             version = "V2"
           }
           labels = {

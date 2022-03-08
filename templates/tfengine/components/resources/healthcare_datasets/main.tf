@@ -130,9 +130,7 @@ module "{{resourceName . "name"}}" {
         {{hclField .parser_config "segment_terminator" -}}
         {{hclField .parser_config "version" -}}
         {{if has .parser_config "schema" -}}
-        schema = <<EOF
-{{.parser_config.schema -}}
-        EOF
+        schema = templatefile("{{.parser_config.schema -}}", {})
         {{- end}}
       }
       {{end -}}

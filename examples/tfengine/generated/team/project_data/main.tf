@@ -196,12 +196,7 @@ module "healthcare_dataset" {
       ]
       parser_config = {
         version = "V2"
-        schema  = <<EOF
-{
-  "schematizedParsingType": "SOFT_FAIL",
-  "ignoreMinOccurs": true
-}
-EOF
+        schema  = templatefile("./schema", {})
       }
       labels = {
         env  = "prod"
