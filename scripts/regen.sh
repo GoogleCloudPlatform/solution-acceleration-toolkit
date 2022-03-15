@@ -20,10 +20,7 @@ if [[ -n "${1}" ]]; then
 fi
 
 # Helper to regenerate generated files.
-rm -rf ${gendir}/*/generated/*
-
-# Policygen
-go run ./cmd/policygen --config_path examples/policygen/config.hcl --output_path ${gendir}/policygen/generated --state_paths examples/policygen/example.tfstate
+rm -rf ${gendir}/tfengine/generated/*
 
 # TF Engine
 for example in examples/tfengine/*.hcl; do

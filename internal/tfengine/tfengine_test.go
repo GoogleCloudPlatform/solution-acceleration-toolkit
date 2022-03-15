@@ -126,7 +126,7 @@ data = {
 }
 
 template "recipe" {
-  recipe_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/org_policies.hcl?ref=templates-v0.1.0"
+  recipe_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/tfengine/recipes/org_policies.hcl?ref=templates-v0.1.0"
   data = {
     allowed_policy_member_customer_ids = [
       "example_customer_id",
@@ -135,7 +135,7 @@ template "recipe" {
 }
 
 template "component" {
-  component_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies?ref=templates-v0.1.0"
+  component_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies?ref=templates-v0.1.0"
   data = {
     allowed_policy_member_customer_ids = [
       "example_customer_id",
@@ -144,7 +144,7 @@ template "component" {
 }
 
 template "component" {
-  component_path = "git://github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies/main.tf?ref=templates-v0.1.0"
+  component_path = "github.com/GoogleCloudPlatform/healthcare-data-protection-suite//templates/policygen/org_policies/main.tf?ref=templates-v0.1.0"
   output_path = "policies.tf"
   data = {
     allowed_policy_member_customer_ids = [
