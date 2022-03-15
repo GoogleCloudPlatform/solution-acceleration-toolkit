@@ -100,7 +100,7 @@ func Run(ctx context.Context, rn runner.Runner, args *RunArgs) error {
 
 	// Policy Library templates are released in a backwards compatible way, and old templates will be
 	// kept in the repository as well, so it's relatively safe to pull from 'master' branch all the time.
-	tp, err := fileutil.Fetch("git://github.com/forseti-security/policy-library?ref=master", "", cacheDir)
+	tp, err := fileutil.Fetch("github.com/forseti-security/policy-library?ref=master", "", cacheDir)
 	if err != nil {
 		return fmt.Errorf("fetch policy templates and utils: %v", err)
 	}
