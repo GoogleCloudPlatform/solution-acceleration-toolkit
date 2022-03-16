@@ -21,5 +21,5 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.10.0
-	google.golang.org/api v0.65.0
+	google.golang.org/api v0.73.0
 )
