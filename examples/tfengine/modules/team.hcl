@@ -332,7 +332,7 @@ EOF
 }
 template "schema" {
   component_path = "./schema/hl7_config_schema.json"
-  output_path = "./project_data/schema.json"
+  output_path = "./project_data/hl7_config_schema.json"
 }
 # Prod central data project for team 1.
 template "project_data" {
@@ -448,7 +448,7 @@ template "project_data" {
             pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
           }]
           parser_config = {
-            schema_file  = "./schema.json"
+            schema_file  = "./hl7_config_schema.json"
             version = "V2"
           }
           labels = {

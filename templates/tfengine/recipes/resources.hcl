@@ -1109,7 +1109,7 @@ schema = {
                       type = "string"
                     }
                     schema_file = {
-                      description = "Path to the JSON encoded schema file."
+                      description = "Path to the JSON encoded schema file. Only one of the schema_file or schema field should be provided, not both."
                       type = "string"
                     }
                     version = {

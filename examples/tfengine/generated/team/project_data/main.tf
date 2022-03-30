@@ -196,7 +196,7 @@ module "healthcare_dataset" {
       ]
       parser_config = {
         version = "V2"
-        schema  = templatefile("./schema.json", {})
+        schema  = templatefile("./hl7_config_schema.json", {})
       }
       labels = {
         env  = "prod"
