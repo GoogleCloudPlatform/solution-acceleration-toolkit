@@ -1108,6 +1108,10 @@ schema = {
                     schema = {
                       type = "string"
                     }
+                    schema_file = {
+                      description = "Path to the JSON encoded schema file."
+                      type = "string"
+                    }
                     version = {
                       type = "string"
                     }
