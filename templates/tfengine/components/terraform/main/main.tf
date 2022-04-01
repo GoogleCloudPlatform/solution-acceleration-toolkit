@@ -34,13 +34,13 @@ terraform {
   {{end -}}
 {{end -}}
     {{if not $hasGoogle -}}
-    google      = "~> 3.0"
+    google      = "~> 4.0"
     {{end -}}
     {{if not $hasGoogleBeta -}}
-    google-beta = "~> 3.0"
+    google-beta = "~> 4.0"
     {{end -}}
     {{if not $hasKubernetes -}}
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.0"
     {{end -}}
   }
 {{- if get . "enable_gcs_backend" true}}

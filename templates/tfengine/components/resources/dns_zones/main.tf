@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "dns_zones"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 4.1.0"
 
   name       = "{{.name}}"
   project_id = module.project.project_id
