@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    google      = "~> 4.0"
+    google-beta = "~> 4.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -28,7 +28,7 @@ terraform {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.2.0"
+  version = "~> 12.0.0"
 
   project_id    = "example-devops"
   activate_apis = []

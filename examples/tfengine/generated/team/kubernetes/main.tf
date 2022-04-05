@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    google      = "~> 4.0"
+    google-beta = "~> 4.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -45,7 +45,7 @@ provider "kubernetes" {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 11.2.0"
+  version = "~> 12.0.0"
 
   project_id    = "example-prod-apps"
   activate_apis = []
@@ -75,7 +75,7 @@ resource "kubernetes_namespace" "namespace" {
 
 module "workload_identity_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version    = "16.1.0"
+  version    = "20.0.0"
   project_id = module.project.project_id
   name       = "runner"
 

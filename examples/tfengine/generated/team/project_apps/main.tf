@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
-    kubernetes  = "~> 1.0"
+    google      = "~> 4.0"
+    google-beta = "~> 4.0"
+    kubernetes  = "~> 2.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -36,7 +36,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.2.0"
+  version = "~> 12.0.0"
 
   name            = "example-prod-apps"
   org_id          = ""
@@ -111,7 +111,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.6.0"
+  version = "~> 7.6.0"
 
   name_prefix        = "instance-template"
   project_id         = module.project.project_id
@@ -147,7 +147,7 @@ module "instance_template" {
 
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.6.0"
+  version = "~> 7.6.0"
 
   hostname           = "instance"
   instance_template  = module.instance_template.self_link
@@ -166,7 +166,7 @@ module "instance" {
 
 module "domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 4.1.0"
 
   name       = "domain"
   project_id = module.project.project_id
@@ -195,7 +195,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.1.0"
+  version = "~> 20.0.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
