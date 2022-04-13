@@ -180,6 +180,7 @@
 | healthcare_datasets.hl7_v2_stores.parser_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_hl7_v2_store#parser_config>. | object | false | - | - |
 | healthcare_datasets.hl7_v2_stores.parser_config.allow_null_header | - | boolean | false | - | - |
 | healthcare_datasets.hl7_v2_stores.parser_config.schema | - | string | false | - | - |
+| healthcare_datasets.hl7_v2_stores.parser_config.schema_file | Path to the JSON encoded schema file. Only one of the schema_file or schema field should be provided, not both. | string | false | - | - |
 | healthcare_datasets.hl7_v2_stores.parser_config.segment_terminator | - | string | false | - | - |
 | healthcare_datasets.hl7_v2_stores.parser_config.version | - | string | false | - | - |
 | healthcare_datasets.iam_members | IAM member to grant access for. | array(object) | false | - | - |

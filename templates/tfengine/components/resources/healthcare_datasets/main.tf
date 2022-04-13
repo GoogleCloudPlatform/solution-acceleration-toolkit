@@ -133,6 +133,8 @@ module "{{resourceName . "name"}}" {
         schema = <<EOF
 {{.parser_config.schema -}}
         EOF
+        {{- else if has .parser_config "schema_file" -}}
+        schema = templatefile("{{.parser_config.schema_file -}}", {})
         {{- end}}
       }
       {{end -}}
