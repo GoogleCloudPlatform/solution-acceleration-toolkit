@@ -30,10 +30,6 @@ Note that YAML-formatted configs were used at the time when the Tutorial video
 was made. The config format has been changed to
 [HCL](https://github.com/hashicorp/hcl).
 
-## Solution Guide
-
-[Google Cloud Data Protection Toolkit guide](https://cloud.google.com/solutions/data-protection-toolkit-guide)
-
 ## Releases
 
 Please see [RELEASING.md](./RELEASING.md) for our release strategy.
