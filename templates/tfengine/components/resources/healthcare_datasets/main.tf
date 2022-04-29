@@ -16,6 +16,7 @@ limitations under the License. */ -}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
   version = "~> 2.1.0"
+  provider = google-beta
 
   name     = "{{.name}}"
   project  = module.project.project_id
