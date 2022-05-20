@@ -18,7 +18,7 @@ limitations under the License. */ -}}
 
 module "{{$resource_name}}" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 3.4.0"
+  version = "~> 4.0.1"
 
   network_name = "{{.name}}"
   project_id   = module.project.project_id
