@@ -117,7 +117,17 @@ module "storage_destination" {
   location                 = "us-central1"
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
-  expiration_days          = 7 * 365
+  lifecycle_rules = [
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 7 * 365
+        with_state = "ANY"
+      }
+    }
+  ]
   retention_policy = {
     is_locked             = true
     retention_period_days = 6 * 365
