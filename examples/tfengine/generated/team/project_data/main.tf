@@ -211,7 +211,7 @@ module "healthcare_dataset" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.2.0"
+  version = "~> 7.4.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
