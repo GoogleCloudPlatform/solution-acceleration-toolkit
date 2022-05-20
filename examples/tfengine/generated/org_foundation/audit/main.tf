@@ -69,7 +69,7 @@ resource "google_organization_iam_audit_config" "config" {
 
 module "bigquery_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 6.0.0"
+  version = "~> 7.3.0"
 
   log_sink_name          = "bigquery-audit-logs-sink"
   destination_uri        = module.bigquery_destination.destination_uri
@@ -82,7 +82,7 @@ module "bigquery_export" {
 
 module "bigquery_destination" {
   source  = "terraform-google-modules/log-export/google//modules/bigquery"
-  version = "~> 6.0.0"
+  version = "~> 7.3.0"
 
   dataset_name             = "1yr_org_audit_logs"
   project_id               = module.project.project_id
@@ -93,7 +93,7 @@ module "bigquery_destination" {
 
 module "storage_export" {
   source  = "terraform-google-modules/log-export/google"
-  version = "~> 6.0.0"
+  version = "~> 7.3.0"
 
   log_sink_name          = "storage-audit-logs-sink"
   destination_uri        = module.storage_destination.destination_uri
@@ -109,14 +109,24 @@ module "storage_export" {
 // and set the actual expiry to be greater than this amount (7 years).
 module "storage_destination" {
   source  = "terraform-google-modules/log-export/google//modules/storage"
-  version = "~> 6.0.0"
+  version = "~> 7.3.0"
 
   storage_bucket_name      = "7yr-org-audit-logs"
   project_id               = module.project.project_id
   location                 = "us-central1"
   log_sink_writer_identity = module.storage_export.writer_identity
   storage_class            = "COLDLINE"
-  expiration_days          = 7 * 365
+  lifecycle_rules = [
+    {
+      action = {
+        type = "Delete"
+      }
+      condition = {
+        age        = 7 * 365
+        with_state = "ANY"
+      }
+    }
+  ]
   retention_policy = {
     is_locked             = true
     retention_period_days = 6 * 365
