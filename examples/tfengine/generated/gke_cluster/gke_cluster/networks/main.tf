@@ -50,7 +50,7 @@ module "project" {
 
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 3.4.0"
+  version = "~> 4.0.1"
 
   network_name = "network"
   project_id   = module.project.project_id
