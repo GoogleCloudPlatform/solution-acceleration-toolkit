@@ -57,15 +57,7 @@ func Fetch(path, pwd, cacheDir string) (string, error) {
 	hash := sha256.Sum256([]byte(root))
 	dst := filepath.Join(cacheDir, fmt.Sprintf("%x", hash))
 
-	c := new(getter.FileGetter)
-	ctx := context.Background()
-	req := &getter.Request{
-		Dst:     dst,
-		Src:     root,
-		Pwd:     pwd,
-		GetMode: getter.ModeDir,
-	}
-	if err := c.Get(ctx, req); err != nil {
+	if _, err := getter.Get(context.Background(), dst, root); err != nil {
 		return "", err
 	}
 	return filepath.Join(dst, subdir), nil
