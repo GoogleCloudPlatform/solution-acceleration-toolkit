@@ -16,13 +16,14 @@
 package fileutil
 
 import (
+	"context"
 	"crypto/sha256"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/hashicorp/go-getter"
+	"github.com/hashicorp/go-getter/v2"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -55,13 +56,8 @@ func Fetch(path, pwd, cacheDir string) (string, error) {
 	root, subdir := getter.SourceDirSubdir(path)
 	hash := sha256.Sum256([]byte(root))
 	dst := filepath.Join(cacheDir, fmt.Sprintf("%x", hash))
-	c := getter.Client{
-		Dst:  dst,
-		Src:  root,
-		Pwd:  pwd,
-		Mode: getter.ClientModeDir,
-	}
-	if err := c.Get(); err != nil {
+
+	if _, err := getter.Get(context.Background(), dst, root); err != nil {
 		return "", err
 	}
 	return filepath.Join(dst, subdir), nil
