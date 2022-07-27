@@ -109,8 +109,8 @@ schema = {
     }
     scheduler_region = {
       description = <<EOF
-        [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler
-        job (or the App Engine App behind the sceneces) resides. Must be specified if
+        [Region](https://cloud.google.com/sdk/gcloud/reference/scheduler/locations/list) where the scheduler
+        job resides. Must be specified if
         any triggers are configured to be run on schedule.
       EOF
       type        = "string"
