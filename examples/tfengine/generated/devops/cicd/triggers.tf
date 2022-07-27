@@ -134,7 +134,6 @@ resource "google_cloud_scheduler_job" "plan_scheduler_prod" {
   }
   depends_on = [
     google_project_service.services,
-    google_app_engine_application.cloudbuild_scheduler_app,
   ]
 }
 
