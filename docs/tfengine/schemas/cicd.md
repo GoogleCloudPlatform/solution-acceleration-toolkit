@@ -36,7 +36,7 @@
 | grant_automation_billing_user_role | Whether or not to grant automation service account the billing.user role. Default to true. | boolean | false | - | - |
 | logs_bucket | Name of the Google Cloud Storage bucket where Cloud Build logs should be written. The bucket will be created as part of CICD. | string | true | - | - |
 | project_id | ID of project to deploy CICD in. | string | false | - | ^[a-z][a-z0-9\-]{4,28}[a-z0-9]$ |
-| scheduler_region | [Region](https://cloud.google.com/appengine/docs/locations) where the scheduler job (or the App Engine App behind the sceneces) resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
+| scheduler_region | [Region](https://cloud.google.com/sdk/gcloud/reference/scheduler/locations/list) where the scheduler job resides. Must be specified if any triggers are configured to be run on schedule. | string | true | - | - |
 | service_account | The custom service account to run Cloud Build triggers. During the CICD deployment, this service account will be granted all necessary permissions to provision and manage your infrastructure. See <https://cloud.google.com/build/docs/securing-builds/configure-user-specified-service-accounts#permissions> for more details. | object | true | - | - |
 | service_account.exists | Whether the service account exists. Defaults to 'false'. | boolean | false | - | - |
 | service_account.id | ID of the service account. | string | true | - | - |
