@@ -162,17 +162,6 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
     google_project_service.services,
   ]
 }
-
-# Cloud Scheduler resources.
-# Cloud Scheduler requires an App Engine app created in the project.
-# App Engine app cannot be destroyed once created, therefore always create it.
-resource "google_app_engine_application" "cloudbuild_scheduler_app" {
-  project     = var.project_id
-  location_id = "us-east1"
-  depends_on = [
-    google_project_service.services,
-  ]
-}
 # Cloud Build - Service Account replacing the default Cloud Build Service Account.
 resource "google_service_account" "cloudbuild_sa" {
   project      = var.project_id
