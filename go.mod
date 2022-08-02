@@ -1,6 +1,6 @@
 module github.com/GoogleCloudPlatform/healthcare-data-protection-suite
 
-go 1.14
+go 1.19
 
 require (
 	cloud.google.com/go/storage v1.22.0
