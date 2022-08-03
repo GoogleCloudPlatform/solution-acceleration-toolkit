@@ -36,6 +36,7 @@ var funcMap = map[string]interface{}{
 	"regexReplaceAll":   regexReplaceAll,
 	"makeSlice":         makeSlice,
 	"schemaDescription": schemaDescription,
+	"substr":            substr,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -155,4 +156,14 @@ func schemaDescription(s string) string {
 	}
 
 	return fmt.Sprintf(`"%s"`, s)
+}
+
+func substr(s string, start int, length int) string {
+	if start >= len(s) {
+		return ""
+	}
+	if start+length > len(s) {
+		length = len(s) - start
+	}
+	return s[start : start+length]
 }

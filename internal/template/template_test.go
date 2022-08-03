@@ -298,3 +298,23 @@ func TestMakeSlice(t *testing.T) {
 		}
 	}
 }
+
+func TestSubstr(t *testing.T) {
+	tests := []struct {
+		input         string
+		start, length int
+		want          string
+	}{
+		{"sample string", 0, 40, "sample string"},
+		{"sample string", 0, 5, "sampl"},
+		{"sample string", 5, 4, "e st"},
+		{"sample string", 100, 4, ""},
+		{"sample string", 3, 0, ""},
+	}
+	for _, tc := range tests {
+		got := substr(tc.input, tc.start, tc.length)
+		if diff := cmp.Diff(tc.want, got); diff != "" {
+			t.Errorf("substr result differs (-want +got):\n%v", diff)
+		}
+	}
+}
