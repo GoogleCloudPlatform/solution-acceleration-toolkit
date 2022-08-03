@@ -305,16 +305,28 @@ func TestSubstr(t *testing.T) {
 		start, length int
 		want          string
 	}{
+		{"sample string", -20, 0, ""},
+		{"sample string", 3, -3, ""},
+		{"sample string", 100, 4, ""},
 		{"sample string", 0, 40, "sample string"},
 		{"sample string", 0, 5, "sampl"},
 		{"sample string", 5, 4, "e st"},
-		{"sample string", 100, 4, ""},
 		{"sample string", 3, 0, ""},
 	}
 	for _, tc := range tests {
-		got := substr(tc.input, tc.start, tc.length)
+		got, err := substr(tc.input, tc.start, tc.length)
+		var tcValid = tc.start >= 0 && tc.start < len(tc.input) && tc.length >= 0
+
+		if !tcValid {
+			if err == nil {
+				t.Errorf("Expected error but received nil for input:\"%s\", "+
+					"start:%d, length:%d", tc.input, tc.start, tc.length)
+			} else {
+				continue
+			}
+		}
 		if diff := cmp.Diff(tc.want, got); diff != "" {
-			t.Errorf("substr results differ for input:\"%s\", start:%d, " +
+			t.Errorf("substr results differ for input:\"%s\", start:%d, "+
 				"length:%d and diff(-want +got):\n%v", tc.input, tc.start, tc.length, diff)
 		}
 	}
