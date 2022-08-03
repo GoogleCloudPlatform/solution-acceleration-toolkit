@@ -318,15 +318,14 @@ func TestSubstr(t *testing.T) {
 		got, err := substr(tc.input, tc.start, tc.length)
 
 		if err != nil && !tc.wantErr {
-			t.Errorf("received error for valid input:\"%s\", start:%d, "+
-				"length:%d", tc.input, tc.start, tc.length)
-			continue
+			t.Fatalf("received error for valid input:\"%s\", start:%d, "+
+				"length:%d, error received:\n%v", tc.input, tc.start, tc.length, err)
 		}
 		if err == nil && tc.wantErr {
-			t.Errorf("did not receive error for invalid input: \"%s\", start:%d, "+
+			t.Fatalf("did not receive error for invalid input: \"%s\", start:%d, "+
 				"length:%d", tc.input, tc.start, tc.length)
-			continue
 		}
+
 		if diff := cmp.Diff(tc.want, got); diff != "" {
 			t.Errorf("substr results differ for input:\"%s\", start:%d, "+
 				"length:%d and diff(-want +got):\n%v", tc.input, tc.start, tc.length, diff)
