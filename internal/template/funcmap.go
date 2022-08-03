@@ -158,12 +158,15 @@ func schemaDescription(s string) string {
 	return fmt.Sprintf(`"%s"`, s)
 }
 
+// substr returns a substring that starts at index 'start'
+// and spans 'length' characters (or until the end of the string,
+// whichever comes first).
 func substr(s string, start int, length int) string {
 	if start >= len(s) {
 		return ""
 	}
-	if start+length > len(s) {
+	if start + length > len(s) {
 		length = len(s) - start
 	}
-	return s[start : start+length]
+	return s[start : start + length]
 }

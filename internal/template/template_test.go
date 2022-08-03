@@ -314,7 +314,8 @@ func TestSubstr(t *testing.T) {
 	for _, tc := range tests {
 		got := substr(tc.input, tc.start, tc.length)
 		if diff := cmp.Diff(tc.want, got); diff != "" {
-			t.Errorf("substr result differs (-want +got):\n%v", diff)
+			t.Errorf("substr results differ for input:\"%s\", start:%d, " +
+				"length:%d and diff(-want +got):\n%v", tc.input, tc.start, tc.length, diff)
 		}
 	}
 }
