@@ -298,3 +298,37 @@ func TestMakeSlice(t *testing.T) {
 		}
 	}
 }
+
+func TestSubstr(t *testing.T) {
+	tests := []struct {
+		input         string
+		start, length int
+		want          string
+		wantErr       bool
+	}{
+		{"sample string", -20, 0, "", true},
+		{"sample string", 3, -3, "", true},
+		{"sample string", 100, 4, "", true},
+		{"sample string", 0, 40, "sample string", false},
+		{"sample string", 0, 5, "sampl", false},
+		{"sample string", 5, 4, "e st", false},
+		{"sample string", 3, 0, "", false},
+	}
+	for _, tc := range tests {
+		got, err := substr(tc.input, tc.start, tc.length)
+
+		if err != nil && !tc.wantErr {
+			t.Fatalf("received error for valid input:\"%s\", start:%d, "+
+				"length:%d, error received:\n%v", tc.input, tc.start, tc.length, err)
+		}
+		if err == nil && tc.wantErr {
+			t.Fatalf("did not receive error for invalid input: \"%s\", start:%d, "+
+				"length:%d", tc.input, tc.start, tc.length)
+		}
+
+		if diff := cmp.Diff(tc.want, got); diff != "" {
+			t.Errorf("substr results differ for input:\"%s\", start:%d, "+
+				"length:%d and diff(-want +got):\n%v", tc.input, tc.start, tc.length, diff)
+		}
+	}
+}
