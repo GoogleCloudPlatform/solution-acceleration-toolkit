@@ -134,7 +134,7 @@ module "network" {
 }
 module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 12.0.0"
+  version = "~> 9.0.0"
 
   project_id  = module.project.project_id
   vpc_network = module.network.network_name
