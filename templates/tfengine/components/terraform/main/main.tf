@@ -34,10 +34,10 @@ terraform {
   {{end -}}
 {{end -}}
     {{if not $hasGoogle -}}
-    google      = "~> 3.0"
+    google      = ">= 3.0"
     {{end -}}
     {{if not $hasGoogleBeta -}}
-    google-beta = "~> 3.0"
+    google-beta = ">= 3.0"
     {{end -}}
     {{if not $hasKubernetes -}}
     kubernetes  = "~> 1.0"
