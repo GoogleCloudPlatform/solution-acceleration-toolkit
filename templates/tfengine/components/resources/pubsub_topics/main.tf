@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range .pubsub_topics}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 3.1.0"
+  version = "~> 4.0.0"
 
   topic        = "{{.name}}"
   project_id   = module.project.project_id
