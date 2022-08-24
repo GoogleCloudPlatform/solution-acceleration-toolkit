@@ -15,8 +15,8 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
+    google      = ">= 3.0"
+    google-beta = ">= 3.0"
     kubernetes  = "~> 1.0"
   }
   backend "gcs" {
@@ -95,7 +95,7 @@ module "one_billion_ms_dataset" {
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
-  version = "~> 4.5.0"
+  version = "~> 9.0.0"
 
   name                = "sql-instance"
   project_id          = module.project.project_id
@@ -225,7 +225,7 @@ module "project_iam_members" {
 
 module "topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 3.1.0"
+  version = "~> 4.0.0"
 
   topic      = "topic"
   project_id = module.project.project_id
