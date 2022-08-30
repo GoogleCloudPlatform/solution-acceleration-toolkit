@@ -332,3 +332,69 @@ func TestSubstr(t *testing.T) {
 		}
 	}
 }
+
+func TestGetEncodedJSON(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  string
+	}{
+		{map[string]interface{}{
+			"testboolfalse": false,
+			"testbooltrue":  true,
+			"testint":       1,
+			"teststring":    "test",
+			"testmap": map[string]interface{}{
+				"testmapstring":  "test",
+				"testmapint":     1,
+				"testmapboolean": true,
+			},
+		}, "{\"testboolfalse\":false,\"testbooltrue\":true,\"testint\":1,\"testmap\":{\"testmapboolean\":true,\"testmapint\":1,\"testmapstring\":\"test\"},\"teststring\":\"test\"}"},
+		{map[string]interface{}{}, "{}"},
+	}
+
+	for _, tc := range tests {
+		got, err := getEncodedJSON(tc.input)
+
+		if err != nil {
+			t.Fatalf("received error for valid input:\"%s\", got:%s, "+
+				", error received:\n%v", tc.input, got, err)
+		}
+		if diff := cmp.Diff(got, tc.want); diff != "" {
+			t.Errorf("getEncodedJSON results differ for input:\"%s\", want:%s, got:%s, "+
+				"and diff(-want +got):\n%v", tc.input, tc.want, got, diff)
+		}
+	}
+}
+
+func TestGetEncodedEscapedJSON(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  string
+	}{
+		{map[string]interface{}{
+			"testboolfalse": false,
+			"testbooltrue":  true,
+			"testint":       1,
+			"teststring":    "test",
+			"testmap": map[string]interface{}{
+				"testmapstring":  "test",
+				"testmapint":     1,
+				"testmapboolean": true,
+			},
+		}, "{\\\"testboolfalse\\\":false,\\\"testbooltrue\\\":true,\\\"testint\\\":1,\\\"testmap\\\":{\\\"testmapboolean\\\":true,\\\"testmapint\\\":1,\\\"testmapstring\\\":\\\"test\\\"},\\\"teststring\\\":\\\"test\\\"}"},
+		{map[string]interface{}{}, "{}"},
+	}
+
+	for _, tc := range tests {
+		got, err := getEncodedEscapedJSON(tc.input)
+
+		if err != nil {
+			t.Fatalf("received error for valid input:\"%s\", got:%s, "+
+				", error received:\n%v", tc.input, got, err)
+		}
+		if diff := cmp.Diff(got, tc.want); diff != "" {
+			t.Errorf("getEncodedEscapedJSON results differ for input:\"%s\", want:%s, got:%s, "+
+				"and diff(-want +got):\n%v", tc.input, tc.want, got, diff)
+		}
+	}
+}
