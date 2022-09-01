@@ -15,6 +15,7 @@
 package template
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
@@ -24,19 +25,21 @@ import (
 )
 
 var funcMap = map[string]interface{}{
-	"get":               get,
-	"has":               has,
-	"hcl":               hcl,
-	"hclField":          hclField,
-	"merge":             merge,
-	"replace":           replace,
-	"resourceName":      resourceName,
-	"now":               time.Now,
-	"trimSpace":         strings.TrimSpace,
-	"regexReplaceAll":   regexReplaceAll,
-	"makeSlice":         makeSlice,
-	"schemaDescription": schemaDescription,
-	"substr":            substr,
+	"get":                   get,
+	"has":                   has,
+	"hcl":                   hcl,
+	"hclField":              hclField,
+	"merge":                 merge,
+	"replace":               replace,
+	"resourceName":          resourceName,
+	"now":                   time.Now,
+	"trimSpace":             strings.TrimSpace,
+	"regexReplaceAll":       regexReplaceAll,
+	"makeSlice":             makeSlice,
+	"schemaDescription":     schemaDescription,
+	"substr":                substr,
+	"getEncodedJSON":        getEncodedJSON,
+	"getEncodedEscapedJSON": getEncodedEscapedJSON,
 }
 
 // invalidIDRE defines the invalid characters not allowed in terraform resource names.
@@ -172,4 +175,36 @@ func substr(s string, start int, length int) (string, error) {
 		length = len(s) - start
 	}
 	return s[start : start+length], nil
+}
+
+// getEncodedJSON returns an encoded JSON string from a given map
+func getEncodedJSON(m map[string]interface{}) (string, error) {
+	jsonStr, err := json.Marshal(m)
+	if err != nil {
+		return "", fmt.Errorf("JSON marshalling failed due to %w", err)
+	}
+	return string(jsonStr), nil
+}
+
+// getEncodedEscapedJSON returns an encoded, escaped JSON string from a given map
+func getEncodedEscapedJSON(m map[string]interface{}) (string, error) {
+	jsonStr, err := json.Marshal(m)
+	if err != nil {
+		return "", fmt.Errorf("JSON marshalling failed due to %w", err)
+	}
+	escapedJSONStr, err := jsonEscape(string(jsonStr))
+	if err != nil {
+		return "", fmt.Errorf("JSON escaping failed due to %w", err)
+	}
+	return escapedJSONStr, nil
+}
+
+// jsonEscape return an escaped JSON string
+func jsonEscape(i string) (string, error) {
+	jsonStr, err := json.Marshal(i)
+	if err != nil {
+		return "", fmt.Errorf("JSON marshalling failed due to %w", err)
+	}
+	str := string(jsonStr)
+	return str[1 : len(str)-1], nil
 }
