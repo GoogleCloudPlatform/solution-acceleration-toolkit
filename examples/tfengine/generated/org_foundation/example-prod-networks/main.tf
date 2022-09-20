@@ -15,8 +15,8 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
+    google      = ">= 3.0"
+    google-beta = ">= 3.0"
     kubernetes  = "~> 1.0"
   }
   backend "gcs" {

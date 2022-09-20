@@ -298,3 +298,103 @@ func TestMakeSlice(t *testing.T) {
 		}
 	}
 }
+
+func TestSubstr(t *testing.T) {
+	tests := []struct {
+		input         string
+		start, length int
+		want          string
+		wantErr       bool
+	}{
+		{"sample string", -20, 0, "", true},
+		{"sample string", 3, -3, "", true},
+		{"sample string", 100, 4, "", true},
+		{"sample string", 0, 40, "sample string", false},
+		{"sample string", 0, 5, "sampl", false},
+		{"sample string", 5, 4, "e st", false},
+		{"sample string", 3, 0, "", false},
+	}
+	for _, tc := range tests {
+		got, err := substr(tc.input, tc.start, tc.length)
+
+		if err != nil && !tc.wantErr {
+			t.Fatalf("received error for valid input:\"%s\", start:%d, "+
+				"length:%d, error received:\n%v", tc.input, tc.start, tc.length, err)
+		}
+		if err == nil && tc.wantErr {
+			t.Fatalf("did not receive error for invalid input: \"%s\", start:%d, "+
+				"length:%d", tc.input, tc.start, tc.length)
+		}
+
+		if diff := cmp.Diff(tc.want, got); diff != "" {
+			t.Errorf("substr results differ for input:\"%s\", start:%d, "+
+				"length:%d and diff(-want +got):\n%v", tc.input, tc.start, tc.length, diff)
+		}
+	}
+}
+
+func TestGetEncodedJSON(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  string
+	}{
+		{map[string]interface{}{
+			"testboolfalse": false,
+			"testbooltrue":  true,
+			"testint":       1,
+			"teststring":    "test",
+			"testmap": map[string]interface{}{
+				"testmapstring":  "test",
+				"testmapint":     1,
+				"testmapboolean": true,
+			},
+		}, "{\"testboolfalse\":false,\"testbooltrue\":true,\"testint\":1,\"testmap\":{\"testmapboolean\":true,\"testmapint\":1,\"testmapstring\":\"test\"},\"teststring\":\"test\"}"},
+		{map[string]interface{}{}, "{}"},
+	}
+
+	for _, tc := range tests {
+		got, err := getEncodedJSON(tc.input)
+
+		if err != nil {
+			t.Fatalf("received error for valid input:\"%s\", got:%s, "+
+				", error received:\n%v", tc.input, got, err)
+		}
+		if diff := cmp.Diff(got, tc.want); diff != "" {
+			t.Errorf("getEncodedJSON results differ for input:\"%s\", want:%s, got:%s, "+
+				"and diff(-want +got):\n%v", tc.input, tc.want, got, diff)
+		}
+	}
+}
+
+func TestGetEncodedEscapedJSON(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  string
+	}{
+		{map[string]interface{}{
+			"testboolfalse": false,
+			"testbooltrue":  true,
+			"testint":       1,
+			"teststring":    "test",
+			"testmap": map[string]interface{}{
+				"testmapstring":  "test",
+				"testmapint":     1,
+				"testmapboolean": true,
+			},
+		}, "{\\\"testboolfalse\\\":false,\\\"testbooltrue\\\":true,\\\"testint\\\":1,\\\"testmap\\\":{\\\"testmapboolean\\\":true,\\\"testmapint\\\":1,\\\"testmapstring\\\":\\\"test\\\"},\\\"teststring\\\":\\\"test\\\"}"},
+		{map[string]interface{}{}, "{}"},
+	}
+
+	for _, tc := range tests {
+		got, err := getEncodedEscapedJSON(tc.input)
+
+		if err != nil {
+			t.Fatalf("received error for valid input:\"%s\", got:%s, "+
+				", error received:\n%v", tc.input, got, err)
+		}
+		if diff := cmp.Diff(got, tc.want); diff != "" {
+			t.Errorf("getEncodedEscapedJSON results differ for input:\"%s\", want:%s, got:%s, "+
+				"and diff(-want +got):\n%v", tc.input, tc.want, got, diff)
+		}
+	}
+}

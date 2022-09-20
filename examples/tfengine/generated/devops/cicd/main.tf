@@ -15,8 +15,8 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = "~> 3.0"
-    google-beta = "~> 3.0"
+    google      = ">= 3.0"
+    google-beta = ">= 3.0"
     kubernetes  = "~> 1.0"
   }
   backend "gcs" {
@@ -152,17 +152,6 @@ resource "google_project_iam_member" "cloudbuild_sa_project_iam" {
   project  = var.project_id
   role     = each.key
   member   = "serviceAccount:${local.cloudbuild_sa_email}"
-  depends_on = [
-    google_project_service.services,
-  ]
-}
-
-# Cloud Scheduler resources.
-# Cloud Scheduler requires an App Engine app created in the project.
-# App Engine app cannot be destroyed once created, therefore always create it.
-resource "google_app_engine_application" "cloudbuild_scheduler_app" {
-  project     = var.project_id
-  location_id = "us-east1"
   depends_on = [
     google_project_service.services,
   ]

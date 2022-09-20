@@ -20,5 +20,5 @@ npm version
 
 # Check format
 # Note: Requires Node 10+ (see https://github.com/igorshubovych/markdownlint-cli/issues/90)
-npm install -g markdownlint-cli
+npm install -g markdownlint-cli@0.31.1
 markdownlint **/*.md --ignore examples/policygen/generated
