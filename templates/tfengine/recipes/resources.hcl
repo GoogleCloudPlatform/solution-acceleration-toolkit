@@ -1712,3 +1712,4 @@ template "workload_identity" {
   component_path = "../components/resources/workload_identity"
 }
 {{end}}
+# dummy test
