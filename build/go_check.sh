@@ -24,7 +24,7 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 
 # Install golint.
 # Switch directories to avoid changing go.mod and go.sum files (see https://stackoverflow.com/a/57313319).
-(cd / && go get -u golang.org/x/lint/golint)
+(cd / && go install golang.org/x/lint/golint@latest)
 
 # Check format
 f=$(gofmt -l .)
