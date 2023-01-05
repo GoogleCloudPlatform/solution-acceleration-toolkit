@@ -128,7 +128,6 @@ data "google_container_cluster" "gke_cluster" {
 }
 
 provider "kubernetes" {
-  load_config_file       = false
   token                  = data.google_client_config.default.access_token
   host                   = data.google_container_cluster.gke_cluster.endpoint
   client_certificate     = base64decode(data.google_container_cluster.gke_cluster.master_auth.0.client_certificate)
