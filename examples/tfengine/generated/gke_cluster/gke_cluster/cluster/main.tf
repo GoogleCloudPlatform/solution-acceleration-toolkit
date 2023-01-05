@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = ">= 3.0"
     google-beta = ">= 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.10"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -56,7 +56,6 @@ data "google_client_config" "default" {}
 
 provider "kubernetes" {
   alias                  = "example_cluster"
-  load_config_file       = false
   host                   = "https://${module.example_cluster.endpoint}"
   token                  = data.google_client_config.default.access_token
   cluster_ca_certificate = base64decode(module.example_cluster.ca_certificate)
@@ -64,7 +63,7 @@ provider "kubernetes" {
 
 module "example_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 13.1.0"
+  version = "~> 21.2"
 
   providers = {
     kubernetes = kubernetes.example_cluster

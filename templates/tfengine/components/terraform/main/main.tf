@@ -40,7 +40,7 @@ terraform {
     google-beta = ">= 3.0"
     {{end -}}
     {{if not $hasKubernetes -}}
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.10"
     {{end -}}
   }
 {{- if get . "enable_gcs_backend" true}}

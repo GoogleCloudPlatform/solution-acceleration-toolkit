@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = ">= 3.0"
     google-beta = ">= 3.0"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.10"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -245,6 +245,7 @@ module "topic" {
       push_endpoint = "https://example.com"
     },
   ]
+  topic_message_retention_duration = "86400s"
   depends_on = [
     module.project
   ]

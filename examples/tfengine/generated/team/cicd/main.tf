@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = ">=3.87, < 4.0.0"
     google-beta = "~>3.50"
-    kubernetes  = "~> 1.0"
+    kubernetes  = "~> 2.10"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
