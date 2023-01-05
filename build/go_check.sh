@@ -20,11 +20,12 @@ go version
 
 # Install more advanced linter.
 # See https://golangci-lint.run/usage/install/#ci-installation
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/local/bin v1.27.0
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.47.3
+ln -s $(go env GOPATH)/bin/golangci-lint /usr/local/bin/
 
 # Install golint.
 # Switch directories to avoid changing go.mod and go.sum files (see https://stackoverflow.com/a/57313319).
-(cd / && go get -u golang.org/x/lint/golint)
+(cd / && go install golang.org/x/lint/golint@latest)
 
 # Check format
 f=$(gofmt -l .)
