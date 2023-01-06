@@ -30,6 +30,7 @@ module "{{resourceName . "name"}}" {
 
   {{hclField . "pull_subscriptions" -}}
   {{hclField . "push_subscriptions" -}}
+  {{hclField . "topic_message_retention_duration" -}}
 
   depends_on = [
     module.project

@@ -1140,6 +1140,10 @@ schema = {
             description = "Name of the topic."
             type        = "string"
           }
+          topic_message_retention_duration = {
+            description = "Message retention duration in seconds."
+            type        = "string"
+          }
           labels = {
             description = "Labels to set on the topic."
             type        = "object"

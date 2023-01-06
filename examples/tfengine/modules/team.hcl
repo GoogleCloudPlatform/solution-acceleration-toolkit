@@ -497,6 +497,7 @@ template "project_data" {
             name = "pull-subscription"
           }
         ]
+        topic_message_retention_duration = "86400s"
       }]
     }
     terraform_addons = {

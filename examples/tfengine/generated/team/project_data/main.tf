@@ -245,6 +245,7 @@ module "topic" {
       push_endpoint = "https://example.com"
     },
   ]
+  topic_message_retention_duration = "86400s"
   depends_on = [
     module.project
   ]

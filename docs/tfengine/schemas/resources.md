@@ -211,6 +211,7 @@
 | pubsub_topics.push_subscriptions.ack_deadline_seconds | Deadline to wait for acknowledgement. | integer | false | - | - |
 | pubsub_topics.push_subscriptions.name | Name of subscription. | string | true | - | - |
 | pubsub_topics.push_subscriptions.push_endpoint | Name of endpoint to push to. | string | false | - | - |
+| pubsub_topics.topic_message_retention_duration | Message retention duration in seconds. | string | false | - | - |
 | secrets | [Module](https://www.terraform.io/docs/providers/google/r/secret_manager_secret.html) | array() | false | - | - |
 | secrets.resource_name | Override for Terraform resource name. If unset, defaults to normalized secret_id. Normalization will make all characters alphanumeric with underscores. | string | false | - | - |
 | secrets.secret_data | Data of the secret. If unset, should be manually set in the GCP console. | string | false | - | - |
