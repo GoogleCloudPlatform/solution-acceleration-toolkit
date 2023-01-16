@@ -87,6 +87,17 @@ module "{{resourceName . "name"}}" {
       }
       {{end -}}
 
+      {{if has . "notification_configs" -}}
+      notification_configs = [
+        {{range $k, $v := .notification_configs -}}
+        {
+          pubsub_topic = "{{$v.pubsub_topic}}"
+          {{hclField $v "send_full_resource" -}}
+        },
+        {{end -}}
+      ]
+      {{end -}}
+
       {{if has . "stream_configs" -}}
       stream_configs = [
         {{range $k, $v := .stream_configs -}}
