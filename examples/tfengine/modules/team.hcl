@@ -421,6 +421,11 @@ template "project_data" {
             notification_config = {
               pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
             }
+	    notification_configs = [{
+              pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
+              send_full_resource = true
+              send_previous_resource_on_delete = true
+	    }]
             stream_configs = [{
               resource_types = [
                 "Patient",
