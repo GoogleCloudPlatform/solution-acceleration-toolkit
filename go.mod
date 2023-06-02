@@ -9,11 +9,11 @@ require (
 	github.com/google/go-cmp v0.5.7
 	github.com/google/go-cpy v0.0.0-20211218193943-a9c933c06932
 	github.com/hashicorp/go-getter v1.5.11
-	github.com/hashicorp/go-getter/v2 v2.1.0 // indirect
+	github.com/hashicorp/go-getter/v2 v2.1.0
 	github.com/hashicorp/go-version v1.5.0
 	github.com/hashicorp/hcl/v2 v2.11.1
 	github.com/hashicorp/terraform v0.15.3
-	github.com/imdario/mergo v0.3.12
+	github.com/imdario/mergo v0.3.16
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/otiai10/copy v1.7.0
