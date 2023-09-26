@@ -238,7 +238,9 @@
 | storage_buckets.lifecycle_rules.condition | The Lifecycle Rule's condition configuration. | object | false | - | - |
 | storage_buckets.lifecycle_rules.condition.age | Minimum age of an object in days. | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.created_before | Creation date of an object in RFC 3339 (e.g. 2017-06-13). | string | false | - | - |
+| storage_buckets.lifecycle_rules.condition.matches_prefix | Match the object with prefix in the bucket. | array(string) | false | - | - |
 | storage_buckets.lifecycle_rules.condition.matches_storage_class | Storage Class of objects. | string | false | - | - |
+| storage_buckets.lifecycle_rules.condition.matches_suffix | Match the object with suffix in the bucket. | array(string) | false | - | - |
 | storage_buckets.lifecycle_rules.condition.num_newer_versions | Relevant only for versioned objects. The number of newer versions of an object." | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.with_state | Match to live and/or archived objects. | string | false | - | - |
 | storage_buckets.name | Name of storage bucket. | string | false | - | - |
