@@ -43,6 +43,8 @@ module "{{resourceName . "name"}}" {
         {{hclField .condition "with_state" -}}
         {{hclField .condition "matches_storage_class" -}}
         {{hclField .condition "num_newer_versions" -}}
+        {{hclField .condition "matches_prefix" -}}
+        {{hclField .condition "matches_suffix" -}}
       }
     }
     {{end -}}
