@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Taken from https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
     - name: Update latest tag
@@ -40,7 +40,7 @@ jobs:
         git push -f --tags
 
     - name: Setup Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
         go-version: '^1.14'
     - run: go version
