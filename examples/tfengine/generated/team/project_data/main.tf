@@ -158,6 +158,10 @@ module "healthcare_dataset" {
       notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
+      notification_configs = [{
+        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
+        send_full_resource = true
+      }]
       stream_configs = [
         {
           bigquery_destination = {

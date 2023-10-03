@@ -994,6 +994,24 @@ schema = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>."
                   type        = "object"
                 }
+                notification_configs = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>."
+                  type        = "array"
+                  items  = {
+                    type = "object"
+                    required = [
+                      "pubsub_topic",
+                    ]
+                    properties = {
+                      pubsub_topic = {
+                        type = "string"
+                      }
+                      send_full_resource = {
+                        type = "boolean"
+                      }
+                    }
+                  }
+                }
                 stream_configs = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>."
                   type        = "array"
