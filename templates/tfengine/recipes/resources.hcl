@@ -1387,6 +1387,20 @@ schema = {
                       EOF
                       type        = "integer"
                     }
+                    matches_prefix = {
+                      description = "Match the object with prefix in the bucket."
+                      type        = "array"
+                      items = {
+                        type = "string"
+                      }
+                    }
+                    matches_suffix = {
+                      description = "Match the object with suffix in the bucket."
+                      type        = "array"
+                      items = {
+                        type = "string"
+                      }
+                    }
                   }
                 }
               }
