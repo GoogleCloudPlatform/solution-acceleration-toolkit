@@ -72,7 +72,7 @@ module "bigquery_export" {
   version = "~> 7.3.0"
 
   log_sink_name          = "bigquery-audit-logs-sink"
-  destination_uri        = module.bigquery_destination.destination_uri
+  destination_uri        = "${module.bigquery_destination.destination_uri}"
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
@@ -87,7 +87,7 @@ module "bigquery_destination" {
   dataset_name             = "1yr_org_audit_logs"
   project_id               = module.project.project_id
   location                 = "us-east1"
-  log_sink_writer_identity = module.bigquery_export.writer_identity
+  log_sink_writer_identity = "${module.bigquery_export.writer_identity}"
   expiration_days          = 365
 }
 
@@ -96,7 +96,7 @@ module "storage_export" {
   version = "~> 7.3.0"
 
   log_sink_name          = "storage-audit-logs-sink"
-  destination_uri        = module.storage_destination.destination_uri
+  destination_uri        = "${module.storage_destination.destination_uri}"
   filter                 = "logName:\"logs/cloudaudit.googleapis.com\""
   parent_resource_type   = "organization"
   parent_resource_id     = var.org_id
@@ -114,7 +114,7 @@ module "storage_destination" {
   storage_bucket_name      = "7yr-org-audit-logs"
   project_id               = module.project.project_id
   location                 = "us-central1"
-  log_sink_writer_identity = module.storage_export.writer_identity
+  log_sink_writer_identity = "${module.storage_export.writer_identity}"
   storage_class            = "COLDLINE"
   lifecycle_rules = [
     {

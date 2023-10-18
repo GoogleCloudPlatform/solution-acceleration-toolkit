@@ -106,7 +106,7 @@ module "sql_instance" {
   vpc_network         = "projects/example-prod-networks/global/networks/network"
   tier                = "db-n1-standard-1"
   user_name           = "admin"
-  user_password       = data.google_secret_manager_secret_version.db_password.secret_data
+  user_password       = "${data.google_secret_manager_secret_version.db_password.secret_data}"
   deletion_protection = false
   user_labels = {
     env  = "prod"

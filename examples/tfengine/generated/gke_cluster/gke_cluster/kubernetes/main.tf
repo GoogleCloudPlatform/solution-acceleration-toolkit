@@ -30,7 +30,7 @@ data "google_client_config" "default" {}
 data "google_container_cluster" "gke_cluster" {
   name     = "example-cluster"
   location = "us-central1"
-  project  = module.project.project_id
+  project  = "${module.project.project_id}"
 }
 
 provider "kubernetes" {
@@ -72,7 +72,7 @@ resource "kubernetes_namespace" "example_namespace" {
 module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
   version    = "16.1.0"
-  project_id = module.project.project_id
+  project_id = "${module.project.project_id}"
   name       = "example-sa"
 
   use_existing_gcp_sa = true
