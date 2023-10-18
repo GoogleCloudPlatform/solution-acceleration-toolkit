@@ -41,7 +41,7 @@ module "project" {
 
   name            = "example-data-prod"
   org_id          = ""
-  folder_id       = "${data.terraform_remote_state.folders.outputs.folder_ids["prod"]}"
+  folder_id       = data.terraform_remote_state.folders.outputs.folder_ids["prod"]
   billing_account = "000-000-000"
   lien            = true
   # Create and keep default service accounts when certain APIs are enabled.
