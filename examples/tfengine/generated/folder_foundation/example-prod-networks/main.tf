@@ -74,7 +74,7 @@ module "example_router" {
   name    = "example-router"
   project = module.project.project_id
   region  = "us-central1"
-  network = "${module.example_network.network.network.self_link}"
+  network = module.example_network.network.network.self_link
 
   nats = [
     {

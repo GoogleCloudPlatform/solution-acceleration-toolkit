@@ -106,7 +106,7 @@ module "sql_instance" {
   vpc_network         = "projects/example-prod-networks/global/networks/network"
   tier                = "db-n1-standard-1"
   user_name           = "admin"
-  user_password       = "${data.google_secret_manager_secret_version.db_password.secret_data}"
+  user_password       = data.google_secret_manager_secret_version.db_password.secret_data
   deletion_protection = false
   user_labels = {
     env  = "prod"
@@ -151,6 +151,7 @@ module "healthcare_dataset" {
       name    = "fhir-store-a"
       version = "R4"
 
+<<<<<<< HEAD
       enable_update_create                = true
       disable_referential_integrity       = false
       disable_resource_versioning         = false
@@ -163,6 +164,20 @@ module "healthcare_dataset" {
           send_previous_resource_on_delete = true
         },
       ]
+=======
+      enable_update_create          = true
+      disable_referential_integrity = false
+      disable_resource_versioning   = false
+      enable_history_import         = false
+      notification_config = {
+        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
+      }
+      notification_configs = [{
+        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
+        send_full_resource = true
+        send_previous_resource_on_delete = true
+      }]
+>>>>>>> 9aed55c (Revert "run ./scripts/regen.sh for unit test failure")
       stream_configs = [
         {
           bigquery_destination = {

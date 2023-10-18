@@ -31,7 +31,7 @@ resource "google_folder" "prod" {
 }
 resource "google_folder" "prod_team1" {
   display_name = "team1"
-  parent       = "${google_folder.prod.name}"
+  parent       = google_folder.prod.name
 }
 resource "google_folder" "dev" {
   display_name = "dev"
@@ -39,5 +39,5 @@ resource "google_folder" "dev" {
 }
 resource "google_folder" "dev_team1" {
   display_name = "team1"
-  parent       = "${google_folder.dev.name}"
+  parent       = google_folder.dev.name
 }
