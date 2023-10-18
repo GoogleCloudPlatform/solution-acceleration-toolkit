@@ -26,7 +26,7 @@ cp -ar './examples/' "${tmp}"
 ./scripts/regen.sh "${tmp}/examples"
 
 # Check for diffs
-changed="$(diff -qr "${tmp}/examples" "./examples" | grep -v ': README.md')" || true
+changed="$(diff -c "${tmp}/examples" "./examples" | grep -v ': README.md')" || true
 if [[ -n "${changed}" ]]; then
   cat <<EOF
 ${changed}
