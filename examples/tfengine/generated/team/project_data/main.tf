@@ -172,12 +172,22 @@ module "healthcare_dataset" {
       notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
+<<<<<<< HEAD
       notification_configs = [{
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
         send_full_resource = true
         send_previous_resource_on_delete = true
       }]
 >>>>>>> 9aed55c (Revert "run ./scripts/regen.sh for unit test failure")
+=======
+      notification_configs = [
+        {
+          pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
+          send_full_resource               = true
+          send_previous_resource_on_delete = true
+        },
+      ]
+>>>>>>> a20c091 (updated genertaed file (not using ./scripts/regen.sh))
       stream_configs = [
         {
           bigquery_destination = {
