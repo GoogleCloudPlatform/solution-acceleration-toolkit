@@ -67,8 +67,8 @@ module "bastion_vm" {
   project      = module.project.project_id
   zone         = "us-central1-a"
   host_project = module.project.project_id
-  network      = module.network.network.network.self_link
-  subnet       = module.network.subnets["us-central1/bastion-subnet"].self_link
+  network      = "${module.network.network.network.self_link}"
+  subnet       = "${module.network.subnets["us-central1/bastion-subnet"].self_link}"
   members      = ["serviceAccount:${google_service_account.bastion_accessor.email}"]
   image_family = "ubuntu-2004-lts"
 
@@ -150,7 +150,7 @@ module "router" {
   name    = "router"
   project = module.project.project_id
   region  = "us-central1"
-  network = module.network.network.network.self_link
+  network = "${module.network.network.network.self_link}"
 
   nats = [
     {

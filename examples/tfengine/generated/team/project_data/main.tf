@@ -106,7 +106,7 @@ module "sql_instance" {
   vpc_network         = "projects/example-prod-networks/global/networks/network"
   tier                = "db-n1-standard-1"
   user_name           = "admin"
-  user_password       = data.google_secret_manager_secret_version.db_password.secret_data
+  user_password       = "${data.google_secret_manager_secret_version.db_password.secret_data}"
   deletion_protection = false
   user_labels = {
     env  = "prod"
@@ -158,11 +158,13 @@ module "healthcare_dataset" {
       notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
-      notification_configs = [{
-        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-        send_full_resource = true
-        send_previous_resource_on_delete = true
-      }]
+      notification_configs = [
+        {
+          pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
+          send_full_resource               = true
+          send_previous_resource_on_delete = true
+        },
+      ]
       stream_configs = [
         {
           bigquery_destination = {
