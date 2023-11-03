@@ -994,6 +994,27 @@ schema = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>."
                   type        = "object"
                 }
+		notification_configs = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>."
+                  type        = "array"
+                  items  = {
+                    type = "object"
+                    required = [
+                      "pubsub_topic",
+                    ]
+                    properties = {
+                      pubsub_topic = {
+                        type = "string"
+                      }
+                      send_full_resource = {
+                        type = "boolean"
+                      }
+		      send_previous_resource_on_delete = {
+                        type = "boolean"
+                      }
+                    }
+                  }
+                }
                 stream_configs = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>."
                   type        = "array"
@@ -1365,6 +1386,20 @@ schema = {
                         The number of newer versions of an object."
                       EOF
                       type        = "integer"
+                    }
+                    matches_prefix = {
+                      description = "Match the object with prefix in the bucket."
+                      type        = "array"
+                      items = {
+                        type = "string"
+                      }
+                    }
+                    matches_suffix = {
+                      description = "Match the object with suffix in the bucket."
+                      type        = "array"
+                      items = {
+                        type = "string"
+                      }
                     }
                   }
                 }

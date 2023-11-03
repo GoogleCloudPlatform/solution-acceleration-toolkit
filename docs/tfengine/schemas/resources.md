@@ -160,6 +160,10 @@
 | healthcare_datasets.fhir_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.fhir_stores.name | Name of FHIR store. | string | true | - | - |
 | healthcare_datasets.fhir_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>. | object | false | - | - |
+| healthcare_datasets.fhir_stores.notification_configs | See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>. | array(object) | false | - | - |
+| healthcare_datasets.fhir_stores.notification_configs.pubsub_topic | - | string | true | - | - |
+| healthcare_datasets.fhir_stores.notification_configs.send_full_resource | - | boolean | false | - | - |
+| healthcare_datasets.fhir_stores.notification_configs.send_previous_resource_on_delete | - | boolean | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#stream_configs>. | array(object) | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination | - | object | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.dataset_uri | - | string | true | - | - |
@@ -238,7 +242,9 @@
 | storage_buckets.lifecycle_rules.condition | The Lifecycle Rule's condition configuration. | object | false | - | - |
 | storage_buckets.lifecycle_rules.condition.age | Minimum age of an object in days. | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.created_before | Creation date of an object in RFC 3339 (e.g. 2017-06-13). | string | false | - | - |
+| storage_buckets.lifecycle_rules.condition.matches_prefix | Match the object with prefix in the bucket. | array(string) | false | - | - |
 | storage_buckets.lifecycle_rules.condition.matches_storage_class | Storage Class of objects. | string | false | - | - |
+| storage_buckets.lifecycle_rules.condition.matches_suffix | Match the object with suffix in the bucket. | array(string) | false | - | - |
 | storage_buckets.lifecycle_rules.condition.num_newer_versions | Relevant only for versioned objects. The number of newer versions of an object." | integer | false | - | - |
 | storage_buckets.lifecycle_rules.condition.with_state | Match to live and/or archived objects. | string | false | - | - |
 | storage_buckets.name | Name of storage bucket. | string | false | - | - |

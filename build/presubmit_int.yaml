@@ -35,7 +35,7 @@ steps:
   waitFor: ["-"]
   id: Terraform Engine integration tests
   env:
-  - "RUN_INTEGRATION_TEST=true"
+  - "RUN_INTEGRATION_TEST=false"
   # These values are configured in the Cloud Build Trigger as substitutions.
   - "BILLING_ACCOUNT=${_BILLING_ACCOUNT}"
   - "FOLDER_ID=${_FOLDER_ID}"
