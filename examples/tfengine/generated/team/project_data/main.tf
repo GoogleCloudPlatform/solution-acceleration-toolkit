@@ -15,10 +15,10 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">= 3.0"
+google      = ">= 3.0"
     google-beta = ">= 3.0"
     kubernetes  = "~> 2.10"
-  }
+    }
   backend "gcs" {
     bucket = "example-terraform-state"
     prefix = "project_data"
@@ -53,66 +53,66 @@ module "project" {
   # Compute Security Admin role on the VPC host project so it can manage firewall rules.
   # It is a no-op when Kubernetes Engine API is not enabled in the project.
   grant_services_security_admin_role = true
-
+  
   svpc_host_project_id = "example-prod-networks"
   activate_apis = [
-    "bigquery.googleapis.com",
-    "compute.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "sqladmin.googleapis.com",
-    "pubsub.googleapis.com",
-  ]
+  "bigquery.googleapis.com",
+  "compute.googleapis.com",
+  "servicenetworking.googleapis.com",
+  "sqladmin.googleapis.com",
+  "pubsub.googleapis.com",
+]
   activate_api_identities = [
-    {
-      api = "healthcare.googleapis.com"
+  {
+    api = "healthcare.googleapis.com"
 
-      roles = [
-        "roles/bigquery.dataEditor",
-        "roles/bigquery.jobUser",
-        "roles/pubsub.publisher",
-      ]
-    },
-  ]
-
+    roles = [
+      "roles/bigquery.dataEditor",
+      "roles/bigquery.jobUser",
+      "roles/pubsub.publisher",
+    ]
+  },
+]
+  
   labels = {
     env = "prod"
+    }
   }
-}
 
 module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 5.3.0"
 
-  dataset_id                  = "1billion_ms_dataset"
-  project_id                  = module.project.project_id
-  location                    = "us-east1"
+  dataset_id = "1billion_ms_dataset"
+  project_id = module.project.project_id
+  location   = "us-east1"
   default_table_expiration_ms = 1e+09
-  dataset_labels = {
-    env  = "prod"
+dataset_labels = {
+    env = "prod"
     type = "phi"
+    }
   }
-}
 
 module "sql_instance" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/safer_mysql"
   version = "~> 9.0.0"
 
-  name                = "sql-instance"
-  project_id          = module.project.project_id
-  region              = "us-central1"
-  zone                = "us-central1-a"
-  availability_type   = "REGIONAL"
-  database_version    = "MYSQL_5_7"
-  vpc_network         = "projects/example-prod-networks/global/networks/network"
-  tier                = "db-n1-standard-1"
-  user_name           = "admin"
-  user_password       = data.google_secret_manager_secret_version.db_password.secret_data
-  deletion_protection = false
-  user_labels = {
-    env  = "prod"
+  name              = "sql-instance"
+  project_id        = module.project.project_id
+  region            = "us-central1"
+  zone              = "us-central1-a"
+  availability_type = "REGIONAL"
+  database_version  = "MYSQL_5_7"
+  vpc_network       = "projects/example-prod-networks/global/networks/network"
+  tier = "db-n1-standard-1"
+user_name = "admin"
+user_password = "${data.google_secret_manager_secret_version.db_password.secret_data}"
+deletion_protection = false
+user_labels = {
+    env = "prod"
     type = "no-phi"
+    }
   }
-}
 
 module "healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
@@ -124,16 +124,16 @@ module "healthcare_dataset" {
 
   consent_stores = [
     {
-      name                            = "consent-store"
+      name = "consent-store"
       enable_consent_create_on_update = true
-      default_consent_ttl             = "90000s"
-      labels = {
+default_consent_ttl = "90000s"
+labels = {
         env = "prod"
 
-        type = "phi"
+type = "phi"
       }
-    },
-  ]
+      },
+    ]
   dicom_stores = [
     {
       name = "dicom-store"
@@ -141,87 +141,89 @@ module "healthcare_dataset" {
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
       labels = {
-        env  = "prod"
+        env = "prod"
         type = "phi"
-      }
-    },
-  ]
+        }
+      },
+    ]
   fhir_stores = [
     {
       name    = "fhir-store-a"
       version = "R4"
 
-      enable_update_create          = true
-      disable_referential_integrity = false
-      disable_resource_versioning   = false
-      enable_history_import         = false
-      notification_config = {
+      enable_update_create = true
+disable_referential_integrity = false
+disable_resource_versioning = false
+enable_history_import = false
+notification_config = {
         pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
       }
       notification_configs = [
         {
-          pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
-          send_full_resource               = true
-          send_previous_resource_on_delete = true
-        },
-      ]
+          pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
+          send_full_resource = true
+send_previous_resource_on_delete = true
+},
+        ]
       stream_configs = [
         {
           bigquery_destination = {
             dataset_uri = "bq://example-prod-data.${module.one_billion_ms_dataset.bigquery_dataset.dataset_id}"
             schema_config = {
-              recursive_structure_depth = 3
               last_updated_partition_config = {
-                type          = "HOUR"
-                expiration_ms = 1000000
-              }
-              schema_type = "ANALYTICS"
+  expiration_ms = 1e+06
+  type          = "HOUR"
+}
+
+recursive_structure_depth = 3
+
+schema_type = "ANALYTICS"
             }
           }
           resource_types = ["Patient"]
-        },
-      ]
+},
+        ]
       labels = {
-        env  = "prod"
+        env = "prod"
         type = "phi"
-      }
-    },
+        }
+      },
     {
       name    = "fhir-store-b"
       version = "R4"
 
       labels = {
-        env  = "prod"
+        env = "prod"
         type = "phi"
-      }
-    },
-  ]
+        }
+      },
+    ]
   hl7_v2_stores = [
     {
       name = "hl7-store"
       notification_configs = [
-        {
-          pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-        },
-      ]
-      parser_config = {
+  {
+    pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
+  },
+]
+parser_config = {
         version = "V2"
-        schema  = templatefile("./hl7_config_schema.json", {})
+schema = templatefile("./hl7_config_schema.json", {})
       }
       labels = {
-        env  = "prod"
+        env = "prod"
         type = "phi"
-      }
-    },
-  ]
+        }
+      },
+    ]
   depends_on = [
     module.project
   ]
 }
 
 module "project_iam_members" {
-  source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.4.0"
+  source   = "terraform-google-modules/iam/google//modules/projects_iam"
+  version  = "~> 7.4.0"
 
   projects = [module.project.project_id]
   mode     = "additive"
@@ -229,34 +231,34 @@ module "project_iam_members" {
   bindings = {
     "roles/cloudsql.client" = [
       "serviceAccount:bastion@example-prod-networks.iam.gserviceaccount.com",
-    ],
-  }
+      ],
+    }
 }
 
 module "topic" {
   source  = "terraform-google-modules/pubsub/google"
   version = "~> 4.0.0"
 
-  topic      = "topic"
-  project_id = module.project.project_id
+  topic        = "topic"
+  project_id   = module.project.project_id
 
   topic_labels = {
-    env  = "prod"
+    env = "prod"
     type = "no-phi"
-  }
+    }
   pull_subscriptions = [
-    {
-      name = "pull-subscription"
-    },
-  ]
-  push_subscriptions = [
-    {
-      name          = "push-subscription"
-      push_endpoint = "https://example.com"
-    },
-  ]
-  topic_message_retention_duration = "86400s"
-  depends_on = [
+  {
+    name = "pull-subscription"
+  },
+]
+push_subscriptions = [
+  {
+    name          = "push-subscription"
+    push_endpoint = "https://example.com"
+  },
+]
+topic_message_retention_duration = "86400s"
+depends_on = [
     module.project
   ]
 }
@@ -268,20 +270,20 @@ module "example_bucket" {
   name       = "example-bucket"
   project_id = module.project.project_id
   location   = "us-central1"
-
+  
   labels = {
-    env  = "prod"
+    env = "prod"
     type = "phi"
-  }
+    }
   lifecycle_rules = [
     {
       action = {
         type = "Delete"
-      }
+        }
       condition = {
-        age        = 7
-        with_state = "ANY"
-      }
-    }
-  ]
+        age = 7
+with_state = "ANY"
 }
+    }
+    ]
+  }
