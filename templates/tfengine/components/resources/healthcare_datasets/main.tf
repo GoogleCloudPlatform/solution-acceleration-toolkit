@@ -107,7 +107,16 @@ module "{{resourceName . "name"}}" {
             dataset_uri = "{{$v.bigquery_destination.dataset_uri}}"
             schema_config = {
               {{hcl $v.bigquery_destination.schema_config}}
-            }
+              {
+	        last_updated_partition_config = {
+		  {{hcl $v.schema_config.last_updated_partition_config}}
+		  {
+                    {{hclField $v "expiration_ms" -}}
+		    {{hclField $v "type" -}}
+		  }
+		}
+	      }
+	    }
           }
           {{hclField $v "resource_types" -}}
         },

@@ -170,7 +170,7 @@ module "healthcare_dataset" {
           bigquery_destination = {
             dataset_uri = "bq://example-prod-data.${module.one_billion_ms_dataset.bigquery_dataset.dataset_id}"
             schema_config = {
-              last_updated_partition_config {
+              last_updated_partition_config = {
                 expiration_ms = 1e+06
                 type          = "HOUR"
               }
