@@ -435,7 +435,11 @@ template "project_data" {
                 schema_config = {
                   schema_type               = "ANALYTICS"
                   recursive_structure_depth = 3
-                }
+                  last_updated_partition_config = {
+                    expiration_ms = 1e+06
+                    type          = "HOUR"
+                  }
+		}
               }
             }]
           },
