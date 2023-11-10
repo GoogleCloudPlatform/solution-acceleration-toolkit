@@ -106,10 +106,11 @@ module "{{resourceName . "name"}}" {
           bigquery_destination = {
             dataset_uri = "{{$v.bigquery_destination.dataset_uri}}"
             schema_config = {
-	      last_updated_partition_config = {
-                {{hclField $v "expiration_ms" -}}
-		{{hclField $v "type" -}}
-	      }
+              recursive_structure_depth = "{{$v.bigquery_destination.schema_config.recursive_structure_depth}}"
+              schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
+              last_updated_partition_config = {
+                {{hcl $v.bigquery_destination.schema_config.last_updated_partition_config}}
+              }
 	    }
           }
           {{hclField $v "resource_types" -}}
