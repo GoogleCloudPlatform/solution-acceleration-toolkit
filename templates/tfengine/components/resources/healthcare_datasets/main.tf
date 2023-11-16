@@ -81,12 +81,6 @@ module "{{resourceName . "name"}}" {
 
       {{hclField . "iam_members" -}}
 
-      {{if has . "notification_config" -}}
-      notification_config = {
-        {{hcl .notification_config}}
-      }
-      {{end -}}
-      
       {{if has . "notification_configs" -}}
       notification_configs = [
         {{range $k, $v := .notification_configs -}}

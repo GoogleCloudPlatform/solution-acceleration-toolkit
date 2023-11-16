@@ -990,11 +990,7 @@ schema = {
                     }
                   }
                 }
-                notification_config = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>."
-                  type        = "object"
-                }
-		notification_configs = {
+                notification_configs = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>."
                   type        = "array"
                   items  = {
