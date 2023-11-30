@@ -156,9 +156,6 @@ module "healthcare_dataset" {
       disable_resource_versioning         = false
       enable_history_import               = false
       complex_data_type_reference_parsing = "DISABLED"
-      notification_config = {
-        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-      }
       notification_configs = [
         {
           pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
