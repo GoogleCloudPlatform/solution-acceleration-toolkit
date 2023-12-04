@@ -36,7 +36,7 @@ module "project" {
 
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.3.0"
+  version = "~> 5.4.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
   project_id                  = module.project.project_id
@@ -60,7 +60,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 2.2.1"
+  version = "~> 2.4.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id

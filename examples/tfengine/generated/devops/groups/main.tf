@@ -42,7 +42,7 @@ provider "google-beta" {
 
 module "example_cicd_viewers_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.6"
 
   id           = "example-cicd-viewers@example.com"
   customer_id  = "c12345678"
@@ -51,7 +51,7 @@ module "example_cicd_viewers_example_com" {
 
 module "example_cicd_editors_example_com" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.6"
 
   id           = "example-cicd-editors@example.com"
   customer_id  = "c12345678"
