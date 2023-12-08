@@ -151,10 +151,11 @@ module "healthcare_dataset" {
       name    = "fhir-store-a"
       version = "R4"
 
-      enable_update_create          = true
-      disable_referential_integrity = false
-      disable_resource_versioning   = false
-      enable_history_import         = false
+      enable_update_create                = true
+      disable_referential_integrity       = false
+      disable_resource_versioning         = false
+      enable_history_import               = false
+      complex_data_type_reference_parsing = "DISABLED"
       notification_configs = [
         {
           pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
