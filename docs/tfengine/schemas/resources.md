@@ -172,11 +172,15 @@
 =======
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config | - | object | false | - | - |
 <<<<<<< HEAD
+<<<<<<< HEAD
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.type | - | string | false | - | - |
 >>>>>>> 2d05520 (correct lastUpdatedPartitionConfig as optional)
 =======
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | true | - | - |
+=======
+| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | false | - | - |
+>>>>>>> 6854414 (remove expiration_ms from last_updated_partition_config required fields list)
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.type | - | string | true | - | - |
 >>>>>>> f17b790 (remove last_updated_partition_config from required fields list)
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.recursive_structure_depth | - | integer | true | - | - |
