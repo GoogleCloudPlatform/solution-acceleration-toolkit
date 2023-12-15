@@ -103,12 +103,18 @@ module "{{resourceName . "name"}}" {
             schema_config = {
               recursive_structure_depth = "{{$v.bigquery_destination.schema_config.recursive_structure_depth}}"
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
+<<<<<<< HEAD
               {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
                 {{if has .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
                 expiration_ms = "{{$v.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms}}"
 		{{end -}}
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
+=======
+              {{if has . "last_updated_partition_config" -}}
+              last_updated_partition_config = {
+                {{hcl $v.bigquery_destination.schema_config.last_updated_partition_config}}
+>>>>>>> 2d05520 (correct lastUpdatedPartitionConfig as optional)
               }
 	      {{end -}}
 	    }
