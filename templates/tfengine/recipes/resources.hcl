@@ -1047,7 +1047,6 @@ schema = {
                             additionalProperties = false
                             required = [
                               "recursive_structure_depth",
-			      "last_updated_partition_config",
                             ]
                             properties = {
                               schema_type = {

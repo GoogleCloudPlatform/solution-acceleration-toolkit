@@ -170,11 +170,6 @@ module "healthcare_dataset" {
             schema_config = {
               recursive_structure_depth = "3"
               schema_type               = "ANALYTICS"
-              last_updated_partition_config = {
-                expiration_ms = 1e+06
-
-                type = "HOUR"
-              }
             }
           }
           resource_types = ["Patient"]
