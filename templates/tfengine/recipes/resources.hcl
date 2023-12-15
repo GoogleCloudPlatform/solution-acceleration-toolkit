@@ -1060,7 +1060,6 @@ schema = {
 				additionalProperties = false
 				required = [
                                   "type",
-                                  "expiration_ms",
                                 ]
 				properties = {
 				  type = {

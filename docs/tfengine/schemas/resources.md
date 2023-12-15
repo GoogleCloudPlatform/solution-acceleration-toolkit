@@ -169,7 +169,7 @@
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.dataset_uri | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config | - | object | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config | - | object | false | - | - |
-| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | true | - | - |
+| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.type | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.recursive_structure_depth | - | integer | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.schema_type | - | string | false | - | - |
