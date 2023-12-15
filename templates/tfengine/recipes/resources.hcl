@@ -961,6 +961,10 @@ schema = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_import>."
                   type        = "boolean"
                 }
+                complex_data_type_reference_parsing = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#complex_data_type_reference_parsing>."
+                  type        = "string"
+                }
                 labels = {
                   description = "Labels to set on the FHIR store."
                   type        = "object"
@@ -990,11 +994,7 @@ schema = {
                     }
                   }
                 }
-                notification_config = {
-                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>."
-                  type        = "object"
-                }
-		notification_configs = {
+                notification_configs = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>."
                   type        = "array"
                   items  = {
@@ -1047,6 +1047,7 @@ schema = {
                             additionalProperties = false
                             required = [
                               "recursive_structure_depth",
+			      "last_updated_partition_config",
                             ]
                             properties = {
                               schema_type = {
@@ -1054,6 +1055,22 @@ schema = {
                               }
                               recursive_structure_depth = {
                                 type = "integer"
+                              }
+			      last_updated_partition_config = {
+                                type = "object"
+				additionalProperties = false
+				required = [
+                                  "type",
+                                  "expiration_ms",
+                                ]
+				properties = {
+				  type = {
+                                    type = "string"
+                                  }
+                                  expiration_ms = {
+                                    type = "integer"
+                                  }
+                                }
                               }
                             }
                           }

@@ -409,19 +409,17 @@ template "project_data" {
         }]
         fhir_stores = [
           {
-            name                          = "fhir-store-a"
-            version                       = "R4"
-            enable_update_create          = true
-            disable_referential_integrity = false
-            disable_resource_versioning   = false
-            enable_history_import         = false
+            name                                = "fhir-store-a"
+            version                             = "R4"
+            enable_update_create                = true
+            disable_referential_integrity       = false
+            disable_resource_versioning         = false
+            enable_history_import               = false
+            complex_data_type_reference_parsing = "DISABLED"
             labels = {
               type = "phi"
             }
-            notification_config = {
-              pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
-            }
-	    notification_configs = [{
+            notification_configs = [{
               pubsub_topic = "projects/{{.prefix}}-{{.env}}-data/topics/$${module.topic.topic}"
               send_full_resource = true
               send_previous_resource_on_delete = true
@@ -435,7 +433,11 @@ template "project_data" {
                 schema_config = {
                   schema_type               = "ANALYTICS"
                   recursive_structure_depth = 3
-                }
+                  last_updated_partition_config = {
+                    expiration_ms = 1e+06
+                    type          = "HOUR"
+                  }
+		}
               }
             }]
           },

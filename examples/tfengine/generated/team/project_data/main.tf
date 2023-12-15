@@ -151,13 +151,11 @@ module "healthcare_dataset" {
       name    = "fhir-store-a"
       version = "R4"
 
-      enable_update_create          = true
-      disable_referential_integrity = false
-      disable_resource_versioning   = false
-      enable_history_import         = false
-      notification_config = {
-        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-      }
+      enable_update_create                = true
+      disable_referential_integrity       = false
+      disable_resource_versioning         = false
+      enable_history_import               = false
+      complex_data_type_reference_parsing = "DISABLED"
       notification_configs = [
         {
           pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
@@ -170,9 +168,13 @@ module "healthcare_dataset" {
           bigquery_destination = {
             dataset_uri = "bq://example-prod-data.${module.one_billion_ms_dataset.bigquery_dataset.dataset_id}"
             schema_config = {
-              recursive_structure_depth = 3
+              recursive_structure_depth = "3"
+              schema_type               = "ANALYTICS"
+              last_updated_partition_config = {
+                expiration_ms = 1e+06
 
-              schema_type = "ANALYTICS"
+                type = "HOUR"
+              }
             }
           }
           resource_types = ["Patient"]

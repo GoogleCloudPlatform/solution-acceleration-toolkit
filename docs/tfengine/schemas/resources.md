@@ -149,6 +149,7 @@
 | healthcare_datasets.dicom_stores.name | Name of dicom store. | string | true | - | - |
 | healthcare_datasets.dicom_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_dicom_store#notification_config>. | object | false | - | - |
 | healthcare_datasets.fhir_stores | FHIR stores to create. | array(object) | false | - | - |
+| healthcare_datasets.fhir_stores.complex_data_type_reference_parsing | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#complex_data_type_reference_parsing>. | string | false | - | - |
 | healthcare_datasets.fhir_stores.disable_referential_integrity | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_referential_integrity>. | boolean | false | - | - |
 | healthcare_datasets.fhir_stores.disable_resource_versioning | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#disable_resource_versioning>. | boolean | false | - | - |
 | healthcare_datasets.fhir_stores.enable_history_import | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_import>. | boolean | false | - | - |
@@ -159,7 +160,6 @@
 | healthcare_datasets.fhir_stores.labels | Labels to set on the FHIR store. | object | false | - | - |
 | healthcare_datasets.fhir_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.fhir_stores.name | Name of FHIR store. | string | true | - | - |
-| healthcare_datasets.fhir_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>. | object | false | - | - |
 | healthcare_datasets.fhir_stores.notification_configs | See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>. | array(object) | false | - | - |
 | healthcare_datasets.fhir_stores.notification_configs.pubsub_topic | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.notification_configs.send_full_resource | - | boolean | false | - | - |
@@ -168,6 +168,9 @@
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination | - | object | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.dataset_uri | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config | - | object | true | - | - |
+| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config | - | object | true | - | - |
+| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms | - | integer | true | - | - |
+| healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.last_updated_partition_config.type | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.recursive_structure_depth | - | integer | true | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.bigquery_destination.schema_config.schema_type | - | string | false | - | - |
 | healthcare_datasets.fhir_stores.stream_configs.resource_types | - | array(string) | false | - | - |
