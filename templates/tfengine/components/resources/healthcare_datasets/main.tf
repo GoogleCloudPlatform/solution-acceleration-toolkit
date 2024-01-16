@@ -105,6 +105,7 @@ module "{{resourceName . "name"}}" {
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
                 {{if has .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
@@ -120,6 +121,11 @@ module "{{resourceName . "name"}}" {
 >>>>>>> e7adc2e (make last_updated_partition_config as optional)
                 {{hcl $v.bigquery_destination.schema_config.last_updated_partition_config}}
 >>>>>>> 2d05520 (correct lastUpdatedPartitionConfig as optional)
+=======
+              {{if has $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
+	      last_updated_partition_config = {
+                {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
+>>>>>>> 35d3004 (update last_updated_partition_config check)
               }
 	      {{end -}}
 	    }
