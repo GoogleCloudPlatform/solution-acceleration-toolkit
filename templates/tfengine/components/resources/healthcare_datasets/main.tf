@@ -103,9 +103,9 @@ module "{{resourceName . "name"}}" {
             schema_config = {
               recursive_structure_depth = "{{$v.bigquery_destination.schema_config.recursive_structure_depth}}"
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
-              {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
+              {{if has $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
-                {{hcl $v.bigquery_destination.schema_config.last_updated_partition_config}}
+                {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
               }
 	      {{end -}}
 	    }
