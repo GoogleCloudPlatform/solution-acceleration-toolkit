@@ -105,7 +105,9 @@ module "{{resourceName . "name"}}" {
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
               {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
-                {{hclField .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
+                {{if has .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
+                expiration_ms = "{{$v.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms}}"
+		{{end -}}
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
               }
 	      {{end -}}
