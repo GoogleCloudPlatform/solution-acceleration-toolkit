@@ -196,12 +196,18 @@ module "healthcare_dataset" {
               recursive_structure_depth = "3"
               schema_type               = "ANALYTICS"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d1e16b3 (./scripts/regen.sh)
               last_updated_partition_config = {
                 expiration_ms = "1e+06"
                 type          = "HOUR"
               }
+<<<<<<< HEAD
 =======
 >>>>>>> f17b790 (remove last_updated_partition_config from required fields list)
+=======
+>>>>>>> d1e16b3 (./scripts/regen.sh)
             }
           }
           resource_types = ["Patient"]
