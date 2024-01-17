@@ -134,9 +134,14 @@ module "{{resourceName . "name"}}" {
 =======
               {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
+<<<<<<< HEAD
                 {{hclField .last_updated_partition_config "expiration_ms" -}}
 		{{hclField .last_updated_partition_config "type" -}}
 >>>>>>> 77b1e77 (correct last_updated_partition_config check)
+=======
+                {{hclField .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
+		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
+>>>>>>> 1a16076 (correct last_updated_partition_config check)
               }
 	      {{end -}}
 	    }
