@@ -105,7 +105,7 @@ module "{{resourceName . "name"}}" {
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
               {{if has $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
-                {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
+                {{hcl $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
               }
 	      {{end -}}
 	    }
