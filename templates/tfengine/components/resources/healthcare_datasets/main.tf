@@ -124,8 +124,12 @@ module "{{resourceName . "name"}}" {
 =======
               {{if has $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
+<<<<<<< HEAD
                 {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
 >>>>>>> 35d3004 (update last_updated_partition_config check)
+=======
+                {{hcl $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
+>>>>>>> c23a0ea (correct last_updated_partition_config check)
               }
 	      {{end -}}
 	    }
