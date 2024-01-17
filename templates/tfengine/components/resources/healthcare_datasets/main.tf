@@ -112,6 +112,7 @@ module "{{resourceName . "name"}}" {
                 {{if has .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
                 expiration_ms = "{{$v.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms}}"
 		{{end -}}
+<<<<<<< HEAD
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
 =======
               {{if has . "last_updated_partition_config" -}}
@@ -140,6 +141,8 @@ module "{{resourceName . "name"}}" {
 >>>>>>> 77b1e77 (correct last_updated_partition_config check)
 =======
                 {{hclField .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
+=======
+>>>>>>> 4074292 (correct last_updated_partition_config check)
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
 >>>>>>> 1a16076 (correct last_updated_partition_config check)
               }
