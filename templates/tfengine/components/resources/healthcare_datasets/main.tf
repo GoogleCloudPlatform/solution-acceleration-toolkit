@@ -103,49 +103,12 @@ module "{{resourceName . "name"}}" {
             schema_config = {
               recursive_structure_depth = "{{$v.bigquery_destination.schema_config.recursive_structure_depth}}"
               schema_type = "{{$v.bigquery_destination.schema_config.schema_type}}"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
               {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
 	      last_updated_partition_config = {
                 {{if has .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
                 expiration_ms = "{{$v.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms}}"
 		{{end -}}
-<<<<<<< HEAD
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
-=======
-              {{if has . "last_updated_partition_config" -}}
-              last_updated_partition_config = {
-=======
-              {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
-	      last_updated_partition_config = {
->>>>>>> e7adc2e (make last_updated_partition_config as optional)
-                {{hcl $v.bigquery_destination.schema_config.last_updated_partition_config}}
->>>>>>> 2d05520 (correct lastUpdatedPartitionConfig as optional)
-=======
-              {{if has $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
-	      last_updated_partition_config = {
-<<<<<<< HEAD
-                {{hclsField $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
->>>>>>> 35d3004 (update last_updated_partition_config check)
-=======
-                {{hcl $v.bigquery_destination.schema_config "last_updated_partition_config" -}}
->>>>>>> c23a0ea (correct last_updated_partition_config check)
-=======
-              {{if has .bigquery_destination.schema_config "last_updated_partition_config" -}}
-	      last_updated_partition_config = {
-<<<<<<< HEAD
-                {{hclField .last_updated_partition_config "expiration_ms" -}}
-		{{hclField .last_updated_partition_config "type" -}}
->>>>>>> 77b1e77 (correct last_updated_partition_config check)
-=======
-                {{hclField .bigquery_destination.schema_config.last_updated_partition_config "expiration_ms" -}}
-=======
->>>>>>> 4074292 (correct last_updated_partition_config check)
-		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
->>>>>>> 1a16076 (correct last_updated_partition_config check)
-              }
 	      {{end -}}
 	    }
           }

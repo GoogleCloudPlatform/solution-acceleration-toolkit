@@ -151,7 +151,6 @@ module "healthcare_dataset" {
       name    = "fhir-store-a"
       version = "R4"
 
-<<<<<<< HEAD
       enable_update_create                = true
       disable_referential_integrity       = false
       disable_resource_versioning         = false
@@ -164,30 +163,6 @@ module "healthcare_dataset" {
           send_previous_resource_on_delete = true
         },
       ]
-=======
-      enable_update_create          = true
-      disable_referential_integrity = false
-      disable_resource_versioning   = false
-      enable_history_import         = false
-      notification_config = {
-        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-      }
-<<<<<<< HEAD
-      notification_configs = [{
-        pubsub_topic = "projects/example-prod-data/topics/${module.topic.topic}"
-        send_full_resource = true
-        send_previous_resource_on_delete = true
-      }]
->>>>>>> 9aed55c (Revert "run ./scripts/regen.sh for unit test failure")
-=======
-      notification_configs = [
-        {
-          pubsub_topic                     = "projects/example-prod-data/topics/${module.topic.topic}"
-          send_full_resource               = true
-          send_previous_resource_on_delete = true
-        },
-      ]
->>>>>>> a20c091 (updated genertaed file (not using ./scripts/regen.sh))
       stream_configs = [
         {
           bigquery_destination = {
@@ -195,19 +170,10 @@ module "healthcare_dataset" {
             schema_config = {
               recursive_structure_depth = "3"
               schema_type               = "ANALYTICS"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d1e16b3 (./scripts/regen.sh)
               last_updated_partition_config = {
                 expiration_ms = "1e+06"
                 type          = "HOUR"
               }
-<<<<<<< HEAD
-=======
->>>>>>> f17b790 (remove last_updated_partition_config from required fields list)
-=======
->>>>>>> d1e16b3 (./scripts/regen.sh)
             }
           }
           resource_types = ["Patient"]
