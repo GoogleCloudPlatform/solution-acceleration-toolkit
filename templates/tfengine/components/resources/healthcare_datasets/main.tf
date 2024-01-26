@@ -78,6 +78,7 @@ module "{{resourceName . "name"}}" {
       {{hclField . "disable_referential_integrity" -}}
       {{hclField . "disable_resource_versioning" -}}
       {{hclField . "enable_history_import" -}}
+      {{hclField . "enable_history_modifications" -}}
       {{hclField . "complex_data_type_reference_parsing" -}}
 
       {{hclField . "iam_members" -}}

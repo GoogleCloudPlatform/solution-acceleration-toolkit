@@ -961,6 +961,10 @@ schema = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_import>."
                   type        = "boolean"
                 }
+                enable_history_modifications = {
+                  description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#enable_history_modifications>."
+                  type        = "boolean"
+                }
                 complex_data_type_reference_parsing = {
                   description = "See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#complex_data_type_reference_parsing>."
                   type        = "string"

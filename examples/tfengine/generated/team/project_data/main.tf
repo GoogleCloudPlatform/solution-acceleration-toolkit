@@ -155,6 +155,7 @@ module "healthcare_dataset" {
       disable_referential_integrity       = false
       disable_resource_versioning         = false
       enable_history_import               = false
+      enable_history_modifications        = false
       complex_data_type_reference_parsing = "DISABLED"
       notification_configs = [
         {
