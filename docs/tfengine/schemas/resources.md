@@ -161,7 +161,6 @@
 | healthcare_datasets.fhir_stores.labels | Labels to set on the FHIR store. | object | false | - | - |
 | healthcare_datasets.fhir_stores.labels.*pattern* | - | string | false | - | .+ |
 | healthcare_datasets.fhir_stores.name | Name of FHIR store. | string | true | - | - |
-| healthcare_datasets.fhir_stores.notification_config | See <https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/healthcare_fhir_store#notification_config>. | object | false | - | - |
 | healthcare_datasets.fhir_stores.notification_configs | See <https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/healthcare_fhir_store#notification_configs>. | array(object) | false | - | - |
 | healthcare_datasets.fhir_stores.notification_configs.pubsub_topic | - | string | true | - | - |
 | healthcare_datasets.fhir_stores.notification_configs.send_full_resource | - | boolean | false | - | - |
