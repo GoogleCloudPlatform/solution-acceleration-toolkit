@@ -109,7 +109,7 @@ module "{{resourceName . "name"}}" {
                 expiration_ms = "{{$v.bigquery_destination.schema_config.last_updated_partition_config.expiration_ms}}"
 		{{end -}}
 		{{hclField .bigquery_destination.schema_config.last_updated_partition_config "type" -}}
-	      }
+              }
 	      {{end -}}
 	    }
           }
