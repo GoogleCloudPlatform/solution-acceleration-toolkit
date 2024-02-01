@@ -81,7 +81,7 @@ module "project" {
 
 module "one_billion_ms_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.3.0"
+  version = "~> 5.4.0"
 
   dataset_id                  = "1billion_ms_dataset"
   project_id                  = module.project.project_id
@@ -220,7 +220,7 @@ module "healthcare_dataset" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.4.0"
+  version = "~> 7.7.0"
 
   projects = [module.project.project_id]
   mode     = "additive"

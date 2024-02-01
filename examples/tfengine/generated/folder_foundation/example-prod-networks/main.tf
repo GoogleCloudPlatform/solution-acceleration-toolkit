@@ -51,7 +51,7 @@ module "project" {
 
 module "example_network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 4.0.1"
+  version = "~> 4.1.0"
 
   network_name = "example-network"
   project_id   = module.project.project_id
@@ -69,7 +69,7 @@ module "example_network" {
 
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 1.2.0"
+  version = "~> 1.3.0"
 
   name    = "example-router"
   project = module.project.project_id

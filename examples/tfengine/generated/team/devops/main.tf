@@ -15,7 +15,7 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 3.71"
+    google      = "<= 3.90"
     google-beta = "~>3.50"
     kubernetes  = "~> 2.10"
   }
@@ -78,7 +78,7 @@ module "state_bucket" {
 # Devops project owners group.
 module "owners_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.6"
 
   id           = "example-devops-owners@example.com"
   customer_id  = "c12345678"
@@ -108,7 +108,7 @@ resource "google_project_iam_binding" "devops_owners" {
 # Admins group for at folder level.
 module "admins_group" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.6"
 
   id           = "example-team-admins@example.com"
   customer_id  = "c12345678"

@@ -21,7 +21,7 @@ provider "google-beta" {
 {{range .groups}}
 module "{{resourceName . "id"}}" {
   source  = "terraform-google-modules/group/google"
-  version = "~> 0.3"
+  version = "~> 0.6"
 
   id = "{{.id}}"
   customer_id = "{{.customer_id}}"
