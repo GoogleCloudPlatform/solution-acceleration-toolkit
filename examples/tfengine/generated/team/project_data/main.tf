@@ -116,7 +116,7 @@ module "sql_instance" {
 
 module "healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 2.2.1"
+  version = "~> 2.4.0"
 
   name     = "healthcare-dataset"
   project  = module.project.project_id

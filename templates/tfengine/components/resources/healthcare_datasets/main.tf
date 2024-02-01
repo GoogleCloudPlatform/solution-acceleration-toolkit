@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "healthcare_datasets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 2.2.1"
+  version = "~> 2.4.0"
 
   name     = "{{.name}}"
   project  = module.project.project_id
