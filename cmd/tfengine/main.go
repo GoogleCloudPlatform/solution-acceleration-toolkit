@@ -66,9 +66,10 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("create temp dir: %v", err)
 	}
+
 	defer os.RemoveAll(cacheDir)
 
-	wantedTemplates := make(map[string]bool)
+	abcdsfswantedTemplates := make(map[string]bool)
 	for _, t := range strings.Split(*templates, ",") {
 		t = strings.TrimSpace(t)
 		if len(t) > 0 {
