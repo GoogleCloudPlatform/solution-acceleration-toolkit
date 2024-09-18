@@ -26,8 +26,9 @@ terraform {
 }
 
 module "storage_bucket_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
-  mode   = "additive"
+  source  = "terraform-google-modules/iam/google//modules/storage_buckets_iam"
+  version = "~> 7.4.0"
+  mode    = "additive"
   for_each = {
     for idx, member in var.storage_bucket_iam_members :
     idx => member
@@ -37,8 +38,9 @@ module "storage_bucket_iam_members" {
 }
 
 module "project_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/projects_iam"
-  mode   = "additive"
+  source  = "terraform-google-modules/iam/google//modules/projects_iam"
+  version = "~> 7.4.0"
+  mode    = "additive"
   for_each = {
     for idx, member in var.project_iam_members :
     idx => member
@@ -48,8 +50,9 @@ module "project_iam_members" {
 }
 
 module "folder_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/folders_iam"
-  mode   = "additive"
+  source  = "terraform-google-modules/iam/google//modules/folders_iam"
+  version = "~> 7.4.0"
+  mode    = "additive"
   for_each = {
     for idx, member in var.folder_iam_members :
     idx => member
@@ -59,8 +62,9 @@ module "folder_iam_members" {
 }
 
 module "organization_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/organizations_iam"
-  mode   = "additive"
+  source  = "terraform-google-modules/iam/google//modules/organizations_iam"
+  version = "~> 7.4.0"
+  mode    = "additive"
   for_each = {
     for idx, member in var.organization_iam_members :
     idx => member
@@ -70,8 +74,9 @@ module "organization_iam_members" {
 }
 
 module "service_account_iam_members" {
-  source = "terraform-google-modules/iam/google//modules/service_accounts_iam"
-  mode   = "additive"
+  source  = "terraform-google-modules/iam/google//modules/service_accounts_iam"
+  version = "~> 7.4.0"
+  mode    = "additive"
   for_each = {
     for idx, member in var.service_account_iam_members :
     idx => member
