@@ -111,7 +111,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.6.0"
+  version = "~> 10.1.1"
 
   name_prefix        = "instance-template"
   project_id         = module.project.project_id
@@ -147,7 +147,7 @@ module "instance_template" {
 
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.6.0"
+  version = "~> 10.1.1"
 
   hostname           = "instance"
   instance_template  = module.instance_template.self_link
