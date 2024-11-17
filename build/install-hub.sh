@@ -19,7 +19,7 @@
 set -x
 
 # See https://github.com/github/hub/blob/master/script/get
-latest="$(curl -fsi https://github.com/github/hub/releases/latest | awk -F/ 'tolower($1) ~ /^location:/ {print $(NF)}' | tr -d '\r')"
+latest=" $(curl -fsi https://github.com/github/hub/releases/latest | awk -F/ 'tolower($1) ~ /^location:/ {print $(NF)}' | tr -d '\r')"
 latest="${latest#v}"
 
 # Install the latest version
