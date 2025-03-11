@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/go-getter/v2 v2.1.0 // indirect
 	github.com/hashicorp/go-version v1.5.0
 	github.com/hashicorp/hcl/v2 v2.11.1
-	github.com/hashicorp/terraform v0.15.3
+	github.com/hashicorp/terraform v0.15.5
 	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
