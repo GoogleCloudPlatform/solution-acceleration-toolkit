@@ -68,7 +68,7 @@ module "example_network" {
 
 module "example_router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 1.2.0"
+  version = "~> 6.0.2"
 
   name    = "example-router"
   project = module.project.project_id
