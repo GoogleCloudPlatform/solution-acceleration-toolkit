@@ -51,11 +51,11 @@ template "devops" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.0, <= 3.71"
+          version_constraints = ">=3.0, <= 6"
         },
         {
           name = "google-beta",
-          version_constraints = "~>3.50"
+          version_constraints = "5.18.0"
         }
       ]
     }
