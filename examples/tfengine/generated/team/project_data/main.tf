@@ -234,7 +234,7 @@ module "project_iam_members" {
 
 module "topic" {
   source  = "terraform-google-modules/pubsub/google"
-  version = "~> 4.0.0"
+  version = "< 6"
 
   topic      = "topic"
   project_id = module.project.project_id
