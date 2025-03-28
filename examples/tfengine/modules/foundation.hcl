@@ -159,11 +159,11 @@ template "cicd" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.87, < 4.0.0"
+          version_constraints = ">=3.87, < 6"
         },
         {
           name = "google-beta",
-          version_constraints = "~>3.50"
+          version_constraints = "<=6"
         }
       ]
     }
