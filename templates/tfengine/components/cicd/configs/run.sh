@@ -21,7 +21,7 @@ DIRS=()
 ROOT="."
 
 # TODO(https://github.com/GoogleCloudPlatform/healthcare-data-protection-suite/issues/1029): Remove this after CICD container is updated to the latest.
-LATEST_GCLOUD_VERSION=356.0.0
+LATEST_GCLOUD_VERSION=496.0.0
 CLOUDSDK_PYTHON=3.8
 
 apk add --no-cache curl
