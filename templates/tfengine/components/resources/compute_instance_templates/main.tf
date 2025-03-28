@@ -23,7 +23,7 @@ limitations under the License. */ -}}
 {{$subnet := .subnet -}}
 module "{{$template_resource_name}}" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.6.0"
+  version = "~> 10.1.1"
 
   name_prefix        = "{{.name_prefix}}"
   project_id         = module.project.project_id
