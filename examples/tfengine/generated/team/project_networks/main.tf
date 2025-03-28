@@ -170,7 +170,7 @@ module "router" {
 
 module "google_apis" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 5.1.1"
 
   name       = "google-apis"
   project_id = module.project.project_id
@@ -203,7 +203,7 @@ module "google_apis" {
 
 module "gcr" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 5.1.1"
 
   name       = "gcr"
   project_id = module.project.project_id
