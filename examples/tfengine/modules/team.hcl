@@ -58,7 +58,7 @@ template "project_secrets" {
         },
         {
           name = "google-beta",
-          version_constraints = "~>5.18.0"
+          version_constraints = "<= 6"
         },
         {
           name = "null",
