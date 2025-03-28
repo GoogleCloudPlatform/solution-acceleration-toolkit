@@ -212,7 +212,6 @@ module "gke_cluster" {
   ip_range_pods           = "pods-range"
   ip_range_services       = "services-range"
   master_ipv4_cidr_block  = "192.168.0.0/28"
-  skip_provisioners       = true
   enable_private_endpoint = false
   release_channel         = "STABLE"
   cluster_resource_labels = {

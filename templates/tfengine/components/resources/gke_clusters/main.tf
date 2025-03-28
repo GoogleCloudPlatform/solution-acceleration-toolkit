@@ -43,7 +43,6 @@ module "{{resourceName . "name"}}" {
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
   {{hclField . "master_authorized_networks" -}}
   {{hclField . "istio" -}}
-  skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"
   {{if has . "service_account" -}}
