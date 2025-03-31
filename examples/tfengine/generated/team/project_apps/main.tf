@@ -36,7 +36,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.3.0"
+  version = "~> 14.4.0"
 
   name            = "example-prod-apps"
   org_id          = ""
@@ -111,7 +111,7 @@ resource "google_binary_authorization_policy" "policy" {
 
 module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 6.6.0"
+  version = "~> 10.1.1"
 
   name_prefix        = "instance-template"
   project_id         = module.project.project_id
@@ -147,7 +147,7 @@ module "instance_template" {
 
 module "instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 6.6.0"
+  version = "~> 10.1.1"
 
   hostname           = "instance"
   instance_template  = module.instance_template.self_link
@@ -166,7 +166,7 @@ module "instance" {
 
 module "domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 3.1.0"
+  version = "~> 5.1.1"
 
   name       = "domain"
   project_id = module.project.project_id
@@ -194,7 +194,7 @@ provider "kubernetes" {
 
 module "gke_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 21.2"
+  version = "~> 29.0.0"
 
   providers = {
     kubernetes = kubernetes.gke_cluster
@@ -212,7 +212,6 @@ module "gke_cluster" {
   ip_range_pods           = "pods-range"
   ip_range_services       = "services-range"
   master_ipv4_cidr_block  = "192.168.0.0/28"
-  skip_provisioners       = true
   enable_private_endpoint = false
   release_channel         = "STABLE"
   cluster_resource_labels = {
@@ -233,7 +232,7 @@ module "gke_cluster" {
 
 module "project_iam_members" {
   source  = "terraform-google-modules/iam/google//modules/projects_iam"
-  version = "~> 7.4.0"
+  version = "~> 7.7.1"
 
   projects = [module.project.project_id]
   mode     = "additive"

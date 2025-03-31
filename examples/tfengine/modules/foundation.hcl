@@ -51,11 +51,11 @@ template "devops" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.0, <= 3.71"
+          version_constraints = ">=3.0, <= 6"
         },
         {
           name = "google-beta",
-          version_constraints = "~>3.50"
+          version_constraints = "<= 6"
         }
       ]
     }
@@ -159,11 +159,11 @@ template "cicd" {
       providers = [
         {
           name = "google",
-          version_constraints = ">=3.87, < 4.0.0"
+          version_constraints = ">=3.87, < 6"
         },
         {
           name = "google-beta",
-          version_constraints = "~>3.50"
+          version_constraints = "<=6"
         }
       ]
     }

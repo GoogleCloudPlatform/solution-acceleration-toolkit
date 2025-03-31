@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Terraform version used is 1.2.9.
+# Terraform version used is 1.3.0.
 substitutions:
-  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:e4ef6a7cb46ca110b97eb5fb7134fb9f3720b98560436792a4199c77e739dca0"
+  _CFT_TOOLS_CONTAINER: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:2d4d0f72d0dec6b388c8d8dc6d5eaf1fb23b4a24a1184a377fdf56ada630902d"
 
 options:
   env: ["GOPATH=/go"]
