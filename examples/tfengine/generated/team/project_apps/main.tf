@@ -36,7 +36,7 @@ resource "google_compute_address" "static" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 14.5.0"
 
   name            = "example-prod-apps"
   org_id          = ""
@@ -166,7 +166,7 @@ module "instance" {
 
 module "domain" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 5.1.1"
+  version = "~> 5.3.0"
 
   name       = "domain"
   project_id = module.project.project_id
