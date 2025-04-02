@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 14.5.0"
 
   name            = "example-prod-networks"
   org_id          = ""
@@ -145,7 +145,7 @@ module "cloud_sql_private_service_access_network" {
 
 module "router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 6.0.2"
+  version = "~> 6.3.0"
 
   name    = "router"
   project = module.project.project_id
@@ -170,7 +170,7 @@ module "router" {
 
 module "google_apis" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 5.1.1"
+  version = "~> 5.3.0"
 
   name       = "google-apis"
   project_id = module.project.project_id
@@ -203,7 +203,7 @@ module "google_apis" {
 
 module "gcr" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 5.1.1"
+  version = "~> 5.3.0"
 
   name       = "gcr"
   project_id = module.project.project_id
