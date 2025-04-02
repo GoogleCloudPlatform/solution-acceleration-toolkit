@@ -33,7 +33,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 11.3.0"
+  version = "~> 14.4.0"
 
   name            = "{{.project.project_id}}"
   {{- if eq .parent_type "organization"}}
@@ -67,7 +67,7 @@ module "project" {
 # Terraform state bucket, hosted in the devops project.
 module "state_bucket" {
 source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 5.0.0"
 
   name       = "{{.state_bucket}}"
   project_id = module.project.project_id
