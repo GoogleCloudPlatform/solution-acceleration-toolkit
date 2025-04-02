@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */}}
 module "project_iam_members" {
   source   = "terraform-google-modules/iam/google//modules/projects_iam"
-  version  = "~> 7.4.0"
+  version  = "~> 7.7.1"
 
   projects = [module.project.project_id]
   mode     = "additive"

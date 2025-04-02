@@ -24,7 +24,7 @@ provider "kubernetes" {
 
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 21.2"
+  version = "~> 29.0.0"
 
   providers = {
     kubernetes = kubernetes.{{resourceName . "name"}}
@@ -43,7 +43,6 @@ module "{{resourceName . "name"}}" {
   master_ipv4_cidr_block = "{{.master_ipv4_cidr_block}}"
   {{hclField . "master_authorized_networks" -}}
   {{hclField . "istio" -}}
-  skip_provisioners          = true
   enable_private_endpoint    = false
   release_channel            = "STABLE"
   {{if has . "service_account" -}}

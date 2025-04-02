@@ -23,7 +23,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hashicorp/go-getter/v2"
+	getter "github.com/hashicorp/go-getter/v2"
 	"github.com/mitchellh/go-homedir"
 )
 
