@@ -8,7 +8,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.5.7
 	github.com/google/go-cpy v0.0.0-20211218193943-a9c933c06932
-	github.com/hashicorp/go-getter/v2 v2.1.0
+	github.com/hashicorp/go-getter/v2 v2.2.0
 	github.com/hashicorp/go-version v1.5.0
 	github.com/hashicorp/hcl/v2 v2.11.1
 	github.com/hashicorp/terraform v0.15.3
