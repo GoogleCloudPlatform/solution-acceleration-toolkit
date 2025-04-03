@@ -15,7 +15,7 @@ require (
 	github.com/imdario/mergo v0.3.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
-	github.com/otiai10/copy v1.7.0
+	github.com/otiai10/copy v1.14.1
 	github.com/rodaine/hclencoder v0.0.1
 	github.com/ryanuber/columnize v2.1.2+incompatible
 	github.com/ulikunitz/xz v0.5.10 // indirect
