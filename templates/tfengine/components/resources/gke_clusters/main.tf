@@ -24,7 +24,7 @@ provider "kubernetes" {
 
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 29.0.0"
+  version = "~> 36.3.0"
 
   providers = {
     kubernetes = kubernetes.{{resourceName . "name"}}

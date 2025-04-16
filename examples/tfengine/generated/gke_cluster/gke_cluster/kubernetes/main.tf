@@ -44,7 +44,7 @@ provider "kubernetes" {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 14.4.0"
+  version = "~> 18.0.0"
 
   project_id    = "example-apps"
   activate_apis = []
@@ -71,7 +71,7 @@ resource "kubernetes_namespace" "example_namespace" {
 
 module "workload_identity_example_namespace" {
   source     = "terraform-google-modules/kubernetes-engine/google//modules/workload-identity"
-  version    = "29.0.0"
+  version    = "36.3.0"
   project_id = module.project.project_id
   name       = "example-sa"
 
