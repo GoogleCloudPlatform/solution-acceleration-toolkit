@@ -179,7 +179,7 @@ resource "google_project_iam_member" "cloudbuild_scheduler_sa_project_iam" {
 # Cloud Build - Storage Bucket to store Cloud Build logs.
 module "logs_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 10.0"
 
   name       = var.logs_bucket
   project_id = var.project_id
