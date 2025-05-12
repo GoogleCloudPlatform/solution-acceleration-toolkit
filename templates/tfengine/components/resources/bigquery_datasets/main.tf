@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "bigquery_datasets"}}
 module "{{resourceName . "dataset_id"}}" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 5.3.0"
+  version = "~> 7.0.0"
 
   dataset_id = "{{.dataset_id}}"
   project_id = module.project.project_id

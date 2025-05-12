@@ -23,19 +23,19 @@ substitutions:
     _LOGS_BUCKET: ""
 
 steps:
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:e4ef6a7cb46ca110b97eb5fb7134fb9f3720b98560436792a4199c77e739dca0"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:eab4344f007d121e36776d0a435718986fd7664eded83e36973fb4b204b06738"
     entrypoint: terraform
     args: ["version"]
     id: Terraform version
 
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:e4ef6a7cb46ca110b97eb5fb7134fb9f3720b98560436792a4199c77e739dca0"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:eab4344f007d121e36776d0a435718986fd7664eded83e36973fb4b204b06738"
     entrypoint: bash
     args: ["./cicd/configs/run.sh", "-d", "${_MANAGED_DIRS}", "-a", "init -lock=false", "-a", "plan -lock=false -out=plan.tfplan"]
     dir: "${_TERRAFORM_ROOT}"
     id: Speculative plan
 
   # Check for delete operations as an FYI, it won't fail the build.
-  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:e4ef6a7cb46ca110b97eb5fb7134fb9f3720b98560436792a4199c77e739dca0"
+  - name: "gcr.io/cloud-foundation-cicd/cft/developer-tools-light@sha256:eab4344f007d121e36776d0a435718986fd7664eded83e36973fb4b204b06738"
     entrypoint: bash
     args: ["./cicd/configs/tf-deletion-check.sh", "./cicd/configs/tf-deletion-allowlist.txt"]
     dir: "${_TERRAFORM_ROOT}"
