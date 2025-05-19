@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 18.0.0"
 
   name            = "example-prod-networks"
   org_id          = ""
@@ -61,7 +61,7 @@ module "project" {
 
 module "bastion_vm" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 6.0.0"
+  version = "~> 8.0.0"
 
   name         = "bastion-vm"
   project      = module.project.project_id
@@ -91,7 +91,7 @@ EOF
 
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 7.5.0"
+  version = "~> 11.1.0"
 
   network_name = "network"
   project_id   = module.project.project_id
@@ -134,7 +134,7 @@ module "network" {
 }
 module "cloud_sql_private_service_access_network" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 9.0.0"
+  version = "~> 25.2.0"
 
   project_id  = module.project.project_id
   vpc_network = module.network.network_name
@@ -145,7 +145,7 @@ module "cloud_sql_private_service_access_network" {
 
 module "router" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 6.0.2"
+  version = "~> 7.0.0"
 
   name    = "router"
   project = module.project.project_id
@@ -170,7 +170,7 @@ module "router" {
 
 module "google_apis" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 5.1.1"
+  version = "~> 6.0.0"
 
   name       = "google-apis"
   project_id = module.project.project_id
@@ -203,7 +203,7 @@ module "google_apis" {
 
 module "gcr" {
   source  = "terraform-google-modules/cloud-dns/google"
-  version = "~> 5.1.1"
+  version = "~> 6.0.0"
 
   name       = "gcr"
   project_id = module.project.project_id

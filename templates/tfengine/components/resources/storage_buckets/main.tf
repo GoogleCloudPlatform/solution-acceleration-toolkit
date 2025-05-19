@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range get . "storage_buckets"}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 10.0"
 
   name       = "{{.name}}"
   project_id = module.project.project_id

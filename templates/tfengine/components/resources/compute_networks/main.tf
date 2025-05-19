@@ -18,7 +18,7 @@ limitations under the License. */ -}}
 
 module "{{$resource_name}}" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 7.5.0"
+  version = "~> 11.1.0"
 
   network_name = "{{.name}}"
   project_id   = module.project.project_id
@@ -60,7 +60,7 @@ module "{{$resource_name}}" {
 {{- if has . "cloud_sql_private_service_access"}}
 module "cloud_sql_private_service_access_{{$resource_name}}" {
   source  = "GoogleCloudPlatform/sql-db/google//modules/private_service_access"
-  version = "~> 9.0.0"
+  version = "~> 25.2.0"
 
   project_id  = module.project.project_id
   vpc_network = module.{{$resource_name}}.network_name

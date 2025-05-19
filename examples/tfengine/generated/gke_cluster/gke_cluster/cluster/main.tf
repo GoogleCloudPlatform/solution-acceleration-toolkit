@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 18.0.0"
 
   name            = "example-apps"
   org_id          = "12345678"
@@ -63,7 +63,7 @@ provider "kubernetes" {
 
 module "example_cluster" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/safer-cluster-update-variant"
-  version = "~> 29.0.0"
+  version = "~> 36.3.0"
 
   providers = {
     kubernetes = kubernetes.example_cluster
