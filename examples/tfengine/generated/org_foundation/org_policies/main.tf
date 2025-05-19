@@ -32,7 +32,7 @@ terraform {
 # App Engine
 module "orgpolicy_appengine_disable_code_download" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -45,7 +45,7 @@ module "orgpolicy_appengine_disable_code_download" {
 # Cloud SQL
 module "orgpolicy_sql_restrict_authorized_networks" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -57,7 +57,7 @@ module "orgpolicy_sql_restrict_authorized_networks" {
 
 module "orgpolicy_sql_restrict_public_ip" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -70,7 +70,7 @@ module "orgpolicy_sql_restrict_public_ip" {
 # Compute Engine
 module "orgpolicy_compute_disable_nested_virtualization" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -82,7 +82,7 @@ module "orgpolicy_compute_disable_nested_virtualization" {
 
 module "orgpolicy_compute_disable_serial_port_access" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -94,7 +94,7 @@ module "orgpolicy_compute_disable_serial_port_access" {
 
 module "orgpolicy_compute_skip_default_network_creation" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -106,7 +106,7 @@ module "orgpolicy_compute_skip_default_network_creation" {
 
 module "orgpolicy_compute_vm_external_ip_access" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -119,7 +119,7 @@ module "orgpolicy_compute_vm_external_ip_access" {
 
 module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -132,7 +132,7 @@ module "orgpolicy_compute_restrict_xpn_project_lien_removal" {
 # Cloud Identity and Access Management
 module "orgpolicy_iam_allowed_policy_member_domains" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -146,7 +146,7 @@ module "orgpolicy_iam_allowed_policy_member_domains" {
 # https://medium.com/@jryancanty/stop-downloading-google-cloud-service-account-keys-1811d44a97d9
 module "orgpolicy_disable_service_account_key_creation" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -158,7 +158,7 @@ module "orgpolicy_disable_service_account_key_creation" {
 
 module "orgpolicy_disable_service_account_key_upload" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -170,7 +170,7 @@ module "orgpolicy_disable_service_account_key_upload" {
 
 module "orgpolicy_disable_automatic_iam_grants_for_default_service_accounts" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -183,7 +183,7 @@ module "orgpolicy_disable_automatic_iam_grants_for_default_service_accounts" {
 # Google Cloud Platform - Resource Locations
 module "orgpolicy_gcp_resource_locations" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"
@@ -197,7 +197,7 @@ module "orgpolicy_gcp_resource_locations" {
 # Cloud Storage
 module "orgpolicy_storage_uniform_bucket_level_access" {
   source  = "terraform-google-modules/org-policy/google"
-  version = "<= 6"
+  version = "<= 7"
 
   policy_for      = "organization"
   organization_id = "12345678"

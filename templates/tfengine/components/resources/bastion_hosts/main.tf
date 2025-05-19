@@ -15,7 +15,7 @@ limitations under the License. */ -}}
 {{range .bastion_hosts}}
 module "{{resourceName . "name"}}" {
   source  = "terraform-google-modules/bastion-host/google"
-  version = "~> 6.0.0"
+  version = "~> 8.0.0"
 
   name         = "{{.name}}"
   project      = module.project.project_id
