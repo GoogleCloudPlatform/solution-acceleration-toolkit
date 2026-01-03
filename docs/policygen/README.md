@@ -106,7 +106,7 @@ Config Validator Scanner.
 To upload policies to the Forseti server bucket:
 
 ```shell
-gsutil -m rsync -d -r $OUTPUT_PATH/forseti_policies gs://forseti-server-{suffix}/policy-library
+gcloud storage rsync --delete-unmatched-destination-objects --recursive $OUTPUT_PATH/forseti_policies gs://forseti-server-{suffix}/policy-library
 ```
 
 ##### With Terraform Validator
