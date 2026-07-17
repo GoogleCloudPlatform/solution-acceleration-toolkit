@@ -24,4 +24,4 @@ latest="${latest#v}"
 
 # Install the latest version
 # See https://github.com/github/hub#github-actions
-curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
+curl -fsSL --header 'Accept */*' https://github.com/github/hub/raw/master/script/get | bash -s "${latest}"
