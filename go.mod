@@ -18,7 +18,7 @@ require (
 	github.com/otiai10/copy v1.7.0
 	github.com/rodaine/hclencoder v0.0.1
 	github.com/ryanuber/columnize v2.1.2+incompatible
-	github.com/ulikunitz/xz v0.5.10 // indirect
+	github.com/ulikunitz/xz v0.5.15 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zclconf/go-cty v1.10.0
