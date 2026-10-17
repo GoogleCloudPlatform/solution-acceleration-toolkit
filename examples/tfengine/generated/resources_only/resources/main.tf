@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = ">= 3.0"
     google-beta = ">= 3.0"
-    kubernetes  = "~> 2.10"
+    kubernetes  = "~> 3.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -28,7 +28,7 @@ terraform {
 
 module "project" {
   source  = "terraform-google-modules/project-factory/google//modules/project_services"
-  version = "~> 14.4.0"
+  version = "~> 18.4.0"
 
   project_id    = "example-prod-project"
   activate_apis = []
@@ -36,7 +36,7 @@ module "project" {
 
 module "one_billion_ms_example_dataset" {
   source  = "terraform-google-modules/bigquery/google"
-  version = "~> 7.0.0"
+  version = "~> 10.2.0"
 
   dataset_id                  = "1billion_ms_example_dataset"
   project_id                  = module.project.project_id
@@ -60,7 +60,7 @@ module "one_billion_ms_example_dataset" {
 
 module "example_healthcare_dataset" {
   source  = "terraform-google-modules/healthcare/google"
-  version = "~> 2.4.0"
+  version = "~> 3.1.0"
 
   name     = "example-healthcare-dataset"
   project  = module.project.project_id
@@ -123,7 +123,7 @@ resource "google_service_account" "example_sa" {
 
 module "example_prod_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 12.0"
 
   name          = "example-prod-bucket"
   project_id    = module.project.project_id

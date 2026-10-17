@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.87, < 6"
-    google-beta = "<=6"
-    kubernetes  = "~> 2.10"
+    google      = "< 9"
+    google-beta = "<= 8"
+    kubernetes  = "~> 3.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -173,7 +173,7 @@ resource "google_service_account" "cloudbuild_sa" {
 # Cloud Build - Storage Bucket to store Cloud Build logs.
 module "logs_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 1.4"
+  version = "~> 12.0"
 
   name       = var.logs_bucket
   project_id = var.project_id
