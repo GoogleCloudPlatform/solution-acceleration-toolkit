@@ -17,7 +17,7 @@ terraform {
   required_providers {
     google      = ">= 3.0"
     google-beta = ">= 3.0"
-    kubernetes  = "~> 2.10"
+    kubernetes  = "~> 3.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -30,7 +30,7 @@ terraform {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 18.4.0"
 
   name            = "example-networks"
   org_id          = "12345678"
@@ -50,7 +50,7 @@ module "project" {
 
 module "network" {
   source  = "terraform-google-modules/network/google"
-  version = "~> 7.5.0"
+  version = "~> 18.3.0"
 
   network_name = "network"
   project_id   = module.project.project_id

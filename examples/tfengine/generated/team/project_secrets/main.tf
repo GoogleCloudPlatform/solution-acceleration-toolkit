@@ -15,10 +15,10 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 6"
-    google-beta = "<= 6"
+    google      = "<= 8"
+    google-beta = "<= 8"
     null        = "~> 3.0"
-    kubernetes  = "~> 2.10"
+    kubernetes  = "~> 3.0"
   }
   backend "gcs" {
     bucket = "example-terraform-state"
@@ -36,7 +36,7 @@ resource "random_password" "db" {
 # Shared VPC: https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#centralize_network_control
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 18.4.0"
 
   name            = "example-prod-secrets"
   org_id          = ""

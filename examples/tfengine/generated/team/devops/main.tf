@@ -15,9 +15,9 @@
 terraform {
   required_version = ">=0.14"
   required_providers {
-    google      = ">=3.0, <= 6"
-    google-beta = "<= 6"
-    kubernetes  = "~> 2.10"
+    google      = "<= 8"
+    google-beta = "<= 8"
+    kubernetes  = "~> 3.0"
   }
 }
 
@@ -39,7 +39,7 @@ provider "google-beta" {
 # Create the project, enable APIs, and create the deletion lien, if specified.
 module "project" {
   source  = "terraform-google-modules/project-factory/google"
-  version = "~> 14.4.0"
+  version = "~> 18.4.0"
 
   name            = "example-prod-devops"
   org_id          = ""
@@ -68,7 +68,7 @@ module "project" {
 # Terraform state bucket, hosted in the devops project.
 module "state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 5.0.0"
+  version = "~> 12.4.0"
 
   name       = "example-terraform-state"
   project_id = module.project.project_id
